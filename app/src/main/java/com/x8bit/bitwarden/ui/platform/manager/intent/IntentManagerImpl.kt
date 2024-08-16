@@ -265,6 +265,13 @@ class IntentManagerImpl(
         )
     }
 
+    override fun startDefaultEmailApplication() {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_APP_EMAIL)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+
     private fun getCameraFileData(): IntentManager.FileData {
         val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)
         val file = File(tmpDir, TEMP_CAMERA_IMAGE_NAME)

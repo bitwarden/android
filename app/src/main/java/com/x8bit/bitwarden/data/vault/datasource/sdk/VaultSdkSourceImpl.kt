@@ -11,7 +11,6 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
@@ -28,6 +27,7 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
+import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
@@ -50,16 +50,18 @@ import java.io.File
  */
 @Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(
-    private val sdkClientManager: SdkClientManager,
+    sdkClientManager: SdkClientManager,
     private val dispatcherManager: DispatcherManager,
-) : VaultSdkSource {
+) : BaseSdkSource(sdkClientManager = sdkClientManager),
+    VaultSdkSource {
+
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
     }
 
     override suspend fun getTrustDevice(
         userId: String,
-    ): Result<TrustDeviceResponse> = runCatching {
+    ): Result<TrustDeviceResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .auth()
             .trustDevice()
@@ -69,7 +71,7 @@ class VaultSdkSourceImpl(
         userId: String,
         pin: String,
     ): Result<DerivePinKeyResponse> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
                 .derivePinKey(pin = pin)
@@ -79,7 +81,7 @@ class VaultSdkSourceImpl(
         userId: String,
         encryptedPin: String,
     ): Result<String> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
                 .derivePinUserKey(encryptedPin = encryptedPin)
@@ -89,7 +91,7 @@ class VaultSdkSourceImpl(
         publicKey: String,
         userId: String,
     ): Result<String> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .auth()
                 .approveAuthRequest(publicKey = publicKey)
@@ -98,7 +100,7 @@ class VaultSdkSourceImpl(
     override suspend fun getResetPasswordKey(
         orgPublicKey: String,
         userId: String,
-    ): Result<String> = runCatching {
+    ): Result<String> = runCatchingWithLogs {
         getClient(userId = userId)
             .crypto()
             .enrollAdminPasswordReset(publicKey = orgPublicKey)
@@ -107,7 +109,7 @@ class VaultSdkSourceImpl(
     override suspend fun getUserEncryptionKey(
         userId: String,
     ): Result<String> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
                 .getUserEncryptionKey()
@@ -116,7 +118,7 @@ class VaultSdkSourceImpl(
     override suspend fun getUserFingerprint(
         userId: String,
     ): Result<String> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .platform()
                 .userFingerprint(fingerprintMaterial = userId)
@@ -126,7 +128,7 @@ class VaultSdkSourceImpl(
         userId: String,
         request: InitUserCryptoRequest,
     ): Result<InitializeCryptoResult> =
-        runCatching {
+        runCatchingWithLogs {
             try {
                 getClient(userId = userId)
                     .crypto()
@@ -142,7 +144,7 @@ class VaultSdkSourceImpl(
         userId: String,
         request: InitOrgCryptoRequest,
     ): Result<InitializeCryptoResult> =
-        runCatching {
+        runCatchingWithLogs {
             try {
                 getClient(userId = userId)
                     .crypto()
@@ -160,7 +162,7 @@ class VaultSdkSourceImpl(
         userId: String,
         sendView: SendView,
     ): Result<Send> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .sends()
                 .encrypt(send = sendView)
@@ -171,7 +173,7 @@ class VaultSdkSourceImpl(
         send: Send,
         fileBuffer: ByteArray,
     ): Result<ByteArray> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .sends()
                 .encryptBuffer(
@@ -186,7 +188,7 @@ class VaultSdkSourceImpl(
         path: String,
         destinationFilePath: String,
     ): Result<File> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .sends()
                 .encryptFile(
@@ -204,7 +206,7 @@ class VaultSdkSourceImpl(
         decryptedFilePath: String,
         encryptedFilePath: String,
     ): Result<Attachment> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .attachments()
@@ -220,7 +222,7 @@ class VaultSdkSourceImpl(
         userId: String,
         cipherView: CipherView,
     ): Result<Cipher> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .ciphers()
@@ -231,7 +233,7 @@ class VaultSdkSourceImpl(
         userId: String,
         cipher: Cipher,
     ): Result<CipherView> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .ciphers()
@@ -242,7 +244,7 @@ class VaultSdkSourceImpl(
         userId: String,
         cipherList: List<Cipher>,
     ): Result<List<CipherListView>> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .ciphers()
@@ -253,7 +255,7 @@ class VaultSdkSourceImpl(
         userId: String,
         cipherList: List<Cipher>,
     ): Result<List<CipherView>> =
-        runCatching {
+        runCatchingWithLogs {
             val ciphers = getClient(userId = userId).vault().ciphers()
             withContext(context = dispatcherManager.default) {
                 cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
@@ -264,7 +266,7 @@ class VaultSdkSourceImpl(
         userId: String,
         collection: Collection,
     ): Result<CollectionView> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .collections()
@@ -275,7 +277,7 @@ class VaultSdkSourceImpl(
         userId: String,
         collectionList: List<Collection>,
     ): Result<List<CollectionView>> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .collections()
@@ -286,7 +288,7 @@ class VaultSdkSourceImpl(
         userId: String,
         send: Send,
     ): Result<SendView> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .sends()
                 .decrypt(send = send)
@@ -296,7 +298,7 @@ class VaultSdkSourceImpl(
         userId: String,
         sendList: List<Send>,
     ): Result<List<SendView>> =
-        runCatching {
+        runCatchingWithLogs {
             val sends = getClient(userId = userId).sends()
             withContext(dispatcherManager.default) {
                 sendList.map { async { sends.decrypt(send = it) } }.awaitAll()
@@ -307,7 +309,7 @@ class VaultSdkSourceImpl(
         userId: String,
         folder: FolderView,
     ): Result<Folder> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .folders()
@@ -318,7 +320,7 @@ class VaultSdkSourceImpl(
         userId: String,
         folder: Folder,
     ): Result<FolderView> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .folders()
@@ -329,7 +331,7 @@ class VaultSdkSourceImpl(
         userId: String,
         folderList: List<Folder>,
     ): Result<List<FolderView>> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .folders()
@@ -343,7 +345,7 @@ class VaultSdkSourceImpl(
         encryptedFilePath: String,
         decryptedFilePath: String,
     ): Result<Unit> =
-        runCatching {
+        runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .attachments()
@@ -358,7 +360,7 @@ class VaultSdkSourceImpl(
     override suspend fun encryptPasswordHistory(
         userId: String,
         passwordHistory: PasswordHistoryView,
-    ): Result<PasswordHistory> = runCatching {
+    ): Result<PasswordHistory> = runCatchingWithLogs {
         getClient(userId = userId)
             .vault()
             .passwordHistory()
@@ -368,7 +370,7 @@ class VaultSdkSourceImpl(
     override suspend fun decryptPasswordHistoryList(
         userId: String,
         passwordHistoryList: List<PasswordHistory>,
-    ): Result<List<PasswordHistoryView>> = runCatching {
+    ): Result<List<PasswordHistoryView>> = runCatchingWithLogs {
         getClient(userId = userId)
             .vault()
             .passwordHistory()
@@ -379,7 +381,7 @@ class VaultSdkSourceImpl(
         userId: String,
         totp: String,
         time: DateTime,
-    ): Result<TotpResponse> = runCatching {
+    ): Result<TotpResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .vault()
             .generateTotp(
@@ -392,7 +394,7 @@ class VaultSdkSourceImpl(
         userId: String,
         organizationId: String,
         cipherView: CipherView,
-    ): Result<CipherView> = runCatching {
+    ): Result<CipherView> = runCatchingWithLogs {
         getClient(userId = userId)
             .vault()
             .ciphers()
@@ -403,7 +405,7 @@ class VaultSdkSourceImpl(
         userId: String,
         password: String,
         passwordHash: String,
-    ): Result<Boolean> = runCatching {
+    ): Result<Boolean> = runCatchingWithLogs {
         getClient(userId = userId)
             .auth()
             .validatePassword(
@@ -416,7 +418,7 @@ class VaultSdkSourceImpl(
         userId: String,
         password: String,
         encryptedUserKey: String,
-    ): Result<String> = runCatching {
+    ): Result<String> = runCatchingWithLogs {
         getClient(userId = userId)
             .auth()
             .validatePasswordUserKey(
@@ -428,7 +430,7 @@ class VaultSdkSourceImpl(
     override suspend fun updatePassword(
         userId: String,
         newPassword: String,
-    ): Result<UpdatePasswordResponse> = runCatching {
+    ): Result<UpdatePasswordResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .crypto()
             .updatePassword(newPassword = newPassword)
@@ -439,7 +441,7 @@ class VaultSdkSourceImpl(
         folders: List<Folder>,
         ciphers: List<Cipher>,
         format: ExportFormat,
-    ): Result<String> = runCatching {
+    ): Result<String> = runCatchingWithLogs {
         getClient(userId = userId)
             .exporters()
             .exportVault(
@@ -452,7 +454,7 @@ class VaultSdkSourceImpl(
     override suspend fun registerFido2Credential(
         request: RegisterFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,
-    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
+    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatchingWithLogs {
         callbackFlow {
             try {
                 val client = getClient(request.userId)
@@ -483,11 +485,10 @@ class VaultSdkSourceImpl(
             .first()
     }
 
-    @Suppress("MaxLineLength")
     override suspend fun authenticateFido2Credential(
         request: AuthenticateFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,
-    ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatching {
+    ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatchingWithLogs {
         callbackFlow {
             try {
                 val client = getClient(request.userId)
@@ -521,7 +522,7 @@ class VaultSdkSourceImpl(
     override suspend fun decryptFido2CredentialAutofillViews(
         userId: String,
         vararg cipherViews: CipherView,
-    ): Result<List<Fido2CredentialAutofillView>> = runCatching {
+    ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         val fido2 = getClient(userId = userId).platform().fido2()
         cipherViews.flatMap { fido2.decryptFido2AutofillCredentials(cipherView = it) }
     }
@@ -530,7 +531,7 @@ class VaultSdkSourceImpl(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
-    ): Result<List<Fido2CredentialAutofillView>> = runCatching {
+    ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         getClient(userId)
             .platform()
             .fido2()
@@ -540,8 +541,4 @@ class VaultSdkSourceImpl(
             )
             .silentlyDiscoverCredentials(relyingPartyId)
     }
-
-    private suspend fun getClient(
-        userId: String,
-    ): Client = sdkClientManager.getOrCreateClient(userId = userId)
 }

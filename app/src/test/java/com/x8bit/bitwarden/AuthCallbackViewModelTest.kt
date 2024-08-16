@@ -30,6 +30,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         every { setSsoCallbackResult(any()) } just runs
         every { setDuoCallbackTokenResult(any()) } just runs
         every { setYubiKeyResult(any()) } just runs
+        every { setWebAuthResult(any()) } just runs
     }
 
     @BeforeEach

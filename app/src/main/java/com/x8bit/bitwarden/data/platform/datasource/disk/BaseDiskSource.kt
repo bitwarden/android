@@ -11,18 +11,15 @@ abstract class BaseDiskSource(
     private val sharedPreferences: SharedPreferences,
 ) {
     /**
-     * Gets the [Boolean] for the given [key] from [SharedPreferences], or return the [default]
-     * value if that key is not present.
+     * Gets the [Boolean] for the given [key] from [SharedPreferences], or returns `null` if that
+     * key is not present.
      */
-    protected fun getBoolean(
-        key: String,
-        default: Boolean? = null,
-    ): Boolean? =
+    protected fun getBoolean(key: String): Boolean? =
         if (sharedPreferences.contains(key.withBase())) {
             sharedPreferences.getBoolean(key.withBase(), false)
         } else {
             // Make sure we can return a null value as a default if necessary
-            default
+            null
         }
 
     /**
@@ -42,18 +39,15 @@ abstract class BaseDiskSource(
         }
 
     /**
-     * Gets the [Int] for the given [key] from [SharedPreferences], or return the [default] value
-     * if that key is not present.
+     * Gets the [Int] for the given [key] from [SharedPreferences], or returns `null` if that key
+     * is not present.
      */
-    protected fun getInt(
-        key: String,
-        default: Int? = null,
-    ): Int? =
+    protected fun getInt(key: String): Int? =
         if (sharedPreferences.contains(key.withBase())) {
             sharedPreferences.getInt(key.withBase(), 0)
         } else {
             // Make sure we can return a null value as a default if necessary
-            default
+            null
         }
 
     /**
@@ -73,18 +67,15 @@ abstract class BaseDiskSource(
         }
 
     /**
-     * Gets the [Long] for the given [key] from [SharedPreferences], or return the [default] value
-     * if that key is not present.
+     * Gets the [Long] for the given [key] from [SharedPreferences], or returns `null` if that key
+     * is not present.
      */
-    protected fun getLong(
-        key: String,
-        default: Long? = null,
-    ): Long? =
+    protected fun getLong(key: String): Long? =
         if (sharedPreferences.contains(key.withBase())) {
             sharedPreferences.getLong(key.withBase(), 0)
         } else {
             // Make sure we can return a null value as a default if necessary
-            default
+            null
         }
 
     /**
@@ -105,8 +96,7 @@ abstract class BaseDiskSource(
 
     protected fun getString(
         key: String,
-        default: String? = null,
-    ): String? = sharedPreferences.getString(key.withBase(), default)
+    ): String? = sharedPreferences.getString(key.withBase(), null)
 
     protected fun putString(
         key: String,

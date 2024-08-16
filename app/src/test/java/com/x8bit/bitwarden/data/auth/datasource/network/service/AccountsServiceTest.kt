@@ -1,15 +1,19 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -18,15 +22,25 @@ import retrofit2.create
 
 class AccountsServiceTest : BaseServiceTest() {
 
-    private val accountsApi: AccountsApi = retrofit.create()
+    private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi = retrofit.create()
     private val authenticatedAccountsApi: AuthenticatedAccountsApi = retrofit.create()
+    private val authenticatedKeyConnectorApi: AuthenticatedKeyConnectorApi = retrofit.create()
     private val service = AccountsServiceImpl(
-        accountsApi = accountsApi,
+        unauthenticatedAccountsApi = unauthenticatedAccountsApi,
         authenticatedAccountsApi = authenticatedAccountsApi,
-        json = Json {
-            ignoreUnknownKeys = true
-        },
+        authenticatedKeyConnectorApi = authenticatedKeyConnectorApi,
+        json = json,
     )
+
+    @Test
+    fun `convertToKeyConnector with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+
+        val result = service.convertToKeyConnector()
+
+        assertTrue(result.isSuccess)
+    }
 
     @Test
     fun `createAccountKeys with empty response is success`() = runTest {
@@ -172,5 +186,49 @@ class AccountsServiceTest : BaseServiceTest() {
             ),
         )
         assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `setKeyConnectorKey with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.setKeyConnectorKey(
+            body = KeyConnectorKeyRequestJson(
+                organizationIdentifier = "organizationId",
+                kdfIterations = 7,
+                kdfMemory = 1,
+                kdfParallelism = 2,
+                kdfType = KdfTypeJson.ARGON2_ID,
+                userKey = "encryptedUserKey",
+                keys = KeyConnectorKeyRequestJson.Keys(
+                    publicKey = "public",
+                    encryptedPrivateKey = "private",
+                ),
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `getMasterKeyFromKeyConnector with empty response is success`() = runTest {
+        val masterKey = "masterKey"
+        val response = MockResponse().setBody("""{ "Key": "$masterKey" }""")
+        server.enqueue(response)
+        val result = service.getMasterKeyFromKeyConnector(url = "$url/test")
+        assertEquals(
+            KeyConnectorMasterKeyResponseJson(masterKey = masterKey).asSuccess(),
+            result,
+        )
+    }
+
+    @Test
+    fun `storeMasterKeyToKeyConnector success should return Success`() = runTest {
+        val response = MockResponse()
+        server.enqueue(response)
+        val result = service.storeMasterKeyToKeyConnector(
+            url = "$url/test",
+            masterKey = "masterKey",
+        )
+        assertEquals(Unit.asSuccess(), result)
     }
 }

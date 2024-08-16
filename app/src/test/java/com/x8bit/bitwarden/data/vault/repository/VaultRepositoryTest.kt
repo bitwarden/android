@@ -826,6 +826,10 @@ class VaultRepositoryTest {
                 userId = "mockId-1",
                 policies = listOf(createMockPolicy(number = 1)),
             )
+            fakeAuthDiskSource.assertShouldUseKeyConnector(
+                userId = "mockId-1",
+                shouldUseKeyConnector = false,
+            )
             coVerify {
                 vaultDiskSource.replaceVaultData(
                     userId = MOCK_USER_STATE.activeUserId,

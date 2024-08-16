@@ -36,8 +36,11 @@ object AuthNetworkModule {
         retrofits: Retrofits,
         json: Json,
     ): AccountsService = AccountsServiceImpl(
-        accountsApi = retrofits.unauthenticatedApiRetrofit.create(),
+        unauthenticatedAccountsApi = retrofits.unauthenticatedApiRetrofit.create(),
         authenticatedAccountsApi = retrofits.authenticatedApiRetrofit.create(),
+        authenticatedKeyConnectorApi = retrofits
+            .createStaticRetrofit(isAuthenticated = true)
+            .create(),
         json = json,
     )
 
@@ -64,7 +67,7 @@ object AuthNetworkModule {
         retrofits: Retrofits,
         json: Json,
     ): IdentityService = IdentityServiceImpl(
-        api = retrofits.unauthenticatedIdentityRetrofit.create(),
+        unauthenticatedIdentityApi = retrofits.unauthenticatedIdentityRetrofit.create(),
         json = json,
     )
 
@@ -73,10 +76,8 @@ object AuthNetworkModule {
     fun providesHaveIBeenPwnedService(
         retrofits: Retrofits,
     ): HaveIBeenPwnedService = HaveIBeenPwnedServiceImpl(
-        retrofits
-            .staticRetrofitBuilder
-            .baseUrl("https://api.pwnedpasswords.com")
-            .build()
+        api = retrofits
+            .createStaticRetrofit(baseUrl = "https://api.pwnedpasswords.com")
             .create(),
     )
 
@@ -95,6 +96,6 @@ object AuthNetworkModule {
         retrofits: Retrofits,
     ): OrganizationService = OrganizationServiceImpl(
         authenticatedOrganizationApi = retrofits.authenticatedApiRetrofit.create(),
-        organizationApi = retrofits.unauthenticatedApiRetrofit.create(),
+        unauthenticatedOrganizationApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 }

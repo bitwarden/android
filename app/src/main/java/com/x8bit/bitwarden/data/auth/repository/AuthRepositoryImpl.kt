@@ -470,7 +470,8 @@ class AuthRepositoryImpl(
                             userId = userId,
                             email = account.profile.email,
                             orgPublicKey = organizationKeys.publicKey,
-                            rememberDevice = authDiskSource.getShouldTrustDevice(userId = userId),
+                            rememberDevice = authDiskSource
+                                .getShouldTrustDevice(userId = userId) == true,
                         )
                     }
                     .flatMap { keys ->

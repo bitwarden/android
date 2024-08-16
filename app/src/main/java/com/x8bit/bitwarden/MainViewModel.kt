@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
@@ -34,6 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
@@ -53,6 +55,7 @@ class MainViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val clock: Clock,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
         theme = settingsRepository.appTheme,
@@ -188,6 +191,7 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
+        val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
         val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
         val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
         when {
@@ -198,6 +202,17 @@ class MainViewModel @Inject constructor(
                         // Allow users back into the already-running app when completing the
                         // autofill task when this is not the first intent.
                         shouldFinishWhenComplete = isFirstIntent,
+                    )
+            }
+
+            completeRegistrationData != null -> {
+                if (authRepository.activeUserId != null) {
+                    authRepository.hasPendingAccountAddition = true
+                }
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.CompleteRegistration(
+                        completeRegistrationData = completeRegistrationData,
+                        timestamp = clock.millis(),
                     )
             }
 
