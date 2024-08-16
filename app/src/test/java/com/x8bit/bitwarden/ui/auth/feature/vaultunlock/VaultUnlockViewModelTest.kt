@@ -431,6 +431,31 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `switching accounts should prompt for biometrics if new account has biometrics enabled`() =
+        runTest {
+            val account = DEFAULT_ACCOUNT.copy(
+                isVaultUnlocked = false,
+                isBiometricsEnabled = true,
+                )
+            val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
+            val viewModel = createViewModel(state = initialState)
+            mutableUserStateFlow.update {
+                it?.copy(
+                    activeUserId = account.userId,
+                    accounts = listOf(account),
+                )
+            }
+
+            viewModel.eventFlow.test {
+                assertEquals(VaultUnlockEvent.PromptForBiometrics(CIPHER), awaitItem())
+                expectNoEvents()
+            }
+            verify {
+                encryptionManager.getOrCreateCipher(USER_ID)
+            }
+        }
+
+    @Test
     fun `on UnlockClick for password unlock should display error dialog on AuthenticationError`() {
         val password = "abcd1234"
         val initialState = DEFAULT_STATE.copy(
