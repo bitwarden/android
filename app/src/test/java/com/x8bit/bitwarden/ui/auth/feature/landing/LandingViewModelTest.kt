@@ -377,7 +377,7 @@ class LandingViewModelTest : BaseViewModelTest() {
     @Test
     fun `When feature is enabled CreateAccountClick should emit NavigateToStartRegistration`() =
         runTest {
-            every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow) } returns true
+            every { featureFlagManager.getFeatureFlag(FlagKey.EmailVerification) } returns true
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LandingAction.CreateAccountClick)
