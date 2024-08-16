@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import retrofit2.Retrofit
+import retrofit2.http.Url
 
 /**
  * A collection of various [Retrofit] instances that serve different purposes.
@@ -36,11 +37,14 @@ interface Retrofits {
     val unauthenticatedIdentityRetrofit: Retrofit
 
     /**
-     * Allows access to static API calls (ex: external APIs) that do not therefore require
-     * authentication with Bitwarden's servers.
+     * Allows access to static API calls (ex: external APIs).
      *
-     * No base URL is supplied as part of the builder and no longer is added to make this URL
-     * dynamically updatable.
+     * @param isAuthenticated Indicates if the [Retrofit] instance should use authentication.
+     * @param baseUrl The static base url associated with this retrofit instance. This can be
+     * overridden with the [Url] annotation.
      */
-    val staticRetrofitBuilder: Retrofit.Builder
+    fun createStaticRetrofit(
+        isAuthenticated: Boolean = false,
+        baseUrl: String = "https://api.bitwarden.com",
+    ): Retrofit
 }
