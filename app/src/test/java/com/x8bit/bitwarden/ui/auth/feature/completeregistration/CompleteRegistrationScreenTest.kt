@@ -1,10 +1,7 @@
-package com.x8bit.bitwarden.ui.auth.feature.createaccount
+package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import android.net.Uri
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -15,17 +12,15 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.EmailInputChange
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CreateAccountClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -41,10 +36,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class CreateAccountScreenTest : BaseComposeTest() {
+class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToLoginCalled = false
+    private var onNavigateToLandingCalled = false
 
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
@@ -52,8 +47,8 @@ class CreateAccountScreenTest : BaseComposeTest() {
     }
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-    private val mutableEventFlow = bufferedMutableSharedFlow<CreateAccountEvent>()
-    private val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+    private val mutableEventFlow = bufferedMutableSharedFlow<CompleteRegistrationEvent>()
+    private val viewModel = mockk<CompleteRegistrationViewModel>(relaxed = true) {
         every { stateFlow } returns mutableStateFlow
         every { eventFlow } returns mutableEventFlow
         every { trySendAction(any()) } just runs
@@ -62,9 +57,9 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Before
     fun setup() {
         composeTestRule.setContent {
-            CreateAccountScreen(
+            CompleteRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToLogin = { _, _ -> onNavigateToLoginCalled = true },
+                onNavigateToLanding = { onNavigateToLandingCalled = true },
                 intentManager = intentManager,
                 viewModel = viewModel,
             )
@@ -72,9 +67,9 @@ class CreateAccountScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `app bar submit click should send SubmitClick action`() {
-        composeTestRule.onNodeWithText("Submit").performClick()
-        verify { viewModel.trySendAction(SubmitClick) }
+    fun `app bar submit click should send CreateAccountClick action`() {
+        composeTestRule.onNodeWithText("Create account").performClick()
+        verify { viewModel.trySendAction(CreateAccountClick) }
     }
 
     @Test
@@ -89,72 +84,19 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .onNodeWithText("Check known data breaches for this password")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(CheckDataBreachesToggle(true)) }
-    }
-
-    @Test
-    fun `accept policies should be toggled on or off according to the state`() {
-        composeTestRule
-            .onNodeWithText("By activating this switch you agree", substring = true)
-            .assertIsOff()
-
-        mutableStateFlow.update { it.copy(isAcceptPoliciesToggled = true) }
-
-        composeTestRule
-            .onNodeWithText("By activating this switch you agree", substring = true)
-            .assertIsOn()
-    }
-
-    @Test
-    fun `accept policies click should send AcceptPoliciesToggle action`() {
-        composeTestRule
-            .onNodeWithText("By activating this switch you agree", substring = true)
-            .performScrollTo()
-            .performClick()
-        verify { viewModel.trySendAction(AcceptPoliciesToggle(true)) }
+        verify { viewModel.trySendAction(CheckDataBreachesToggle(false)) }
     }
 
     @Test
     fun `NavigateBack event should invoke navigate back lambda`() {
-        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateBack)
+        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
     }
 
     @Test
     fun `NavigateToLogin event should invoke navigate login lambda`() {
-        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToLogin(email = "", captchaToken = ""))
-        assertTrue(onNavigateToLoginCalled)
-    }
-
-    @Test
-    fun `NavigateToCaptcha event should invoke intent manager`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToCaptcha(uri = mockUri))
-        verify {
-            intentManager.startCustomTabsActivity(mockUri)
-        }
-    }
-
-    @Test
-    fun `NavigateToPrivacyPolicy event should invoke intent manager`() {
-        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToPrivacyPolicy)
-        verify {
-            intentManager.launchUri("https://bitwarden.com/privacy/".toUri())
-        }
-    }
-
-    @Test
-    fun `NavigateToTerms event should invoke intent manager`() {
-        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToTerms)
-        verify {
-            intentManager.launchUri("https://bitwarden.com/terms/".toUri())
-        }
-    }
-
-    @Test
-    fun `email input change should send EmailInputChange action`() {
-        composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
-        verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
+        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToLanding)
+        assertTrue(onNavigateToLandingCalled)
     }
 
     @Test
@@ -181,7 +123,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
     fun `clicking OK on the error dialog should send ErrorDialogDismiss action`() {
         mutableStateFlow.update {
             it.copy(
-                dialog = CreateAccountDialog.Error(
+                dialog = CompleteRegistrationDialog.Error(
                     BasicDialogState.Shown(
                         title = "title".asText(),
                         message = "message".asText(),
@@ -193,7 +135,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(CreateAccountAction.ErrorDialogDismiss) }
+        verify { viewModel.trySendAction(ErrorDialogDismiss) }
     }
 
     @Test
@@ -205,7 +147,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .onAllNodesWithText("No")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(CreateAccountAction.ErrorDialogDismiss) }
+        verify { viewModel.trySendAction(ErrorDialogDismiss) }
     }
 
     @Test
@@ -217,14 +159,14 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Yes")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(CreateAccountAction.ContinueWithBreachedPasswordClick) }
+        verify { viewModel.trySendAction(ContinueWithBreachedPasswordClick) }
     }
 
     @Test
     fun `when BasicDialogState is Shown should show dialog`() {
         mutableStateFlow.update {
             it.copy(
-                dialog = CreateAccountDialog.Error(
+                dialog = CompleteRegistrationDialog.Error(
                     BasicDialogState.Shown(
                         title = "title".asText(),
                         message = "message".asText(),
@@ -288,33 +230,18 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .assertCountEquals(2)
     }
 
-    @Test
-    fun `terms of service click should send TermsClick action`() {
-        composeTestRule
-            .onNodeWithText("Terms of Service")
-            .performScrollTo()
-            .performClick()
-        verify { viewModel.trySendAction(CreateAccountAction.TermsClick) }
-    }
-
-    @Test
-    fun `privacy policy click should send PrivacyPolicyClick action`() {
-        composeTestRule
-            .onNodeWithText("Privacy Policy")
-            .performScrollTo()
-            .performClick()
-        verify { viewModel.trySendAction(CreateAccountAction.PrivacyPolicyClick) }
-    }
-
     companion object {
+        private const val EMAIL = "test@test.com"
+        private const val TOKEN = "token"
         private const val TEST_INPUT = "input"
-        private val DEFAULT_STATE = CreateAccountState(
-            emailInput = "",
+        private val DEFAULT_STATE = CompleteRegistrationState(
+            userEmail = EMAIL,
+            emailVerificationToken = TOKEN,
+            fromEmail = true,
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
-            isCheckDataBreachesToggled = false,
-            isAcceptPoliciesToggled = false,
+            isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
         )

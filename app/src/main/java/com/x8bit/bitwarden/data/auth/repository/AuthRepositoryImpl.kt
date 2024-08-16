@@ -757,6 +757,7 @@ class AuthRepositoryImpl(
             )
             .flatMap { registerKeyResponse ->
                 if (emailVerificationToken == null) {
+                    // TODO PM-6675: Remove register call and service implementation
                     identityService.register(
                         body = RegisterRequestJson(
                             email = email,
