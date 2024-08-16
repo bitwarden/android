@@ -63,14 +63,13 @@ class BiometricsEncryptionManagerImpl(
     }
 
     override fun getOrCreateCipher(userId: String): Cipher? {
-        val secretKey =
-            getSecretKey()
-                ?: generateKeyOrNull()
-                ?: run {
-                    // user removed all biometrics from the device
-                    settingsDiskSource.systemBiometricIntegritySource = null
-                    return null
-                }
+        val secretKey = getSecretKeyOrNull()
+            ?: generateKeyOrNull()
+            ?: run {
+                // user removed all biometrics from the device
+                settingsDiskSource.systemBiometricIntegritySource = null
+                return null
+            }
 
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         val isCipherInitialized = initializeCipher(
@@ -127,13 +126,13 @@ class BiometricsEncryptionManagerImpl(
             return null
         }
 
-        return getSecretKey()
+        return getSecretKeyOrNull()
     }
 
     /**
      * Returns the [SecretKey] stored in the keystore, or null if there isn't one.
      */
-    private fun getSecretKey(): SecretKey? {
+    private fun getSecretKeyOrNull(): SecretKey? {
         try {
             keystore.load(null)
         } catch (e: IllegalArgumentException) {
@@ -193,7 +192,7 @@ class BiometricsEncryptionManagerImpl(
      * Validates the keystore key and decrypts it using the user-provided [cipher].
      */
     private fun isSystemBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean {
-        val secretKey = getSecretKey()
+        val secretKey = getSecretKeyOrNull()
         return if (cipher != null && secretKey != null) {
             initializeCipher(
                 userId = userId,
