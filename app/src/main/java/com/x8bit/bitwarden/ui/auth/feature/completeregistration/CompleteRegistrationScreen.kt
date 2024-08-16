@@ -57,9 +57,8 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.nonMaterialTypography
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Top level composable for the complete registration screen.
@@ -95,6 +94,13 @@ fun CompleteRegistrationScreen(
                     event.captchaToken,
                 )
             }
+
+            CompleteRegistrationEvent.NavigateToMakePasswordStrong -> onNavigateToPasswordGuidance()
+            CompleteRegistrationEvent.NavigateToPreventAccountLockout -> {
+                onNavigateToPreventAccountLockout()
+            }
+
+            CompleteRegistrationEvent.NavigateToOnboarding -> onNavigateToOnboarding()
         }
     }
 
@@ -314,6 +320,51 @@ private fun OrderedHeaderContent() {
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+@PreviewScreenSizes
+@Composable
+private fun CompleteRegistrationContentPreview() {
+    BitwardenTheme {
+        CompleteRegistrationContent(
+            passwordInput = "tortor",
+            passwordStrengthState = PasswordStrengthState.WEAK_3,
+            confirmPasswordInput = "consequat",
+            passwordHintInput = "dissentiunt",
+            isCheckDataBreachesToggled = false,
+            handler = CompleteRegistrationHandler(
+                onDismissErrorDialog = {},
+                onContinueWithBreachedPasswordClick = {},
+                onBackClick = {},
+                onPasswordInputChange = {},
+                onConfirmPasswordInputChange = {},
+                onPasswordHintChange = {},
+                onCheckDataBreachesToggle = {},
+                onLearnToPreventLockout = {},
+                onMakeStrongPassword = {},
+                onCallToAction = {},
+            ),
+            callToActionText = "Next",
+            nextButtonEnabled = true,
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+    }
+
+    if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            orderedContent()
+        }
+    } else {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            orderedContent()
+        }
     }
 }
 

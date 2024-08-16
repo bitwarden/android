@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.checkEmailDestination
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
@@ -96,6 +97,21 @@ fun NavGraphBuilder.authGraph(
                     captchaToken = captchaToken,
                     navOptions = navOptions {
                         popUpTo(LANDING_ROUTE)
+                    },
+                )
+            },
+            onNavigateToPasswordGuidance = {
+                navController.navigateToMasterPasswordGuidance()
+            },
+            onNavigateToPreventAccountLockout = {
+                navController.navigateToPreventAccountLockout()
+            },
+            onNavigateToOnboarding = {
+                navController.navigateToSetupUnlockScreen(
+                    navOptions = navOptions {
+                        popUpTo(LANDING_ROUTE) {
+                            inclusive = false
+                        }
                     },
                 )
             },
