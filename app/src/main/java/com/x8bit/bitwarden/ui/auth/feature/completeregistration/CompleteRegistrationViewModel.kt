@@ -80,7 +80,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         // clean the specialCircumstance after being handled
         specialCircumstanceManager.specialCircumstance = null
         super.onCleared()

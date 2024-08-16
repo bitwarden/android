@@ -85,7 +85,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(mapOf("state" to DEFAULT_STATE)),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
-            specialCircumstance = specialCircumstanceManager,
+            specialCircumstanceManager = specialCircumstanceManager,
         )
         viewModel.onCleared()
         assertTrue(specialCircumstanceManager.specialCircumstance == null)
@@ -506,7 +506,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(mapOf("state" to completeRegistrationState)),
             authRepository = authRepository,
             environmentRepository = fakeEnvironmentRepository,
-            specialCircumstance = specialCircumstanceManager,
+            specialCircumstanceManager = specialCircumstanceManager,
         )
 
     companion object {
