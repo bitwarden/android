@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
@@ -10,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequest
 /**
  * Provides an API for querying accounts endpoints.
  */
+@Suppress("TooManyFunctions")
 interface AccountsService {
 
     /**
@@ -64,4 +66,16 @@ interface AccountsService {
      * Set the password.
      */
     suspend fun setPassword(body: SetPasswordRequestJson): Result<Unit>
+
+    /**
+     * Retrieves the master key from the key connector.
+     */
+    suspend fun getMasterKeyFromKeyConnector(
+        url: String,
+    ): Result<KeyConnectorMasterKeyResponseJson>
+
+    /**
+     * Stores the master key to the key connector.
+     */
+    suspend fun storeMasterKeyToKeyConnector(url: String, masterKey: String): Result<Unit>
 }

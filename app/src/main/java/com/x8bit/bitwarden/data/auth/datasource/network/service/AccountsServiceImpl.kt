@@ -1,11 +1,14 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
@@ -16,9 +19,14 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenErr
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
 
+/**
+ * The default implementation of the [AccountsService].
+ */
+@Suppress("TooManyFunctions")
 class AccountsServiceImpl(
-    private val accountsApi: AccountsApi,
+    private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi,
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
+    private val authenticatedKeyConnectorApi: AuthenticatedKeyConnectorApi,
     private val json: Json,
 ) : AccountsService {
 
@@ -76,7 +84,7 @@ class AccountsServiceImpl(
     override suspend fun requestPasswordHint(
         email: String,
     ): Result<PasswordHintResponseJson> =
-        accountsApi
+        unauthenticatedAccountsApi
             .passwordHintRequest(PasswordHintRequestJson(email))
             .map { PasswordHintResponseJson.Success }
             .recoverCatching { throwable ->
@@ -90,7 +98,7 @@ class AccountsServiceImpl(
             }
 
     override suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit> =
-        accountsApi.resendVerificationCodeEmail(body = body)
+        unauthenticatedAccountsApi.resendVerificationCodeEmail(body = body)
 
     override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> {
         return if (body.currentPasswordHash == null) {
@@ -107,4 +115,18 @@ class AccountsServiceImpl(
     override suspend fun setPassword(
         body: SetPasswordRequestJson,
     ): Result<Unit> = authenticatedAccountsApi.setPassword(body)
+
+    override suspend fun getMasterKeyFromKeyConnector(
+        url: String,
+    ): Result<KeyConnectorMasterKeyResponseJson> =
+        authenticatedKeyConnectorApi.getMasterKeyFromKeyConnector(url = url)
+
+    override suspend fun storeMasterKeyToKeyConnector(
+        url: String,
+        masterKey: String,
+    ): Result<Unit> =
+        authenticatedKeyConnectorApi.storeMasterKeyToKeyConnector(
+            url = url,
+            body = KeyConnectorMasterKeyRequestJson(masterKey = masterKey),
+        )
 }
