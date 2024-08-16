@@ -248,7 +248,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         } returns null
         val viewModel = createViewModel()
 
-        viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick,)
+        viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
