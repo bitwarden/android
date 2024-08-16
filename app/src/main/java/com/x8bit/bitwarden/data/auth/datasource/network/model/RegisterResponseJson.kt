@@ -46,7 +46,6 @@ sealed class RegisterResponseJson {
     /**
      * Represents the json body of an invalid register request.
      *
-     * @param message
      * @param validationErrors a map where each value is a list of error messages for each key.
      * The values in the array should be used for display to the user, since the keys tend to come
      * back as nonsense. (eg: empty string key)
@@ -54,18 +53,17 @@ sealed class RegisterResponseJson {
     @Serializable
     data class Invalid(
         @SerialName("message")
-        val message: String?,
+        private val invalidMessage: String? = null,
+
+        @SerialName("Message")
+        private val errorMessage: String? = null,
 
         @SerialName("validationErrors")
         val validationErrors: Map<String, List<String>>?,
-    ) : RegisterResponseJson()
-
-    /**
-     * A different register error with a message.
-     */
-    @Serializable
-    data class Error(
-        @SerialName("Message")
-        val message: String?,
-    ) : RegisterResponseJson()
+    ) : RegisterResponseJson() {
+        /**
+         * A generic error message.
+         */
+        val message: String? get() = invalidMessage ?: errorMessage
+    }
 }
