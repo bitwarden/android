@@ -3712,7 +3712,9 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RegisterResponseJson.Invalid("message", mapOf()).asSuccess()
+        } returns RegisterResponseJson
+            .Invalid(invalidMessage = "message", validationErrors = mapOf())
+            .asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -3746,7 +3748,7 @@ class AuthRepositoryTest {
             )
         } returns RegisterResponseJson
             .Invalid(
-                message = "message",
+                invalidMessage = "message",
                 validationErrors = mapOf("" to listOf("expected")),
             )
             .asSuccess()
@@ -3760,38 +3762,6 @@ class AuthRepositoryTest {
             isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Error(errorMessage = "expected"), result)
-    }
-
-    @Test
-    fun `register returns Error body should return Error with message`() = runTest {
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    captchaResponse = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns RegisterResponseJson.Error(message = "message").asSuccess()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            captchaToken = null,
-            shouldCheckDataBreaches = false,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Error(errorMessage = "message"), result)
     }
 
     @Test
