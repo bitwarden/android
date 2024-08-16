@@ -10,13 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -38,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -89,7 +87,7 @@ fun MasterPasswordGuidanceScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         ) {
             Column(
                 modifier = Modifier
@@ -160,57 +158,25 @@ private fun TryGeneratorCard(
     onCardClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        onClick = onCardClicked,
-        shape = RoundedCornerShape(size = 16.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+    BitwardenActionCard(
+        actionIcon = rememberVectorPainter(id = R.drawable.ic_generator),
+        actionText = stringResource(
+            R.string.use_the_generator_to_create_a_strong_unique_password,
         ),
-        elevation = CardDefaults.elevatedCardElevation(),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-        ) {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_generator),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp),
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier.weight(weight = 1f),
-            ) {
-                Text(
-                    text = stringResource(
-                        R.string.use_the_generator_to_create_a_strong_unique_password,
-                    ),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.try_it_out),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
+        callToActionText = stringResource(R.string.try_it_out),
+        onCardClicked = onCardClicked,
+        modifier = modifier,
+        trailingContent = {
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.Center)
                     .size(16.dp),
             )
-        }
-    }
+        },
+    )
 }
 
 @Composable
