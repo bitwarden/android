@@ -43,10 +43,6 @@ class IdentityServiceImpl(
                         codes = listOf(400, 429),
                         json = json,
                     )
-                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                        code = 429,
-                        json = json,
-                    )
                     ?: throw throwable
             }
 
@@ -119,10 +115,6 @@ class IdentityServiceImpl(
                 bitwardenError
                     .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
                         codes = listOf(400, 429),
-                        json = json,
-                    )
-                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                        code = 429,
                         json = json,
                     )
                     ?: throw throwable

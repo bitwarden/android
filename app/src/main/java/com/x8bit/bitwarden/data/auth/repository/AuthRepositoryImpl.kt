@@ -816,10 +816,6 @@ class AuthRepositoryImpl(
                                     ?: it.message,
                             )
                         }
-
-                        is RegisterResponseJson.Error -> {
-                            RegisterResult.Error(it.message)
-                        }
                     }
                 },
                 onFailure = { RegisterResult.Error(errorMessage = null) },
