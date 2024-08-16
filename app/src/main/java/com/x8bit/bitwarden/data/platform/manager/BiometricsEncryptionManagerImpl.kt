@@ -6,13 +6,20 @@ import android.security.keystore.KeyProperties
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.KeyStore
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
+import java.security.NoSuchProviderException
+import java.security.ProviderException
 import java.security.UnrecoverableKeyException
+import java.security.cert.CertificateException
 import java.util.UUID
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
+import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
 
 /**
@@ -39,9 +46,20 @@ class BiometricsEncryptionManagerImpl(
             .setInvalidatedByBiometricEnrollment(true)
             .build()
 
-    override fun createCipher(userId: String): Cipher {
-        val secretKey: SecretKey = generateKey()
-        val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
+    override fun createCipherOrNull(userId: String): Cipher? {
+        val secretKey: SecretKey = generateKeyOrNull()
+            ?: run {
+                // user removed all biometrics from the device
+                settingsDiskSource.systemBiometricIntegritySource = null
+                return null
+            }
+        val cipher = try {
+            Cipher.getInstance(CIPHER_TRANSFORMATION)
+        } catch (e: NoSuchAlgorithmException) {
+            return null
+        } catch (e: NoSuchPaddingException) {
+            return null
+        }
         // This should never fail to initialize / return false because the cipher is newly generated
         initializeCipher(
             userId = userId,
@@ -52,13 +70,14 @@ class BiometricsEncryptionManagerImpl(
     }
 
     override fun getOrCreateCipher(userId: String): Cipher? {
-        val secretKey = try {
-            getSecretKey() ?: generateKey()
-        } catch (e: InvalidAlgorithmParameterException) {
-            // user removed all biometrics from the device
-            settingsDiskSource.systemBiometricIntegritySource = null
-            return null
-        }
+        val secretKey = getSecretKeyOrNull()
+            ?: generateKeyOrNull()
+            ?: run {
+                // user removed all biometrics from the device
+                settingsDiskSource.systemBiometricIntegritySource = null
+                return null
+            }
+
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         val isCipherInitialized = initializeCipher(
             userId = userId,
@@ -88,24 +107,67 @@ class BiometricsEncryptionManagerImpl(
     }
 
     /**
-     * Generates a [SecretKey] from which the [Cipher] will be generated.
+     * Generates a [SecretKey] from which the [Cipher] will be generated, or `null` if a key cannot
+     * be generated.
      */
-    private fun generateKey(): SecretKey {
-        val keyGen = KeyGenerator.getInstance(
-            KeyProperties.KEY_ALGORITHM_AES,
-            ENCRYPTION_KEYSTORE_NAME,
-        )
-        keyGen.init(keyGenParameterSpec)
-        keyGen.generateKey()
-        return requireNotNull(getSecretKey())
+    private fun generateKeyOrNull(): SecretKey? {
+        val keyGen = try {
+            KeyGenerator.getInstance(
+                KeyProperties.KEY_ALGORITHM_AES,
+                ENCRYPTION_KEYSTORE_NAME,
+            )
+        } catch (e: NoSuchAlgorithmException) {
+            return null
+        } catch (e: NoSuchProviderException) {
+            return null
+        } catch (e: IllegalArgumentException) {
+            return null
+        }
+
+        try {
+            keyGen.init(keyGenParameterSpec)
+            keyGen.generateKey()
+        } catch (e: InvalidAlgorithmParameterException) {
+            return null
+        } catch (e: ProviderException) {
+            return null
+        }
+
+        return getSecretKeyOrNull()
     }
 
     /**
      * Returns the [SecretKey] stored in the keystore, or null if there isn't one.
      */
-    private fun getSecretKey(): SecretKey? {
-        keystore.load(null)
-        return keystore.getKey(ENCRYPTION_KEY_NAME, null) as? SecretKey
+    private fun getSecretKeyOrNull(): SecretKey? {
+        try {
+            keystore.load(null)
+        } catch (e: IllegalArgumentException) {
+            // keystore could not be loaded because [param] is unrecognized.
+            return null
+        } catch (e: IOException) {
+            // keystore data format is invalid or the password is incorrect.
+            return null
+        } catch (e: NoSuchAlgorithmException) {
+            // keystore integrity could not be checked due to missing algorithm.
+            return null
+        } catch (e: CertificateException) {
+            // keystore certificates could not be loaded
+            return null
+        }
+
+        return try {
+            keystore.getKey(ENCRYPTION_KEY_NAME, null) as? SecretKey
+        } catch (e: KeyStoreException) {
+            // keystore was not loaded
+            null
+        } catch (e: NoSuchAlgorithmException) {
+            // keystore algorithm cannot be found
+            null
+        } catch (e: UnrecoverableKeyException) {
+            // key could not be recovered
+            null
+        }
     }
 
     /**
@@ -137,7 +199,7 @@ class BiometricsEncryptionManagerImpl(
      * Validates the keystore key and decrypts it using the user-provided [cipher].
      */
     private fun isSystemBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean {
-        val secretKey = getSecretKey()
+        val secretKey = getSecretKeyOrNull()
         return if (cipher != null && secretKey != null) {
             initializeCipher(
                 userId = userId,
@@ -165,12 +227,9 @@ class BiometricsEncryptionManagerImpl(
             value = true,
         )
 
-        try {
-            createCipher(userId)
-        } catch (e: Exception) {
-            // Catch silently to allow biometrics to function on devices that are in
-            // a state where key generation is not functioning
-        }
+        // Ignore result so biometrics function on devices that are in a state where key generation
+        // is not functioning
+        createCipherOrNull(userId)
     }
 }
 

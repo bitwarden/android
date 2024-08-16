@@ -158,14 +158,26 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        sendEvent(
-            AccountSecurityEvent.ShowBiometricsPrompt(
-                // Generate a new key in case the previous one was invalidated
-                cipher = biometricsEncryptionManager.createCipher(
-                    userId = state.userId,
-                ),
-            ),
-        )
+        biometricsEncryptionManager
+            .createCipherOrNull(userId = state.userId)
+            ?.let {
+                sendEvent(
+                    AccountSecurityEvent.ShowBiometricsPrompt(
+                        // Generate a new key in case the previous one was invalidated
+                        cipher = it,
+                    ),
+                )
+            }
+            ?: run {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = AccountSecurityDialog.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
     }
 
     private fun handleFingerPrintLearnMoreClick() {
@@ -405,6 +417,15 @@ sealed class AccountSecurityDialog : Parcelable {
      */
     @Parcelize
     data class Loading(
+        val message: Text,
+    ) : AccountSecurityDialog()
+
+    /**
+     * Displays an error dialog with a title and message.
+     */
+    @Parcelize
+    data class Error(
+        val title: Text,
         val message: Text,
     ) : AccountSecurityDialog()
 }
