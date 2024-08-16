@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -41,9 +40,7 @@ class IdentityServiceTest : BaseServiceTest() {
 
     private val identityService = IdentityServiceImpl(
         unauthenticatedIdentityApi = unauthenticatedIdentityApi,
-        json = Json {
-            ignoreUnknownKeys = true
-        },
+        json = json,
         deviceModelProvider = deviceModelProvider,
     )
 
@@ -154,7 +151,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.register(registerRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                message = "The model state is invalid.",
+                invalidMessage = "The model state is invalid.",
                 validationErrors = mapOf("" to listOf("Email '' is already taken.")),
             ),
             result.getOrThrow(),
@@ -167,8 +164,9 @@ class IdentityServiceTest : BaseServiceTest() {
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
-            RegisterResponseJson.Error(
-                message = "Slow down! Too many requests. Try again soon.",
+            RegisterResponseJson.Invalid(
+                errorMessage = "Slow down! Too many requests. Try again soon.",
+                validationErrors = null,
             ),
             result.getOrThrow(),
         )
@@ -328,7 +326,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                message = "The model state is invalid.",
+                invalidMessage = "The model state is invalid.",
                 validationErrors = mapOf("" to listOf("Email '' is already taken.")),
             ),
             result.getOrThrow(),
@@ -341,8 +339,9 @@ class IdentityServiceTest : BaseServiceTest() {
         server.enqueue(response)
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
-            RegisterResponseJson.Error(
-                message = "Slow down! Too many requests. Try again soon.",
+            RegisterResponseJson.Invalid(
+                errorMessage = "Slow down! Too many requests. Try again soon.",
+                validationErrors = null,
             ),
             result.getOrThrow(),
         )
