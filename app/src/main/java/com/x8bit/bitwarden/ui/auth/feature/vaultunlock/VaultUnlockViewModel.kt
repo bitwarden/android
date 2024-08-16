@@ -101,14 +101,7 @@ class VaultUnlockViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
-        if (state.showBiometricLogin && cipher != null) {
-            sendEvent(
-                VaultUnlockEvent.PromptForBiometrics(
-                    cipher = cipher,
-                ),
-            )
-        }
+        promptForBiometricsIfAvailable()
     }
 
     override fun onCleared() {
@@ -318,6 +311,20 @@ class VaultUnlockViewModel @Inject constructor(
                 isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
                 vaultUnlockType = userState.activeAccount.vaultUnlockType,
                 input = "",
+            )
+        }
+
+        // If the new account has biometrics available, automatically prompt for biometrics.
+        promptForBiometricsIfAvailable()
+    }
+
+    private fun promptForBiometricsIfAvailable() {
+        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
+        if (state.showBiometricLogin && cipher != null) {
+            sendEvent(
+                VaultUnlockEvent.PromptForBiometrics(
+                    cipher = cipher,
+                ),
             )
         }
     }
