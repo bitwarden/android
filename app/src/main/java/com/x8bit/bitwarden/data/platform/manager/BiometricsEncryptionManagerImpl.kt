@@ -19,6 +19,7 @@ import java.security.cert.CertificateException
 import java.util.UUID
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
+import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
 
 /**
@@ -52,7 +53,13 @@ class BiometricsEncryptionManagerImpl(
                 settingsDiskSource.systemBiometricIntegritySource = null
                 return null
             }
-        val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
+        val cipher = try {
+            Cipher.getInstance(CIPHER_TRANSFORMATION)
+        } catch (e: NoSuchAlgorithmException) {
+            return null
+        } catch (e: NoSuchPaddingException) {
+            return null
+        }
         // This should never fail to initialize / return false because the cipher is newly generated
         initializeCipher(
             userId = userId,
@@ -220,12 +227,9 @@ class BiometricsEncryptionManagerImpl(
             value = true,
         )
 
-        try {
-            createCipherOrNull(userId)
-        } catch (e: Exception) {
-            // Catch silently to allow biometrics to function on devices that are in
-            // a state where key generation is not functioning
-        }
+        // Ignore result so biometrics function on devices that are in a state where key generation
+        // is not functioning
+        createCipherOrNull(userId)
     }
 }
 
