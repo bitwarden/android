@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import androidx.annotation.Keep
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import retrofit2.http.Body
@@ -10,6 +11,7 @@ import retrofit2.http.Url
 /**
  * Defines raw calls specific for key connectors that use custom urls.
  */
+@Keep
 interface AuthenticatedKeyConnectorApi {
     @POST
     suspend fun storeMasterKeyToKeyConnector(
