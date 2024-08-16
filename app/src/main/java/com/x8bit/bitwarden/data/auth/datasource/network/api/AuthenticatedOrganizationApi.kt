@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysRe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetPasswordEnrollRequestJson
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -37,4 +38,12 @@ interface AuthenticatedOrganizationApi {
     suspend fun getOrganizationKeys(
         @Path("id") organizationId: String,
     ): Result<OrganizationKeysResponseJson>
+
+    /**
+     * Leaves the this organization.
+     */
+    @POST("/organizations/{id}/leave")
+    suspend fun leaveOrganization(
+        @Path("id") organizationId: String,
+    ): Result<Unit>
 }
