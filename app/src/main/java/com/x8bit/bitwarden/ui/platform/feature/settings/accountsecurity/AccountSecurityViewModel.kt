@@ -158,11 +158,26 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        trySendAction(
-            AccountSecurityAction.Internal.CreateBiometricsCipherResultReceive(
-                biometricsEncryptionManager.createCipherOrNull(state.userId),
-            ),
-        )
+        biometricsEncryptionManager
+            .createCipherOrNull(userId = state.userId)
+            ?.let {
+                sendEvent(
+                    AccountSecurityEvent.ShowBiometricsPrompt(
+                        // Generate a new key in case the previous one was invalidated
+                        cipher = it,
+                    ),
+                )
+            }
+            ?: run {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = AccountSecurityDialog.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
     }
 
     private fun handleFingerPrintLearnMoreClick() {
@@ -289,10 +304,6 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.PolicyUpdateReceive -> {
                 handlePolicyUpdateReceive(action)
             }
-
-            is AccountSecurityAction.Internal.CreateBiometricsCipherResultReceive -> {
-                handleCreateBiometricsCipherResultReceive(action)
-            }
         }
     }
 
@@ -345,32 +356,6 @@ class AccountSecurityViewModel @Inject constructor(
                 vaultTimeoutPolicyMinutes = action.vaultTimeoutPolicies?.firstOrNull()?.minutes,
                 vaultTimeoutPolicyAction = action.vaultTimeoutPolicies?.firstOrNull()?.action,
             )
-        }
-    }
-
-    private fun handleCreateBiometricsCipherResultReceive(
-        action: AccountSecurityAction.Internal.CreateBiometricsCipherResultReceive,
-    ) {
-        when (val cipher = action.cipher) {
-            null -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = AccountSecurityDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
-            }
-
-            else -> {
-                sendEvent(
-                    AccountSecurityEvent.ShowBiometricsPrompt(
-                        // Generate a new key in case the previous one was invalidated
-                        cipher = cipher,
-                    ),
-                )
-            }
         }
     }
 
@@ -627,13 +612,6 @@ sealed class AccountSecurityAction {
          */
         data class PolicyUpdateReceive(
             val vaultTimeoutPolicies: List<PolicyInformation.VaultTimeout>?,
-        ) : Internal()
-
-        /**
-         * Indicates a result for creating a cryptographic cipher for biometrics has been received.
-         */
-        data class CreateBiometricsCipherResultReceive(
-            val cipher: Cipher?,
         ) : Internal()
     }
 }

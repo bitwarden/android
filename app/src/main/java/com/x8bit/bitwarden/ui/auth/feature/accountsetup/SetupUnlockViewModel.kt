@@ -71,11 +71,26 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        trySendAction(
-            SetupUnlockAction.Internal.ReceiveCreateCipherResult(
-                cipher = biometricsEncryptionManager.createCipherOrNull(userId = state.userId),
-            ),
-        )
+        biometricsEncryptionManager
+            .createCipherOrNull(userId = state.userId)
+            ?.let {
+                sendEvent(
+                    SetupUnlockEvent.ShowBiometricsPrompt(
+                        // Generate a new key in case the previous one was invalidated
+                        cipher = it,
+                    ),
+                )
+            }
+            ?: run {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SetupUnlockState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
     }
 
     private fun handleSetUpLaterClick() {
@@ -132,10 +147,6 @@ class SetupUnlockViewModel @Inject constructor(
             is SetupUnlockAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
-
-            is SetupUnlockAction.Internal.ReceiveCreateCipherResult -> {
-                handleReceiveCreateCipherResult(action)
-            }
         }
     }
 
@@ -159,32 +170,6 @@ class SetupUnlockViewModel @Inject constructor(
                         isUnlockWithBiometricsEnabled = true,
                     )
                 }
-            }
-        }
-    }
-
-    private fun handleReceiveCreateCipherResult(
-        action: SetupUnlockAction.Internal.ReceiveCreateCipherResult,
-    ) {
-        when (val cipher = action.cipher) {
-            null -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = SetupUnlockState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
-            }
-
-            else -> {
-                sendEvent(
-                    SetupUnlockEvent.ShowBiometricsPrompt(
-                        // Generate a new key in case the previous one was invalidated
-                        cipher = cipher,
-                    ),
-                )
             }
         }
     }
@@ -294,13 +279,6 @@ sealed class SetupUnlockAction {
          */
         data class BiometricsKeyResultReceive(
             val result: BiometricsKeyResult,
-        ) : Internal()
-
-        /**
-         * Indicates a result for creating a cryptographic cipher for biometrics has been received.
-         */
-        data class ReceiveCreateCipherResult(
-            val cipher: Cipher?,
         ) : Internal()
     }
 }

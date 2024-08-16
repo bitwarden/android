@@ -224,44 +224,31 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `EnableBiometricsClick action should create a new biometrics cipher and emit result`() {
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
-
-        verify {
-            biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_ID)
-        }
-    }
-
-    @Test
-    fun `ReceiveCreateCipherResult should show biometrics prompt when cipher is not null`() =
+    fun `EnableBiometricsClick action should create a new biometrics cipher and emit result`() =
         runTest {
             val viewModel = createViewModel()
 
+            viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
+
+            verify {
+                biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_ID)
+            }
+
             viewModel.eventFlow.test {
-                viewModel.trySendAction(
-                    SetupUnlockAction.Internal.ReceiveCreateCipherResult(
-                        cipher = CIPHER,
-                    ),
-                )
                 assertEquals(
                     SetupUnlockEvent.ShowBiometricsPrompt(CIPHER),
                     awaitItem(),
                 )
             }
         }
-
     @Test
-    fun `ReceiveCreateCipherResult should show error dialog when cipher is null`() {
+    fun `EnableBiometricsClick actin should show error dialog when cipher is null`() {
         every {
             biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_ID)
         } returns null
         val viewModel = createViewModel()
 
-        viewModel.trySendAction(
-            SetupUnlockAction.Internal.ReceiveCreateCipherResult(cipher = null),
-        )
+        viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick,)
 
         assertEquals(
             DEFAULT_STATE.copy(
