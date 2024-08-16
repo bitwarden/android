@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -80,6 +81,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    @VisibleForTesting
     public override fun onCleared() {
         // clean the specialCircumstance after being handled
         specialCircumstanceManager.specialCircumstance = null
