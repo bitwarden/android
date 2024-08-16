@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedOrganizationApi
-import com.x8bit.bitwarden.data.auth.datasource.network.api.OrganizationApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedOrganizationApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
@@ -17,11 +17,11 @@ import java.time.ZonedDateTime
 
 class OrganizationServiceTest : BaseServiceTest() {
     private val authenticatedOrganizationApi: AuthenticatedOrganizationApi = retrofit.create()
-    private val organizationApi: OrganizationApi = retrofit.create()
+    private val unauthenticatedOrganizationApi: UnauthenticatedOrganizationApi = retrofit.create()
 
     private val organizationService = OrganizationServiceImpl(
         authenticatedOrganizationApi = authenticatedOrganizationApi,
-        organizationApi = organizationApi,
+        unauthenticatedOrganizationApi = unauthenticatedOrganizationApi,
     )
 
     @Test

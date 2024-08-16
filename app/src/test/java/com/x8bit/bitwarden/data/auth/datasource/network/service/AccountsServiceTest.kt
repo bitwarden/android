@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
@@ -22,11 +22,11 @@ import retrofit2.create
 
 class AccountsServiceTest : BaseServiceTest() {
 
-    private val accountsApi: AccountsApi = retrofit.create()
+    private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi = retrofit.create()
     private val authenticatedAccountsApi: AuthenticatedAccountsApi = retrofit.create()
     private val authenticatedKeyConnectorApi: AuthenticatedKeyConnectorApi = retrofit.create()
     private val service = AccountsServiceImpl(
-        accountsApi = accountsApi,
+        unauthenticatedAccountsApi = unauthenticatedAccountsApi,
         authenticatedAccountsApi = authenticatedAccountsApi,
         authenticatedKeyConnectorApi = authenticatedKeyConnectorApi,
         json = json,

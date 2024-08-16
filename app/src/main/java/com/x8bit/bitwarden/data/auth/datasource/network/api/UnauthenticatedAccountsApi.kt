@@ -8,7 +8,7 @@ import retrofit2.http.POST
 /**
  * Defines raw calls under the /accounts API.
  */
-interface AccountsApi {
+interface UnauthenticatedAccountsApi {
     @POST("/accounts/password-hint")
     suspend fun passwordHintRequest(
         @Body body: PasswordHintRequestJson,
