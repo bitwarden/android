@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.tools.feature.generator.util.toServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -2601,44 +2602,6 @@ private val UsernameGenerationOptions?.usernameType: Username.UsernameType
         UsernameGenerationOptions.UsernameType.RANDOM_WORD -> RandomWord()
         else -> PlusAddressedEmail()
     }
-
-private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
-    options: UsernameGenerationOptions,
-): ForwardedEmailAlias.ServiceType? {
-    return when (this) {
-        UsernameGenerationOptions.ForwardedEmailServiceType.FIREFOX_RELAY -> {
-            FirefoxRelay(apiAccessToken = options.firefoxRelayApiAccessToken.orEmpty())
-        }
-
-        UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN -> {
-            SimpleLogin(apiKey = options.simpleLoginApiKey.orEmpty())
-        }
-
-        UsernameGenerationOptions.ForwardedEmailServiceType.DUCK_DUCK_GO -> {
-            DuckDuckGo(apiKey = options.duckDuckGoApiKey.orEmpty())
-        }
-
-        UsernameGenerationOptions.ForwardedEmailServiceType.FASTMAIL -> {
-            FastMail(apiKey = options.fastMailApiKey.orEmpty())
-        }
-
-        UsernameGenerationOptions.ForwardedEmailServiceType.ANON_ADDY -> {
-            AddyIo(
-                apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
-                domainName = options.anonAddyDomainName.orEmpty(),
-            )
-        }
-
-        UsernameGenerationOptions.ForwardedEmailServiceType.FORWARD_EMAIL -> {
-            ForwardEmail(
-                apiKey = options.forwardEmailApiAccessToken.orEmpty(),
-                domainName = options.forwardEmailDomainName.orEmpty(),
-            )
-        }
-
-        else -> null
-    }
-}
 
 private fun String?.toSelectedType(): Passcode.PasscodeType =
     when (this) {
