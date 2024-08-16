@@ -47,7 +47,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
-    private val specialCircumstance: SpecialCircumstanceManager,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -80,23 +80,9 @@ class CompleteRegistrationViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun verifyEmailAddress() {
-        if (!state.fromEmail) {
-            return
-        }
-
-        viewModelScope.launch {
-            sendEvent(
-                CompleteRegistrationEvent.ShowToast(
-                    message = R.string.email_verified.asText(),
-                ),
-            )
-        }
-    }
-
-    public override fun onCleared() {
+    override fun onCleared() {
         // clean the specialCircumstance after being handled
-        specialCircumstance.specialCircumstance = null
+        specialCircumstanceManager.specialCircumstance = null
         super.onCleared()
     }
 
@@ -118,6 +104,20 @@ class CompleteRegistrationViewModel @Inject constructor(
         }
     }
 
+    private fun verifyEmailAddress() {
+        if (!state.fromEmail) {
+            return
+        }
+
+        viewModelScope.launch {
+            sendEvent(
+                CompleteRegistrationEvent.ShowToast(
+                    message = R.string.email_verified.asText(),
+                ),
+            )
+        }
+    }
+
     private fun handlePasswordStrengthResult(action: ReceivePasswordStrengthResult) {
         when (val result = action.result) {
             is PasswordStrengthResult.Success -> {
@@ -135,9 +135,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> {
-                // Leave UI the same
-            }
+            PasswordStrengthResult.Error -> Unit
         }
     }
 
