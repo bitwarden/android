@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
@@ -28,6 +29,7 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -55,7 +57,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class MainViewModelTest : BaseViewModelTest() {
 
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
@@ -96,6 +102,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getPasswordlessRequestDataIntentOrNull,
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
+            Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2CredentialRequestOrNull,
         )
         mockkStatic(
@@ -110,6 +117,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getPasswordlessRequestDataIntentOrNull,
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
+            Intent::getCompleteRegistrationDataIntentOrNull,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
@@ -261,6 +269,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
@@ -287,6 +296,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val autofillSelectionData = mockk<AutofillSelectionData>()
         every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         every { mockIntent.isMyVaultShortcut } returns false
@@ -308,6 +318,36 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to CompleteRegistration`() {
+        val viewModel = createViewModel()
+        val completeRegistrationData = mockk<CompleteRegistrationData>()
+        val mockIntent = mockk<Intent> {
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { authRepository.activeUserId } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.CompleteRegistration(
+                completeRegistrationData = completeRegistrationData,
+                timestamp = FIXED_CLOCK.millis(),
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveFirstIntent with an autofill save item should set the special circumstance to AutofillSave`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
@@ -315,6 +355,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
@@ -343,6 +384,7 @@ class MainViewModelTest : BaseViewModelTest() {
         } returns passwordlessRequestData
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
@@ -426,6 +468,7 @@ class MainViewModelTest : BaseViewModelTest() {
             every { getPasswordlessRequestDataIntentOrNull() } returns null
             every { getAutofillSelectionDataOrNull() } returns null
             every { getAutofillSaveItemOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns null
             every { isMyVaultShortcut } returns false
             every { isPasswordGeneratorShortcut } returns false
         }
@@ -459,6 +502,7 @@ class MainViewModelTest : BaseViewModelTest() {
             every { getPasswordlessRequestDataIntentOrNull() } returns null
             every { getAutofillSelectionDataOrNull() } returns null
             every { getAutofillSaveItemOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns null
             every { isMyVaultShortcut } returns false
             every { isPasswordGeneratorShortcut } returns false
         }
@@ -527,6 +571,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
@@ -553,6 +598,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val autofillSelectionData = mockk<AutofillSelectionData>()
         every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         every { mockIntent.isMyVaultShortcut } returns false
@@ -581,6 +627,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
@@ -609,6 +656,7 @@ class MainViewModelTest : BaseViewModelTest() {
         } returns passwordlessRequestData
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
@@ -635,6 +683,7 @@ class MainViewModelTest : BaseViewModelTest() {
             every { getPasswordlessRequestDataIntentOrNull() } returns null
             every { getAutofillSaveItemOrNull() } returns null
             every { getAutofillSelectionDataOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns null
             every { isMyVaultShortcut } returns true
             every { isPasswordGeneratorShortcut } returns false
         }
@@ -659,6 +708,7 @@ class MainViewModelTest : BaseViewModelTest() {
             every { getPasswordlessRequestDataIntentOrNull() } returns null
             every { getAutofillSaveItemOrNull() } returns null
             every { getAutofillSelectionDataOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns null
             every { isMyVaultShortcut } returns false
             every { isPasswordGeneratorShortcut } returns true
         }
@@ -700,6 +750,7 @@ class MainViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRepository = authRepository,
+        clock = FIXED_CLOCK,
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
@@ -740,6 +791,7 @@ private fun createMockFido2RegistrationIntent(
     every { getPasswordlessRequestDataIntentOrNull() } returns null
     every { getAutofillSelectionDataOrNull() } returns null
     every { getAutofillSaveItemOrNull() } returns null
+    every { getCompleteRegistrationDataIntentOrNull() } returns null
     every { isMyVaultShortcut } returns false
     every { isPasswordGeneratorShortcut } returns false
 }
@@ -752,6 +804,7 @@ private fun createMockFido2AssertionIntent(
     every { getPasswordlessRequestDataIntentOrNull() } returns null
     every { getAutofillSelectionDataOrNull() } returns null
     every { getAutofillSaveItemOrNull() } returns null
+    every { getCompleteRegistrationDataIntentOrNull() } returns null
     every { isMyVaultShortcut } returns false
     every { isPasswordGeneratorShortcut } returns false
 }
@@ -767,6 +820,12 @@ private fun createMockFido2GetCredentialsIntent(
     every { getAutofillSaveItemOrNull() } returns null
     every { getFido2CredentialRequestOrNull() } returns null
     every { getFido2AssertionRequestOrNull() } returns null
+    every { getCompleteRegistrationDataIntentOrNull() } returns null
     every { isMyVaultShortcut } returns false
     every { isPasswordGeneratorShortcut } returns false
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)

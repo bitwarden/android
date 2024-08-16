@@ -826,6 +826,10 @@ class VaultRepositoryTest {
                 userId = "mockId-1",
                 policies = listOf(createMockPolicy(number = 1)),
             )
+            fakeAuthDiskSource.assertShouldUseKeyConnector(
+                userId = "mockId-1",
+                shouldUseKeyConnector = false,
+            )
             coVerify {
                 vaultDiskSource.replaceVaultData(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -1590,58 +1594,6 @@ class VaultRepositoryTest {
                 )
             }
         }
-
-    @Test
-    fun `unlockVault should delegate to the VaultLockManager`() = runTest {
-        val userId = "userId"
-        val kdf = MOCK_PROFILE.toSdkParams()
-        val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
-        val privateKey = "54321"
-        val organizationKeys = mapOf("orgId1" to "orgKey1")
-        val mockVaultUnlockResult = mockk<VaultUnlockResult>()
-        coEvery {
-            vaultLockManager.unlockVault(
-                userId = userId,
-                kdf = kdf,
-                email = email,
-                privateKey = privateKey,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
-                    password = masterPassword,
-                    userKey = userKey,
-                ),
-
-                organizationKeys = organizationKeys,
-            )
-        } returns mockVaultUnlockResult
-
-        val result = vaultRepository.unlockVault(
-            userId = userId,
-            masterPassword = masterPassword,
-            kdf = kdf,
-            email = email,
-            userKey = userKey,
-            privateKey = privateKey,
-            organizationKeys = organizationKeys,
-        )
-
-        assertEquals(mockVaultUnlockResult, result)
-        coVerify(exactly = 1) {
-            vaultLockManager.unlockVault(
-                userId = userId,
-                kdf = kdf,
-                email = email,
-                privateKey = privateKey,
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
-                    password = masterPassword,
-                    userKey = userKey,
-                ),
-
-                organizationKeys = organizationKeys,
-            )
-        }
-    }
 
     @Test
     fun `getVaultItemStateFlow should update to Error when a sync fails generically`() =

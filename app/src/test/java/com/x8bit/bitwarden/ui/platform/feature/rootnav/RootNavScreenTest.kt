@@ -12,6 +12,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class RootNavScreenTest : BaseComposeTest() {
     private val fakeNavHostController = FakeNavHostController()
@@ -72,6 +75,28 @@ class RootNavScreenTest : BaseComposeTest() {
             )
         }
         assertTrue(isSplashScreenRemoved)
+
+        // Make sure navigating to Auth with the welcome route works as expected:
+        rootNavStateFlow.value = RootNavState.AuthWithWelcome
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "welcome",
+                navOptions = expectedNavOptions,
+            )
+        }
+
+        // Make sure navigating to complete registration route works as expected:
+        rootNavStateFlow.value = RootNavState.CompleteOngoingRegistration(
+            email = "example@email.com",
+            verificationToken = "verificationToken",
+            fromEmail = true,
+            timestamp = FIXED_CLOCK.millis(),
+        )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "complete_registration/example@email.com/verificationToken/true",
+            )
+        }
 
         // Make sure navigating to vault locked works as expected:
         rootNavStateFlow.value = RootNavState.VaultLocked
@@ -194,3 +219,8 @@ class RootNavScreenTest : BaseComposeTest() {
             }
     }
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)

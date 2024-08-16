@@ -11,7 +11,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
+import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
@@ -369,7 +369,7 @@ private fun SendView.toDisplayItem(
  */
 private fun List<SearchState.DisplayItem>.sortAlphabetically(): List<SearchState.DisplayItem> {
     return this.sortedWith { item1, item2 ->
-        CompareStringSpecialCharWithPrecedence.compare(item1.title, item2.title)
+        SpecialCharWithPrecedenceComparator.compare(item1.title, item2.title)
     }
 }
 

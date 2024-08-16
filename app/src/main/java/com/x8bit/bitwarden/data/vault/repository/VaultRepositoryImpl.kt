@@ -4,7 +4,6 @@ import android.net.Uri
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -607,27 +606,6 @@ class VaultRepositoryImpl(
         )
     }
 
-    override suspend fun unlockVault(
-        userId: String,
-        masterPassword: String,
-        email: String,
-        kdf: Kdf,
-        userKey: String,
-        privateKey: String,
-        organizationKeys: Map<String, String>?,
-    ): VaultUnlockResult =
-        unlockVault(
-            userId = userId,
-            email = email,
-            kdf = kdf,
-            privateKey = privateKey,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
-                password = masterPassword,
-                userKey = userKey,
-            ),
-            organizationKeys = organizationKeys,
-        )
-
     override suspend fun createSend(
         sendView: SendView,
         fileUri: Uri?,
@@ -920,27 +898,29 @@ class VaultRepositoryImpl(
     ) {
         val profile = syncResponse.profile
         val userId = profile.id
-        val userKey = profile.key
-        val privateKey = profile.privateKey
         authDiskSource.apply {
             storeUserKey(
                 userId = userId,
-                userKey = userKey,
+                userKey = profile.key,
             )
             storePrivateKey(
                 userId = userId,
-                privateKey = privateKey,
+                privateKey = profile.privateKey,
             )
             storeOrganizationKeys(
-                userId = profile.id,
+                userId = userId,
                 organizationKeys = profile.organizations
                     .orEmpty()
                     .filter { it.key != null }
                     .associate { it.id to requireNotNull(it.key) },
             )
+            storeShouldUseKeyConnector(
+                userId = userId,
+                shouldUseKeyConnector = profile.shouldUseKeyConnector,
+            )
             storeOrganizations(
-                userId = profile.id,
-                organizations = syncResponse.profile.organizations,
+                userId = userId,
+                organizations = profile.organizations,
             )
         }
     }

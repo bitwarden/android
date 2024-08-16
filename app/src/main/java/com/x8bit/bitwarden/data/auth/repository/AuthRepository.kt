@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -129,6 +130,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * The organization for the active user.
      */
     val organizations: List<SyncResponseJson.Profile.Organization>
+
+    /**
+     * Whether or not the welcome carousel should be displayed, based on the feature flag and
+     * whether the user has ever logged in or created an account before.
+     */
+    val showWelcomeCarousel: Boolean
 
     /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
@@ -247,6 +254,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
+        emailVerificationToken: String? = null,
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
@@ -348,4 +356,13 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * policies for the current user.
      */
     suspend fun validatePasswordAgainstPolicies(password: String): Boolean
+
+    /**
+     * Send a verification email.
+     */
+    suspend fun sendVerificationEmail(
+        email: String,
+        name: String,
+        receiveMarketingEmails: Boolean,
+    ): SendVerificationEmailResult
 }

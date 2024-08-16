@@ -25,7 +25,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    private val authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
@@ -52,11 +52,12 @@ class RootNavViewModel @Inject constructor(
         }
     }
 
-    @Suppress("CyclomaticComplexMethod", "MaxLineLength")
+    @Suppress("CyclomaticComplexMethod", "MaxLineLength", "LongMethod")
     private fun handleUserStateUpdateReceive(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
         val userState = action.userState
+        val specialCircumstance = action.specialCircumstance
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
                 !userState.activeAccount.isVaultUnlocked &&
@@ -66,12 +67,27 @@ class RootNavViewModel @Inject constructor(
 
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
+            specialCircumstance is SpecialCircumstance.CompleteRegistration -> {
+                RootNavState.CompleteOngoingRegistration(
+                    email = specialCircumstance.completeRegistrationData.email,
+                    verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
+                    fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
+                    timestamp = specialCircumstance.timestamp,
+                )
+            }
+
             userState == null ||
                 !userState.activeAccount.isLoggedIn ||
-                userState.hasPendingAccountAddition -> RootNavState.Auth
+                userState.hasPendingAccountAddition -> {
+                if (authRepository.showWelcomeCarousel) {
+                    RootNavState.AuthWithWelcome
+                } else {
+                    RootNavState.Auth
+                }
+            }
 
             userState.activeAccount.isVaultUnlocked -> {
-                when (val specialCircumstance = action.specialCircumstance) {
+                when (specialCircumstance) {
                     is SpecialCircumstance.AutofillSave -> {
                         RootNavState.VaultUnlockedForAutofillSave(
                             autofillSaveItem = specialCircumstance.autofillSaveItem,
@@ -116,6 +132,12 @@ class RootNavViewModel @Inject constructor(
                     SpecialCircumstance.VaultShortcut,
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
+
+                    is SpecialCircumstance.CompleteRegistration -> {
+                        throw IllegalStateException(
+                            "Special circumstance should have been already handled.",
+                        )
+                    }
                 }
             }
 
@@ -134,6 +156,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object Auth : RootNavState()
+
+    /**
+     * App should show auth nav graph starting with the welcome carousel.
+     */
+    @Parcelize
+    data object AuthWithWelcome : RootNavState()
 
     /**
      * App should show reset password graph.
@@ -229,6 +257,17 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultUnlockedForNewSend : RootNavState()
+
+    /**
+     * App should show the screen to complete an ongoing registration process.
+     */
+    @Parcelize
+    data class CompleteOngoingRegistration(
+        val email: String,
+        val verificationToken: String,
+        val fromEmail: Boolean,
+        val timestamp: Long,
+    ) : RootNavState()
 
     /**
      * App should show the auth confirmation screen for an unlocked user.

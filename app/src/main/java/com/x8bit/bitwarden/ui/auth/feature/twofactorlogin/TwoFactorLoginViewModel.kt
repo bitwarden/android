@@ -290,7 +290,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.invalid_verification_code.asText(),
+                            message = loginResult.errorMessage?.asText()
+                                ?: R.string.invalid_verification_code.asText(),
                         ),
                     )
                 }

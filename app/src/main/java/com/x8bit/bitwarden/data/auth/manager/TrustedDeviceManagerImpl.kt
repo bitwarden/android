@@ -17,7 +17,7 @@ class TrustedDeviceManagerImpl(
     private val devicesService: DevicesService,
 ) : TrustedDeviceManager {
     override suspend fun trustThisDeviceIfNecessary(userId: String): Result<Boolean> =
-        if (!authDiskSource.getShouldTrustDevice(userId = userId)) {
+        if (authDiskSource.getShouldTrustDevice(userId = userId) != true) {
             false.asSuccess()
         } else {
             vaultSdkSource

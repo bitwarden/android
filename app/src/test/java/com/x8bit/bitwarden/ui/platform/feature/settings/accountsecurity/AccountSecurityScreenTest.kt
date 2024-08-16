@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -23,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -244,7 +246,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
 
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.Disabled) }
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -276,6 +282,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .onAllNodesWithText("PIN")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
+            .assertIsFocused()
         composeTestRule
             .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -285,7 +292,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.PendingEnabled) }
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.PendingEnabled),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -304,7 +315,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.Disabled) }
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
+            )
+        }
         composeTestRule.assertNoDialogExists()
     }
 
@@ -324,7 +339,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.Disabled) }
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
+            )
+        }
         composeTestRule.assertNoDialogExists()
     }
 
@@ -368,7 +387,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.PendingEnabled) }
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.PendingEnabled),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -398,9 +421,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                    pin = "1234",
-                    shouldRequireMasterPasswordOnRestart = false,
+                AccountSecurityAction.UnlockWithPinToggle(
+                    UnlockWithPinState.Enabled(
+                        pin = "1234",
+                        shouldRequireMasterPasswordOnRestart = false,
+                    ),
                 ),
             )
         }
@@ -432,9 +457,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                    pin = "1234",
-                    shouldRequireMasterPasswordOnRestart = false,
+                AccountSecurityAction.UnlockWithPinToggle(
+                    UnlockWithPinState.Enabled(
+                        pin = "1234",
+                        shouldRequireMasterPasswordOnRestart = false,
+                    ),
                 ),
             )
         }
@@ -467,9 +494,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                    pin = "1234",
-                    shouldRequireMasterPasswordOnRestart = true,
+                AccountSecurityAction.UnlockWithPinToggle(
+                    UnlockWithPinState.Enabled(
+                        pin = "1234",
+                        shouldRequireMasterPasswordOnRestart = true,
+                    ),
                 ),
             )
         }

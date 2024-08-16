@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -55,4 +56,19 @@ class EnvironmentRepositoryImpl(
             }
             .launchIn(scope)
     }
+
+    override fun loadEnvironmentForEmail(userEmail: String): Boolean {
+        val urls = environmentDiskSource
+            .getPreAuthEnvironmentUrlDataForEmail(userEmail)
+            ?: return false
+        environment = urls.toEnvironmentUrls()
+        return true
+    }
+
+    override fun saveCurrentEnvironmentForEmail(userEmail: String) =
+        environmentDiskSource
+            .storePreAuthEnvironmentUrlDataForEmail(
+                userEmail = userEmail,
+                urls = environment.environmentUrlData,
+            )
 }

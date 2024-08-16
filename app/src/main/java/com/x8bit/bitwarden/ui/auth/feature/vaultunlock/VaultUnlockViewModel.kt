@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
@@ -100,14 +101,7 @@ class VaultUnlockViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
-        if (state.showBiometricLogin && cipher != null) {
-            sendEvent(
-                VaultUnlockEvent.PromptForBiometrics(
-                    cipher = cipher,
-                ),
-            )
-        }
+        promptForBiometricsIfAvailable()
     }
 
     override fun onCleared() {
@@ -319,6 +313,20 @@ class VaultUnlockViewModel @Inject constructor(
                 input = "",
             )
         }
+
+        // If the new account has biometrics available, automatically prompt for biometrics.
+        promptForBiometricsIfAvailable()
+    }
+
+    private fun promptForBiometricsIfAvailable() {
+        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
+        if (state.showBiometricLogin && cipher != null) {
+            sendEvent(
+                VaultUnlockEvent.PromptForBiometrics(
+                    cipher = cipher,
+                ),
+            )
+        }
     }
 }
 
@@ -355,6 +363,11 @@ data class VaultUnlockState(
     val showBiometricLogin: Boolean get() = isBiometricEnabled && isBiometricsValid
 
     /**
+     * Indicates if we want force focus on Master Password \ PIN input field and show keyboard.
+     */
+    val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
+
+    /**
      * Represents the various dialogs the vault unlock screen can display.
      */
     sealed class VaultUnlockDialog : Parcelable {
@@ -388,7 +401,7 @@ sealed class VaultUnlockEvent {
     /**
      * Prompts the user for biometrics unlock.
      */
-    data class PromptForBiometrics(val cipher: Cipher) : VaultUnlockEvent()
+    data class PromptForBiometrics(val cipher: Cipher) : BackgroundEvent, VaultUnlockEvent()
 }
 
 /**

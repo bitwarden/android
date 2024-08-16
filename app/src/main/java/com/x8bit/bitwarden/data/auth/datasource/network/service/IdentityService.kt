@@ -5,8 +5,10 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthM
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 
 /**
@@ -58,4 +60,16 @@ interface IdentityService {
      * @param refreshToken The refresh token needed to obtain a new token.
      */
     fun refreshTokenSynchronously(refreshToken: String): Result<RefreshTokenResponseJson>
+
+    /**
+     * Send a verification email.
+     */
+    suspend fun sendVerificationEmail(
+        body: SendVerificationEmailRequestJson,
+    ): Result<String?>
+
+    /**
+     * Register a new account to Bitwarden using email verification flow.
+     */
+    suspend fun registerFinish(body: RegisterFinishRequestJson): Result<RegisterResponseJson>
 }
