@@ -6,6 +6,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -34,6 +36,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         every { lockVault(any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
+    private val featureFlagManager: FeatureFlagManager = mockk()
 
     @Test
     fun `initial state should be correct when there is no remembered email`() = runTest {
@@ -358,6 +361,9 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `CreateAccountClick should emit NavigateToCreateAccount`() = runTest {
+        every {
+            featureFlagManager.getFeatureFlag(FlagKey.EmailVerification)
+        } returns false
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
@@ -367,6 +373,23 @@ class LandingViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CreateAccountClick should emit NavigateToStartRegistration if EmailVerification feature flag is true`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.EmailVerification)
+            } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(LandingAction.CreateAccountClick)
+                assertEquals(
+                    LandingEvent.NavigateToStartRegistration,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `DialogDismiss should clear the active dialog`() {
@@ -543,6 +566,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         },
         vaultRepository = vaultRepository,
         environmentRepository = fakeEnvironmentRepository,
+        featureFlagManager = featureFlagManager,
         savedStateHandle = savedStateHandle,
     )
 
