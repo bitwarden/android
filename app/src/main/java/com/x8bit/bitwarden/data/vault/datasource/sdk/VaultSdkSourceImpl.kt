@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -66,6 +68,26 @@ class VaultSdkSourceImpl(
             .auth()
             .trustDevice()
     }
+
+    override suspend fun deriveKeyConnector(
+        userId: String,
+        userKeyEncrypted: String,
+        email: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<String> =
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .crypto()
+                .deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        password = password,
+                        kdf = kdf,
+                        email = email,
+                    ),
+                )
+        }
 
     override suspend fun derivePinKey(
         userId: String,

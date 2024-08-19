@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.ClientData
@@ -144,6 +146,46 @@ class VaultSdkSourceTest {
             clientAuth.trustDevice()
         }
     }
+
+    @Test
+    fun `deriveKeyConnector should call SDK and return a Result with the correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val userKeyEncrypted = "userKeyEncrypted"
+            val email = "email"
+            val password = "password"
+            val expectedResult = "expectedResult"
+            val kdf = mockk<Kdf>()
+            coEvery {
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            } returns expectedResult
+            val result = vaultSdkSource.deriveKeyConnector(
+                userId = userId,
+                userKeyEncrypted = userKeyEncrypted,
+                email = email,
+                password = password,
+                kdf = kdf,
+            )
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                sdkClientManager.getOrCreateClient(userId = userId)
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            }
+        }
 
     @Test
     fun `derivePinKey should call SDK and return a Result with the correct data`() = runBlocking {

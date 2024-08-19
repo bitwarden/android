@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
 import java.time.ZonedDateTime
 
 /**
@@ -15,7 +15,10 @@ fun createMockCipherListView(number: Int): CipherListView =
         folderId = "mockFolderId-$number",
         collectionIds = listOf("mockCollectionId-$number"),
         name = "mockName-$number",
-        type = CipherType.LOGIN,
+        type = CipherListViewType.Login(
+            hasFido2 = false,
+            totp = null,
+        ),
         creationDate = ZonedDateTime
             .parse("2023-10-27T12:00:00Z")
             .toInstant(),
@@ -30,5 +33,6 @@ fun createMockCipherListView(number: Int): CipherListView =
         reprompt = CipherRepromptType.NONE,
         edit = false,
         viewPassword = false,
-        subTitle = "",
+        subTitle = "mockSubTitle-$number",
+        key = "mockKey-$number",
     )
