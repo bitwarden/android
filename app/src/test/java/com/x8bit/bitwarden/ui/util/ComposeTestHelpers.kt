@@ -156,17 +156,20 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
     fetchSemanticsNode()
         .let {
             val customActions = it.config[SemanticsActions.CustomActions]
-            customActions.find { action ->
-                action.label == label
-            }
+            customActions
+                .find { action ->
+                    action.label == label
+                }
                 ?.action
-                ?.invoke() ?: throw AssertionError("""
+                ?.invoke()
+                ?: throw AssertionError(
+                    """
                     No action with label $label
                     
                     Available actions: $customActions
                     in
                     $tree
                 """.trimMargin(),
-            )
+                )
         }
 }
