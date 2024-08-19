@@ -90,6 +90,7 @@ fun RootNavScreen(
         is RootNavState.CompleteOngoingRegistration,
         RootNavState.AuthWithWelcome,
         -> AUTH_GRAPH_ROUTE
+
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
         RootNavState.SetPassword -> SET_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
