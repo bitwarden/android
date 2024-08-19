@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
 import io.mockk.mockk
@@ -229,6 +230,8 @@ class UserStateJsonExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -287,6 +290,8 @@ class UserStateJsonExtensionsTest {
                                 Organization(
                                     id = "organizationId",
                                     name = "organizationName",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
@@ -320,6 +325,8 @@ class UserStateJsonExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         isBiometricsEnabled = true,
@@ -374,6 +381,8 @@ class UserStateJsonExtensionsTest {
                                 Organization(
                                     id = "organizationId",
                                     name = "organizationName",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
@@ -408,6 +417,8 @@ class UserStateJsonExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -470,6 +481,8 @@ class UserStateJsonExtensionsTest {
                                 Organization(
                                     id = "organizationId",
                                     name = "organizationName",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),

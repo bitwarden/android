@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -102,14 +103,20 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                         Organization(
                             id = "mockOrganizationId-1",
                             name = "mockOrganizationName-1",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                         Organization(
                             id = "mockOrganizationId-2",
                             name = "mockOrganizationName-2",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                         Organization(
                             id = "mockOrganizationId-3",
                             name = "mockOrganizationName-3",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     )
                 } else {

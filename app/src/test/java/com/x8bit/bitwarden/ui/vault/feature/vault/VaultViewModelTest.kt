@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -187,6 +188,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                             Organization(
                                 id = "organiationId",
                                 name = "Test Organization",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
@@ -267,6 +270,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                             Organization(
                                 id = "organizationId",
                                 name = "Test Organization",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
@@ -471,6 +476,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                             Organization(
                                 id = "testOrganizationId",
                                 name = "Test Organization",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                     ),

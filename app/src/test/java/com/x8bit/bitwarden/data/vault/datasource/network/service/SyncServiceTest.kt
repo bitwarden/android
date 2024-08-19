@@ -58,6 +58,7 @@ private const val SYNC_SUCCESS_JSON = """
     "organizations": [
       {
         "usePolicies": false,
+        "useKeyConnector": false,
         "keyConnectorUrl": "mockKeyConnectorUrl-1",
         "type": 1,
         "seats": 1,
@@ -132,6 +133,7 @@ private const val SYNC_SUCCESS_JSON = """
     "providerOrganizations": [
       {
         "usePolicies": false,
+        "useKeyConnector": false,
         "keyConnectorUrl": "mockKeyConnectorUrl-1",
         "type": 1,
         "seats": 1,

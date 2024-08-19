@@ -615,6 +615,7 @@ Scanning will happen automatically.</string>
   <string name="updating_password">Updating password</string>
   <string name="update_password_error">Currently unable to update password</string>
   <string name="remove_master_password">Remove master password</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.</string>
   <string name="remove_master_password_warning">%1$s is using SSO with customer-managed encryption. Continuing will remove your master password from your account and require SSO to login.</string>
   <string name="remove_master_password_warning2">If you do not want to remove your master password, you may leave this organization.</string>
   <string name="leave_organization">Leave organization</string>
