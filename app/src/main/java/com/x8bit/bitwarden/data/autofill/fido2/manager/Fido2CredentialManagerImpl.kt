@@ -55,18 +55,18 @@ class Fido2CredentialManagerImpl(
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult {
         val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
-                fido2CredentialRequest
+            fido2CredentialRequest
+                .callingAppInfo
+                .getAppSigningSignatureFingerprint()
+                ?.let { ClientData.DefaultWithCustomHash(hash = it) }
+                ?: return Fido2RegisterCredentialResult.Error
+        } else {
+            ClientData.DefaultWithExtraData(
+                androidPackageName = fido2CredentialRequest
                     .callingAppInfo
-                    .getAppSigningSignatureFingerprint()
-                    ?.let { ClientData.DefaultWithCustomHash(hash = it) }
-                    ?: return Fido2RegisterCredentialResult.Error
-            } else {
-                ClientData.DefaultWithExtraData(
-                    androidPackageName = fido2CredentialRequest
-                        .callingAppInfo
-                        .packageName,
-                )
-            }
+                    .packageName,
+            )
+        }
         val origin = fido2CredentialRequest
             .origin
             ?: getOriginUrlFromAttestationOptionsOrNull(fido2CredentialRequest.requestJson)

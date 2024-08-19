@@ -1961,96 +1961,101 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `login two factor should return Error result when get token succeeds but unlock vault fails`() = runTest {
-        val twoFactorResponse = GetTokenResponseJson
-            .TwoFactorRequired(
+    fun `login two factor should return Error result when get token succeeds but unlock vault fails`() =
+        runTest {
+            val twoFactorResponse = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
-        // Attempt a normal login with a two factor error first, so that the auth
-        // data will be cached.
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        } returns twoFactorResponse
-            .asSuccess()
-        val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.TwoFactorRequired, firstResult)
-        coVerify { identityService.preLogin(email = EMAIL) }
-        coVerify {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        }
+            // Attempt a normal login with a two factor error first, so that the auth
+            // data will be cached.
+            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns twoFactorResponse.asSuccess()
 
-        // Login with two factor data.
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-            twoFactorToken = "twoFactorTokenToStore",
-        )
-        coEvery {
-            identityService.getToken(
+            val firstResult = repository.login(
                 email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
+                password = PASSWORD,
                 captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
+            )
+
+            assertEquals(LoginResult.TwoFactorRequired, firstResult)
+            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+
+            // Login with two factor data.
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                twoFactorToken = "twoFactorTokenToStore",
+            )
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                    twoFactorData = TWO_FACTOR_DATA,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
+                    privateKey = successResponse.privateKey!!,
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.InvalidStateError
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val finalResult = repository.login(
+                email = EMAIL,
+                password = PASSWORD,
                 twoFactorData = TWO_FACTOR_DATA,
+                captchaToken = null,
             )
-        } returns successResponse.asSuccess()
-        coEvery {
-            vaultRepository.unlockVault(
-                userId = USER_ID_1,
+            assertEquals(LoginResult.Error(errorMessage = null), finalResult)
+            assertEquals(twoFactorResponse, repository.twoFactorResponse)
+            fakeAuthDiskSource.assertTwoFactorToken(
                 email = EMAIL,
-                kdf = ACCOUNT_1.profile.toSdkParams(),
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
-                    password = PASSWORD,
-                    userKey = successResponse.key!!,
-                ),
-                privateKey = successResponse.privateKey!!,
-                organizationKeys = null,
+                twoFactorToken = null,
             )
-        } returns VaultUnlockResult.InvalidStateError
-        every {
-            successResponse.toUserState(
-                previousUserState = null,
-                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-            )
-        } returns SINGLE_USER_STATE_1
-        val finalResult = repository.login(
-            email = EMAIL,
-            password = PASSWORD,
-            twoFactorData = TWO_FACTOR_DATA,
-            captchaToken = null,
-        )
-        assertEquals(LoginResult.Error(errorMessage = null), finalResult)
-        assertEquals(twoFactorResponse, repository.twoFactorResponse)
-        fakeAuthDiskSource.assertTwoFactorToken(
-            email = EMAIL,
-            twoFactorToken = null,
-        )
 
-        coVerify(exactly = 0) {
-            vaultRepository.syncIfNecessary()
+            coVerify(exactly = 0) {
+                vaultRepository.syncIfNecessary()
+            }
         }
-    }
 
     @Test
     fun `login uses remembered two factor tokens`() = runTest {

@@ -311,7 +311,6 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherView(1).copy(name = "D"),
             createMockCipherView(1).copy(name = "AbA"),
             createMockCipherView(1).copy(name = "aAb"),
-
         )
 
         val expected = listOf(

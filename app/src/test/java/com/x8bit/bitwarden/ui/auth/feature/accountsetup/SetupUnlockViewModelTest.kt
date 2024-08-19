@@ -241,6 +241,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
     @Test
     fun `EnableBiometricsClick actin should show error dialog when cipher is null`() {
         every {
