@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
+import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
@@ -62,6 +63,13 @@ class AuthSdkSourceImpl(
                 purpose = purpose,
             )
     }
+
+    override suspend fun makeKeyConnectorKeys(): Result<KeyConnectorResponse> =
+        runCatchingWithLogs {
+            getClient()
+                .auth()
+                .makeKeyConnectorKeys()
+        }
 
     override suspend fun makeRegisterKeys(
         email: String,
