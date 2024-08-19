@@ -45,6 +45,7 @@ data class UserState(
      * they logged in using SSO and don't yet have one). NOTE: This should **not** be used to
      * determine whether a user has a master password. There are cases in which a user can both
      * not have a password but still not need one, such as TDE.
+     * @property hasMasterPassword Indicates that the user does or does not have a master password.
      * @property organizations List of [Organization]s the user is associated with, if any.
      * @property isBiometricsEnabled Indicates that the biometrics mechanism for unlocking the
      * user's vault is enabled.
@@ -61,16 +62,12 @@ data class UserState(
         val isVaultUnlocked: Boolean,
         val needsPasswordReset: Boolean,
         val needsMasterPassword: Boolean,
+        val hasMasterPassword: Boolean,
         val trustedDevice: TrustedDevice?,
         val organizations: List<Organization>,
         val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     ) {
-        /**
-         * Indicates that the user does or does not have a master password.
-         */
-        val hasMasterPassword: Boolean get() = trustedDevice?.hasMasterPassword != false
-
         /**
          * Indicates that the user does or does not have a means to manually unlock the vault.
          */
@@ -86,7 +83,6 @@ data class UserState(
      */
     data class TrustedDevice(
         val isDeviceTrusted: Boolean,
-        val hasMasterPassword: Boolean,
         val hasAdminApproval: Boolean,
         val hasLoginApprovingDevice: Boolean,
         val hasResetPasswordPermission: Boolean,

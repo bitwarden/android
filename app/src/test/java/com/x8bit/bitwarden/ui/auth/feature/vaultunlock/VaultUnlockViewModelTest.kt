@@ -109,7 +109,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 DEFAULT_ACCOUNT.copy(
                     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     isBiometricsEnabled = false,
-                    trustedDevice = TRUSTED_DEVICE,
+                    hasMasterPassword = false,
                 ),
             ),
         )
@@ -128,6 +128,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     isBiometricsEnabled = true,
                     trustedDevice = TRUSTED_DEVICE,
+                    hasMasterPassword = false,
                 ),
             ),
         )
@@ -146,6 +147,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                     vaultUnlockType = VaultUnlockType.PIN,
                     isBiometricsEnabled = false,
                     trustedDevice = TRUSTED_DEVICE,
+                    hasMasterPassword = false,
                 ),
             ),
         )
@@ -210,6 +212,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                 ),
             )
@@ -246,6 +249,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                 ),
             )
@@ -436,7 +440,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             val account = DEFAULT_ACCOUNT.copy(
                 isVaultUnlocked = false,
                 isBiometricsEnabled = true,
-                )
+            )
             val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
             val viewModel = createViewModel(state = initialState)
             mutableUserStateFlow.update {
@@ -984,7 +988,6 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
 
 private val TRUSTED_DEVICE: UserState.TrustedDevice = UserState.TrustedDevice(
     isDeviceTrusted = false,
-    hasMasterPassword = false,
     hasAdminApproval = false,
     hasLoginApprovingDevice = false,
     hasResetPasswordPermission = false,
@@ -1004,6 +1007,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     organizations = emptyList(),
     needsMasterPassword = false,
     trustedDevice = null,
+    hasMasterPassword = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(

@@ -41,11 +41,11 @@ class TrustedDeviceViewModel @Inject constructor(
                 environmentLabel = environmentRepository.environment.label,
                 isRemembered = true,
                 showContinueButton = trustedDevice
-                    ?.let { !it.hasAdminApproval && !it.hasMasterPassword }
+                    ?.let { !it.hasAdminApproval && !account.hasMasterPassword }
                     ?: false,
                 showOtherDeviceButton = trustedDevice?.hasLoginApprovingDevice ?: false,
                 showRequestAdminButton = trustedDevice?.hasAdminApproval ?: false,
-                showMasterPasswordButton = trustedDevice?.hasMasterPassword ?: false,
+                showMasterPasswordButton = account?.hasMasterPassword ?: false,
             )
         },
 ) {

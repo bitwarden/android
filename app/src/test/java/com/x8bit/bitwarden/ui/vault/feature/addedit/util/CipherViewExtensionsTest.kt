@@ -440,6 +440,7 @@ class CipherViewExtensionsTest {
             vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
         )
 }
 

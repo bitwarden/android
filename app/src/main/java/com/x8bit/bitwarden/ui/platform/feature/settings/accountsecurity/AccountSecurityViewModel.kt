@@ -63,7 +63,6 @@ class AccountSecurityViewModel @Inject constructor(
                 .userStateFlow
                 .value
                 ?.activeAccount
-                ?.trustedDevice
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             userId = userId,

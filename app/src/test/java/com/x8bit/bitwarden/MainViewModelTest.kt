@@ -777,6 +777,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     organizations = emptyList(),
     needsMasterPassword = false,
     trustedDevice = null,
+    hasMasterPassword = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(
