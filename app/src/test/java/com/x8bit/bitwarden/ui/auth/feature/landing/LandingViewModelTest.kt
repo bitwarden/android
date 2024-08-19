@@ -38,7 +38,7 @@ class LandingViewModelTest : BaseViewModelTest() {
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
+        every { getFeatureFlag(FlagKey.EmailVerification) } returns false
     }
 
     @Test
