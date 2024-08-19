@@ -254,7 +254,6 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `when terms and conditions custom action invoked should send TermsClick`() {
-        @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
             .performCustomAccessibilityAction("Terms of Service")
@@ -264,7 +263,6 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `when privacy policy custom action invoked should send TermsClick`() {
-        @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
             .performCustomAccessibilityAction("Privacy Policy")
