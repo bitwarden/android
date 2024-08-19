@@ -9,7 +9,7 @@
     <string name="internet_connection_required_title">Internet connection required</string>
     <string name="internet_connection_required_message">Anslut till internet innan du fortsätter.</string>
     <string name="ok">OK</string>
-    <string name="syncing">Syncing</string>
+    <string name="syncing">Synkroniserar</string>
     <string name="copy">Kopiera</string>
     <string name="edit_item">Redigera</string>
     <string name="close">Stäng</string>
@@ -20,7 +20,7 @@
     <string name="enter_a_setup_key">Enter a setup key</string>
     <string name="scan_qr_code">Skanna QR-kod</string>
     <string name="point_your_camera_at_the_qr_code">Rikta din kamera mot QR-koden.</string>
-    <string name="cannot_scan_qr_code">Cannot scan QR code.</string>
+    <string name="cannot_scan_qr_code">Kan inte skanna QR-kod.</string>
     <string name="enter_key_manually">Ange nyckel manuellt.</string>
     <string name="cannot_add_key">Cannot add key?</string>
     <string name="once_the_key_is_successfully_entered">Once the key is successfully entered,\nselect Add TOTP to store the key safely</string>
@@ -28,7 +28,7 @@
     <string name="authenticator_key_scanner">Autentiseringsnyckel</string>
     <string name="no_thanks">Nej tack</string>
     <string name="settings">Inställningar</string>
-    <string name="enable_camera_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
+    <string name="enable_camera_permission_to_use_the_scanner">Bevilja kamerabehörighet för att använda skannern</string>
     <string name="empty_item_list">Empty Item Listing</string>
     <string name="you_dont_have_items_to_display">Du har inga objekt att visa.</string>
     <string name="empty_item_list_instruction">Lägg till en ny kod för att säkra dina konton.</string>
@@ -69,7 +69,7 @@
     <string name="use_your_device_camera_to_scan_codes">Använd enhetens kamera för att skanna koder</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
     <string name="sign_in_using_unique_codes">Logga in med unika koder</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you’ll enter your username and password and a code generated in this app.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
     <string name="continue_button">Fortsätt</string>
     <string name="skip">Hoppa över</string>
     <string name="get_started">Kom igång</string>
@@ -80,14 +80,14 @@
     <string name="delete_item">Radera objekt</string>
     <string name="item_deleted">Item deleted</string>
     <string name="delete">Radera</string>
-    <string name="do_you_really_want_to_permanently_delete_cipher">Do you really want to permanently delete? This cannot be undone.</string>
+    <string name="do_you_really_want_to_permanently_delete_cipher">Är du säker på att du vill radera permanent? Detta går inte att ångra.</string>
     <string name="data">Data</string>
     <string name="export">Exportera</string>
     <string name="loading">Laddar</string>
-    <string name="export_confirmation_title">Confirm export</string>
-    <string name="export_vault_warning">This export contains your data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
+    <string name="export_confirmation_title">Bekräfta export</string>
+    <string name="export_vault_warning">Denna export innehåller din data i ett okrypterat format. Du bör inte lagra eller skicka den exporterade filen över osäkra kanaler (t.ex. e-post). Radera den omedelbart när du är färdig med den.</string>
     <string name="file_format">Filformat</string>
-    <string name="export_vault_failure">There was a problem exporting your vault. If the problem persists, you\'ll need to export from the web vault.</string>
+    <string name="export_vault_failure">Det gick inte att exportera ditt valv. Om problemet kvarstår måste du exportera från webbvalvet istället.</string>
     <string name="export_success">Data exported successfully</string>
     <string name="unlock_with">Lås upp med %1$s</string>
     <string name="biometrics">Biometri</string>

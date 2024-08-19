@@ -69,7 +69,7 @@
     <string name="use_your_device_camera_to_scan_codes">Користите камеру уређаја за скенирање кодова</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Скенирајте QR кôд у подешавањима верификације у 2 корака за било који налог.</string>
     <string name="sign_in_using_unique_codes">Пријавите се користећи јединствене кодове</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Када користите верификацију у 2 корака, унећете своје корисничко име и лозинку и кôд генерисан у овој апликацији.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
     <string name="continue_button">Настави</string>
     <string name="skip">Прескочи</string>
     <string name="get_started">Почните</string>
