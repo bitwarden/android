@@ -268,7 +268,7 @@ jobs:
           if-no-files-found: error
 
       # When building variants other than 'prod'
-      - name: Upload other .apk artifact
+      - name: Upload debug .apk artifact
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
@@ -310,40 +310,40 @@ jobs:
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: bw-android-apk-sha256.txt
-          path: ./bw-android-apk-sha256.txt
+          name: com.x8bit.bitwarden.apk-sha256.txt
+          path: ./com.x8bit.bitwarden.apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload .apk SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: bw-android-beta-apk-sha256.txt
-          path: ./bw-android-beta-apk-sha256.txt
+          name: com.x8bit.bitwarden.beta.apk-sha256.txt
+          path: ./com.x8bit.bitwarden.beta.apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload .aab SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: bw-android-aab-sha256.txt
-          path: ./bw-android-aab-sha256.txt
+          name: com.x8bit.bitwarden.aab-sha256.txt
+          path: ./com.x8bit.bitwarden.aab-sha256.txt
           if-no-files-found: error
 
       - name: Upload .aab SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: bw-android-beta-aab-sha256.txt
-          path: ./bw-android-beta-aab-sha256.txt
+          name: com.x8bit.bitwarden.beta.aab-sha256.txt
+          path: ./com.x8bit.bitwarden.beta.aab-sha256.txt
           if-no-files-found: error
 
-      - name: Upload .apk SHA file for other
+      - name: Upload .apk SHA file for debug
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: bw-android-${{ matrix.variant }}-apk-sha256.txt
-          path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+          name: com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
+          path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
@@ -469,7 +469,6 @@ jobs:
           keyAlias:bitwarden \
           keyPassword:"${{ env.FDROID_STORE_PASSWORD }}"
 
-            # Generate the F-Droid APK for publishing
       - name: Generate F-Droid Beta Artifacts
         env:
           FDROID_BETA_KEYSTORE_PASSWORD: ${{ secrets.FDROID_BETA_KEYSTORE_PASSWORD }}
@@ -516,7 +515,7 @@ jobs:
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
           name: com.x8bit.bitwarden.apk.beta-sha256.txt
-          path: ./bw-fdroid-beta-apk-sha256.txt
+          path: ./com.x8bit.bitwarden.apk.beta-sha256.txt
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
