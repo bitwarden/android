@@ -26,6 +26,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
 import io.mockk.just
@@ -1564,49 +1566,70 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `ServiceTypeOptionSelect should update service type correctly`() = runTest {
-            val action = GeneratorAction
-                .MainType
-                .Username
-                .UsernameType
-                .ForwardedEmailAlias
-                .ServiceTypeOptionSelect(
-                    serviceTypeOption = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceTypeOption
-                        .ADDY_IO,
-                )
-
             fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
                 GeneratedForwardedServiceUsernameResult.Success(
                     generatedEmailAddress = "defaultForwardedEmailAlias",
                 ),
             )
 
-            viewModel.trySendAction(action)
-
-            val expectedState = defaultForwardedEmailAliasState.copy(
-                generatedText = "-",
-                selectedType = GeneratorState.MainType.Username(
-                    selectedType = GeneratorState
+            ServiceTypeOption
+                .entries
+                .forEach {
+                    val action = GeneratorAction
                         .MainType
                         .Username
                         .UsernameType
-                        .ForwardedEmailAlias(
-                            selectedServiceType = GeneratorState
+                        .ForwardedEmailAlias
+                        .ServiceTypeOptionSelect(serviceTypeOption = it)
+
+                    viewModel.trySendAction(action)
+
+                    val serviceType = createMockForwardedEmailAliasGeneratorState(it)
+
+                    val expectedState = defaultForwardedEmailAliasState.copy(
+                        generatedText = "-",
+                        selectedType = GeneratorState.MainType.Username(
+                            selectedType = GeneratorState
                                 .MainType
                                 .Username
                                 .UsernameType
-                                .ForwardedEmailAlias
-                                .ServiceType
-                                .AddyIo(),
+                                .ForwardedEmailAlias(
+                                    selectedServiceType = serviceType,
+                                ),
                         ),
-                ),
-            )
+                    )
 
-            assertEquals(expectedState, viewModel.stateFlow.value)
+                    assertEquals(expectedState, viewModel.stateFlow.value)
+                }
+        }
+
+        @Suppress("MaxLineLength")
+        private fun createMockForwardedEmailAliasGeneratorState(
+            serviceTypeOption: ServiceTypeOption,
+        ): ServiceType = when (serviceTypeOption) {
+            ServiceTypeOption.ADDY_IO -> {
+                ServiceType.AddyIo()
+            }
+
+            ServiceTypeOption.DUCK_DUCK_GO -> {
+                ServiceType.DuckDuckGo()
+            }
+
+            ServiceTypeOption.FAST_MAIL -> {
+                ServiceType.FastMail()
+            }
+
+            ServiceTypeOption.FIREFOX_RELAY -> {
+                ServiceType.FirefoxRelay()
+            }
+
+            ServiceTypeOption.FORWARD_EMAIL -> {
+                ServiceType.ForwardEmail()
+            }
+
+            ServiceTypeOption.SIMPLE_LOGIN -> {
+                ServiceType.SimpleLogin()
+            }
         }
     }
 
@@ -1645,12 +1668,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .AddyIo(
                                 apiAccessToken = newAccessToken,
                             ),
@@ -1685,12 +1703,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .AddyIo(
                                 domainName = newDomainName,
                             ),
@@ -1736,12 +1749,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .DuckDuckGo(
                                 apiKey = newApiKey,
                             ),
@@ -1787,12 +1795,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .FastMail(
                                 apiKey = newApiKey,
                             ),
@@ -1839,12 +1842,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .FirefoxRelay(
                                 apiAccessToken = newAccessToken,
                             ),
@@ -1891,12 +1889,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .ForwardEmail(
                                 apiKey = newApiKey,
                             ),
@@ -1932,12 +1925,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .ForwardEmail(
                                 domainName = newDomainName,
                             ),
@@ -1984,12 +1972,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
+                        selectedServiceType = ServiceType
                             .SimpleLogin(
                                 apiKey = newApiKey,
                             ),
@@ -2235,12 +2218,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                    selectedServiceType = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceType
+                    selectedServiceType = ServiceType
                         .AddyIo(),
                 ),
             ),
@@ -2254,12 +2232,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                    selectedServiceType = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceType
+                    selectedServiceType = ServiceType
                         .DuckDuckGo(),
                 ),
             ),
@@ -2273,12 +2246,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                    selectedServiceType = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceType
+                    selectedServiceType = ServiceType
                         .FastMail(),
                 ),
             ),
@@ -2292,12 +2260,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                    selectedServiceType = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceType
+                    selectedServiceType = ServiceType
                         .FirefoxRelay(),
                 ),
             ),
@@ -2311,12 +2274,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                    selectedServiceType = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceType
+                    selectedServiceType = ServiceType
                         .ForwardEmail(),
                 ),
             ),
@@ -2330,12 +2288,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                    selectedServiceType = GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .ForwardedEmailAlias
-                        .ServiceType
+                    selectedServiceType = ServiceType
                         .SimpleLogin(),
                 ),
             ),
