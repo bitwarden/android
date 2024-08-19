@@ -85,7 +85,7 @@ class StartRegistrationViewModel @Inject constructor(
             is ContinueClick -> handleContinueClick()
             is EmailInputChange -> handleEmailInputChanged(action)
             is NameInputChange -> handleNameInputChanged(action)
-            is BackClick -> handleCloseClick()
+            is BackClick -> handleBackClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
             is ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
                 action,
@@ -157,7 +157,7 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleCloseClick() {
+    private fun handleBackClick() {
         sendEvent(StartRegistrationEvent.NavigateBack)
     }
 

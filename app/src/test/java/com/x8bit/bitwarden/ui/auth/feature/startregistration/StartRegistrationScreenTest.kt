@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -195,6 +196,48 @@ class StartRegistrationScreenTest : BaseComposeTest() {
                 uri = "https://bitwarden.com/help/server-geographies/".toUri(),
             )
         }
+    }
+
+    @Test
+    fun `when environment selected in dialog should send EnvironmentTypeSelect action`() {
+        val selectedEnvironment = Environment.Eu
+
+        // Clicking to open dialog
+        composeTestRule
+            .onNodeWithText(Environment.Us.label)
+            .performScrollTo()
+            .performClick()
+
+        // Clicking item on dialog
+        composeTestRule
+            .onNodeWithText(selectedEnvironment.label)
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+
+        verify {
+            viewModel.trySendAction(StartRegistrationAction.EnvironmentTypeSelect(selectedEnvironment.type))
+        }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `when continue button clicked should send ContinueClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                isContinueButtonEnabled = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(StartRegistrationAction.ContinueClick) }
     }
 
     companion object {
