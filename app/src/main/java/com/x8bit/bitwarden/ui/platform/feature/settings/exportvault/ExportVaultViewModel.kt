@@ -66,7 +66,6 @@ class ExportVaultViewModel @Inject constructor(
                 .userStateFlow
                 .value
                 ?.activeAccount
-                ?.trustedDevice
                 ?.hasMasterPassword == false,
         ),
 ) {

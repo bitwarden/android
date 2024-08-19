@@ -368,6 +368,7 @@ private val DEFAULT_USER_STATE = UserState(
             organizations = emptyList(),
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
         ),
     ),
 )

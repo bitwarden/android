@@ -79,6 +79,7 @@ class UserStateExtensionsTest {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -99,6 +100,7 @@ class UserStateExtensionsTest {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -123,6 +125,7 @@ class UserStateExtensionsTest {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -147,6 +150,7 @@ class UserStateExtensionsTest {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                 ),
             )
@@ -186,6 +190,7 @@ class UserStateExtensionsTest {
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -223,6 +228,7 @@ class UserStateExtensionsTest {
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -264,6 +270,7 @@ class UserStateExtensionsTest {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                 ),
             )
@@ -288,6 +295,7 @@ class UserStateExtensionsTest {
                 organizations = emptyList(),
                 needsMasterPassword = false,
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -335,6 +343,7 @@ class UserStateExtensionsTest {
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -383,6 +392,7 @@ class UserStateExtensionsTest {
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

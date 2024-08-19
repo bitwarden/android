@@ -78,6 +78,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     organizations = emptyList(),
                     needsMasterPassword = false,
                     trustedDevice = null,
+                    hasMasterPassword = true,
                 ),
             ),
         )
@@ -212,6 +213,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             organizations = emptyList(),
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -265,6 +267,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 organizations = emptyList(),
                 needsMasterPassword = false,
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -322,6 +325,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 organizations = emptyList(),
                 needsMasterPassword = false,
                 trustedDevice = null,
+                hasMasterPassword = true,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -481,6 +485,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             organizations = listOf(),
             isBiometricsEnabled = false,
             vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+            hasMasterPassword = true,
         )
 
         val userState = UserState(
@@ -513,6 +518,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             organizations = listOf(),
             isBiometricsEnabled = false,
             vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+            hasMasterPassword = true,
         )
 
         val userState = UserState(

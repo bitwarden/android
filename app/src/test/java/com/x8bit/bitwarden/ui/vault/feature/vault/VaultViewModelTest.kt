@@ -190,6 +190,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                 ),
             )
@@ -269,6 +270,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
                     ),
                 ),
             )
@@ -1515,6 +1517,7 @@ private val DEFAULT_USER_STATE = UserState(
             organizations = emptyList(),
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -1530,6 +1533,7 @@ private val DEFAULT_USER_STATE = UserState(
             organizations = emptyList(),
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
         ),
     ),
 )

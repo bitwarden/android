@@ -514,6 +514,7 @@ private fun createMockAccounts(number: Int): List<UserState.Account> {
                 organizations = emptyList(),
                 isBiometricsEnabled = false,
                 vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                hasMasterPassword = true,
             ),
         )
     }
