@@ -21,6 +21,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -41,6 +42,7 @@ object Fido2ProviderModule {
         fido2CredentialManager: Fido2CredentialManager,
         dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
+        clock: Clock,
     ): Fido2ProviderProcessor =
         Fido2ProviderProcessorImpl(
             context,
@@ -49,6 +51,7 @@ object Fido2ProviderModule {
             fido2CredentialStore,
             fido2CredentialManager,
             intentManager,
+            clock,
             dispatcherManager,
         )
 

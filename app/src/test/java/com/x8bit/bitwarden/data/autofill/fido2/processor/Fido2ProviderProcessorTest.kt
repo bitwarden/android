@@ -53,6 +53,9 @@ import kotlinx.serialization.encodeToString
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class Fido2ProviderProcessorTest {
 
@@ -80,6 +83,7 @@ class Fido2ProviderProcessorTest {
     private val cancellationSignal: CancellationSignal = mockk()
 
     private val json = PlatformNetworkModule.providesJson()
+    private val clock = FIXED_CLOCK
 
     @BeforeEach
     fun setUp() {
@@ -90,6 +94,7 @@ class Fido2ProviderProcessorTest {
             fido2CredentialStore,
             fido2CredentialManager,
             intentManager,
+            clock,
             dispatcherManager,
         )
     }
@@ -244,6 +249,12 @@ class Fido2ProviderProcessorTest {
         verify(exactly = 0) { callback.onError(any()) }
 
         assertEquals(DEFAULT_USER_STATE.accounts.size, captureSlot.captured.createEntries.size)
+
+        // Verify only the active account entry has a lastUsedTime
+        assertEquals(
+            1,
+            captureSlot.captured.createEntries.filter { it.lastUsedTime != null }.size,
+        )
         DEFAULT_USER_STATE.accounts.forEachIndexed { index, mockAccount ->
             assertEquals(mockAccount.email, captureSlot.captured.createEntries[index].accountName)
         }
@@ -493,6 +504,11 @@ class Fido2ProviderProcessorTest {
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "mockUserId-1",
     accounts = createMockAccounts(2),
+)
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
 )
 
 private fun createMockAccounts(number: Int): List<UserState.Account> {
