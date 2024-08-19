@@ -214,9 +214,10 @@ class StartRegistrationScreenTest : BaseComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
-
         verify {
-            viewModel.trySendAction(StartRegistrationAction.EnvironmentTypeSelect(selectedEnvironment.type))
+            viewModel.trySendAction(
+                StartRegistrationAction.EnvironmentTypeSelect(selectedEnvironment.type),
+            )
         }
 
         // Make sure dialog is hidden:
