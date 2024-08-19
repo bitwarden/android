@@ -272,7 +272,7 @@ jobs:
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: com.x8bit.bitwarden-${{ matrix.variant }}.apk
+          name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden-standard-debug.apk
           if-no-files-found: error
 
@@ -490,13 +490,13 @@ jobs:
       - name: Create checksum for F-Droid artifact
         run: |
           sha256sum "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk" \
-          > ./com.x8bit.bitwarden-fdroid-sha256.txt
+          > ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid SHA file
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: com.x8bit.bitwarden-fdroid-sha256.txt
-          path: ./com.x8bit.bitwarden-fdroid-sha256.txt
+          name: com.x8bit.bitwarden-fdroid.apk-sha256.txt
+          path: ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload F-Droid Beta .apk artifact
@@ -509,13 +509,13 @@ jobs:
       - name: Create checksum for F-Droid Beta artifact
         run: |
           sha256sum "app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden-fdroid-beta.apk" \
-          > ./com.x8bit.bitwarden.apk.beta-sha-256.txt
+          > ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid Beta SHA file
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: com.x8bit.bitwarden.apk.beta-sha256.txt
-          path: ./com.x8bit.bitwarden.apk.beta-sha256.txt
+          name: com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
+          path: ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
