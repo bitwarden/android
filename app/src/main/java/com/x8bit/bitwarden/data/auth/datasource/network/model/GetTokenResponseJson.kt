@@ -28,6 +28,7 @@ sealed class GetTokenResponseJson {
      * this token will be cached and used for future auth requests.
      * @property masterPasswordPolicyOptions The options available for a user's master password.
      * @property userDecryptionOptions The options available to a user for decryption.
+     * @property keyConnectorUrl URL to the user's key connector.
      */
     @Serializable
     data class Success(
@@ -75,6 +76,9 @@ sealed class GetTokenResponseJson {
 
         @SerialName("UserDecryptionOptions")
         val userDecryptionOptions: UserDecryptionOptionsJson?,
+
+        @SerialName("KeyConnectorUrl")
+        val keyConnectorUrl: String?,
     ) : GetTokenResponseJson()
 
     /**

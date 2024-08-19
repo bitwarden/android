@@ -5504,6 +5504,7 @@ class AuthRepositoryTest {
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = null,
+            keyConnectorUrl = null,
         )
         private val PROFILE_1 = AccountJson.Profile(
             userId = USER_ID_1,

@@ -212,7 +212,7 @@ class AccountsServiceTest : BaseServiceTest() {
     @Test
     fun `getMasterKeyFromKeyConnector with empty response is success`() = runTest {
         val masterKey = "masterKey"
-        val response = MockResponse().setBody("""{ "Key": "$masterKey" }""")
+        val response = MockResponse().setBody("""{ "key": "$masterKey" }""")
         server.enqueue(response)
         val result = service.getMasterKeyFromKeyConnector(url = "$url/test")
         assertEquals(
