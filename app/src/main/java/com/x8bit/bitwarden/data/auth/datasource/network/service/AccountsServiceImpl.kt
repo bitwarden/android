@@ -119,14 +119,14 @@ class AccountsServiceImpl(
     override suspend fun getMasterKeyFromKeyConnector(
         url: String,
     ): Result<KeyConnectorMasterKeyResponseJson> =
-        authenticatedKeyConnectorApi.getMasterKeyFromKeyConnector(url = url)
+        authenticatedKeyConnectorApi.getMasterKeyFromKeyConnector(url = "$url/user-keys")
 
     override suspend fun storeMasterKeyToKeyConnector(
         url: String,
         masterKey: String,
     ): Result<Unit> =
         authenticatedKeyConnectorApi.storeMasterKeyToKeyConnector(
-            url = url,
+            url = "$url/user-keys",
             body = KeyConnectorMasterKeyRequestJson(masterKey = masterKey),
         )
 }
