@@ -25,7 +25,7 @@ sealed class FlagKey<out T : Any> {
     data object EmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "email-verification"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
