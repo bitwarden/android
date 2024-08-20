@@ -133,6 +133,11 @@ fun @receiver:StringRes Int.asText(vararg args: Any): Text = ResArgsText(this, a
 fun createAnnotatedString(
     mainString: String,
     highlights: List<String>,
+    highlightStyle: SpanStyle = SpanStyle(
+        color = MaterialTheme.colorScheme.primary,
+        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+        fontWeight = FontWeight.Bold,
+    ),
     tag: String,
 ): AnnotatedString {
     return buildAnnotatedString {
@@ -149,11 +154,7 @@ fun createAnnotatedString(
             val startIndexUnsubscribe = mainString.indexOf(highlightString, ignoreCase = true)
             val endIndexUnsubscribe = startIndexUnsubscribe + highlightString.length
             addStyle(
-                style = SpanStyle(
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    fontWeight = FontWeight.Bold,
-                ),
+                style = highlightStyle,
                 start = startIndexUnsubscribe,
                 end = endIndexUnsubscribe,
             )

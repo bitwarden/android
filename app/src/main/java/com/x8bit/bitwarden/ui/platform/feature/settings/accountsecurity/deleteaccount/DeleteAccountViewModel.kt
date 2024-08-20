@@ -34,8 +34,7 @@ class DeleteAccountViewModel @Inject constructor(
         dialog = null,
         isUnlockWithPasswordEnabled = requireNotNull(authRepository.userStateFlow.value)
             .activeAccount
-            .trustedDevice
-            ?.hasMasterPassword != false,
+            .hasMasterPassword,
     ),
 ) {
 

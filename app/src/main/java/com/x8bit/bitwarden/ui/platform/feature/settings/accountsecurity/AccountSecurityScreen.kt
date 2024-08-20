@@ -376,6 +376,14 @@ private fun AccountSecurityDialogs(
             visibilityState = LoadingDialogState.Shown(text = dialogState.message),
         )
 
+        is AccountSecurityDialog.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
         null -> Unit
     }
 }

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
 import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
@@ -36,6 +37,11 @@ interface AuthSdkSource {
         kdf: Kdf,
         purpose: HashPurpose,
     ): Result<String>
+
+    /**
+     * Creates a set of encryption key information for use with a key connector.
+     */
+    suspend fun makeKeyConnectorKeys(): Result<KeyConnectorResponse>
 
     /**
      * Creates a set of encryption key information for registration.

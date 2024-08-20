@@ -40,6 +40,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         every {
             isBiometricIntegrityValid(userId = DEFAULT_USER_ID, cipher = CIPHER)
         } returns false
+        every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
 
     @Test
@@ -210,6 +211,57 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `on DismissDialog should hide dialog`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SetupUnlockAction.DismissDialog)
+
+        assertEquals(
+            DEFAULT_STATE.copy(dialogState = null),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `EnableBiometricsClick action should create a new biometrics cipher and emit result`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
+
+            verify {
+                biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_ID)
+            }
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    SetupUnlockEvent.ShowBiometricsPrompt(CIPHER),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `EnableBiometricsClick actin should show error dialog when cipher is null`() {
+        every {
+            biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_ID)
+        } returns null
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = SetupUnlockState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(
         state: SetupUnlockState? = null,
     ): SetupUnlockViewModel =
@@ -248,6 +300,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             organizations = emptyList(),
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
         ),
     ),
 )

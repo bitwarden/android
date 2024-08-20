@@ -218,24 +218,42 @@ class RetrofitsTest {
     }
 
     @Test
-    fun `staticRetrofitBuilder should invoke the correct interceptors`() = runBlocking {
-        val testApi = retrofits
-            .staticRetrofitBuilder
-            .baseUrl(server.url("/").toString())
-            .build()
-            .createMockRetrofit()
-            .create<TestApi>()
+    fun `createStaticRetrofit when authenticated should invoke the correct interceptors`() =
+        runBlocking {
+            val testApi = retrofits
+                .createStaticRetrofit(isAuthenticated = true)
+                .createMockRetrofit()
+                .create<TestApi>()
 
-        server.enqueue(MockResponse().setBody("""{}"""))
+            server.enqueue(MockResponse().setBody("""{}"""))
 
-        testApi.test()
+            testApi.test()
 
-        assertFalse(isAuthInterceptorCalled)
-        assertFalse(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
-        assertFalse(isIdentityInterceptorCalled)
-        assertFalse(isEventsInterceptorCalled)
-    }
+            assertTrue(isAuthInterceptorCalled)
+            assertFalse(isApiInterceptorCalled)
+            assertTrue(isheadersInterceptorCalled)
+            assertFalse(isIdentityInterceptorCalled)
+            assertFalse(isEventsInterceptorCalled)
+        }
+
+    @Test
+    fun `createStaticRetrofit when unauthenticated should invoke the correct interceptors`() =
+        runBlocking {
+            val testApi = retrofits
+                .createStaticRetrofit(isAuthenticated = false)
+                .createMockRetrofit()
+                .create<TestApi>()
+
+            server.enqueue(MockResponse().setBody("""{}"""))
+
+            testApi.test()
+
+            assertFalse(isAuthInterceptorCalled)
+            assertFalse(isApiInterceptorCalled)
+            assertTrue(isheadersInterceptorCalled)
+            assertFalse(isIdentityInterceptorCalled)
+            assertFalse(isEventsInterceptorCalled)
+        }
 
     private fun Retrofit.createMockRetrofit(): Retrofit =
         this

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedIdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -34,16 +33,14 @@ import retrofit2.create
 
 class IdentityServiceTest : BaseServiceTest() {
 
-    private val identityApi: IdentityApi = retrofit.create()
+    private val unauthenticatedIdentityApi: UnauthenticatedIdentityApi = retrofit.create()
     private val deviceModelProvider = mockk<DeviceModelProvider> {
         every { deviceModel } returns "Test Device"
     }
 
     private val identityService = IdentityServiceImpl(
-        api = identityApi,
-        json = Json {
-            ignoreUnknownKeys = true
-        },
+        unauthenticatedIdentityApi = unauthenticatedIdentityApi,
+        json = json,
         deviceModelProvider = deviceModelProvider,
     )
 
@@ -154,7 +151,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.register(registerRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                message = "The model state is invalid.",
+                invalidMessage = "The model state is invalid.",
                 validationErrors = mapOf("" to listOf("Email '' is already taken.")),
             ),
             result.getOrThrow(),
@@ -167,8 +164,9 @@ class IdentityServiceTest : BaseServiceTest() {
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
-            RegisterResponseJson.Error(
-                message = "Slow down! Too many requests. Try again soon.",
+            RegisterResponseJson.Invalid(
+                errorMessage = "Slow down! Too many requests. Try again soon.",
+                validationErrors = null,
             ),
             result.getOrThrow(),
         )
@@ -328,7 +326,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                message = "The model state is invalid.",
+                invalidMessage = "The model state is invalid.",
                 validationErrors = mapOf("" to listOf("Email '' is already taken.")),
             ),
             result.getOrThrow(),
@@ -341,8 +339,9 @@ class IdentityServiceTest : BaseServiceTest() {
         server.enqueue(response)
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
-            RegisterResponseJson.Error(
-                message = "Slow down! Too many requests. Try again soon.",
+            RegisterResponseJson.Invalid(
+                errorMessage = "Slow down! Too many requests. Try again soon.",
+                validationErrors = null,
             ),
             result.getOrThrow(),
         )
@@ -492,7 +491,8 @@ private const val LOGIN_SUCCESS_JSON = """
     "KeyConnectorOption": {
       "KeyConnectorUrl": "keyConnectorUrl"
     }
-  }
+  },
+  "KeyConnectorUrl": "keyConnectorUrl"
 }    
 """
 
@@ -532,6 +532,7 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
             keyConnectorUrl = "keyConnectorUrl",
         ),
     ),
+    keyConnectorUrl = "keyConnectorUrl",
 )
 
 private const val INVALID_LOGIN_JSON = """

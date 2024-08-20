@@ -103,7 +103,6 @@ fun UserStateJson.toUserState(
                 val trustedDevice = trustedDeviceOptions?.let {
                     UserState.TrustedDevice(
                         isDeviceTrusted = isDeviceTrustedProvider(userId),
-                        hasMasterPassword = decryptionOptions.hasMasterPassword,
                         hasAdminApproval = it.hasAdminApproval,
                         hasLoginApprovingDevice = it.hasLoginApprovingDevice,
                         hasResetPasswordPermission = it.hasManageResetPasswordPermission,
@@ -132,6 +131,7 @@ fun UserStateJson.toUserState(
                     isBiometricsEnabled = isBiometricsEnabledProvider(userId),
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
                     needsMasterPassword = needsMasterPassword,
+                    hasMasterPassword = decryptionOptions?.hasMasterPassword != false,
                     trustedDevice = trustedDevice,
                 )
             },

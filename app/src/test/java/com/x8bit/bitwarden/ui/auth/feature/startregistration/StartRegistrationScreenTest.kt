@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -239,6 +240,34 @@ class StartRegistrationScreenTest : BaseComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(StartRegistrationAction.ContinueClick) }
+    }
+
+    @Test
+    fun `when unsubscribe custom action invoked should send UnsubscribeMarketingEmailsClick`() {
+        @Suppress("MaxLineLength")
+        composeTestRule
+            .onNodeWithText("Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.")
+            .performCustomAccessibilityAction("Unsubscribe")
+
+        verify { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
+    }
+
+    @Test
+    fun `when terms and conditions custom action invoked should send TermsClick`() {
+        composeTestRule
+            .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
+            .performCustomAccessibilityAction("Terms of Service")
+
+        verify { viewModel.trySendAction(StartRegistrationAction.TermsClick) }
+    }
+
+    @Test
+    fun `when privacy policy custom action invoked should send TermsClick`() {
+        composeTestRule
+            .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
+            .performCustomAccessibilityAction("Privacy Policy")
+
+        verify { viewModel.trySendAction(StartRegistrationAction.PrivacyPolicyClick) }
     }
 
     companion object {

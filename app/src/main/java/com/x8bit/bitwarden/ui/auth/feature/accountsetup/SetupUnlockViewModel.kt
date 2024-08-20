@@ -56,6 +56,7 @@ class SetupUnlockViewModel @Inject constructor(
             SetupUnlockAction.ContinueClick -> handleContinueClick()
             SetupUnlockAction.EnableBiometricsClick -> handleEnableBiometricsClick()
             SetupUnlockAction.SetUpLaterClick -> handleSetUpLaterClick()
+            SetupUnlockAction.DismissDialog -> handleDismissDialog()
             is SetupUnlockAction.UnlockWithBiometricToggle -> {
                 handleUnlockWithBiometricToggle(action)
             }
@@ -70,16 +71,36 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        sendEvent(
-            SetupUnlockEvent.ShowBiometricsPrompt(
-                // Generate a new key in case the previous one was invalidated
-                cipher = biometricsEncryptionManager.createCipher(userId = state.userId),
-            ),
-        )
+        biometricsEncryptionManager
+            .createCipherOrNull(userId = state.userId)
+            ?.let {
+                sendEvent(
+                    SetupUnlockEvent.ShowBiometricsPrompt(
+                        // Generate a new key in case the previous one was invalidated
+                        cipher = it,
+                    ),
+                )
+            }
+            ?: run {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SetupUnlockState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
     }
 
     private fun handleSetUpLaterClick() {
         sendEvent(SetupUnlockEvent.NavigateToSetupAutofill)
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update {
+            it.copy(dialogState = null)
+        }
     }
 
     private fun handleUnlockWithBiometricToggle(
@@ -182,6 +203,15 @@ data class SetupUnlockState(
         data class Loading(
             val title: Text,
         ) : DialogState()
+
+        /**
+         * Displays an error dialog with a title, message, and an acknowledgement button.
+         */
+        @Parcelize
+        data class Error(
+            val title: Text,
+            val message: Text,
+        ) : DialogState()
     }
 }
 
@@ -234,6 +264,11 @@ sealed class SetupUnlockAction {
      * The user clicked the set up later button.
      */
     data object SetUpLaterClick : SetupUnlockAction()
+
+    /**
+     * The user has dismissed the dialog.
+     */
+    data object DismissDialog : SetupUnlockAction()
 
     /**
      * Models actions that can be sent by the view model itself.

@@ -113,6 +113,7 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     twoFactorToken = null,
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,
+    keyConnectorUrl = null,
 )
 private val USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
     hasMasterPassword = false,

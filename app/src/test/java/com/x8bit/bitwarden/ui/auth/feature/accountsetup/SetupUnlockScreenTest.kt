@@ -586,6 +586,40 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         mutableStateFlow.update { it.copy(dialogState = null) }
         composeTestRule.assertNoDialogExists()
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Error Dialog should be displayed according to state and send DismissDialog action on click`() {
+        val title = "title"
+        val message = "message"
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupUnlockState.DialogState.Error(
+                    title = title.asText(),
+                    message = message.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = title)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(SetupUnlockAction.DismissDialog)
+        }
+
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.assertNoDialogExists()
+    }
 }
 
 private const val DEFAULT_USER_ID: String = "user_id"

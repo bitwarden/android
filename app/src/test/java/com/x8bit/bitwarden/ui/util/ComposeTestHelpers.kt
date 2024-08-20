@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.util
 
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
@@ -19,6 +20,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.printToString
 import org.junit.jupiter.api.assertThrows
 
 /**
@@ -143,3 +145,31 @@ fun ComposeContentTestRule.onFirstNodeWithTextAfterScroll(
     text: String,
 ): SemanticsNodeInteraction =
     onAllNodesWithTextAfterScroll(text).onFirst()
+
+/**
+ * A helper used to perform a custom accessibility action on a node with a given [label].
+ *
+ * @throws AssertionError if no action with the given [label] is found.
+ */
+fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
+    val tree = printToString()
+    fetchSemanticsNode()
+        .let {
+            val customActions = it.config[SemanticsActions.CustomActions]
+            customActions
+                .find { action ->
+                    action.label == label
+                }
+                ?.action
+                ?.invoke()
+                ?: throw AssertionError(
+                    """
+                    No action with label $label
+                    
+                    Available actions: $customActions
+                    in
+                    $tree
+                """.trimMargin(),
+                )
+        }
+}

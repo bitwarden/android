@@ -253,7 +253,6 @@ private val DEFAULT_AUTH_STATE: AuthState = AuthState.Authenticated(accessToken 
 
 private val TRUSTED_DEVICE = UserState.TrustedDevice(
     isDeviceTrusted = false,
-    hasMasterPassword = false,
     hasAdminApproval = true,
     hasLoginApprovingDevice = true,
     hasResetPasswordPermission = false,
@@ -273,6 +272,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     organizations = emptyList(),
     needsMasterPassword = false,
     trustedDevice = TRUSTED_DEVICE,
+    hasMasterPassword = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(

@@ -127,6 +127,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     organizations = emptyList(),
                     needsMasterPassword = false,
                     trustedDevice = null,
+                    hasMasterPassword = true,
                 ),
             ),
         )

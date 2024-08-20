@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedIdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
@@ -20,17 +20,17 @@ import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
 
 class IdentityServiceImpl(
-    private val api: IdentityApi,
+    private val unauthenticatedIdentityApi: UnauthenticatedIdentityApi,
     private val json: Json,
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),
 ) : IdentityService {
 
     override suspend fun preLogin(email: String): Result<PreLoginResponseJson> =
-        api.preLogin(PreLoginRequestJson(email = email))
+        unauthenticatedIdentityApi.preLogin(PreLoginRequestJson(email = email))
 
     @Suppress("MagicNumber")
     override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
-        api
+        unauthenticatedIdentityApi
             .register(body)
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
@@ -39,13 +39,8 @@ class IdentityServiceImpl(
                         code = 400,
                         json = json,
                     )
-                    ?: bitwardenError
-                        .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                            codes = listOf(400, 429),
-                            json = json,
-                        )
-                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                        code = 429,
+                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                        codes = listOf(400, 429),
                         json = json,
                     )
                     ?: throw throwable
@@ -58,7 +53,7 @@ class IdentityServiceImpl(
         authModel: IdentityTokenAuthModel,
         captchaToken: String?,
         twoFactorData: TwoFactorDataModel?,
-    ): Result<GetTokenResponseJson> = api
+    ): Result<GetTokenResponseJson> = unauthenticatedIdentityApi
         .getToken(
             scope = "api offline_access",
             clientId = "mobile",
@@ -94,14 +89,14 @@ class IdentityServiceImpl(
 
     override suspend fun prevalidateSso(
         organizationIdentifier: String,
-    ): Result<PrevalidateSsoResponseJson> = api
+    ): Result<PrevalidateSsoResponseJson> = unauthenticatedIdentityApi
         .prevalidateSso(
             organizationIdentifier = organizationIdentifier,
         )
 
     override fun refreshTokenSynchronously(
         refreshToken: String,
-    ): Result<RefreshTokenResponseJson> = api
+    ): Result<RefreshTokenResponseJson> = unauthenticatedIdentityApi
         .refreshTokenCall(
             clientId = "mobile",
             grantType = "refresh_token",
@@ -113,7 +108,7 @@ class IdentityServiceImpl(
     override suspend fun registerFinish(
         body: RegisterFinishRequestJson,
     ): Result<RegisterResponseJson> =
-        api
+        unauthenticatedIdentityApi
             .registerFinish(body)
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
@@ -122,17 +117,13 @@ class IdentityServiceImpl(
                         codes = listOf(400, 429),
                         json = json,
                     )
-                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                        code = 429,
-                        json = json,
-                    )
                     ?: throw throwable
             }
 
     override suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson,
     ): Result<String?> {
-        return api
+        return unauthenticatedIdentityApi
             .sendVerificationEmail(body = body)
             .map { it?.content }
     }

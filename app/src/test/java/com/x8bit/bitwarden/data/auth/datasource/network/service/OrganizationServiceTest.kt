@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedOrganizationApi
-import com.x8bit.bitwarden.data.auth.datasource.network.api.OrganizationApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedOrganizationApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
@@ -17,11 +17,11 @@ import java.time.ZonedDateTime
 
 class OrganizationServiceTest : BaseServiceTest() {
     private val authenticatedOrganizationApi: AuthenticatedOrganizationApi = retrofit.create()
-    private val organizationApi: OrganizationApi = retrofit.create()
+    private val unauthenticatedOrganizationApi: UnauthenticatedOrganizationApi = retrofit.create()
 
     private val organizationService = OrganizationServiceImpl(
         authenticatedOrganizationApi = authenticatedOrganizationApi,
-        organizationApi = organizationApi,
+        unauthenticatedOrganizationApi = unauthenticatedOrganizationApi,
     )
 
     @Test
@@ -103,6 +103,13 @@ class OrganizationServiceTest : BaseServiceTest() {
         server.enqueue(MockResponse().setResponseCode(400))
         val result = organizationService.getOrganizationKeys("orgId")
         assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `leaveOrganization when response is success should return success`() = runTest {
+        server.enqueue(MockResponse())
+        val result = organizationService.leaveOrganization(organizationId = "orgId")
+        assertTrue(result.isSuccess)
     }
 }
 
