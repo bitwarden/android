@@ -31,21 +31,9 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
     fun `CloseTap should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.CloseClick)
+            viewModel.trySendAction(CheckEmailAction.BackClick)
             assertEquals(
                 CheckEmailEvent.NavigateBack,
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `LoginTap should emit NavigateBackToLanding`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.LoginClick)
-            assertEquals(
-                CheckEmailEvent.NavigateBackToLanding,
                 awaitItem(),
             )
         }
@@ -58,6 +46,18 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(CheckEmailAction.OpenEmailClick)
             assertEquals(
                 CheckEmailEvent.NavigateToEmailApp,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ChangeEmailTap should emit NavigateBack`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(CheckEmailAction.ChangeEmailClick)
+            assertEquals(
+                CheckEmailEvent.NavigateBack,
                 awaitItem(),
             )
         }

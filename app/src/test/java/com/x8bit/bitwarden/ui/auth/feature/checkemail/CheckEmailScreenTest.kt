@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -21,8 +22,6 @@ class CheckEmailScreenTest : BaseComposeTest() {
         every { startDefaultEmailApplication() } just runs
     }
     private var onNavigateBackCalled = false
-    private var onNavigateBackToLandingCalled = false
-    private var onNavigateToEmailAppCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<CheckEmailEvent>()
@@ -36,7 +35,6 @@ class CheckEmailScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CheckEmailScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateBackToLanding = { onNavigateBackToLandingCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )
@@ -44,25 +42,25 @@ class CheckEmailScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `close button click should send CloseTap action`() {
-        composeTestRule.onNodeWithContentDescription("Close").performClick()
+    fun `close button click should send BackClick action`() {
+        composeTestRule
+            .onNodeWithContentDescription("Back")
+            .performClick()
         verify {
-            viewModel.trySendAction(CheckEmailAction.CloseClick)
+            viewModel.trySendAction(CheckEmailAction.BackClick)
         }
     }
 
     @Test
-    fun `open email app button click should send OpenEmailTap action`() {
-        composeTestRule.onNodeWithText("Open email app").performClick()
+    fun `open email app button click should send OpenEmailClcik action`() {
+        composeTestRule
+            .onNodeWithText("Open email app")
+            .performScrollTo()
+            .performClick()
+
         verify {
             viewModel.trySendAction(CheckEmailAction.OpenEmailClick)
         }
-    }
-
-    @Test
-    fun `login button click should send LoginTap action`() {
-        mutableEventFlow.tryEmit(CheckEmailEvent.NavigateBackToLanding)
-        TestCase.assertTrue(onNavigateBackToLandingCalled)
     }
 
     @Test
@@ -77,6 +75,16 @@ class CheckEmailScreenTest : BaseComposeTest() {
         verify {
             intentManager.startDefaultEmailApplication()
         }
+    }
+
+    @Test
+    fun `change email button click should send ChangeEmailClick action`() {
+        composeTestRule
+            .onNodeWithText("Change email address")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(CheckEmailAction.ChangeEmailClick) }
     }
 
     companion object {
