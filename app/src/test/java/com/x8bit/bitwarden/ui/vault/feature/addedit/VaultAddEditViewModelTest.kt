@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -3878,6 +3879,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         Organization(
                             id = "organizationId",
                             name = "organizationName",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                     isBiometricsEnabled = true,

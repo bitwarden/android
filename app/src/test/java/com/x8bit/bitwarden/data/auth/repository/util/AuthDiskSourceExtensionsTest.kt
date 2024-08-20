@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import io.mockk.every
 import io.mockk.mockk
@@ -187,6 +188,8 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-1",
                             name = "mockName-1",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                 ),
@@ -196,6 +199,8 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-2",
                             name = "mockName-2",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                 ),
@@ -205,6 +210,8 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-3",
                             name = "mockName-3",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                 ),
@@ -241,6 +248,8 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-1",
                                     name = "mockName-1",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
@@ -269,6 +278,8 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-1",
                                     name = "mockName-1",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
@@ -278,6 +289,8 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-2",
                                     name = "mockName-2",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
