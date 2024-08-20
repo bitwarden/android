@@ -148,7 +148,6 @@ private fun CheckEmailContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        @Suppress("MaxLineLength")
         val descriptionAnnotatedString = createAnnotatedString(
             mainString = stringResource(
                 id = R.string.we_sent_an_email_to,
