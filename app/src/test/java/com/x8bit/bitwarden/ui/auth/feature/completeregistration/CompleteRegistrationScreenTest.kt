@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 class CompleteRegistrationScreenTest : BaseComposeTest() {
 
@@ -303,6 +304,33 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
     fun `NavigateToPasswordGuidance event should invoke navigate to password guidance lambda`() {
         mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToMakePasswordStrong)
         assertTrue(onNavigateToPasswordGuidanceCalled)
+    }
+
+    @Test
+    fun `Header should be displayed in portrait mode`() {
+        composeTestRule
+            .onNodeWithText("Choose your master password")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Choose a unique and strong password to keep your information safe.")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Config(qualifiers = "land")
+    @Test
+    fun `Header should be displayed in landscape mode`() {
+        composeTestRule
+            .onNodeWithText("Choose your master password")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Choose a unique and strong password to keep your information safe.")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 
     companion object {

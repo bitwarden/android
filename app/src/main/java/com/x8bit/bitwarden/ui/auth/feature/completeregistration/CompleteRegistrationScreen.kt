@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -205,6 +206,7 @@ private fun CompleteRegistrationContent(
                 .testTag("MasterPasswordEntry")
                 .fillMaxWidth(),
             showPasswordTestTag = "PasswordVisibilityToggle",
+            imeAction = ImeAction.Next,
         )
         Spacer(modifier = Modifier.height(8.dp))
         PasswordStrengthIndicator(
@@ -259,45 +261,53 @@ private fun CompleteRegistrationContent(
 @Composable
 private fun CompleteRegistrationContentHeader(modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
-    val orderedContent: @Composable () -> Unit = {
-        Image(
-            painter = rememberVectorPainter(id = R.drawable.lock), contentDescription = null,
-            modifier = Modifier.size(100.dp),
-        )
-        Spacer(modifier = Modifier.size(24.dp))
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "Choose your master password",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Choose a unique and strong password to keep your information safe.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-            )
-        }
-    }
 
     if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            orderedContent()
+            OrderedHeaderContent()
         }
     } else {
         Row(
             modifier = modifier,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            orderedContent()
+            OrderedHeaderContent()
         }
+    }
+}
+
+/**
+ * Header content ordered with the image "first" and the text "second" which can be placed in a
+ * [Column] or [Row].
+ */
+@Composable
+private fun OrderedHeaderContent() {
+    Image(
+        painter = rememberVectorPainter(id = R.drawable.lock), contentDescription = null,
+        modifier = Modifier.size(100.dp),
+    )
+    Spacer(modifier = Modifier.size(24.dp))
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.choose_your_master_password),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(
+                R.string.choose_a_unique_and_strong_password_to_keep_your_information_safe,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
