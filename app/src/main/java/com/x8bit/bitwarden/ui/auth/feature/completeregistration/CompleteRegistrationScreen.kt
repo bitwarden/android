@@ -166,6 +166,7 @@ fun CompleteRegistrationScreen(
                 modifier = Modifier.standardHorizontalMargin(),
                 nextButtonEnabled = state.hasValidMasterPassword,
                 callToActionText = state.callToActionText(),
+                minimumPasswordLength = state.minimumPasswordLength,
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
@@ -181,6 +182,7 @@ private fun CompleteRegistrationContent(
     passwordHintInput: String,
     isCheckDataBreachesToggled: Boolean,
     nextButtonEnabled: Boolean,
+    minimumPasswordLength: Int,
     callToActionText: String,
     handler: CompleteRegistrationHandler,
     modifier: Modifier = Modifier,
@@ -218,8 +220,9 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         PasswordStrengthIndicator(
-            modifier = Modifier.padding(horizontal = 16.dp),
             state = passwordStrengthState,
+            currentCharacterCount = passwordInput.length,
+            minimumCharacterCount = minimumPasswordLength,
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenPasswordField(
@@ -346,6 +349,7 @@ private fun CompleteRegistrationContentPreview() {
             ),
             callToActionText = "Next",
             nextButtonEnabled = true,
+            minimumPasswordLength = 12,
             modifier = Modifier.standardHorizontalMargin(),
         )
     }

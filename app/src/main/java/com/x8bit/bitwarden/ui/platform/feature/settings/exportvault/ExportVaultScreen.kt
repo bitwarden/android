@@ -256,6 +256,7 @@ private fun ExportVaultScreenContent(
             PasswordStrengthIndicator(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 state = state.passwordStrengthState,
+                currentCharacterCount = state.passwordInput.length,
             )
             Spacer(modifier = Modifier.height(4.dp))
 
