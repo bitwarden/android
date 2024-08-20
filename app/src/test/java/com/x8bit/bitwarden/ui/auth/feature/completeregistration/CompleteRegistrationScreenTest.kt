@@ -350,6 +350,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
             onBoardingEnabled = false,
+            minimumPasswordLength = 12,
         )
     }
 }
