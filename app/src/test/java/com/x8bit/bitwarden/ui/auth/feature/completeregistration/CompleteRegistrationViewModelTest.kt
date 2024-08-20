@@ -20,6 +20,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
@@ -61,6 +64,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
         every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
+    private val mutableGeneratorResultFlow = bufferedMutableSharedFlow<GeneratorResult>()
+    private val generatorRepository = mockk<GeneratorRepository>(relaxed = true) {
+        every { generatorResultFlow } returns mutableGeneratorResultFlow
+    }
 
     @BeforeEach
     fun setUp() {
@@ -95,35 +102,34 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             environmentRepository = fakeEnvironmentRepository,
             specialCircumstanceManager = specialCircumstanceManager,
             featureFlagManager = featureFlagManager,
+            generatorRepository = generatorRepository,
         )
         viewModel.onCleared()
         assertTrue(specialCircumstanceManager.specialCircumstance == null)
     }
 
     @Test
-    fun `Password below 12 chars should have non-valid state`() =
-        runTest {
-            val input = "abcdefghikl"
-            coEvery {
-                mockAuthRepository.getPasswordStrength(EMAIL, input)
-            } returns PasswordStrengthResult.Error
-            val viewModel = createCompleteRegistrationViewModel()
-            viewModel.trySendAction(PasswordInputChange(input))
+    fun `Password below 12 chars should have non-valid state`() = runTest {
+        val input = "abcdefghikl"
+        coEvery {
+            mockAuthRepository.getPasswordStrength(EMAIL, input)
+        } returns PasswordStrengthResult.Error
+        val viewModel = createCompleteRegistrationViewModel()
+        viewModel.trySendAction(PasswordInputChange(input))
 
-            assertFalse(viewModel.stateFlow.value.validSubmissionReady)
-        }
+        assertFalse(viewModel.stateFlow.value.validSubmissionReady)
+    }
 
     @Test
-    fun `Passwords not matching should have non-valid state`() =
-        runTest {
-            coEvery {
-                mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-            } returns PasswordStrengthResult.Error
-            val viewModel = createCompleteRegistrationViewModel()
-            viewModel.trySendAction(PasswordInputChange(PASSWORD))
+    fun `Passwords not matching should have non-valid state`() = runTest {
+        coEvery {
+            mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
+        } returns PasswordStrengthResult.Error
+        val viewModel = createCompleteRegistrationViewModel()
+        viewModel.trySendAction(PasswordInputChange(PASSWORD))
 
-            assertFalse(viewModel.stateFlow.value.validSubmissionReady)
-        }
+        assertFalse(viewModel.stateFlow.value.validSubmissionReady)
+    }
 
     @Test
     fun `CallToActionClick with all inputs valid should show and hide loading dialog`() = runTest {
@@ -344,11 +350,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     )
                 } returns RegisterResult.WeakPassword
             }
-            val initialState = VALID_INPUT_STATE
-                .copy(
-                    passwordStrengthState = PasswordStrengthState.WEAK_1,
-                    isCheckDataBreachesToggled = true,
-                )
+            val initialState = VALID_INPUT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
+                isCheckDataBreachesToggled = true,
+            )
             val viewModel =
                 createCompleteRegistrationViewModel(completeRegistrationState = initialState)
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -417,6 +422,47 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
         coVerify { mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD) }
     }
+
+    @Test
+    fun `Empty PasswordInputChange update should result in password strength being NONE`() =
+        runTest {
+            val viewModel = createCompleteRegistrationViewModel(
+                completeRegistrationState = DEFAULT_STATE.copy(
+                    passwordInput = PASSWORD,
+                    passwordStrengthState = PasswordStrengthState.STRONG,
+                ),
+            )
+            viewModel.trySendAction(PasswordInputChange(""))
+            val expectedStrengthUpdateState = DEFAULT_STATE.copy(
+                passwordInput = "",
+                passwordStrengthState = PasswordStrengthState.NONE,
+            )
+            viewModel.stateFlow.test {
+                assertEquals(expectedStrengthUpdateState, awaitItem())
+            }
+            coVerify(exactly = 0) { mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal GeneratedPasswordResult update passwordInput and confirmPasswordInput and call getPasswordStrength`() =
+        runTest {
+            coEvery {
+                mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel()
+            mutableGeneratorResultFlow.emit(GeneratorResult.Password(PASSWORD))
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        passwordInput = PASSWORD,
+                        confirmPasswordInput = PASSWORD,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify { mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD) }
+        }
 
     @Test
     fun `CheckDataBreachesToggle should change isCheckDataBreachesToggled`() = runTest {
@@ -565,47 +611,47 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CreateAccountClick with no email not should show dialog`() =
-        runTest {
-            coEvery {
-                mockAuthRepository.getPasswordStrength("", PASSWORD)
-            } returns PasswordStrengthResult.Error
-            val viewModel = createCompleteRegistrationViewModel(
-                DEFAULT_STATE.copy(userEmail = ""),
-            )
-            viewModel.trySendAction(PasswordInputChange(PASSWORD))
-            val expectedState = DEFAULT_STATE.copy(
-                userEmail = "",
-                passwordInput = PASSWORD,
-                dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.email_address.asText()),
+    fun `CreateAccountClick with no email not should show dialog`() = runTest {
+        coEvery {
+            mockAuthRepository.getPasswordStrength("", PASSWORD)
+        } returns PasswordStrengthResult.Error
+        val viewModel = createCompleteRegistrationViewModel(
+            DEFAULT_STATE.copy(userEmail = ""),
+        )
+        viewModel.trySendAction(PasswordInputChange(PASSWORD))
+        val expectedState = DEFAULT_STATE.copy(
+            userEmail = "",
+            passwordInput = PASSWORD,
+            dialog = CompleteRegistrationDialog.Error(
+                BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required.asText(
+                        R.string.email_address.asText(),
                     ),
                 ),
-            )
-            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-            viewModel.stateFlow.test {
-                assertEquals(expectedState, awaitItem())
-            }
+            ),
+        )
+        viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+        viewModel.stateFlow.test {
+            assertEquals(expectedState, awaitItem())
         }
+    }
 
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
         authRepository: AuthRepository = mockAuthRepository,
-    ): CompleteRegistrationViewModel =
-        CompleteRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(
-                mapOf(
-                    "state" to completeRegistrationState,
-                ),
+    ): CompleteRegistrationViewModel = CompleteRegistrationViewModel(
+        savedStateHandle = SavedStateHandle(
+            mapOf(
+                "state" to completeRegistrationState,
             ),
-            authRepository = authRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            specialCircumstanceManager = specialCircumstanceManager,
-            featureFlagManager = featureFlagManager,
-        )
+        ),
+        authRepository = authRepository,
+        environmentRepository = fakeEnvironmentRepository,
+        specialCircumstanceManager = specialCircumstanceManager,
+        featureFlagManager = featureFlagManager,
+        generatorRepository = generatorRepository,
+    )
 
     companion object {
         private const val PASSWORD = "longenoughtpassword"

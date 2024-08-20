@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
@@ -48,27 +50,27 @@ private const val MIN_PASSWORD_LENGTH = 12
 class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
+    generatorRepository: GeneratorRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val args = CompleteRegistrationArgs(savedStateHandle)
-            CompleteRegistrationState(
-                userEmail = args.emailAddress,
-                emailVerificationToken = args.verificationToken,
-                fromEmail = args.fromEmail,
-                passwordInput = "",
-                confirmPasswordInput = "",
-                passwordHintInput = "",
-                isCheckDataBreachesToggled = true,
-                dialog = null,
-                passwordStrengthState = PasswordStrengthState.NONE,
-                onboardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
-                minimumPasswordLength = MIN_PASSWORD_LENGTH,
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val args = CompleteRegistrationArgs(savedStateHandle)
+        CompleteRegistrationState(
+            userEmail = args.emailAddress,
+            emailVerificationToken = args.verificationToken,
+            fromEmail = args.fromEmail,
+            passwordInput = "",
+            confirmPasswordInput = "",
+            passwordHintInput = "",
+            isCheckDataBreachesToggled = true,
+            dialog = null,
+            passwordStrengthState = PasswordStrengthState.NONE,
+            onboardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
+            minimumPasswordLength = MIN_PASSWORD_LENGTH,
+        )
+    },
 ) {
 
     /**
@@ -88,6 +90,15 @@ class CompleteRegistrationViewModel @Inject constructor(
             .getFeatureFlagFlow(FlagKey.OnboardingFlow)
             .map {
                 Internal.UpdateOnboardingFeatureState(newValue = it)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        generatorRepository
+            .generatorResultFlow
+            .map {
+                val passwordResult = it as? GeneratorResult.Password
+                Internal.GeneratedPasswordResult(generatedPassword = passwordResult?.password)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -124,6 +135,23 @@ class CompleteRegistrationViewModel @Inject constructor(
 
             CompleteRegistrationAction.CallToActionClick -> handleCallToActionClick()
             is Internal.UpdateOnboardingFeatureState -> handleUpdateOnboardingFeatureState(action)
+            is Internal.GeneratedPasswordResult -> handleGeneratedPasswordResult(
+                action,
+            )
+        }
+    }
+
+    private fun handleGeneratedPasswordResult(
+        action: Internal.GeneratedPasswordResult,
+    ) {
+        action.generatedPassword?.let { password ->
+            mutableStateFlow.update {
+                it.copy(
+                    passwordInput = password,
+                    confirmPasswordInput = password,
+                )
+            }
+            checkPasswordStrength(input = password)
         }
     }
 
@@ -262,21 +290,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     private fun handlePasswordInputChanged(action: PasswordInputChange) {
         // Update input:
         mutableStateFlow.update { it.copy(passwordInput = action.input) }
-        // Update password strength:
-        passwordStrengthJob.cancel()
-        if (action.input.isEmpty()) {
-            mutableStateFlow.update {
-                it.copy(passwordStrengthState = PasswordStrengthState.NONE)
-            }
-        } else {
-            passwordStrengthJob = viewModelScope.launch {
-                val result = authRepository.getPasswordStrength(
-                    email = state.userEmail,
-                    password = action.input,
-                )
-                trySendAction(ReceivePasswordStrengthResult(result))
-            }
-        }
+        checkPasswordStrength(action.input)
     }
 
     private fun handleConfirmPasswordInputChanged(action: ConfirmPasswordInputChange) {
@@ -285,10 +299,10 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     private fun handleCallToActionClick() = when {
         state.userEmail.isBlank() -> {
+            @Suppress("MaxLineLength")
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
+                message = R.string.validation_field_required.asText(R.string.email_address.asText()),
             )
             mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
         }
@@ -365,6 +379,24 @@ class CompleteRegistrationViewModel @Inject constructor(
                     registerResult = result,
                 ),
             )
+        }
+    }
+
+    private fun checkPasswordStrength(input: String) {
+        // Update password strength:
+        passwordStrengthJob.cancel()
+        if (input.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(passwordStrengthState = PasswordStrengthState.NONE)
+            }
+        } else {
+            passwordStrengthJob = viewModelScope.launch {
+                val result = authRepository.getPasswordStrength(
+                    email = state.userEmail,
+                    password = input,
+                )
+                trySendAction(ReceivePasswordStrengthResult(result))
+            }
         }
     }
 }
@@ -564,5 +596,10 @@ sealed class CompleteRegistrationAction {
          * Indicate on boarding feature state has been updated.
          */
         data class UpdateOnboardingFeatureState(val newValue: Boolean) : Internal()
+
+        /**
+         * Indicates a generated password has been received.
+         */
+        data class GeneratedPasswordResult(val generatedPassword: String?) : Internal()
     }
 }

@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -121,6 +122,21 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(MasterPasswordGeneratorAction.PreventLockoutClickAction)
                 assertEquals(MasterPasswordGeneratorEvent.NavigateToPreventLockout, awaitItem())
+            }
+        }
+
+    @Test
+    fun `NavigateBackWithPassword event is sent when SavePasswordClickAction is handled`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = MasterPasswordGeneratorState(generatedPassword = "saved-pw"),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(MasterPasswordGeneratorAction.SavePasswordClickAction)
+                assertEquals(
+                    MasterPasswordGeneratorEvent.NavigateBackToRegistration,
+                    awaitItem(),
+                )
             }
         }
 
