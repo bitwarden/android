@@ -39,4 +39,10 @@ interface BitwardenClipboardManager {
         isSensitive: Boolean = true,
         toastDescriptorOverride: String? = null,
     )
+
+    /**
+     * Clears the clipboard content. If a delay is specified, the clipboard will be cleared
+     * after the designated number of seconds [delay]; otherwise, it will be cleared immediately.
+     */
+    fun clearClipboard(delay: Long = 0)
 }

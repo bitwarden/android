@@ -256,6 +256,8 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleExitConfirmationClick() {
+        clipboardManager.clearClipboard()
+        vaultRepository.lockVaultForCurrentUser()
         sendEvent(VaultEvent.NavigateOutOfApp)
     }
 

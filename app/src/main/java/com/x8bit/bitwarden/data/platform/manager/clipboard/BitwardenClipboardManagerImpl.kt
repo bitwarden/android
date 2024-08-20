@@ -57,17 +57,7 @@ class BitwardenClipboardManagerImpl(
         }
 
         val frequency = clearClipboardFrequencySeconds ?: return
-        val clearClipboardRequest: OneTimeWorkRequest =
-            OneTimeWorkRequest
-                .Builder(ClearClipboardWorker::class.java)
-                .setInitialDelay(frequency.toLong(), TimeUnit.SECONDS)
-                .build()
-
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "ClearClipboard",
-            ExistingWorkPolicy.REPLACE,
-            clearClipboardRequest,
-        )
+        clearClipboard(frequency.toLong())
     }
 
     override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: String?) {
@@ -76,5 +66,19 @@ class BitwardenClipboardManagerImpl(
 
     override fun setText(text: Text, isSensitive: Boolean, toastDescriptorOverride: String?) {
         setText(text.toString(context.resources), isSensitive, toastDescriptorOverride)
+    }
+
+    override fun clearClipboard(delay: Long) {
+        val clearClipboardRequest: OneTimeWorkRequest =
+            OneTimeWorkRequest
+                .Builder(ClearClipboardWorker::class.java)
+                .setInitialDelay(delay, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "ClearClipboard",
+            ExistingWorkPolicy.REPLACE,
+            clearClipboardRequest,
+        )
     }
 }
