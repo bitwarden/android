@@ -272,7 +272,6 @@ private fun CompleteRegistrationContentHeader(
     modifier: Modifier = Modifier,
     configuration: Configuration = LocalConfiguration.current,
 ) {
-
     if (configuration.isPortrait) {
         Column(
             modifier = modifier,
