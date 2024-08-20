@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
+import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
@@ -25,6 +26,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ItemSearchViewModel @Inject constructor(
+    private val clipboardManager: BitwardenClipboardManager,
     private val authenticatorRepository: AuthenticatorRepository,
 ) :
     BaseViewModel<ItemSearchState, ItemSearchEvent, ItemSearchAction>(
@@ -59,9 +61,10 @@ class ItemSearchViewModel @Inject constructor(
             }
 
             is ItemSearchAction.ItemClick -> {
+                clipboardManager.setText(action.authCode)
                 sendEvent(
                     event = ItemSearchEvent.ShowToast(
-                        message = "Item ${action.itemId} copied to clipboard".asText(),
+                        message = R.string.value_has_been_copied.asText(action.authCode),
                     ),
                 )
             }
@@ -231,7 +234,7 @@ class ItemSearchViewModel @Inject constructor(
     private fun VerificationCodeItem.toDisplayItem(): ItemSearchState.DisplayItem =
         ItemSearchState.DisplayItem(
             id = id,
-            authCode = "",
+            authCode = code,
             accountName = username ?: "",
             issuer = issuer,
             periodSeconds = periodSeconds,
@@ -345,7 +348,7 @@ sealed class ItemSearchAction {
     /**
      * User clicked a row item.
      */
-    data class ItemClick(val itemId: String) : ItemSearchAction()
+    data class ItemClick(val authCode: String) : ItemSearchAction()
 
     /**
      * Models actions that the [ItemSearchViewModel] itself might send.

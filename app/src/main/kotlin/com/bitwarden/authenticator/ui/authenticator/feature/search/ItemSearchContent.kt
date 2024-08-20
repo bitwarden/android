@@ -38,8 +38,8 @@ fun ItemSearchContent(
                 alertThresholdSeconds = it.alertThresholdSeconds,
                 supportingLabel = it.supportingLabel,
                 startIcon = it.startIcon,
-                onCopyClick = { searchHandlers.onItemClick(it.id) },
-                onItemClick = { searchHandlers.onItemClick(it.id) },
+                onCopyClick = { searchHandlers.onItemClick(it.authCode) },
+                onItemClick = { searchHandlers.onItemClick(it.authCode) },
             )
         }
 
