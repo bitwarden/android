@@ -939,6 +939,7 @@ Do you want to switch to this account?</string>
   <string name="no_email_go_back_to_edit_your_email_address">No email? Go back to edit your email address.</string>
   <string name="or_log_in_you_may_already_have_an_account">Or log in, you may already have an account.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
   <string name="privacy_prioritized">Privacy, prioritized</string>
   <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
   <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>

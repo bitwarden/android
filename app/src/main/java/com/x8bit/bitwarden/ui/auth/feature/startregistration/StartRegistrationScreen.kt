@@ -422,7 +422,7 @@ private fun ReceiveMarketingEmailsSwitch(
     val unsubscribeString = stringResource(id = R.string.unsubscribe)
     @Suppress("MaxLineLength")
     val annotatedLinkString = createAnnotatedString(
-        mainString = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time),
+        mainString = stringResource(id = R.string.get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time),
         highlights = listOf(unsubscribeString),
         tag = TAG_URL,
     )
