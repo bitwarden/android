@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedKeyConnectorApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
@@ -24,10 +25,12 @@ class AccountsServiceTest : BaseServiceTest() {
 
     private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi = retrofit.create()
     private val authenticatedAccountsApi: AuthenticatedAccountsApi = retrofit.create()
+    private val unauthenticatedKeyConnectorApi: UnauthenticatedKeyConnectorApi = retrofit.create()
     private val authenticatedKeyConnectorApi: AuthenticatedKeyConnectorApi = retrofit.create()
     private val service = AccountsServiceImpl(
         unauthenticatedAccountsApi = unauthenticatedAccountsApi,
         authenticatedAccountsApi = authenticatedAccountsApi,
+        unauthenticatedKeyConnectorApi = unauthenticatedKeyConnectorApi,
         authenticatedKeyConnectorApi = authenticatedKeyConnectorApi,
         json = json,
     )
@@ -189,10 +192,11 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `setKeyConnectorKey with empty response is success`() = runTest {
+    fun `setKeyConnectorKey with token and empty response is success`() = runTest {
         val response = MockResponse().setBody("")
         server.enqueue(response)
         val result = service.setKeyConnectorKey(
+            accessToken = "token",
             body = KeyConnectorKeyRequestJson(
                 organizationIdentifier = "organizationId",
                 kdfIterations = 7,
@@ -210,11 +214,14 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `getMasterKeyFromKeyConnector with empty response is success`() = runTest {
+    fun `getMasterKeyFromKeyConnector with token and empty response is success`() = runTest {
         val masterKey = "masterKey"
         val response = MockResponse().setBody("""{ "key": "$masterKey" }""")
         server.enqueue(response)
-        val result = service.getMasterKeyFromKeyConnector(url = "$url/test")
+        val result = service.getMasterKeyFromKeyConnector(
+            url = "$url/test",
+            accessToken = "token",
+        )
         assertEquals(
             KeyConnectorMasterKeyResponseJson(masterKey = masterKey).asSuccess(),
             result,
@@ -222,12 +229,24 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `storeMasterKeyToKeyConnector success should return Success`() = runTest {
+    fun `storeMasterKeyToKeyConnector without token success should return Success`() = runTest {
         val response = MockResponse()
         server.enqueue(response)
         val result = service.storeMasterKeyToKeyConnector(
             url = "$url/test",
             masterKey = "masterKey",
+        )
+        assertEquals(Unit.asSuccess(), result)
+    }
+
+    @Test
+    fun `storeMasterKeyToKeyConnector with token success should return Success`() = runTest {
+        val response = MockResponse()
+        server.enqueue(response)
+        val result = service.storeMasterKeyToKeyConnector(
+            url = "$url/test",
+            masterKey = "masterKey",
+            accessToken = "token",
         )
         assertEquals(Unit.asSuccess(), result)
     }

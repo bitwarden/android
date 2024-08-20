@@ -38,6 +38,7 @@ object AuthNetworkModule {
     ): AccountsService = AccountsServiceImpl(
         unauthenticatedAccountsApi = retrofits.unauthenticatedApiRetrofit.create(),
         authenticatedAccountsApi = retrofits.authenticatedApiRetrofit.create(),
+        unauthenticatedKeyConnectorApi = retrofits.createStaticRetrofit().create(),
         authenticatedKeyConnectorApi = retrofits
             .createStaticRetrofit(isAuthenticated = true)
             .create(),
