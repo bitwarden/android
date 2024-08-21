@@ -99,7 +99,7 @@ fun PasswordStrengthIndicator(
         }
         Spacer(Modifier.height(4.dp))
         Row(
-            Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -154,7 +154,7 @@ private fun MinimumCharacterCount(
         }
         Spacer(modifier = Modifier.width(2.dp))
         Text(
-            text = stringResource(R.string.min_characters, minimumCharacterCount),
+            text = stringResource(R.string.minimum_characters, minimumCharacterCount),
             color = characterCountColor,
             style = MaterialTheme.typography.labelSmall,
         )
