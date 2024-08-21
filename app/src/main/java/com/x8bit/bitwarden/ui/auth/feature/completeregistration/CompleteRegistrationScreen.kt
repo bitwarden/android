@@ -228,6 +228,7 @@ private fun CompleteRegistrationContent(
             showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
         )
         Spacer(modifier = Modifier.height(16.dp))
+        @Suppress("MaxLineLength")
         BitwardenTextField(
             label = stringResource(id = R.string.master_password_hint),
             value = passwordHintInput,
