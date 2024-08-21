@@ -42,9 +42,7 @@ fun BitwardenActionCard(
     Card(
         onClick = onCardClicked,
         shape = RoundedCornerShape(size = 16.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
+        modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
         ),
@@ -114,7 +112,8 @@ private fun ActionCardWithTrailingPreview() {
                 Icon(
                     painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,)
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             },
         )
     }

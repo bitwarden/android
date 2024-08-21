@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.nonMaterialTypography
+import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
  * Top level composable for the complete registration screen.
@@ -70,7 +71,7 @@ fun CompleteRegistrationScreen(
     onNavigateBack: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToLogin: (String, String) -> Unit,
+    onNavigateToLogin: (email: String, token: String) -> Unit,
     viewModel: CompleteRegistrationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -192,6 +193,7 @@ private fun CompleteRegistrationContent(
             actionText = stringResource(id = R.string.what_makes_a_password_strong),
             callToActionText = stringResource(id = R.string.learn_more),
             onCardClicked = handler.onMakeStrongPassword,
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -226,7 +228,6 @@ private fun CompleteRegistrationContent(
             showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
         )
         Spacer(modifier = Modifier.height(16.dp))
-        @Suppress("MaxLineLength")
         BitwardenTextField(
             label = stringResource(id = R.string.master_password_hint),
             value = passwordHintInput,
@@ -259,10 +260,12 @@ private fun CompleteRegistrationContent(
 }
 
 @Composable
-private fun CompleteRegistrationContentHeader(modifier: Modifier = Modifier) {
-    val configuration = LocalConfiguration.current
+private fun CompleteRegistrationContentHeader(
+    modifier: Modifier = Modifier,
+    configuration: Configuration = LocalConfiguration.current,
+) {
 
-    if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+    if (configuration.isPortrait) {
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -286,7 +289,8 @@ private fun CompleteRegistrationContentHeader(modifier: Modifier = Modifier) {
 @Composable
 private fun OrderedHeaderContent() {
     Image(
-        painter = rememberVectorPainter(id = R.drawable.lock), contentDescription = null,
+        painter = rememberVectorPainter(id = R.drawable.lock),
+        contentDescription = null,
         modifier = Modifier.size(100.dp),
     )
     Spacer(modifier = Modifier.size(24.dp))

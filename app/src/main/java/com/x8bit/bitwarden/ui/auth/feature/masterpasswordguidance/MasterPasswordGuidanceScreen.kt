@@ -165,7 +165,8 @@ private fun TryGeneratorCard(
         ),
         callToActionText = stringResource(R.string.try_it_out),
         onCardClicked = onCardClicked,
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth(),
         trailingContent = {
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),

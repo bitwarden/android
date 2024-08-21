@@ -343,6 +343,9 @@ data class CompleteRegistrationState(
     val onBoardingEnabled: Boolean,
 ) : Parcelable {
 
+    /**
+     * The text to display on the call to action button.
+     */
     val callToActionText: Text
         get() = if (onBoardingEnabled) {
             R.string.next.asText()
