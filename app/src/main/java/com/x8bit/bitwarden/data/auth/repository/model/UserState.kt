@@ -50,6 +50,7 @@ data class UserState(
      * @property isBiometricsEnabled Indicates that the biometrics mechanism for unlocking the
      * user's vault is enabled.
      * @property vaultUnlockType The mechanism by which the user's vault may be unlocked.
+     * @property isUsingKeyConnector Indicates if the account is currently using a key connector.
      */
     data class Account(
         val userId: String,
@@ -67,6 +68,7 @@ data class UserState(
         val organizations: List<Organization>,
         val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        val isUsingKeyConnector: Boolean,
     ) {
         /**
          * Indicates that the user does or does not have a means to manually unlock the vault.

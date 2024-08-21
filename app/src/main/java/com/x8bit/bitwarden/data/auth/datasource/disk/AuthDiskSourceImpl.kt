@@ -57,6 +57,8 @@ class AuthDiskSourceImpl(
     AuthDiskSource {
 
     private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
+    private val mutableShouldUseKeyConnectorFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutablePoliciesFlowMap =
@@ -129,6 +131,10 @@ class AuthDiskSourceImpl(
         // indefinitely unless the TDE flow explicitly removes them.
     }
 
+    override fun getShouldUseKeyConnectorFlow(userId: String): Flow<Boolean?> =
+        getMutableShouldUseKeyConnectorFlowMap(userId = userId)
+            .onSubscription { emit(getShouldUseKeyConnector(userId = userId)) }
+
     override fun getShouldUseKeyConnector(
         userId: String,
     ): Boolean? = getBoolean(key = USES_KEY_CONNECTOR.appendIdentifier(userId))
@@ -138,6 +144,7 @@ class AuthDiskSourceImpl(
             key = USES_KEY_CONNECTOR.appendIdentifier(userId),
             value = shouldUseKeyConnector,
         )
+        getMutableShouldUseKeyConnectorFlowMap(userId = userId).tryEmit(shouldUseKeyConnector)
     }
 
     override fun getShouldTrustDevice(
@@ -380,6 +387,13 @@ class AuthDiskSourceImpl(
             .also {
                 putString(key = UNIQUE_APP_ID_KEY, value = it)
             }
+
+    private fun getMutableShouldUseKeyConnectorFlowMap(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShouldUseKeyConnectorFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableOrganizationsFlow(
         userId: String,

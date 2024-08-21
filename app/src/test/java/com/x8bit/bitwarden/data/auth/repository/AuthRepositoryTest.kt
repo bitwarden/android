@@ -72,6 +72,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
@@ -316,6 +317,7 @@ class AuthRepositoryTest {
                 vaultState = VAULT_UNLOCK_DATA,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -340,6 +342,7 @@ class AuthRepositoryTest {
                 vaultState = VAULT_UNLOCK_DATA,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
@@ -355,6 +358,7 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
@@ -382,6 +386,7 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = USER_ORGANIZATIONS,
+                userIsUsingKeyConnectorList = USER_SHOULD_USER_KEY_CONNECTOR,
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -597,6 +602,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -606,6 +612,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -4752,6 +4759,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -4784,6 +4792,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -4814,6 +4823,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -5594,6 +5604,12 @@ class AuthRepositoryTest {
             UserOrganizations(
                 userId = USER_ID_1,
                 organizations = ORGANIZATIONS.toOrganizations(),
+            ),
+        )
+        private val USER_SHOULD_USER_KEY_CONNECTOR = listOf(
+            UserKeyConnectorState(
+                userId = USER_ID_1,
+                isUsingKeyConnector = null,
             ),
         )
         private val VAULT_UNLOCK_DATA = listOf(

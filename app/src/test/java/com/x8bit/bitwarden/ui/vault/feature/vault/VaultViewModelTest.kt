@@ -194,6 +194,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             )
@@ -276,6 +277,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             )
@@ -1525,6 +1527,7 @@ private val DEFAULT_USER_STATE = UserState(
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,
+            isUsingKeyConnector = false,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -1541,6 +1544,7 @@ private val DEFAULT_USER_STATE = UserState(
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,
+            isUsingKeyConnector = false,
         ),
     ),
 )

@@ -444,6 +444,7 @@ class CipherViewExtensionsTest {
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,
+            isUsingKeyConnector = false,
         )
 }
 

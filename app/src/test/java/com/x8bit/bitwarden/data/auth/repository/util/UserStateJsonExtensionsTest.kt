@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
+import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -239,6 +240,7 @@ class UserStateJsonExtensionsTest {
                         needsMasterPassword = false,
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -296,6 +298,12 @@ class UserStateJsonExtensionsTest {
                             ),
                         ),
                     ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = false,
+                        ),
+                    ),
                     hasPendingAccountAddition = false,
                     isBiometricsEnabledProvider = { false },
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
@@ -334,6 +342,7 @@ class UserStateJsonExtensionsTest {
                         needsMasterPassword = true,
                         trustedDevice = null,
                         hasMasterPassword = false,
+                        isUsingKeyConnector = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -387,6 +396,12 @@ class UserStateJsonExtensionsTest {
                             ),
                         ),
                     ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = null,
+                        ),
+                    ),
                     hasPendingAccountAddition = true,
                     isBiometricsEnabledProvider = { true },
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -431,6 +446,7 @@ class UserStateJsonExtensionsTest {
                             hasResetPasswordPermission = false,
                         ),
                         hasMasterPassword = false,
+                        isUsingKeyConnector = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -485,6 +501,12 @@ class UserStateJsonExtensionsTest {
                                     role = OrganizationType.ADMIN,
                                 ),
                             ),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = true,
                         ),
                     ),
                     hasPendingAccountAddition = true,

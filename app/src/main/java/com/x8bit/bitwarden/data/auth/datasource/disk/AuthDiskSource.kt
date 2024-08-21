@@ -51,6 +51,11 @@ interface AuthDiskSource {
     fun getShouldUseKeyConnector(userId: String): Boolean?
 
     /**
+     * Retrieves the state indicating that the user should use a key connector as a flow.
+     */
+    fun getShouldUseKeyConnectorFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Stores the boolean indicating that the user should use a key connector.
      */
     fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?)

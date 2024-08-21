@@ -56,6 +56,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
+import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -74,6 +75,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokensFlow
+import com.x8bit.bitwarden.data.auth.repository.util.userKeyConnectorStateFlow
+import com.x8bit.bitwarden.data.auth.repository.util.userKeyConnectorStateList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -238,6 +241,7 @@ class AuthRepositoryImpl(
         authDiskSource.userStateFlow,
         authDiskSource.userAccountTokensFlow,
         authDiskSource.userOrganizationsListFlow,
+        authDiskSource.userKeyConnectorStateFlow,
         vaultRepository.vaultUnlockDataStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
         // Ignore the data in the merge, but trigger an update when they emit.
@@ -249,12 +253,14 @@ class AuthRepositoryImpl(
         val userStateJson = array[0] as UserStateJson?
         val userAccountTokens = array[1] as List<UserAccountTokens>
         val userOrganizationsList = array[2] as List<UserOrganizations>
-        val vaultState = array[3] as List<VaultUnlockData>
-        val hasPendingAccountAddition = array[4] as Boolean
+        val userIsUsingKeyConnectorList = array[3] as List<UserKeyConnectorState>
+        val vaultState = array[4] as List<VaultUnlockData>
+        val hasPendingAccountAddition = array[5] as Boolean
         userStateJson?.toUserState(
             vaultState = vaultState,
             userAccountTokens = userAccountTokens,
             userOrganizationsList = userOrganizationsList,
+            userIsUsingKeyConnectorList = userIsUsingKeyConnectorList,
             hasPendingAccountAddition = hasPendingAccountAddition,
             isBiometricsEnabledProvider = ::isBiometricsEnabled,
             vaultUnlockTypeProvider = ::getVaultUnlockType,
@@ -272,6 +278,7 @@ class AuthRepositoryImpl(
                     vaultState = vaultRepository.vaultUnlockDataStateFlow.value,
                     userAccountTokens = authDiskSource.userAccountTokens,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
+                    userIsUsingKeyConnectorList = authDiskSource.userKeyConnectorStateList,
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
