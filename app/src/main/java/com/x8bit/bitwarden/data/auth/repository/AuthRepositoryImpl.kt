@@ -1455,13 +1455,20 @@ class AuthRepositoryImpl(
             previousUserState = authDiskSource.userState,
             environmentUrlData = environmentRepository.environment.environmentUrlData,
         )
-        val userId = userStateJson.activeUserId
+        val profile = userStateJson.activeAccount.profile
+        val userId = profile.userId
 
         checkForVaultUnlockError(
             onVaultUnlockError = { vaultUnlockError ->
                 return@userStateTransaction vaultUnlockError.toLoginErrorResult()
             },
         ) {
+            val keyConnectorUrl = loginResponse
+                .keyConnectorUrl
+                ?: loginResponse
+                    .userDecryptionOptions
+                    ?.keyConnectorUserDecryptionOptions
+                    ?.keyConnectorUrl
             val isDeviceUnlockAvailable = deviceData != null ||
                 loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
             // if possible attempt to unlock the vault with trusted device data
@@ -1471,14 +1478,19 @@ class AuthRepositoryImpl(
                     userStateJson = userStateJson,
                     deviceData = deviceData,
                 )
+            } else if (keyConnectorUrl != null && orgIdentifier != null) {
+                unlockVaultWithKeyConnectorOnLoginSuccess(
+                    profile = profile,
+                    keyConnectorUrl = keyConnectorUrl,
+                    orgIdentifier = orgIdentifier,
+                    loginResponse = loginResponse,
+                )
             } else {
-                password?.let {
-                    unlockVaultWithPasswordOnLoginSuccess(
-                        loginResponse = loginResponse,
-                        userStateJson = userStateJson,
-                        password = it,
-                    )
-                }
+                unlockVaultWithPasswordOnLoginSuccess(
+                    loginResponse = loginResponse,
+                    userStateJson = userStateJson,
+                    password = password,
+                )
             }
         }
 
@@ -1488,7 +1500,7 @@ class AuthRepositoryImpl(
                 .hashPassword(
                     email = email,
                     password = it,
-                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                    kdf = profile.toSdkParams(),
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
                 .onSuccess { passwordHash ->
@@ -1516,8 +1528,11 @@ class AuthRepositoryImpl(
             // when we completed the pending admin auth request.
             authDiskSource.storeUserKey(userId = userId, userKey = it)
         }
-        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
-
+        loginResponse.privateKey?.let {
+            // Only set the value if it's present, since we may have set it already
+            // when we completed the key connector conversion.
+            authDiskSource.storePrivateKey(userId = userId, privateKey = it)
+        }
         // If the user just authenticated with a two-factor code and selected the option to
         // remember it, then the API response will return a token that will be used in place
         // of the two-factor code on the next login attempt.
@@ -1565,6 +1580,83 @@ class AuthRepositoryImpl(
         authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = null)
         return LoginResult.TwoFactorRequired
     }
+
+    /**
+     * Attempt to unlock the current user's vault with key connector data.
+     */
+    private suspend fun unlockVaultWithKeyConnectorOnLoginSuccess(
+        profile: AccountJson.Profile,
+        keyConnectorUrl: String,
+        orgIdentifier: String,
+        loginResponse: GetTokenResponseJson.Success,
+    ): VaultUnlockResult? =
+        if (loginResponse.userDecryptionOptions?.hasMasterPassword != false) {
+            // This user has a master password, so we skip the key-connector logic as it is not
+            // setup yet. The user can still unlock the vault with their master password.
+            null
+        } else if (loginResponse.key != null && loginResponse.privateKey != null) {
+            // This is a returning user who should already have the key connector setup
+            keyConnectorManager
+                .getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = loginResponse.accessToken,
+                )
+                .map {
+                    unlockVault(
+                        accountProfile = profile,
+                        privateKey = loginResponse.privateKey,
+                        initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                            masterKey = it.masterKey,
+                            userKey = loginResponse.key,
+                        ),
+                    )
+                }
+                .fold(
+                    // If the request failed, we want to abort the login process
+                    onFailure = { VaultUnlockResult.GenericError },
+                    onSuccess = { it },
+                )
+        } else {
+            // This is a new user who needs to setup the key connector
+            keyConnectorManager
+                .migrateNewUserToKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = loginResponse.accessToken,
+                    kdfType = loginResponse.kdfType,
+                    kdfIterations = loginResponse.kdfIterations,
+                    kdfMemory = loginResponse.kdfMemory,
+                    kdfParallelism = loginResponse.kdfParallelism,
+                    organizationIdentifier = orgIdentifier,
+                )
+                .map { keyConnectorResponse ->
+                    val result = unlockVault(
+                        accountProfile = profile,
+                        privateKey = keyConnectorResponse.keys.private,
+                        initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                            masterKey = keyConnectorResponse.masterKey,
+                            userKey = keyConnectorResponse.encryptedUserKey,
+                        ),
+                    )
+                    if (result is VaultUnlockResult.Success) {
+                        // We now know that login/unlock was successful, so we store the userKey
+                        // and privateKey we now have since it didn't exist on the loginResponse
+                        authDiskSource.storeUserKey(
+                            userId = profile.userId,
+                            userKey = keyConnectorResponse.encryptedUserKey,
+                        )
+                        authDiskSource.storePrivateKey(
+                            userId = profile.userId,
+                            privateKey = keyConnectorResponse.keys.private,
+                        )
+                    }
+                    result
+                }
+                .fold(
+                    // If the request failed, we want to abort the login process
+                    onFailure = { VaultUnlockResult.GenericError },
+                    onSuccess = { it },
+                )
+        }
 
     /**
      * Attempt to unlock the current user's vault with password data.
