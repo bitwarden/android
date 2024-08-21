@@ -59,8 +59,14 @@ interface AccountsService {
 
     /**
      * Set the key connector key.
+     *
+     * This API requires the [accessToken] to be passed in manually because it occurs during the
+     * login process.
      */
-    suspend fun setKeyConnectorKey(body: KeyConnectorKeyRequestJson): Result<Unit>
+    suspend fun setKeyConnectorKey(
+        accessToken: String,
+        body: KeyConnectorKeyRequestJson,
+    ): Result<Unit>
 
     /**
      * Set the password.
@@ -69,13 +75,32 @@ interface AccountsService {
 
     /**
      * Retrieves the master key from the key connector.
+     *
+     * This API requires the [accessToken] to be passed in manually because it occurs during the
+     * login process.
      */
     suspend fun getMasterKeyFromKeyConnector(
         url: String,
+        accessToken: String,
     ): Result<KeyConnectorMasterKeyResponseJson>
 
     /**
      * Stores the master key to the key connector.
      */
-    suspend fun storeMasterKeyToKeyConnector(url: String, masterKey: String): Result<Unit>
+    suspend fun storeMasterKeyToKeyConnector(
+        url: String,
+        masterKey: String,
+    ): Result<Unit>
+
+    /**
+     * Stores the master key to the key connector.
+     *
+     * This API requires the [accessToken] to be passed in manually because it occurs during the
+     * login process.
+     */
+    suspend fun storeMasterKeyToKeyConnector(
+        url: String,
+        accessToken: String,
+        masterKey: String,
+    ): Result<Unit>
 }
