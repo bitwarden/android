@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDe
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator.masterPasswordGeneratorDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator.navigateToMasterPasswordGenerator
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordguidance.masterPasswordGuidanceDestination
+import com.x8bit.bitwarden.ui.auth.feature.masterpasswordguidance.navigateToMasterPasswordGuidance
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHintDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
 import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.navigateToPreventAccountLockout
@@ -83,8 +84,20 @@ fun NavGraphBuilder.authGraph(
         )
         completeRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToLanding = {
-                navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
+            onNavigateToPasswordGuidance = {
+                navController.navigateToMasterPasswordGuidance()
+            },
+            onNavigateToPreventAccountLockout = {
+                navController.navigateToPreventAccountLockout()
+            },
+            onNavigateToLogin = { emailAddress, captchaToken ->
+                navController.navigateToLogin(
+                    emailAddress = emailAddress,
+                    captchaToken = captchaToken,
+                    navOptions = navOptions {
+                        popUpTo(LANDING_ROUTE)
+                    },
+                )
             },
         )
         enterpriseSignOnDestination(

@@ -8,13 +8,14 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CreateAccountClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
@@ -23,7 +24,6 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,12 +40,13 @@ private const val KEY_STATE = "state"
 private const val MIN_PASSWORD_LENGTH = 12
 
 /**
- * Models logic for the create account screen.
+ * Models logic for the Complete Registration screen.
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    featureFlagManager: FeatureFlagManager,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -63,6 +64,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 isCheckDataBreachesToggled = true,
                 dialog = null,
                 passwordStrengthState = PasswordStrengthState.NONE,
+                onBoardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
             )
         },
 ) {
@@ -90,11 +92,10 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     override fun handleAction(action: CompleteRegistrationAction) {
         when (action) {
-            is CreateAccountClick -> handleCreateAccountClick()
             is ConfirmPasswordInputChange -> handleConfirmPasswordInputChanged(action)
             is PasswordHintChange -> handlePasswordHintChanged(action)
             is PasswordInputChange -> handlePasswordInputChanged(action)
-            is CloseClick -> handleCloseClick()
+            is BackClick -> handleBackClicked()
             is ErrorDialogDismiss -> handleDialogDismiss()
             is CheckDataBreachesToggle -> handleCheckDataBreachesToggle(action)
             is Internal.ReceiveRegisterResult -> {
@@ -103,6 +104,15 @@ class CompleteRegistrationViewModel @Inject constructor(
 
             ContinueWithBreachedPasswordClick -> handleContinueWithBreachedPasswordClick()
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
+            CompleteRegistrationAction.LearnToPreventLockoutClick -> {
+                handlePreventAccountLockoutClickAction()
+            }
+
+            CompleteRegistrationAction.MakePasswordStrongClick -> {
+                handleMakePasswordStrongClickAction()
+            }
+
+            CompleteRegistrationAction.CallToActionClick -> handleCallToActionClick()
         }
     }
 
@@ -170,7 +180,10 @@ class CompleteRegistrationViewModel @Inject constructor(
             is RegisterResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(
-                    CompleteRegistrationEvent.NavigateToLanding,
+                    CompleteRegistrationEvent.NavigateToLogin(
+                        email = state.userEmail,
+                        captchaToken = registerAccountResult.captchaToken,
+                    ),
                 )
             }
 
@@ -221,7 +234,7 @@ class CompleteRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleCloseClick() {
+    private fun handleBackClicked() {
         sendEvent(CompleteRegistrationEvent.NavigateBack)
     }
 
@@ -253,46 +266,27 @@ class CompleteRegistrationViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(confirmPasswordInput = action.input) }
     }
 
-    private fun handleCreateAccountClick() = when {
-        state.userEmail.isBlank() -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
-            )
-            mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
-        }
-
-        !state.userEmail.isValidEmail() -> {
+    private fun handleCallToActionClick() {
+        if (!state.userEmail.isValidEmail()) {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.invalid_email.asText(),
             )
             mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
-        }
-
-        state.passwordInput.length < MIN_PASSWORD_LENGTH -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
-            )
-            mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
-        }
-
-        state.passwordInput != state.confirmPasswordInput -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_confirmation_val_message.asText(),
-            )
-            mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
-        }
-
-        else -> {
+        } else {
             submitRegisterAccountRequest(
                 shouldCheckForDataBreaches = state.isCheckDataBreachesToggled,
                 shouldIgnorePasswordStrength = false,
             )
         }
+    }
+
+    private fun handleMakePasswordStrongClickAction() {
+        sendEvent(CompleteRegistrationEvent.NavigateToMakePasswordStrong)
+    }
+
+    private fun handlePreventAccountLockoutClickAction() {
+        sendEvent(CompleteRegistrationEvent.NavigateToPreventAccountLockout)
     }
 
     private fun handleContinueWithBreachedPasswordClick() {
@@ -345,19 +339,18 @@ data class CompleteRegistrationState(
     val isCheckDataBreachesToggled: Boolean,
     val dialog: CompleteRegistrationDialog?,
     val passwordStrengthState: PasswordStrengthState,
+    val onBoardingEnabled: Boolean,
 ) : Parcelable {
 
-    val passwordLengthLabel: Text
-        // Have to concat a few strings here, resulting string is:
-        // Important: Your master password cannot be recovered if you forget it! 12
-        // characters minimum
-        @Suppress("MaxLineLength")
-        get() = R.string.important.asText()
-            .concat(
-                ": ".asText(),
-                R.string.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
-                    .asText(MIN_PASSWORD_LENGTH),
-            )
+    /**
+     * The text to display on the call to action button.
+     */
+    val callToActionText: Text
+        get() = if (onBoardingEnabled) {
+            R.string.next.asText()
+        } else {
+            R.string.create_account.asText()
+        }
 
     /**
      * Whether or not the provided master password is considered strong.
@@ -374,6 +367,14 @@ data class CompleteRegistrationState(
             PasswordStrengthState.STRONG,
             -> true
         }
+
+    /**
+     * Whether the form is valid.
+     */
+    val hasValidMasterPassword: Boolean
+        get() = passwordInput == confirmPasswordInput &&
+            passwordInput.isNotBlank() &&
+            passwordInput.length >= MIN_PASSWORD_LENGTH
 }
 
 /**
@@ -423,24 +424,33 @@ sealed class CompleteRegistrationEvent {
     ) : CompleteRegistrationEvent()
 
     /**
-     * Navigates to the landing screen.
+     * Navigates to prevent account lockout info screen
      */
-    data object NavigateToLanding : CompleteRegistrationEvent()
+    data object NavigateToPreventAccountLockout : CompleteRegistrationEvent()
+
+    /**
+     * Navigates to make password strong screen
+     */
+    data object NavigateToMakePasswordStrong : CompleteRegistrationEvent()
+
+    /**
+     * Navigates to the captcha verification screen.
+     */
+    data class NavigateToLogin(
+        val email: String,
+        val captchaToken: String,
+    ) : CompleteRegistrationEvent()
 }
 
 /**
  * Models actions for the complete registration screen.
  */
 sealed class CompleteRegistrationAction {
-    /**
-     * User clicked create account.
-     */
-    data object CreateAccountClick : CompleteRegistrationAction()
 
     /**
-     * User clicked close.
+     * User clicked back.
      */
-    data object CloseClick : CompleteRegistrationAction()
+    data object BackClick : CompleteRegistrationAction()
 
     /**
      * User clicked "Yes" when being asked if they are sure they want to use a breached password.
@@ -471,6 +481,21 @@ sealed class CompleteRegistrationAction {
      * User tapped check data breaches toggle.
      */
     data class CheckDataBreachesToggle(val newState: Boolean) : CompleteRegistrationAction()
+
+    /**
+     * User clicked on the make password strong card.
+     */
+    data object MakePasswordStrongClick : CompleteRegistrationAction()
+
+    /**
+     * User clicked on learn to prevent lockout text.
+     */
+    data object LearnToPreventLockoutClick : CompleteRegistrationAction()
+
+    /**
+     * User clicked on the "CTA" button.
+     */
+    data object CallToActionClick : CompleteRegistrationAction()
 
     /**
      * Models actions that the [CompleteRegistrationViewModel] itself might send.
