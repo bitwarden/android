@@ -95,11 +95,6 @@ fun CompleteRegistrationScreen(
                     event.captchaToken,
                 )
             }
-
-            CompleteRegistrationEvent.NavigateToMakePasswordStrong -> onNavigateToPasswordGuidance()
-            CompleteRegistrationEvent.NavigateToPreventAccountLockout -> {
-                onNavigateToPreventAccountLockout()
-            }
         }
     }
 
