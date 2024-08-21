@@ -19,6 +19,19 @@ sealed class FlagKey<out T : Any> {
      */
     abstract val isRemotelyConfigured: Boolean
 
+    companion object {
+        /**
+         * List of all flag keys to consider
+         */
+        val activeFlags: List<FlagKey<*>> by lazy {
+            listOf(
+                EmailVerification,
+                OnboardingFlow,
+                OnboardingCarousel,
+            )
+        }
+    }
+
     /**
      * Data object holding the key for Email Verification feature.
      */

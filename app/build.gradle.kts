@@ -61,6 +61,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
             isMinifyEnabled = false
+
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "true")
         }
 
         // Beta and Release variants are identical except beta has a different package name
@@ -72,6 +74,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
         }
         release {
             isDebuggable = false
@@ -80,6 +84,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
         }
     }
 

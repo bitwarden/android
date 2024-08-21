@@ -1,27 +1,32 @@
 package com.x8bit.bitwarden
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
+import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
+import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -42,12 +47,13 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var settingsRepository: SettingsRepository
 
+    @Inject
+    lateinit var debugLaunchManager: DebugMenuLaunchManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
-
-        observeViewModelEvents()
 
         if (savedInstanceState == null) {
             mainViewModel.trySendAction(
@@ -66,11 +72,18 @@ class MainActivity : AppCompatActivity() {
         }
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
+            val navController = rememberNavController()
+            ObserveViewModelEvents(
+                onNavigateToDebugMenu = {
+                    navController.navigateToDebugMenuScreen()
+                },
+            )
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider {
                 BitwardenTheme(theme = state.theme) {
                     RootNavScreen(
                         onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        navController = navController,
                     )
                 }
             }
@@ -93,16 +106,32 @@ class MainActivity : AppCompatActivity() {
         currentFocus?.clearFocus()
     }
 
-    private fun observeViewModelEvents() {
-        mainViewModel
-            .eventFlow
-            .onEach { event ->
-                when (event) {
-                    is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
-                    MainEvent.Recreate -> handleRecreate()
-                }
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean = debugLaunchManager
+        .actionOnInputEvent(event = event, action = ::sendOpenDebugMenuEvent)
+        .takeIf { it }
+        ?: super.dispatchTouchEvent(event)
+
+    @SuppressLint("RestrictedApi")
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean = debugLaunchManager
+        .actionOnInputEvent(event = event, action = ::sendOpenDebugMenuEvent)
+        .takeIf { it }
+        ?: super.dispatchKeyEvent(event)
+
+    @Composable
+    private fun ObserveViewModelEvents(
+        onNavigateToDebugMenu: () -> Unit,
+    ) {
+        EventsEffect(viewModel = mainViewModel) { event ->
+            when (event) {
+                is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
+                MainEvent.Recreate -> handleRecreate()
+                MainEvent.NavigateToDebugMenu -> onNavigateToDebugMenu()
             }
-            .launchIn(lifecycleScope)
+        }
+    }
+
+    private fun sendOpenDebugMenuEvent() {
+        mainViewModel.trySendAction(MainAction.OpenDebugMenu)
     }
 
     private fun handleCompleteAutofill(event: MainEvent.CompleteAutofill) {
