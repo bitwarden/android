@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -66,6 +67,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
@@ -100,6 +102,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
@@ -206,6 +209,7 @@ class AuthRepositoryTest {
         } returns "AsymmetricEncString".asSuccess()
     }
     private val authRequestManager: AuthRequestManager = mockk()
+    private val keyConnectorManager: KeyConnectorManager = mockk()
     private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
@@ -238,6 +242,7 @@ class AuthRepositoryTest {
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRequestManager = authRequestManager,
+        keyConnectorManager = keyConnectorManager,
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
@@ -3809,6 +3814,114 @@ class AuthRepositoryTest {
         )
         assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
     }
+
+    @Test
+    fun `removePassword with no active account should return error`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = repository.removePassword(masterPassword = PASSWORD)
+
+        assertEquals(RemovePasswordResult.Error, result)
+    }
+
+    @Test
+    fun `removePassword with no userKey should return error`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = null)
+
+        val result = repository.removePassword(masterPassword = PASSWORD)
+
+        assertEquals(RemovePasswordResult.Error, result)
+    }
+
+    @Test
+    fun `removePassword with no keyConnectorUrl should return error`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+        val organizations = listOf(
+            mockk<SyncResponseJson.Profile.Organization> {
+                every { id } returns "orgId"
+                every { name } returns "orgName"
+                every { shouldUseKeyConnector } returns true
+                every { type } returns OrganizationType.USER
+                every { keyConnectorUrl } returns null
+            },
+        )
+        fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+
+        val result = repository.removePassword(masterPassword = PASSWORD)
+
+        assertEquals(RemovePasswordResult.Error, result)
+    }
+
+    @Test
+    fun `removePassword with migrateExistingUserToKeyConnector error should return error`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            val url = "www.example.com"
+            val organizations = listOf(
+                mockk<SyncResponseJson.Profile.Organization> {
+                    every { id } returns "orgId"
+                    every { name } returns "orgName"
+                    every { shouldUseKeyConnector } returns true
+                    every { type } returns OrganizationType.USER
+                    every { keyConnectorUrl } returns url
+                },
+            )
+            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+            coEvery {
+                keyConnectorManager.migrateExistingUserToKeyConnector(
+                    userId = USER_ID_1,
+                    url = url,
+                    userKeyEncrypted = ENCRYPTED_USER_KEY,
+                    email = PROFILE_1.email,
+                    masterPassword = PASSWORD,
+                    kdf = PROFILE_1.toSdkParams(),
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = repository.removePassword(masterPassword = PASSWORD)
+
+            assertEquals(RemovePasswordResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `removePassword with migrateExistingUserToKeyConnector success should sync and return success`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            val url = "www.example.com"
+            val organizations = listOf(
+                mockk<SyncResponseJson.Profile.Organization> {
+                    every { id } returns "orgId"
+                    every { name } returns "orgName"
+                    every { shouldUseKeyConnector } returns true
+                    every { type } returns OrganizationType.USER
+                    every { keyConnectorUrl } returns url
+                },
+            )
+            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+            coEvery {
+                keyConnectorManager.migrateExistingUserToKeyConnector(
+                    userId = USER_ID_1,
+                    url = url,
+                    userKeyEncrypted = ENCRYPTED_USER_KEY,
+                    email = PROFILE_1.email,
+                    masterPassword = PASSWORD,
+                    kdf = PROFILE_1.toSdkParams(),
+                )
+            } returns Unit.asSuccess()
+            every { vaultRepository.sync() } just runs
+
+            val result = repository.removePassword(masterPassword = PASSWORD)
+
+            assertEquals(RemovePasswordResult.Success, result)
+            verify(exactly = 1) {
+                vaultRepository.sync()
+            }
+        }
 
     @Test
     fun `resetPassword Success should return Success`() = runTest {

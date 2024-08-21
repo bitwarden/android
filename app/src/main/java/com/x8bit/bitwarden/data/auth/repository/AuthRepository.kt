@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
@@ -266,6 +267,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     suspend fun passwordHintRequest(
         email: String,
     ): PasswordHintResult
+
+    /**
+     * Removes the users password from the account. This used used when migrating from master
+     * password login to key connector login.
+     */
+    suspend fun removePassword(masterPassword: String): RemovePasswordResult
 
     /**
      * Resets the users password from the [currentPassword] (or null for account recovery resets),
