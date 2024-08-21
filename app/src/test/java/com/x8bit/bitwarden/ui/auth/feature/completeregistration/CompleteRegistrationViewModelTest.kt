@@ -149,7 +149,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                CompleteRegistrationEvent.NavigateToLanding,
+                CompleteRegistrationEvent.NavigateToLogin(
+                    EMAIL,
+                    CAPTCHA_BYPASS_TOKEN,
+                ),
                 eventFlow.awaitItem(),
             )
             // Make sure loading dialog is hidden:
@@ -213,40 +216,14 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             assertEquals(
-                CompleteRegistrationEvent.NavigateToLanding,
+                CompleteRegistrationEvent.NavigateToLogin(
+                    EMAIL,
+                    CAPTCHA_BYPASS_TOKEN,
+                ),
                 awaitItem(),
             )
         }
     }
-
-    @Test
-    fun `CallToActionClick register returns Success should emit NavigateToOnboarding if enabled`() =
-        runTest {
-            val repo = mockk<AuthRepository> {
-                coEvery {
-                    register(
-                        email = EMAIL,
-                        masterPassword = PASSWORD,
-                        masterPasswordHint = null,
-                        emailVerificationToken = TOKEN,
-                        captchaToken = null,
-                        shouldCheckDataBreaches = false,
-                        isMasterPasswordStrong = true,
-                    )
-                } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
-            }
-            val viewModel = createCompleteRegistrationViewModel(
-                completeRegistrationState = VALID_INPUT_STATE.copy(onBoardingEnabled = true),
-                authRepository = repo,
-            )
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-                assertEquals(
-                    CompleteRegistrationEvent.NavigateToOnboarding,
-                    awaitItem(),
-                )
-            }
-        }
 
     @Test
     fun `ContinueWithBreachedPasswordClick should call repository with checkDataBreaches false`() {

@@ -12,8 +12,8 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
@@ -178,13 +178,14 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             is RegisterResult.Success -> {
+                // Clear dialog.
                 mutableStateFlow.update { it.copy(dialog = null) }
-                val navEvent = if (state.onBoardingEnabled) {
-                    CompleteRegistrationEvent.NavigateToOnboarding
-                } else {
-                    CompleteRegistrationEvent.NavigateToLanding
-                }
-                sendEvent(navEvent)
+                sendEvent(
+                    CompleteRegistrationEvent.NavigateToLogin(
+                        email = state.userEmail,
+                        captchaToken = registerAccountResult.captchaToken,
+                    ),
+                )
             }
 
             RegisterResult.DataBreachFound -> {
@@ -421,11 +422,6 @@ sealed class CompleteRegistrationEvent {
     ) : CompleteRegistrationEvent()
 
     /**
-     * Navigates to the landing screen.
-     */
-    data object NavigateToLanding : CompleteRegistrationEvent()
-
-    /**
      * Navigates to prevent account lockout info screen
      */
     data object NavigateToPreventAccountLockout : CompleteRegistrationEvent()
@@ -436,9 +432,12 @@ sealed class CompleteRegistrationEvent {
     data object NavigateToMakePasswordStrong : CompleteRegistrationEvent()
 
     /**
-     * Navigates to onboarding flow
+     * Navigates to the captcha verification screen.
      */
-    data object NavigateToOnboarding : CompleteRegistrationEvent()
+    data class NavigateToLogin(
+        val email: String,
+        val captchaToken: String,
+    ) : CompleteRegistrationEvent()
 }
 
 /**

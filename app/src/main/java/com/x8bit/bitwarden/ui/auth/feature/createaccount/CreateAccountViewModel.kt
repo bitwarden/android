@@ -473,7 +473,7 @@ sealed class CreateAccountEvent {
     data class NavigateToCaptcha(val uri: Uri) : CreateAccountEvent()
 
     /**
-     * Navigates to the captcha verification screen.
+     * Navigates to the login screen bypassing captcha with token.
      */
     data class NavigateToLogin(
         val email: String,

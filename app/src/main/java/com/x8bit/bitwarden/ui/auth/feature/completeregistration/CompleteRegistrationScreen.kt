@@ -68,10 +68,9 @@ import com.x8bit.bitwarden.ui.platform.theme.nonMaterialTypography
 @Composable
 fun CompleteRegistrationScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLanding: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToOnboarding: () -> Unit,
+    onNavigateToLogin: (String, String) -> Unit,
     viewModel: CompleteRegistrationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -84,16 +83,17 @@ fun CompleteRegistrationScreen(
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
 
-            is CompleteRegistrationEvent.NavigateToLanding -> {
-                onNavigateToLanding()
-            }
-
             CompleteRegistrationEvent.NavigateToMakePasswordStrong -> onNavigateToPasswordGuidance()
             CompleteRegistrationEvent.NavigateToPreventAccountLockout -> {
                 onNavigateToPreventAccountLockout()
             }
 
-            CompleteRegistrationEvent.NavigateToOnboarding -> onNavigateToOnboarding()
+            is CompleteRegistrationEvent.NavigateToLogin -> {
+                onNavigateToLogin(
+                    event.email,
+                    event.captchaToken,
+                )
+            }
         }
     }
 

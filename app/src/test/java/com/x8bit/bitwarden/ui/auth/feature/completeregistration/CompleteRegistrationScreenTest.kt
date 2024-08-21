@@ -42,10 +42,9 @@ import org.robolectric.annotation.Config
 class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToLandingCalled = false
     private var onNavigateToPreventAccountLockoutCalled = false
     private var onNavigateToPasswordGuidanceCalled = false
-    private var onNavigateToOnboardingCalled = false
+    private var onNavigateToLoginCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<CompleteRegistrationEvent>()
@@ -60,12 +59,15 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CompleteRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToLanding = { onNavigateToLandingCalled = true },
                 onNavigateToPasswordGuidance = { onNavigateToPasswordGuidanceCalled = true },
                 onNavigateToPreventAccountLockout = {
                     onNavigateToPreventAccountLockoutCalled = true
                 },
-                onNavigateToOnboarding = { onNavigateToOnboardingCalled = true },
+                onNavigateToLogin = { email, captchaToken ->
+                    onNavigateToLoginCalled = true
+                    assertTrue(email == EMAIL)
+                    assertTrue(captchaToken == TOKEN)
+                },
                 viewModel = viewModel,
             )
         }
@@ -124,12 +126,6 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
     fun `NavigateBack event should invoke navigate back lambda`() {
         mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
-    }
-
-    @Test
-    fun `NavigateToLogin event should invoke navigate login lambda`() {
-        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToLanding)
-        assertTrue(onNavigateToLandingCalled)
     }
 
     @Test
@@ -287,12 +283,6 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             }
     }
 
-    @Test
-    fun `NavigateToOnboarding event should invoke navigate to onboarding lambda`() {
-        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToOnboarding)
-        assertTrue(onNavigateToOnboardingCalled)
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `NavigateToPreventAccountLockout event should invoke navigate to prevent account lockout lambda`() {
@@ -331,6 +321,18 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .onNodeWithText("Choose a unique and strong password to keep your information safe.")
             .performScrollTo()
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `NavigateToLogin event should invoke navigate to login lambda`() {
+        mutableEventFlow.tryEmit(
+            CompleteRegistrationEvent.NavigateToLogin(
+                email = EMAIL,
+                captchaToken = TOKEN,
+            ),
+        )
+
+        assertTrue(onNavigateToLoginCalled)
     }
 
     companion object {

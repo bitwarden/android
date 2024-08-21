@@ -52,10 +52,9 @@ fun NavController.navigateToCompleteRegistration(
  */
 fun NavGraphBuilder.completeRegistrationDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToLanding: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToOnboarding: () -> Unit,
+    onNavigateToLogin: (String, String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = COMPLETE_REGISTRATION_ROUTE,
@@ -67,10 +66,9 @@ fun NavGraphBuilder.completeRegistrationDestination(
     ) {
         CompleteRegistrationScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToLanding = onNavigateToLanding,
             onNavigateToPasswordGuidance = onNavigateToPasswordGuidance,
             onNavigateToPreventAccountLockout = onNavigateToPreventAccountLockout,
-            onNavigateToOnboarding = onNavigateToOnboarding,
+            onNavigateToLogin = onNavigateToLogin,
         )
     }
 }
