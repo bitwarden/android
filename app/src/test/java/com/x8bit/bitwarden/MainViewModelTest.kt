@@ -778,6 +778,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     needsMasterPassword = false,
     trustedDevice = null,
     hasMasterPassword = true,
+    isUsingKeyConnector = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(

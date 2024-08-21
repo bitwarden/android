@@ -301,6 +301,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,
+            isUsingKeyConnector = false,
         ),
     ),
 )

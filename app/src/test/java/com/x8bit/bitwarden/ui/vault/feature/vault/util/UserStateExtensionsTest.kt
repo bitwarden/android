@@ -83,6 +83,7 @@ class UserStateExtensionsTest {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -106,6 +107,7 @@ class UserStateExtensionsTest {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -133,6 +135,7 @@ class UserStateExtensionsTest {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -160,6 +163,7 @@ class UserStateExtensionsTest {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             )
@@ -202,6 +206,7 @@ class UserStateExtensionsTest {
                 ),
                 trustedDevice = null,
                 hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -242,6 +247,7 @@ class UserStateExtensionsTest {
                 ),
                 trustedDevice = null,
                 hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -286,6 +292,7 @@ class UserStateExtensionsTest {
                         ),
                         trustedDevice = null,
                         hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             )
@@ -311,6 +318,7 @@ class UserStateExtensionsTest {
                 needsMasterPassword = false,
                 trustedDevice = null,
                 hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -363,6 +371,7 @@ class UserStateExtensionsTest {
                 ),
                 trustedDevice = null,
                 hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -416,6 +425,7 @@ class UserStateExtensionsTest {
                 ),
                 trustedDevice = null,
                 hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

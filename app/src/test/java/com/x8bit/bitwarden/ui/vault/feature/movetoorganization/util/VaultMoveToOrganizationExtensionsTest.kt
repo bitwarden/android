@@ -124,6 +124,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 },
                 trustedDevice = null,
                 hasMasterPassword = true,
+                isUsingKeyConnector = false,
             ),
         ),
     )

@@ -1100,6 +1100,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,
+            isUsingKeyConnector = false,
         )
 
         private val DEFAULT_USER_STATE = UserState(

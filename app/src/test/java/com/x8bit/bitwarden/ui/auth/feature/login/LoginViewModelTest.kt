@@ -128,6 +128,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     needsMasterPassword = false,
                     trustedDevice = null,
                     hasMasterPassword = true,
+                    isUsingKeyConnector = false,
                 ),
             ),
         )

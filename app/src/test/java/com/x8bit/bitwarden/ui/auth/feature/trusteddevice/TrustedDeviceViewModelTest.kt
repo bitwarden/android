@@ -273,6 +273,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     needsMasterPassword = false,
     trustedDevice = TRUSTED_DEVICE,
     hasMasterPassword = false,
+    isUsingKeyConnector = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(

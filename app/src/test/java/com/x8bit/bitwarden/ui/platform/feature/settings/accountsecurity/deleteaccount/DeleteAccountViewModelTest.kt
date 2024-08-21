@@ -241,6 +241,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
                 hasResetPasswordPermission = true,
             ),
             hasMasterPassword = true,
+            isUsingKeyConnector = false,
         ),
     ),
 )
