@@ -178,7 +178,6 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             is RegisterResult.Success -> {
-                // Clear dialog.
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(
                     CompleteRegistrationEvent.NavigateToLogin(
