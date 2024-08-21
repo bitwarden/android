@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -49,6 +50,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
@@ -92,6 +94,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -142,6 +145,7 @@ class AuthRepositoryImpl(
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val authRequestManager: AuthRequestManager,
+    private val keyConnectorManager: KeyConnectorManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
@@ -832,6 +836,40 @@ class AuthRepositoryImpl(
             },
             onFailure = { PasswordHintResult.Error(null) },
         )
+    }
+
+    override suspend fun removePassword(masterPassword: String): RemovePasswordResult {
+        val activeAccount = authDiskSource
+            .userState
+            ?.activeAccount
+            ?: return RemovePasswordResult.Error
+        val profile = activeAccount.profile
+        val userId = profile.userId
+        val userKey = authDiskSource
+            .getUserKey(userId = userId)
+            ?: return RemovePasswordResult.Error
+        val keyConnectorUrl = organizations
+            .find {
+                it.shouldUseKeyConnector &&
+                    it.type != OrganizationType.OWNER &&
+                    it.type != OrganizationType.ADMIN
+            }
+            ?.keyConnectorUrl
+            ?: return RemovePasswordResult.Error
+        return keyConnectorManager
+            .migrateExistingUserToKeyConnector(
+                userId = userId,
+                url = keyConnectorUrl,
+                userKeyEncrypted = userKey,
+                email = profile.email,
+                masterPassword = masterPassword,
+                kdf = profile.toSdkParams(),
+            )
+            .onSuccess { vaultRepository.sync() }
+            .fold(
+                onFailure = { RemovePasswordResult.Error },
+                onSuccess = { RemovePasswordResult.Success },
+            )
     }
 
     override suspend fun resetPassword(

@@ -63,6 +63,20 @@ class RemovePasswordScreenTest : BaseComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .isDisplayed()
 
+        val loadingMessage = "Loading message"
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = RemovePasswordState.DialogState.Loading(
+                    title = loadingMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = loadingMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .isDisplayed()
+
         mutableStateFlow.update { it.copy(dialogState = null) }
 
         composeTestRule.onNode(isDialog()).assertDoesNotExist()

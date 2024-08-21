@@ -5,11 +5,13 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +26,74 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClick calls does nothing`() = runTest {
+    fun `ContinueClick with blank input should show error dialog`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+        viewModel.trySendAction(RemovePasswordAction.ContinueClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = RemovePasswordState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required
+                        .asText(R.string.master_password.asText()),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ContinueClick with input and remove password error should show error dialog`() = runTest {
+        val password = "123"
+        val initialState = DEFAULT_STATE.copy(input = password)
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            authRepository.removePassword(masterPassword = password)
+        } returns RemovePasswordResult.Error
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
             viewModel.trySendAction(RemovePasswordAction.ContinueClick)
-            expectNoEvents()
+            assertEquals(
+                initialState.copy(
+                    dialogState = RemovePasswordState.DialogState.Loading(
+                        title = R.string.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialogState = RemovePasswordState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ContinueClick with input and remove password success should dismiss dialog`() = runTest {
+        val password = "123"
+        val initialState = DEFAULT_STATE.copy(input = password)
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            authRepository.removePassword(masterPassword = password)
+        } returns RemovePasswordResult.Success
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(RemovePasswordAction.ContinueClick)
+            assertEquals(
+                initialState.copy(
+                    dialogState = RemovePasswordState.DialogState.Loading(
+                        title = R.string.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(initialState, awaitItem())
         }
     }
 
