@@ -100,21 +100,6 @@ fun NavGraphBuilder.authGraph(
                     },
                 )
             },
-            onNavigateToPasswordGuidance = {
-                navController.navigateToMasterPasswordGuidance()
-            },
-            onNavigateToPreventAccountLockout = {
-                navController.navigateToPreventAccountLockout()
-            },
-            onNavigateToOnboarding = {
-                navController.navigateToSetupUnlockScreen(
-                    navOptions = navOptions {
-                        popUpTo(LANDING_ROUTE) {
-                            inclusive = false
-                        }
-                    },
-                )
-            },
         )
         enterpriseSignOnDestination(
             onNavigateBack = { navController.popBackStack() },
