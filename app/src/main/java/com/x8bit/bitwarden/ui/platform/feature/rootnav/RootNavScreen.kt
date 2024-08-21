@@ -19,6 +19,9 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
+import com.x8bit.bitwarden.ui.auth.feature.removepassword.REMOVE_PASSWORD_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.removepassword.navigateToRemovePassword
+import com.x8bit.bitwarden.ui.auth.feature.removepassword.removePasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.RESET_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
@@ -79,6 +82,7 @@ fun RootNavScreen(
     ) {
         splashDestination()
         authGraph(navController)
+        removePasswordDestination()
         resetPasswordDestination()
         trustedDeviceGraph(navController)
         vaultUnlockDestination()
@@ -93,6 +97,7 @@ fun RootNavScreen(
 
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
         RootNavState.SetPassword -> SET_PASSWORD_ROUTE
+        RootNavState.RemovePassword -> REMOVE_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.TrustedDevice -> TRUSTED_DEVICE_GRAPH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
@@ -149,13 +154,14 @@ fun RootNavScreen(
                 )
             }
 
+            RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
             RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
             RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
             is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(
-                rootNavOptions,
+                navOptions = rootNavOptions,
             )
 
             RootNavState.VaultUnlockedForNewSend -> {

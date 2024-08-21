@@ -37,4 +37,10 @@ data class JwtTokenDataJson(
 
     @SerialName("amr")
     val authenticationMethodsReference: List<String>,
-)
+) {
+    /**
+     * Indicates that this is an external user. Mainly used for SSO users with a key connector.
+     */
+    val isExternal: Boolean
+        get() = authenticationMethodsReference.any { it == "external" }
+}
