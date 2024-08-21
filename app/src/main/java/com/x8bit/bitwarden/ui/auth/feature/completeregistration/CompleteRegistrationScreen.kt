@@ -228,12 +228,13 @@ private fun CompleteRegistrationContent(
             showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
         )
         Spacer(modifier = Modifier.height(16.dp))
-        @Suppress("MaxLineLength")
         BitwardenTextField(
             label = stringResource(id = R.string.master_password_hint),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
-            hint = stringResource(R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password),
+            hint = stringResource(
+                R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password,
+            ),
             modifier = Modifier
                 .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth(),
