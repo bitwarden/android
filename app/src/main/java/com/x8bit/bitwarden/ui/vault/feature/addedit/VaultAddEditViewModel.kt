@@ -2063,6 +2063,7 @@ data class VaultAddEditState(
                     val password: String = "",
                     val totp: String? = null,
                     val canViewPassword: Boolean = true,
+                    val canEdit: Boolean = true,
                     val uriList: List<UriItem> = listOf(
                         UriItem(
                             id = UUID.randomUUID().toString(),

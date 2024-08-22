@@ -81,7 +81,7 @@ fun createMockCipherView(
         passwordHistory = listOf(createMockPasswordHistoryView(number = number, clock)),
         reprompt = repromptType,
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
-        edit = false,
+        edit = true,
         organizationUseTotp = false,
         viewPassword = true,
         localData = null,
