@@ -134,7 +134,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `email input change should send EmailInputChange action`() {
-        composeTestRule.onNodeWithText("Email address (required)").performTextInput(TEST_INPUT)
+        composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
     }
 
@@ -180,12 +180,21 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking the server tool tip should send ServerGeologyHelpClickAction`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = true)
         composeTestRule
             .onNodeWithContentDescription("Help with server geolocations.")
             .performScrollTo()
             .performClick()
 
         verify { viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick) }
+    }
+
+    @Test
+    fun `server tool tip should not exist if not in new onboarding ui`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = false)
+        composeTestRule
+            .onNodeWithContentDescription("Help with server geolocations.")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -279,6 +288,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
+            showNewOnboardingUi = false,
         )
     }
 }

@@ -81,6 +81,9 @@ fun NavGraphBuilder.authGraph(
         )
         checkEmailDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateBackToLanding = {
+                navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
+            },
         )
         completeRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
