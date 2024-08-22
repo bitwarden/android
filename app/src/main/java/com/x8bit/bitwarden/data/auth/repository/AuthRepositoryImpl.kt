@@ -7,6 +7,7 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson.Profile
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -1475,7 +1476,7 @@ class AuthRepositoryImpl(
             if (isDeviceUnlockAvailable) {
                 unlockVaultWithTdeOnLoginSuccess(
                     loginResponse = loginResponse,
-                    userStateJson = userStateJson,
+                    profile = profile,
                     deviceData = deviceData,
                 )
             } else if (keyConnectorUrl != null && orgIdentifier != null) {
@@ -1488,7 +1489,7 @@ class AuthRepositoryImpl(
             } else {
                 unlockVaultWithPasswordOnLoginSuccess(
                     loginResponse = loginResponse,
-                    userStateJson = userStateJson,
+                    profile = profile,
                     password = password,
                 )
             }
@@ -1663,7 +1664,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithPasswordOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
-        userStateJson: UserStateJson,
+        profile: Profile,
         password: String?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with password if possible.
@@ -1671,7 +1672,7 @@ class AuthRepositoryImpl(
         val privateKey = loginResponse.privateKey ?: return null
         val key = loginResponse.key ?: return null
         return unlockVault(
-            accountProfile = userStateJson.activeAccount.profile,
+            accountProfile = profile,
             privateKey = privateKey,
             initUserCryptoMethod = InitUserCryptoMethod.Password(
                 password = masterPassword,
@@ -1685,7 +1686,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithTdeOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
-        userStateJson: UserStateJson,
+        profile: Profile,
         deviceData: DeviceDataModel?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with auth request if possible.
@@ -1693,7 +1694,7 @@ class AuthRepositoryImpl(
         if (loginResponse.privateKey != null && loginResponse.key != null) {
             deviceData?.let { model ->
                 return unlockVault(
-                    accountProfile = userStateJson.activeAccount.profile,
+                    accountProfile = profile,
                     privateKey = loginResponse.privateKey,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = model.privateKey,
@@ -1722,7 +1723,7 @@ class AuthRepositoryImpl(
                 loginResponse.privateKey?.let { privateKey ->
                     unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
                         options = options,
-                        userStateJson = userStateJson,
+                        profile = profile,
                         privateKey = privateKey,
                     )
                 }
@@ -1735,11 +1736,11 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
         options: TrustedDeviceUserDecryptionOptionsJson,
-        userStateJson: UserStateJson,
+        profile: Profile,
         privateKey: String,
     ): VaultUnlockResult? {
         var vaultUnlockResult: VaultUnlockResult? = null
-        val userId = userStateJson.activeUserId
+        val userId = profile.userId
         val deviceKey = authDiskSource.getDeviceKey(userId = userId)
         if (deviceKey == null) {
             // A null device key means this device is not trusted.
@@ -1753,7 +1754,7 @@ class AuthRepositoryImpl(
                     // For approved requests the key will always be present.
                     val userKey = requireNotNull(request.key)
                     vaultUnlockResult = unlockVault(
-                        accountProfile = userStateJson.activeAccount.profile,
+                        accountProfile = profile,
                         privateKey = privateKey,
                         initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                             requestPrivateKey = pendingRequest.requestPrivateKey,
@@ -1780,7 +1781,7 @@ class AuthRepositoryImpl(
         }
 
         vaultUnlockResult = unlockVault(
-            accountProfile = userStateJson.activeAccount.profile,
+            accountProfile = profile,
             privateKey = privateKey,
             initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
                 deviceKey = deviceKey,
