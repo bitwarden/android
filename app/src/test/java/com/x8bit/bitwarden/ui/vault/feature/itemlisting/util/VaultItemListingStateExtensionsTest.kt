@@ -118,6 +118,7 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Identity,
             VaultItemListingState.ItemListingType.Vault.SecureNote,
             VaultItemListingState.ItemListingType.Vault.Login,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
         )
 
         val result = itemListingTypes.map { it.toVaultItemCipherType() }
@@ -128,6 +129,7 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.IDENTITY,
                 VaultItemCipherType.SECURE_NOTE,
                 VaultItemCipherType.LOGIN,
+                VaultItemCipherType.LOGIN,
             ),
             result,
         )
@@ -137,9 +139,6 @@ class VaultItemListingStateExtensionsTest {
     fun `toVaultItemCipherType should throw an exception for unsupported ItemListingTypes`() {
         val itemListingTypes = listOf(
             VaultItemListingState.ItemListingType.Vault.Trash,
-            VaultItemListingState.ItemListingType.Vault.Collection(
-                collectionId = "mockId",
-            ),
             VaultItemListingState.ItemListingType.Vault.Folder(
                 folderId = "mockId",
             ),

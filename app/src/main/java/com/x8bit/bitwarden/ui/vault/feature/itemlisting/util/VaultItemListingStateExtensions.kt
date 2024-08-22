@@ -37,8 +37,8 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         is VaultItemListingState.ItemListingType.Vault.Identity -> VaultItemCipherType.IDENTITY
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> VaultItemCipherType.SECURE_NOTE
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN
+        is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Trash,
-        is VaultItemListingState.ItemListingType.Vault.Collection,
         is VaultItemListingState.ItemListingType.Vault.Folder,
         -> throw IllegalStateException("Cannot create vault item from this VaultItemListingState!")
     }
