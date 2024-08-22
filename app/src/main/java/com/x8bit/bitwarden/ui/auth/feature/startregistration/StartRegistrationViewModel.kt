@@ -60,7 +60,7 @@ class StartRegistrationViewModel @Inject constructor(
             isContinueButtonEnabled = false,
             selectedEnvironmentType = environmentRepository.environment.type,
             dialog = null,
-            showNewOnboardingUi = false,
+            showNewOnboardingUi = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
         ),
 ) {
 
@@ -85,7 +85,7 @@ class StartRegistrationViewModel @Inject constructor(
             .map {
                 OnboardingFeatureFlagUpdated(it)
             }
-            .onEach(::handleAction)
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 

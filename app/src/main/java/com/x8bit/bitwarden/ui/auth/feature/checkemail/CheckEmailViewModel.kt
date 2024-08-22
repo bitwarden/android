@@ -27,7 +27,7 @@ class CheckEmailViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: CheckEmailState(
             email = CheckEmailArgs(savedStateHandle).emailAddress,
-            showNewOnboardingUi = false,
+            showNewOnboardingUi = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
         ),
 ) {
     init {
@@ -41,7 +41,7 @@ class CheckEmailViewModel @Inject constructor(
             .map {
                 CheckEmailAction.Internal.OnboardingFeatureFlagUpdated(it)
             }
-            .onEach(::handleAction)
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 

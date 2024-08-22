@@ -14,8 +14,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import junit.framework.TestCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -70,13 +70,13 @@ class CheckEmailScreenTest : BaseComposeTest() {
     @Test
     fun `login button click should send LoginTap action`() {
         mutableEventFlow.tryEmit(CheckEmailEvent.NavigateBackToLanding)
-        TestCase.assertTrue(onNavigateToLandingCalled)
+        assertTrue(onNavigateToLandingCalled)
     }
 
     @Test
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(CheckEmailEvent.NavigateBack)
-        TestCase.assertTrue(onNavigateBackCalled)
+        assertTrue(onNavigateBackCalled)
     }
 
     @Test
