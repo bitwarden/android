@@ -91,7 +91,6 @@ class Fido2ProviderProcessorTest {
             context,
             authRepository,
             vaultRepository,
-            fido2CredentialStore,
             fido2CredentialManager,
             intentManager,
             clock,
@@ -300,6 +299,7 @@ class Fido2ProviderProcessorTest {
         every {
             intentManager.createFido2UnlockPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT",
+                userId = DEFAULT_USER_STATE.activeUserId,
                 requestCode = any(),
             )
         } returns mockIntent
@@ -316,6 +316,7 @@ class Fido2ProviderProcessorTest {
             callback.onResult(any())
             intentManager.createFido2UnlockPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT",
+                userId = DEFAULT_USER_STATE.activeUserId,
                 requestCode = any(),
             )
         }
@@ -462,6 +463,7 @@ class Fido2ProviderProcessorTest {
         every {
             intentManager.createFido2GetCredentialPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
+                userId = DEFAULT_USER_STATE.activeUserId,
                 credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
                 cipherId = mockFido2CredentialAutofillViews.first().cipherId,
                 requestCode = any(),

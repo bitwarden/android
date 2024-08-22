@@ -25,7 +25,6 @@ import androidx.credentials.CredentialManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.io.File
@@ -248,18 +247,20 @@ class IntentManagerImpl(
             /* context = */ context,
             /* requestCode = */ requestCode,
             /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+            /* flags = */ PendingIntent.FLAG_MUTABLE,
         )
     }
 
     override fun createFido2GetCredentialPendingIntent(
         action: String,
+        userId: String,
         credentialId: String,
         cipherId: String,
         requestCode: Int,
     ): PendingIntent {
         val intent = Intent(action)
             .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_USER_ID, userId)
             .putExtra(EXTRA_KEY_CREDENTIAL_ID, credentialId)
             .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
 
@@ -267,21 +268,24 @@ class IntentManagerImpl(
             /* context = */ context,
             /* requestCode = */ requestCode,
             /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+            /* flags = */ PendingIntent.FLAG_MUTABLE,
         )
     }
 
     override fun createFido2UnlockPendingIntent(
         action: String,
+        userId: String,
         requestCode: Int,
     ): PendingIntent {
-        val intent = Intent(action).setPackage(context.packageName)
+        val intent = Intent(action)
+            .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_USER_ID, userId)
 
         return PendingIntent.getActivity(
             /* context = */ context,
             /* requestCode = */ requestCode,
             /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+            /* flags = */ PendingIntent.FLAG_MUTABLE,
         )
     }
 

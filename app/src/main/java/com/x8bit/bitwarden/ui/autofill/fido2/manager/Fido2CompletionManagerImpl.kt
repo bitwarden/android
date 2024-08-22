@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.credentials.CreatePublicKeyCredentialResponse
@@ -9,7 +10,9 @@ import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
@@ -18,6 +21,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRes
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
+import com.x8bit.bitwarden.data.autofill.fido2.processor.UNLOCK_ACCOUNT_INTENT
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlin.random.Random
 
@@ -95,15 +100,15 @@ class Fido2CompletionManagerImpl(
 
     override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialsResult) {
         val resultIntent = Intent()
-        val responseBuilder = BeginGetCredentialResponse.Builder()
         when (result) {
             is Fido2GetCredentialsResult.Success -> {
-                val entries = result
+                val credentialEntries = result
                     .credentials
                     .map {
                         val pendingIntent = intentManager
                             .createFido2GetCredentialPendingIntent(
                                 action = GET_PASSKEY_INTENT,
+                                userId = result.userId,
                                 credentialId = it.credentialId.toString(),
                                 cipherId = it.cipherId,
                                 requestCode = Random.nextInt(),
@@ -116,29 +121,51 @@ class Fido2CompletionManagerImpl(
                                 pendingIntent = pendingIntent,
                                 beginGetPublicKeyCredentialOption = result.options,
                             )
+                            .setIcon(Icon.createWithResource(activity, R.drawable.icon))
+                            .setDisplayName("Bitwarden")
                             .build()
                     }
+                val authActions = result.alternateAccounts.toAuthenticationActions()
                 PendingIntentHandler
                     .setBeginGetCredentialResponse(
                         resultIntent,
-                        responseBuilder
-                            .setCredentialEntries(entries)
-                            // Explicitly clear any pending authentication actions since we only
-                            // display results from the active account.
-                            .setAuthenticationActions(emptyList())
-                            .build(),
+                        BeginGetCredentialResponse(
+                            credentialEntries = credentialEntries,
+                            authenticationActions = authActions,
+                        ),
                     )
             }
 
             Fido2GetCredentialsResult.Error,
-            -> {
+                -> {
                 PendingIntentHandler.setGetCredentialException(
                     resultIntent,
                     GetCredentialUnknownException(),
+                )
+            }
+
+            Fido2GetCredentialsResult.Cancelled -> {
+                PendingIntentHandler.setGetCredentialException(
+                    resultIntent,
+                    GetCredentialCancellationException(),
                 )
             }
         }
         activity.setResult(Activity.RESULT_OK, resultIntent)
         activity.finish()
     }
+
+    private fun List<AccountSummary>.toAuthenticationActions(): List<AuthenticationAction> =
+        map {
+            AuthenticationAction
+                .Builder(
+                    title = it.name ?: it.email,
+                    pendingIntent = intentManager.createFido2UnlockPendingIntent(
+                        action = UNLOCK_ACCOUNT_INTENT,
+                        userId = it.userId,
+                        requestCode = Random.nextInt(),
+                    ),
+                )
+                .build()
+        }
 }

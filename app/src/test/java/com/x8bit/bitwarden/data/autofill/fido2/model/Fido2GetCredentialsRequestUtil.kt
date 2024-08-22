@@ -10,6 +10,7 @@ fun createMockFido2GetCredentialsRequest(
 ): Fido2GetCredentialsRequest = Fido2GetCredentialsRequest(
     candidateQueryData = Bundle(),
     id = "mockId-$number",
+    userId = "mockUserId-$number",
     requestJson = "requestJson-$number",
     clientDataHash = null,
     packageName = "mockPackageName-$number",

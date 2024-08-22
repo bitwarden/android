@@ -176,7 +176,9 @@ class Fido2CompletionManagerTest {
                 .completeFido2GetCredentialRequest(
                     Fido2GetCredentialsResult.Success(
                         options = mockk(),
+                        userId = "activeUserId",
                         credentials = emptyList(),
+                        alternateAccounts = emptyList(),
                     ),
                 )
 
@@ -201,6 +203,7 @@ class Fido2CompletionManagerTest {
             every {
                 mockIntentManager.createFido2GetCredentialPendingIntent(
                     action = GET_PASSKEY_INTENT,
+                    userId = "activeUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
                     requestCode = any(),
@@ -212,7 +215,9 @@ class Fido2CompletionManagerTest {
                 .completeFido2GetCredentialRequest(
                     Fido2GetCredentialsResult.Success(
                         options = mockk(),
+                        userId = "activeUserId",
                         credentials = mockFido2AutofillViewList,
+                        alternateAccounts = emptyList(),
                     ),
                 )
 
@@ -249,6 +254,7 @@ class Fido2CompletionManagerTest {
             every {
                 mockIntentManager.createFido2GetCredentialPendingIntent(
                     action = GET_PASSKEY_INTENT,
+                    userId = "activeUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
                     requestCode = any(),
@@ -260,7 +266,9 @@ class Fido2CompletionManagerTest {
                 .completeFido2GetCredentialRequest(
                     Fido2GetCredentialsResult.Success(
                         options = mockk(),
+                        userId = "activeUserId",
                         credentials = mockFido2AutofillViewList,
+                        alternateAccounts = emptyList(),
                     ),
                 )
 

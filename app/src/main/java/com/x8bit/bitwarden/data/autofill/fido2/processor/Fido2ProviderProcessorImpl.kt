@@ -26,7 +26,6 @@ import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -41,21 +40,21 @@ import kotlinx.coroutines.launch
 import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 
-private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.fido2.ACTION_CREATE_PASSKEY"
-const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY"
-const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT"
+private const val FIDO2_PACKAGE = "com.x8bit.bitwarden.fido2"
+private const val CREATE_PASSKEY_INTENT = "$FIDO2_PACKAGE.ACTION_CREATE_PASSKEY"
+const val GET_PASSKEY_INTENT = "$FIDO2_PACKAGE.ACTION_GET_PASSKEY"
+const val UNLOCK_ACCOUNT_INTENT = "$FIDO2_PACKAGE.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The default implementation of [Fido2ProviderProcessor]. Its purpose is to handle FIDO2 related
  * processing.
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 @RequiresApi(Build.VERSION_CODES.S)
 class Fido2ProviderProcessorImpl(
     private val context: Context,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
-    private val fido2CredentialStore: Fido2CredentialStore,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
     private val clock: Clock,
@@ -155,34 +154,27 @@ class Fido2ProviderProcessorImpl(
             return
         }
 
-        // Return an unlock action if the current account is locked.
-        if (!userState.activeAccount.isVaultUnlocked) {
-            val authenticationAction = AuthenticationAction(
-                title = context.getString(R.string.unlock),
-                pendingIntent = intentManager.createFido2UnlockPendingIntent(
-                    action = UNLOCK_ACCOUNT_INTENT,
-                    requestCode = requestCode.getAndIncrement(),
-                ),
-            )
-
-            callback.onResult(
-                BeginGetCredentialResponse(
-                    authenticationActions = listOf(authenticationAction),
-                ),
-            )
-            return
-        }
-
-        // Otherwise, find all matching credentials from the current vault.
         val getCredentialJob = scope.launch {
             try {
-                val credentialEntries = getMatchingFido2CredentialEntries(
-                    userId = userState.activeUserId,
-                    request = request,
-                )
+                val authenticationActions = userState.accounts
+                    .toAuthenticationActions()
+
+                val switchAccountActions = userState.accounts
+                    .toSwitchAccountActions(userState.activeUserId)
+
+                val credentialEntries =
+                    if (userState.activeAccount.isVaultUnlocked) {
+                        getMatchingFido2CredentialEntries(
+                            userId = userState.activeUserId,
+                            request = request,
+                        )
+                    } else {
+                        emptyList()
+                    }
 
                 callback.onResult(
                     BeginGetCredentialResponse(
+                        authenticationActions = authenticationActions + switchAccountActions,
                         credentialEntries = credentialEntries,
                     ),
                 )
@@ -191,10 +183,44 @@ class Fido2ProviderProcessorImpl(
             }
         }
         cancellationSignal.setOnCancelListener {
+            if (getCredentialJob.isActive) {
+                getCredentialJob.cancel()
+            }
             callback.onError(GetCredentialCancellationException())
-            getCredentialJob.cancel()
         }
     }
+
+    private fun List<UserState.Account>.toAuthenticationActions(): List<AuthenticationAction> =
+        this.filterNot { it.isVaultUnlocked }
+            .map { it.toAuthenticationAction() }
+
+    private fun UserState.Account.toAuthenticationAction(): AuthenticationAction =
+        AuthenticationAction(
+            title = context.getString(R.string.unlock_vault_for_x, name ?: email),
+            pendingIntent = intentManager.createFido2UnlockPendingIntent(
+                action = UNLOCK_ACCOUNT_INTENT,
+                userId = userId,
+                requestCode = requestCode.getAndIncrement(),
+            ),
+        )
+
+    private fun List<UserState.Account>.toSwitchAccountActions(
+        activeUserId: String,
+    ): List<AuthenticationAction> = this
+        .filter { it.isVaultUnlocked && it.userId != activeUserId }
+        .map { it.toSwitchAccountAction() }
+
+    private fun UserState.Account.toSwitchAccountAction(): AuthenticationAction =
+        AuthenticationAction
+            .Builder(
+                title = context.getString(R.string.check_x_for_passkeys, name ?: email),
+                pendingIntent = intentManager.createFido2UnlockPendingIntent(
+                    action = UNLOCK_ACCOUNT_INTENT,
+                    userId = userId,
+                    requestCode = requestCode.getAndIncrement(),
+                ),
+            )
+            .build()
 
     @Throws(GetCredentialUnsupportedException::class)
     private suspend fun getMatchingFido2CredentialEntries(
@@ -209,13 +235,14 @@ class Fido2ProviderProcessorImpl(
                         .getPasskeyAssertionOptionsOrNull(requestJson = option.requestJson)
                         ?.relyingPartyId
                         ?: throw GetCredentialUnknownException("Invalid data.")
-                    buildCredentialEntries(relyingPartyId, option)
+                    buildCredentialEntries(userId, relyingPartyId, option)
                 } else {
                     throw GetCredentialUnsupportedException("Unsupported option.")
                 }
             }
 
     private suspend fun buildCredentialEntries(
+        userId: String,
         relyingPartyId: String,
         option: BeginGetPublicKeyCredentialOption,
     ): List<CredentialEntry> {
@@ -236,12 +263,13 @@ class Fido2ProviderProcessorImpl(
                 result
                     .fido2CredentialAutofillViews
                     .filter { it.rpId == relyingPartyId }
-                    .toCredentialEntries(option)
+                    .toCredentialEntries(userId, option)
             }
         }
     }
 
     private fun List<Fido2CredentialAutofillView>.toCredentialEntries(
+        userId: String,
         option: BeginGetPublicKeyCredentialOption,
     ): List<CredentialEntry> =
         this
@@ -253,12 +281,14 @@ class Fido2ProviderProcessorImpl(
                         pendingIntent = intentManager
                             .createFido2GetCredentialPendingIntent(
                                 action = GET_PASSKEY_INTENT,
+                                userId = userId,
                                 credentialId = it.credentialId.toString(),
                                 cipherId = it.cipherId,
                                 requestCode = requestCode.getAndIncrement(),
                             ),
                         beginGetPublicKeyCredentialOption = option,
                     )
+                    .setDisplayName("Bitwarden")
                     .build()
             }
 

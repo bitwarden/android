@@ -24,7 +24,6 @@ class Fido2CredentialStoreImpl(
      * Return all active ciphers that contain FIDO 2 credentials.
      */
     override suspend fun allCredentials(): List<CipherView> {
-        vaultRepository.sync()
         return vaultRepository.ciphersStateFlow.value.data
             ?.filter { it.isActiveWithFido2Credentials }
             ?: emptyList()
@@ -39,9 +38,6 @@ class Fido2CredentialStoreImpl(
      */
     override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
         val userId = getActiveUserIdOrThrow()
-
-        vaultRepository.sync()
-
         val ciphersWithFido2Credentials = vaultRepository.ciphersStateFlow.value.data
             ?.filter { it.isActiveWithFido2Credentials }
             .orEmpty()

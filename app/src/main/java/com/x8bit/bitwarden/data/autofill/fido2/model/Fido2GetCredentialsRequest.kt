@@ -4,7 +4,6 @@ import android.content.pm.SigningInfo
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
-import androidx.credentials.provider.CallingAppInfo
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -14,15 +13,13 @@ import kotlinx.parcelize.Parcelize
 data class Fido2GetCredentialsRequest(
     val candidateQueryData: Bundle,
     val id: String,
+    val userId: String,
     val requestJson: String,
     val clientDataHash: ByteArray? = null,
-    val packageName: String,
-    val signingInfo: SigningInfo,
-    val origin: String?,
+    private val packageName: String,
+    private val signingInfo: SigningInfo,
+    private val origin: String?,
 ) : Parcelable {
-    val callingAppInfo: CallingAppInfo
-        get() = CallingAppInfo(packageName, signingInfo, origin)
-
     val option: BeginGetPublicKeyCredentialOption
         get() = BeginGetPublicKeyCredentialOption(
             candidateQueryData,

@@ -1001,4 +1001,7 @@ Do you want to switch to this account?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="unlock_vault_for_x">Unlock vault for %s</string>
+  <string name="check_x_for_passkeys">Check %s for passkeys</string>
+  <string name="passkey_operation_failed_because_passkey_does_not_exist">Passkey operation failed because passkey does not exist</string>
 </resources>
