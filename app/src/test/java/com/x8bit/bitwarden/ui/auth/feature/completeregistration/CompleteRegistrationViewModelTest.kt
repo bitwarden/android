@@ -539,6 +539,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
             onBoardingEnabled = false,
+            minimumPasswordLength = 12,
         )
         private val VALID_INPUT_STATE = CompleteRegistrationState(
             userEmail = EMAIL,
@@ -551,6 +552,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             dialog = null,
             passwordStrengthState = PasswordStrengthState.GOOD,
             onBoardingEnabled = false,
+            minimumPasswordLength = 12,
         )
     }
 }
