@@ -2,12 +2,22 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class CheckEmailViewModelTest : BaseViewModelTest() {
+    private val mutableFeatureFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager = mockk<FeatureFlagManager>() {
+        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
+    }
+
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
@@ -63,8 +73,19 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `OnboardingFeatureFlagUpdated should update showNewOnboardingUi in state`() {
+        val viewModel = createViewModel()
+        mutableFeatureFlagFlow.value = true
+        val expectedState = DEFAULT_STATE.copy(
+            showNewOnboardingUi = true,
+        )
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
     private fun createViewModel(state: CheckEmailState? = null): CheckEmailViewModel =
         CheckEmailViewModel(
+            featureFlagManager = featureFlagManager,
             savedStateHandle = SavedStateHandle().also {
                 it["email"] = EMAIL
                 it["state"] = state
@@ -75,6 +96,7 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
         private const val EMAIL = "test@gmail.com"
         private val DEFAULT_STATE = CheckEmailState(
             email = EMAIL,
+            showNewOnboardingUi = false,
         )
     }
 }
