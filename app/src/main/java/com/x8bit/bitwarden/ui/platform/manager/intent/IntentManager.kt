@@ -93,10 +93,10 @@ interface IntentManager {
     fun createTileIntent(data: String): Intent
 
     /**
-     * Creates an pending intent using [tileIntent] when selecting a quick settings tile on
-     * API 34+.
+     * Creates a pending intent using [requestCode] and [tileIntent] when selecting a quick
+     * settings tile on API 34+.
      */
-    fun createTilePendingIntent(tileIntent: Intent): PendingIntent
+    fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent
 
     /**
      * Creates a pending intent to use when providing [androidx.credentials.provider.CreateEntry]

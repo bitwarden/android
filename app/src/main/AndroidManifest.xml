@@ -70,6 +70,7 @@
                 <action android:name="com.x8bit.bitwarden.fido2.ACTION_CREATE_PASSKEY" />
                 <action android:name="com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY" />
                 <action android:name="com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -189,23 +190,37 @@
                 android:value="true" />
         </service>
 
+        <!--
+        The GeneratorTileService name below refers to the legacy Xamarin app's service name.
+        This must always match in order for the app to properly query if it is providing generator
+        tile services.
+        -->
+        <!--suppress AndroidDomInspection -->
         <service
-            android:name="com.x8bit.bitwarden.ui.platform.feature.tiles.GeneratorTileService"
+            android:name="com.x8bit.bitwarden.GeneratorTileService"
             android:exported="true"
-            android:label="@string/password_generator"
             android:icon="@drawable/ic_generator"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:label="@string/password_generator"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
+        <!--
+        The MyVaultTileService name below refers to the legacy Xamarin app's service name.
+        This must always match in order for the app to properly query if it is providing vault
+        tile services.
+        -->
+        <!--suppress AndroidDomInspection -->
         <service
-            android:name="com.x8bit.bitwarden.ui.platform.feature.tiles.MyVaultTileService"
+            android:name="com.x8bit.bitwarden.MyVaultTileService"
             android:exported="true"
-            android:label="@string/my_vault"
             android:icon="@drawable/ic_notification"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:label="@string/my_vault"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>

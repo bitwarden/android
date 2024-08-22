@@ -7,10 +7,14 @@ import androidx.core.app.AppComponentFactory
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
 import com.x8bit.bitwarden.data.autofill.fido2.BitwardenFido2ProviderService
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.tiles.BitwardenGeneratorTileService
+import com.x8bit.bitwarden.data.tiles.BitwardenVaultTileService
 
 private const val LEGACY_AUTOFILL_SERVICE_NAME = "com.x8bit.bitwarden.Autofill.AutofillService"
 private const val LEGACY_CREDENTIAL_SERVICE_NAME =
     "com.x8bit.bitwarden.Autofill.CredentialProviderService"
+private const val LEGACY_VAULT_TILE_SERVICE_NAME = "com.x8bit.bitwarden.MyVaultTileService"
+private const val LEGACY_GENERATOR_TILE_SERVICE_NAME = "com.x8bit.bitwarden.GeneratorTileService"
 
 /**
  * A factory class that allows us to intercept when a manifest element is being instantiated
@@ -46,6 +50,18 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
                     "The CredentialProviderService requires API 34 or higher.",
                 )
             }
+        }
+
+        LEGACY_VAULT_TILE_SERVICE_NAME -> {
+            super.instantiateServiceCompat(cl, BitwardenVaultTileService::class.java.name, intent)
+        }
+
+        LEGACY_GENERATOR_TILE_SERVICE_NAME -> {
+            super.instantiateServiceCompat(
+                cl,
+                BitwardenGeneratorTileService::class.java.name,
+                intent,
+            )
         }
 
         else -> super.instantiateServiceCompat(cl, className, intent)

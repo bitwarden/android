@@ -226,10 +226,10 @@ class IntentManagerImpl(
             .setData(data.toUri())
     }
 
-    override fun createTilePendingIntent(tileIntent: Intent): PendingIntent {
+    override fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent {
         return PendingIntent.getActivity(
             context,
-            0,
+            requestCode,
             tileIntent,
             PendingIntent.FLAG_IMMUTABLE,
         )
