@@ -14,6 +14,32 @@ import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
 
 /**
+ * Updates the given [UserStateJson] with the data to indicate that the password has been removed.
+ * The original will be returned if the [userId] does not match any accounts in the [UserStateJson].
+ */
+fun UserStateJson.toRemovedPasswordUserStateJson(
+    userId: String,
+): UserStateJson {
+    val account = this.accounts[userId] ?: return this
+    val profile = account.profile
+    val updatedUserDecryptionOptions = profile
+        .userDecryptionOptions
+        ?.copy(hasMasterPassword = false)
+        ?: UserDecryptionOptionsJson(
+            hasMasterPassword = false,
+            trustedDeviceUserDecryptionOptions = null,
+            keyConnectorUserDecryptionOptions = null,
+        )
+    val updatedProfile = profile.copy(userDecryptionOptions = updatedUserDecryptionOptions)
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
+
+/**
  * Updates the given [UserStateJson] with the data from the [syncResponse] to return a new
  * [UserStateJson]. The original will be returned if the sync response does not match any accounts
  * in the [UserStateJson].

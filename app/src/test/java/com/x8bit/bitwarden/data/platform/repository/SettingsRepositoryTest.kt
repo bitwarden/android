@@ -176,7 +176,11 @@ class SettingsRepositoryTest {
         )
 
         // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
-        // effect on the currently stored values.
+        // effect on the currently stored values since we have a way to unlock the vault.
+        fakeAuthDiskSource.storePinProtectedUserKey(
+            userId = USER_ID,
+            pinProtectedUserKey = "pinProtectedKey",
+        )
         fakeSettingsDiskSource.apply {
             storeVaultTimeoutInMinutes(
                 userId = USER_ID,
@@ -191,6 +195,44 @@ class SettingsRepositoryTest {
         assertEquals(240, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
         assertEquals(
             VaultTimeoutAction.LOCK,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `setDefaultsIfNecessary should reset default values to LOGOUT for the given user without a password if necessary`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID))
+
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
+
+        // Calling once sets values
+        assertEquals(15, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertEquals(
+            VaultTimeoutAction.LOGOUT,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
+        )
+
+        // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
+        // effect on the currently stored values.
+        fakeSettingsDiskSource.apply {
+            storeVaultTimeoutInMinutes(
+                userId = USER_ID,
+                vaultTimeoutInMinutes = 240,
+            )
+            storeVaultTimeoutAction(
+                userId = USER_ID,
+                vaultTimeoutAction = VaultTimeoutAction.LOCK,
+            )
+        }
+        // This will reset the setting because the user does not have a method to unlock the vault
+        // so you cannot use the "lock" timeout action, it must be "logout".
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
+        assertEquals(15, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertEquals(
+            VaultTimeoutAction.LOGOUT,
             fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
         )
     }

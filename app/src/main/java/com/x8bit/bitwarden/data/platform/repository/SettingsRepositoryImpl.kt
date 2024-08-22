@@ -325,14 +325,23 @@ class SettingsRepositoryImpl(
 
     override fun setDefaultsIfNecessary(userId: String) {
         // Set Vault Settings defaults
-        if (!isVaultTimeoutActionSet(userId = userId)) {
+        val hasMasterPassword = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?.userDecryptionOptions
+            ?.hasMasterPassword != false
+        val timeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        val hasPin = authDiskSource.getPinProtectedUserKey(userId = userId) != null
+        val hasBiometrics = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
+        // The timeout action cannot be "lock" if you do not have master password, pin, or
+        // biometrics unlock enabled.
+        val hasInvalidTimeoutAction = timeoutAction == VaultTimeoutAction.LOCK &&
+            !hasPin &&
+            !hasBiometrics &&
+            !hasMasterPassword
+        if (!isVaultTimeoutActionSet(userId = userId) || hasInvalidTimeoutAction) {
             storeVaultTimeout(userId, VaultTimeout.FifteenMinutes)
-            val hasMasterPassword = authDiskSource
-                .userState
-                ?.activeAccount
-                ?.profile
-                ?.userDecryptionOptions
-                ?.hasMasterPassword != false
             storeVaultTimeoutAction(
                 userId = userId,
                 vaultTimeoutAction = if (!hasMasterPassword) {

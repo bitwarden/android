@@ -73,6 +73,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
@@ -873,7 +874,13 @@ class AuthRepositoryImpl(
                 masterPassword = masterPassword,
                 kdf = profile.toSdkParams(),
             )
-            .onSuccess { vaultRepository.sync() }
+            .onSuccess {
+                authDiskSource.userState = authDiskSource
+                    .userState
+                    ?.toRemovedPasswordUserStateJson(userId = userId)
+                vaultRepository.sync()
+                settingsRepository.setDefaultsIfNecessary(userId = userId)
+            }
             .fold(
                 onFailure = { RemovePasswordResult.Error },
                 onSuccess = { RemovePasswordResult.Success },

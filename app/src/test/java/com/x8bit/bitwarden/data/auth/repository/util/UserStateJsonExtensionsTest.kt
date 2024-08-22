@@ -25,6 +25,117 @@ import org.junit.jupiter.api.Test
 
 class UserStateJsonExtensionsTest {
     @Test
+    fun `toUpdatedUserStateJn should do nothing for a non-matching account`() {
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to mockk()),
+        )
+        assertEquals(
+            originalUserState,
+            originalUserState.toRemovedPasswordUserStateJson(userId = "nonActiveUserId"),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUpdatedUserStateJn should create user decryption options without a password if not present`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toRemovedPasswordUserStateJson(userId = "activeUserId"),
+        )
+    }
+
+    @Test
+    fun `toUpdatedUserStateJn should update user decryption options to not have a password`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                trustedDeviceUserDecryptionOptions = null,
+                keyConnectorUserDecryptionOptions = null,
+            ),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to originalAccount),
+        )
+
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            originalUserState.toRemovedPasswordUserStateJson(userId = "activeUserId"),
+        )
+    }
+
+    @Test
     fun `toUpdatedUserStateJson should do nothing for a non-matching account`() {
         val originalUserState = UserStateJson(
             activeUserId = "activeUserId",
