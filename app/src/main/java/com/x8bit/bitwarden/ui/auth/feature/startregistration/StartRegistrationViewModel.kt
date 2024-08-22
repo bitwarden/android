@@ -117,11 +117,11 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-private fun handleOnboardingFeatureFlagUpdated(action: OnboardingFeatureFlagUpdated) {
-    mutableStateFlow.update {
-        it.copy(showNewOnboardingUi = action.newValue)
+    private fun handleOnboardingFeatureFlagUpdated(action: OnboardingFeatureFlagUpdated) {
+        mutableStateFlow.update {
+            it.copy(showNewOnboardingUi = action.newValue)
+        }
     }
-}
 
     private fun handleServerGeologyHelpClick() {
         sendEvent(StartRegistrationEvent.NavigateToServerSelectionInfo)

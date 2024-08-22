@@ -238,8 +238,8 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
             label = stringResource(
-                    id = R.string.email_address,
-                ),
+                id = R.string.email_address,
+            ),
             placeholder = stringResource(R.string.email_address_required),
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
@@ -422,6 +422,7 @@ private fun ReceiveMarketingEmailsSwitch(
     modifier: Modifier = Modifier,
 ) {
     val unsubscribeString = stringResource(id = R.string.unsubscribe)
+
     @Suppress("MaxLineLength")
     val annotatedLinkString = createAnnotatedString(
         mainString = stringResource(id = R.string.get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time),
