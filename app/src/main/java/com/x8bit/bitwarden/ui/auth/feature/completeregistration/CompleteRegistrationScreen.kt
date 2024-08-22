@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -135,11 +136,24 @@ fun CompleteRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = if (state.onBoardingEnabled) {
+                    stringResource(id = R.string.create_account)
+                } else {
+                    stringResource(id = R.string.set_password)
+                },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = handler.onBackClick,
+                actions = {
+                    if (!state.onBoardingEnabled) {
+                        BitwardenTextButton(
+                            label = state.callToActionText(),
+                            onClick = handler.onCallToAction,
+                            modifier = Modifier.testTag("CreateAccountButton"),
+                        )
+                    }
+                },
             )
         },
     ) { innerPadding ->
@@ -158,9 +172,11 @@ fun CompleteRegistrationScreen(
                 isCheckDataBreachesToggled = state.isCheckDataBreachesToggled,
                 handler = handler,
                 modifier = Modifier.standardHorizontalMargin(),
-                nextButtonEnabled = state.hasValidMasterPassword,
+                nextButtonEnabled = state.validSubmissionReady,
                 callToActionText = state.callToActionText(),
                 minimumPasswordLength = state.minimumPasswordLength,
+                showNewOnboardingUi = state.onBoardingEnabled,
+                userEmail = state.userEmail,
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
@@ -170,6 +186,7 @@ fun CompleteRegistrationScreen(
 @Suppress("LongMethod")
 @Composable
 private fun CompleteRegistrationContent(
+    userEmail: String,
     passwordInput: String,
     passwordStrengthState: PasswordStrengthState,
     confirmPasswordInput: String,
@@ -179,6 +196,7 @@ private fun CompleteRegistrationContent(
     minimumPasswordLength: Int,
     callToActionText: String,
     handler: CompleteRegistrationHandler,
+    showNewOnboardingUi: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -186,17 +204,24 @@ private fun CompleteRegistrationContent(
             .fillMaxWidth(),
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        CompleteRegistrationContentHeader(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenActionCard(
-            actionIcon = rememberVectorPainter(id = R.drawable.ic_tooltip),
-            actionText = stringResource(id = R.string.what_makes_a_password_strong),
-            callToActionText = stringResource(id = R.string.learn_more),
-            onCardClicked = handler.onMakeStrongPassword,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        if (showNewOnboardingUi) {
+            CompleteRegistrationContentHeader(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            BitwardenActionCard(
+                actionIcon = rememberVectorPainter(id = R.drawable.ic_tooltip),
+                actionText = stringResource(id = R.string.what_makes_a_password_strong),
+                callToActionText = stringResource(id = R.string.learn_more),
+                onCardClicked = handler.onMakeStrongPassword,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        } else {
+            LegacyHeaderContent(
+                userEmail = userEmail,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+        }
         Spacer(modifier = Modifier.height(24.dp))
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -216,7 +241,7 @@ private fun CompleteRegistrationContent(
         PasswordStrengthIndicator(
             state = passwordStrengthState,
             currentCharacterCount = passwordInput.length,
-            minimumCharacterCount = minimumPasswordLength,
+            minimumCharacterCount = minimumPasswordLength.takeIf { showNewOnboardingUi },
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenPasswordField(
@@ -235,18 +260,26 @@ private fun CompleteRegistrationContent(
             label = stringResource(id = R.string.master_password_hint),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
-            hint = stringResource(
-                R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password,
-            ),
+            hint = if (showNewOnboardingUi) {
+                stringResource(
+                    R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password,
+                )
+            } else {
+                stringResource(id = R.string.master_password_description)
+            },
             modifier = Modifier
                 .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth(),
         )
-        BitwardenClickableText(
-            label = stringResource(id = R.string.learn_about_other_ways_to_prevent_account_lockout),
-            onClick = handler.onLearnToPreventLockout,
-            style = nonMaterialTypography.labelMediumProminent,
-        )
+        if (showNewOnboardingUi) {
+            BitwardenClickableText(
+                label = stringResource(
+                    id = R.string.learn_about_other_ways_to_prevent_account_lockout,
+                ),
+                onClick = handler.onLearnToPreventLockout,
+                style = nonMaterialTypography.labelMediumProminent,
+            )
+        }
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenSwitch(
             label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
@@ -254,13 +287,15 @@ private fun CompleteRegistrationContent(
             onCheckedChange = handler.onCheckDataBreachesToggle,
             modifier = Modifier.testTag("CheckExposedMasterPasswordToggle"),
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenFilledButton(
-            label = callToActionText,
-            isEnabled = nextButtonEnabled,
-            onClick = handler.onCallToAction,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        if (showNewOnboardingUi) {
+            Spacer(modifier = Modifier.height(24.dp))
+            BitwardenFilledButton(
+                label = callToActionText,
+                isEnabled = nextButtonEnabled,
+                onClick = handler.onCallToAction,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
 
@@ -284,6 +319,24 @@ private fun CompleteRegistrationContentHeader(
             OrderedHeaderContent()
         }
     }
+}
+
+@Composable
+private fun LegacyHeaderContent(
+    userEmail: String,
+    modifier: Modifier = Modifier,
+) {
+    @Suppress("MaxLineLength")
+    Text(
+        text = stringResource(
+            id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
+            userEmail,
+        ),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier
+            .fillMaxWidth(),
+    )
 }
 
 /**
@@ -321,7 +374,7 @@ private fun OrderedHeaderContent() {
 
 @PreviewScreenSizes
 @Composable
-private fun CompleteRegistrationContent_preview() {
+private fun CompleteRegistrationContentOldUI_preview() {
     BitwardenTheme {
         CompleteRegistrationContent(
             passwordInput = "tortor",
@@ -345,6 +398,40 @@ private fun CompleteRegistrationContent_preview() {
             nextButtonEnabled = true,
             modifier = Modifier.standardHorizontalMargin(),
             minimumPasswordLength = 12,
+            showNewOnboardingUi = false,
+            userEmail = "fake@email.com",
+        )
+    }
+}
+
+@PreviewScreenSizes
+@Composable
+private fun CompleteRegistrationContentNewUI_preview() {
+    BitwardenTheme {
+        CompleteRegistrationContent(
+            passwordInput = "tortor",
+            passwordStrengthState = PasswordStrengthState.WEAK_3,
+            confirmPasswordInput = "consequat",
+            passwordHintInput = "dissentiunt",
+            isCheckDataBreachesToggled = false,
+            handler = CompleteRegistrationHandler(
+                onDismissErrorDialog = {},
+                onContinueWithBreachedPasswordClick = {},
+                onBackClick = {},
+                onPasswordInputChange = {},
+                onConfirmPasswordInputChange = {},
+                onPasswordHintChange = {},
+                onCheckDataBreachesToggle = {},
+                onLearnToPreventLockout = {},
+                onMakeStrongPassword = {},
+                onCallToAction = {},
+            ),
+            callToActionText = "Next",
+            nextButtonEnabled = true,
+            modifier = Modifier.standardHorizontalMargin(),
+            minimumPasswordLength = 12,
+            showNewOnboardingUi = true,
+            userEmail = "fake@email.com",
         )
     }
 }
