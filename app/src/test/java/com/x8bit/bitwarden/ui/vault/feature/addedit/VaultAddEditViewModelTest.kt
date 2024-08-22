@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -917,7 +918,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should show fido2 error dialog when create options are null`() =
         runTest {
-            val mockUserId = "mockUserId"
             val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
@@ -3216,11 +3216,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = true,
-                            hasMasterPassword = false,
                             hasAdminApproval = true,
                             hasLoginApprovingDevice = true,
                             hasResetPasswordPermission = true,
                         ),
+                        hasMasterPassword = false,
                     ),
                 ),
             )
@@ -3879,12 +3879,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         Organization(
                             id = "organizationId",
                             name = "organizationName",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                     isBiometricsEnabled = true,
                     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     needsMasterPassword = false,
                     trustedDevice = null,
+                    hasMasterPassword = true,
+                    isUsingKeyConnector = false,
                 ),
             ),
             hasPendingAccountAddition = false,

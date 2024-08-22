@@ -140,6 +140,26 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getShouldUseKeyConnectorFlow should react to changes in getShouldUseKeyConnector`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            authDiskSource.getShouldUseKeyConnectorFlow(userId = mockUserId).test {
+                assertNull(authDiskSource.getShouldUseKeyConnector(userId = mockUserId))
+                assertNull(awaitItem())
+                authDiskSource.storeShouldUseKeyConnector(
+                    userId = mockUserId,
+                    shouldUseKeyConnector = true,
+                )
+                assertEquals(true, awaitItem())
+                authDiskSource.storeShouldUseKeyConnector(
+                    userId = mockUserId,
+                    shouldUseKeyConnector = false,
+                )
+                assertEquals(false, awaitItem())
+            }
+        }
+
+    @Test
     fun `shouldTrustDevice should pull from and update SharedPreferences`() {
         val userId = "userId"
         val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice_$userId"

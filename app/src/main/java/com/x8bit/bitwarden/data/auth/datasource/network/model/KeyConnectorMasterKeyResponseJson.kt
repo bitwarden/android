@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class KeyConnectorMasterKeyResponseJson(
-    @SerialName("Key") val masterKey: String,
+    @SerialName("key") val masterKey: String,
 )

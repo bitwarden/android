@@ -13,12 +13,14 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
@@ -28,12 +30,14 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -52,7 +56,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private val specialCircumstanceManager: SpecialCircumstanceManager =
         SpecialCircumstanceManagerImpl()
 
-    private var viewmodelVerifyEmailCalled = false
+    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
+    }
 
     @BeforeEach
     fun setUp() {
@@ -86,13 +92,14 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
             specialCircumstanceManager = specialCircumstanceManager,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.onCleared()
         assertTrue(specialCircumstanceManager.specialCircumstance == null)
     }
 
     @Test
-    fun `CreateAccountClick with password below 12 chars should show password length dialog`() =
+    fun `Password below 12 chars should have non-valid state`() =
         runTest {
             val input = "abcdefghikl"
             coEvery {
@@ -100,47 +107,24 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             } returns PasswordStrengthResult.Error
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(input))
-            val expectedState = DEFAULT_STATE.copy(
-                passwordInput = input,
-                dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_length_val_message_x.asText(12),
-                    ),
-                ),
-            )
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
-            viewModel.stateFlow.test {
-                assertEquals(expectedState, awaitItem())
-            }
+
+            assertFalse(viewModel.stateFlow.value.hasValidMasterPassword)
         }
 
     @Test
-    fun `CreateAccountClick with passwords not matching should show password match dialog`() =
+    fun `Passwords not matching should have non-valid state`() =
         runTest {
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
             } returns PasswordStrengthResult.Error
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(PASSWORD))
-            val expectedState = DEFAULT_STATE.copy(
-                userEmail = EMAIL,
-                passwordInput = PASSWORD,
-                dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_confirmation_val_message.asText(),
-                    ),
-                ),
-            )
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
-            viewModel.stateFlow.test {
-                assertEquals(expectedState, awaitItem())
-            }
+
+            assertFalse(viewModel.stateFlow.value.hasValidMasterPassword)
         }
 
     @Test
-    fun `CreateAccountClick with all inputs valid should show and hide loading dialog`() = runTest {
+    fun `CallToActionClick with all inputs valid should show and hide loading dialog`() = runTest {
         val repo = mockk<AuthRepository> {
             coEvery {
                 register(
@@ -159,13 +143,16 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
             val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             assertEquals(
                 VALID_INPUT_STATE.copy(dialog = CompleteRegistrationDialog.Loading),
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                CompleteRegistrationEvent.NavigateToLanding,
+                CompleteRegistrationEvent.NavigateToLogin(
+                    EMAIL,
+                    CAPTCHA_BYPASS_TOKEN,
+                ),
                 eventFlow.awaitItem(),
             )
             // Make sure loading dialog is hidden:
@@ -174,7 +161,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CreateAccountClick register returns error should update errorDialogState`() = runTest {
+    fun `CallToActionClick register returns error should update errorDialogState`() = runTest {
         val repo = mockk<AuthRepository> {
             coEvery {
                 register(
@@ -191,7 +178,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             assertEquals(
                 VALID_INPUT_STATE.copy(dialog = CompleteRegistrationDialog.Loading),
                 awaitItem(),
@@ -211,7 +198,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CreateAccountClick register returns Success should emit NavigateToLogin`() = runTest {
+    fun `CallToActionClick register returns Success should emit NavigateToLogin`() = runTest {
         val repo = mockk<AuthRepository> {
             coEvery {
                 register(
@@ -227,9 +214,12 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             assertEquals(
-                CompleteRegistrationEvent.NavigateToLanding,
+                CompleteRegistrationEvent.NavigateToLogin(
+                    EMAIL,
+                    CAPTCHA_BYPASS_TOKEN,
+                ),
                 awaitItem(),
             )
         }
@@ -266,7 +256,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CreateAccountClick register returns ShowDataBreaches should show HaveIBeenPwned dialog`() =
+    fun `CallToActionClick register returns ShowDataBreaches should show HaveIBeenPwned dialog`() =
         runTest {
             mockAuthRepository.apply {
                 coEvery {
@@ -287,7 +277,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val viewModel = createCompleteRegistrationViewModel(
                 completeRegistrationState = initialState,
             )
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             viewModel.stateFlow.test {
                 assertEquals(
                     initialState.copy(
@@ -304,7 +294,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `CreateAccountClick register returns DataBreachAndWeakPassword should show HaveIBeenPwned dialog`() =
+    fun `CallToActionClick register returns DataBreachAndWeakPassword should show HaveIBeenPwned dialog`() =
         runTest {
             mockAuthRepository.apply {
                 coEvery {
@@ -326,7 +316,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
             val viewModel =
                 createCompleteRegistrationViewModel(completeRegistrationState = initialState)
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             viewModel.stateFlow.test {
                 assertEquals(
                     initialState.copy(dialog = createHaveIBeenPwned()),
@@ -337,7 +327,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `CreateAccountClick register returns WeakPassword should show HaveIBeenPwned dialog`() =
+    fun `CallToActionClick register returns WeakPassword should show HaveIBeenPwned dialog`() =
         runTest {
             mockAuthRepository.apply {
                 coEvery {
@@ -359,7 +349,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 )
             val viewModel =
                 createCompleteRegistrationViewModel(completeRegistrationState = initialState)
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             viewModel.stateFlow.test {
                 assertEquals(
                     initialState.copy(
@@ -377,7 +367,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CloseClick)
+            viewModel.trySendAction(BackClick)
             assertEquals(CompleteRegistrationEvent.NavigateBack, awaitItem())
         }
     }
@@ -498,15 +488,39 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `handling LearnToPreventLockoutClick should emit NavigateToPreventAccountLockout`() =
+        runTest {
+            val viewModel = createCompleteRegistrationViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
+                assertEquals(CompleteRegistrationEvent.NavigateToPreventAccountLockout, awaitItem())
+            }
+        }
+
+    @Test
+    fun `handling MakePasswordStrongClick should emit NavigateToMakePasswordStrong`() = runTest {
+        val viewModel = createCompleteRegistrationViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(CompleteRegistrationAction.MakePasswordStrongClick)
+            assertEquals(CompleteRegistrationEvent.NavigateToMakePasswordStrong, awaitItem())
+        }
+    }
+
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
         authRepository: AuthRepository = mockAuthRepository,
     ): CompleteRegistrationViewModel =
         CompleteRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(mapOf("state" to completeRegistrationState)),
+            savedStateHandle = SavedStateHandle(
+                mapOf(
+                    "state" to completeRegistrationState,
+                ),
+            ),
             authRepository = authRepository,
             environmentRepository = fakeEnvironmentRepository,
             specialCircumstanceManager = specialCircumstanceManager,
+            featureFlagManager = featureFlagManager,
         )
 
     companion object {
@@ -524,6 +538,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
+            onBoardingEnabled = false,
+            minimumPasswordLength = 12,
         )
         private val VALID_INPUT_STATE = CompleteRegistrationState(
             userEmail = EMAIL,
@@ -535,6 +551,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = false,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.GOOD,
+            onBoardingEnabled = false,
+            minimumPasswordLength = 12,
         )
     }
 }

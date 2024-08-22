@@ -2577,6 +2577,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     organizations = emptyList(),
                     needsMasterPassword = false,
                     trustedDevice = null,
+                    hasMasterPassword = true,
+                    isUsingKeyConnector = false,
                 ),
             ),
         )

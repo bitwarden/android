@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedKeyConnectorApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
@@ -16,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordReque
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
 
@@ -26,6 +28,7 @@ import kotlinx.serialization.json.Json
 class AccountsServiceImpl(
     private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi,
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
+    private val unauthenticatedKeyConnectorApi: UnauthenticatedKeyConnectorApi,
     private val authenticatedKeyConnectorApi: AuthenticatedKeyConnectorApi,
     private val json: Json,
 ) : AccountsService {
@@ -109,8 +112,12 @@ class AccountsServiceImpl(
     }
 
     override suspend fun setKeyConnectorKey(
+        accessToken: String,
         body: KeyConnectorKeyRequestJson,
-    ): Result<Unit> = authenticatedAccountsApi.setKeyConnectorKey(body)
+    ): Result<Unit> = unauthenticatedAccountsApi.setKeyConnectorKey(
+        body = body,
+        bearerToken = "$HEADER_VALUE_BEARER_PREFIX$accessToken",
+    )
 
     override suspend fun setPassword(
         body: SetPasswordRequestJson,
@@ -118,15 +125,30 @@ class AccountsServiceImpl(
 
     override suspend fun getMasterKeyFromKeyConnector(
         url: String,
+        accessToken: String,
     ): Result<KeyConnectorMasterKeyResponseJson> =
-        authenticatedKeyConnectorApi.getMasterKeyFromKeyConnector(url = url)
+        unauthenticatedKeyConnectorApi.getMasterKeyFromKeyConnector(
+            url = "$url/user-keys",
+            bearerToken = "$HEADER_VALUE_BEARER_PREFIX$accessToken",
+        )
 
     override suspend fun storeMasterKeyToKeyConnector(
         url: String,
         masterKey: String,
     ): Result<Unit> =
         authenticatedKeyConnectorApi.storeMasterKeyToKeyConnector(
-            url = url,
+            url = "$url/user-keys",
+            body = KeyConnectorMasterKeyRequestJson(masterKey = masterKey),
+        )
+
+    override suspend fun storeMasterKeyToKeyConnector(
+        url: String,
+        accessToken: String,
+        masterKey: String,
+    ): Result<Unit> =
+        unauthenticatedKeyConnectorApi.storeMasterKeyToKeyConnector(
+            url = "$url/user-keys",
+            bearerToken = "$HEADER_VALUE_BEARER_PREFIX$accessToken",
             body = KeyConnectorMasterKeyRequestJson(masterKey = masterKey),
         )
 }

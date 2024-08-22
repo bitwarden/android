@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAut
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 
 private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.fido2.ACTION_CREATE_PASSKEY"
@@ -57,6 +58,7 @@ class Fido2ProviderProcessorImpl(
     private val fido2CredentialStore: Fido2CredentialStore,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
+    private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : Fido2ProviderProcessor {
 
@@ -111,13 +113,14 @@ class Fido2ProviderProcessorImpl(
         val userState = authRepository.userStateFlow.value ?: return null
 
         return BeginCreateCredentialResponse.Builder()
-            .setCreateEntries(userState.accounts.toCreateEntries())
+            .setCreateEntries(userState.accounts.toCreateEntries(userState.activeUserId))
             .build()
     }
 
-    private fun List<UserState.Account>.toCreateEntries() = map { it.toCreateEntry() }
+    private fun List<UserState.Account>.toCreateEntries(activeUserId: String) =
+        map { it.toCreateEntry(isActive = activeUserId == it.userId) }
 
-    private fun UserState.Account.toCreateEntry(): CreateEntry {
+    private fun UserState.Account.toCreateEntry(isActive: Boolean): CreateEntry {
         val accountName = name ?: email
         return CreateEntry
             .Builder(
@@ -134,6 +137,9 @@ class Fido2ProviderProcessorImpl(
                     accountName,
                 ),
             )
+            // Set the last used time to "now" so the active account is the default option in the
+            // system prompt.
+            .setLastUsedTime(if (isActive) clock.instant() else null)
             .build()
     }
 

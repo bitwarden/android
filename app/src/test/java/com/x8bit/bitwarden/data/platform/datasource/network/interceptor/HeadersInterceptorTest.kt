@@ -16,6 +16,8 @@ class HeadersInterceptorTest : BaseRobolectricTest() {
         // We reference the real BuildConfig here, since we don't want the test to break on every
         // version bump. We are also doing the same thing for Build when the SDK gets incremented.
         val versionName = BuildConfig.VERSION_NAME
+        val buildType = BuildConfig.BUILD_TYPE
+        val flavor = BuildConfig.FLAVOR
         val release = Build.VERSION.RELEASE
         val sdk = Build.VERSION.SDK_INT
         val originalRequest = Request.Builder().url("http://www.fake.com/").build()
@@ -24,8 +26,9 @@ class HeadersInterceptorTest : BaseRobolectricTest() {
         val response = headersInterceptors.intercept(chain)
 
         val request = response.request
+        @Suppress("MaxLineLength")
         assertEquals(
-            "Bitwarden_Mobile/$versionName (Android $release; SDK $sdk; Model robolectric)",
+            "Bitwarden_Mobile/$versionName ($buildType/$flavor) (Android $release; SDK $sdk; Model robolectric)",
             request.header("User-Agent"),
         )
         assertEquals("mobile", request.header("Bitwarden-Client-Name"))

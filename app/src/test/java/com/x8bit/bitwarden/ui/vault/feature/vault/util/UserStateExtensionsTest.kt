@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJso
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -76,9 +77,13 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -96,9 +101,13 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -120,9 +129,13 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -144,9 +157,13 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             )
@@ -183,9 +200,13 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId",
                         name = "organizationName",
+                        shouldUseKeyConnector = false,
+                        role = OrganizationType.ADMIN,
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -220,9 +241,13 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId",
                         name = "organizationName",
+                        shouldUseKeyConnector = false,
+                        role = OrganizationType.ADMIN,
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -261,9 +286,13 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
                             ),
                         ),
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             )
@@ -288,6 +317,8 @@ class UserStateExtensionsTest {
                 organizations = emptyList(),
                 needsMasterPassword = false,
                 trustedDevice = null,
+                hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -328,13 +359,19 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId-B",
                         name = "Organization B",
+                        shouldUseKeyConnector = false,
+                        role = OrganizationType.ADMIN,
                     ),
                     Organization(
                         id = "organizationId-A",
                         name = "Organization A",
+                        shouldUseKeyConnector = false,
+                        role = OrganizationType.ADMIN,
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -376,13 +413,19 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId-B",
                         name = "Organization B",
+                        shouldUseKeyConnector = false,
+                        role = OrganizationType.ADMIN,
                     ),
                     Organization(
                         id = "organizationId-A",
                         name = "Organization A",
+                        shouldUseKeyConnector = false,
+                        role = OrganizationType.ADMIN,
                     ),
                 ),
                 trustedDevice = null,
+                hasMasterPassword = true,
+                isUsingKeyConnector = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

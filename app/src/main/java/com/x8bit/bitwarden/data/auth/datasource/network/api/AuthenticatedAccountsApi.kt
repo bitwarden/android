@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
@@ -52,12 +51,6 @@ interface AuthenticatedAccountsApi {
      */
     @HTTP(method = "POST", path = "/accounts/password", hasBody = true)
     suspend fun resetPassword(@Body body: ResetPasswordRequestJson): Result<Unit>
-
-    /**
-     * Sets the key connector key.
-     */
-    @POST("/accounts/set-key-connector-key")
-    suspend fun setKeyConnectorKey(@Body body: KeyConnectorKeyRequestJson): Result<Unit>
 
     /**
      * Sets the password.

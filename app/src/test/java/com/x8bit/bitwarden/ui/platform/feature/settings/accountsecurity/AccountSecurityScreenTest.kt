@@ -1288,6 +1288,55 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `Error dialog should be shown or hidden according to state`() {
+        val title = "title"
+        val message = "message"
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = AccountSecurityDialog.Error(
+                    title = title.asText(),
+                    message = message.asText(),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(title)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(message)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(dialog = null) }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `Error dialog dismiss should send DismissDialog`() {
+        val title = "title"
+        val message = "message"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = AccountSecurityDialog.Error(
+                    title = title.asText(),
+                    message = message.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+    }
+
+    @Test
     fun `fingerprint phrase dialog should be shown or hidden according to the state`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.FingerprintPhrase) }

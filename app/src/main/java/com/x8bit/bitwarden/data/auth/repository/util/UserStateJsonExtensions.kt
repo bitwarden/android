@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
+import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -79,6 +80,7 @@ fun UserStateJson.toUserState(
     vaultState: List<VaultUnlockData>,
     userAccountTokens: List<UserAccountTokens>,
     userOrganizationsList: List<UserOrganizations>,
+    userIsUsingKeyConnectorList: List<UserKeyConnectorState>,
     hasPendingAccountAddition: Boolean,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
@@ -103,7 +105,6 @@ fun UserStateJson.toUserState(
                 val trustedDevice = trustedDeviceOptions?.let {
                     UserState.TrustedDevice(
                         isDeviceTrusted = isDeviceTrustedProvider(userId),
-                        hasMasterPassword = decryptionOptions.hasMasterPassword,
                         hasAdminApproval = it.hasAdminApproval,
                         hasLoginApprovingDevice = it.hasLoginApprovingDevice,
                         hasResetPasswordPermission = it.hasManageResetPasswordPermission,
@@ -132,7 +133,11 @@ fun UserStateJson.toUserState(
                     isBiometricsEnabled = isBiometricsEnabledProvider(userId),
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
                     needsMasterPassword = needsMasterPassword,
+                    hasMasterPassword = decryptionOptions?.hasMasterPassword != false,
                     trustedDevice = trustedDevice,
+                    isUsingKeyConnector = userIsUsingKeyConnectorList
+                        .find { it.userId == userId }
+                        ?.isUsingKeyConnector == true,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,

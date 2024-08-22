@@ -18,6 +18,8 @@ class FakeAuthDiskSource : AuthDiskSource {
     override var rememberedEmailAddress: String? = null
     override var rememberedOrgIdentifier: String? = null
 
+    private val mutableShouldUseKeyConnectorFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutablePoliciesFlowMap =
@@ -68,17 +70,24 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
 
+        mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
     }
 
+    override fun getShouldUseKeyConnectorFlow(
+        userId: String,
+    ): Flow<Boolean?> = getMutableShouldUseKeyConnectorFlow(userId = userId)
+        .onSubscription { emit(getShouldUseKeyConnector(userId = userId)) }
+
     override fun getShouldUseKeyConnector(
         userId: String,
-    ): Boolean = storedShouldUseKeyConnector[userId] ?: false
+    ): Boolean? = storedShouldUseKeyConnector[userId]
 
     override fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?) {
         storedShouldUseKeyConnector[userId] = shouldUseKeyConnector
+        getMutableShouldUseKeyConnectorFlow(userId = userId).tryEmit(shouldUseKeyConnector)
     }
 
     override fun getShouldTrustDevice(userId: String): Boolean =
@@ -353,6 +362,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     //region Private helper functions
+
+    private fun getMutableShouldUseKeyConnectorFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShouldUseKeyConnectorFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableOrganizationsFlow(
         userId: String,

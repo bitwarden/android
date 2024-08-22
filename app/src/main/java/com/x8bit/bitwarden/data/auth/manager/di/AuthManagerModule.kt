@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
@@ -10,6 +11,8 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
+import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
@@ -69,6 +72,19 @@ object AuthManagerModule {
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,
             authDiskSource = authDiskSource,
+        )
+
+    @Provides
+    @Singleton
+    fun provideKeyConnectorManager(
+        accountsService: AccountsService,
+        authSdkSource: AuthSdkSource,
+        vaultSdkSource: VaultSdkSource,
+    ): KeyConnectorManager =
+        KeyConnectorManagerImpl(
+            accountsService = accountsService,
+            authSdkSource = authSdkSource,
+            vaultSdkSource = vaultSdkSource,
         )
 
     @Provides

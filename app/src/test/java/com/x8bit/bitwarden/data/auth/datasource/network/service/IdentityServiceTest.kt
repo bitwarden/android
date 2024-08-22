@@ -491,7 +491,8 @@ private const val LOGIN_SUCCESS_JSON = """
     "KeyConnectorOption": {
       "KeyConnectorUrl": "keyConnectorUrl"
     }
-  }
+  },
+  "KeyConnectorUrl": "keyConnectorUrl"
 }    
 """
 
@@ -531,6 +532,7 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
             keyConnectorUrl = "keyConnectorUrl",
         ),
     ),
+    keyConnectorUrl = "keyConnectorUrl",
 )
 
 private const val INVALID_LOGIN_JSON = """

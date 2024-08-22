@@ -2,7 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.content.pm.SigningInfo
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
@@ -12,11 +16,16 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -24,12 +33,24 @@ import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class RootNavViewModelTest : BaseViewModelTest() {
+    private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Uninitialized)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
+        every { authStateFlow } returns mutableAuthStateFlow
         every { showWelcomeCarousel } returns false
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(::parseJwtTokenDataOrNull)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(::parseJwtTokenDataOrNull)
+    }
 
     @Test
     fun `when there are no accounts the nav state should be Auth`() {
@@ -73,6 +94,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -104,6 +127,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -132,6 +157,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = true,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -164,11 +191,12 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         needsMasterPassword = false,
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = false,
-                            hasMasterPassword = false,
                             hasAdminApproval = true,
                             hasLoginApprovingDevice = true,
                             hasResetPasswordPermission = false,
                         ),
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -199,11 +227,12 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         needsMasterPassword = false,
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = false,
-                            hasMasterPassword = true,
                             hasAdminApproval = true,
                             hasLoginApprovingDevice = true,
                             hasResetPasswordPermission = false,
                         ),
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -234,11 +263,12 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         needsMasterPassword = false,
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = false,
-                            hasMasterPassword = false,
                             hasAdminApproval = true,
                             hasLoginApprovingDevice = true,
                             hasResetPasswordPermission = false,
                         ),
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -271,6 +301,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -281,6 +313,49 @@ class RootNavViewModelTest : BaseViewModelTest() {
             RootNavState.Auth,
             viewModel.stateFlow.value,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault with an external user, a key-connector user account and is not currently using key connector the nav state should be RemovePassword`() {
+        val jwtTokenDataJson = mockk<JwtTokenDataJson> {
+            every { isExternal } returns true
+        }
+        every { parseJwtTokenDataOrNull(ACCESS_TOKEN) } returns jwtTokenDataJson
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "orgId",
+                                name = "orgName",
+                                shouldUseKeyConnector = true,
+                                role = OrganizationType.USER,
+                            ),
+                        ),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                    ),
+                ),
+            ),
+        )
+        mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = ACCESS_TOKEN)
+        val viewModel = createViewModel()
+        assertEquals(RootNavState.RemovePassword, viewModel.stateFlow.value)
     }
 
     @Test
@@ -303,6 +378,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -340,6 +417,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -377,6 +456,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -420,6 +501,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -464,6 +547,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -503,6 +588,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -541,6 +628,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -614,6 +703,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -662,6 +753,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -698,6 +791,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         organizations = emptyList(),
                         needsMasterPassword = false,
                         trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
                     ),
                 ),
             ),
@@ -711,9 +806,11 @@ class RootNavViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             specialCircumstanceManager = specialCircumstanceManager,
         )
-
-    private val FIXED_CLOCK: Clock = Clock.fixed(
-        Instant.parse("2023-10-27T12:00:00Z"),
-        ZoneOffset.UTC,
-    )
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)
+
+private const val ACCESS_TOKEN: String = "access_token"

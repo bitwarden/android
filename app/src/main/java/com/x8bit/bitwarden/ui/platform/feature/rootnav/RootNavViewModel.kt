@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
@@ -11,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -32,12 +35,12 @@ class RootNavViewModel @Inject constructor(
 ) {
     init {
         combine(
-            authRepository
-                .userStateFlow,
-            specialCircumstanceManager
-                .specialCircumstanceStateFlow,
-        ) { userState, specialCircumstance ->
+            authRepository.authStateFlow,
+            authRepository.userStateFlow,
+            specialCircumstanceManager.specialCircumstanceStateFlow,
+        ) { authState, userState, specialCircumstance ->
             RootNavAction.Internal.UserStateUpdateReceive(
+                authState = authState,
                 userState = userState,
                 specialCircumstance = specialCircumstance,
             )
@@ -84,6 +87,11 @@ class RootNavViewModel @Inject constructor(
                 } else {
                     RootNavState.Auth
                 }
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                userState.shouldShowRemovePassword(authState = action.authState) -> {
+                RootNavState.RemovePassword
             }
 
             userState.activeAccount.isVaultUnlocked -> {
@@ -145,6 +153,20 @@ class RootNavViewModel @Inject constructor(
         }
         mutableStateFlow.update { updatedRootNavState }
     }
+
+    private fun UserState.shouldShowRemovePassword(authState: AuthState): Boolean {
+        val isLoggedInUsingSso = (authState as? AuthState.Authenticated)
+            ?.accessToken
+            ?.let(::parseJwtTokenDataOrNull)
+            ?.isExternal == true
+        val usesKeyConnectorAndNotAdmin = this.activeAccount.organizations.any {
+            it.shouldUseKeyConnector &&
+                it.role != OrganizationType.OWNER &&
+                it.role != OrganizationType.ADMIN
+        }
+        val userIsNotUsingKeyConnector = !this.activeAccount.isUsingKeyConnector
+        return isLoggedInUsingSso && usesKeyConnectorAndNotAdmin && userIsNotUsingKeyConnector
+    }
 }
 
 /**
@@ -162,6 +184,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object AuthWithWelcome : RootNavState()
+
+    /**
+     * App should show remove password graph.
+     */
+    @Parcelize
+    data object RemovePassword : RootNavState()
 
     /**
      * App should show reset password graph.
@@ -290,6 +318,7 @@ sealed class RootNavAction {
          * User state in the repository layer changed.
          */
         data class UserStateUpdateReceive(
+            val authState: AuthState,
             val userState: UserState?,
             val specialCircumstance: SpecialCircumstance?,
         ) : RootNavAction()

@@ -6,6 +6,7 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -51,6 +52,22 @@ interface VaultSdkSource {
      * user.
      */
     suspend fun getTrustDevice(userId: String): Result<TrustDeviceResponse>
+
+    /**
+     * Derives a "key connector" key from the given information for the given `userId. This can be
+     * used to later unlock their vault via a call to [initializeCrypto] with
+     * [InitUserCryptoMethod.KeyConnector].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun deriveKeyConnector(
+        userId: String,
+        userKeyEncrypted: String,
+        email: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<String>
 
     /**
      * Derives a "pin key" from the given [pin] for the given [userId]. This can be used to later

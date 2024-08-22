@@ -57,7 +57,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
-        every { createCipher(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
+        every { createCipherOrNull(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
     }
     private val policyManager: PolicyManager = mockk {
         every {
@@ -342,6 +342,26 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on EnableBiometricsClick should show Error dialog when cipher is null`() {
+        every {
+            biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_STATE.activeUserId)
+        } returns null
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = AccountSecurityDialog.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `on UnlockWithBiometricToggle false should call clearBiometricsKey and update the state`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
@@ -619,6 +639,8 @@ private val DEFAULT_USER_STATE = UserState(
             organizations = emptyList(),
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
         ),
     ),
 )

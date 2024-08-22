@@ -34,11 +34,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         mutableUserStateFlow.update { currentState ->
             currentState.copy(
                 accounts = currentState.accounts.map { account ->
-                    account.copy(
-                        trustedDevice = account.trustedDevice?.copy(
-                            hasMasterPassword = false,
-                        ),
-                    )
+                    account.copy(hasMasterPassword = false)
                 },
             )
         }
@@ -240,11 +236,12 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             needsMasterPassword = false,
             trustedDevice = UserState.TrustedDevice(
                 isDeviceTrusted = true,
-                hasMasterPassword = true,
                 hasAdminApproval = true,
                 hasLoginApprovingDevice = true,
                 hasResetPasswordPermission = true,
             ),
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
         ),
     ),
 )

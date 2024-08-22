@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -8,16 +9,18 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -39,6 +42,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
         every { startActivity(any()) } just runs
+        every { launchUri(any()) } just runs
     }
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -66,9 +70,9 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `close click should send CloseClick action`() {
-        composeTestRule.onNodeWithContentDescription("Close").performClick()
-        verify { viewModel.trySendAction(CloseClick) }
+    fun `close click should send BackClick action`() {
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        verify { viewModel.trySendAction(BackClick) }
     }
 
     @Test
@@ -130,7 +134,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `email input change should send EmailInputChange action`() {
-        composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
+        composeTestRule.onNodeWithText("Email address (required)").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
     }
 
@@ -172,6 +176,98 @@ class StartRegistrationScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking the server tool tip should send ServerGeologyHelpClickAction`() {
+        composeTestRule
+            .onNodeWithContentDescription("Help with server geolocations.")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick) }
+    }
+
+    @Test
+    fun `when NavigateToServerSelectionInfo is observed event should invoke intent manager`() {
+        mutableEventFlow.tryEmit(StartRegistrationEvent.NavigateToServerSelectionInfo)
+
+        verify {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/server-geographies/".toUri(),
+            )
+        }
+    }
+
+    @Test
+    fun `when environment selected in dialog should send EnvironmentTypeSelect action`() {
+        val selectedEnvironment = Environment.Eu
+
+        // Clicking to open dialog
+        composeTestRule
+            .onNodeWithText(Environment.Us.label)
+            .performScrollTo()
+            .performClick()
+
+        // Clicking item on dialog
+        composeTestRule
+            .onNodeWithText(selectedEnvironment.label)
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                StartRegistrationAction.EnvironmentTypeSelect(selectedEnvironment.type),
+            )
+        }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `when continue button clicked should send ContinueClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                isContinueButtonEnabled = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(StartRegistrationAction.ContinueClick) }
+    }
+
+    @Test
+    fun `when unsubscribe custom action invoked should send UnsubscribeMarketingEmailsClick`() {
+        @Suppress("MaxLineLength")
+        composeTestRule
+            .onNodeWithText("Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.")
+            .performCustomAccessibilityAction("Unsubscribe")
+
+        verify { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
+    }
+
+    @Test
+    fun `when terms and conditions custom action invoked should send TermsClick`() {
+        composeTestRule
+            .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
+            .performCustomAccessibilityAction("Terms of Service")
+
+        verify { viewModel.trySendAction(StartRegistrationAction.TermsClick) }
+    }
+
+    @Test
+    fun `when privacy policy custom action invoked should send TermsClick`() {
+        composeTestRule
+            .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
+            .performCustomAccessibilityAction("Privacy Policy")
+
+        verify { viewModel.trySendAction(StartRegistrationAction.PrivacyPolicyClick) }
     }
 
     companion object {

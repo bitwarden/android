@@ -4210,29 +4210,24 @@ class VaultRepositoryTest {
         val userId = "userId"
         val fido2CredentialStore: Fido2CredentialStore = mockk()
         val relyingPartyId = "relyingPartyId"
-        val expected: Result<List<Fido2CredentialAutofillView>> = mockk()
+        val expected: List<Fido2CredentialAutofillView> = mockk()
         coEvery {
             vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
                 relyingPartyId = relyingPartyId,
             )
-        } returns expected
+        } returns expected.asSuccess()
 
-        turbineScope {
-            val result = vaultRepository.silentlyDiscoverCredentials(
-                userId = userId,
-                fido2CredentialStore = fido2CredentialStore,
-                relyingPartyId = relyingPartyId,
-            )
+        val result = vaultRepository.silentlyDiscoverCredentials(
+            userId = userId,
+            fido2CredentialStore = fido2CredentialStore,
+            relyingPartyId = relyingPartyId,
+        )
 
-            assertEquals(
-                expected,
-                result,
-            )
-        }
+        assertEquals(expected.asSuccess(), result)
 
-        coVerify {
+        coVerify(exactly = 1) {
             vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,

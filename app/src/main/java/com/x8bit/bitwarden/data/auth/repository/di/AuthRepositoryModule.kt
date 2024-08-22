@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -48,6 +49,7 @@ object AuthRepositoryModule {
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        keyConnectorManager: KeyConnectorManager,
         authRequestManager: AuthRequestManager,
         trustedDeviceManager: TrustedDeviceManager,
         userLogoutManager: UserLogoutManager,
@@ -67,6 +69,7 @@ object AuthRepositoryModule {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        keyConnectorManager = keyConnectorManager,
         authRequestManager = authRequestManager,
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,

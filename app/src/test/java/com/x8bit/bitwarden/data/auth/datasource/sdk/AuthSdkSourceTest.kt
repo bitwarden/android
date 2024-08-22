@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
+import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
@@ -123,6 +124,20 @@ class AuthSdkSourceTest {
             )
         }
     }
+
+    @Test
+    fun `makeKeyConnectorKeys should call SDK and return a Result with the correct data`() =
+        runBlocking {
+            val expectedResult = mockk<KeyConnectorResponse>()
+            coEvery { clientAuth.makeKeyConnectorKeys() } returns expectedResult
+
+            val result = authSkdSource.makeKeyConnectorKeys()
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                clientAuth.makeKeyConnectorKeys()
+            }
+        }
 
     @Test
     fun `makeRegisterKeys should call SDK and return a Result with the correct data`() =

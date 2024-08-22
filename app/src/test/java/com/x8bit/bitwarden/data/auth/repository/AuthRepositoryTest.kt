@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.UpdatePasswordResponse
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRespo
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
@@ -52,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -66,12 +69,14 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
@@ -99,6 +104,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
@@ -205,6 +211,7 @@ class AuthRepositoryTest {
         } returns "AsymmetricEncString".asSuccess()
     }
     private val authRequestManager: AuthRequestManager = mockk()
+    private val keyConnectorManager: KeyConnectorManager = mockk()
     private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
@@ -237,6 +244,7 @@ class AuthRepositoryTest {
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRequestManager = authRequestManager,
+        keyConnectorManager = keyConnectorManager,
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
@@ -316,6 +324,7 @@ class AuthRepositoryTest {
                 vaultState = VAULT_UNLOCK_DATA,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -340,6 +349,7 @@ class AuthRepositoryTest {
                 vaultState = VAULT_UNLOCK_DATA,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
@@ -355,6 +365,7 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
+                userIsUsingKeyConnectorList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
@@ -382,6 +393,7 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userAccountTokens = emptyList(),
                 userOrganizationsList = USER_ORGANIZATIONS,
+                userIsUsingKeyConnectorList = USER_SHOULD_USER_KEY_CONNECTOR,
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -597,6 +609,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -606,6 +619,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -1961,96 +1975,101 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `login two factor should return Error result when get token succeeds but unlock vault fails`() = runTest {
-        val twoFactorResponse = GetTokenResponseJson
-            .TwoFactorRequired(
+    fun `login two factor should return Error result when get token succeeds but unlock vault fails`() =
+        runTest {
+            val twoFactorResponse = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
-        // Attempt a normal login with a two factor error first, so that the auth
-        // data will be cached.
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        } returns twoFactorResponse
-            .asSuccess()
-        val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.TwoFactorRequired, firstResult)
-        coVerify { identityService.preLogin(email = EMAIL) }
-        coVerify {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        }
+            // Attempt a normal login with a two factor error first, so that the auth
+            // data will be cached.
+            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns twoFactorResponse.asSuccess()
 
-        // Login with two factor data.
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-            twoFactorToken = "twoFactorTokenToStore",
-        )
-        coEvery {
-            identityService.getToken(
+            val firstResult = repository.login(
                 email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
+                password = PASSWORD,
                 captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
+            )
+
+            assertEquals(LoginResult.TwoFactorRequired, firstResult)
+            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+
+            // Login with two factor data.
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                twoFactorToken = "twoFactorTokenToStore",
+            )
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                    twoFactorData = TWO_FACTOR_DATA,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
+                    privateKey = successResponse.privateKey!!,
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.InvalidStateError
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val finalResult = repository.login(
+                email = EMAIL,
+                password = PASSWORD,
                 twoFactorData = TWO_FACTOR_DATA,
+                captchaToken = null,
             )
-        } returns successResponse.asSuccess()
-        coEvery {
-            vaultRepository.unlockVault(
-                userId = USER_ID_1,
+            assertEquals(LoginResult.Error(errorMessage = null), finalResult)
+            assertEquals(twoFactorResponse, repository.twoFactorResponse)
+            fakeAuthDiskSource.assertTwoFactorToken(
                 email = EMAIL,
-                kdf = ACCOUNT_1.profile.toSdkParams(),
-                initUserCryptoMethod = InitUserCryptoMethod.Password(
-                    password = PASSWORD,
-                    userKey = successResponse.key!!,
-                ),
-                privateKey = successResponse.privateKey!!,
-                organizationKeys = null,
+                twoFactorToken = null,
             )
-        } returns VaultUnlockResult.InvalidStateError
-        every {
-            successResponse.toUserState(
-                previousUserState = null,
-                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-            )
-        } returns SINGLE_USER_STATE_1
-        val finalResult = repository.login(
-            email = EMAIL,
-            password = PASSWORD,
-            twoFactorData = TWO_FACTOR_DATA,
-            captchaToken = null,
-        )
-        assertEquals(LoginResult.Error(errorMessage = null), finalResult)
-        assertEquals(twoFactorResponse, repository.twoFactorResponse)
-        fakeAuthDiskSource.assertTwoFactorToken(
-            email = EMAIL,
-            twoFactorToken = null,
-        )
 
-        coVerify(exactly = 0) {
-            vaultRepository.syncIfNecessary()
+            coVerify(exactly = 0) {
+                vaultRepository.syncIfNecessary()
+            }
         }
-    }
 
     @Test
     fun `login uses remembered two factor tokens`() = runTest {
@@ -2761,6 +2780,432 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds with key connector and master password should return success and not unlock the vault`() =
+        runTest {
+            val keyConnectorUrl = "www.example.com"
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                keyConnectorUrl = keyConnectorUrl,
+                userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
+                    hasMasterPassword = true,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+            )
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
+            )
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
+            coVerify(exactly = 1) {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
+            verify(exactly = 1) {
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds with key connector and no master password should return failure`() =
+        runTest {
+            val keyConnectorUrl = "www.example.com"
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                keyConnectorUrl = keyConnectorUrl,
+                userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
+                    hasMasterPassword = false,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+            )
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                keyConnectorManager.getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                )
+            } returns Throwable("Fail").asFailure()
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
+            )
+
+            assertEquals(LoginResult.Error(errorMessage = null), result)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
+            coVerify(exactly = 1) {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                keyConnectorManager.getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds with key connector and no master password should return success and unlock the vault`() =
+        runTest {
+            val keyConnectorUrl = "www.example.com"
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                keyConnectorUrl = keyConnectorUrl,
+                userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
+                    hasMasterPassword = false,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+            )
+            val masterKey = "masterKey"
+            val keyConnectorMasterKeyResponseJson = mockk<KeyConnectorMasterKeyResponseJson> {
+                every { this@mockk.masterKey } returns masterKey
+            }
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                keyConnectorManager.getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                )
+            } returns keyConnectorMasterKeyResponseJson.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = "privateKey",
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                        masterKey = masterKey,
+                        userKey = "key",
+                    ),
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
+            )
+
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
+            coVerify(exactly = 1) {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                keyConnectorManager.getMasterKeyFromKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                )
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = "privateKey",
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                        masterKey = masterKey,
+                        userKey = "key",
+                    ),
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
+            verify(exactly = 1) {
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds with key connector, no master password, no key and no private key should return failure`() =
+        runTest {
+            val keyConnectorUrl = "www.example.com"
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                keyConnectorUrl = keyConnectorUrl,
+                userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
+                    hasMasterPassword = false,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+                key = null,
+                privateKey = null,
+            )
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                keyConnectorManager.migrateNewUserToKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                    kdfType = PROFILE_1.kdfType!!,
+                    kdfIterations = PROFILE_1.kdfIterations,
+                    kdfMemory = PROFILE_1.kdfMemory,
+                    kdfParallelism = PROFILE_1.kdfParallelism,
+                    organizationIdentifier = ORGANIZATION_IDENTIFIER,
+                )
+            } returns Throwable("Fail").asFailure()
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
+            )
+
+            assertEquals(LoginResult.Error(errorMessage = null), result)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
+            coVerify(exactly = 1) {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                keyConnectorManager.migrateNewUserToKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                    kdfType = PROFILE_1.kdfType!!,
+                    kdfIterations = PROFILE_1.kdfIterations,
+                    kdfMemory = PROFILE_1.kdfMemory,
+                    kdfParallelism = PROFILE_1.kdfParallelism,
+                    organizationIdentifier = ORGANIZATION_IDENTIFIER,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds with key connector, no master password, no key and no private key should return success and unlock the vault`() =
+        runTest {
+            val keyConnectorUrl = "www.example.com"
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                keyConnectorUrl = keyConnectorUrl,
+                userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
+                    hasMasterPassword = false,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+                key = null,
+                privateKey = null,
+            )
+            val masterKey = "masterKey"
+            val keyConnectorResponse = mockk<KeyConnectorResponse> {
+                every {
+                    this@mockk.keys
+                } returns RsaKeyPair(public = PUBLIC_KEY, private = PRIVATE_KEY)
+                every { this@mockk.masterKey } returns masterKey
+                every { this@mockk.encryptedUserKey } returns ENCRYPTED_USER_KEY
+            }
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery {
+                keyConnectorManager.migrateNewUserToKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                    kdfType = PROFILE_1.kdfType!!,
+                    kdfIterations = PROFILE_1.kdfIterations,
+                    kdfMemory = PROFILE_1.kdfMemory,
+                    kdfParallelism = PROFILE_1.kdfParallelism,
+                    organizationIdentifier = ORGANIZATION_IDENTIFIER,
+                )
+            } returns keyConnectorResponse.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = PRIVATE_KEY,
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                        masterKey = masterKey,
+                        userKey = ENCRYPTED_USER_KEY,
+                    ),
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
+            )
+
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = PRIVATE_KEY)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            coVerify(exactly = 1) {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                keyConnectorManager.migrateNewUserToKeyConnector(
+                    url = keyConnectorUrl,
+                    accessToken = ACCESS_TOKEN,
+                    kdfType = PROFILE_1.kdfType!!,
+                    kdfIterations = PROFILE_1.kdfIterations,
+                    kdfMemory = PROFILE_1.kdfMemory,
+                    kdfParallelism = PROFILE_1.kdfParallelism,
+                    organizationIdentifier = ORGANIZATION_IDENTIFIER,
+                )
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = "privateKey",
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                        masterKey = masterKey,
+                        userKey = ENCRYPTED_USER_KEY,
+                    ),
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
+            verify(exactly = 1) {
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -3799,6 +4244,114 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `removePassword with no active account should return error`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = repository.removePassword(masterPassword = PASSWORD)
+
+        assertEquals(RemovePasswordResult.Error, result)
+    }
+
+    @Test
+    fun `removePassword with no userKey should return error`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = null)
+
+        val result = repository.removePassword(masterPassword = PASSWORD)
+
+        assertEquals(RemovePasswordResult.Error, result)
+    }
+
+    @Test
+    fun `removePassword with no keyConnectorUrl should return error`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+        val organizations = listOf(
+            mockk<SyncResponseJson.Profile.Organization> {
+                every { id } returns "orgId"
+                every { name } returns "orgName"
+                every { shouldUseKeyConnector } returns true
+                every { type } returns OrganizationType.USER
+                every { keyConnectorUrl } returns null
+            },
+        )
+        fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+
+        val result = repository.removePassword(masterPassword = PASSWORD)
+
+        assertEquals(RemovePasswordResult.Error, result)
+    }
+
+    @Test
+    fun `removePassword with migrateExistingUserToKeyConnector error should return error`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            val url = "www.example.com"
+            val organizations = listOf(
+                mockk<SyncResponseJson.Profile.Organization> {
+                    every { id } returns "orgId"
+                    every { name } returns "orgName"
+                    every { shouldUseKeyConnector } returns true
+                    every { type } returns OrganizationType.USER
+                    every { keyConnectorUrl } returns url
+                },
+            )
+            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+            coEvery {
+                keyConnectorManager.migrateExistingUserToKeyConnector(
+                    userId = USER_ID_1,
+                    url = url,
+                    userKeyEncrypted = ENCRYPTED_USER_KEY,
+                    email = PROFILE_1.email,
+                    masterPassword = PASSWORD,
+                    kdf = PROFILE_1.toSdkParams(),
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = repository.removePassword(masterPassword = PASSWORD)
+
+            assertEquals(RemovePasswordResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `removePassword with migrateExistingUserToKeyConnector success should sync and return success`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            val url = "www.example.com"
+            val organizations = listOf(
+                mockk<SyncResponseJson.Profile.Organization> {
+                    every { id } returns "orgId"
+                    every { name } returns "orgName"
+                    every { shouldUseKeyConnector } returns true
+                    every { type } returns OrganizationType.USER
+                    every { keyConnectorUrl } returns url
+                },
+            )
+            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+            coEvery {
+                keyConnectorManager.migrateExistingUserToKeyConnector(
+                    userId = USER_ID_1,
+                    url = url,
+                    userKeyEncrypted = ENCRYPTED_USER_KEY,
+                    email = PROFILE_1.email,
+                    masterPassword = PASSWORD,
+                    kdf = PROFILE_1.toSdkParams(),
+                )
+            } returns Unit.asSuccess()
+            every { vaultRepository.sync() } just runs
+
+            val result = repository.removePassword(masterPassword = PASSWORD)
+
+            assertEquals(RemovePasswordResult.Success, result)
+            verify(exactly = 1) {
+                vaultRepository.sync()
+            }
+        }
+
+    @Test
     fun `resetPassword Success should return Success`() = runTest {
         val currentPassword = "currentPassword"
         val currentPasswordHash = "hashedCurrentPassword"
@@ -4747,6 +5300,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -4779,6 +5333,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -4809,6 +5364,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_UNLOCK_DATA,
             userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
+            userIsUsingKeyConnectorList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
@@ -5499,6 +6055,7 @@ class AuthRepositoryTest {
             twoFactorToken = null,
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = null,
+            keyConnectorUrl = null,
         )
         private val PROFILE_1 = AccountJson.Profile(
             userId = USER_ID_1,
@@ -5588,6 +6145,12 @@ class AuthRepositoryTest {
             UserOrganizations(
                 userId = USER_ID_1,
                 organizations = ORGANIZATIONS.toOrganizations(),
+            ),
+        )
+        private val USER_SHOULD_USER_KEY_CONNECTOR = listOf(
+            UserKeyConnectorState(
+                userId = USER_ID_1,
+                isUsingKeyConnector = null,
             ),
         )
         private val VAULT_UNLOCK_DATA = listOf(

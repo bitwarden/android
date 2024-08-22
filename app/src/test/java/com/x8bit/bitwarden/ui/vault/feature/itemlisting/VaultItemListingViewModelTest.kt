@@ -2762,14 +2762,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_ACCOUNT.copy(
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
-
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = true,
-                            hasMasterPassword = false,
                             hasAdminApproval = true,
                             hasLoginApprovingDevice = true,
                             hasResetPasswordPermission = true,
                         ),
+                        hasMasterPassword = false,
                     ),
                 ),
             )
@@ -3157,11 +3156,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     trustedDevice = UserState.TrustedDevice(
                         isDeviceTrusted = true,
-                        hasMasterPassword = false,
                         hasAdminApproval = true,
                         hasLoginApprovingDevice = true,
                         hasResetPasswordPermission = true,
                     ),
+                    hasMasterPassword = false,
                 ),
             ),
         )
@@ -3784,6 +3783,8 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     organizations = emptyList(),
     needsMasterPassword = false,
     trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(

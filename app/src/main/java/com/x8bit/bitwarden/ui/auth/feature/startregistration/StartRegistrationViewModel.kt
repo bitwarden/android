@@ -10,18 +10,19 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.model.Environment.Type
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.UpdatedEnvironmentReceive
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ServerGeologyHelpClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.UpdatedEnvironmentReceive
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
@@ -79,7 +80,7 @@ class StartRegistrationViewModel @Inject constructor(
             is ContinueClick -> handleContinueClick()
             is EmailInputChange -> handleEmailInputChanged(action)
             is NameInputChange -> handleNameInputChanged(action)
-            is CloseClick -> handleCloseClick()
+            is BackClick -> handleBackClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
             is ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
                 action,
@@ -96,7 +97,13 @@ class StartRegistrationViewModel @Inject constructor(
             is UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
             }
+
+            ServerGeologyHelpClick -> handleServerGeologyHelpClick()
         }
+    }
+
+    private fun handleServerGeologyHelpClick() {
+        sendEvent(StartRegistrationEvent.NavigateToServerSelectionInfo)
     }
 
     private fun handleEnvironmentTypeSelect(action: EnvironmentTypeSelect) {
@@ -145,7 +152,7 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleCloseClick() {
+    private fun handleBackClick() {
         sendEvent(StartRegistrationEvent.NavigateBack)
     }
 
@@ -330,6 +337,11 @@ sealed class StartRegistrationEvent {
      * Navigates to the self-hosted/custom environment screen.
      */
     data object NavigateToEnvironment : StartRegistrationEvent()
+
+    /**
+     * Navigates to the server selection info.
+     */
+    data object NavigateToServerSelectionInfo : StartRegistrationEvent()
 }
 
 /**
@@ -342,9 +354,9 @@ sealed class StartRegistrationAction {
     data object ContinueClick : StartRegistrationAction()
 
     /**
-     * User clicked close.
+     * User clicked back.
      */
-    data object CloseClick : StartRegistrationAction()
+    data object BackClick : StartRegistrationAction()
 
     /**
      * Email input changed.
@@ -387,6 +399,11 @@ sealed class StartRegistrationAction {
      * User tapped the unsubscribe link.
      */
     data object UnsubscribeMarketingEmailsClick : StartRegistrationAction()
+
+    /**
+     * User has tapped the tooltip for the server environment
+     */
+    data object ServerGeologyHelpClick : StartRegistrationAction()
 
     /**
      * Models actions that the [StartRegistrationViewModel] itself might send.

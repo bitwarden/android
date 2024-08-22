@@ -8,8 +8,10 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
+import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import io.mockk.every
 import io.mockk.mockk
@@ -187,6 +189,8 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-1",
                             name = "mockName-1",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                 ),
@@ -196,6 +200,8 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-2",
                             name = "mockName-2",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                 ),
@@ -205,11 +211,121 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-3",
                             name = "mockName-3",
+                            shouldUseKeyConnector = false,
+                            role = OrganizationType.ADMIN,
                         ),
                     ),
                 ),
             ),
             authDiskSource.userOrganizationsList,
+        )
+    }
+
+    @Test
+    fun `userKeyConnectorStateFlow should emit whenever there are changes to key connector data`() =
+        runTest {
+            val mockAccounts = mapOf(
+                "userId1" to mockk<AccountJson>(),
+                "userId2" to mockk<AccountJson>(),
+                "userId3" to mockk<AccountJson>(),
+            )
+            val userStateJson = mockk<UserStateJson> {
+                every { accounts } returns mockAccounts
+            }
+            authDiskSource.apply {
+                userState = userStateJson
+                storeShouldUseKeyConnector(
+                    userId = "userId1",
+                    shouldUseKeyConnector = false,
+                )
+            }
+
+            authDiskSource.userKeyConnectorStateFlow.test {
+                assertEquals(
+                    listOf(
+                        UserKeyConnectorState(
+                            userId = "userId1",
+                            isUsingKeyConnector = false,
+                        ),
+                        UserKeyConnectorState(
+                            userId = "userId2",
+                            isUsingKeyConnector = null,
+                        ),
+                        UserKeyConnectorState(
+                            userId = "userId3",
+                            isUsingKeyConnector = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                authDiskSource.storeShouldUseKeyConnector(
+                    userId = "userId2",
+                    shouldUseKeyConnector = true,
+                )
+
+                assertEquals(
+                    listOf(
+                        UserKeyConnectorState(
+                            userId = "userId1",
+                            isUsingKeyConnector = false,
+                        ),
+                        UserKeyConnectorState(
+                            userId = "userId2",
+                            isUsingKeyConnector = true,
+                        ),
+                        UserKeyConnectorState(
+                            userId = "userId3",
+                            isUsingKeyConnector = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `userKeyConnectorStateList should return data for all available users`() {
+        val mockAccounts = mapOf(
+            "userId1" to mockk<AccountJson>(),
+            "userId2" to mockk<AccountJson>(),
+            "userId3" to mockk<AccountJson>(),
+        )
+        val userStateJson = mockk<UserStateJson> {
+            every { accounts } returns mockAccounts
+        }
+        authDiskSource.apply {
+            userState = userStateJson
+            storeShouldUseKeyConnector(
+                userId = "userId1",
+                shouldUseKeyConnector = false,
+            )
+            storeShouldUseKeyConnector(
+                userId = "userId2",
+                shouldUseKeyConnector = true,
+            )
+            storeShouldUseKeyConnector(
+                userId = "userId3",
+                shouldUseKeyConnector = null,
+            )
+        }
+
+        assertEquals(
+            listOf(
+                UserKeyConnectorState(
+                    userId = "userId1",
+                    isUsingKeyConnector = false,
+                ),
+                UserKeyConnectorState(
+                    userId = "userId2",
+                    isUsingKeyConnector = true,
+                ),
+                UserKeyConnectorState(
+                    userId = "userId3",
+                    isUsingKeyConnector = null,
+                ),
+            ),
+            authDiskSource.userKeyConnectorStateList,
         )
     }
 
@@ -241,6 +357,8 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-1",
                                     name = "mockName-1",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
@@ -269,6 +387,8 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-1",
                                     name = "mockName-1",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),
@@ -278,6 +398,8 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-2",
                                     name = "mockName-2",
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
                                 ),
                             ),
                         ),

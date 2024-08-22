@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -434,12 +435,16 @@ class CipherViewExtensionsTest {
                 Organization(
                     id = "mockOrganizationId-1",
                     name = "organizationName",
+                    shouldUseKeyConnector = false,
+                    role = OrganizationType.ADMIN,
                 ),
             ),
             isBiometricsEnabled = true,
             vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
             needsMasterPassword = false,
             trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
         )
 }
 
