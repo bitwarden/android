@@ -99,6 +99,17 @@ class CheckEmailScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `already have account text click should send ChangeEmailClick action`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = false)
+        composeTestRule
+            .onNodeWithText("Or log in, you may already have an account.")
+            .performScrollTo()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify { viewModel.trySendAction(CheckEmailAction.LoginClick) }
+    }
+
+    @Test
     fun `change email button click should send ChangeEmailClick action`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = true)
         composeTestRule

@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Test
 
 class CheckEmailViewModelTest : BaseViewModelTest() {
     private val mutableFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager>() {
+    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
         every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
 
@@ -81,6 +82,18 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
             showNewOnboardingUi = true,
         )
         assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `OnLoginClick action should send NavigateToLanding event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(CheckEmailAction.LoginClick)
+            assertEquals(
+                CheckEmailEvent.NavigateBackToLanding,
+                awaitItem(),
+            )
+        }
     }
 
     private fun createViewModel(state: CheckEmailState? = null): CheckEmailViewModel =

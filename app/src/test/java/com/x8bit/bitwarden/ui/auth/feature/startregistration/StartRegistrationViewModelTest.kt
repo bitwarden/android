@@ -46,7 +46,8 @@ import org.junit.jupiter.api.Test
 @Suppress("LargeClass")
 class StartRegistrationViewModelTest : BaseViewModelTest() {
     private val mutableFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager>() {
+    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
         every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
     /**
