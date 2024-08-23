@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -96,9 +97,9 @@ class CompleteRegistrationViewModel @Inject constructor(
 
         generatorRepository
             .generatorResultFlow
+            .filterIsInstance<GeneratorResult.Password>()
             .map {
-                val passwordResult = it as? GeneratorResult.Password
-                Internal.GeneratedPasswordResult(generatedPassword = passwordResult?.password)
+                Internal.GeneratedPasswordResult(generatedPassword = it.password)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -299,10 +300,10 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     private fun handleCallToActionClick() = when {
         state.userEmail.isBlank() -> {
-            @Suppress("MaxLineLength")
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required.asText(R.string.email_address.asText()),
+                message = R.string.validation_field_required
+                    .asText(R.string.email_address.asText()),
             )
             mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
         }
