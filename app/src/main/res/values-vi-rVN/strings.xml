@@ -69,7 +69,7 @@
     <string name="use_your_device_camera_to_scan_codes">Sử dụng camera của thiết bị để quét mã</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Quét mã QR trong các cài đặt xác minh hai bước của bạn cho bất kỳ tài khoản nào.</string>
     <string name="sign_in_using_unique_codes">Đăng nhập bằng mã duy nhất</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Khi sử dụng xác minh 2 bước, bạn sẽ nhập tên người dùng và mật khẩu của mình cũng như mã được tạo trong ứng dụng này.</string>
     <string name="continue_button">Tiếp tục</string>
     <string name="skip">Bỏ qua</string>
     <string name="get_started">Bắt đầu</string>
@@ -110,7 +110,7 @@
     <string name="submit_crash_logs">Gửi nhật ký lỗi</string>
     <string name="import_vault_failure">Xảy ra lỗi khi nhập kho của bạn.</string>
     <string name="file_source">Tập tin nguồn</string>
-    <string name="import_vault">Nhập dữ liệu</string>
+    <string name="import_vault">Nhập</string>
     <string name="import_success">Nhập kho hoàn tất</string>
     <string name="key_is_invalid">Khoá không hợp lệ.</string>
     <string name="favorite_tooltip">Lưu thành ưa thích</string>
