@@ -171,7 +171,6 @@ fun CompleteRegistrationScreen(
                 passwordHintInput = state.passwordHintInput,
                 isCheckDataBreachesToggled = state.isCheckDataBreachesToggled,
                 handler = handler,
-                modifier = Modifier.standardHorizontalMargin(),
                 nextButtonEnabled = state.validSubmissionReady,
                 callToActionText = state.callToActionText(),
                 minimumPasswordLength = state.minimumPasswordLength,
@@ -206,7 +205,9 @@ private fun CompleteRegistrationContent(
         Spacer(modifier = Modifier.height(8.dp))
         if (showNewOnboardingUi) {
             CompleteRegistrationContentHeader(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenActionCard(
@@ -214,12 +215,15 @@ private fun CompleteRegistrationContent(
                 actionText = stringResource(id = R.string.what_makes_a_password_strong),
                 callToActionText = stringResource(id = R.string.learn_more),
                 onCardClicked = handler.onMakeStrongPassword,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
             )
         } else {
             LegacyHeaderContent(
                 userEmail = userEmail,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .standardHorizontalMargin(),
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -233,7 +237,8 @@ private fun CompleteRegistrationContent(
             onValueChange = handler.onPasswordInputChange,
             modifier = Modifier
                 .testTag("MasterPasswordEntry")
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
             showPasswordTestTag = "PasswordVisibilityToggle",
             imeAction = ImeAction.Next,
         )
@@ -242,6 +247,7 @@ private fun CompleteRegistrationContent(
             state = passwordStrengthState,
             currentCharacterCount = passwordInput.length,
             minimumCharacterCount = minimumPasswordLength.takeIf { showNewOnboardingUi },
+            modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenPasswordField(
@@ -252,7 +258,8 @@ private fun CompleteRegistrationContent(
             onValueChange = handler.onConfirmPasswordInputChange,
             modifier = Modifier
                 .testTag("ConfirmMasterPasswordEntry")
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
             showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -269,7 +276,8 @@ private fun CompleteRegistrationContent(
             },
             modifier = Modifier
                 .testTag("MasterPasswordHintLabel")
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
         if (showNewOnboardingUi) {
             BitwardenClickableText(
@@ -278,6 +286,7 @@ private fun CompleteRegistrationContent(
                 ),
                 onClick = handler.onLearnToPreventLockout,
                 style = nonMaterialTypography.labelMediumProminent,
+                modifier = Modifier.standardHorizontalMargin(),
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -285,7 +294,9 @@ private fun CompleteRegistrationContent(
             label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
             isChecked = isCheckDataBreachesToggled,
             onCheckedChange = handler.onCheckDataBreachesToggle,
-            modifier = Modifier.testTag("CheckExposedMasterPasswordToggle"),
+            modifier = Modifier
+                .testTag("CheckExposedMasterPasswordToggle")
+                .standardHorizontalMargin(),
         )
         if (showNewOnboardingUi) {
             Spacer(modifier = Modifier.height(24.dp))
@@ -293,7 +304,9 @@ private fun CompleteRegistrationContent(
                 label = callToActionText,
                 isEnabled = nextButtonEnabled,
                 onClick = handler.onCallToAction,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
         }
     }
