@@ -615,6 +615,7 @@
   <string name="updating_password">Обновление пароля</string>
   <string name="update_password_error">В настоящее время обновить пароль невозможно</string>
   <string name="remove_master_password">Удалить мастер-пароль</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s использует SSO с собственным сервером ключей. Для авторизации пользователям этой организации больше не требуется мастер-пароль.</string>
   <string name="remove_master_password_warning">%1$s использует SSO с шифрованием, управляемым клиентом. Если вы продолжите, то мастер-пароль будет удален из вашего аккаунта, и для авторизации потребуется SSO.</string>
   <string name="remove_master_password_warning2">Если вы не хотите удалять свой мастер-пароль, вы можете покинуть эту организацию.</string>
   <string name="leave_organization">Покинуть организацию</string>
@@ -931,6 +932,7 @@
   <string name="user_verification_direction">Верификация пользователя</string>
   <string name="creating_on">Создано:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следуйте инструкциям в письме, отправленном на %1$s, чтобы продолжить создание аккаунта.</string>
+  <string name="we_sent_an_email_to">Мы отправили письмо на %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продолжая, вы принимаете Условия предоставления услуг и Политику конфиденциальности</string>
   <string name="set_password">Задать пароль</string>
   <string name="unsubscribe">Отписаться</string>
@@ -941,6 +943,7 @@
   <string name="no_email_go_back_to_edit_your_email_address">Нет письма? Вернитесь, чтобы изменить свой адрес email.</string>
   <string name="or_log_in_you_may_already_have_an_account">Или авторизуйтесь, возможно, у вас уже есть аккаунт.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований. Отписаться можно в любое время.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Получайте советы, объявления и исследования от Bitwarden в свой почтовый ящик. Отписаться можно в любое время.</string>
   <string name="privacy_prioritized">Конфиденциальность, приоритет</string>
   <string name="welcome_message_1">Сохраняйте логины, карты и личные данные в своем защищенном хранилище. Bitwarden использует сквозное шифрование, чтобы защитить то, что для вас важно.</string>
   <string name="welcome_message_2">Настройте биометрическую разблокировку и автозаполнение, чтобы входить в свои аккаунты, не набирая ни одной буквы.</string>
@@ -977,4 +980,13 @@
   <string name="generate_button_label">Сгенерировать</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишите этот пароль и храните его в надежном месте.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Узнайте о других способах предотвращения блокировки аккаунта</string>
+  <string name="help_with_server_geolocations">Справка по геолокации сервера.</string>
+  <string name="email_address_required">Email (обязательно)</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Кликните ссылку в письме, чтобы подтвердить свой адрес email и продолжить создание у аккаунта. "</string>
+  <string name="change_email_address">Изменить адрес email</string>
+  <string name="next">Далее</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не может восстановить утерянный или забытый мастер-пароль.</string>
+  <string name="choose_your_master_password">Задайте мастер-пароль</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Задайте уникальный и надежный пароль, чтобы хранить информацию в безопасности.</string>
+  <string name="minimum_characters">Символов: %1$s</string>
 </resources>

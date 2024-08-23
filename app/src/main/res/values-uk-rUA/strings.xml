@@ -615,6 +615,7 @@
   <string name="updating_password">Оновлення пароля</string>
   <string name="update_password_error">Наразі неможливо оновити пароль</string>
   <string name="remove_master_password">Вилучити головний пароль</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s використовує SSO з власним сервером ключів. Головний пароль для учасників цієї організації більше не вимагається.</string>
   <string name="remove_master_password_warning">%1$s використовує SSO з шифруванням, керованим клієнтом. Продовжуючи, головний пароль буде вилучено з вашого облікового запису та вимагатиметься вхід з SSO.</string>
   <string name="remove_master_password_warning2">Якщо ви не хочете вилучати свій головний пароль, ви можете покинути цю організацію.</string>
   <string name="leave_organization">Покинути організацію</string>
@@ -929,6 +930,7 @@
   <string name="user_verification_direction">Перевірка користувача</string>
   <string name="creating_on">Створення на:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Дотримуйтесь інструкцій у повідомленні, надісланому на %1$s, щоб продовжити створення облікового запису.</string>
+  <string name="we_sent_an_email_to">Ми надіслали електронний лист на %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продовжуючи, ви погоджуєтеся з Умовами користування і Політикою приватності</string>
   <string name="set_password">Встановіть пароль</string>
   <string name="unsubscribe">Відписатися</string>
@@ -939,6 +941,7 @@
   <string name="no_email_go_back_to_edit_your_email_address">Не отримали листа? Поверніться та виправте адресу електронної пошти.</string>
   <string name="or_log_in_you_may_already_have_an_account">Або увійдіть, якщо вже маєте обліковий запис.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості. Відписатися можна будь-коли.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Отримуйте поради, оголошення та інформацію щодо можливості участі в дослідженнях від Bitwarden у вашій поштовій скриньці. Відпишіться коли завгодно.</string>
   <string name="privacy_prioritized">Приватність понад усе</string>
   <string name="welcome_message_1">Зберігайте записи входу, картки та посвідчення в захищеному сховищі. Для захисту ваших даних Bitwarden використовує наскрізне шифрування з нульовим рівнем доступу.</string>
   <string name="welcome_message_2">Налаштуйте біометричне розблокування та автозаповнення, щоб миттєво входити в облікові записи.</string>
@@ -975,4 +978,13 @@
   <string name="generate_button_label">Генерувати</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишіть цей пароль і зберігайте його в надійному місці.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Дізнайтеся про інші способи запобігання блокування облікового запису</string>
+  <string name="help_with_server_geolocations">Допомога з розташуванням серверів.</string>
+  <string name="email_address_required">Адреса е-пошти (обов\'язково)</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Перейдіть за посиланням у листі, щоб підтвердити адресу електронної пошти й продовжити створення облікового запису. "</string>
+  <string name="change_email_address">Змінити адресу е-пошти</string>
+  <string name="next">Далі</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не може відновити втрачений чи забутий головний пароль.</string>
+  <string name="choose_your_master_password">Створити головний пароль</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Створіть унікальний, надійний пароль, щоб захистити вашу інформацію.</string>
+  <string name="minimum_characters">%1$s символів</string>
 </resources>
