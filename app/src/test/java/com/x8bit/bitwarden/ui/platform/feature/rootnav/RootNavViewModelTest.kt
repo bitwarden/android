@@ -170,8 +170,9 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an untrusted device the nav state should be TrustedDevice`() {
+    fun `when the active user has an untrusted device without password the nav state should be TrustedDevice`() {
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -207,7 +208,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an untrusted device with password the nav state should be VaultLocked`() {
+    fun `when the active user has an untrusted device with password the nav state should be TrustedDevice`() {
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -238,7 +239,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
-        assertEquals(RootNavState.VaultLocked, viewModel.stateFlow.value)
+        assertEquals(RootNavState.TrustedDevice, viewModel.stateFlow.value)
     }
 
     @Suppress("MaxLineLength")

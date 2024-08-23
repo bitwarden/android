@@ -275,7 +275,7 @@ class VaultLockManagerTest {
 
         fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
-        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+        assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
 
     @Suppress("MaxLineLength")
@@ -330,6 +330,8 @@ class VaultLockManagerTest {
 
         // Start in a foregrounded state
         fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        // We want to skip the first time since that is different from subsequent foregrounds
+        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
