@@ -34,6 +34,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -55,9 +56,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     private val specialCircumstanceManager: SpecialCircumstanceManager =
         SpecialCircumstanceManagerImpl()
-
+    private val mutableFeatureFlagFlow = MutableStateFlow(false)
     private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
+        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
 
     @BeforeEach
@@ -108,7 +110,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(input))
 
-            assertFalse(viewModel.stateFlow.value.hasValidMasterPassword)
+            assertFalse(viewModel.stateFlow.value.validSubmissionReady)
         }
 
     @Test
@@ -120,7 +122,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(PASSWORD))
 
-            assertFalse(viewModel.stateFlow.value.hasValidMasterPassword)
+            assertFalse(viewModel.stateFlow.value.validSubmissionReady)
         }
 
     @Test
@@ -507,6 +509,88 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `feature flag state update is captured in ViewModel state`() {
+        mutableFeatureFlagFlow.value = true
+        val viewModel = createCompleteRegistrationViewModel()
+        assertTrue(viewModel.stateFlow.value.onboardingEnabled)
+    }
+
+    @Test
+    fun `CreateAccountClick with password below 12 chars should show password length dialog`() =
+        runTest {
+            val input = "abcdefghikl"
+            coEvery {
+                mockAuthRepository.getPasswordStrength(EMAIL, input)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel()
+            viewModel.trySendAction(PasswordInputChange(input))
+            val expectedState = DEFAULT_STATE.copy(
+                passwordInput = input,
+                dialog = CompleteRegistrationDialog.Error(
+                    BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.master_password_length_val_message_x.asText(12),
+                    ),
+                ),
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
+        }
+
+    @Test
+    fun `CreateAccountClick with passwords not matching should show password match dialog`() =
+        runTest {
+            coEvery {
+                mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel()
+            viewModel.trySendAction(PasswordInputChange(PASSWORD))
+            val expectedState = DEFAULT_STATE.copy(
+                userEmail = EMAIL,
+                passwordInput = PASSWORD,
+                dialog = CompleteRegistrationDialog.Error(
+                    BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.master_password_confirmation_val_message.asText(),
+                    ),
+                ),
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
+        }
+
+    @Test
+    fun `CreateAccountClick with no email not should show dialog`() =
+        runTest {
+            coEvery {
+                mockAuthRepository.getPasswordStrength("", PASSWORD)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel(
+                DEFAULT_STATE.copy(userEmail = ""),
+            )
+            viewModel.trySendAction(PasswordInputChange(PASSWORD))
+            val expectedState = DEFAULT_STATE.copy(
+                userEmail = "",
+                passwordInput = PASSWORD,
+                dialog = CompleteRegistrationDialog.Error(
+                    BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required
+                            .asText(R.string.email_address.asText()),
+                    ),
+                ),
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
+        }
+
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
         authRepository: AuthRepository = mockAuthRepository,
@@ -538,7 +622,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onBoardingEnabled = false,
+            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
         private val VALID_INPUT_STATE = CompleteRegistrationState(
@@ -551,7 +635,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = false,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.GOOD,
-            onBoardingEnabled = false,
+            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
     }

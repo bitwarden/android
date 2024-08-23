@@ -74,6 +74,17 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `determine if using the old ui by title text`() {
+        composeTestRule
+            .onNodeWithText("Set password")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNode(hasText("Create account") and !hasClickAction())
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `call to action with valid input click should send CreateAccountClick action`() {
         mutableStateFlow.update {
             it.copy(
@@ -83,28 +94,9 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNode(hasText("Create account") and hasClickAction())
-            .performScrollTo()
             .assertIsEnabled()
             .performClick()
         verify { viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick) }
-    }
-
-    @Test
-    fun `call to action not enabled if passwords don't match`() {
-        mutableStateFlow.update {
-            it.copy(
-                passwordInput = "4321drowssap",
-                confirmPasswordInput = "password1234",
-            )
-        }
-        composeTestRule
-            .onNode(hasText("Create account") and hasClickAction())
-            .performScrollTo()
-            .assertIsNotEnabled()
-            .performClick()
-        verify(exactly = 0) {
-            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-        }
     }
 
     @Test
@@ -261,28 +253,6 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .assertCountEquals(2)
     }
 
-    @Test
-    fun `Click on action card should send MakePasswordStrongClick action`() {
-        composeTestRule
-            .onNodeWithText("Learn more")
-            .performScrollTo()
-            .performClick()
-
-        verify { viewModel.trySendAction(CompleteRegistrationAction.MakePasswordStrongClick) }
-    }
-
-    @Test
-    fun `Click on prevent account lockout should send LearnToPreventLockoutClick action`() {
-        composeTestRule
-            .onNodeWithText("Learn about other ways to prevent account lockout")
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
-        }
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `NavigateToPreventAccountLockout event should invoke navigate to prevent account lockout lambda`() {
@@ -297,7 +267,90 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Header should be displayed in portrait mode`() {
+    fun `NavigateToLogin event should invoke navigate to login lambda`() {
+        mutableEventFlow.tryEmit(
+            CompleteRegistrationEvent.NavigateToLogin(
+                email = EMAIL,
+                captchaToken = TOKEN,
+            ),
+        )
+
+        assertTrue(onNavigateToLoginCalled)
+    }
+
+    // New Onboarding UI tests
+    @Test
+    fun `determine if using the new ui by title text`() = testWithFeatureFlagOn {
+        composeTestRule
+            .onNode(hasText("Create account") and !hasClickAction())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Set password")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `call to action state should update with input based on if both fields are populated`() =
+        testWithFeatureFlagOn {
+            mutableStateFlow.update {
+                it.copy(
+                    passwordInput = "",
+                    confirmPasswordInput = "password1234",
+                )
+            }
+            composeTestRule
+                .onNodeWithText("Next")
+                .assertIsNotEnabled()
+                .performScrollTo()
+                .performClick()
+            verify(exactly = 0) {
+                viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            }
+
+            mutableStateFlow.update {
+                it.copy(
+                    passwordInput = "password1234",
+                    confirmPasswordInput = "password1234",
+                )
+            }
+
+            composeTestRule
+                .onNodeWithText("Next")
+                .assertIsEnabled()
+                .performScrollTo()
+                .performClick()
+            verify(exactly = 1) {
+                viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            }
+        }
+
+    @Test
+    fun `Click on action card should send MakePasswordStrongClick action`() =
+        testWithFeatureFlagOn {
+            composeTestRule
+                .onNodeWithText("Learn more")
+                .performScrollTo()
+                .performClick()
+
+            verify { viewModel.trySendAction(CompleteRegistrationAction.MakePasswordStrongClick) }
+        }
+
+    @Test
+    fun `Click on prevent account lockout should send LearnToPreventLockoutClick action`() =
+        testWithFeatureFlagOn {
+            composeTestRule
+                .onNodeWithText("Learn about other ways to prevent account lockout")
+                .performScrollTo()
+                .performClick()
+
+        verify {
+            viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
+        }
+    }
+
+    @Test
+    fun `Header should be displayed in portrait mode`() = testWithFeatureFlagOn {
         composeTestRule
             .onNodeWithText("Choose your master password")
             .performScrollTo()
@@ -311,7 +364,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     @Config(qualifiers = "land")
     @Test
-    fun `Header should be displayed in landscape mode`() {
+    fun `Header should be displayed in landscape mode`() = testWithFeatureFlagOn {
         composeTestRule
             .onNodeWithText("Choose your master password")
             .performScrollTo()
@@ -323,16 +376,22 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
-    @Test
-    fun `NavigateToLogin event should invoke navigate to login lambda`() {
-        mutableEventFlow.tryEmit(
-            CompleteRegistrationEvent.NavigateToLogin(
-                email = EMAIL,
-                captchaToken = TOKEN,
-            ),
-        )
+    private fun testWithFeatureFlagOn(test: () -> Unit) {
+        turnFeatureFlagOn()
+        test()
+        turnFeatureFlagOff()
+    }
 
-        assertTrue(onNavigateToLoginCalled)
+    private fun turnFeatureFlagOn() {
+        mutableStateFlow.update {
+            it.copy(onboardingEnabled = true)
+        }
+    }
+
+    private fun turnFeatureFlagOff() {
+        mutableStateFlow.update {
+            it.copy(onboardingEnabled = false)
+        }
     }
 
     companion object {
@@ -349,7 +408,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onBoardingEnabled = false,
+            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
     }
