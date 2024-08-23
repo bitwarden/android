@@ -615,6 +615,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="updating_password">Aktualizácia hesla</string>
   <string name="update_password_error">Aktuálne nie je možné heslo aktualizovať</string>
   <string name="remove_master_password">Odstrániť hlavné heslo</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s používa SSO s vlastným kľúčovým serverom. Na prihlásenie členov tejto organizácie už nie je potrebné hlavné heslo.</string>
   <string name="remove_master_password_warning">%1$s používa SSO so šifrovaním spravovaným zákazníkom. Pokračovaním sa z vášho účtu odstráni hlavné heslo a na prihlásenie sa bude vyžadovať SSO.</string>
   <string name="remove_master_password_warning2">Ak nechcete odstrániť svoje hlavné heslo, môžete opustiť túto organizáciu.</string>
   <string name="leave_organization">Opustiť organizáciu</string>
@@ -929,6 +930,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="user_verification_direction">Overenie používateľa</string>
   <string name="creating_on">Vytvorené na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Na vytvorenie účtu postupujte podľa pokynov v e-maile zaslanom na %1$s.</string>
+  <string name="we_sent_an_email_to">Poslali sme email na adresu %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ak budete pokračovať, tak súhlasíte s Podmienkami používania a Zásadami ochrany osobných údajov</string>
   <string name="set_password">Nastaviť heslo</string>
   <string name="unsubscribe">Odhlásiť sa z odberu</string>
@@ -939,6 +941,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="no_email_go_back_to_edit_your_email_address">Žiadny e-mail? Vráťte sa späť a upravte e-mailovú adresu.</string>
   <string name="or_log_in_you_may_already_have_an_account">Alebo sa prihláste, možno už účet máte.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu. Odhlásiť dá môžete kedykoľvek.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Dostávajte do schránky rady, oznámenia a príležitosti na výskum od spoločnosti Bitwarden. Kedykoľvek sa môžete odhlásiť z odberu.</string>
   <string name="privacy_prioritized">Súkromie na prvom mieste</string>
   <string name="welcome_message_1">Ukladajte prihlasovacie údaje, karty a identity do zabezpečeného trezoru. Bitwarden používa šifrovanie s nulovou znalosťou od začiatku do konca na ochranu toho, čo je pre vás dôležité.</string>
   <string name="welcome_message_2">Nastavte si odomykanie biometrickými údajmi a automatické vypĺňanie na prihlasovanie do účtov bez zadávania jediného písmena.</string>
@@ -975,4 +978,13 @@ Chcete prepnúť na toto konto?</string>
   <string name="generate_button_label">Generovať</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Toto heslo si zapíšte a uložte na bezpečné miesto.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Prečítajte si o ďalších spôsoboch, ako zabrániť zablokovaniu účtu</string>
+  <string name="help_with_server_geolocations">Pomoc pri určovaní geografickej polohy servera.</string>
+  <string name="email_address_required">Emailová adresa (povinná)</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Odkazom v e-maile overte svoju e-mailovú adresu a pokračujte vo vytváraní konta. "</string>
+  <string name="change_email_address">Zmeniť e-mailovú adresu</string>
+  <string name="next">Ďalej</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nemôže obnoviť stratené alebo zabudnuté hlavné heslo.</string>
+  <string name="choose_your_master_password">Zvoľte si hlavné heslo</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Na udržanie vašich informácií v bezpečí si zvoľte unikátne a silné heslo.</string>
+  <string name="minimum_characters">%1$s znakov</string>
 </resources>
