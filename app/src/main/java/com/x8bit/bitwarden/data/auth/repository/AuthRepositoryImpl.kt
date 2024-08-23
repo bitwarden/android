@@ -7,7 +7,6 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson.Profile
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -1671,7 +1670,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithPasswordOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
-        profile: Profile,
+        profile: AccountJson.Profile,
         password: String?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with password if possible.
@@ -1693,7 +1692,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithTdeOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
-        profile: Profile,
+        profile: AccountJson.Profile,
         deviceData: DeviceDataModel?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with auth request if possible.
@@ -1743,7 +1742,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
         options: TrustedDeviceUserDecryptionOptionsJson,
-        profile: Profile,
+        profile: AccountJson.Profile,
         privateKey: String,
     ): VaultUnlockResult? {
         var vaultUnlockResult: VaultUnlockResult? = null

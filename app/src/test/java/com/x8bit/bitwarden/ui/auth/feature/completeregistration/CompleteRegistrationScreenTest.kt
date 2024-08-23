@@ -278,9 +278,9 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
 
-            verify {
-                viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
-            }
+        verify {
+            viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
+        }
     }
 
     @Suppress("MaxLineLength")
