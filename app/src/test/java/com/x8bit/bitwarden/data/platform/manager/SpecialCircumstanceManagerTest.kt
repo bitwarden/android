@@ -29,4 +29,37 @@ class SpecialCircumstanceManagerTest {
                 assertEquals(specialCircumstance2, awaitItem())
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clearSpecialCircumstanceAfterLogin should clear the SpecialCircumstance if it is a PreLogin`() =
+        runTest {
+            specialCircumstanceManager.specialCircumstanceStateFlow.test {
+                assertNull(awaitItem())
+
+                val preLoginSpecialCircumstance =
+                    mockk<SpecialCircumstance.PreLogin.CompleteRegistration>()
+
+                specialCircumstanceManager.specialCircumstance = preLoginSpecialCircumstance
+                assertEquals(preLoginSpecialCircumstance, awaitItem())
+
+                specialCircumstanceManager.clearSpecialCircumstanceAfterLogin()
+                assertNull(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clearSpecialCircumstanceAfterLogin should not clear the SpecialCircumstance if it is not a PreLogin`() =
+        runTest {
+            specialCircumstanceManager.specialCircumstanceStateFlow.test {
+                assertNull(awaitItem())
+
+                specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
+                assertEquals(SpecialCircumstance.VaultShortcut, awaitItem())
+
+                specialCircumstanceManager.clearSpecialCircumstanceAfterLogin()
+                expectNoEvents()
+            }
+        }
 }

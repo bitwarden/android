@@ -153,6 +153,7 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isLoggedIn } returns true
                     },
                 ),
                 hasPendingAccountAddition = false,
@@ -164,6 +165,7 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isLoggedIn } returns false
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -175,9 +177,11 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isLoggedIn } returns false
                     },
                     mockk<UserState.Account> {
                         every { userId } returns userId2
+                        every { isLoggedIn } returns true
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -188,6 +192,31 @@ class MainViewModelTest : BaseViewModelTest() {
             garbageCollectionManager.tryCollect()
         }
     }
+
+    @Test
+    fun `user state updates to a logged in state should clear the special circumstance`() =
+        runTest {
+            val userId1 = "userId1"
+            val mockCompleteRegistrationCircumstance =
+                mockk<SpecialCircumstance.PreLogin.CompleteRegistration>()
+            specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
+            assertEquals(
+                specialCircumstanceManager.specialCircumstance,
+                mockCompleteRegistrationCircumstance,
+            )
+            createViewModel()
+            mutableUserStateFlow.value = UserState(
+                activeUserId = userId1,
+                accounts = listOf(
+                    mockk<UserState.Account> {
+                        every { userId } returns userId1
+                        every { isLoggedIn } returns false
+                    },
+                ),
+                hasPendingAccountAddition = true,
+            )
+            assertNull(specialCircumstanceManager.specialCircumstance)
+        }
 
     @Test
     fun `vault state lock events should emit Recreate event and trigger garbage collection`() =
@@ -338,7 +367,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            SpecialCircumstance.CompleteRegistration(
+            SpecialCircumstance.PreLogin.CompleteRegistration(
                 completeRegistrationData = completeRegistrationData,
                 timestamp = FIXED_CLOCK.millis(),
             ),

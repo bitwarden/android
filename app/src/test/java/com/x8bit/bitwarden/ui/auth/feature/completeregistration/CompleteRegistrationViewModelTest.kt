@@ -16,9 +16,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.PreLogin
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -42,6 +41,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -65,12 +65,14 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
     private val mutableGeneratorResultFlow = bufferedMutableSharedFlow<GeneratorResult>()
+    private val mockCompleteRegistrationCircumstance = mockk<PreLogin.CompleteRegistration>()
     private val generatorRepository = mockk<GeneratorRepository>(relaxed = true) {
         every { generatorResultFlow } returns mutableGeneratorResultFlow
     }
 
     @BeforeEach
     fun setUp() {
+        specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
         mockkStatic(::generateUriForCaptcha)
     }
 
@@ -83,29 +85,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() {
         val viewModel = createCompleteRegistrationViewModel(DEFAULT_STATE)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-    }
-
-    @Test
-    fun `onCleared should erase specialCircumstance`() = runTest {
-        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.CompleteRegistration(
-            completeRegistrationData = CompleteRegistrationData(
-                email = EMAIL,
-                verificationToken = TOKEN,
-                fromEmail = true,
-            ),
-            System.currentTimeMillis(),
-        )
-
-        val viewModel = CompleteRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(mapOf("state" to DEFAULT_STATE)),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            specialCircumstanceManager = specialCircumstanceManager,
-            featureFlagManager = featureFlagManager,
-            generatorRepository = generatorRepository,
-        )
-        viewModel.onCleared()
-        assertTrue(specialCircumstanceManager.specialCircumstance == null)
     }
 
     @Test
@@ -371,12 +350,18 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CloseClick should emit NavigateBack`() = runTest {
+    fun `CloseClick should emit NavigateBack and clear special circumstances`() = runTest {
+        assertEquals(
+            mockCompleteRegistrationCircumstance,
+            specialCircumstanceManager.specialCircumstance,
+        )
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(BackClick)
             assertEquals(CompleteRegistrationEvent.NavigateBack, awaitItem())
         }
+
+        assertNull(specialCircumstanceManager.specialCircumstance)
     }
 
     @Test

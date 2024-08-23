@@ -18,4 +18,10 @@ class SpecialCircumstanceManagerImpl : SpecialCircumstanceManager {
 
     override val specialCircumstanceStateFlow: StateFlow<SpecialCircumstance?>
         get() = mutableSpecialCircumstanceFlow
+
+    override fun clearSpecialCircumstanceAfterLogin() {
+        if (specialCircumstance is SpecialCircumstance.PreLogin) {
+            specialCircumstance = null
+        }
+    }
 }

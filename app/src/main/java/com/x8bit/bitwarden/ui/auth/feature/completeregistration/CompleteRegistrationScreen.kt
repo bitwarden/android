@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import android.content.res.Configuration
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -179,6 +180,11 @@ fun CompleteRegistrationScreen(
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
+    }
+
+    // route OS back actions through the VM to clear the special circumstance
+    BackHandler {
+        handler.onBackClick()
     }
 }
 
