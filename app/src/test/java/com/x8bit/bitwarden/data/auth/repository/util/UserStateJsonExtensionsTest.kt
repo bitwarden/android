@@ -342,6 +342,7 @@ class UserStateJsonExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -403,6 +404,7 @@ class UserStateJsonExtensionsTest {
                                 Organization(
                                     id = "organizationId",
                                     name = "organizationName",
+                                    shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                 ),
@@ -444,6 +446,7 @@ class UserStateJsonExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -501,6 +504,7 @@ class UserStateJsonExtensionsTest {
                                 Organization(
                                     id = "organizationId",
                                     name = "organizationName",
+                                    shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                 ),
@@ -543,13 +547,14 @@ class UserStateJsonExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
                         ),
                         isBiometricsEnabled = false,
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
-                        needsMasterPassword = false,
+                        needsMasterPassword = true,
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = true,
                             hasAdminApproval = false,
@@ -608,6 +613,7 @@ class UserStateJsonExtensionsTest {
                                 Organization(
                                     id = "organizationId",
                                     name = "organizationName",
+                                    shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                 ),

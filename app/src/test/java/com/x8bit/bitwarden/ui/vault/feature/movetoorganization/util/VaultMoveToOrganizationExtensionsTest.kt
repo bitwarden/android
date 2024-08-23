@@ -103,18 +103,21 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                         Organization(
                             id = "mockOrganizationId-1",
                             name = "mockOrganizationName-1",
+                            shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),
                         Organization(
                             id = "mockOrganizationId-2",
                             name = "mockOrganizationName-2",
+                            shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),
                         Organization(
                             id = "mockOrganizationId-3",
                             name = "mockOrganizationName-3",
+                            shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),

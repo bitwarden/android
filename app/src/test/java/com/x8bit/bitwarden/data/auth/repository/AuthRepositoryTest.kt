@@ -4277,6 +4277,9 @@ class AuthRepositoryTest {
             mockk<SyncResponseJson.Profile.Organization> {
                 every { id } returns "orgId"
                 every { name } returns "orgName"
+                every { permissions } returns mockk {
+                    every { shouldManageResetPassword } returns false
+                }
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
@@ -4299,6 +4302,9 @@ class AuthRepositoryTest {
                 mockk<SyncResponseJson.Profile.Organization> {
                     every { id } returns "orgId"
                     every { name } returns "orgName"
+                    every { permissions } returns mockk {
+                        every { shouldManageResetPassword } returns false
+                    }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
@@ -4332,6 +4338,9 @@ class AuthRepositoryTest {
                 mockk<SyncResponseJson.Profile.Organization> {
                     every { id } returns "orgId"
                     every { name } returns "orgName"
+                    every { permissions } returns mockk {
+                        every { shouldManageResetPassword } returns false
+                    }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
