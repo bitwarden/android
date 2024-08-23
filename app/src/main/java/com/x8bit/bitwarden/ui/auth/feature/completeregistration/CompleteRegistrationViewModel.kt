@@ -65,7 +65,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 isCheckDataBreachesToggled = true,
                 dialog = null,
                 passwordStrengthState = PasswordStrengthState.NONE,
-                onBoardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
+                onboardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
                 minimumPasswordLength = MIN_PASSWORD_LENGTH,
             )
         },
@@ -143,7 +143,7 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     private fun handleUpdateOnboardingFeatureState(action: Internal.UpdateOnboardingFeatureState) {
         mutableStateFlow.update {
-            it.copy(onBoardingEnabled = action.newValue)
+            it.copy(onboardingEnabled = action.newValue)
         }
     }
 
@@ -383,7 +383,7 @@ data class CompleteRegistrationState(
     val isCheckDataBreachesToggled: Boolean,
     val dialog: CompleteRegistrationDialog?,
     val passwordStrengthState: PasswordStrengthState,
-    val onBoardingEnabled: Boolean,
+    val onboardingEnabled: Boolean,
     val minimumPasswordLength: Int,
 ) : Parcelable {
 
@@ -391,7 +391,7 @@ data class CompleteRegistrationState(
      * The text to display on the call to action button.
      */
     val callToActionText: Text
-        get() = if (onBoardingEnabled) {
+        get() = if (onboardingEnabled) {
             R.string.next.asText()
         } else {
             R.string.create_account.asText()
@@ -417,7 +417,9 @@ data class CompleteRegistrationState(
      * Whether the form is valid.
      */
     val validSubmissionReady: Boolean
-        get() = passwordInput.isNotBlank() && confirmPasswordInput.isNotBlank()
+        get() = passwordInput.isNotBlank() &&
+            confirmPasswordInput.isNotBlank() &&
+            passwordInput.length >= minimumPasswordLength
 }
 
 /**

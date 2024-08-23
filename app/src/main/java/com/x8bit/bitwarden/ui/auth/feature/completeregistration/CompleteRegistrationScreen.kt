@@ -136,7 +136,7 @@ fun CompleteRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = if (state.onBoardingEnabled) {
+                title = if (state.onboardingEnabled) {
                     stringResource(id = R.string.create_account)
                 } else {
                     stringResource(id = R.string.set_password)
@@ -146,7 +146,7 @@ fun CompleteRegistrationScreen(
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = handler.onBackClick,
                 actions = {
-                    if (!state.onBoardingEnabled) {
+                    if (!state.onboardingEnabled) {
                         BitwardenTextButton(
                             label = state.callToActionText(),
                             onClick = handler.onCallToAction,
@@ -175,7 +175,7 @@ fun CompleteRegistrationScreen(
                 nextButtonEnabled = state.validSubmissionReady,
                 callToActionText = state.callToActionText(),
                 minimumPasswordLength = state.minimumPasswordLength,
-                showNewOnboardingUi = state.onBoardingEnabled,
+                showNewOnboardingUi = state.onboardingEnabled,
                 userEmail = state.userEmail,
             )
             Spacer(modifier = Modifier.navigationBarsPadding())

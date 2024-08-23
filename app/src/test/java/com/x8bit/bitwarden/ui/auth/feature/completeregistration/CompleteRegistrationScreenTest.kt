@@ -384,13 +384,13 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     private fun turnFeatureFlagOn() {
         mutableStateFlow.update {
-            it.copy(onBoardingEnabled = true)
+            it.copy(onboardingEnabled = true)
         }
     }
 
     private fun turnFeatureFlagOff() {
         mutableStateFlow.update {
-            it.copy(onBoardingEnabled = false)
+            it.copy(onboardingEnabled = false)
         }
     }
 
@@ -408,7 +408,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onBoardingEnabled = false,
+            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
     }

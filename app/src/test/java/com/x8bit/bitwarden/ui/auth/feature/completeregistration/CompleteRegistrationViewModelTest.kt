@@ -513,7 +513,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `feature flag state update is captured in ViewModel state`() {
         mutableFeatureFlagFlow.value = true
         val viewModel = createCompleteRegistrationViewModel()
-        assertTrue(viewModel.stateFlow.value.onBoardingEnabled)
+        assertTrue(viewModel.stateFlow.value.onboardingEnabled)
     }
 
     @Test
@@ -564,6 +564,33 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `CreateAccountClick with no email not should show dialog`() =
+        runTest {
+            coEvery {
+                mockAuthRepository.getPasswordStrength("", PASSWORD)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel(
+                DEFAULT_STATE.copy(userEmail = ""),
+            )
+            viewModel.trySendAction(PasswordInputChange(PASSWORD))
+            val expectedState = DEFAULT_STATE.copy(
+                userEmail = "",
+                passwordInput = PASSWORD,
+                dialog = CompleteRegistrationDialog.Error(
+                    BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required
+                            .asText(R.string.email_address.asText()),
+                    ),
+                ),
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
+        }
+
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
         authRepository: AuthRepository = mockAuthRepository,
@@ -595,7 +622,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onBoardingEnabled = false,
+            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
         private val VALID_INPUT_STATE = CompleteRegistrationState(
@@ -608,7 +635,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = false,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.GOOD,
-            onBoardingEnabled = false,
+            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
     }
