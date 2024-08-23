@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
