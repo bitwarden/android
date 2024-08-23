@@ -145,15 +145,14 @@ class CompleteRegistrationViewModel @Inject constructor(
     private fun handleGeneratedPasswordResult(
         action: Internal.GeneratedPasswordResult,
     ) {
-        action.generatedPassword?.let { password ->
-            mutableStateFlow.update {
-                it.copy(
-                    passwordInput = password,
-                    confirmPasswordInput = password,
-                )
-            }
-            checkPasswordStrength(input = password)
+        val password = action.generatedPassword
+        mutableStateFlow.update {
+            it.copy(
+                passwordInput = password,
+                confirmPasswordInput = password,
+            )
         }
+        checkPasswordStrength(input = password)
     }
 
     private fun verifyEmailAddress() {
@@ -601,6 +600,6 @@ sealed class CompleteRegistrationAction {
         /**
          * Indicates a generated password has been received.
          */
-        data class GeneratedPasswordResult(val generatedPassword: String?) : Internal()
+        data class GeneratedPasswordResult(val generatedPassword: String) : Internal()
     }
 }
