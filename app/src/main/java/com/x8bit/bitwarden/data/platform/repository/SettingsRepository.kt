@@ -38,6 +38,11 @@ interface SettingsRepository {
     var initialAutofillDialogShown: Boolean
 
     /**
+     * Whether the user has enabled syncing with the Bitwarden Authenticator app.
+     */
+    var isAuthenticatorSyncEnabled: Boolean
+
+    /**
      * The currently stored last time the vault was synced.
      */
     var vaultLastSync: Instant?
