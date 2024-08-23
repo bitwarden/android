@@ -476,10 +476,15 @@ class VaultLockManagerImpl(
             }
 
             else -> {
-                // Only perform action for users losing "fully active" status in some way.
                 when (checkTimeoutReason) {
-                    // Don't perform delayed actions when first starting the app
-                    CheckTimeoutReason.APP_RESTARTED -> Unit
+                    // Always preform the timeout action on app restart to ensure the user is
+                    // in the correct state.
+                    CheckTimeoutReason.APP_RESTARTED -> {
+                        handleTimeoutAction(
+                            userId = userId,
+                            vaultTimeoutAction = vaultTimeoutAction,
+                        )
+                    }
 
                     // User no longer active or engaging with the app.
                     CheckTimeoutReason.APP_BACKGROUNDED,
