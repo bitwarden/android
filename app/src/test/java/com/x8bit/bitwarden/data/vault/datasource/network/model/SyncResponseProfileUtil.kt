@@ -34,6 +34,7 @@ fun createMockOrganization(
     number: Int,
     isEnabled: Boolean = false,
     shouldUsePolicies: Boolean = false,
+    shouldManageResetPassword: Boolean = false,
 ): SyncResponseJson.Profile.Organization =
     SyncResponseJson.Profile.Organization(
         shouldUsePolicies = shouldUsePolicies,
@@ -45,7 +46,7 @@ fun createMockOrganization(
         providerType = 1,
         maxCollections = 1,
         isSelfHost = false,
-        permissions = createMockPermissions(),
+        permissions = createMockPermissions(shouldManageResetPassword = shouldManageResetPassword),
         providerId = "mockProviderId-$number",
         id = "mockId-$number",
         shouldUseGroups = false,
@@ -78,10 +79,12 @@ fun createMockOrganizationKeys(number: Int): Map<String, String> =
 /**
  * Create a mock [SyncResponseJson.Profile.Permissions].
  */
-fun createMockPermissions(): SyncResponseJson.Profile.Permissions =
+fun createMockPermissions(
+    shouldManageResetPassword: Boolean = false,
+): SyncResponseJson.Profile.Permissions =
     SyncResponseJson.Profile.Permissions(
         shouldManageGroups = false,
-        shouldManageResetPassword = false,
+        shouldManageResetPassword = shouldManageResetPassword,
         shouldAccessReports = false,
         shouldManagePolicies = false,
         shouldDeleteAnyCollection = false,

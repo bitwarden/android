@@ -20,6 +20,7 @@ class SyncResponseJsonExtensionsTest {
             Organization(
                 id = "mockId-1",
                 name = "mockName-1",
+                shouldManageResetPassword = false,
                 shouldUseKeyConnector = false,
                 role = OrganizationType.ADMIN,
             ),
@@ -34,19 +35,22 @@ class SyncResponseJsonExtensionsTest {
                 Organization(
                     id = "mockId-1",
                     name = "mockName-1",
+                    shouldManageResetPassword = false,
                     shouldUseKeyConnector = true,
                     role = OrganizationType.ADMIN,
                 ),
                 Organization(
                     id = "mockId-2",
                     name = "mockName-2",
+                    shouldManageResetPassword = true,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
                 ),
             ),
             listOf(
                 createMockOrganization(number = 1).copy(shouldUseKeyConnector = true),
-                createMockOrganization(number = 2).copy(type = OrganizationType.USER),
+                createMockOrganization(number = 2, shouldManageResetPassword = true)
+                    .copy(type = OrganizationType.USER),
             )
                 .toOrganizations(),
         )
