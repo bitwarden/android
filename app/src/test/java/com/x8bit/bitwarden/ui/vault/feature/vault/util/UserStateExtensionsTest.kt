@@ -77,6 +77,7 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -101,6 +102,7 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -129,6 +131,7 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -157,6 +160,7 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -200,6 +204,7 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId",
                         name = "organizationName",
+                        shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                     ),
@@ -241,6 +246,7 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId",
                         name = "organizationName",
+                        shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                     ),
@@ -286,6 +292,7 @@ class UserStateExtensionsTest {
                             Organization(
                                 id = "organizationId",
                                 name = "organizationName",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -360,11 +367,13 @@ class UserStateExtensionsTest {
                         id = "organizationId-B",
                         name = "Organization B",
                         shouldUseKeyConnector = false,
+                        shouldManageResetPassword = false,
                         role = OrganizationType.ADMIN,
                     ),
                     Organization(
                         id = "organizationId-A",
                         name = "Organization A",
+                        shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                     ),
@@ -413,12 +422,14 @@ class UserStateExtensionsTest {
                     Organization(
                         id = "organizationId-B",
                         name = "Organization B",
+                        shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                     ),
                     Organization(
                         id = "organizationId-A",
                         name = "Organization A",
+                        shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                     ),

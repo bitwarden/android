@@ -189,6 +189,7 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-1",
                             name = "mockName-1",
+                            shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),
@@ -200,6 +201,7 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-2",
                             name = "mockName-2",
+                            shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),
@@ -211,6 +213,7 @@ class AuthDiskSourceExtensionsTest {
                         Organization(
                             id = "mockId-3",
                             name = "mockName-3",
+                            shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),
@@ -357,6 +360,7 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-1",
                                     name = "mockName-1",
+                                    shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                 ),
@@ -387,6 +391,7 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-1",
                                     name = "mockName-1",
+                                    shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                 ),
@@ -398,6 +403,7 @@ class AuthDiskSourceExtensionsTest {
                                 Organization(
                                     id = "mockId-2",
                                     name = "mockName-2",
+                                    shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
                                 ),

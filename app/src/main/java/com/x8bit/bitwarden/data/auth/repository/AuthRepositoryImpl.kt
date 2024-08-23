@@ -7,7 +7,6 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson.Profile
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -73,6 +72,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
@@ -873,7 +873,13 @@ class AuthRepositoryImpl(
                 masterPassword = masterPassword,
                 kdf = profile.toSdkParams(),
             )
-            .onSuccess { vaultRepository.sync() }
+            .onSuccess {
+                authDiskSource.userState = authDiskSource
+                    .userState
+                    ?.toRemovedPasswordUserStateJson(userId = userId)
+                vaultRepository.sync()
+                settingsRepository.setDefaultsIfNecessary(userId = userId)
+            }
             .fold(
                 onFailure = { RemovePasswordResult.Error },
                 onSuccess = { RemovePasswordResult.Success },
@@ -1664,7 +1670,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithPasswordOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
-        profile: Profile,
+        profile: AccountJson.Profile,
         password: String?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with password if possible.
@@ -1686,7 +1692,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithTdeOnLoginSuccess(
         loginResponse: GetTokenResponseJson.Success,
-        profile: Profile,
+        profile: AccountJson.Profile,
         deviceData: DeviceDataModel?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with auth request if possible.
@@ -1736,7 +1742,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
         options: TrustedDeviceUserDecryptionOptionsJson,
-        profile: Profile,
+        profile: AccountJson.Profile,
         privateKey: String,
     ): VaultUnlockResult? {
         var vaultUnlockResult: VaultUnlockResult? = null

@@ -104,13 +104,6 @@ class OrganizationServiceTest : BaseServiceTest() {
         val result = organizationService.getOrganizationKeys("orgId")
         assertTrue(result.isFailure)
     }
-
-    @Test
-    fun `leaveOrganization when response is success should return success`() = runTest {
-        server.enqueue(MockResponse())
-        val result = organizationService.leaveOrganization(organizationId = "orgId")
-        assertTrue(result.isSuccess)
-    }
 }
 
 private const val ORGANIZATION_AUTO_ENROLL_STATUS_JSON = """

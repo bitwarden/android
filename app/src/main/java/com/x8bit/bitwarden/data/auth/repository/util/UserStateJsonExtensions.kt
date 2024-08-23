@@ -8,10 +8,37 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
+
+/**
+ * Updates the given [UserStateJson] with the data to indicate that the password has been removed.
+ * The original will be returned if the [userId] does not match any accounts in the [UserStateJson].
+ */
+fun UserStateJson.toRemovedPasswordUserStateJson(
+    userId: String,
+): UserStateJson {
+    val account = this.accounts[userId] ?: return this
+    val profile = account.profile
+    val updatedUserDecryptionOptions = profile
+        .userDecryptionOptions
+        ?.copy(hasMasterPassword = false)
+        ?: UserDecryptionOptionsJson(
+            hasMasterPassword = false,
+            trustedDeviceUserDecryptionOptions = null,
+            keyConnectorUserDecryptionOptions = null,
+        )
+    val updatedProfile = profile.copy(userDecryptionOptions = updatedUserDecryptionOptions)
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
 
 /**
  * Updates the given [UserStateJson] with the data from the [syncResponse] to return a new
@@ -75,7 +102,7 @@ fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
 /**
  * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 fun UserStateJson.toUserState(
     vaultState: List<VaultUnlockData>,
     userAccountTokens: List<UserAccountTokens>,
@@ -99,8 +126,17 @@ fun UserStateJson.toUserState(
                 val decryptionOptions = profile.userDecryptionOptions
                 val trustedDeviceOptions = decryptionOptions?.trustedDeviceUserDecryptionOptions
                 val keyConnectorOptions = decryptionOptions?.keyConnectorUserDecryptionOptions
+                val organizations = userOrganizationsList
+                    .find { it.userId == userId }
+                    ?.organizations
+                    .orEmpty()
+                val hasManageResetPasswordPermission = organizations.any {
+                    it.role == OrganizationType.OWNER ||
+                        it.role == OrganizationType.ADMIN ||
+                        it.shouldManageResetPassword
+                }
                 val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
-                    trustedDeviceOptions?.hasManageResetPasswordPermission != false &&
+                    hasManageResetPasswordPermission &&
                     keyConnectorOptions == null
                 val trustedDevice = trustedDeviceOptions?.let {
                     UserState.TrustedDevice(
@@ -126,10 +162,7 @@ fun UserStateJson.toUserState(
                         ?.isLoggedIn == true,
                     isVaultUnlocked = vaultUnlocked,
                     needsPasswordReset = needsPasswordReset,
-                    organizations = userOrganizationsList
-                        .find { it.userId == userId }
-                        ?.organizations
-                        .orEmpty(),
+                    organizations = organizations,
                     isBiometricsEnabled = isBiometricsEnabledProvider(userId),
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
                     needsMasterPassword = needsMasterPassword,

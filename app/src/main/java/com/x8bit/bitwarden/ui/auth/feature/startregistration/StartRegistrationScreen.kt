@@ -194,6 +194,7 @@ fun StartRegistrationScreen(
                 nameInput = state.nameInput,
                 isReceiveMarketingEmailsToggled = state.isReceiveMarketingEmailsToggled,
                 isContinueButtonEnabled = state.isContinueButtonEnabled,
+                isNewOnboardingUiEnabled = state.showNewOnboardingUi,
                 handler = handler,
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
@@ -210,18 +211,21 @@ private fun StartRegistrationContent(
     isReceiveMarketingEmailsToggled: Boolean,
     isContinueButtonEnabled: Boolean,
     handler: StartRegistrationHandler,
+    isNewOnboardingUiEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(16.dp))
-        Image(
-            painter = rememberVectorPainter(id = R.drawable.vault),
-            contentDescription = null,
-            modifier = Modifier
-                .size(132.dp)
-                .align(Alignment.CenterHorizontally),
-        )
-        Spacer(modifier = Modifier.height(48.dp))
+        if (isNewOnboardingUiEnabled) {
+            Image(
+                painter = rememberVectorPainter(id = R.drawable.vault),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(132.dp)
+                    .align(Alignment.CenterHorizontally),
+            )
+            Spacer(modifier = Modifier.height(48.dp))
+        }
         BitwardenTextField(
             label = stringResource(id = R.string.name),
             value = nameInput,
@@ -233,13 +237,9 @@ private fun StartRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
-            label = if (emailInput.isEmpty()) {
-                stringResource(R.string.email_address_required)
-            } else {
-                stringResource(
-                    id = R.string.email_address,
-                )
-            },
+            label = stringResource(
+                id = R.string.email_address,
+            ),
             placeholder = stringResource(R.string.email_address_required),
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
@@ -263,17 +263,19 @@ private fun StartRegistrationContent(
                 modifier = Modifier
                     .testTag("RegionSelectorDropdown"),
             )
-            IconButton(
-                onClick = handler.onServerGeologyHelpClick,
-                // Align with design but keep accessible touch target of IconButton.
-                modifier = Modifier.offset(y = (-8f).dp, x = 16.dp),
-            ) {
-                Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_tooltip_small),
-                    contentDescription = stringResource(R.string.help_with_server_geolocations),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(18.dp),
-                )
+            if (isNewOnboardingUiEnabled) {
+                IconButton(
+                    onClick = handler.onServerGeologyHelpClick,
+                    // Align with design but keep accessible touch target of IconButton.
+                    modifier = Modifier.offset(y = (-8f).dp, x = 16.dp),
+                ) {
+                    Icon(
+                        painter = rememberVectorPainter(id = R.drawable.ic_tooltip_small),
+                        contentDescription = stringResource(R.string.help_with_server_geolocations),
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -420,6 +422,7 @@ private fun ReceiveMarketingEmailsSwitch(
     modifier: Modifier = Modifier,
 ) {
     val unsubscribeString = stringResource(id = R.string.unsubscribe)
+
     @Suppress("MaxLineLength")
     val annotatedLinkString = createAnnotatedString(
         mainString = stringResource(id = R.string.get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time),
@@ -474,7 +477,7 @@ private fun ReceiveMarketingEmailsSwitch(
 
 @PreviewScreenSizes
 @Composable
-private fun StartRegistrationContentPreview_filledout() {
+private fun StartRegistrationContentFilledOut_preview() {
     BitwardenTheme {
         StartRegistrationContent(
             emailInput = "e@mail.com",
@@ -482,6 +485,7 @@ private fun StartRegistrationContentPreview_filledout() {
             nameInput = "Test User",
             isReceiveMarketingEmailsToggled = true,
             isContinueButtonEnabled = true,
+            isNewOnboardingUiEnabled = false,
             handler = StartRegistrationHandler(
                 onEmailInputChange = {},
                 onNameInputChange = {},
@@ -500,7 +504,7 @@ private fun StartRegistrationContentPreview_filledout() {
 
 @Preview(showBackground = true)
 @Composable
-private fun StartRegistrationContentPreview_empty() {
+private fun StartRegistrationContentEmpty_preview() {
     BitwardenTheme {
         StartRegistrationContent(
             emailInput = "",
@@ -508,6 +512,34 @@ private fun StartRegistrationContentPreview_empty() {
             nameInput = "",
             isReceiveMarketingEmailsToggled = false,
             isContinueButtonEnabled = false,
+            isNewOnboardingUiEnabled = false,
+            handler = StartRegistrationHandler(
+                onEmailInputChange = {},
+                onNameInputChange = {},
+                onEnvironmentTypeSelect = {},
+                onContinueClick = {},
+                onTermsClick = {},
+                onPrivacyPolicyClick = {},
+                onReceiveMarketingEmailsToggle = {},
+                onUnsubscribeMarketingEmailsClick = {},
+                onServerGeologyHelpClick = {},
+                onBackClick = {},
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StartRegistrationContentNewOnboardingUi_preview() {
+    BitwardenTheme {
+        StartRegistrationContent(
+            emailInput = "",
+            selectedEnvironmentType = Environment.Type.US,
+            nameInput = "",
+            isReceiveMarketingEmailsToggled = false,
+            isContinueButtonEnabled = false,
+            isNewOnboardingUiEnabled = true,
             handler = StartRegistrationHandler(
                 onEmailInputChange = {},
                 onNameInputChange = {},

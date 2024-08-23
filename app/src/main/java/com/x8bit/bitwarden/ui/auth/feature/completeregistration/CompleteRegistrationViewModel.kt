@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -64,7 +65,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 isCheckDataBreachesToggled = true,
                 dialog = null,
                 passwordStrengthState = PasswordStrengthState.NONE,
-                onBoardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
+                onboardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
                 minimumPasswordLength = MIN_PASSWORD_LENGTH,
             )
         },
@@ -81,6 +82,14 @@ class CompleteRegistrationViewModel @Inject constructor(
         // As state updates, write to saved state handle:
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.OnboardingFlow)
+            .map {
+                Internal.UpdateOnboardingFeatureState(newValue = it)
+            }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -114,6 +123,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             CompleteRegistrationAction.CallToActionClick -> handleCallToActionClick()
+            is Internal.UpdateOnboardingFeatureState -> handleUpdateOnboardingFeatureState(action)
         }
     }
 
@@ -128,6 +138,12 @@ class CompleteRegistrationViewModel @Inject constructor(
                     message = R.string.email_verified.asText(),
                 ),
             )
+        }
+    }
+
+    private fun handleUpdateOnboardingFeatureState(action: Internal.UpdateOnboardingFeatureState) {
+        mutableStateFlow.update {
+            it.copy(onboardingEnabled = action.newValue)
         }
     }
 
@@ -267,14 +283,41 @@ class CompleteRegistrationViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(confirmPasswordInput = action.input) }
     }
 
-    private fun handleCallToActionClick() {
-        if (!state.userEmail.isValidEmail()) {
+    private fun handleCallToActionClick() = when {
+        state.userEmail.isBlank() -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required
+                    .asText(R.string.email_address.asText()),
+            )
+            mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
+        }
+
+        !state.userEmail.isValidEmail() -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.invalid_email.asText(),
             )
             mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
-        } else {
+        }
+
+        state.passwordInput.length < MIN_PASSWORD_LENGTH -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
+            )
+            mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
+        }
+
+        state.passwordInput != state.confirmPasswordInput -> {
+            val dialog = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_confirmation_val_message.asText(),
+            )
+            mutableStateFlow.update { it.copy(dialog = CompleteRegistrationDialog.Error(dialog)) }
+        }
+
+        else -> {
             submitRegisterAccountRequest(
                 shouldCheckForDataBreaches = state.isCheckDataBreachesToggled,
                 shouldIgnorePasswordStrength = false,
@@ -340,7 +383,7 @@ data class CompleteRegistrationState(
     val isCheckDataBreachesToggled: Boolean,
     val dialog: CompleteRegistrationDialog?,
     val passwordStrengthState: PasswordStrengthState,
-    val onBoardingEnabled: Boolean,
+    val onboardingEnabled: Boolean,
     val minimumPasswordLength: Int,
 ) : Parcelable {
 
@@ -348,7 +391,7 @@ data class CompleteRegistrationState(
      * The text to display on the call to action button.
      */
     val callToActionText: Text
-        get() = if (onBoardingEnabled) {
+        get() = if (onboardingEnabled) {
             R.string.next.asText()
         } else {
             R.string.create_account.asText()
@@ -373,10 +416,10 @@ data class CompleteRegistrationState(
     /**
      * Whether the form is valid.
      */
-    val hasValidMasterPassword: Boolean
-        get() = passwordInput == confirmPasswordInput &&
-            passwordInput.isNotBlank() &&
-            passwordInput.length >= MIN_PASSWORD_LENGTH
+    val validSubmissionReady: Boolean
+        get() = passwordInput.isNotBlank() &&
+            confirmPasswordInput.isNotBlank() &&
+            passwordInput.length >= minimumPasswordLength
 }
 
 /**
@@ -516,5 +559,10 @@ sealed class CompleteRegistrationAction {
         data class ReceivePasswordStrengthResult(
             val result: PasswordStrengthResult,
         ) : Internal()
+
+        /**
+         * Indicate on boarding feature state has been updated.
+         */
+        data class UpdateOnboardingFeatureState(val newValue: Boolean) : Internal()
     }
 }

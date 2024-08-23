@@ -615,6 +615,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="updating_password">A atualizar palavra-passe</string>
   <string name="update_password_error">Atualmente não é possível atualizar a palavra-passe</string>
   <string name="remove_master_password">Remover palavra-passe mestra</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">A %1$s está a utilizar o SSO com um servidor de chaves auto-hospedado. Já não é necessária uma palavra-passe mestra para iniciar sessão para os membros desta organização.</string>
   <string name="remove_master_password_warning">%1$s está a utilizar SSO com encriptação gerida pelo cliente. Se continuar removerá a sua palavra-passe mestra da sua conta e será exigido SSO para iniciar sessão.</string>
   <string name="remove_master_password_warning2">Se não pretender remover a sua palavra-passe mestra, pode sair desta organização.</string>
   <string name="leave_organization">Sair da organização</string>
@@ -928,6 +929,7 @@ Pretende mudar para esta conta?</string>
   <string name="user_verification_direction">Verificação do utilizador</string>
   <string name="creating_on">A criar em:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções do e-mail enviado para %1$s para continuar a criar a sua conta.</string>
+  <string name="we_sent_an_email_to">Enviámos um e-mail para %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os Termos de utilização e Política de privacidade</string>
   <string name="set_password">Definir palavra-passe</string>
   <string name="unsubscribe">Anular subscrição</string>
@@ -939,6 +941,7 @@ Pretende mudar para esta conta?</string>
   <string name="or_log_in_you_may_already_have_an_account">Ou inicie sessão, uma vez que pode já ter uma conta.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Receba e-mails do Bitwarden com anúncios, conselhos e oportunidades de investigação.
 Anule a subscrição em qualquer altura.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Receba conselhos, anúncios e oportunidades de investigação do Bitwarden na sua caixa de entrada. Anule a subscrição a qualquer altura.</string>
   <string name="privacy_prioritized">Privacidade, priorizada</string>
   <string name="welcome_message_1">Guarde credenciais, cartões e identidades no seu cofre seguro. O Bitwarden utiliza encriptação de conhecimento zero e de ponto a ponto para proteger o que é importante para si.</string>
   <string name="welcome_message_2">Configure o desbloqueio biométrico e o preenchimento automático para iniciar sessão nas suas contas sem escrever uma única letra.</string>
@@ -975,4 +978,13 @@ Anule a subscrição em qualquer altura.</string>
   <string name="generate_button_label">Gerar</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Anote esta palavra-passe e guarde-a num local seguro.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Saiba mais sobre outras formas de evitar o bloqueio da conta</string>
+  <string name="help_with_server_geolocations">Ajuda com a geolocalização do servidor.</string>
+  <string name="email_address_required">Endereço de e-mail (obrigatório)</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Selecione o link no e-mail enviado para verificar o seu endereço de e-mail e continuar a criar a sua conta. "</string>
+  <string name="change_email_address">Alterar o endereço de e-mail</string>
+  <string name="next">Avançar</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não pode recuperar uma palavra-passe mestra perdida ou esquecida.</string>
+  <string name="choose_your_master_password">Escolha a sua palavra-passe mestra</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma palavra-passe única e forte para manter as suas informações seguras.</string>
+  <string name="minimum_characters">%1$s caracteres</string>
 </resources>

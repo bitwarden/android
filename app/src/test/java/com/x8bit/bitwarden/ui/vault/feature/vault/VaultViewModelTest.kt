@@ -188,6 +188,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             Organization(
                                 id = "organiationId",
                                 name = "Test Organization",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -271,6 +272,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             Organization(
                                 id = "organizationId",
                                 name = "Test Organization",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),
@@ -478,6 +480,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             Organization(
                                 id = "testOrganizationId",
                                 name = "Test Organization",
+                                shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                             ),

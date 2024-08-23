@@ -435,6 +435,7 @@ class CipherViewExtensionsTest {
                 Organization(
                     id = "mockOrganizationId-1",
                     name = "organizationName",
+                    shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                 ),

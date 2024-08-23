@@ -246,7 +246,7 @@ data class SyncResponseJson(
             @SerialName("usePolicies")
             val shouldUsePolicies: Boolean,
 
-            @SerialName("useKeyConnector")
+            @SerialName("keyConnectorEnabled")
             val shouldUseKeyConnector: Boolean,
 
             @SerialName("keyConnectorUrl")

@@ -87,6 +87,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
+import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
@@ -255,12 +256,18 @@ class AuthRepositoryTest {
 
     @BeforeEach
     fun beforeEach() {
-        mockkStatic(GetTokenResponseJson.Success::toUserState)
+        mockkStatic(
+            GetTokenResponseJson.Success::toUserState,
+            UserStateJson::toRemovedPasswordUserStateJson,
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(GetTokenResponseJson.Success::toUserState)
+        unmockkStatic(
+            GetTokenResponseJson.Success::toUserState,
+            UserStateJson::toRemovedPasswordUserStateJson,
+        )
     }
 
     @Test
@@ -4270,6 +4277,9 @@ class AuthRepositoryTest {
             mockk<SyncResponseJson.Profile.Organization> {
                 every { id } returns "orgId"
                 every { name } returns "orgName"
+                every { permissions } returns mockk {
+                    every { shouldManageResetPassword } returns false
+                }
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
@@ -4292,6 +4302,9 @@ class AuthRepositoryTest {
                 mockk<SyncResponseJson.Profile.Organization> {
                     every { id } returns "orgId"
                     every { name } returns "orgName"
+                    every { permissions } returns mockk {
+                        every { shouldManageResetPassword } returns false
+                    }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
@@ -4325,6 +4338,9 @@ class AuthRepositoryTest {
                 mockk<SyncResponseJson.Profile.Organization> {
                     every { id } returns "orgId"
                     every { name } returns "orgName"
+                    every { permissions } returns mockk {
+                        every { shouldManageResetPassword } returns false
+                    }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
@@ -4341,13 +4357,19 @@ class AuthRepositoryTest {
                     kdf = PROFILE_1.toSdkParams(),
                 )
             } returns Unit.asSuccess()
+            every {
+                SINGLE_USER_STATE_1.toRemovedPasswordUserStateJson(userId = USER_ID_1)
+            } returns SINGLE_USER_STATE_1
             every { vaultRepository.sync() } just runs
+            every { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) } just runs
 
             val result = repository.removePassword(masterPassword = PASSWORD)
 
             assertEquals(RemovePasswordResult.Success, result)
             verify(exactly = 1) {
+                SINGLE_USER_STATE_1.toRemovedPasswordUserStateJson(userId = USER_ID_1)
                 vaultRepository.sync()
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
 

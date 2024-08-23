@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
  * The [CompleteRegistrationData] will be returned when present.
  */
 fun Intent.getCompleteRegistrationDataIntentOrNull(): CompleteRegistrationData? {
-    val sanitizedUriString = data.toString().replace("/#/", "/")
+    val sanitizedUriString = data.toString().replace("/redirect-connector.html#", "/")
     val uri = runCatching { Uri.parse(sanitizedUriString) }.getOrNull() ?: return null
     uri.host ?: return null
     if (uri.path != "/finish-signup") return null
