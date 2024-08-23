@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.model.Environment.Type
@@ -15,6 +17,7 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAc
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.OnboardingFeatureFlagUpdated
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.UpdatedEnvironmentReceive
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
@@ -29,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -44,6 +48,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class StartRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    featureFlagManager: FeatureFlagManager,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<StartRegistrationState, StartRegistrationEvent, StartRegistrationAction>(
@@ -55,6 +60,7 @@ class StartRegistrationViewModel @Inject constructor(
             isContinueButtonEnabled = false,
             selectedEnvironmentType = environmentRepository.environment.type,
             dialog = null,
+            showNewOnboardingUi = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
         ),
 ) {
 
@@ -72,6 +78,14 @@ class StartRegistrationViewModel @Inject constructor(
                     UpdatedEnvironmentReceive(environment = environment),
                 )
             }
+            .launchIn(viewModelScope)
+        // Listen for changes on the onboarding feature flag.
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.OnboardingFlow)
+            .map {
+                OnboardingFeatureFlagUpdated(it)
+            }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -99,8 +113,15 @@ class StartRegistrationViewModel @Inject constructor(
             }
 
             ServerGeologyHelpClick -> handleServerGeologyHelpClick()
+            is OnboardingFeatureFlagUpdated -> handleOnboardingFeatureFlagUpdated(action)
         }
     }
+
+private fun handleOnboardingFeatureFlagUpdated(action: OnboardingFeatureFlagUpdated) {
+    mutableStateFlow.update {
+        it.copy(showNewOnboardingUi = action.newValue)
+    }
+}
 
     private fun handleServerGeologyHelpClick() {
         sendEvent(StartRegistrationEvent.NavigateToServerSelectionInfo)
@@ -269,6 +290,7 @@ data class StartRegistrationState(
     val isContinueButtonEnabled: Boolean,
     val selectedEnvironmentType: Type,
     val dialog: StartRegistrationDialog?,
+    val showNewOnboardingUi: Boolean,
 ) : Parcelable
 
 /**
@@ -422,5 +444,10 @@ sealed class StartRegistrationAction {
         data class UpdatedEnvironmentReceive(
             val environment: Environment,
         ) : Internal()
+
+        /**
+         * Indicates updated value for onboarding feature flag.
+         */
+        data class OnboardingFeatureFlagUpdated(val newValue: Boolean) : Internal()
     }
 }

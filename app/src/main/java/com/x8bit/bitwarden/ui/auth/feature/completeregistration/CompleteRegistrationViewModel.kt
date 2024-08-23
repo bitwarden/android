@@ -65,6 +65,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 dialog = null,
                 passwordStrengthState = PasswordStrengthState.NONE,
                 onBoardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
+                minimumPasswordLength = MIN_PASSWORD_LENGTH,
             )
         },
 ) {
@@ -340,6 +341,7 @@ data class CompleteRegistrationState(
     val dialog: CompleteRegistrationDialog?,
     val passwordStrengthState: PasswordStrengthState,
     val onBoardingEnabled: Boolean,
+    val minimumPasswordLength: Int,
 ) : Parcelable {
 
     /**

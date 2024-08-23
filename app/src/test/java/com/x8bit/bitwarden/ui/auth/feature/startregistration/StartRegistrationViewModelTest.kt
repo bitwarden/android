@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
@@ -33,6 +35,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -42,7 +45,11 @@ import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class StartRegistrationViewModelTest : BaseViewModelTest() {
-
+    private val mutableFeatureFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
+        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
+    }
     /**
      * Saved state handle that has valid inputs. Useful for tests that want to test things
      * after the user has entered all valid inputs.
@@ -71,6 +78,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
@@ -84,12 +92,14 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
+            showNewOnboardingUi = false,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = handle,
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         assertEquals(savedState, viewModel.stateFlow.value)
     }
@@ -100,6 +110,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         val input = "a"
         viewModel.trySendAction(EmailInputChange(input))
@@ -125,6 +136,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         val input = " "
         viewModel.trySendAction(EmailInputChange(input))
@@ -162,6 +174,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = validInputHandle,
             authRepository = repo,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         turbineScope {
             val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
@@ -197,6 +210,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = validInputHandle,
             authRepository = repo,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
@@ -243,6 +257,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 savedStateHandle = validInputHandle,
                 authRepository = repo,
                 environmentRepository = fakeEnvironmentRepository,
+                featureFlagManager = featureFlagManager,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ContinueClick)
@@ -280,6 +295,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 savedStateHandle = validInputHandle,
                 authRepository = repo,
                 environmentRepository = fakeEnvironmentRepository,
+                featureFlagManager = featureFlagManager,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ContinueClick)
@@ -298,6 +314,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(BackClick)
@@ -311,6 +328,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(PrivacyPolicyClick)
@@ -324,6 +342,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(TermsClick)
@@ -337,6 +356,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(UnsubscribeMarketingEmailsClick)
@@ -351,6 +371,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.stateFlow.test {
             awaitItem()
@@ -373,6 +394,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -393,6 +415,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
@@ -412,6 +435,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.trySendAction(NameInputChange("input"))
         viewModel.stateFlow.test {
@@ -425,6 +449,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
         viewModel.trySendAction(ReceiveMarketingEmailsToggle(false))
         viewModel.stateFlow.test {
@@ -438,12 +463,28 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
         )
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick)
             assertEquals(StartRegistrationEvent.NavigateToServerSelectionInfo, awaitItem())
         }
+    }
+
+    @Test
+    fun `OnboardingFeatureFlagUpdated should update showNewOnboardingUi in state`() {
+        val viewModel = StartRegistrationViewModel(
+            savedStateHandle = SavedStateHandle(),
+            authRepository = mockAuthRepository,
+            environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = featureFlagManager,
+        )
+        mutableFeatureFlagFlow.value = true
+        assertEquals(
+            DEFAULT_STATE.copy(showNewOnboardingUi = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     companion object {
@@ -456,6 +497,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
+            showNewOnboardingUi = false,
         )
         private val VALID_INPUT_STATE = StartRegistrationState(
             emailInput = EMAIL,
@@ -464,6 +506,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = true,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
+            showNewOnboardingUi = false,
         )
     }
 }
