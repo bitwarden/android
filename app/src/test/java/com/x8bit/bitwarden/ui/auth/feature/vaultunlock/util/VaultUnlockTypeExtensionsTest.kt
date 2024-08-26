@@ -77,4 +77,20 @@ class VaultUnlockTypeExtensionsTest {
                 )
             }
     }
+
+    @Test
+    fun `emptyInputDialogMessage should return the correct title for each type`() {
+        mapOf(
+            VaultUnlockType.MASTER_PASSWORD to R.string.validation_field_required.asText(
+                R.string.master_password.asText(),
+            ),
+            VaultUnlockType.PIN to R.string.validation_field_required.asText(R.string.pin.asText()),
+        )
+            .forEach { (type, expected) ->
+                assertEquals(
+                    expected,
+                    type.emptyInputDialogMessage,
+                )
+            }
+    }
 }

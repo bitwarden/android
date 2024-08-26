@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.NativeKeyEvent
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
@@ -12,8 +14,10 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyPress
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.requestFocus
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -415,6 +419,19 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             .onNodeWithText("Unlock")
             .performScrollTo()
             .performClick()
+        verify { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
+    }
+
+    @Test
+    fun `keyboard Done event should send UnlockClick action`() {
+        val keyEvent = KeyEvent(
+            NativeKeyEvent(NativeKeyEvent.ACTION_DOWN, NativeKeyEvent.KEYCODE_ENTER),
+        )
+        composeTestRule
+            .onNodeWithText("Master password")
+            .performScrollTo()
+            .requestFocus()
+            .performKeyPress(keyEvent)
         verify { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
     }
 
