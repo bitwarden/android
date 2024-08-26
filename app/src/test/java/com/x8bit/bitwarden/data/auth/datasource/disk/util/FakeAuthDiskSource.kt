@@ -29,6 +29,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     private val storedShouldUseKeyConnector = mutableMapOf<String, Boolean?>()
+    private val storedIsTdeLoginComplete = mutableMapOf<String, Boolean?>()
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
@@ -90,8 +91,14 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableShouldUseKeyConnectorFlow(userId = userId).tryEmit(shouldUseKeyConnector)
     }
 
-    override fun getShouldTrustDevice(userId: String): Boolean =
-        storedShouldTrustDevice[userId] ?: false
+    override fun getIsTdeLoginComplete(userId: String): Boolean? = storedIsTdeLoginComplete[userId]
+
+    override fun storeIsTdeLoginComplete(userId: String, isTdeLoginComplete: Boolean?) {
+        storedIsTdeLoginComplete[userId] = isTdeLoginComplete
+    }
+
+    override fun getShouldTrustDevice(userId: String): Boolean? =
+        storedShouldTrustDevice[userId]
 
     override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
         storedShouldTrustDevice[userId] = shouldTrustDevice
@@ -230,6 +237,20 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
         storedAccountTokens[userId] = accountTokens
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
+    }
+
+    /**
+     * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
+     */
+    fun assertIsTdeLoginComplete(userId: String, isTdeLoginComplete: Boolean?) {
+        assertEquals(isTdeLoginComplete, storedIsTdeLoginComplete[userId])
+    }
+
+    /**
+     * Assert the the [shouldTrustDevice] was stored successfully using the [userId].
+     */
+    fun assertShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
+        assertEquals(shouldTrustDevice, storedShouldTrustDevice[userId])
     }
 
     /**

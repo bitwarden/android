@@ -18,6 +18,7 @@ class TrustedDeviceManagerImpl(
 ) : TrustedDeviceManager {
     override suspend fun trustThisDeviceIfNecessary(userId: String): Result<Boolean> =
         if (authDiskSource.getShouldTrustDevice(userId = userId) != true) {
+            authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
             false.asSuccess()
         } else {
             vaultSdkSource
@@ -51,6 +52,7 @@ class TrustedDeviceManagerImpl(
                 userId = userId,
                 previousUserState = requireNotNull(authDiskSource.userState),
             )
+            authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
         }
         .also { authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = null) }
         .map { Unit }

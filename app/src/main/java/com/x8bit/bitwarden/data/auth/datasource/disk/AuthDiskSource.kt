@@ -61,6 +61,16 @@ interface AuthDiskSource {
     fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?)
 
     /**
+     * Retrieves the state indicating that the user has completed login with TDE.
+     */
+    fun getIsTdeLoginComplete(userId: String): Boolean?
+
+    /**
+     * Stores the boolean indicating that the user has completed login with TDE.
+     */
+    fun storeIsTdeLoginComplete(userId: String, isTdeLoginComplete: Boolean?)
+
+    /**
      * Retrieves the state indicating that the user has chosen to trust this device.
      *
      * Note: This indicates intent to trust the device, the device may not be trusted yet.
