@@ -194,12 +194,12 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClicked() {
-        @Suppress("MaxLineLength")
-        val navigationEvent = if (featureFlagManager.getFeatureFlag(key = FlagKey.EmailVerification)) {
-            LandingEvent.NavigateToStartRegistration
-        } else {
-            LandingEvent.NavigateToCreateAccount
-        }
+        val navigationEvent =
+            if (featureFlagManager.getFeatureFlag(key = FlagKey.EmailVerification)) {
+                LandingEvent.NavigateToStartRegistration
+            } else {
+                LandingEvent.NavigateToCreateAccount
+            }
         sendEvent(navigationEvent)
     }
 

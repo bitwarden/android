@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.ui.auth.feature.checkemail.checkEmailDestination
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.popUpToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestination
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
 import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.enterpriseSignOnDestination
@@ -184,6 +185,9 @@ fun NavGraphBuilder.authGraph(
         masterPasswordGeneratorDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToPreventLockout = { navController.navigateToPreventAccountLockout() },
+            onNavigateBackWithPassword = {
+                navController.popUpToCompleteRegistration()
+            },
         )
     }
 }

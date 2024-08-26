@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -73,7 +74,8 @@ class MasterPasswordGeneratorViewModel @Inject constructor(
     private fun handleBackAction() = sendEvent(MasterPasswordGeneratorEvent.NavigateBack)
 
     private fun handleSavePasswordAction() {
-        // TODO [PM-10692](https://bitwarden.atlassian.net/browse/PM-10692)
+        generatorRepository.emitGeneratorResult(GeneratorResult.Password(state.generatedPassword))
+        sendEvent(MasterPasswordGeneratorEvent.NavigateBackToRegistration)
     }
 
     private fun handlePreventLockoutAction() =
@@ -163,6 +165,11 @@ sealed class MasterPasswordGeneratorEvent {
      * Show a Snackbar message.
      */
     data class ShowSnackbar(val text: Text) : MasterPasswordGeneratorEvent()
+
+    /**
+     * Navigate back to the complete registration screen.
+     */
+    data object NavigateBackToRegistration : MasterPasswordGeneratorEvent()
 }
 
 /**

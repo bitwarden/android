@@ -50,6 +50,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
         every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
+
     /**
      * Saved state handle that has valid inputs. Useful for tests that want to test things
      * after the user has entered all valid inputs.
