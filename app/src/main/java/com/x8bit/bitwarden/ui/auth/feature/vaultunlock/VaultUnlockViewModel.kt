@@ -61,22 +61,20 @@ class VaultUnlockViewModel @Inject constructor(
         )
         val vaultUnlockType = activeAccount.vaultUnlockType
         val hasNoMasterPassword = !activeAccount.hasMasterPassword
-        val hideInput = hasNoMasterPassword && vaultUnlockType == VaultUnlockType.MASTER_PASSWORD
-        val isBiometricsEnabled = activeAccount.isBiometricsEnabled
-        if (hasNoMasterPassword && vaultUnlockType != VaultUnlockType.PIN && !isBiometricsEnabled) {
+        if (!activeAccount.hasManualUnlockMechanism) {
             // There is no valid way to unlock this app.
             authRepository.logout()
         }
         VaultUnlockState(
             accountSummaries = accountSummaries,
             avatarColorString = activeAccountSummary.avatarColorHex,
-            hideInput = hideInput,
+            hideInput = hasNoMasterPassword && vaultUnlockType == VaultUnlockType.MASTER_PASSWORD,
             initials = activeAccountSummary.initials,
             email = activeAccountSummary.email,
             dialog = null,
             environmentUrl = environmentRepo.environment.label,
             input = "",
-            isBiometricEnabled = isBiometricsEnabled,
+            isBiometricEnabled = activeAccount.isBiometricsEnabled,
             isBiometricsValid = isBiometricsValid,
             showAccountMenu = VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD,
             showBiometricInvalidatedMessage = false,
