@@ -216,7 +216,8 @@ private fun CompleteRegistrationContent(
                 callToActionText = stringResource(id = R.string.learn_more),
                 onCardClicked = handler.onMakeStrongPassword,
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
         } else {
             LegacyHeaderContent(

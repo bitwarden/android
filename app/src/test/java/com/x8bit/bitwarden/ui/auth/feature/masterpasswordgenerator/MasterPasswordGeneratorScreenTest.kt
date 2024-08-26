@@ -20,6 +20,7 @@ import org.junit.Test
 class MasterPasswordGeneratorScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToPreventLockoutCalled = false
+    private var navigateBackWithPasswordCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<MasterPasswordGeneratorEvent>()
     private val mutableStateFlow = MutableStateFlow(
         value = MasterPasswordGeneratorState(generatedPassword = "-"),
@@ -35,6 +36,7 @@ class MasterPasswordGeneratorScreenTest : BaseComposeTest() {
             MasterPasswordGeneratorScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToPreventLockout = { onNavigateToPreventLockoutCalled = true },
+                onNavigateBackWithPassword = { navigateBackWithPasswordCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -42,7 +44,7 @@ class MasterPasswordGeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `Generated password field state should update with ViewModel state`() {
-        val updatedValue = "soup-r-stronk-pazzwerd"
+        val updatedValue = PASSWORD_INPUT
         mutableStateFlow.update { it.copy(generatedPassword = updatedValue) }
 
         composeTestRule
@@ -104,4 +106,15 @@ class MasterPasswordGeneratorScreenTest : BaseComposeTest() {
 
         verify { viewModel.trySendAction(MasterPasswordGeneratorAction.PreventLockoutClickAction) }
     }
+
+    @Test
+    fun `Verify navigating back with password invokes the lambda`() {
+        mutableEventFlow.tryEmit(
+            MasterPasswordGeneratorEvent.NavigateBackToRegistration,
+        )
+
+        assertTrue(navigateBackWithPasswordCalled)
+    }
 }
+
+private const val PASSWORD_INPUT = "password1234"

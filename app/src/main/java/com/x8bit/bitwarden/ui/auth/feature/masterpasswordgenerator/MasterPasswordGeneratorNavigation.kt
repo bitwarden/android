@@ -20,6 +20,7 @@ fun NavController.navigateToMasterPasswordGenerator(navOptions: NavOptions? = nu
 fun NavGraphBuilder.masterPasswordGeneratorDestination(
     onNavigateBack: () -> Unit,
     onNavigateToPreventLockout: () -> Unit,
+    onNavigateBackWithPassword: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = MASTER_PASSWORD_GENERATOR,
@@ -27,6 +28,7 @@ fun NavGraphBuilder.masterPasswordGeneratorDestination(
         MasterPasswordGeneratorScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToPreventLockout = onNavigateToPreventLockout,
+            onNavigateBackWithPassword = onNavigateBackWithPassword,
         )
     }
 }

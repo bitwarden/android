@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 fun MasterPasswordGeneratorScreen(
     onNavigateBack: () -> Unit,
     onNavigateToPreventLockout: () -> Unit,
+    onNavigateBackWithPassword: () -> Unit,
     viewModel: MasterPasswordGeneratorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -70,6 +71,10 @@ fun MasterPasswordGeneratorScreen(
                     message = event.text.toString(resources),
                     duration = SnackbarDuration.Short,
                 )
+            }
+
+            is MasterPasswordGeneratorEvent.NavigateBackToRegistration -> {
+                onNavigateBackWithPassword()
             }
         }
     }

@@ -72,3 +72,10 @@ fun NavGraphBuilder.completeRegistrationDestination(
         )
     }
 }
+
+/**
+ * Pop up to the complete registration screen.
+ */
+fun NavController.popUpToCompleteRegistration() {
+    popBackStack(route = COMPLETE_REGISTRATION_ROUTE, inclusive = false)
+}
