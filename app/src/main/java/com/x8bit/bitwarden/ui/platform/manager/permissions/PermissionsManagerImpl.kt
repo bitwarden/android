@@ -44,7 +44,7 @@ class PermissionsManagerImpl(
     override fun checkPermissions(permissions: Array<String>): Boolean =
         permissions.map { checkPermission(it) }.all { isGranted -> isGranted }
 
-    override fun shouldShouldRequestPermissionRationale(
+    override fun shouldShowRequestPermissionRationale(
         permission: String,
     ): Boolean =
         activity.shouldShowRequestPermissionRationale(permission)

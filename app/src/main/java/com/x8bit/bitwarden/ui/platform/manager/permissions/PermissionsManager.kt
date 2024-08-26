@@ -39,7 +39,7 @@ interface PermissionsManager {
     /**
      * Method for checking if an informative UI should be shown the user.
      */
-    fun shouldShouldRequestPermissionRationale(
+    fun shouldShowRequestPermissionRationale(
         permission: String,
     ): Boolean
 }
