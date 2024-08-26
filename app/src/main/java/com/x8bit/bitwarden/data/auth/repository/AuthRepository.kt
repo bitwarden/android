@@ -104,6 +104,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     var rememberedOrgIdentifier: String?
 
     /**
+     * The currently persisted state indicating whether the user has completed login via TDE.
+     */
+    val tdeLoginComplete: Boolean?
+
+    /**
      * The currently persisted state indicating whether the user has trusted this device.
      */
     var shouldTrustDevice: Boolean

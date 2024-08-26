@@ -160,6 +160,24 @@ class AuthDiskSourceTest {
         }
 
     @Test
+    fun `tdeLoginComplete should pull from and update SharedPreferences`() {
+        val userId = "userId"
+        val isTdeLoginComplete = "bwPreferencesStorage:tdeLoginComplete_$userId"
+
+        // Shared preferences and the disk source start with the same value.
+        assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))
+        assertFalse(fakeSharedPreferences.getBoolean(isTdeLoginComplete, false))
+
+        // Updating the disk source updates shared preferences
+        authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
+        assertTrue(fakeSharedPreferences.getBoolean(isTdeLoginComplete, false))
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit { putBoolean(isTdeLoginComplete, false) }
+        assertFalse(authDiskSource.getIsTdeLoginComplete(userId = userId) ?: true)
+    }
+
+    @Test
     fun `shouldTrustDevice should pull from and update SharedPreferences`() {
         val userId = "userId"
         val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice_$userId"
@@ -235,6 +253,7 @@ class AuthDiskSourceTest {
             userId = userId,
             shouldTrustDevice = shouldTrustDevice,
         )
+        authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
         val deviceKey = "deviceKey"
         authDiskSource.storeDeviceKey(userId = userId, deviceKey = deviceKey)
         authDiskSource.storeUserBiometricUnlockKey(
@@ -298,6 +317,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
         assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
+        assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))
     }
 
     @Test

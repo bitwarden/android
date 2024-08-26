@@ -312,6 +312,9 @@ class AuthRepositoryImpl(
 
     override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
 
+    override val tdeLoginComplete: Boolean?
+        get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
+
     override var shouldTrustDevice: Boolean
         get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } ?: false
         set(value) {

@@ -39,6 +39,7 @@ private const val TWO_FACTOR_TOKEN_KEY = "twoFactorToken"
 private const val MASTER_PASSWORD_HASH_KEY = "keyHash"
 private const val POLICIES_KEY = "policies"
 private const val SHOULD_TRUST_DEVICE_KEY = "shouldTrustDevice"
+private const val TDE_LOGIN_COMPLETE = "tdeLoginComplete"
 private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 
 /**
@@ -126,6 +127,7 @@ class AuthDiskSourceImpl(
         storePolicies(userId = userId, policies = null)
         storeAccountTokens(userId = userId, accountTokens = null)
         storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = null)
+        storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = null)
 
         // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
         // indefinitely unless the TDE flow explicitly removes them.
@@ -145,6 +147,14 @@ class AuthDiskSourceImpl(
             value = shouldUseKeyConnector,
         )
         getMutableShouldUseKeyConnectorFlowMap(userId = userId).tryEmit(shouldUseKeyConnector)
+    }
+
+    override fun getIsTdeLoginComplete(
+        userId: String,
+    ): Boolean? = getBoolean(key = TDE_LOGIN_COMPLETE.appendIdentifier(userId))
+
+    override fun storeIsTdeLoginComplete(userId: String, isTdeLoginComplete: Boolean?) {
+        putBoolean(TDE_LOGIN_COMPLETE.appendIdentifier(userId), isTdeLoginComplete)
     }
 
     override fun getShouldTrustDevice(

@@ -63,6 +63,7 @@ class RootNavViewModel @Inject constructor(
         val specialCircumstance = action.specialCircumstance
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
+                authRepository.tdeLoginComplete != true &&
                 !userState.activeAccount.isVaultUnlocked -> RootNavState.TrustedDevice
 
             userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
