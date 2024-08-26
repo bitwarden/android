@@ -554,7 +554,6 @@ class AuthRepositoryImpl(
             )
         }
 
-        authDiskSource.storeUserKey(userId = userId, userKey = asymmetricalKey)
         vaultRepository.syncIfNecessary()
         return LoginResult.Success
     }
