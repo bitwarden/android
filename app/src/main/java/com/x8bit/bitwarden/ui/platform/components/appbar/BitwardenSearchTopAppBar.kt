@@ -79,6 +79,7 @@ fun BitwardenSearchTopAppBar(
                 ),
                 placeholder = { Text(text = placeholder) },
                 value = searchTerm,
+                singleLine = true,
                 onValueChange = onSearchTermChange,
                 trailingIcon = {
                     IconButton(
