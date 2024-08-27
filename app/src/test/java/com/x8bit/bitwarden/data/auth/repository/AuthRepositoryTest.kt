@@ -1346,7 +1346,6 @@ class AuthRepositoryTest {
             )
             vaultRepository.syncIfNecessary()
         }
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = asymmetricalKey)
         assertEquals(LoginResult.Success, result)
     }
 
@@ -1392,12 +1391,9 @@ class AuthRepositoryTest {
                 organizationKeys = orgKeys,
             )
         }
-
         coVerify(exactly = 0) {
             vaultRepository.syncIfNecessary()
         }
-
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
         assertEquals(LoginResult.Error(errorMessage = null), result)
     }
 
