@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.button
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,16 +39,15 @@ fun BitwardenTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = isEnabled,
+        contentPadding = PaddingValues(
+            vertical = 10.dp,
+            horizontal = 24.dp,
+        ),
         colors = defaultColors,
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier
-                .padding(
-                    vertical = 10.dp,
-                    horizontal = 12.dp,
-                ),
         )
     }
 }

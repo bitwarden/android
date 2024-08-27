@@ -163,9 +163,10 @@ private fun WelcomeScreenContent(
             onClick = onLoginClick,
             modifier = Modifier
                 .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
-                .padding(bottom = 32.dp),
+                .fillMaxWidth(),
         )
 
+        Spacer(modifier = Modifier.height(32.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

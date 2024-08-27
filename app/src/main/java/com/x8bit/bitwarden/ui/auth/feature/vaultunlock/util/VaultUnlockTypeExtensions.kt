@@ -72,3 +72,9 @@ val VaultUnlockType.unlockScreenKeyboardType: KeyboardType
         VaultUnlockType.MASTER_PASSWORD -> KeyboardType.Password
         VaultUnlockType.PIN -> KeyboardType.Number
     }
+
+/**
+ * The message to show when user try to unlock vault with empty or blank input.
+ */
+val VaultUnlockType.emptyInputDialogMessage: Text
+    get() = R.string.validation_field_required.asText(unlockScreenInputLabel)

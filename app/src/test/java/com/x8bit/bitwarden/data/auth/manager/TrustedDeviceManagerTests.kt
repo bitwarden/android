@@ -23,7 +23,6 @@ import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
@@ -58,6 +57,7 @@ class TrustedDeviceManagerTests {
             val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
             assertEquals(false.asSuccess(), result)
+            fakeAuthDiskSource.assertIsTdeLoginComplete(userId = USER_ID, isTdeLoginComplete = true)
             coVerify(exactly = 0) {
                 vaultSdkSource.getTrustDevice(userId = USER_ID)
                 devicesService.trustDevice(
@@ -80,7 +80,8 @@ class TrustedDeviceManagerTests {
         val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
         assertEquals(error.asFailure(), result)
-        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
+        fakeAuthDiskSource.assertShouldTrustDevice(userId = USER_ID, shouldTrustDevice = null)
+        fakeAuthDiskSource.assertIsTdeLoginComplete(userId = USER_ID, isTdeLoginComplete = null)
         coVerify(exactly = 1) {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
         }
@@ -123,7 +124,8 @@ class TrustedDeviceManagerTests {
         val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
         assertEquals(error.asFailure(), result)
-        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
+        fakeAuthDiskSource.assertShouldTrustDevice(userId = USER_ID, shouldTrustDevice = null)
+        fakeAuthDiskSource.assertIsTdeLoginComplete(userId = USER_ID, isTdeLoginComplete = null)
         coVerify(exactly = 1) {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
             devicesService.trustDevice(
@@ -178,8 +180,9 @@ class TrustedDeviceManagerTests {
 
         assertEquals(true.asSuccess(), result)
         fakeAuthDiskSource.assertDeviceKey(userId = USER_ID, deviceKey = deviceKey)
-        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
+        fakeAuthDiskSource.assertShouldTrustDevice(userId = USER_ID, shouldTrustDevice = null)
         fakeAuthDiskSource.assertUserState(UPDATED_USER_STATE)
+        fakeAuthDiskSource.assertIsTdeLoginComplete(userId = USER_ID, isTdeLoginComplete = true)
         coVerify(exactly = 1) {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
             devicesService.trustDevice(
@@ -234,8 +237,9 @@ class TrustedDeviceManagerTests {
 
         assertEquals(Unit.asSuccess(), result)
         fakeAuthDiskSource.assertDeviceKey(userId = USER_ID, deviceKey = deviceKey)
-        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
+        fakeAuthDiskSource.assertShouldTrustDevice(userId = USER_ID, shouldTrustDevice = null)
         fakeAuthDiskSource.assertUserState(UPDATED_USER_STATE)
+        fakeAuthDiskSource.assertIsTdeLoginComplete(userId = USER_ID, isTdeLoginComplete = true)
         coVerify(exactly = 1) {
             devicesService.trustDevice(
                 appId = "testUniqueAppId",

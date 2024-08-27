@@ -559,19 +559,31 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `tdeLoginComplete should directly access the authDiskSource`() {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        // AuthDiskSource and the repository start with the same default value.
+        assertNull(repository.tdeLoginComplete)
+        assertNull(fakeAuthDiskSource.getIsTdeLoginComplete(userId = USER_ID_1))
+
+        // Updating AuthDiskSource updates the repository
+        fakeAuthDiskSource.storeIsTdeLoginComplete(userId = USER_ID_1, isTdeLoginComplete = true)
+        assertEquals(true, repository.tdeLoginComplete)
+    }
+
+    @Test
     fun `shouldTrustDevice should directly access the authDiskSource`() {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         // AuthDiskSource and the repository start with the same default value.
         assertFalse(repository.shouldTrustDevice)
-        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID_1))
+        assertNull(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID_1))
 
         // Updating the repository updates AuthDiskSource
         repository.shouldTrustDevice = true
-        assertTrue(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID_1))
+        assertEquals(true, fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID_1))
 
         // Updating AuthDiskSource updates the repository
         fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID_1, shouldTrustDevice = false)
-        assertFalse(repository.shouldTrustDevice)
+        assertEquals(false, repository.shouldTrustDevice)
     }
 
     @Test

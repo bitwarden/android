@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
  * @param keyboardType The type of keyboard the user has access to when inputting values into
  * the password field.
  * @param imeAction the preferred IME action for the keyboard to have.
+ * @param keyboardActions the callbacks of keyboard actions.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -68,6 +70,7 @@ fun BitwardenPasswordField(
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
@@ -89,6 +92,7 @@ fun BitwardenPasswordField(
             keyboardType = keyboardType,
             imeAction = imeAction,
         ),
+        keyboardActions = keyboardActions,
         supportingText = hint?.let {
             {
                 Text(
@@ -144,6 +148,7 @@ fun BitwardenPasswordField(
  * @param keyboardType The type of keyboard the user has access to when inputting values into
  * the password field.
  * @param imeAction the preferred IME action for the keyboard to have.
+ * @param keyboardActions the callbacks of keyboard actions.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -159,6 +164,7 @@ fun BitwardenPasswordField(
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -175,6 +181,7 @@ fun BitwardenPasswordField(
         autoFocus = autoFocus,
         keyboardType = keyboardType,
         imeAction = imeAction,
+        keyboardActions = keyboardActions,
     )
 }
 

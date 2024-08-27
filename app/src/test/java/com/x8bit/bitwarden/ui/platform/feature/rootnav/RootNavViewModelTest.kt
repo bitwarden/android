@@ -173,6 +173,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an untrusted device without password the nav state should be TrustedDevice`() {
+        every { authRepository.tdeLoginComplete } returns null
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -209,6 +210,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an untrusted device with password the nav state should be TrustedDevice`() {
+        every { authRepository.tdeLoginComplete } returns null
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -244,7 +246,8 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an untrusted device but an unlocked vault the nav state should be Auth`() {
+    fun `when the active user has an untrusted device but has completed TDE login the nav state should be Auth`() {
+        every { authRepository.tdeLoginComplete } returns true
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
