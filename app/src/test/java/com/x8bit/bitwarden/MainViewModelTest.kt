@@ -739,6 +739,16 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(MainAction.OpenDebugMenu)
+
+        viewModel.eventFlow.test {
+            assertEquals(MainEvent.NavigateToDebugMenu, awaitItem())
+        }
+    }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
