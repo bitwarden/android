@@ -73,11 +73,13 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberNavController()
-            ObserveViewModelEvents(
-                onNavigateToDebugMenu = {
-                    navController.navigateToDebugMenuScreen()
-                },
-            )
+            EventsEffect(viewModel = mainViewModel) { event ->
+                when (event) {
+                    is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
+                    MainEvent.Recreate -> handleRecreate()
+                    MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                }
+            }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider {
                 BitwardenTheme(theme = state.theme) {
@@ -116,19 +118,6 @@ class MainActivity : AppCompatActivity() {
         .actionOnInputEvent(event = event, action = ::sendOpenDebugMenuEvent)
         .takeIf { it }
         ?: super.dispatchKeyEvent(event)
-
-    @Composable
-    private fun ObserveViewModelEvents(
-        onNavigateToDebugMenu: () -> Unit,
-    ) {
-        EventsEffect(viewModel = mainViewModel) { event ->
-            when (event) {
-                is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
-                MainEvent.Recreate -> handleRecreate()
-                MainEvent.NavigateToDebugMenu -> onNavigateToDebugMenu()
-            }
-        }
-    }
 
     private fun sendOpenDebugMenuEvent() {
         mainViewModel.trySendAction(MainAction.OpenDebugMenu)
