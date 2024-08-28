@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -54,7 +55,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
      * Saved state handle that has valid inputs. Useful for tests that want to test things
      * after the user has entered all valid inputs.
      */
-    private val mockAuthRepository = mockk<AuthRepository>()
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
+    private val mockAuthRepository = mockk<AuthRepository>() {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
