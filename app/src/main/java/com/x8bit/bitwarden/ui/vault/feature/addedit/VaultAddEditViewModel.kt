@@ -2054,7 +2054,7 @@ data class VaultAddEditState(
                  * @property totp The current TOTP (if applicable).
                  * @property canViewPassword Indicates whether the current user can view and copy
                  * passwords associated with the login item.
-                 * @property canEdit Indicates whether the current user can edit the login item.
+                 * @property canEditItem Indicates whether the current user can edit the login item.
                  * @property fido2CredentialCreationDateTime Date and time the FIDO 2 credential was
                  * created.
                  */
@@ -2064,7 +2064,7 @@ data class VaultAddEditState(
                     val password: String = "",
                     val totp: String? = null,
                     val canViewPassword: Boolean = true,
-                    val canEdit: Boolean = true,
+                    val canEditItem: Boolean = true,
                     val uriList: List<UriItem> = listOf(
                         UriItem(
                             id = UUID.randomUUID().toString(),
@@ -2076,6 +2076,11 @@ data class VaultAddEditState(
                     val fido2CredentialCreationDateTime: Text? = null,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.LOGIN
+
+                    /**
+                     * Indicates whether the passkey can or cannot be removed.
+                     */
+                    val canRemovePasskey: Boolean get() = this.canEditItem && this.canViewPassword
                 }
 
                 /**

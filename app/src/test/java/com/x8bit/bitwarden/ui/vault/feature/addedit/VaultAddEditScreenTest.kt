@@ -925,7 +925,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(
                         fido2CredentialCreationDateTime = "fido2Credentials".asText(),
                         canViewPassword = false,
-                        canEdit = false,
+                        canEditItem = false,
                     ),
                     isIndividualVaultDisabled = false,
                 ),
@@ -947,7 +947,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(
                         fido2CredentialCreationDateTime = "fido2Credentials".asText(),
                         canViewPassword = false,
-                        canEdit = true,
+                        canEditItem = true,
                     ),
                     isIndividualVaultDisabled = false,
                 ),
@@ -969,7 +969,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(
                         fido2CredentialCreationDateTime = "fido2Credentials".asText(),
                         canViewPassword = true,
-                        canEdit = true,
+                        canEditItem = true,
                     ),
                     isIndividualVaultDisabled = false,
                 ),
