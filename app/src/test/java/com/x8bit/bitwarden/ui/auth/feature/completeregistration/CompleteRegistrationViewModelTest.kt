@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -58,7 +59,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     private val specialCircumstanceManager: SpecialCircumstanceManager =
-        SpecialCircumstanceManagerImpl()
+        SpecialCircumstanceManagerImpl(
+            authRepository = mockAuthRepository,
+            dispatcherManager = FakeDispatcherManager(),
+        )
     private val mutableFeatureFlagFlow = MutableStateFlow(false)
     private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false

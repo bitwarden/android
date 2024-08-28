@@ -27,6 +27,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
@@ -86,7 +88,12 @@ class MainViewModelTest : BaseViewModelTest() {
     private val garbageCollectionManager = mockk<GarbageCollectionManager> {
         every { tryCollect() } just runs
     }
-    private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
+    private val specialCircumstanceManager: SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl(
+            authRepository = mockAuthRepository,
+            dispatcherManager = FakeDispatcherManager(),
+        )
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
     }
@@ -153,7 +160,6 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
-                        every { isLoggedIn } returns true
                     },
                 ),
                 hasPendingAccountAddition = false,
@@ -165,7 +171,6 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
-                        every { isLoggedIn } returns false
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -177,11 +182,9 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
-                        every { isLoggedIn } returns false
                     },
                     mockk<UserState.Account> {
                         every { userId } returns userId2
-                        every { isLoggedIn } returns true
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -192,31 +195,6 @@ class MainViewModelTest : BaseViewModelTest() {
             garbageCollectionManager.tryCollect()
         }
     }
-
-    @Test
-    fun `user state updates to a logged in state should clear the special circumstance`() =
-        runTest {
-            val userId1 = "userId1"
-            val mockCompleteRegistrationCircumstance =
-                mockk<SpecialCircumstance.PreLogin.CompleteRegistration>()
-            specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
-            assertEquals(
-                specialCircumstanceManager.specialCircumstance,
-                mockCompleteRegistrationCircumstance,
-            )
-            createViewModel()
-            mutableUserStateFlow.value = UserState(
-                activeUserId = userId1,
-                accounts = listOf(
-                    mockk<UserState.Account> {
-                        every { userId } returns userId1
-                        every { isLoggedIn } returns false
-                    },
-                ),
-                hasPendingAccountAddition = true,
-            )
-            assertNull(specialCircumstanceManager.specialCircumstance)
-        }
 
     @Test
     fun `vault state lock events should emit Recreate event and trigger garbage collection`() =

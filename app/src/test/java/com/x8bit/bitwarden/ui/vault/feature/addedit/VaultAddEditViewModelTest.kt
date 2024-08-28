@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -137,8 +138,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
     }
+
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
     private val specialCircumstanceManager: SpecialCircumstanceManager =
-        SpecialCircumstanceManagerImpl()
+        SpecialCircumstanceManagerImpl(
+            authRepository = mockAuthRepository,
+            dispatcherManager = FakeDispatcherManager(),
+        )
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
     private val organizationEventManager = mockk<OrganizationEventManager> {

@@ -21,9 +21,4 @@ interface SpecialCircumstanceManager {
      * Emits updates that track changes to [specialCircumstance].
      */
     val specialCircumstanceStateFlow: StateFlow<SpecialCircumstance?>
-
-    /**
-     * Clears any [SpecialCircumstance] that may be present, if it is no longer needed after login.
-     */
-    fun clearSpecialCircumstanceAfterLogin()
 }

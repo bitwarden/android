@@ -98,9 +98,7 @@ class MainViewModel @Inject constructor(
             .drop(count = 1)
             // Trigger an action whenever the current user changes or we go into/out of a pending
             // account state (which acts like switching to a temporary user).
-            .map {
-                it?.activeAccount to it?.hasPendingAccountAddition
-            }
+            .map { it?.activeUserId to it?.hasPendingAccountAddition }
             .distinctUntilChanged()
             .onEach {
                 // Switching between account states often involves some kind of animation (ex:
@@ -108,10 +106,7 @@ class MainViewModel @Inject constructor(
                 // a refresh.
                 @Suppress("MagicNumber")
                 delay(500)
-                val isLoggedIn = it.first?.isLoggedIn == true
-                trySendAction(
-                    MainAction.Internal.CurrentUserStateChange(isLoggedIn = isLoggedIn),
-                )
+                trySendAction(MainAction.Internal.CurrentUserStateChange)
             }
             .launchIn(viewModelScope)
 
@@ -139,7 +134,7 @@ class MainViewModel @Inject constructor(
                 handleAutofillSelectionReceive(action)
             }
 
-            is MainAction.Internal.CurrentUserStateChange -> handleCurrentUserStateChange(action)
+            is MainAction.Internal.CurrentUserStateChange -> handleCurrentUserStateChange()
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
@@ -154,11 +149,8 @@ class MainViewModel @Inject constructor(
         sendEvent(MainEvent.CompleteAutofill(cipherView = action.cipherView))
     }
 
-    private fun handleCurrentUserStateChange(action: MainAction.Internal.CurrentUserStateChange) {
+    private fun handleCurrentUserStateChange() {
         recreateUiAndGarbageCollect()
-        if (action.isLoggedIn) {
-            specialCircumstanceManager.clearSpecialCircumstanceAfterLogin()
-        }
     }
 
     private fun handleScreenCaptureUpdate(action: MainAction.Internal.ScreenCaptureUpdate) {
@@ -337,7 +329,7 @@ sealed class MainAction {
         /**
          * Indicates a relevant change in the current user state.
          */
-        data class CurrentUserStateChange(val isLoggedIn: Boolean) : Internal()
+        data object CurrentUserStateChange : Internal()
 
         /**
          * Indicates that the screen capture state has changed.
