@@ -15,7 +15,7 @@ class FeatureFlagOverrideDiskSourceImpl(
             is Boolean -> putBoolean(key.keyName, value as Boolean)
             is String -> putString(key.keyName, value as String)
             is Int -> putInt(key.keyName, value as Int)
-            else -> throw IllegalArgumentException("Unsupported type")
+            else -> Unit
         }
     }
 
