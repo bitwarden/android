@@ -35,28 +35,20 @@ class DebugLaunchManagerImpl(
     }
 
     private fun shouldHandleMotionEvent(event: MotionEvent): Boolean {
-        if (event.debugTrigger()) {
-            // Pop old tap events until we have ones within our threshold
-            while (
-                tapEventQueue
-                    .firstOrNull()
-                    ?.let { event.eventTime - it >= TAP_TIME_THRESHOLD_MILLIS } == true
-            ) {
-                tapEventQueue.removeFirst()
-            }
-
-            // Add this tap event
-            tapEventQueue.add(event.eventTime)
-
-            // If this tap is within threshold of the oldest valid tap, and we have enough taps,
-            // launch UI
-            if (event.eventTime - tapEventQueue.first() < TAP_TIME_THRESHOLD_MILLIS &&
-                tapEventQueue.size >= POINTERS_REQUIRED
-            ) {
-                return true
-            }
+        if (!event.debugTrigger()) return false
+        // Pop old tap events until we have ones within our threshold
+        while (
+            tapEventQueue
+                .firstOrNull()
+                ?.let { event.eventTime - it >= TAP_TIME_THRESHOLD_MILLIS } == true
+        ) {
+            tapEventQueue.removeFirst()
         }
-        return false
+
+        // Add this tap event
+        tapEventQueue.add(event.eventTime)
+        return event.eventTime - tapEventQueue.first() < TAP_TIME_THRESHOLD_MILLIS &&
+            tapEventQueue.size >= POINTERS_REQUIRED
     }
 
     /**

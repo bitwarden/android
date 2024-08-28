@@ -22,8 +22,11 @@ class DebugMenuFeatureFlagManagerImpl(
     }
 
     override suspend fun <T : Any> getFeatureFlag(key: FlagKey<T>, forceRefresh: Boolean): T {
-        val refreshValue = defaultFeatureFlagManager.getFeatureFlag(key, forceRefresh)
-        return debugMenuRepository.getFeatureFlag(key) ?: refreshValue
+        return debugMenuRepository.getFeatureFlag(key)
+            ?: defaultFeatureFlagManager.getFeatureFlag(
+                key,
+                forceRefresh,
+            )
     }
 
     override fun <T : Any> getFeatureFlag(key: FlagKey<T>): T {

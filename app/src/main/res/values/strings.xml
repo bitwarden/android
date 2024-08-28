@@ -987,10 +987,4 @@ Do you want to switch to this account?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
-    <string name="email_verification">Email Verification</string>
-  <string name="onboarding_carousel">Onboarding Carousel</string>
-  <string name="onboarding_flow">Onboarding Flow</string>
-    <string name="feature_flags">Feature Flags:</string>
-  <string name="debug_menu">Debug Menu</string>
-    <string name="reset_values">Reset values</string>
 </resources>

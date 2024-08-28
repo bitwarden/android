@@ -4,12 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,7 +23,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.components.ListItemContent
@@ -79,7 +76,6 @@ fun DebugMenuScreen(
                 onResetValues = {
                     viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
                 },
-                modifier = Modifier.standardHorizontalMargin(),
             )
         }
     }
@@ -92,37 +88,33 @@ private fun FeatureFlagContent(
     onResetValues: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    Column(
         modifier = modifier,
-        elevation = CardDefaults.outlinedCardElevation(),
     ) {
-        Column {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(R.string.feature_flags),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(horizontal = 4.dp),
+        Spacer(modifier = Modifier.height(8.dp))
+        BitwardenListHeaderText(
+            label = stringResource(R.string.feature_flags),
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider()
+        featureFlagMap.forEach { featureFlag ->
+            featureFlag.key.ListItemContent(
+                currentValue = featureFlag.value,
+                onValueChange = onValueChange,
+                modifier = Modifier.standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            featureFlagMap.forEach { featureFlag ->
-                featureFlag.key.ListItemContent(
-                    currentValue = featureFlag.value,
-                    onValueChange = onValueChange,
-                    modifier = Modifier.padding(start = 8.dp),
-                )
-                HorizontalDivider()
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenOutlinedButton(
-                label = stringResource(R.string.reset_values),
-                onClick = onResetValues,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .align(Alignment.CenterHorizontally),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider()
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        BitwardenFilledButton(
+            label = stringResource(R.string.reset_values),
+            onClick = onResetValues,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .align(Alignment.CenterHorizontally),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
