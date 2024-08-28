@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -58,6 +59,11 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mockAuthRepository = mockk<AuthRepository>() {
         every { userStateFlow } returns mutableUserStateFlow
+        coEvery { login(any(), any(), any()) } returns LoginResult.Success
+
+        coEvery {
+            register(any(), any(), any(), any(), any(), any(), any())
+        } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -119,10 +125,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CallToActionClick with all inputs valid should show and hide loading dialog`() = runTest {
-        val repo = mockk<AuthRepository> {
+    fun `CallToActionClick with all inputs valid should account created toast and hide dialog`() =
+        runTest {
             coEvery {
-                register(
+                mockAuthRepository.register(
                     email = EMAIL,
                     masterPassword = PASSWORD,
                     masterPasswordHint = null,
@@ -132,45 +138,39 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     isMasterPasswordStrong = true,
                 )
             } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
+            val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
+            turbineScope {
+                val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
+                val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+                assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
+                viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+                assertEquals(
+                    VALID_INPUT_STATE.copy(dialog = CompleteRegistrationDialog.Loading),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    CompleteRegistrationEvent.ShowToast(R.string.account_created_success.asText()),
+                    eventFlow.awaitItem(),
+                )
+                // Make sure loading dialog is hidden:
+                assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
+            }
         }
-        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
-        turbineScope {
-            val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-            val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
-            assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
-            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-            assertEquals(
-                VALID_INPUT_STATE.copy(dialog = CompleteRegistrationDialog.Loading),
-                stateFlow.awaitItem(),
-            )
-            assertEquals(
-                CompleteRegistrationEvent.NavigateToLogin(
-                    EMAIL,
-                    CAPTCHA_BYPASS_TOKEN,
-                ),
-                eventFlow.awaitItem(),
-            )
-            // Make sure loading dialog is hidden:
-            assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
-        }
-    }
 
     @Test
     fun `CallToActionClick register returns error should update errorDialogState`() = runTest {
-        val repo = mockk<AuthRepository> {
-            coEvery {
-                register(
-                    email = EMAIL,
-                    masterPassword = PASSWORD,
-                    masterPasswordHint = null,
-                    emailVerificationToken = TOKEN,
-                    captchaToken = null,
-                    shouldCheckDataBreaches = false,
-                    isMasterPasswordStrong = true,
-                )
-            } returns RegisterResult.Error(errorMessage = "mock_error")
-        }
-        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
+        coEvery {
+            mockAuthRepository.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                emailVerificationToken = TOKEN,
+                captchaToken = null,
+                shouldCheckDataBreaches = false,
+                isMasterPasswordStrong = true,
+            )
+        } returns RegisterResult.Error(errorMessage = "mock_error")
+        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -193,52 +193,67 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CallToActionClick register returns Success should emit NavigateToLogin`() = runTest {
-        val repo = mockk<AuthRepository> {
-            coEvery {
-                register(
-                    email = EMAIL,
-                    masterPassword = PASSWORD,
-                    masterPasswordHint = null,
-                    emailVerificationToken = TOKEN,
-                    captchaToken = null,
-                    shouldCheckDataBreaches = false,
-                    isMasterPasswordStrong = true,
-                )
-            } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
-        }
-        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-            assertEquals(
-                CompleteRegistrationEvent.NavigateToLogin(
-                    EMAIL,
-                    CAPTCHA_BYPASS_TOKEN,
-                ),
-                awaitItem(),
+    fun `CallToActionClick register returns Success should attempt login`() = runTest {
+        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
+        viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+        coVerify {
+            mockAuthRepository.login(
+                email = EMAIL,
+                password = PASSWORD,
+                captchaToken = CAPTCHA_BYPASS_TOKEN,
             )
         }
     }
 
     @Test
-    fun `ContinueWithBreachedPasswordClick should call repository with checkDataBreaches false`() {
-        val repo = mockk<AuthRepository> {
-            coEvery {
-                register(
-                    email = EMAIL,
-                    masterPassword = PASSWORD,
-                    masterPasswordHint = null,
-                    emailVerificationToken = TOKEN,
-                    captchaToken = null,
-                    shouldCheckDataBreaches = false,
-                    isMasterPasswordStrong = true,
-                )
-            } returns RegisterResult.Error(null)
+    fun `when login attempt returns success should wait for state based navigation`() = runTest {
+        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
+        viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+        viewModel.eventFlow.test {
+            assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
+            expectNoEvents()
         }
-        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
+    }
+
+    @Test
+    fun `when login attempt returns anything other than success should send navigate to login event`() =
+        runTest {
+            coEvery {
+                mockAuthRepository.login(
+                    email = EMAIL,
+                    password = PASSWORD,
+                    captchaToken = CAPTCHA_BYPASS_TOKEN,
+                )
+            } returns LoginResult.TwoFactorRequired
+
+            val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.eventFlow.test {
+                assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
+                assertEquals(
+                    CompleteRegistrationEvent.NavigateToLogin(EMAIL, CAPTCHA_BYPASS_TOKEN),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ContinueWithBreachedPasswordClick should call repository with checkDataBreaches false`() {
+        coEvery {
+            mockAuthRepository.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                emailVerificationToken = TOKEN,
+                captchaToken = null,
+                shouldCheckDataBreaches = false,
+                isMasterPasswordStrong = true,
+            )
+        } returns RegisterResult.Error(null)
+        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.trySendAction(CompleteRegistrationAction.ContinueWithBreachedPasswordClick)
         coVerify {
-            repo.register(
+            mockAuthRepository.register(
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
@@ -632,14 +647,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
-        authRepository: AuthRepository = mockAuthRepository,
     ): CompleteRegistrationViewModel = CompleteRegistrationViewModel(
         savedStateHandle = SavedStateHandle(
             mapOf(
                 "state" to completeRegistrationState,
             ),
         ),
-        authRepository = authRepository,
+        authRepository = mockAuthRepository,
         environmentRepository = fakeEnvironmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         featureFlagManager = featureFlagManager,

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -106,18 +107,14 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     override fun handleAction(action: CompleteRegistrationAction) {
         when (action) {
+            is Internal -> handleInternalAction(action)
             is ConfirmPasswordInputChange -> handleConfirmPasswordInputChanged(action)
             is PasswordHintChange -> handlePasswordHintChanged(action)
             is PasswordInputChange -> handlePasswordInputChanged(action)
             is BackClick -> handleBackClicked()
             is ErrorDialogDismiss -> handleDialogDismiss()
             is CheckDataBreachesToggle -> handleCheckDataBreachesToggle(action)
-            is Internal.ReceiveRegisterResult -> {
-                handleReceiveRegisterAccountResult(action)
-            }
-
             ContinueWithBreachedPasswordClick -> handleContinueWithBreachedPasswordClick()
-            is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
             CompleteRegistrationAction.LearnToPreventLockoutClick -> {
                 handlePreventAccountLockoutClickAction()
             }
@@ -127,10 +124,17 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             CompleteRegistrationAction.CallToActionClick -> handleCallToActionClick()
+        }
+    }
+
+    private fun handleInternalAction(action: Internal) {
+        when (action) {
+            is Internal.AttemptLogin -> handleLoginAttempt(action)
+            is Internal.GeneratedPasswordResult -> handleGeneratedPasswordResult(action)
+            is Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
+            is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
+            is Internal.ReceiveRegisterResult -> handleReceiveRegisterAccountResult(action)
             is Internal.UpdateOnboardingFeatureState -> handleUpdateOnboardingFeatureState(action)
-            is Internal.GeneratedPasswordResult -> handleGeneratedPasswordResult(
-                action,
-            )
         }
     }
 
@@ -215,13 +219,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             is RegisterResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(
-                    CompleteRegistrationEvent.NavigateToLogin(
-                        email = state.userEmail,
-                        captchaToken = registerAccountResult.captchaToken,
-                    ),
-                )
+                trySendAction(Internal.AttemptLogin(registerAccountResult.captchaToken))
             }
 
             RegisterResult.DataBreachFound -> {
@@ -256,6 +254,36 @@ class CompleteRegistrationViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun handleLoginAttempt(action: Internal.AttemptLogin) {
+        viewModelScope.launch {
+            val result = authRepository.login(
+                email = state.userEmail,
+                password = state.passwordInput,
+                captchaToken = action.captchaToken,
+            )
+            sendAction(Internal.ReceiveLoginResult(result, action.captchaToken))
+        }
+    }
+
+    private fun handleReceiveLoginResult(action: Internal.ReceiveLoginResult) {
+        handleDialogDismiss()
+        sendEvent(
+            CompleteRegistrationEvent.ShowToast(
+                message = R.string.account_created_success.asText(),
+            ),
+        )
+        // If the login result is Success the state based navigation will take care of it.
+        // otherwise we need to navigate to the login screen.
+        if (action.result !is LoginResult.Success) {
+            sendEvent(
+                CompleteRegistrationEvent.NavigateToLogin(
+                    email = state.userEmail,
+                    captchaToken = action.captchaToken,
+                ),
+            )
         }
     }
 
@@ -509,7 +537,7 @@ sealed class CompleteRegistrationEvent {
      */
     data class NavigateToLogin(
         val email: String,
-        val captchaToken: String,
+        val captchaToken: String?,
     ) : CompleteRegistrationEvent()
 }
 
@@ -595,5 +623,18 @@ sealed class CompleteRegistrationAction {
          * Indicates a generated password has been received.
          */
         data class GeneratedPasswordResult(val generatedPassword: String) : Internal()
+
+        /**
+         * Indicates registration was successful and will now attempt to login and unlock the vault.
+         */
+        data class AttemptLogin(val captchaToken: String?) : Internal()
+
+        /**
+         * Indicates a login result has been received.
+         */
+        data class ReceiveLoginResult(
+            val result: LoginResult,
+            val captchaToken: String?,
+        ) : Internal()
     }
 }
