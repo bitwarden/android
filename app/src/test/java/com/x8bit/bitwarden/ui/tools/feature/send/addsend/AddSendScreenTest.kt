@@ -62,7 +62,7 @@ class AddSendScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContentWithBackDispatcher {
             AddSendScreen(
                 viewModel = viewModel,
                 exitManager = exitManager,
@@ -101,6 +101,12 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Close")
             .performClick()
+        verify { viewModel.trySendAction(AddSendAction.CloseClick) }
+    }
+
+    @Test
+    fun `on system back should send CloseClick`() {
+        backDispatcher?.onBackPressed()
         verify { viewModel.trySendAction(AddSendAction.CloseClick) }
     }
 

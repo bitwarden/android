@@ -79,6 +79,10 @@ fun CompleteRegistrationScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberCompleteRegistrationHandler(viewModel = viewModel)
     val context = LocalContext.current
+
+    // route OS back actions through the VM to clear the special circumstance
+    BackHandler(onBack = handler.onBackClick)
+
     EventsEffect(viewModel) { event ->
         when (event) {
             is CompleteRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
@@ -180,11 +184,6 @@ fun CompleteRegistrationScreen(
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
-    }
-
-    // route OS back actions through the VM to clear the special circumstance
-    BackHandler {
-        handler.onBackClick()
     }
 }
 
