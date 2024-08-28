@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -60,7 +61,7 @@ class LoginViewModelTest : BaseViewModelTest() {
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::generateUriForCaptcha)
+        unmockkStatic(::generateUriForCaptcha, String::base64UrlEncode)
     }
 
     @Test
@@ -330,6 +331,51 @@ class LoginViewModelTest : BaseViewModelTest() {
             }
             coVerify {
                 authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns TwoFactorRequired should base64 URL encode password and emit NavigateToTwoFactorLogin`() =
+        runTest {
+            mockkStatic(String::base64UrlEncode)
+            val decodedPassword = "password"
+            val encodedPassword = "base64EncodedPassword"
+            every { decodedPassword.base64UrlEncode() } returns encodedPassword
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = decodedPassword,
+                    captchaToken = null,
+                )
+            } returns LoginResult.TwoFactorRequired
+
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    passwordInput = decodedPassword,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                verify { decodedPassword.base64UrlEncode() }
+                assertEquals(
+                    DEFAULT_STATE.copy(passwordInput = decodedPassword),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    LoginEvent.NavigateToTwoFactorLogin(
+                        EMAIL,
+                        encodedPassword,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(
+                    email = EMAIL,
+                    password = decodedPassword,
+                    captchaToken = null,
+                )
             }
         }
 

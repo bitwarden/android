@@ -28,7 +28,7 @@ fun NavGraphBuilder.trustedDeviceGraph(navController: NavHostController) {
             onNavigateToTwoFactorLogin = {
                 navController.navigateToTwoFactorLogin(
                     emailAddress = it,
-                    password = null,
+                    base64EncodedPassword = null,
                 )
             },
         )

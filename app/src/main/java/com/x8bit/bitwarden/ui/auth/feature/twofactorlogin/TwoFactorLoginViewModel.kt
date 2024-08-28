@@ -57,21 +57,24 @@ class TwoFactorLoginViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: TwoFactorLoginState(
-            authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
-            availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
-            codeInput = "",
-            displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
-            dialogState = null,
-            isContinueButtonEnabled = authRepository
-                .twoFactorResponse
-                .preferredAuthMethod
-                .isContinueButtonEnabled,
-            isRememberMeEnabled = false,
-            captchaToken = null,
-            email = TwoFactorLoginArgs(savedStateHandle).emailAddress,
-            password = TwoFactorLoginArgs(savedStateHandle).password?.base64UrlDecodeOrNull(),
-        ),
+        ?: run {
+            val args = TwoFactorLoginArgs(savedStateHandle)
+            TwoFactorLoginState(
+                authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
+                availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
+                codeInput = "",
+                displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
+                dialogState = null,
+                isContinueButtonEnabled = authRepository
+                    .twoFactorResponse
+                    .preferredAuthMethod
+                    .isContinueButtonEnabled,
+                isRememberMeEnabled = false,
+                captchaToken = null,
+                email = args.emailAddress,
+                password = args.base64EncodedPassword?.base64UrlDecodeOrNull(),
+            )
+        },
 ) {
 
     private val recover2faUri: Uri
