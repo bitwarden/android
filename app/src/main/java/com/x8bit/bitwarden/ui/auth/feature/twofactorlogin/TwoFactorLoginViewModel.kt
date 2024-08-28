@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
@@ -69,7 +70,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             isRememberMeEnabled = false,
             captchaToken = null,
             email = TwoFactorLoginArgs(savedStateHandle).emailAddress,
-            password = TwoFactorLoginArgs(savedStateHandle).password,
+            password = TwoFactorLoginArgs(savedStateHandle).password?.base64UrlDecodeOrNull(),
         ),
 ) {
 

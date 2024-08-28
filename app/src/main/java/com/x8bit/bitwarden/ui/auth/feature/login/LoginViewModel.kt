@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -159,7 +160,9 @@ class LoginViewModel @Inject constructor(
                 sendEvent(
                     LoginEvent.NavigateToTwoFactorLogin(
                         emailAddress = state.emailAddress,
-                        password = state.passwordInput,
+                        // Base64 URL encode the password to prevent corruption of escapable chars
+                        // when sending via navArgs.
+                        base64EncodedPassword = state.passwordInput.base64UrlEncode(),
                     ),
                 )
             }
@@ -342,7 +345,7 @@ sealed class LoginEvent {
      */
     data class NavigateToTwoFactorLogin(
         val emailAddress: String,
-        val password: String?,
+        val base64EncodedPassword: String?,
     ) : LoginEvent()
 
     /**
