@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAs
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -40,7 +42,13 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authStateFlow } returns mutableAuthStateFlow
         every { showWelcomeCarousel } returns false
     }
-    private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
+
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
+    private val specialCircumstanceManager: SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl(
+            authRepository = mockAuthRepository,
+            dispatcherManager = FakeDispatcherManager(),
+        )
 
     @BeforeEach
     fun setup() {
@@ -655,7 +663,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns false
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.CompleteRegistration(
+            SpecialCircumstance.PreLogin.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -682,7 +690,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns true
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.CompleteRegistration(
+            SpecialCircumstance.PreLogin.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -732,7 +740,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns true
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.CompleteRegistration(
+            SpecialCircumstance.PreLogin.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",

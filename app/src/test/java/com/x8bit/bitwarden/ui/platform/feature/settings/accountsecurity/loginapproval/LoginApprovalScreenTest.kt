@@ -37,7 +37,7 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContentWithBackDispatcher {
             LoginApprovalScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -50,6 +50,14 @@ class LoginApprovalScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(LoginApprovalEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `system back should send CloseClick`() {
+        backDispatcher?.onBackPressed()
+        verify {
+            viewModel.trySendAction(LoginApprovalAction.CloseClick)
+        }
     }
 
     @Test

@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager.di
 
 import com.x8bit.bitwarden.MainActivity
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +22,12 @@ class ActivityPlatformManagerModule {
 
     @Provides
     @ActivityRetainedScoped
-    fun provideActivityScopedSpecialCircumstanceRepository(): SpecialCircumstanceManager =
-        SpecialCircumstanceManagerImpl()
+    fun provideActivityScopedSpecialCircumstanceRepository(
+        authRepository: AuthRepository,
+        dispatcher: DispatcherManager,
+    ): SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl(
+            authRepository = authRepository,
+            dispatcherManager = dispatcher,
+        )
 }

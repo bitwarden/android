@@ -210,7 +210,7 @@ class MainViewModel @Inject constructor(
                     authRepository.hasPendingAccountAddition = true
                 }
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.CompleteRegistration(
+                    SpecialCircumstance.PreLogin.CompleteRegistration(
                         completeRegistrationData = completeRegistrationData,
                         timestamp = clock.millis(),
                     )

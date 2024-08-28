@@ -27,6 +27,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
@@ -86,7 +88,12 @@ class MainViewModelTest : BaseViewModelTest() {
     private val garbageCollectionManager = mockk<GarbageCollectionManager> {
         every { tryCollect() } just runs
     }
-    private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
+    private val specialCircumstanceManager: SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl(
+            authRepository = mockAuthRepository,
+            dispatcherManager = FakeDispatcherManager(),
+        )
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
     }
@@ -338,7 +345,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            SpecialCircumstance.CompleteRegistration(
+            SpecialCircumstance.PreLogin.CompleteRegistration(
                 completeRegistrationData = completeRegistrationData,
                 timestamp = FIXED_CLOCK.millis(),
             ),
