@@ -56,7 +56,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContentWithBackDispatcher {
             CompleteRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToPasswordGuidance = { onNavigateToPasswordGuidanceCalled = true },
@@ -118,6 +118,12 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
     fun `NavigateBack event should invoke navigate back lambda`() {
         mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `system back event should send BackClick action`() {
+        backDispatcher?.onBackPressed()
+        verify { viewModel.trySendAction(BackClick) }
     }
 
     @Test

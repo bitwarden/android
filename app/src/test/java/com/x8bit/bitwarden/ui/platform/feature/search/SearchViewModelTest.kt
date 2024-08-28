@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -107,8 +108,13 @@ class SearchViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
     }
+
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
     private val specialCircumstanceManager: SpecialCircumstanceManager =
-        SpecialCircumstanceManagerImpl()
+        SpecialCircumstanceManagerImpl(
+            authRepository = mockAuthRepository,
+            dispatcherManager = FakeDispatcherManager(),
+        )
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
     }

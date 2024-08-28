@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -103,13 +102,6 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
-    }
-
-    @VisibleForTesting
-    public override fun onCleared() {
-        // clean the specialCircumstance after being handled
-        specialCircumstanceManager.specialCircumstance = null
-        super.onCleared()
     }
 
     override fun handleAction(action: CompleteRegistrationAction) {
@@ -280,6 +272,8 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun handleBackClicked() {
+        // clear the special circumstance manager as user has elected not to proceed.
+        specialCircumstanceManager.specialCircumstance = null
         sendEvent(CompleteRegistrationEvent.NavigateBack)
     }
 

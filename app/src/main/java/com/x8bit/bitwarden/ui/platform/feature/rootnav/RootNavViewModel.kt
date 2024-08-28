@@ -70,7 +70,7 @@ class RootNavViewModel @Inject constructor(
 
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
-            specialCircumstance is SpecialCircumstance.CompleteRegistration -> {
+            specialCircumstance is SpecialCircumstance.PreLogin.CompleteRegistration -> {
                 RootNavState.CompleteOngoingRegistration(
                     email = specialCircumstance.completeRegistrationData.email,
                     verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
@@ -141,7 +141,7 @@ class RootNavViewModel @Inject constructor(
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    is SpecialCircumstance.CompleteRegistration -> {
+                    is SpecialCircumstance.PreLogin.CompleteRegistration -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
                         )

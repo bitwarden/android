@@ -35,10 +35,10 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    environmentRepository: EnvironmentRepository,
-    private val vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
+    environmentRepository: EnvironmentRepository,
+    private val authRepository: AuthRepository,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]

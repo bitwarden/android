@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.base
 
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -15,6 +18,14 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
     val composeTestRule = createComposeRule()
 
     /**
+     * instance of [OnBackPressedDispatcher] made available if testing using
+     *
+     * [setContentWithBackDispatcher] or [runTestWithTheme]
+     */
+    var backDispatcher: OnBackPressedDispatcher? = null
+        private set
+
+    /**
      * Helper for testing a basic Composable function that only requires a Composable environment
      * with the [BitwardenTheme].
      */
@@ -26,8 +37,22 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
             BitwardenTheme(
                 theme = theme,
             ) {
+                backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
                 test()
             }
+        }
+    }
+
+    /**
+     * Helper for testing a basic Composable function that provides access to a
+     * [OnBackPressedDispatcher].
+     *
+     * Use if the [Composable] function being tested uses a [BackHandler]
+     */
+    protected fun setContentWithBackDispatcher(test: @Composable () -> Unit) {
+        composeTestRule.setContent {
+            backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+            test()
         }
     }
 }
