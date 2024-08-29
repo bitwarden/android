@@ -92,7 +92,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                canRemovePasskey = loginState.canViewPassword,
+                canRemovePasskey = loginState.canRemovePasskey,
                 loginItemTypeHandlers = loginItemTypeHandlers,
             )
         }
