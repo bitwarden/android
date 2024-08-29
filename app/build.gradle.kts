@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
@@ -144,6 +145,14 @@ dependencies {
     testImplementation(libs.square.turbine)
 
     androidTestImplementation(libs.bundles.tests.instrumented)
+
+    detektPlugins(libs.detekt.detekt.formatting)
+    detektPlugins(libs.detekt.detekt.rules)
+}
+
+detekt {
+    config.from(files("$rootDir/detekt-config.yml"))
+    baseline = file("$rootDir/detekt-baseline.xml")
 }
 
 kover {

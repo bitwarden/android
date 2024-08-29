@@ -28,6 +28,7 @@ androdixAutofill = "1.1.0"
 androidxWork = "2.9.1"
 bitwardenSdk = "0.4.0-20240314.115913-173"
 crashlytics = "3.0.2"
+detekt = "1.23.6"
 espresso = "3.6.1"
 fastlaneScreengrab = "2.1.1"
 firebaseBom = "33.2.0"
@@ -91,6 +92,8 @@ androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", vers
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
+detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 fastlane-screengrab = { module = "tools.fastlane:screengrab", version.ref = "fastlaneScreengrab" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
@@ -122,6 +125,7 @@ zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
