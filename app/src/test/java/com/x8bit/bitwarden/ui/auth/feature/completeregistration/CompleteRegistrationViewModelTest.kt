@@ -59,10 +59,24 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mockAuthRepository = mockk<AuthRepository>() {
         every { userStateFlow } returns mutableUserStateFlow
-        coEvery { login(any(), any(), any()) } returns LoginResult.Success
+        coEvery {
+            login(
+                email = any(),
+                password = any(),
+                captchaToken = any(),
+            )
+        } returns LoginResult.Success
 
         coEvery {
-            register(any(), any(), any(), any(), any(), any(), any())
+            register(
+                email = any(),
+                masterPassword = any(),
+                masterPasswordHint = any(),
+                emailVerificationToken = any(),
+                captchaToken = any(),
+                shouldCheckDataBreaches = any(),
+                isMasterPasswordStrong = any(),
+            )
         } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
     }
 
@@ -215,6 +229,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `when login attempt returns anything other than success should send navigate to login event`() =
         runTest {

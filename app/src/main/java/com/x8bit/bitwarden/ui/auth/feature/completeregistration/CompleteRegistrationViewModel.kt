@@ -131,7 +131,6 @@ class CompleteRegistrationViewModel @Inject constructor(
         when (action) {
             is Internal.AttemptLogin -> handleLoginAttempt(action)
             is Internal.GeneratedPasswordResult -> handleGeneratedPasswordResult(action)
-            is Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
             is Internal.ReceiveRegisterResult -> handleReceiveRegisterAccountResult(action)
             is Internal.UpdateOnboardingFeatureState -> handleUpdateOnboardingFeatureState(action)
@@ -219,7 +218,11 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             is RegisterResult.Success -> {
-                trySendAction(Internal.AttemptLogin(registerAccountResult.captchaToken))
+                trySendAction(
+                    action = Internal.AttemptLogin(
+                        captchaToken = registerAccountResult.captchaToken,
+                    ),
+                )
             }
 
             RegisterResult.DataBreachFound -> {
@@ -264,26 +267,22 @@ class CompleteRegistrationViewModel @Inject constructor(
                 password = state.passwordInput,
                 captchaToken = action.captchaToken,
             )
-            sendAction(Internal.ReceiveLoginResult(result, action.captchaToken))
-        }
-    }
-
-    private fun handleReceiveLoginResult(action: Internal.ReceiveLoginResult) {
-        handleDialogDismiss()
-        sendEvent(
-            CompleteRegistrationEvent.ShowToast(
-                message = R.string.account_created_success.asText(),
-            ),
-        )
-        // If the login result is Success the state based navigation will take care of it.
-        // otherwise we need to navigate to the login screen.
-        if (action.result !is LoginResult.Success) {
+            handleDialogDismiss()
             sendEvent(
-                CompleteRegistrationEvent.NavigateToLogin(
-                    email = state.userEmail,
-                    captchaToken = action.captchaToken,
+                CompleteRegistrationEvent.ShowToast(
+                    message = R.string.account_created_success.asText(),
                 ),
             )
+            // If the login result is Success the state based navigation will take care of it.
+            // otherwise we need to navigate to the login screen.
+            if (result !is LoginResult.Success) {
+                sendEvent(
+                    CompleteRegistrationEvent.NavigateToLogin(
+                        email = state.userEmail,
+                        captchaToken = action.captchaToken,
+                    ),
+                )
+            }
         }
     }
 
@@ -626,15 +625,11 @@ sealed class CompleteRegistrationAction {
 
         /**
          * Indicates registration was successful and will now attempt to login and unlock the vault.
+         * @property captchaToken The captcha token to use for login. With the login function this
+         * is possible to be negative.
+         *
+         * @see [AuthRepository.login]
          */
         data class AttemptLogin(val captchaToken: String?) : Internal()
-
-        /**
-         * Indicates a login result has been received.
-         */
-        data class ReceiveLoginResult(
-            val result: LoginResult,
-            val captchaToken: String?,
-        ) : Internal()
     }
 }
