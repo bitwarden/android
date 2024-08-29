@@ -144,6 +144,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             VaultUnlockedNavBarState(
                 vaultNavBarLabelRes = R.string.vaults,
                 vaultNavBarContentDescriptionRes = R.string.vaults,
+                currentTab = SelectedBottomTab.Vault,
             ),
         )
 
@@ -155,4 +156,5 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = R.string.my_vault,
     vaultNavBarContentDescriptionRes = R.string.my_vault,
+    currentTab = SelectedBottomTab.Vault,
 )

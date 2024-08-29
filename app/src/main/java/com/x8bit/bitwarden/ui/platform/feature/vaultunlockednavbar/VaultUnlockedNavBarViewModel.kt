@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -12,7 +14,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_STATE = "state"
 
 /**
  * Manages bottom tab navigation of the application.
@@ -20,12 +25,15 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultUnlockedNavBarViewModel @Inject constructor(
     authRepository: AuthRepository,
+    savedStateHandle: SavedStateHandle,
     specialCircumstancesManager: SpecialCircumstanceManager,
 ) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
-    initialState = VaultUnlockedNavBarState(
-        vaultNavBarLabelRes = R.string.my_vault,
-        vaultNavBarContentDescriptionRes = R.string.my_vault,
-    ),
+    initialState = savedStateHandle[KEY_STATE]
+        ?: VaultUnlockedNavBarState(
+            vaultNavBarLabelRes = R.string.my_vault,
+            vaultNavBarContentDescriptionRes = R.string.my_vault,
+            currentTab = SelectedBottomTab.Vault,
+        ),
 ) {
     init {
         authRepository
@@ -48,6 +56,11 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
 
             else -> Unit
         }
+
+        // As state updates, write to saved state handle:
+        stateFlow
+            .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultUnlockedNavBarAction) {
@@ -72,28 +85,28 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToGeneratorScreen] event
      */
     private fun handleGeneratorTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
+        sendNavigationEvent(SelectedBottomTab.Generator)
     }
 
     /**
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToSendScreen] event
      */
     private fun handleSendTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToSendScreen)
+        sendNavigationEvent(SelectedBottomTab.Send)
     }
 
     /**
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToVaultScreen] event
      */
     private fun handleVaultTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+        sendNavigationEvent(SelectedBottomTab.Vault)
     }
 
     /**
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToSettingsScreen] event
      */
     private fun handleSettingsTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
+        sendNavigationEvent(SelectedBottomTab.Settings)
     }
 
     /**
@@ -117,15 +130,36 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
         }
     }
     // #endregion BottomTabViewModel Action Handlers
+
+    /**
+     * Send the navigation event for the selected tab. If the tab is already selected, do nothing.
+     */
+    private fun sendNavigationEvent(tab: SelectedBottomTab) {
+        // If the tab is already selected, do nothing.
+        if (stateFlow.value.currentTab == tab) return
+        val navEvent = when (tab) {
+            SelectedBottomTab.Vault -> VaultUnlockedNavBarEvent.NavigateToVaultScreen
+            SelectedBottomTab.Send -> VaultUnlockedNavBarEvent.NavigateToSendScreen
+            SelectedBottomTab.Generator -> VaultUnlockedNavBarEvent.NavigateToGeneratorScreen
+            SelectedBottomTab.Settings -> VaultUnlockedNavBarEvent.NavigateToSettingsScreen
+        }
+        sendEvent(navEvent)
+        // Update the current tab.
+        mutableStateFlow.update {
+            it.copy(currentTab = tab)
+        }
+    }
 }
 
 /**
  * Models state for the [VaultUnlockedNavBarViewModel].
  */
+@Parcelize
 data class VaultUnlockedNavBarState(
     @StringRes val vaultNavBarLabelRes: Int,
     @StringRes val vaultNavBarContentDescriptionRes: Int,
-)
+    val currentTab: SelectedBottomTab,
+) : Parcelable
 
 /**
  * Models actions for the bottom tab of the vault unlocked portion of the app.
@@ -187,4 +221,15 @@ sealed class VaultUnlockedNavBarEvent {
      * Navigate to the Settings screen.
      */
     data object NavigateToSettingsScreen : VaultUnlockedNavBarEvent()
+}
+
+/**
+ * Enum to represent the current bottom tab that is selected.
+ */
+@Parcelize
+enum class SelectedBottomTab : Parcelable {
+    Vault,
+    Send,
+    Generator,
+    Settings,
 }

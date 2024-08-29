@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -92,6 +93,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.vaults,
             vaultNavBarContentDescriptionRes = R.string.vaults,
+            currentTab = SelectedBottomTab.Vault,
         )
         val accountWithoutOrganizations: UserState.Account = mockk {
             every { userId } returns activeUserId
@@ -100,6 +102,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithoutOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.my_vault,
             vaultNavBarContentDescriptionRes = R.string.my_vault,
+            currentTab = SelectedBottomTab.Vault,
         )
 
         val viewModel = createViewModel()
@@ -135,21 +138,63 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `VaultTabClick should navigate to the vault screen`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
-            assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
+    fun `VaultTabClick should not navigate to the vault screen if already on the vault screen`() =
+        runTest {
+            val viewModel = createViewModel()
+            assertEquals(
+                DEFAULT_STATE,
+                viewModel.stateFlow.value,
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
+                expectNoEvents()
+            }
         }
-    }
 
     @Test
-    fun `SendTabClick should navigate to the send screen`() = runTest {
+    fun `VaultTabClick should navigate to the vault screen if not already on the vault screen`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick)
+                assertEquals(
+                    VaultUnlockedNavBarState(
+                        vaultNavBarLabelRes = R.string.my_vault,
+                        vaultNavBarContentDescriptionRes = R.string.my_vault,
+                        currentTab = SelectedBottomTab.Send,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(VaultUnlockedNavBarEvent.NavigateToSendScreen, awaitItem())
+                viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
+                assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
+            }
+            assertEquals(
+                DEFAULT_STATE,
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `SendTabClick should navigate to the send screen and update the state`() = runTest {
         val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick)
             assertEquals(VaultUnlockedNavBarEvent.NavigateToSendScreen, awaitItem())
         }
+        assertEquals(
+            VaultUnlockedNavBarState(
+                vaultNavBarLabelRes = R.string.my_vault,
+                vaultNavBarContentDescriptionRes = R.string.my_vault,
+                currentTab = SelectedBottomTab.Send,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -170,9 +215,23 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel() =
+    @Test
+    fun `if state exists in SavedStateHandle apply as the initial state`() {
+        val savedState = DEFAULT_STATE.copy(currentTab = SelectedBottomTab.Send)
+        val viewModel = createViewModel(savedState)
+        assertEquals(savedState, viewModel.stateFlow.value)
+    }
+
+    private fun createViewModel(initialState: VaultUnlockedNavBarState = DEFAULT_STATE) =
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,
             specialCircumstancesManager = specialCircumstancesManager,
+            savedStateHandle = SavedStateHandle(initialState = mapOf("state" to initialState)),
         )
 }
+
+private val DEFAULT_STATE = VaultUnlockedNavBarState(
+    vaultNavBarLabelRes = R.string.my_vault,
+    vaultNavBarContentDescriptionRes = R.string.my_vault,
+    currentTab = SelectedBottomTab.Vault,
+)
