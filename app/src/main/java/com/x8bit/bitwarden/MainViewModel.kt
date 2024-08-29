@@ -140,7 +140,12 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
+            MainAction.OpenDebugMenu -> handleOpenDebugMenu()
         }
+    }
+
+    private fun handleOpenDebugMenu() {
+        sendEvent(MainEvent.NavigateToDebugMenu)
     }
 
     private fun handleAutofillSelectionReceive(
@@ -316,6 +321,11 @@ sealed class MainAction {
     data class ReceiveNewIntent(val intent: Intent) : MainAction()
 
     /**
+     * Receive event to open the debug menu.
+     */
+    data object OpenDebugMenu : MainAction()
+
+    /**
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : MainAction() {
@@ -366,4 +376,9 @@ sealed class MainEvent {
      * Event indicating that the UI should recreate itself.
      */
     data object Recreate : MainEvent()
+
+    /**
+     * Navigate to the debug menu.
+     */
+    data object NavigateToDebugMenu : MainEvent()
 }

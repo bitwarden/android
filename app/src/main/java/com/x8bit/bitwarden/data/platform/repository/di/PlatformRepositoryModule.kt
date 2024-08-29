@@ -5,11 +5,14 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
+import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
@@ -81,4 +84,14 @@ object PlatformRepositoryModule {
             dispatcherManager = dispatcherManager,
             policyManager = policyManager,
         )
+
+    @Provides
+    @Singleton
+    fun provideDebugMenuRepository(
+        featureFlagOverrideDiskSource: FeatureFlagOverrideDiskSource,
+        serverConfigRepository: ServerConfigRepository,
+    ): DebugMenuRepository = DebugMenuRepositoryImpl(
+        featureFlagOverrideDiskSource = featureFlagOverrideDiskSource,
+        serverConfigRepository = serverConfigRepository,
+    )
 }
