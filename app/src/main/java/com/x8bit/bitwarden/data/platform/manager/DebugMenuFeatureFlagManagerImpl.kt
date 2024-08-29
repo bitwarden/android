@@ -17,21 +17,21 @@ class DebugMenuFeatureFlagManagerImpl(
 
     override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> {
         return debugMenuRepository.featureFlagOverridesUpdatedFlow.map { _ ->
-            debugMenuRepository.getFeatureFlag(key) ?: defaultFeatureFlagManager.getFeatureFlag(key)
+            debugMenuRepository
+                .getFeatureFlag(key)
+                ?: defaultFeatureFlagManager.getFeatureFlag(key = key)
         }
     }
 
     override suspend fun <T : Any> getFeatureFlag(key: FlagKey<T>, forceRefresh: Boolean): T {
-        return debugMenuRepository.getFeatureFlag(key)
-            ?: defaultFeatureFlagManager.getFeatureFlag(
-                key,
-                forceRefresh,
-            )
+        return debugMenuRepository
+            .getFeatureFlag(key)
+            ?: defaultFeatureFlagManager.getFeatureFlag(key = key, forceRefresh = forceRefresh)
     }
 
     override fun <T : Any> getFeatureFlag(key: FlagKey<T>): T {
-        return debugMenuRepository.getFeatureFlag(key) ?: defaultFeatureFlagManager.getFeatureFlag(
-            key,
-        )
+        return debugMenuRepository
+            .getFeatureFlag(key)
+            ?: defaultFeatureFlagManager.getFeatureFlag(key = key)
     }
 }

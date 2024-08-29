@@ -7,7 +7,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class DebugLaunchManagerTest {
@@ -32,11 +31,6 @@ class DebugLaunchManagerTest {
 
     private val debugLaunchManager =
         DebugLaunchManagerImpl(debugMenuRepository = mockDebugMenuRepository)
-
-    @BeforeEach
-    fun setup() {
-        actionHasBeenCalled = false
-    }
 
     @Test
     fun `actionOnInputEvent should return true when KeyEvent is debug trigger`() {

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
@@ -112,7 +111,6 @@ class MainActivity : AppCompatActivity() {
         .takeIf { it }
         ?: super.dispatchTouchEvent(event)
 
-    @SuppressLint("RestrictedApi")
     override fun dispatchKeyEvent(event: KeyEvent): Boolean = debugLaunchManager
         .actionOnInputEvent(event = event, action = ::sendOpenDebugMenuEvent)
         .takeIf { it }

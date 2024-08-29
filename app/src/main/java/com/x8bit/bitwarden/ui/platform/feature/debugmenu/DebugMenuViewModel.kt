@@ -41,7 +41,8 @@ class DebugMenuViewModel @Inject constructor(
                     ),
                 ),
             )
-        }.launchIn(viewModelScope)
+        }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: DebugMenuAction) {

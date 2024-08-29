@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class FeatureFlagOverrideDiskSourceTest {
@@ -16,11 +15,6 @@ class FeatureFlagOverrideDiskSourceTest {
     private val featureFlagOverrideDiskSource = FeatureFlagOverrideDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
     )
-
-    @BeforeEach
-    fun setup() {
-        fakeSharedPreferences.edit { clear() }
-    }
 
     @Test
     fun `call to save feature flag should update SharedPreferences for booleans`() {

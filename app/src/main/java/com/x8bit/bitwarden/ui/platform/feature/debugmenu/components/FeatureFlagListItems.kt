@@ -1,22 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.toggleableState
-import androidx.compose.ui.state.ToggleableState
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 
 /**
  * Creates a list item for a [FlagKey].
@@ -56,26 +45,14 @@ private fun BooleanFlagItem(
     onValueChange: (key: FlagKey<Boolean>, value: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .semantics(mergeDescendants = true) {
-                toggleableState = ToggleableState(currentValue)
-            }
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
-                onClick = { onValueChange(key, !currentValue) },
-            )
-            .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        BitwardenSwitch(
-            label = label,
-            isChecked = currentValue,
-            onCheckedChange = null,
-        )
-    }
+    BitwardenWideSwitch(
+        label = label,
+        isChecked = currentValue,
+        onCheckedChange = {
+            onValueChange(key, it)
+        },
+        modifier = modifier,
+    )
 }
 
 @Composable
