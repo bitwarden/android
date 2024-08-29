@@ -129,11 +129,11 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     private fun handleInternalAction(action: Internal) {
         when (action) {
-            is Internal.AttemptLogin -> handleLoginAttempt(action)
             is Internal.GeneratedPasswordResult -> handleGeneratedPasswordResult(action)
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
             is Internal.ReceiveRegisterResult -> handleReceiveRegisterAccountResult(action)
             is Internal.UpdateOnboardingFeatureState -> handleUpdateOnboardingFeatureState(action)
+            is Internal.ReceiveLoginResult -> handleLoginResult(action)
         }
     }
 
@@ -218,11 +218,19 @@ class CompleteRegistrationViewModel @Inject constructor(
             }
 
             is RegisterResult.Success -> {
-                trySendAction(
-                    action = Internal.AttemptLogin(
+                viewModelScope.launch {
+                    val loginResult = authRepository.login(
+                        email = state.userEmail,
+                        password = state.passwordInput,
                         captchaToken = registerAccountResult.captchaToken,
-                    ),
-                )
+                    )
+                    sendAction(
+                        Internal.ReceiveLoginResult(
+                            loginResult = loginResult,
+                            captchaToken = registerAccountResult.captchaToken,
+                        ),
+                    )
+                }
             }
 
             RegisterResult.DataBreachFound -> {
@@ -260,29 +268,22 @@ class CompleteRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleLoginAttempt(action: Internal.AttemptLogin) {
-        viewModelScope.launch {
-            val result = authRepository.login(
-                email = state.userEmail,
-                password = state.passwordInput,
-                captchaToken = action.captchaToken,
-            )
-            handleDialogDismiss()
+    private fun handleLoginResult(action: Internal.ReceiveLoginResult) {
+        handleDialogDismiss()
+        sendEvent(
+            CompleteRegistrationEvent.ShowToast(
+                message = R.string.account_created_success.asText(),
+            ),
+        )
+        // If the login result is Success the state based navigation will take care of it.
+        // otherwise we need to navigate to the login screen.
+        if (action.loginResult !is LoginResult.Success) {
             sendEvent(
-                CompleteRegistrationEvent.ShowToast(
-                    message = R.string.account_created_success.asText(),
+                CompleteRegistrationEvent.NavigateToLogin(
+                    email = state.userEmail,
+                    captchaToken = action.captchaToken,
                 ),
             )
-            // If the login result is Success the state based navigation will take care of it.
-            // otherwise we need to navigate to the login screen.
-            if (result !is LoginResult.Success) {
-                sendEvent(
-                    CompleteRegistrationEvent.NavigateToLogin(
-                        email = state.userEmail,
-                        captchaToken = action.captchaToken,
-                    ),
-                )
-            }
         }
     }
 
@@ -630,6 +631,9 @@ sealed class CompleteRegistrationAction {
          *
          * @see [AuthRepository.login]
          */
-        data class AttemptLogin(val captchaToken: String?) : Internal()
+        data class ReceiveLoginResult(
+            val loginResult: LoginResult,
+            val captchaToken: String?,
+        ) : Internal()
     }
 }
