@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
@@ -56,21 +57,24 @@ class TwoFactorLoginViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: TwoFactorLoginState(
-            authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
-            availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
-            codeInput = "",
-            displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
-            dialogState = null,
-            isContinueButtonEnabled = authRepository
-                .twoFactorResponse
-                .preferredAuthMethod
-                .isContinueButtonEnabled,
-            isRememberMeEnabled = false,
-            captchaToken = null,
-            email = TwoFactorLoginArgs(savedStateHandle).emailAddress,
-            password = TwoFactorLoginArgs(savedStateHandle).password,
-        ),
+        ?: run {
+            val args = TwoFactorLoginArgs(savedStateHandle)
+            TwoFactorLoginState(
+                authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
+                availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
+                codeInput = "",
+                displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
+                dialogState = null,
+                isContinueButtonEnabled = authRepository
+                    .twoFactorResponse
+                    .preferredAuthMethod
+                    .isContinueButtonEnabled,
+                isRememberMeEnabled = false,
+                captchaToken = null,
+                email = args.emailAddress,
+                password = args.base64EncodedPassword?.base64UrlDecodeOrNull(),
+            )
+        },
 ) {
 
     private val recover2faUri: Uri
