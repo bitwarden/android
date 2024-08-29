@@ -2,9 +2,12 @@ package com.bitwarden.authenticator.data.platform.repository.di
 
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
+import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.bitwarden.authenticator.data.platform.repository.FeatureFlagRepository
+import com.bitwarden.authenticator.data.platform.repository.FeatureFlagRepositoryImpl
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepositoryImpl
 import dagger.Module
@@ -35,5 +38,16 @@ object PlatformRepositoryModule {
             dispatcherManager = dispatcherManager,
             biometricsEncryptionManager = biometricsEncryptionManager,
             authenticatorSdkSource = authenticatorSdkSource,
+        )
+
+    @Provides
+    @Singleton
+    fun provideFeatureFlagRepo(
+        featureFlagDiskSource: FeatureFlagDiskSource,
+        dispatcherManager: DispatcherManager,
+    ): FeatureFlagRepository =
+        FeatureFlagRepositoryImpl(
+            featureFlagDiskSource = featureFlagDiskSource,
+            dispatcherManager = dispatcherManager,
         )
 }
