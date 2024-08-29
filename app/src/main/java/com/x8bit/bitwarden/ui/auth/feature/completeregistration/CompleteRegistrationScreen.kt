@@ -73,7 +73,7 @@ fun CompleteRegistrationScreen(
     onNavigateBack: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToLogin: (email: String, token: String) -> Unit,
+    onNavigateToLogin: (email: String, token: String?) -> Unit,
     viewModel: CompleteRegistrationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()

@@ -54,7 +54,7 @@ fun NavGraphBuilder.completeRegistrationDestination(
     onNavigateBack: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToLogin: (email: String, token: String) -> Unit,
+    onNavigateToLogin: (email: String, token: String?) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = COMPLETE_REGISTRATION_ROUTE,
