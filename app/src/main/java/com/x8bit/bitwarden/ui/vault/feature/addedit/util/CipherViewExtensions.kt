@@ -48,6 +48,7 @@ fun CipherView.toViewState(
                     password = login?.password.orEmpty(),
                     totp = login?.totp,
                     canViewPassword = this.viewPassword,
+                    canEditItem = this.edit,
                     uriList = login?.uris.toUriItems(),
                     fido2CredentialCreationDateTime = login
                         ?.fido2Credentials

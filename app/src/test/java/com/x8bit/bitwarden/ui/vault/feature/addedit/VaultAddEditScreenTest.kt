@@ -925,6 +925,29 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(
                         fido2CredentialCreationDateTime = "fido2Credentials".asText(),
                         canViewPassword = false,
+                        canEditItem = false,
+                    ),
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Passkey")
+            .assertTextEquals("Passkey", "fido2Credentials")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Remove passkey")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                        fido2CredentialCreationDateTime = "fido2Credentials".asText(),
+                        canViewPassword = false,
+                        canEditItem = true,
                     ),
                     isIndividualVaultDisabled = false,
                 ),
@@ -946,6 +969,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(
                         fido2CredentialCreationDateTime = "fido2Credentials".asText(),
                         canViewPassword = true,
+                        canEditItem = true,
                     ),
                     isIndividualVaultDisabled = false,
                 ),

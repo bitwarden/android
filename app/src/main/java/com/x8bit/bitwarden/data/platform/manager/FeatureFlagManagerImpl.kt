@@ -40,7 +40,11 @@ class FeatureFlagManagerImpl(
             .getFlagValueOrDefault(key = key)
 }
 
-private fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
+/**
+ * Extract the value of a [FlagKey] from the [ServerConfig]. If there is an issue with retrieving
+ * or if the value is null, the default value will be returned.
+ */
+fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
     val defaultValue = key.defaultValue
     if (!key.isRemotelyConfigured) return key.defaultValue
     return this

@@ -17,6 +17,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
@@ -64,8 +66,12 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         mockkStatic(
             ::generateUriForCaptcha,
             ::generateUriForWebAuth,
+            String::base64UrlEncode,
         )
         mockkStatic(Uri::class)
+        every {
+            DEFAULT_ENCODED_PASSWORD.base64UrlDecodeOrNull()
+        } returns DEFAULT_PASSWORD
     }
 
     @AfterEach
@@ -73,6 +79,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         unmockkStatic(
             ::generateUriForCaptcha,
             ::generateUriForWebAuth,
+            String::base64UrlDecodeOrNull,
         )
         unmockkStatic(Uri::class)
     }
@@ -81,6 +88,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
+            verify {
+                DEFAULT_ENCODED_PASSWORD.base64UrlDecodeOrNull()
+            }
             assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
@@ -107,7 +117,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = token,
                     method = TwoFactorAuthMethod.WEB_AUTH.value.toString(),
@@ -127,7 +137,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coVerify(exactly = 1) {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = token,
                     method = TwoFactorAuthMethod.WEB_AUTH.value.toString(),
@@ -158,7 +168,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "",
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -172,7 +182,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coVerify {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "",
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -188,7 +198,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "token",
                     method = TwoFactorAuthMethod.DUO.value.toString(),
@@ -206,7 +216,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coVerify {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "token",
                     method = TwoFactorAuthMethod.DUO.value.toString(),
@@ -274,7 +284,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "",
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -305,7 +315,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coVerify {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "",
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -460,7 +470,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.login(
                     email = "example@email.com",
-                    password = "password123",
+                    password = DEFAULT_PASSWORD,
                     twoFactorData = TwoFactorDataModel(
                         code = "",
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -486,7 +496,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             coVerify {
                 authRepository.login(
                     email = "example@email.com",
-                    password = "password123",
+                    password = DEFAULT_PASSWORD,
                     twoFactorData = TwoFactorDataModel(
                         code = "",
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -502,7 +512,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "",
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -542,7 +552,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         coVerify {
             authRepository.login(
                 email = "example@email.com",
-                password = "password123",
+                password = DEFAULT_PASSWORD,
                 twoFactorData = TwoFactorDataModel(
                     code = "",
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -559,7 +569,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.login(
                     email = "example@email.com",
-                    password = "password123",
+                    password = DEFAULT_PASSWORD,
                     twoFactorData = TwoFactorDataModel(
                         code = "",
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -599,7 +609,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             coVerify {
                 authRepository.login(
                     email = "example@email.com",
-                    password = "password123",
+                    password = DEFAULT_PASSWORD,
                     twoFactorData = TwoFactorDataModel(
                         code = "",
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
@@ -840,7 +850,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle().also {
                 it["state"] = state
                 it["email_address"] = "example@email.com"
-                it["password"] = "password123"
+                it["password"] = DEFAULT_ENCODED_PASSWORD
             },
         )
 }
@@ -858,7 +868,8 @@ private val TWO_FACTOR_RESPONSE = GetTokenResponseJson.TwoFactorRequired(
     ssoToken = null,
     twoFactorProviders = null,
 )
-
+private const val DEFAULT_PASSWORD = "password123"
+private const val DEFAULT_ENCODED_PASSWORD = "base64EncodedPassword"
 private val DEFAULT_STATE = TwoFactorLoginState(
     authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
     availableAuthMethods = listOf(
@@ -873,5 +884,5 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     isRememberMeEnabled = false,
     captchaToken = null,
     email = "example@email.com",
-    password = "password123",
+    password = DEFAULT_PASSWORD,
 )

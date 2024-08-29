@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
@@ -48,6 +49,7 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
+import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -141,11 +143,20 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun providesFeatureFlagManager(
+        debugMenuRepository: DebugMenuRepository,
         serverConfigRepository: ServerConfigRepository,
-    ): FeatureFlagManager =
+    ): FeatureFlagManager = if (debugMenuRepository.isDebugMenuEnabled) {
+        DebugMenuFeatureFlagManagerImpl(
+            debugMenuRepository = debugMenuRepository,
+            defaultFeatureFlagManager = FeatureFlagManagerImpl(
+                serverConfigRepository = serverConfigRepository,
+            ),
+        )
+    } else {
         FeatureFlagManagerImpl(
             serverConfigRepository = serverConfigRepository,
         )
+    }
 
     @Provides
     @Singleton

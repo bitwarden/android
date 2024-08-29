@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -149,4 +151,12 @@ object PlatformDiskModule {
             sharedPreferences = sharedPreferences,
             json = json,
         )
+
+    @Provides
+    @Singleton
+    fun provideFeatureFlagOverrideDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+    ): FeatureFlagOverrideDiskSource = FeatureFlagOverrideDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
+    )
 }

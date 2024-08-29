@@ -15,12 +15,14 @@ private const val TWO_FACTOR_LOGIN_ROUTE =
 
 /**
  * Class to retrieve Two-Factor Login arguments from the [SavedStateHandle].
+ *
+ * @property base64EncodedPassword Base64 URL encoded password input.
  */
 @OmitFromCoverage
-data class TwoFactorLoginArgs(val emailAddress: String, val password: String?) {
+data class TwoFactorLoginArgs(val emailAddress: String, val base64EncodedPassword: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         emailAddress = checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-        password = savedStateHandle[PASSWORD],
+        base64EncodedPassword = savedStateHandle[PASSWORD],
     )
 }
 
@@ -29,10 +31,13 @@ data class TwoFactorLoginArgs(val emailAddress: String, val password: String?) {
  */
 fun NavController.navigateToTwoFactorLogin(
     emailAddress: String,
-    password: String?,
+    base64EncodedPassword: String?,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?$PASSWORD=$password", navOptions)
+    this.navigate(
+        route = "$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?$PASSWORD=$base64EncodedPassword",
+        navOptions = navOptions,
+    )
 }
 
 /**
