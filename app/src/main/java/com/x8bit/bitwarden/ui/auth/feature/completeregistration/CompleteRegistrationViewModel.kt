@@ -269,7 +269,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun handleLoginResult(action: Internal.ReceiveLoginResult) {
-        handleDialogDismiss()
+        clearDialogState()
         sendEvent(
             CompleteRegistrationEvent.ShowToast(
                 message = R.string.account_created_success.asText(),
@@ -294,9 +294,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun handleDialogDismiss() {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
     }
 
     private fun handleBackClicked() {
@@ -419,6 +417,12 @@ class CompleteRegistrationViewModel @Inject constructor(
                 )
                 trySendAction(ReceivePasswordStrengthResult(result))
             }
+        }
+    }
+
+    private fun clearDialogState() {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
         }
     }
 }
