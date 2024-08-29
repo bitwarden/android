@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
+import com.x8bit.bitwarden.data.platform.manager.getFlagValueOrDefault
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Default implementation of the [DebugMenuRepository]
@@ -33,38 +33,13 @@ class DebugMenuRepositoryImpl(
             key = key,
         )
 
-    override suspend fun resetFeatureFlagOverrides() {
-        serverConfigRepository
-            .getServerConfig(
-                forceRefresh = true,
+    override fun resetFeatureFlagOverrides() {
+        val currentServerConfig = serverConfigRepository.serverConfigStateFlow.value
+        FlagKey.activeFlags.forEach { flagKey ->
+            updateFeatureFlag(
+                flagKey,
+                currentServerConfig.getFlagValueOrDefault(flagKey),
             )
-            ?.serverData
-            ?.featureStates
-            ?.forEach { (key, value) ->
-                FlagKey
-                    .activeFlags
-                    .find { it.keyName == key }
-                    ?.let { flagKey ->
-                        updateKeyFromNetwork(flagKey, value)
-                    }
-            }
-    }
-
-    private fun updateKeyFromNetwork(
-        flagKey: FlagKey<*>,
-        value: JsonPrimitive,
-    ) {
-        try {
-            when (flagKey.defaultValue) {
-                is Boolean -> updateFeatureFlag(flagKey, value.content.toBoolean())
-                is String -> updateFeatureFlag(flagKey, value.content)
-                is Int -> updateFeatureFlag(flagKey, value.content.toInt())
-                else -> Unit
-            }
-        } catch (_: ClassCastException) {
-            // No-op
-        } catch (_: NumberFormatException) {
-            // No-op
         }
     }
 }

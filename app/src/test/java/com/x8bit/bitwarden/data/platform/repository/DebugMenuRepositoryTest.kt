@@ -5,15 +5,17 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDisk
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -25,8 +27,9 @@ class DebugMenuRepositoryTest {
         every { getFeatureFlag(FlagKey.DummyInt()) } returns TEST_INT_VALUE
         every { saveFeatureFlag(any(), any()) } just runs
     }
+    private val mutableServerConfigStateFlow = MutableStateFlow<ServerConfig?>(null)
     private val mockServerConfigRepository = mockk<ServerConfigRepository>() {
-        coEvery { getServerConfig(any()) } returns null
+        every { serverConfigStateFlow } returns mutableServerConfigStateFlow
     }
 
     private val debugMenuRepository = DebugMenuRepositoryImpl(
@@ -79,21 +82,33 @@ class DebugMenuRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `resetFeatureFlagOverrides should not update flags or emit if there server config is null`() =
+    fun `resetFeatureFlagOverrides should reset flags to default values if they don't exist in server config`() =
         runTest {
             debugMenuRepository.resetFeatureFlagOverrides()
-            verify(exactly = 0) {
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(any(), any())
+            verify(exactly = 1) {
+                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
+                    FlagKey.EmailVerification,
+                    FlagKey.EmailVerification.defaultValue,
+                )
+                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
+                    FlagKey.OnboardingCarousel,
+                    FlagKey.OnboardingCarousel.defaultValue,
+                )
+                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
+                    FlagKey.OnboardingFlow,
+                    FlagKey.OnboardingFlow.defaultValue,
+                )
             }
             debugMenuRepository.featureFlagOverridesUpdatedFlow.test {
                 awaitItem() // initial value on subscription
+                awaitItem()
                 expectNoEvents()
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `resetFeatureFlagOverrides should save all feature flags to values from the server config`() =
+    fun `resetFeatureFlagOverrides should save all feature flags to values from the server config if remote configured is on`() =
         runTest {
             val mockServerData = mockk<ConfigResponseJson>(relaxed = true) {
                 every { featureStates } returns mapOf(
@@ -105,9 +120,12 @@ class DebugMenuRepositoryTest {
             val mockServerConfig = mockk<ServerConfig>(relaxed = true) {
                 every { serverData } returns mockServerData
             }
-            coEvery { mockServerConfigRepository.getServerConfig(any()) } returns mockServerConfig
+            mutableServerConfigStateFlow.value = mockServerConfig
 
             debugMenuRepository.resetFeatureFlagOverrides()
+
+            assertTrue(FlagKey.EmailVerification.isRemotelyConfigured)
+            assertFalse(FlagKey.OnboardingCarousel.isRemotelyConfigured)
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(FlagKey.EmailVerification, true)
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
@@ -116,7 +134,7 @@ class DebugMenuRepositoryTest {
                 )
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingFlow,
-                    true,
+                    false,
                 )
             }
 
@@ -125,6 +143,7 @@ class DebugMenuRepositoryTest {
                 awaitItem()
                 cancel()
             }
+            unmockkStatic(FlagKey.OnboardingFlow::class)
         }
 }
 

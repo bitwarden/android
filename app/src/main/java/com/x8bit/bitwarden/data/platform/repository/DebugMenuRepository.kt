@@ -31,5 +31,5 @@ interface DebugMenuRepository {
     /**
      * Reset all feature flag overrides to their default values or values from the network.
      */
-    suspend fun resetFeatureFlagOverrides()
+    fun resetFeatureFlagOverrides()
 }
