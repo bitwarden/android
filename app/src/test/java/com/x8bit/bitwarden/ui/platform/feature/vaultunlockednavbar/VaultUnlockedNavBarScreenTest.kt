@@ -66,11 +66,35 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToVaultScreen should navigate to VaultScreen`() {
         composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-        mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+        mutableEventFlow.tryEmit(
+            VaultUnlockedNavBarEvent.NavigateToVaultScreen(returnToSubgraphRoot = false),
+        )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "vault_graph",
                 navOptions = expectedNavOptions,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `NavigateToVaultScreen should navigate to VaultScreen with correct options when returnToSubgraphRoot is true`() {
+        composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
+        mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToVaultScreen(returnToSubgraphRoot = true))
+        val expectedSubRootNavOptions = navOptions {
+            // When changing root navigation state, pop everything else off the back stack:
+            popUpTo(fakeNavHostController.graphId) {
+                inclusive = false
+                saveState = false
+            }
+            launchSingleTop = true
+            restoreState = false
+        }
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_graph",
+                navOptions = expectedSubRootNavOptions,
             )
         }
     }
@@ -85,7 +109,11 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     fun `NavigateToSendScreen should navigate to SendScreen`() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
+            mutableEventFlow.tryEmit(
+                VaultUnlockedNavBarEvent.NavigateToSendScreen(
+                    returnToSubgraphRoot = false,
+                ),
+            )
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "send_graph",
@@ -105,7 +133,11 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     fun `NavigateToGeneratorScreen should navigate to GeneratorScreen`() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
+            mutableEventFlow.tryEmit(
+                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen(
+                    returnToSubgraphRoot = false,
+                ),
+            )
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "generator_graph",
@@ -125,7 +157,11 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     fun `NavigateToSettingsScreen should navigate to SettingsScreen`() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
+            mutableEventFlow.tryEmit(
+                VaultUnlockedNavBarEvent.NavigateToSettingsScreen(
+                    returnToSubgraphRoot = false,
+                ),
+            )
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "settings_graph",
@@ -144,7 +180,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             VaultUnlockedNavBarState(
                 vaultNavBarLabelRes = R.string.vaults,
                 vaultNavBarContentDescriptionRes = R.string.vaults,
-                currentTab = SelectedBottomTab.Vault,
+                currentTab = BottomNavDestination.VAULT,
             ),
         )
 
@@ -156,5 +192,5 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = R.string.my_vault,
     vaultNavBarContentDescriptionRes = R.string.my_vault,
-    currentTab = SelectedBottomTab.Vault,
+    currentTab = BottomNavDestination.VAULT,
 )

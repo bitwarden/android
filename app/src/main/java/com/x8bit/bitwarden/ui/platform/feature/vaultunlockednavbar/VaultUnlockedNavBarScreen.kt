@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -90,21 +91,21 @@ fun VaultUnlockedNavBarScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
-            val navOptions = vaultUnlockedNavBarScreenNavOptions()
+            val navOptions = vaultUnlockedNavBarScreenNavOptions(event.returnToSubgraphRoot)
             when (event) {
-                VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
+                is VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
                     navigateToVaultGraph(navOptions)
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
+                is VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
                     navigateToSendGraph(navOptions)
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
+                is VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
                     navigateToGeneratorGraph(navOptions)
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
+                is VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
                     navigateToSettingsGraph(navOptions)
                 }
             }
@@ -421,12 +422,38 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
 
 /**
  * Helper function to generate [NavOptions] for [VaultUnlockedNavBarScreen].
+ *
+ * @param returnToCurrentSubRoot Whether to return to the current sub-root destination. This would
+ * be marked true in the case the current selected tab has been clicked again.
  */
-private fun NavController.vaultUnlockedNavBarScreenNavOptions(): NavOptions =
-    navOptions {
-        popUpTo(graph.findStartDestination().id) {
-            saveState = true
+private fun NavController.vaultUnlockedNavBarScreenNavOptions(
+    returnToCurrentSubRoot: Boolean,
+): NavOptions {
+    val startDestination = graph.findStartDestination().id
+    val currentSubRootGraph = currentDestination?.parent?.id
+    val popUpToDestination = graph
+        .getSubgraphStartDestinationOrNull(currentSubRootGraph)
+        .takeIf { returnToCurrentSubRoot }
+        ?: startDestination
+    return navOptions {
+        popUpTo(popUpToDestination) {
+            saveState = !returnToCurrentSubRoot
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = !returnToCurrentSubRoot
     }
+}
+
+/**
+ * Helper function to determine the start destination of a subgraph.
+ *
+ * @param subgraphId the id of the subgraph to find the start destination of.
+ *
+ * @return the id of the start destination of the subgraph, or null if the subgraph does not exist.
+ */
+private fun NavGraph.getSubgraphStartDestinationOrNull(subgraphId: Int?): Int? {
+    subgraphId ?: return null
+    return nodes[subgraphId]?.let {
+        (it as? NavGraph)?.findStartDestination()?.id
+    }
+}

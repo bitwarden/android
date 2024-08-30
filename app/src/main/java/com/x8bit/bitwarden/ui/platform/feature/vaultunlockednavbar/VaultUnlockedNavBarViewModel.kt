@@ -32,7 +32,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
         ?: VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.my_vault,
             vaultNavBarContentDescriptionRes = R.string.my_vault,
-            currentTab = SelectedBottomTab.Vault,
+            currentTab = BottomNavDestination.VAULT,
         ),
 ) {
     init {
@@ -45,12 +45,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
 
         when (specialCircumstancesManager.specialCircumstance) {
             SpecialCircumstance.GeneratorShortcut -> {
-                sendEvent(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
+                updateTabStateAndSendNavEvent(BottomNavDestination.GENERATOR)
                 specialCircumstancesManager.specialCircumstance = null
             }
 
             SpecialCircumstance.VaultShortcut -> {
-                sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+                updateTabStateAndSendNavEvent(BottomNavDestination.VAULT)
                 specialCircumstancesManager.specialCircumstance = null
             }
 
@@ -85,28 +85,28 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToGeneratorScreen] event
      */
     private fun handleGeneratorTabClicked() {
-        sendNavigationEvent(SelectedBottomTab.Generator)
+        updateTabStateAndSendNavEvent(BottomNavDestination.GENERATOR)
     }
 
     /**
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToSendScreen] event
      */
     private fun handleSendTabClicked() {
-        sendNavigationEvent(SelectedBottomTab.Send)
+        updateTabStateAndSendNavEvent(BottomNavDestination.SEND)
     }
 
     /**
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToVaultScreen] event
      */
     private fun handleVaultTabClicked() {
-        sendNavigationEvent(SelectedBottomTab.Vault)
+        updateTabStateAndSendNavEvent(BottomNavDestination.VAULT)
     }
 
     /**
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToSettingsScreen] event
      */
     private fun handleSettingsTabClicked() {
-        sendNavigationEvent(SelectedBottomTab.Settings)
+        updateTabStateAndSendNavEvent(BottomNavDestination.SETTINGS)
     }
 
     /**
@@ -134,20 +134,28 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
     /**
      * Send the navigation event for the selected tab. If the tab is already selected, do nothing.
      */
-    private fun sendNavigationEvent(tab: SelectedBottomTab) {
-        // If the tab is already selected, do nothing.
-        if (stateFlow.value.currentTab == tab) return
+    private fun updateTabStateAndSendNavEvent(tab: BottomNavDestination) {
+        val shouldReturnToSubgraphRoot = stateFlow.value.currentTab == tab
         val navEvent = when (tab) {
-            SelectedBottomTab.Vault -> VaultUnlockedNavBarEvent.NavigateToVaultScreen
-            SelectedBottomTab.Send -> VaultUnlockedNavBarEvent.NavigateToSendScreen
-            SelectedBottomTab.Generator -> VaultUnlockedNavBarEvent.NavigateToGeneratorScreen
-            SelectedBottomTab.Settings -> VaultUnlockedNavBarEvent.NavigateToSettingsScreen
+            BottomNavDestination.VAULT -> VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                returnToSubgraphRoot = shouldReturnToSubgraphRoot,
+            )
+
+            BottomNavDestination.SEND -> VaultUnlockedNavBarEvent.NavigateToSendScreen(
+                returnToSubgraphRoot = shouldReturnToSubgraphRoot,
+            )
+
+            BottomNavDestination.GENERATOR -> VaultUnlockedNavBarEvent.NavigateToGeneratorScreen(
+                returnToSubgraphRoot = shouldReturnToSubgraphRoot,
+            )
+
+            BottomNavDestination.SETTINGS -> VaultUnlockedNavBarEvent.NavigateToSettingsScreen(
+                returnToSubgraphRoot = shouldReturnToSubgraphRoot,
+            )
         }
         sendEvent(navEvent)
         // Update the current tab.
-        mutableStateFlow.update {
-            it.copy(currentTab = tab)
-        }
+        mutableStateFlow.update { it.copy(currentTab = tab) }
     }
 }
 
@@ -158,7 +166,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
 data class VaultUnlockedNavBarState(
     @StringRes val vaultNavBarLabelRes: Int,
     @StringRes val vaultNavBarContentDescriptionRes: Int,
-    val currentTab: SelectedBottomTab,
+    val currentTab: BottomNavDestination,
 ) : Parcelable
 
 /**
@@ -203,33 +211,41 @@ sealed class VaultUnlockedNavBarAction {
  */
 sealed class VaultUnlockedNavBarEvent {
     /**
+     * Whether to return to the root of the subgraph or not.
+     */
+    abstract val returnToSubgraphRoot: Boolean
+    /**
      * Navigate to the Generator screen.
      */
-    data object NavigateToGeneratorScreen : VaultUnlockedNavBarEvent()
+    data class NavigateToGeneratorScreen(override val returnToSubgraphRoot: Boolean) :
+        VaultUnlockedNavBarEvent()
 
     /**
      * Navigate to the Send screen.
      */
-    data object NavigateToSendScreen : VaultUnlockedNavBarEvent()
+    data class NavigateToSendScreen(override val returnToSubgraphRoot: Boolean) :
+        VaultUnlockedNavBarEvent()
 
     /**
      * Navigate to the Vault screen.
      */
-    data object NavigateToVaultScreen : VaultUnlockedNavBarEvent()
+    data class NavigateToVaultScreen(override val returnToSubgraphRoot: Boolean) :
+        VaultUnlockedNavBarEvent()
 
     /**
      * Navigate to the Settings screen.
      */
-    data object NavigateToSettingsScreen : VaultUnlockedNavBarEvent()
+    data class NavigateToSettingsScreen(override val returnToSubgraphRoot: Boolean) :
+        VaultUnlockedNavBarEvent()
 }
 
 /**
  * Enum to represent the current bottom tab that is selected.
  */
 @Parcelize
-enum class SelectedBottomTab : Parcelable {
-    Vault,
-    Send,
-    Generator,
-    Settings,
+enum class BottomNavDestination : Parcelable {
+    VAULT,
+    SEND,
+    GENERATOR,
+    SETTINGS,
 }
