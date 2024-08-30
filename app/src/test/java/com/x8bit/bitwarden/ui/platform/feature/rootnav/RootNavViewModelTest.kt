@@ -663,7 +663,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns false
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -690,7 +690,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns true
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -740,7 +740,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns true
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",

@@ -70,13 +70,8 @@ class RootNavViewModel @Inject constructor(
 
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
-            specialCircumstance is SpecialCircumstance.PreLogin.CompleteRegistration -> {
-                RootNavState.CompleteOngoingRegistration(
-                    email = specialCircumstance.completeRegistrationData.email,
-                    verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
-                    fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
-                    timestamp = specialCircumstance.timestamp,
-                )
+            specialCircumstance is SpecialCircumstance.RegistrationEvent -> {
+                getRegistrationEventNavState(specialCircumstance)
             }
 
             userState == null ||
@@ -141,7 +136,9 @@ class RootNavViewModel @Inject constructor(
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    is SpecialCircumstance.PreLogin.CompleteRegistration -> {
+                    SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink,
+                    is SpecialCircumstance.RegistrationEvent.CompleteRegistration,
+                    -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
                         )
@@ -152,6 +149,24 @@ class RootNavViewModel @Inject constructor(
             else -> RootNavState.VaultLocked
         }
         mutableStateFlow.update { updatedRootNavState }
+    }
+
+    private fun getRegistrationEventNavState(
+        registrationEvent: SpecialCircumstance.RegistrationEvent,
+    ) = when (registrationEvent) {
+        is SpecialCircumstance.RegistrationEvent.CompleteRegistration -> {
+            RootNavState.CompleteOngoingRegistration(
+                email = registrationEvent.completeRegistrationData.email,
+                verificationToken = registrationEvent.completeRegistrationData.verificationToken,
+                fromEmail = registrationEvent.completeRegistrationData.fromEmail,
+                timestamp = registrationEvent.timestamp,
+            )
+        }
+
+        SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink -> {
+            // TODO PM-11479
+            RootNavState.Auth
+        }
     }
 
     private fun UserState.shouldShowRemovePassword(authState: AuthState): Boolean {

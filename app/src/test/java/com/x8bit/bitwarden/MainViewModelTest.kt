@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
@@ -34,12 +35,14 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
@@ -80,6 +83,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
         every { userStateFlow } returns mutableUserStateFlow
         every { switchAccount(any()) } returns SwitchAccountResult.NoChange
+        coEvery { validateEmailToken(any(), any()) } returns EmailTokenResult.Success
     }
     private val mutableVaultStateEventFlow = bufferedMutableSharedFlow<VaultStateEvent>()
     private val vaultRepository = mockk<VaultRepository> {
@@ -94,6 +98,9 @@ class MainViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
+    private val environmentRepository = mockk<EnvironmentRepository>(relaxed = true) {
+        every { loadEnvironmentForEmail(any()) } returns true
+    }
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
     }
@@ -325,9 +332,12 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to CompleteRegistration`() {
+    fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to CompleteRegistration if token is valid`() {
         val viewModel = createViewModel()
-        val completeRegistrationData = mockk<CompleteRegistrationData>()
+        val completeRegistrationData = mockk<CompleteRegistrationData>() {
+            every { email } returns "email"
+            every { verificationToken } returns "token"
+        }
         val mockIntent = mockk<Intent> {
             every { getPasswordlessRequestDataIntentOrNull() } returns null
             every { getAutofillSaveItemOrNull() } returns null
@@ -345,13 +355,135 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 completeRegistrationData = completeRegistrationData,
                 timestamp = FIXED_CLOCK.millis(),
             ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to ExpiredRegistration if token is not valid`() {
+        val viewModel = createViewModel()
+        val intentEmail = "email"
+        val token = "token"
+        val completeRegistrationData = mockk<CompleteRegistrationData>() {
+            every { email } returns intentEmail
+            every { verificationToken } returns token
+        }
+        val mockIntent = mockk<Intent> {
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { authRepository.activeUserId } returns null
+        coEvery {
+            authRepository.validateEmailToken(
+                email = intentEmail,
+                token = token,
+            )
+        } returns EmailTokenResult.Expired
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with complete registration data should show toast if token is not valid but unable to determine reason`() =
+        runTest {
+            val viewModel = createViewModel()
+            val intentEmail = "email"
+            val token = "token"
+            val completeRegistrationData = mockk<CompleteRegistrationData>() {
+                every { email } returns intentEmail
+                every { verificationToken } returns token
+            }
+            val mockIntent = mockk<Intent> {
+                every { getPasswordlessRequestDataIntentOrNull() } returns null
+                every { getAutofillSaveItemOrNull() } returns null
+                every { getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
+                every { getAutofillSelectionDataOrNull() } returns null
+                every { isMyVaultShortcut } returns false
+                every { isPasswordGeneratorShortcut } returns false
+            }
+            every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+            every { authRepository.activeUserId } returns null
+            coEvery {
+                authRepository.validateEmailToken(
+                    intentEmail,
+                    token,
+                )
+            } returns EmailTokenResult.Error(message = null)
+
+            viewModel.trySendAction(
+                MainAction.ReceiveFirstIntent(
+                    intent = mockIntent,
+                ),
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with complete registration data should show toast with custom message if token is not valid but unable to determine reason`() =
+        runTest {
+            val viewModel = createViewModel()
+            val intentEmail = "email"
+            val token = "token"
+            val completeRegistrationData = mockk<CompleteRegistrationData>() {
+                every { email } returns intentEmail
+                every { verificationToken } returns token
+            }
+            val mockIntent = mockk<Intent> {
+                every { getPasswordlessRequestDataIntentOrNull() } returns null
+                every { getAutofillSaveItemOrNull() } returns null
+                every { getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
+                every { getAutofillSelectionDataOrNull() } returns null
+                every { isMyVaultShortcut } returns false
+                every { isPasswordGeneratorShortcut } returns false
+            }
+            every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+            every { authRepository.activeUserId } returns null
+
+            val expectedMessage = "expectedMessage"
+            coEvery {
+                authRepository.validateEmailToken(
+                    intentEmail,
+                    token,
+                )
+            } returns EmailTokenResult.Error(message = expectedMessage)
+
+            viewModel.trySendAction(
+                MainAction.ReceiveFirstIntent(
+                    intent = mockIntent,
+                ),
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    MainEvent.ShowToast(expectedMessage.asText()),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -768,6 +900,7 @@ class MainViewModelTest : BaseViewModelTest() {
         vaultRepository = vaultRepository,
         authRepository = authRepository,
         clock = FIXED_CLOCK,
+        environmentRepository = environmentRepository,
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },

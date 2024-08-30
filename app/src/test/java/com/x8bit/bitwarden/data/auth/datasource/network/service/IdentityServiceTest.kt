@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEm
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -366,6 +368,55 @@ class IdentityServiceTest : BaseServiceTest() {
     fun `sendVerificationEmail should return an error when response is an error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(400))
         val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `verifyEmailToken should return Valid when response is success`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val result = identityService.verifyEmailRegistrationToken(
+            body = VerifyEmailTokenRequestJson(
+                token = EMAIL_TOKEN,
+                email = EMAIL,
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `verifyEmailToken should return Invalid when response is expired error`() = runTest {
+        val json = """
+            {
+              "message": "Expired link. Please restart registration or try logging in. You may already have an account"
+            }
+        """.trimIndent()
+        val response = MockResponse().setResponseCode(400).setBody(json)
+        server.enqueue(response)
+        val result = identityService.verifyEmailRegistrationToken(
+            body = VerifyEmailTokenRequestJson(
+                token = EMAIL_TOKEN,
+                email = EMAIL,
+            ),
+        )
+        assertTrue(result.isSuccess)
+        assertEquals(
+            VerifyEmailTokenResponseJson.Invalid(
+                message = "Expired link. Please restart registration or try logging in. You may already have an account",
+            ),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `verifyEmailToken should return an error when response is an un-handled error`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(500))
+        val result = identityService.verifyEmailRegistrationToken(
+            body = VerifyEmailTokenRequestJson(
+                email = EMAIL,
+                token = EMAIL_TOKEN,
+            ),
+        )
         assertTrue(result.isFailure)
     }
 

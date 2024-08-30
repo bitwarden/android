@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -377,4 +378,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         name: String,
         receiveMarketingEmails: Boolean,
     ): SendVerificationEmailResult
+
+    /**
+     * Validates the given [token] for the given [email]. Part of th new account registration flow.
+     */
+    suspend fun validateEmailToken(
+        email: String,
+        token: String,
+    ): EmailTokenResult
 }

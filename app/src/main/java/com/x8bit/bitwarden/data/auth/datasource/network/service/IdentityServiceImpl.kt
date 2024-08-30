@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResult
@@ -127,4 +129,20 @@ class IdentityServiceImpl(
             .sendVerificationEmail(body = body)
             .map { it?.content }
     }
+
+    override suspend fun verifyEmailRegistrationToken(
+        body: VerifyEmailTokenRequestJson,
+    ): Result<VerifyEmailTokenResponseJson> = unauthenticatedIdentityApi
+        .verifyEmailToken(
+            body = body,
+        ).map {
+            VerifyEmailTokenResponseJson.Valid
+        }
+        .recoverCatching { throwable ->
+            val bitwardenError = throwable.toBitwardenError()
+            bitwardenError.parseErrorBodyOrNull<VerifyEmailTokenResponseJson.Invalid>(
+                code = 400,
+                json = json,
+            ) ?: throw throwable
+        }
 }

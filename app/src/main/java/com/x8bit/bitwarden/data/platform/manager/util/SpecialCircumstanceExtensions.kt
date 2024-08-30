@@ -21,7 +21,8 @@ fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
         is SpecialCircumstance.Fido2Save -> null
         is SpecialCircumstance.Fido2Assertion -> null
         is SpecialCircumstance.Fido2GetCredentials -> null
-        is SpecialCircumstance.PreLogin.CompleteRegistration -> null
+        is SpecialCircumstance.RegistrationEvent.CompleteRegistration -> null
+        SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink -> null
     }
 
 /**
@@ -38,7 +39,8 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
         is SpecialCircumstance.Fido2Save -> null
         is SpecialCircumstance.Fido2Assertion -> null
         is SpecialCircumstance.Fido2GetCredentials -> null
-        is SpecialCircumstance.PreLogin.CompleteRegistration -> null
+        is SpecialCircumstance.RegistrationEvent.CompleteRegistration -> null
+        SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink -> null
     }
 
 /**
