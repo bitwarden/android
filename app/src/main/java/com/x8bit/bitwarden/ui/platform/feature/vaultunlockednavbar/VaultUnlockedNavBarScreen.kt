@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -42,7 +41,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
@@ -50,21 +48,18 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
-import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
-import kotlinx.parcelize.Parcelize
 
 /**
  * Top level composable for the Vault Unlocked Screen.
@@ -91,7 +86,8 @@ fun VaultUnlockedNavBarScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
-            val navOptions = vaultUnlockedNavBarScreenNavOptions(event.returnToSubgraphRoot)
+            val navOptions =
+                vaultUnlockedNavBarScreenNavOptions(tabToNavigateTo = event.tab)
             when (event) {
                 is VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
                     navigateToVaultGraph(navOptions)
@@ -323,112 +319,15 @@ private fun VaultBottomAppBar(
 }
 
 /**
- * Represents the different tabs available in the navigation bar
- * for the unlocked portion of the vault.
- *
- * Each tab is modeled with properties that provide information on:
- * - Regular icon resource
- * - Icon resource when selected
- * and other essential UI and navigational data.
- *
- * @property iconRes The resource ID for the regular (unselected) icon representing the tab.
- * @property iconResSelected The resource ID for the icon representing the tab when it's selected.
- */
-@Parcelize
-private sealed class VaultUnlockedNavBarTab : Parcelable {
-    /**
-     * The resource ID for the icon representing the tab when it is selected.
-     */
-    abstract val iconResSelected: Int
-
-    /**
-     * Resource id for the icon representing the tab.
-     */
-    abstract val iconRes: Int
-
-    /**
-     * Resource id for the label describing the tab.
-     */
-    abstract val labelRes: Int
-
-    /**
-     * Resource id for the content description describing the tab.
-     */
-    abstract val contentDescriptionRes: Int
-
-    /**
-     * Route of the tab.
-     */
-    abstract val route: String
-
-    /**
-     * The test tag of the tab.
-     */
-    abstract val testTag: String
-
-    /**
-     * Show the Generator screen.
-     */
-    @Parcelize
-    data object Generator : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_generator_filled
-        override val iconRes get() = R.drawable.ic_generator
-        override val labelRes get() = R.string.generator
-        override val contentDescriptionRes get() = R.string.generator
-        override val route get() = GENERATOR_GRAPH_ROUTE
-        override val testTag get() = "GeneratorTab"
-    }
-
-    /**
-     * Show the Send screen.
-     */
-    @Parcelize
-    data object Send : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_send_filled
-        override val iconRes get() = R.drawable.ic_send
-        override val labelRes get() = R.string.send
-        override val contentDescriptionRes get() = R.string.send
-        override val route get() = SEND_GRAPH_ROUTE
-        override val testTag get() = "SendTab"
-    }
-
-    /**
-     * Show the Vault screen.
-     */
-    @Parcelize
-    data class Vault(
-        override val labelRes: Int,
-        override val contentDescriptionRes: Int,
-    ) : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_vault_filled
-        override val iconRes get() = R.drawable.ic_vault
-        override val route get() = VAULT_GRAPH_ROUTE
-        override val testTag get() = "VaultTab"
-    }
-
-    /**
-     * Show the Settings screen.
-     */
-    @Parcelize
-    data object Settings : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_settings_filled
-        override val iconRes get() = R.drawable.ic_settings
-        override val labelRes get() = R.string.settings
-        override val contentDescriptionRes get() = R.string.settings
-        override val route get() = SETTINGS_GRAPH_ROUTE
-        override val testTag get() = "SettingsTab"
-    }
-}
-
-/**
  * Helper function to generate [NavOptions] for [VaultUnlockedNavBarScreen].
  *
- * @param returnToCurrentSubRoot Whether to return to the current sub-root destination. This would
- * be marked true in the case the current selected tab has been clicked again.
+ * @param tabToNavigateTo The [VaultUnlockedNavBarTab] to prepare the NavOptions for.
+ * NavOptions are determined on whether or not the tab is already selected.
  */
 private fun NavController.vaultUnlockedNavBarScreenNavOptions(
-    returnToCurrentSubRoot: Boolean,
+    tabToNavigateTo: VaultUnlockedNavBarTab,
 ): NavOptions {
+    val returnToCurrentSubRoot = isCurrentTab(tabToNavigateTo)
     val startDestination = graph.findStartDestination().id
     val currentSubRootGraph = currentDestination?.parent?.id
     val popUpToDestination = graph
@@ -443,6 +342,14 @@ private fun NavController.vaultUnlockedNavBarScreenNavOptions(
         restoreState = !returnToCurrentSubRoot
     }
 }
+
+/**
+ * Determine if the current destination is the same as the given tab.
+ */
+private fun NavController.isCurrentTab(tab: VaultUnlockedNavBarTab): Boolean =
+    currentDestination?.hierarchy?.any {
+        it.route == tab.route
+    } == true
 
 /**
  * Helper function to determine the start destination of a subgraph.

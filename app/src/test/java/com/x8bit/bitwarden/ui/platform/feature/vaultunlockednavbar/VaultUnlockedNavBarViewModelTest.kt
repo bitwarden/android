@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -39,10 +38,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                assertEquals(
-                    VaultUnlockedNavBarEvent.NavigateToGeneratorScreen(returnToSubgraphRoot = false),
-                    awaitItem(),
-                )
+                assertEquals(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen, awaitItem())
             }
             verify(exactly = 1) {
                 specialCircumstancesManager.specialCircumstance
@@ -61,10 +57,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                assertEquals(
-                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(returnToSubgraphRoot = true),
-                    awaitItem(),
-                )
+                assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
             }
             verify(exactly = 1) {
                 specialCircumstancesManager.specialCircumstance
@@ -99,7 +92,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.vaults,
             vaultNavBarContentDescriptionRes = R.string.vaults,
-            currentTab = BottomNavDestination.VAULT,
         )
         val accountWithoutOrganizations: UserState.Account = mockk {
             every { userId } returns activeUserId
@@ -108,7 +100,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithoutOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.my_vault,
             vaultNavBarContentDescriptionRes = R.string.my_vault,
-            currentTab = BottomNavDestination.VAULT,
         )
 
         val viewModel = createViewModel()
@@ -143,78 +134,22 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `VaultTabClick should navigate to the vault screen with option to return to subgraph root true`() =
-        runTest {
-            val viewModel = createViewModel()
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
-                assertEquals(
-                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(returnToSubgraphRoot = true),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `VaultTabClick should navigate to the vault screen with option to return to subgraph root false`() =
-        runTest {
-            val viewModel = createViewModel()
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick)
-                assertEquals(
-                    VaultUnlockedNavBarState(
-                        vaultNavBarLabelRes = R.string.my_vault,
-                        vaultNavBarContentDescriptionRes = R.string.my_vault,
-                        currentTab = BottomNavDestination.SEND,
-                    ),
-                    viewModel.stateFlow.value,
-                )
-                assertEquals(
-                    VaultUnlockedNavBarEvent.NavigateToSendScreen(returnToSubgraphRoot = false),
-                    awaitItem(),
-                )
-                viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
-                assertEquals(
-                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(returnToSubgraphRoot = false),
-                    awaitItem(),
-                )
-            }
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Test
-    fun `SendTabClick should navigate to the send screen and update the state`() = runTest {
+    fun `VaultTabClick should navigate to the vault screen`() = runTest {
         val viewModel = createViewModel()
-        assertEquals(
-            DEFAULT_STATE,
-            viewModel.stateFlow.value,
-        )
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
+            assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
+        }
+    }
+
+    @Test
+    fun `SendTabClick should navigate to the send screen`() = runTest {
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick)
-            assertEquals(
-                VaultUnlockedNavBarEvent.NavigateToSendScreen(returnToSubgraphRoot = false),
-                awaitItem(),
-            )
+            assertEquals(VaultUnlockedNavBarEvent.NavigateToSendScreen, awaitItem())
         }
-        assertEquals(
-            VaultUnlockedNavBarState(
-                vaultNavBarLabelRes = R.string.my_vault,
-                vaultNavBarContentDescriptionRes = R.string.my_vault,
-                currentTab = BottomNavDestination.SEND,
-            ),
-            viewModel.stateFlow.value,
-        )
     }
 
     @Test
@@ -222,10 +157,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
-            assertEquals(
-                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen(returnToSubgraphRoot = false),
-                awaitItem(),
-            )
+            assertEquals(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen, awaitItem())
         }
     }
 
@@ -234,30 +166,13 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
-            assertEquals(
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen(returnToSubgraphRoot = false),
-                awaitItem(),
-            )
+            assertEquals(VaultUnlockedNavBarEvent.NavigateToSettingsScreen, awaitItem())
         }
     }
 
-    @Test
-    fun `if state exists in SavedStateHandle apply as the initial state`() {
-        val savedState = DEFAULT_STATE.copy(currentTab = BottomNavDestination.SEND)
-        val viewModel = createViewModel(savedState)
-        assertEquals(savedState, viewModel.stateFlow.value)
-    }
-
-    private fun createViewModel(initialState: VaultUnlockedNavBarState = DEFAULT_STATE) =
+    private fun createViewModel() =
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,
             specialCircumstancesManager = specialCircumstancesManager,
-            savedStateHandle = SavedStateHandle(initialState = mapOf("state" to initialState)),
         )
 }
-
-private val DEFAULT_STATE = VaultUnlockedNavBarState(
-    vaultNavBarLabelRes = R.string.my_vault,
-    vaultNavBarContentDescriptionRes = R.string.my_vault,
-    currentTab = BottomNavDestination.VAULT,
-)
