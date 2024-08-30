@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph
@@ -267,12 +268,11 @@ private fun VaultBottomAppBar(
             VaultUnlockedNavBarTab.Generator,
             VaultUnlockedNavBarTab.Settings,
         )
+        // Collecting the back stack entry here as state is crucial to ensuring that the items
+        // below recompose when the navigation state changes to update the selected tab.
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
         destinations.forEach { destination ->
-            val isSelected = currentDestination?.hierarchy?.any {
-                it.route == destination.route
-            } == true
+            val isSelected = navBackStackEntry.isCurrentTab(destination)
 
             NavigationBarItem(
                 icon = {
@@ -327,7 +327,7 @@ private fun VaultBottomAppBar(
 private fun NavController.vaultUnlockedNavBarScreenNavOptions(
     tabToNavigateTo: VaultUnlockedNavBarTab,
 ): NavOptions {
-    val returnToCurrentSubRoot = isCurrentTab(tabToNavigateTo)
+    val returnToCurrentSubRoot = currentBackStackEntry.isCurrentTab(tabToNavigateTo)
     val startDestination = graph.findStartDestination().id
     val currentSubRootGraph = currentDestination?.parent?.id
     val popUpToDestination = graph
@@ -346,8 +346,8 @@ private fun NavController.vaultUnlockedNavBarScreenNavOptions(
 /**
  * Determine if the current destination is the same as the given tab.
  */
-private fun NavController.isCurrentTab(tab: VaultUnlockedNavBarTab): Boolean =
-    currentDestination?.hierarchy?.any {
+private fun NavBackStackEntry?.isCurrentTab(tab: VaultUnlockedNavBarTab): Boolean =
+    this?.destination?.hierarchy?.any {
         it.route == tab.route
     } == true
 

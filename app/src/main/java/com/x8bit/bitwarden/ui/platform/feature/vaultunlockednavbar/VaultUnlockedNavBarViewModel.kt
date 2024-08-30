@@ -43,7 +43,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             }
 
             SpecialCircumstance.VaultShortcut -> {
-                sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+                sendEvent(
+                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                        labelRes = state.vaultNavBarLabelRes,
+                        contentDescRes = state.vaultNavBarContentDescriptionRes,
+                    ),
+                )
                 specialCircumstancesManager.specialCircumstance = null
             }
 
@@ -87,7 +92,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToVaultScreen] event
      */
     private fun handleVaultTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+        sendEvent(
+            VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                labelRes = state.vaultNavBarLabelRes,
+                contentDescRes = state.vaultNavBarContentDescriptionRes,
+            ),
+        )
     }
 
     /**
@@ -189,10 +199,13 @@ sealed class VaultUnlockedNavBarEvent {
     /**
      * Navigate to the Vault screen.
      */
-    data object NavigateToVaultScreen : VaultUnlockedNavBarEvent() {
+    data class NavigateToVaultScreen(
+        val labelRes: Int,
+        val contentDescRes: Int,
+    ) : VaultUnlockedNavBarEvent() {
         override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Vault(
-            labelRes = R.string.my_vault,
-            contentDescriptionRes = R.string.my_vault,
+            labelRes = labelRes,
+            contentDescriptionRes = contentDescRes,
         )
     }
 
