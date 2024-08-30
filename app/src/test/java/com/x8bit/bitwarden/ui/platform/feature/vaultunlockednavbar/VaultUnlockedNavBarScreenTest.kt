@@ -68,7 +68,10 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
         composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("send_graph") }
         mutableEventFlow.tryEmit(
-            VaultUnlockedNavBarEvent.NavigateToVaultScreen,
+            VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                labelRes = R.string.my_vault,
+                contentDescRes = R.string.my_vault,
+            ),
         )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
@@ -88,9 +91,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     fun `NavigateToSendScreen should navigate to SendScreen`() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-            mutableEventFlow.tryEmit(
-                VaultUnlockedNavBarEvent.NavigateToSendScreen,
-            )
+            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "send_graph",
@@ -110,9 +111,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     fun `NavigateToGeneratorScreen should navigate to GeneratorScreen`() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-            mutableEventFlow.tryEmit(
-                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
-            )
+            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "generator_graph",
@@ -132,9 +131,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     fun `NavigateToSettingsScreen should navigate to SettingsScreen`() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-            mutableEventFlow.tryEmit(
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen,
-            )
+            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "settings_graph",

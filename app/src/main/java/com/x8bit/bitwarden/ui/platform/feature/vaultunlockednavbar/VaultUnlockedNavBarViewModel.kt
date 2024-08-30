@@ -180,6 +180,9 @@ sealed class VaultUnlockedNavBarAction {
  */
 sealed class VaultUnlockedNavBarEvent {
 
+    /**
+     * The [VaultUnlockedNavBarTab] to be associated with the event.
+     */
     abstract val tab: VaultUnlockedNavBarTab
 
     /**

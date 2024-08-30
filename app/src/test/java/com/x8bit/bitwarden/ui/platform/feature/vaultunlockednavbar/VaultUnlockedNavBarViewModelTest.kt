@@ -57,7 +57,13 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
+                assertEquals(
+                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                        labelRes = R.string.my_vault,
+                        contentDescRes = R.string.my_vault,
+                    ),
+                    awaitItem(),
+                )
             }
             verify(exactly = 1) {
                 specialCircumstancesManager.specialCircumstance
@@ -139,7 +145,13 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
-            assertEquals(VaultUnlockedNavBarEvent.NavigateToVaultScreen, awaitItem())
+            assertEquals(
+                VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                    labelRes = R.string.my_vault,
+                    contentDescRes = R.string.my_vault,
+                ),
+                awaitItem(),
+            )
         }
     }
 

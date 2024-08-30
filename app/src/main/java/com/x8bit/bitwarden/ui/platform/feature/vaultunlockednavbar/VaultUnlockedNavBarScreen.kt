@@ -87,22 +87,21 @@ fun VaultUnlockedNavBarScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
-            val navOptions =
-                vaultUnlockedNavBarScreenNavOptions(tabToNavigateTo = event.tab)
+            val navOptions = vaultUnlockedNavBarScreenNavOptions(tabToNavigateTo = event.tab)
             when (event) {
                 is VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
                     navigateToVaultGraph(navOptions)
                 }
 
-                is VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
+                VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
                     navigateToSendGraph(navOptions)
                 }
 
-                is VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
+                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
                     navigateToGeneratorGraph(navOptions)
                 }
 
-                is VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
+                VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
                     navigateToSettingsGraph(navOptions)
                 }
             }
@@ -356,7 +355,7 @@ private fun NavBackStackEntry?.isCurrentTab(tab: VaultUnlockedNavBarTab): Boolea
  *
  * @param subgraphId the id of the subgraph to find the start destination of.
  *
- * @return the id of the start destination of the subgraph, or null if the subgraph does not exist.
+ * @return the ID of the start destination of the subgraph, or null if the subgraph does not exist.
  */
 private fun NavGraph.getSubgraphStartDestinationOrNull(subgraphId: Int?): Int? {
     subgraphId ?: return null

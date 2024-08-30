@@ -16,9 +16,6 @@ import kotlinx.parcelize.Parcelize
  * - Regular icon resource
  * - Icon resource when selected
  * and other essential UI and navigational data.
- *
- * @property iconRes The resource ID for the regular (unselected) icon representing the tab.
- * @property iconResSelected The resource ID for the icon representing the tab when it's selected.
  */
 @Parcelize
 sealed class VaultUnlockedNavBarTab : Parcelable {
