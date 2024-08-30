@@ -82,6 +82,7 @@
   <string name="yes">হ্যাঁ</string>
   <string name="account">অ্যাকাউন্ট</string>
   <string name="account_created">আপনার নতুন অ্যাকাউন্ট তৈরি করা হয়েছে! আপনি এখন লগইন করতে পারবেন।</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">একটি আইটেম যোগ করুন</string>
   <string name="app_extension">App extension</string>
   <string name="autofill_accessibility_description">Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</string>

@@ -82,6 +82,7 @@
   <string name="yes">Так</string>
   <string name="account">Уліковы запіс</string>
   <string name="account_created">Ваш уліковы запіс створаны! Цяпер вы можаце ўвайсці ў яго.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Дадаць элемент</string>
   <string name="app_extension">Дадаць пашырэнне</string>
   <string name="autofill_accessibility_description">Выкарыстоўвайце службу спецыяльных магчымасцей Bitwarden для аўтазапаўнення вашых лагінаў у разнастайных праграмах.</string>

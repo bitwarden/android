@@ -82,6 +82,7 @@
   <string name="yes">Da</string>
   <string name="account">Cont</string>
   <string name="account_created">Noul dvs. cont a fost creat! Acum vă puteți autentifica.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Adăugare articol</string>
   <string name="app_extension">Extensie aplicație</string>
   <string name="autofill_accessibility_description">Utilizați serviciul de accesibilitate Bitwarden pentru a completa automat datele de autentificare între aplicații și pagini web.</string>

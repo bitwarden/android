@@ -82,6 +82,7 @@
   <string name="yes">是</string>
   <string name="account">帳戶</string>
   <string name="account_created">帳戶建立成功！現在可以登入了。</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">新增項目</string>
   <string name="app_extension">App 延伸功能</string>
   <string name="autofill_accessibility_description">使用 Bitwarden 無障礙服務在應用程式和網站中自動填入您的登入資料。</string>

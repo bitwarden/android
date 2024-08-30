@@ -82,6 +82,7 @@
   <string name="yes">Ya</string>
   <string name="account">Akun</string>
   <string name="account_created">Akun baru Anda telah dibuat! Sekarang Anda bisa masuk.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Tambah Item</string>
   <string name="app_extension">Ekstensi Aplikasi</string>
   <string name="autofill_accessibility_description">Gunakan layanan aksesibilitas Bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</string>

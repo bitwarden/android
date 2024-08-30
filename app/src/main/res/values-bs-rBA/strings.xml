@@ -82,6 +82,7 @@
   <string name="yes">Da</string>
   <string name="account">Račun</string>
   <string name="account_created">Tvoj novi račun je kreiran! Sada se možeš prijaviti.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Dodaj stavku</string>
   <string name="app_extension">Proširenje aplikacije</string>
   <string name="autofill_accessibility_description">Koristi uslugu Bitwarden pristupačnosti za auto-ispunu svojih prijava u aplikacijama i na webu.</string>

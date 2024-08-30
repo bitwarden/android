@@ -82,6 +82,7 @@
   <string name="yes">Ja</string>
   <string name="account">Konto</string>
   <string name="account_created">Den nye kontoen din er laga! Du kan no skriva deg inn.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Legg til ei oppføring</string>
   <string name="app_extension">App-utviding</string>
   <string name="autofill_accessibility_description">Bruka tilgjengetenesta åt Bitwarden for å automatisk fylla ut innskrivingane dine på appar og på nett.</string>

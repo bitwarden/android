@@ -82,6 +82,7 @@
   <string name="yes">Sim</string>
   <string name="account">Conta</string>
   <string name="account_created">A sua nova conta foi criada! Pode agora iniciar sessão.</string>
+  <string name="account_created_success">A sua nova conta foi criada!</string>
   <string name="add_an_item">Adicionar um item</string>
   <string name="app_extension">Extensão da app</string>
   <string name="autofill_accessibility_description">Utilize o serviço de acessibilidade Bitwarden para preencher automaticamente as suas credenciais entre as aplicações e a web.</string>

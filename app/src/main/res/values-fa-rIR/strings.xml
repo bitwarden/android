@@ -82,6 +82,7 @@
   <string name="yes">بله</string>
   <string name="account">حساب</string>
   <string name="account_created">حساب کاربری جدید شما ساخته شد! حالا می‌توانید وارد شوید.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">افزودن یک مورد</string>
   <string name="app_extension">افزونه برنامه</string>
   <string name="autofill_accessibility_description">از سرویس دسترسی Bitwarden برای پر کردن خودکار ورود به سیستم خود در سراسر برنامه‌ها و وب استفاده کنید.</string>

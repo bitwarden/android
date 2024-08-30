@@ -82,6 +82,7 @@
   <string name="yes">Ja</string>
   <string name="account">Konto</string>
   <string name="account_created">Den nye konto er oprettet! Der kan nu logges ind.</string>
+  <string name="account_created_success">Din nye konto er oprettet!</string>
   <string name="add_an_item">Tilføj et emne</string>
   <string name="app_extension">App-udvidelse</string>
   <string name="autofill_accessibility_description">Brug Bitwardens hjælpefunktion til autoudfyldning af logins på tværs af apps og internet.</string>

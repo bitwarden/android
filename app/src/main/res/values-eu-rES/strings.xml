@@ -82,6 +82,7 @@
   <string name="yes">Bai</string>
   <string name="account">Kontua</string>
   <string name="account_created">Zure kontua egina dago. Orain saioa has dezakezu.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Gehitu elementua</string>
   <string name="app_extension">Aplikazioaren gehigarria</string>
   <string name="autofill_accessibility_description">Erabili Bitwarden-en erabilerraztasun zerbitzua zure saio hasierak automatikoki betetzeko aplikazio eta webguneetan zehar.</string>

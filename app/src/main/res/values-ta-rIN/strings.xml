@@ -82,6 +82,7 @@
   <string name="yes">ஆம்</string>
   <string name="account">கணக்கு</string>
   <string name="account_created">உங்கள் புது கணக்கு உருவாக்கப்பட்டது, நீங்கள் இப்போது உள்நுழையலாம்.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">ஓர் உருப்படியைச் சேர்</string>
   <string name="app_extension">செயலி நீட்டிப்பு</string>
   <string name="autofill_accessibility_description">செயலிகள் மற்றும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்து.</string>

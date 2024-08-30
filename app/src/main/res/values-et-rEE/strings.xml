@@ -82,6 +82,7 @@
   <string name="yes">Jah</string>
   <string name="account">Konto</string>
   <string name="account_created">Sinu konto on loodud! Võid nüüd sisse logida.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Lisa kirje</string>
   <string name="app_extension">Rakenduse laiendus</string>
   <string name="autofill_accessibility_description">Kasuta Bitwardeni juurdepääsetavuse teenust, et erinevatel veebilehtedel ja rakendustes kontoandmeid sisestada.</string>
