@@ -2,10 +2,13 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.datasource.network.serializer.ZonedDateTimeSerializer
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 
 /**
  * Maps the given [SyncResponseJson.Profile.Organization] to an [Organization].
@@ -31,21 +34,30 @@ fun List<SyncResponseJson.Profile.Organization>.toOrganizations(): List<Organiza
  */
 val SyncResponseJson.Policy.policyInformation: PolicyInformation?
     get() = data?.toString()?.let {
+        var json = Json {
+            ignoreUnknownKeys = true
+            explicitNulls = false
+            serializersModule = SerializersModule {
+                contextual(ZonedDateTimeSerializer())
+            }
+            coerceInputValues = true
+        }
+
         when (type) {
             PolicyTypeJson.MASTER_PASSWORD -> {
-                Json.decodeFromStringOrNull<PolicyInformation.MasterPassword>(it)
+                json.decodeFromStringOrNull<PolicyInformation.MasterPassword>(it)
             }
 
             PolicyTypeJson.PASSWORD_GENERATOR -> {
-                Json.decodeFromStringOrNull<PolicyInformation.PasswordGenerator>(it)
+                json.decodeFromStringOrNull<PolicyInformation.PasswordGenerator>(it)
             }
 
             PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
-                Json.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
+                json.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
             }
 
             PolicyTypeJson.SEND_OPTIONS -> {
-                Json.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
+                json.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
             }
 
             else -> null
