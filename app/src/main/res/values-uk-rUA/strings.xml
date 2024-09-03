@@ -69,7 +69,7 @@
     <string name="use_your_device_camera_to_scan_codes">Використовуйте камеру пристрою для сканування кодів</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Скануйте QR-код у налаштуваннях двоетапної перевірки будь-якого облікового запису.</string>
     <string name="sign_in_using_unique_codes">Входьте з використанням унікальних кодів</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Використовуючи двоетапну перевірку, ви вводите ім\'я користувача, пароль, а також одноразовий код, згенерований цією програмою.</string>
     <string name="continue_button">Продовжити</string>
     <string name="skip">Пропустити</string>
     <string name="get_started">Початок роботи</string>
