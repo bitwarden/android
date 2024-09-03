@@ -327,18 +327,25 @@ private fun NavController.vaultUnlockedNavBarScreenNavOptions(
     tabToNavigateTo: VaultUnlockedNavBarTab,
 ): NavOptions {
     val returnToCurrentSubRoot = currentBackStackEntry.isCurrentTab(tabToNavigateTo)
-    val startDestination = graph.findStartDestination().id
     val currentSubRootGraph = currentDestination?.parent?.id
+    // determine the destination to navigate to, if we are navigating to the same sub-root for the
+    // selected tab we want to find the start destination of the sub-root and pop up to it, which
+    // will maintain its state (i.e. scroll position). If we are navigating to a different sub-root,
+    // we can safely pop up to the start of the graph, the "home" tab destination.
     val popUpToDestination = graph
         .getSubgraphStartDestinationOrNull(currentSubRootGraph)
         .takeIf { returnToCurrentSubRoot }
-        ?: startDestination
+        ?: graph.findStartDestination().id
+    // If we are popping up the start of the whole nav graph we want to maintain the state of the
+    // the popped destinations in the other sub-roots. If we are navigating to the same sub-root,
+    // we want to pop off the nested destinations without maintaining their state.
+    val maintainStateOfPoppedDestinations = !returnToCurrentSubRoot
     return navOptions {
         popUpTo(popUpToDestination) {
-            saveState = !returnToCurrentSubRoot
+            saveState = maintainStateOfPoppedDestinations
         }
         launchSingleTop = true
-        restoreState = !returnToCurrentSubRoot
+        restoreState = maintainStateOfPoppedDestinations
     }
 }
 
