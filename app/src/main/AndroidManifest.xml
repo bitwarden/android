@@ -78,6 +78,13 @@
         </activity>
 
         <activity
+            android:name=".AccessibilityActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <activity
             android:name=".AutofillTotpCopyActivity"
             android:exported="true"
             android:launchMode="singleTop"
