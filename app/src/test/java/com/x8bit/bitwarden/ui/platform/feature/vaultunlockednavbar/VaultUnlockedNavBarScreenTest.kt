@@ -65,8 +65,14 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToVaultScreen should navigate to VaultScreen`() {
-        composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
-        mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+        mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
+        composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("send_graph") }
+        mutableEventFlow.tryEmit(
+            VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                labelRes = R.string.my_vault,
+                contentDescRes = R.string.my_vault,
+            ),
+        )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "vault_graph",

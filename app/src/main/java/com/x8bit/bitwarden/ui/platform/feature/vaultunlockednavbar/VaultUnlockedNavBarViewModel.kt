@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,7 +43,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             }
 
             SpecialCircumstance.VaultShortcut -> {
-                sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+                sendEvent(
+                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                        labelRes = state.vaultNavBarLabelRes,
+                        contentDescRes = state.vaultNavBarContentDescriptionRes,
+                    ),
+                )
                 specialCircumstancesManager.specialCircumstance = null
             }
 
@@ -86,7 +92,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
      * Attempts to send [VaultUnlockedNavBarEvent.NavigateToVaultScreen] event
      */
     private fun handleVaultTabClicked() {
-        sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+        sendEvent(
+            VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                labelRes = state.vaultNavBarLabelRes,
+                contentDescRes = state.vaultNavBarContentDescriptionRes,
+            ),
+        )
     }
 
     /**
@@ -168,23 +179,43 @@ sealed class VaultUnlockedNavBarAction {
  * Models events for the bottom tab of the vault unlocked portion of the app.
  */
 sealed class VaultUnlockedNavBarEvent {
+
+    /**
+     * The [VaultUnlockedNavBarTab] to be associated with the event.
+     */
+    abstract val tab: VaultUnlockedNavBarTab
+
     /**
      * Navigate to the Generator screen.
      */
-    data object NavigateToGeneratorScreen : VaultUnlockedNavBarEvent()
+    data object NavigateToGeneratorScreen : VaultUnlockedNavBarEvent() {
+        override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Generator
+    }
 
     /**
      * Navigate to the Send screen.
      */
-    data object NavigateToSendScreen : VaultUnlockedNavBarEvent()
+    data object NavigateToSendScreen : VaultUnlockedNavBarEvent() {
+        override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Send
+    }
 
     /**
      * Navigate to the Vault screen.
      */
-    data object NavigateToVaultScreen : VaultUnlockedNavBarEvent()
+    data class NavigateToVaultScreen(
+        val labelRes: Int,
+        val contentDescRes: Int,
+    ) : VaultUnlockedNavBarEvent() {
+        override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Vault(
+            labelRes = labelRes,
+            contentDescriptionRes = contentDescRes,
+        )
+    }
 
     /**
      * Navigate to the Settings screen.
      */
-    data object NavigateToSettingsScreen : VaultUnlockedNavBarEvent()
+    data object NavigateToSettingsScreen : VaultUnlockedNavBarEvent() {
+        override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Settings
+    }
 }
