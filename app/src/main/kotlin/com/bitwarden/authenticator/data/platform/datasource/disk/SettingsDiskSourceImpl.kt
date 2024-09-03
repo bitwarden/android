@@ -16,6 +16,7 @@ private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds
 private const val FIRST_LAUNCH_KEY = "$BASE_KEY:hasSeenWelcomeTutorial"
 private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
+private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -99,14 +100,14 @@ class SettingsDiskSourceImpl(
     override fun storeAlertThresholdSeconds(thresholdSeconds: Int) {
         putInt(
             ALERT_THRESHOLD_SECONDS_KEY,
-            thresholdSeconds
+            thresholdSeconds,
         )
         mutableAlertThresholdSecondsFlow.tryEmit(thresholdSeconds)
     }
 
-    override fun getAlertThresholdSeconds(): Int {
-        return getInt(ALERT_THRESHOLD_SECONDS_KEY, default = 7) ?: 7
-    }
+    override fun getAlertThresholdSeconds() =
+        getInt(ALERT_THRESHOLD_SECONDS_KEY, default = DEFAULT_ALERT_THRESHOLD_SECONDS)
+            ?: DEFAULT_ALERT_THRESHOLD_SECONDS
 
     override fun getAlertThresholdSecondsFlow(): Flow<Int> = mutableAlertThresholdSecondsFlow
         .onSubscription { emit(getAlertThresholdSeconds()) }

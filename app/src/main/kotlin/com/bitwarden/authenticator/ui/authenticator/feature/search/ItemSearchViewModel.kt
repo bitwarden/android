@@ -24,6 +24,7 @@ import javax.inject.Inject
 /**
  * View model for the item search screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class ItemSearchViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
@@ -34,7 +35,7 @@ class ItemSearchViewModel @Inject constructor(
             searchTerm = "",
             viewState = ItemSearchState.ViewState.Loading,
             dialogState = null,
-        )
+        ),
     ) {
 
     init {
@@ -75,7 +76,9 @@ class ItemSearchViewModel @Inject constructor(
         }
     }
 
-    private fun handleAuthenticatorDataReceive(action: ItemSearchAction.Internal.AuthenticatorDataReceive) {
+    private fun handleAuthenticatorDataReceive(
+        action: ItemSearchAction.Internal.AuthenticatorDataReceive,
+    ) {
         when (val data = action.dataState) {
             is DataState.Error -> authenticatorErrorReceive(authenticatorData = data)
             is DataState.Loaded -> authenticatorLoadedReceive(authenticatorData = data)
@@ -85,7 +88,9 @@ class ItemSearchViewModel @Inject constructor(
         }
     }
 
-    private fun authenticatorErrorReceive(authenticatorData: DataState<List<VerificationCodeItem>>) {
+    private fun authenticatorErrorReceive(
+        authenticatorData: DataState<List<VerificationCodeItem>>,
+    ) {
         authenticatorData
             .data
             ?.let {
@@ -157,7 +162,7 @@ class ItemSearchViewModel @Inject constructor(
         authenticatorRepository.getAuthCodesFlow().value.data?.let { authenticatorData ->
             updateStateWithAuthenticatorData(
                 authenticatorData = authenticatorData,
-                clearDialogState = false
+                clearDialogState = false,
             )
         }
     }
@@ -172,7 +177,7 @@ class ItemSearchViewModel @Inject constructor(
                 viewState = authenticatorData
                     .filterAndOrganize(state.searchTerm)
                     .toViewState(searchTerm = state.searchTerm),
-                dialogState = currentState.dialogState.takeUnless { clearDialogState }
+                dialogState = currentState.dialogState.takeUnless { clearDialogState },
             )
         }
     }
@@ -192,6 +197,7 @@ class ItemSearchViewModel @Inject constructor(
                 }
         }
 
+    @Suppress("MagicNumber")
     private fun VerificationCodeItem.matchedSearch(searchTerm: String): SortPriority? {
         val term = searchTerm.removeDiacritics()
         val itemName = label.removeDiacritics()
@@ -221,7 +227,7 @@ class ItemSearchViewModel @Inject constructor(
 
             else -> {
                 ItemSearchState.ViewState.Empty(
-                    message = R.string.there_are_no_items_that_match_the_search.asText()
+                    message = R.string.there_are_no_items_that_match_the_search.asText(),
                 )
             }
         }
@@ -382,5 +388,5 @@ sealed class ItemSearchEvent {
 
 private enum class SortPriority {
     HIGH,
-    LOW
+    LOW,
 }

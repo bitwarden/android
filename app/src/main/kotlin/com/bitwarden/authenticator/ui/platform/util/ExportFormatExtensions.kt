@@ -3,22 +3,22 @@ package com.bitwarden.authenticator.ui.platform.util
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 
 /**
  *  Provides a human-readable label for the export format.
  */
-val ExportFormat.displayLabel: Text
+val ExportVaultFormat.displayLabel: Text
     get() = when (this) {
-        ExportFormat.JSON -> R.string.export_format_label_json.asText()
-        ExportFormat.CSV -> R.string.export_format_label_csv.asText()
+        ExportVaultFormat.JSON -> R.string.export_format_label_json.asText()
+        ExportVaultFormat.CSV -> R.string.export_format_label_csv.asText()
     }
 
 /**
  * Provides the file extension associated with the export format.
  */
-val ExportFormat.fileExtension: String
+val ExportVaultFormat.fileExtension: String
     get() = when (this) {
-        ExportFormat.JSON -> "json"
-        ExportFormat.CSV -> "csv"
+        ExportVaultFormat.JSON -> "json"
+        ExportVaultFormat.CSV -> "csv"
     }

@@ -42,6 +42,10 @@ data class AuthenticatorItemEntity(
     @ColumnInfo(name = "favorite", defaultValue = "0")
     val favorite: Boolean,
 ) {
+    /**
+     * Returns the OTP data in a string formatted to match the Google Authenticator specification,
+     * https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+     */
     fun toOtpAuthUriString(): String {
         return when (type) {
             AuthenticatorItemType.TOTP -> {

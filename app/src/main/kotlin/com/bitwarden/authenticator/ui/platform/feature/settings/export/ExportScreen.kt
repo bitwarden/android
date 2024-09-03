@@ -40,12 +40,16 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoBut
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Top level composable for the export data screen.
+ */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExportScreen(
@@ -117,15 +121,15 @@ fun ExportScreen(
                     {
                         viewModel.trySendAction(ExportAction.DialogDismiss)
                     }
-                }
+                },
             )
         }
 
         is ExportState.DialogState.Loading -> {
             BitwardenLoadingDialog(
                 visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message
-                )
+                    text = dialog.message,
+                ),
             )
         }
 
@@ -161,7 +165,7 @@ fun ExportScreen(
                     viewModel.trySendAction(ExportAction.ExportFormatOptionSelect(it))
                 }
             },
-            onExportClick = { shouldShowConfirmationPrompt = true }
+            onExportClick = { shouldShowConfirmationPrompt = true },
         )
     }
 }
@@ -170,21 +174,21 @@ fun ExportScreen(
 private fun ExportScreenContent(
     modifier: Modifier = Modifier,
     state: ExportState,
-    onExportFormatOptionSelected: (ExportFormat) -> Unit,
+    onExportFormatOptionSelected: (ExportVaultFormat) -> Unit,
     onExportClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .imePadding()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.file_format),
-            options = ExportFormat.entries.map { it.displayLabel() }.toImmutableList(),
-            selectedOption = state.exportFormat.displayLabel(),
+            options = ExportVaultFormat.entries.map { it.displayLabel() }.toImmutableList(),
+            selectedOption = state.exportVaultFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
-                val selectedOption = ExportFormat
+                val selectedOption = ExportVaultFormat
                     .entries
                     .first { it.displayLabel(resources) == selectedOptionLabel }
                 onExportFormatOptionSelected(selectedOption)

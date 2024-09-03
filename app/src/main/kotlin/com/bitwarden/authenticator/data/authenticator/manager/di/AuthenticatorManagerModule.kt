@@ -27,7 +27,7 @@ object AuthenticatorManagerModule {
     fun providerFileManager(
         @ApplicationContext context: Context,
         dispatcherManager: DispatcherManager,
-    ) : FileManager = FileManagerImpl(
+    ): FileManager = FileManagerImpl(
         context = context,
         dispatcherManager = dispatcherManager,
     )
@@ -41,7 +41,6 @@ object AuthenticatorManagerModule {
     ): TotpCodeManager = TotpCodeManagerImpl(
         authenticatorSdkSource = authenticatorSdkSource,
         dispatcherManager = dispatcherManager,
-        clock = clock
+        clock = clock,
     )
-
 }

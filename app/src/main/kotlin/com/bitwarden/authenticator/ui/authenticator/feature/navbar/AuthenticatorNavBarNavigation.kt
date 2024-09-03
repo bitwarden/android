@@ -8,6 +8,7 @@ const val AUTHENTICATOR_NAV_BAR_ROUTE: String = "AuthenticatorNavBarRoute"
 /**
  * Add the authenticator nav bar to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.authenticatorNavBarDestination(
     onNavigateBack: () -> Unit,
     onNavigateToSearch: () -> Unit,
@@ -29,7 +30,7 @@ fun NavGraphBuilder.authenticatorNavBarDestination(
             onNavigateToEditItem = onNavigateToEditItem,
             onNavigateToExport = onNavigateToExport,
             onNavigateToImport = onNavigateToImport,
-            onNavigateToTutorial = onNavigateToTutorial
+            onNavigateToTutorial = onNavigateToTutorial,
         )
     }
 }

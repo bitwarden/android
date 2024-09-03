@@ -7,7 +7,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,10 +25,6 @@ class MainViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         mainViewModel = MainViewModel(settingsRepository)
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

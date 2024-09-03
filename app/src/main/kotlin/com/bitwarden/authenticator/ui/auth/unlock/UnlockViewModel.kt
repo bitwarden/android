@@ -33,7 +33,7 @@ class UnlockViewModel @Inject constructor(
             isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(),
             dialog = null,
         )
-    }
+    },
 ) {
 
     init {
@@ -74,7 +74,7 @@ class UnlockViewModel @Inject constructor(
             it.copy(
                 dialog = UnlockState.Dialog.Error(
                     message = R.string.too_many_failed_biometric_attempts.asText(),
-                )
+                ),
             )
         }
     }
@@ -125,7 +125,6 @@ sealed class UnlockEvent {
     data class ShowToast(
         val message: Text,
     ) : UnlockEvent()
-
 }
 
 /**

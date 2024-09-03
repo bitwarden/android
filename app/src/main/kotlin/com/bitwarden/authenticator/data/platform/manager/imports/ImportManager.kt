@@ -15,5 +15,4 @@ interface ImportManager {
         importFileFormat: ImportFileFormat,
         byteArray: ByteArray,
     ): ImportDataResult
-
 }

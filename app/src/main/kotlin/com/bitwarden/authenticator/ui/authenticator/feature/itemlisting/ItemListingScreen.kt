@@ -72,6 +72,7 @@ import com.bitwarden.authenticator.ui.platform.theme.Typography
 /**
  * Displays the item listing screen.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemListingScreen(
@@ -109,7 +110,7 @@ fun ItemListingScreen(
                     .makeText(
                         context,
                         event.message(context.resources),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     )
                     .show()
             }
@@ -164,7 +165,7 @@ fun ItemListingScreen(
                 onNavigateToSearch = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            ItemListingAction.SearchClick
+                            ItemListingAction.SearchClick,
                         )
                     }
                 },
@@ -181,24 +182,24 @@ fun ItemListingScreen(
                 onItemClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            ItemListingAction.ItemClick(it)
+                            ItemListingAction.ItemClick(it),
                         )
                     }
                 },
                 onEditItemClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            ItemListingAction.EditItemClick(it)
+                            ItemListingAction.EditItemClick(it),
                         )
                     }
                 },
                 onDeleteItemClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            ItemListingAction.DeleteItemClick(it)
+                            ItemListingAction.DeleteItemClick(it),
                         )
                     }
-                }
+                },
             )
         }
 
@@ -229,7 +230,7 @@ fun ItemListingScreen(
                     {
                         viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick)
                     }
-                }
+                },
             )
         }
     }
@@ -270,7 +271,7 @@ private fun ItemListingDialogs(
                     onConfirmDeleteClick(dialog.itemId)
                 },
                 onDismissClick = onDismissRequest,
-                onDismissRequest = onDismissRequest
+                onDismissRequest = onDismissRequest,
             )
         }
 
@@ -278,6 +279,7 @@ private fun ItemListingDialogs(
     }
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ItemListingContent(
@@ -303,7 +305,7 @@ private fun ItemListingContent(
                         contentDescription = stringResource(id = R.string.search_codes),
                         onClick = onNavigateToSearch,
                     )
-                }
+                },
             )
         },
         floatingActionButton = {
@@ -329,8 +331,8 @@ private fun ItemListingContent(
                             contentDescription = stringResource(id = R.string.enter_key_manually),
                             testTag = "EnterSetupKeyButton",
                         ),
-                        onEnterSetupKeyClick = onEnterSetupKeyClick
-                    )
+                        onEnterSetupKeyClick = onEnterSetupKeyClick,
+                    ),
                 ),
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
@@ -421,13 +423,14 @@ private fun ItemListingContent(
 /**
  * Displays the item listing screen with no existing items.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmptyItemListingContent(
     modifier: Modifier = Modifier,
     appTheme: AppTheme,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
-        rememberTopAppBarState()
+        rememberTopAppBarState(),
     ),
     onAddCodeClick: () -> Unit,
     onScanQuCodeClick: () -> Unit,
@@ -442,7 +445,7 @@ fun EmptyItemListingContent(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
-                actions = { }
+                actions = { },
             )
         },
         floatingActionButton = {
@@ -459,7 +462,7 @@ fun EmptyItemListingContent(
                             contentDescription = stringResource(id = R.string.scan_a_qr_code),
                             testTag = "ScanQRCodeButton",
                         ),
-                        onScanQrCodeClick = onScanQuCodeClick
+                        onScanQrCodeClick = onScanQuCodeClick,
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(
                         label = R.string.enter_key_manually.asText(),
@@ -469,7 +472,7 @@ fun EmptyItemListingContent(
                             testTag = "EnterSetupKeyButton",
                         ),
                         onEnterSetupKeyClick = onEnterSetupKeyClick,
-                    )
+                    ),
                 ),
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
@@ -497,7 +500,7 @@ fun EmptyItemListingContent(
                         AppTheme.DARK -> R.drawable.ic_empty_vault_dark
                         AppTheme.LIGHT -> R.drawable.ic_empty_vault_light
                         AppTheme.DEFAULT -> R.drawable.ic_empty_vault
-                    }
+                    },
                 ),
                 contentDescription = stringResource(
                     id = R.string.empty_item_list,
@@ -530,7 +533,7 @@ fun EmptyItemListingContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
-fun EmptyListingContentPreview() {
+private fun EmptyListingContentPreview() {
     EmptyItemListingContent(
         modifier = Modifier.padding(horizontal = 16.dp),
         appTheme = AppTheme.DEFAULT,

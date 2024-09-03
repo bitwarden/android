@@ -7,6 +7,9 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.sdk.Client
 import javax.inject.Inject
 
+/**
+ * Default implementation of [AuthenticatorSdkSource].
+ */
 class AuthenticatorSdkSourceImpl @Inject constructor(
     private val sdkClientManager: SdkClientManager,
 ) : AuthenticatorSdkSource {
@@ -38,11 +41,10 @@ class AuthenticatorSdkSourceImpl @Inject constructor(
                         minLowercase = null,
                         minUppercase = null,
                         minNumber = null,
-                        minSpecial = null
-                    )
+                        minSpecial = null,
+                    ),
                 )
         }
 
     private suspend fun getClient(): Client = sdkClientManager.getOrCreateClient()
-
 }

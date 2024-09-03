@@ -38,6 +38,7 @@ import javax.inject.Inject
 /**
  * View model responsible for handling user interactions with the item listing screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class ItemListingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
@@ -49,8 +50,8 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository.appTheme,
         settingsRepository.authenticatorAlertThresholdSeconds,
         viewState = ItemListingState.ViewState.Loading,
-        dialog = null
-    )
+        dialog = null,
+    ),
 ) {
 
     init {
@@ -136,8 +137,8 @@ class ItemListingViewModel @Inject constructor(
         clipboardManager.setText(action.authCode)
         sendEvent(
             ItemListingEvent.ShowToast(
-                message = R.string.value_has_been_copied.asText(action.authCode)
-            )
+                message = R.string.value_has_been_copied.asText(action.authCode),
+            ),
         )
     }
 
@@ -151,7 +152,7 @@ class ItemListingViewModel @Inject constructor(
                 dialog = ItemListingState.DialogState.DeleteConfirmationPrompt(
                     message = R.string.do_you_really_want_to_permanently_delete_cipher.asText(),
                     itemId = action.itemId,
-                )
+                ),
             )
         }
     }
@@ -166,8 +167,8 @@ class ItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             trySendAction(
                 ItemListingAction.Internal.DeleteItemReceive(
-                    authenticatorRepository.hardDeleteItem(action.itemId)
-                )
+                    authenticatorRepository.hardDeleteItem(action.itemId),
+                ),
             )
         }
     }
@@ -214,7 +215,7 @@ class ItemListingViewModel @Inject constructor(
                         dialog = ItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
-                        )
+                        ),
                     )
                 }
             }
@@ -244,7 +245,7 @@ class ItemListingViewModel @Inject constructor(
                         dialog = ItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.authenticator_key_read_error.asText(),
-                        )
+                        ),
                     )
                 }
             }
@@ -310,7 +311,7 @@ class ItemListingViewModel @Inject constructor(
             .otpParametersList
             .mapNotNull { otpParam ->
                 val secret = encodingManager.base32Encode(
-                    byteArray = otpParam.secret.toByteArray()
+                    byteArray = otpParam.secret.toByteArray(),
                 )
 
                 // Google Authenticator only supports TOTP and HOTP codes. We do not support HOTP
@@ -325,7 +326,7 @@ class ItemListingViewModel @Inject constructor(
 
                 // Google Authenticator does not always provide a valid digits value so we double
                 // check it and fallback to the default value if it is not within our valid range.
-                val digits = if (otpParam.digits in 5..10) {
+                val digits = if (otpParam.digits in TotpCodeManager.TOTP_DIGITS_RANGE) {
                     otpParam.digits
                 } else {
                     TotpCodeManager.TOTP_DIGITS_DEFAULT
@@ -411,11 +412,13 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun authenticatorErrorReceive(authenticatorData: DataState.Error<List<VerificationCodeItem>>) {
+    private fun authenticatorErrorReceive(
+        authenticatorData: DataState.Error<List<VerificationCodeItem>>,
+    ) {
         if (authenticatorData.data != null) {
             updateStateWithVerificationCodeItems(
                 authenticatorData = authenticatorData.data,
-                clearDialogState = true
+                clearDialogState = true,
             )
         } else {
             mutableStateFlow.update {
@@ -434,14 +437,14 @@ class ItemListingViewModel @Inject constructor(
     ) {
         updateStateWithVerificationCodeItems(
             authenticatorData = authenticatorData.data,
-            clearDialogState = false
+            clearDialogState = false,
         )
     }
 
     private fun authenticatorDataLoadingReceive() {
         mutableStateFlow.update {
             it.copy(
-                viewState = ItemListingState.ViewState.Loading
+                viewState = ItemListingState.ViewState.Loading,
             )
         }
     }
@@ -452,7 +455,7 @@ class ItemListingViewModel @Inject constructor(
         if (state.data != null) {
             updateStateWithVerificationCodeItems(
                 authenticatorData = state.data,
-                clearDialogState = true
+                clearDialogState = true,
             )
         } else {
             mutableStateFlow.update {
@@ -460,7 +463,7 @@ class ItemListingViewModel @Inject constructor(
                     viewState = ItemListingState.ViewState.Error(
                         message = R.string.internet_connection_required_title
                             .asText()
-                            .concat(R.string.internet_connection_required_message.asText())
+                            .concat(R.string.internet_connection_required_message.asText()),
                     ),
                     dialog = null,
                 )
@@ -473,7 +476,7 @@ class ItemListingViewModel @Inject constructor(
     ) {
         updateStateWithVerificationCodeItems(
             authenticatorData = action.data,
-            clearDialogState = false
+            clearDialogState = false,
         )
     }
 
@@ -492,51 +495,50 @@ class ItemListingViewModel @Inject constructor(
     }
 
     private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
-        try {
-            val uri = Uri.parse(this)
+        val uri = Uri.parse(this)
 
-            val type = AuthenticatorItemType
-                .entries
-                .find { it.name.lowercase() == uri.host }
-                ?: return null
+        val type = AuthenticatorItemType
+            .entries
+            .find { it.name.lowercase() == uri.host }
+            ?: return null
 
-            val label = uri.pathSegments.firstOrNull() ?: return null
-            val accountName = if (label.contains(":")) {
-                label
-                    .split(":")
-                    .last()
-            } else {
-                label
-            }
-
-            val key = uri.getQueryParameter(SECRET) ?: return null
-
-            val algorithm = AuthenticatorItemAlgorithm
-                .entries
-                .find { it.name == uri.getQueryParameter(ALGORITHM) }
-                ?: AuthenticatorItemAlgorithm.SHA1
-
-            val digits = uri.getQueryParameter(DIGITS)?.toInt() ?: 6
-
-            val issuer = uri.getQueryParameter(ISSUER) ?: label
-
-            val period = uri.getQueryParameter(PERIOD)?.toInt() ?: 30
-
-            return AuthenticatorItemEntity(
-                id = UUID.randomUUID().toString(),
-                key = key,
-                accountName = accountName,
-                type = type,
-                algorithm = algorithm,
-                period = period,
-                digits = digits,
-                issuer = issuer,
-                userId = null,
-                favorite = false,
-            )
-        } catch (e: Throwable) {
-            return null
+        val label = uri.pathSegments.firstOrNull() ?: return null
+        val accountName = if (label.contains(":")) {
+            label
+                .split(":")
+                .last()
+        } else {
+            label
         }
+
+        val key = uri.getQueryParameter(SECRET) ?: return null
+
+        val algorithm = AuthenticatorItemAlgorithm
+            .entries
+            .find { it.name == uri.getQueryParameter(ALGORITHM) }
+            ?: AuthenticatorItemAlgorithm.SHA1
+
+        val digits = uri.getQueryParameter(DIGITS)?.toIntOrNull()
+            ?: TotpCodeManager.TOTP_DIGITS_DEFAULT
+
+        val issuer = uri.getQueryParameter(ISSUER)
+            ?: label
+
+        val period = uri.getQueryParameter(PERIOD)?.toIntOrNull()
+            ?: TotpCodeManager.PERIOD_SECONDS_DEFAULT
+
+        return AuthenticatorItemEntity(
+            id = UUID.randomUUID().toString(),
+            key = key,
+            accountName = accountName,
+            type = type,
+            algorithm = algorithm,
+            period = period,
+            digits = digits,
+            issuer = issuer,
+            userId = null,
+            favorite = false,
+        )
     }
 }
 
@@ -617,6 +619,9 @@ data class ItemListingState(
             val message: Text,
         ) : DialogState()
 
+        /**
+         * Displays a prompt to confirm item deletion.
+         */
         @Parcelize
         data class DeleteConfirmationPrompt(
             val message: Text,

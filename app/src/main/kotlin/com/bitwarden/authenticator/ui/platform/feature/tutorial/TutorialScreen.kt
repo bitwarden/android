@@ -44,6 +44,10 @@ private const val QR_SCANNER_PAGE = 1
 private const val UNIQUE_CODES_PAGE = 2
 private const val PAGE_COUNT = 3
 
+/**
+ * Top level composable for the tutorial screen.
+ */
+@Suppress("LongMethod")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TutorialScreen(
@@ -75,7 +79,7 @@ fun TutorialScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             HorizontalPager(
                 modifier = Modifier
@@ -86,7 +90,7 @@ fun TutorialScreen(
                 userScrollEnabled = true,
             ) { page ->
                 viewModel.trySendAction(
-                    TutorialAction.TutorialPageChange(pagerState.targetPage)
+                    TutorialAction.TutorialPageChange(pagerState.targetPage),
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -112,7 +116,7 @@ fun TutorialScreen(
                         modifier = Modifier
                             .height(50.dp)
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         repeat(PAGE_COUNT) {
                             val color = if (pagerState.currentPage == it) {
@@ -124,7 +128,7 @@ fun TutorialScreen(
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .background(color, CircleShape)
-                                    .size(10.dp)
+                                    .size(10.dp),
                             )
                         }
                     }
@@ -137,7 +141,7 @@ fun TutorialScreen(
                         onClick = remember(viewModel) {
                             {
                                 viewModel.trySendAction(
-                                    TutorialAction.ContinueClick
+                                    TutorialAction.ContinueClick,
                                 )
                             }
                         },
@@ -203,7 +207,7 @@ private fun TutorialQrScannerScreen() {
         style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
         text = stringResource(
-            R.string.use_your_device_camera_to_scan_codes
+            R.string.use_your_device_camera_to_scan_codes,
         ),
     )
     Spacer(Modifier.height(8.dp))
@@ -211,16 +215,17 @@ private fun TutorialQrScannerScreen() {
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
         text = stringResource(
-            R.string.scan_the_qr_code_in_your_2_step_verification_settings_for_any_account
+            R.string.scan_the_qr_code_in_your_2_step_verification_settings_for_any_account,
         ),
     )
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun UniqueCodesContent() {
     Image(
         painter = painterResource(id = R.drawable.ic_tutorial_2fa),
-        contentDescription = stringResource(id = R.string.unique_codes)
+        contentDescription = stringResource(id = R.string.unique_codes),
     )
     Spacer(Modifier.height(24.dp))
     Text(
@@ -233,17 +238,17 @@ private fun UniqueCodesContent() {
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
         text = stringResource(
-            R.string.when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app
+            R.string.when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app,
         ),
     )
 }
 
 @Preview
 @Composable
-fun TutorialScreenPreview() {
+private fun TutorialScreenPreview() {
     Box {
         TutorialScreen(
-            onTutorialFinished = {}
+            onTutorialFinished = {},
         )
     }
 }

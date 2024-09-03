@@ -37,9 +37,9 @@ class FeatureFlagRepositoryImpl(
         val config = FeatureFlagsConfiguration(
             mapOf(
                 LocalFeatureFlag.BitwardenAuthenticationEnabled.name to JsonPrimitive(
-                    LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue
-                )
-            )
+                    LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue,
+                ),
+            ),
         )
         featureFlagDiskSource.featureFlagsConfiguration = config
         return config

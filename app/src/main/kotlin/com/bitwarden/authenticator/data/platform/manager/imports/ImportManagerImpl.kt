@@ -29,19 +29,15 @@ class ImportManagerImpl(
             ImportFileFormat.AEGIS -> AegisExportParser()
         }
 
-        return try {
-            when (val parseResult = parser.parse(byteArray)) {
-                is ExportParseResult.Error -> {
-                    ImportDataResult.Error(parseResult.message)
-                }
-
-                is ExportParseResult.Success -> {
-                    authenticatorDiskSource.saveItem(*parseResult.items.toTypedArray())
-                    ImportDataResult.Success
-                }
+        return when (val parseResult = parser.parse(byteArray)) {
+            is ExportParseResult.Error -> {
+                ImportDataResult.Error(parseResult.message)
             }
-        } catch (e: Throwable) {
-            ImportDataResult.Error()
+
+            is ExportParseResult.Success -> {
+                authenticatorDiskSource.saveItem(*parseResult.items.toTypedArray())
+                ImportDataResult.Success
+            }
         }
     }
 }

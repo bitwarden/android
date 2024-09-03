@@ -11,6 +11,9 @@ import java.io.ByteArrayOutputStream
  */
 private const val BUFFER_SIZE: Int = 1024
 
+/**
+ * Manages reading and writing files.
+ */
 class FileManagerImpl(
     private val context: Context,
     private val dispatcherManager: DispatcherManager,

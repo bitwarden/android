@@ -15,6 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+/**
+ * Manages root level navigation state for the application.
+ */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -24,7 +27,7 @@ class RootNavViewModel @Inject constructor(
     initialState = RootNavState(
         hasSeenWelcomeGuide = settingsRepository.hasSeenWelcomeTutorial,
         navState = RootNavState.NavState.Splash,
-    )
+    ),
 ) {
 
     init {
@@ -67,8 +70,8 @@ class RootNavViewModel @Inject constructor(
     private fun handleHasSeenWelcomeTutorialChange(hasSeenWelcomeGuide: Boolean) {
         settingsRepository.hasSeenWelcomeTutorial = hasSeenWelcomeGuide
         if (hasSeenWelcomeGuide) {
-            if (settingsRepository.isUnlockWithBiometricsEnabled
-                && biometricsEncryptionManager.isBiometricIntegrityValid()) {
+            if (settingsRepository.isUnlockWithBiometricsEnabled &&
+                biometricsEncryptionManager.isBiometricIntegrityValid()) {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Locked) }
             } else {
                 mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Unlocked) }
@@ -99,7 +102,10 @@ class RootNavViewModel @Inject constructor(
 }
 
 /**
- * Models root level destinations for the app.
+ * Models root level navigation state for the app.
+ *
+ * @property hasSeenWelcomeGuide Indicates if the user has seen the Welcome Guide screen.
+ * @property navState Current destination state of the app.
  */
 @Parcelize
 data class RootNavState(
@@ -107,6 +113,9 @@ data class RootNavState(
     val navState: NavState,
 ) : Parcelable {
 
+    /**
+     * Models root level destinations for the app.
+     */
     @Parcelize
     sealed class NavState : Parcelable {
         /**

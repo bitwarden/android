@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 import javax.inject.Inject
 
+/**
+ * Default implementation of [AuthenticatorDiskSource].
+ */
 class AuthenticatorDiskSourceImpl @Inject constructor(
     private val itemDao: ItemDao,
 ) : AuthenticatorDiskSource {
@@ -19,7 +22,7 @@ class AuthenticatorDiskSourceImpl @Inject constructor(
 
     override fun getItems(): Flow<List<AuthenticatorItemEntity>> = merge(
         forceItemsFlow,
-        itemDao.getAllItems()
+        itemDao.getAllItems(),
     )
 
     override suspend fun deleteItem(itemId: String) {

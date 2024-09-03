@@ -39,6 +39,10 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
 
+/**
+ * Top level composable for the unlock screen.
+ */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UnlockScreen(
@@ -66,7 +70,7 @@ fun UnlockScreen(
         is UnlockState.Dialog.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
-                message = dialog.message
+                message = dialog.message,
             ),
             onDismissRequest = remember(viewModel) {
                 {
@@ -76,7 +80,7 @@ fun UnlockScreen(
         )
 
         UnlockState.Dialog.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(R.string.loading.asText())
+            visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
         )
 
         null -> Unit
@@ -118,7 +122,7 @@ fun UnlockScreen(
                     .padding(innerPadding)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     modifier = Modifier

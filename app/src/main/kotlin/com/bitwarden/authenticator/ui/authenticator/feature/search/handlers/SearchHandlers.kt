@@ -17,6 +17,10 @@ class SearchHandlers(
      * [ItemSearchViewModel].
      */
     companion object {
+        /**
+         * Creates an instance of [SearchHandlers] by binding actions to the provided
+         * [ItemSearchViewModel].
+         */
         fun create(viewModel: ItemSearchViewModel): SearchHandlers =
             SearchHandlers(
                 onBackClick = { viewModel.trySendAction(ItemSearchAction.BackClick) },
@@ -24,7 +28,7 @@ class SearchHandlers(
                 onItemClick = { viewModel.trySendAction(ItemSearchAction.ItemClick(it)) },
                 onSearchTermChange = {
                     viewModel.trySendAction(ItemSearchAction.SearchTermChange(it))
-                }
+                },
             )
     }
 }

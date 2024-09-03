@@ -17,6 +17,7 @@ const val ITEM_LISTING_GRAPH_ROUTE = "item_listing_graph"
 /**
  * Add the item listing graph to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.itemListingGraph(
     navController: NavController,
     navigateBack: () -> Unit,
@@ -43,7 +44,7 @@ fun NavGraphBuilder.itemListingGraph(
             onNavigateBack = { navController.popBackStack() },
         )
         itemSearchDestination(
-            onNavigateBack = { navController.popBackStack() }
+            onNavigateBack = { navController.popBackStack() },
         )
         qrCodeScanDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -57,13 +58,13 @@ fun NavGraphBuilder.itemListingGraph(
             onNavigateToQrCodeScreen = {
                 navController.popBackStack()
                 navController.navigateToQrCodeScanScreen()
-            }
+            },
         )
         settingsGraph(
             navController = navController,
             onNavigateToExport = navigateToExport,
             onNavigateToImport = navigateToImport,
-            onNavigateToTutorial = navigateToTutorial
+            onNavigateToTutorial = navigateToTutorial,
         )
     }
 }
@@ -76,6 +77,6 @@ fun NavController.navigateToItemListGraph(
 ) {
     navigate(
         route = ITEM_LISTING_GRAPH_ROUTE,
-        navOptions = navOptions
+        navOptions = navOptions,
     )
 }

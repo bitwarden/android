@@ -22,5 +22,4 @@ interface AuthenticatorDiskSource {
      * Deletes an authenticator item from the data source with the given [itemId].
      */
     suspend fun deleteItem(itemId: String)
-
 }

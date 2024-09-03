@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Controls the root level [NavHost] for the app.
  */
+@Suppress("LongMethod")
 @Composable
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
@@ -77,7 +78,7 @@ fun RootNavScreen(
         unlockDestination(
             onUnlocked = {
                 viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
-            }
+            },
         )
         authenticatorGraph(
             navController = navController,

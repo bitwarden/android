@@ -33,6 +33,6 @@ private val FEATURE_FLAGS_CONFIG =
     FeatureFlagsConfiguration(
         featureFlags = mapOf(
             LocalFeatureFlag.BitwardenAuthenticationEnabled.name to
-                JsonPrimitive(LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue)
-        )
+                JsonPrimitive(LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue),
+        ),
     )

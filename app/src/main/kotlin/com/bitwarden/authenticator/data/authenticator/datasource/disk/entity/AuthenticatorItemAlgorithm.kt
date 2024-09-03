@@ -22,6 +22,9 @@ enum class AuthenticatorItemAlgorithm {
     ;
 
     companion object {
+        /**
+         * Returns a [AuthenticatorItemAlgorithm] with a name matching [value], or null.
+         */
         fun fromStringOrNull(value: String): AuthenticatorItemAlgorithm? =
             entries.find { it.name.equals(value, ignoreCase = true) }
     }

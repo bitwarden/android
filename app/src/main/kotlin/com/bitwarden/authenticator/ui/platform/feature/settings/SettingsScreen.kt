@@ -69,6 +69,7 @@ import com.bitwarden.authenticator.ui.platform.util.displayLabel
 /**
  * Display the settings screen.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -111,7 +112,7 @@ fun SettingsScreen(
         topBar = {
             BitwardenMediumTopAppBar(
                 title = stringResource(id = R.string.settings),
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { innerPadding ->
@@ -119,7 +120,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(state = rememberScrollState())
+                .verticalScroll(state = rememberScrollState()),
         ) {
             SecuritySettings(
                 state = state,
@@ -127,10 +128,10 @@ fun SettingsScreen(
                 onBiometricToggle = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            SettingsAction.SecurityClick.UnlockWithBiometricToggle(it)
+                            SettingsAction.SecurityClick.UnlockWithBiometricToggle(it),
                         )
                     }
-                }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             VaultSettings(
@@ -148,7 +149,7 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.DataClick.BackupClick)
                     }
-                }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
@@ -208,7 +209,7 @@ fun SettingsScreen(
 //region Security settings
 
 @Composable
-fun SecuritySettings(
+private fun SecuritySettings(
     state: SettingsState,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onBiometricToggle: (Boolean) -> Unit,
@@ -217,7 +218,7 @@ fun SecuritySettings(
 
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.security)
+        label = stringResource(id = R.string.security),
     )
     Spacer(modifier = Modifier.height(8.dp))
     UnlockWithBiometricsRow(
@@ -236,7 +237,7 @@ fun SecuritySettings(
 //region Data settings
 
 @Composable
-fun VaultSettings(
+private fun VaultSettings(
     modifier: Modifier = Modifier,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
@@ -244,7 +245,7 @@ fun VaultSettings(
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.data)
+        label = stringResource(id = R.string.data),
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextRow(
@@ -261,7 +262,7 @@ fun VaultSettings(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )
-        }
+        },
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextRow(
@@ -278,7 +279,7 @@ fun VaultSettings(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )
-        }
+        },
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenExternalLinkRow(
@@ -337,7 +338,7 @@ private fun AppearanceSettings(
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.appearance)
+        label = stringResource(id = R.string.appearance),
     )
     ThemeSelectionRow(
         currentSelection = state.appearance.theme,
@@ -367,7 +368,7 @@ private fun ThemeSelectionRow(
                 .mirrorIfRtl()
                 .size(24.dp),
             painter = painterResource(
-                id = R.drawable.ic_navigate_next
+                id = R.drawable.ic_navigate_next,
             ),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
@@ -407,7 +408,7 @@ private fun HelpSettings(
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.help)
+        label = stringResource(id = R.string.help),
     )
     BitwardenTextRow(
         text = stringResource(id = R.string.launch_tutorial),
@@ -439,7 +440,7 @@ private fun AboutSettings(
 ) {
     BitwardenListHeaderText(
         modifier = modifier,
-        label = stringResource(id = R.string.about)
+        label = stringResource(id = R.string.about),
     )
     BitwardenWideSwitch(
         modifier = modifier,

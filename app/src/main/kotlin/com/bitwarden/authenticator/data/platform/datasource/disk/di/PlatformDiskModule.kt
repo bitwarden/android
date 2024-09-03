@@ -15,6 +15,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
+/**
+ * Provides persistence-related dependencies in the platform package.
+ */
 object PlatformDiskModule {
 
     @Provides

@@ -16,5 +16,8 @@ interface AuthenticatorSdkSource {
         time: DateTime,
     ): Result<TotpResponse>
 
+    /**
+     * Generate a random key for seeding biometrics.
+     */
     suspend fun generateBiometricsKey(): Result<String>
 }

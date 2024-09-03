@@ -32,10 +32,10 @@ class FeatureFlagDiskSourceTest {
         featureFlagDiskSource.featureFlagsConfiguration = FEATURE_FLAGS_CONFIGURATION
         assertEquals(
             json.parseToJsonElement(
-                FEATURE_FLAGS_CONFIGURATION_JSON
+                FEATURE_FLAGS_CONFIGURATION_JSON,
             ),
             json.parseToJsonElement(
-                fakeSharedPreferences.getString(featureFlagsConfigKey, null)!!
+                fakeSharedPreferences.getString(featureFlagsConfigKey, null)!!,
             ),
         )
 
@@ -53,7 +53,6 @@ class FeatureFlagDiskSourceTest {
             assertEquals(FEATURE_FLAGS_CONFIGURATION, awaitItem())
         }
     }
-
 }
 
 private const val FEATURE_FLAGS_CONFIGURATION_JSON = """
@@ -67,6 +66,6 @@ private const val FEATURE_FLAGS_CONFIGURATION_JSON = """
 
 private val FEATURE_FLAGS_CONFIGURATION = FeatureFlagsConfiguration(
     featureFlags = mapOf(
-        LocalFeatureFlag.BitwardenAuthenticationEnabled.name to JsonPrimitive(true)
-    )
+        LocalFeatureFlag.BitwardenAuthenticationEnabled.name to JsonPrimitive(true),
+    ),
 )

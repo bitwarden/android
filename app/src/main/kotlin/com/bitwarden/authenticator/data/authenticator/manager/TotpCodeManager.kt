@@ -40,8 +40,11 @@ interface TotpCodeManager {
         const val STEAM_CODE_PREFIX = "steam://"
         const val GOOGLE_EXPORT_PREFIX = "otpauth-migration://"
         const val TOTP_DIGITS_DEFAULT = 6
+        const val TOTP_DIGITS_MIN = 5
+        const val TOTP_DIGITS_MAX = 10
         const val STEAM_DIGITS_DEFAULT = 5
         const val PERIOD_SECONDS_DEFAULT = 30
+        val TOTP_DIGITS_RANGE = TOTP_DIGITS_MIN..TOTP_DIGITS_MAX
         val ALGORITHM_DEFAULT = AuthenticatorItemAlgorithm.SHA1
     }
 }

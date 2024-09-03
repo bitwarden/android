@@ -12,6 +12,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
+/**
+ * This class provides network-related functionality for the application.
+ * It initializes and configures the networking components.
+ */
 object PlatformNetworkModule {
     @Provides
     @Singleton

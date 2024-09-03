@@ -47,14 +47,13 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
                 /* hints = */
                 mapOf(
                     DecodeHintType.POSSIBLE_FORMATS to arrayListOf(BarcodeFormat.QR_CODE),
-                    DecodeHintType.ALSO_INVERTED to true
+                    DecodeHintType.ALSO_INVERTED to true,
                 ),
             )
 
             qrCodeRead = true
             onQrCodeScanned(result.text)
         } catch (ignored: NotFoundException) {
-
         } finally {
             image.close()
         }

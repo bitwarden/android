@@ -7,7 +7,6 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
-import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
@@ -41,10 +40,6 @@ class ManualCodeEntryViewModel @Inject constructor(
             is ManualCodeEntryAction.CodeSubmit -> handleCodeSubmit()
             is ManualCodeEntryAction.ScanQrCodeTextClick -> handleScanQrCodeTextClick()
             is ManualCodeEntryAction.SettingsClick -> handleSettingsClick()
-            is ManualCodeEntryAction.Internal.CreateItemResultReceive -> {
-                handleCreateItemReceive(action)
-            }
-
             ManualCodeEntryAction.DismissDialog -> {
                 handleDialogDismiss()
             }
@@ -76,8 +71,8 @@ class ManualCodeEntryViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = ManualCodeEntryState.DialogState.Error(
-                        message = R.string.key_is_required.asText()
-                    )
+                        message = R.string.key_is_required.asText(),
+                    ),
                 )
             }
             return
@@ -87,8 +82,8 @@ class ManualCodeEntryViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = ManualCodeEntryState.DialogState.Error(
-                        message = R.string.key_is_invalid.asText()
-                    )
+                        message = R.string.key_is_invalid.asText(),
+                    ),
                 )
             }
             return
@@ -98,15 +93,15 @@ class ManualCodeEntryViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = ManualCodeEntryState.DialogState.Error(
-                        message = R.string.name_is_required.asText()
-                    )
+                        message = R.string.name_is_required.asText(),
+                    ),
                 )
             }
             return
         }
 
         viewModelScope.launch {
-            val result = authenticatorRepository.createItem(
+            authenticatorRepository.createItem(
                 AuthenticatorItemEntity(
                     id = UUID.randomUUID().toString(),
                     key = state.code,
@@ -119,9 +114,16 @@ class ManualCodeEntryViewModel @Inject constructor(
                         AuthenticatorItemType.TOTP
                     },
                     favorite = false,
-                )
+                ),
             )
-            sendAction(ManualCodeEntryAction.Internal.CreateItemResultReceive(result))
+            sendEvent(
+                event = ManualCodeEntryEvent.ShowToast(
+                    message = R.string.verification_code_added.asText(),
+                ),
+            )
+            sendEvent(
+                event = ManualCodeEntryEvent.NavigateBack,
+            )
         }
     }
 
@@ -131,34 +133,6 @@ class ManualCodeEntryViewModel @Inject constructor(
 
     private fun handleSettingsClick() {
         sendEvent(ManualCodeEntryEvent.NavigateToAppSettings)
-    }
-
-    private fun handleCreateItemReceive(
-        action: ManualCodeEntryAction.Internal.CreateItemResultReceive,
-    ) {
-        when (action.result) {
-            CreateItemResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = ManualCodeEntryState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                        )
-                    )
-                }
-            }
-
-            CreateItemResult.Success -> {
-                sendEvent(
-                    event = ManualCodeEntryEvent.ShowToast(
-                        message = R.string.verification_code_added.asText(),
-                    ),
-                )
-                sendEvent(
-                    event = ManualCodeEntryEvent.NavigateBack,
-                )
-            }
-        }
     }
 }
 
@@ -172,15 +146,24 @@ data class ManualCodeEntryState(
     val dialog: DialogState?,
 ) : Parcelable {
 
+    /**
+     * Models dialog states for [ManualCodeEntryViewModel].
+     */
     @Parcelize
     sealed class DialogState : Parcelable {
 
+        /**
+         * Show an error dialog with an optional [title], and a [message].
+         */
         @Parcelize
         data class Error(
             val title: Text? = null,
             val message: Text,
         ) : DialogState()
 
+        /**
+         * Show a loading dialog.
+         */
         @Parcelize
         data class Loading(
             val message: Text,
@@ -238,17 +221,6 @@ sealed class ManualCodeEntryAction {
      * The use has changed the issuer text.
      */
     data class IssuerTextChange(val issuer: String) : ManualCodeEntryAction()
-
-    /**
-     * Models actions that the [ManualCodeEntryViewModel] itself might send.
-     */
-    sealed class Internal : ManualCodeEntryAction() {
-
-        /**
-         * Indicates a result for creating an item has been received.
-         */
-        data class CreateItemResultReceive(val result: CreateItemResult) : Internal()
-    }
 
     /**
      * The text to switch to QR code scanning is clicked.

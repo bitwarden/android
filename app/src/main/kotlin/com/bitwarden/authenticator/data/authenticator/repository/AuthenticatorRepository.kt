@@ -8,12 +8,10 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
-import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
-import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
-import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -83,17 +81,9 @@ interface AuthenticatorRepository {
     suspend fun hardDeleteItem(itemId: String): DeleteItemResult
 
     /**
-     * Attempt to update a cipher.
-     */
-    suspend fun updateItem(
-        itemId: String,
-        updateItemRequest: UpdateItemRequest,
-    ): UpdateItemResult
-
-    /**
      *  Attempt to get the user's data for export.
      */
-    suspend fun exportVaultData(format: ExportFormat, fileUri: Uri): ExportDataResult
+    suspend fun exportVaultData(format: ExportVaultFormat, fileUri: Uri): ExportDataResult
 
     /**
      * Attempt to read the user's data from a file

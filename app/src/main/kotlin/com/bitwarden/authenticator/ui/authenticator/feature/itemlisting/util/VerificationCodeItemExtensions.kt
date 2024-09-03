@@ -4,6 +4,9 @@ import com.bitwarden.authenticator.data.authenticator.manager.model.Verification
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 
+/**
+ * Transform a list of [VerificationCodeItem] into [ItemListingState.ViewState].
+ */
 fun List<VerificationCodeItem>.toViewState(
     alertThresholdSeconds: Int,
 ): ItemListingState.ViewState =
@@ -25,7 +28,7 @@ fun List<VerificationCodeItem>.toViewState(
         )
     }
 
-fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
+private fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
     VerificationCodeDisplayItem(
         id = id,
         issuer = issuer,

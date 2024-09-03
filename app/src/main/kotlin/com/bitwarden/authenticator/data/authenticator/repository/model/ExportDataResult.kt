@@ -5,8 +5,13 @@ package com.bitwarden.authenticator.data.authenticator.repository.model
  */
 sealed class ExportDataResult {
 
+    /**
+     * Data has been successfully exported.
+     */
     data object Success : ExportDataResult()
 
+    /**
+     * Data could not be exported.
+     */
     data object Error : ExportDataResult()
-
 }

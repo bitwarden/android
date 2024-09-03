@@ -97,4 +97,3 @@ private data class ZonedDateTimeData(
     @SerialName("dataAsZonedDateTime")
     val dataAsZonedDateTime: ZonedDateTime,
 )
-

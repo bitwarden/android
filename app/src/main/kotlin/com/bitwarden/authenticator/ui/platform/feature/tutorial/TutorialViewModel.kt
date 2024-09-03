@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TutorialViewModel @Inject constructor() :
     BaseViewModel<TutorialState, TutorialEvent, TutorialAction>(
-        initialState = TutorialState.IntroSlide
+        initialState = TutorialState.IntroSlide,
     ) {
 
     override fun handleAction(action: TutorialAction) {
@@ -84,7 +84,7 @@ sealed class TutorialState(
     @Parcelize
     data object QrScannerSlide : TutorialState(
         continueButtonText = R.string.continue_button.asText(),
-        isLastPage = false
+        isLastPage = false,
     )
 
     /**
@@ -93,7 +93,7 @@ sealed class TutorialState(
     @Parcelize
     data object UniqueCodesSlide : TutorialState(
         continueButtonText = R.string.get_started.asText(),
-        isLastPage = true
+        isLastPage = true,
     )
 }
 

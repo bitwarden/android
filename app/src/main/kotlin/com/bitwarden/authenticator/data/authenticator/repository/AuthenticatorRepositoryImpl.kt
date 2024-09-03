@@ -12,8 +12,6 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
-import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
-import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
@@ -22,7 +20,7 @@ import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.repository.util.combineDataStates
 import com.bitwarden.authenticator.data.platform.repository.util.map
-import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,6 +48,10 @@ import javax.inject.Inject
  */
 private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 
+/**
+ * Default implementation of [AuthenticatorRepository].
+ */
+@Suppress("TooManyFunctions")
 class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorDiskSource: AuthenticatorDiskSource,
     private val totpCodeManager: TotpCodeManager,
@@ -188,6 +190,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun createItem(item: AuthenticatorItemEntity): CreateItemResult {
         return try {
             authenticatorDiskSource.saveItem(item)
@@ -197,6 +200,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun addItems(vararg items: AuthenticatorItemEntity): CreateItemResult {
         return try {
             authenticatorDiskSource.saveItem(*items)
@@ -206,6 +210,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun hardDeleteItem(itemId: String): DeleteItemResult {
         return try {
             authenticatorDiskSource.deleteItem(itemId)
@@ -215,34 +220,13 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateItem(
-        itemId: String,
-        updateItemRequest: UpdateItemRequest,
-    ): UpdateItemResult {
-        return try {
-            authenticatorDiskSource.saveItem(
-                AuthenticatorItemEntity(
-                    id = itemId,
-                    key = updateItemRequest.key,
-                    accountName = updateItemRequest.accountName,
-                    type = updateItemRequest.type,
-                    period = updateItemRequest.period,
-                    digits = updateItemRequest.digits,
-                    issuer = updateItemRequest.issuer,
-                    userId = null,
-                    favorite = updateItemRequest.favorite
-                ),
-            )
-            UpdateItemResult.Success
-        } catch (e: Exception) {
-            UpdateItemResult.Error(e.message)
-        }
-    }
-
-    override suspend fun exportVaultData(format: ExportFormat, fileUri: Uri): ExportDataResult {
+    override suspend fun exportVaultData(
+        format: ExportVaultFormat,
+        fileUri: Uri,
+    ): ExportDataResult {
         return when (format) {
-            ExportFormat.JSON -> encodeVaultDataToJson(fileUri)
-            ExportFormat.CSV -> encodeVaultDataToCsv(fileUri)
+            ExportVaultFormat.JSON -> encodeVaultDataToJson(fileUri)
+            ExportVaultFormat.CSV -> encodeVaultDataToCsv(fileUri)
         }
     }
 
@@ -254,12 +238,12 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             importManager
                 .import(
                     importFileFormat = format,
-                    byteArray = it
+                    byteArray = it,
                 )
         }
         .fold(
             onSuccess = { it },
-            onFailure = { ImportDataResult.Error() }
+            onFailure = { ImportDataResult.Error() },
         )
 
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
@@ -292,7 +276,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                     .firstOrNull()
                     .orEmpty()
                     .map { it.toExportJsonItem() },
-            )
+            ),
         )
 
         return if (

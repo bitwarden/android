@@ -19,6 +19,6 @@ object AuthRepositoryModule {
     fun provideAuthRepository(
         authDiskSource: AuthDiskSource,
     ): AuthRepository = AuthRepositoryImpl(
-        authDiskSource = authDiskSource
+        authDiskSource = authDiskSource,
     )
 }

@@ -33,7 +33,7 @@ fun NavGraphBuilder.authenticatorGraph(
 ) {
     navigation(
         startDestination = AUTHENTICATOR_NAV_BAR_ROUTE,
-        route = AUTHENTICATOR_GRAPH_ROUTE
+        route = AUTHENTICATOR_GRAPH_ROUTE,
     ) {
         authenticatorNavBarDestination(
             onNavigateBack = onNavigateBack,
@@ -43,7 +43,7 @@ fun NavGraphBuilder.authenticatorGraph(
             onNavigateToEditItem = { navController.navigateToEditItem(itemId = it) },
             onNavigateToExport = { navController.navigateToExport() },
             onNavigateToImport = { navController.navigateToImporting() },
-            onNavigateToTutorial = { navController.navigateToSettingsTutorial() }
+            onNavigateToTutorial = { navController.navigateToSettingsTutorial() },
         )
         itemListingGraph(
             navController = navController,
@@ -62,7 +62,7 @@ fun NavGraphBuilder.authenticatorGraph(
             },
             navigateToExport = { navController.navigateToExport() },
             navigateToImport = { navController.navigateToImporting() },
-            navigateToTutorial = { navController.navigateToSettingsTutorial() }
+            navigateToTutorial = { navController.navigateToSettingsTutorial() },
         )
     }
 }

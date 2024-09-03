@@ -30,6 +30,9 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
 
+/**
+ * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
+ */
 @Composable
 fun AuthenticatorTheme(
     theme: AppTheme = AppTheme.DEFAULT,

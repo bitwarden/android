@@ -29,6 +29,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the settings screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -42,8 +43,8 @@ class SettingsViewModel @Inject constructor(
             settingsRepository.appLanguage,
             settingsRepository.appTheme,
             settingsRepository.isUnlockWithBiometricsEnabled,
-            settingsRepository.isCrashLoggingEnabled
-        )
+            settingsRepository.isCrashLoggingEnabled,
+        ),
 ) {
     override fun handleAction(action: SettingsAction) {
         when (action) {
@@ -160,7 +161,7 @@ class SettingsViewModel @Inject constructor(
     private fun handleLanguageChange(language: AppLanguage) {
         mutableStateFlow.update {
             it.copy(
-                appearance = it.appearance.copy(language = language)
+                appearance = it.appearance.copy(language = language),
             )
         }
         settingsRepository.appLanguage = language
@@ -173,7 +174,7 @@ class SettingsViewModel @Inject constructor(
     private fun handleThemeChange(theme: AppTheme) {
         mutableStateFlow.update {
             it.copy(
-                appearance = it.appearance.copy(theme = theme)
+                appearance = it.appearance.copy(theme = theme),
             )
         }
         settingsRepository.appTheme = theme
@@ -226,7 +227,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     companion object {
-        fun createInitialState(
+        private fun createInitialState(
             clock: Clock,
             appLanguage: AppLanguage,
             appTheme: AppTheme,
@@ -246,7 +247,7 @@ class SettingsViewModel @Inject constructor(
                 version = R.string.version
                     .asText()
                     .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
-                copyrightInfo = copyrightInfo
+                copyrightInfo = copyrightInfo,
             )
         }
     }
@@ -265,9 +266,15 @@ data class SettingsState(
     val copyrightInfo: Text,
 ) : Parcelable {
 
+    /**
+     * Models the dialog state for [SettingsViewModel].
+     */
     @Parcelize
     sealed class Dialog : Parcelable {
 
+        /**
+         * Displays a loading dialog with a [message].
+         */
         data class Loading(
             val message: Text,
         ) : Dialog()
@@ -343,6 +350,9 @@ sealed class SettingsAction(
      * Indicates the user clicked the Unlock with biometrics button.
      */
     sealed class SecurityClick : SettingsAction() {
+        /**
+         * Indicates the user clicked unlock with biometrics toggle.
+         */
         data class UnlockWithBiometricToggle(val enabled: Boolean) : SecurityClick()
     }
 

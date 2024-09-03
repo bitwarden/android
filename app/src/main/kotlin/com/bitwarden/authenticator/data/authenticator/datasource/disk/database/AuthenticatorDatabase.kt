@@ -14,7 +14,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
  */
 @Database(
     entities = [
-        AuthenticatorItemEntity::class
+        AuthenticatorItemEntity::class,
     ],
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -32,5 +32,4 @@ abstract class AuthenticatorDatabase : RoomDatabase() {
      * Provide the DAO for accessing authenticator item data.
      */
     abstract fun itemDao(): ItemDao
-
 }

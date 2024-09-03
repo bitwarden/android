@@ -8,7 +8,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDat
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.util.fileExtension
 import com.bitwarden.authenticator.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,13 +18,16 @@ import kotlinx.parcelize.IgnoredOnParcel
 import java.time.Clock
 import javax.inject.Inject
 
+/**
+ * Manages state for the [ExportScreen].
+ */
 @HiltViewModel
 class ExportViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
     private val clock: Clock,
 ) :
     BaseViewModel<ExportState, ExportEvent, ExportAction>(
-        initialState = ExportState(dialogState = null, exportFormat = ExportFormat.JSON)
+        initialState = ExportState(dialogState = null, exportVaultFormat = ExportVaultFormat.JSON),
     ) {
 
     override fun handleAction(action: ExportAction) {
@@ -61,7 +64,7 @@ class ExportViewModel @Inject constructor(
 
     private fun handleExportFormatOptionSelect(action: ExportAction.ExportFormatOptionSelect) {
         mutableStateFlow.update {
-            it.copy(exportFormat = action.option)
+            it.copy(exportVaultFormat = action.option)
         }
     }
 
@@ -71,7 +74,7 @@ class ExportViewModel @Inject constructor(
             pattern = "yyyyMMddHHmmss",
             clock = clock,
         )
-        val extension = state.exportFormat.fileExtension
+        val extension = state.exportVaultFormat.fileExtension
         val fileName = "authenticator_export_$date.$extension"
 
         sendEvent(
@@ -92,14 +95,14 @@ class ExportViewModel @Inject constructor(
 
         viewModelScope.launch {
             val result = authenticatorRepository.exportVaultData(
-                format = state.exportFormat,
+                format = state.exportVaultFormat,
                 fileUri = action.fileUri,
             )
 
             sendAction(
                 ExportAction.Internal.SaveExportDataToUriResultReceive(
-                    result = result
-                )
+                    result = result,
+                ),
             )
         }
     }
@@ -133,17 +136,29 @@ class ExportViewModel @Inject constructor(
     }
 }
 
+/**
+ * Represents the state of the [ExportViewModel].
+ */
 data class ExportState(
     @IgnoredOnParcel
     val exportData: String? = null,
     val dialogState: DialogState? = null,
-    val exportFormat: ExportFormat,
+    val exportVaultFormat: ExportVaultFormat,
 ) {
+    /**
+     * Represents state of dialogs for the [ExportViewModel].
+     */
     sealed class DialogState {
+        /**
+         * Displays a loading dialog with an optional [message].
+         */
         data class Loading(
             val message: Text = R.string.loading.asText(),
         ) : DialogState()
 
+        /**
+         * Displays an error dialog with an optional [title], and a [message].
+         */
         data class Error(
             val title: Text? = null,
             val message: Text,
@@ -151,27 +166,64 @@ data class ExportState(
     }
 }
 
+/**
+ * Represents events for the [ExportViewModel].
+ */
 sealed class ExportEvent {
+    /**
+     * Navigate back.
+     */
     data object NavigateBack : ExportEvent()
 
+    /**
+     * Display a toast with the provided [message].
+     */
     data class ShowToast(val message: Text) : ExportEvent()
 
+    /**
+     * Navigate to the select export destination screen.
+     */
     data class NavigateToSelectExportDestination(val fileName: String) : ExportEvent()
 }
 
+/**
+ * Represents actions for the [ExportViewModel].
+ */
 sealed class ExportAction {
+
+    /**
+     * Indicates the user has clicked the close button.
+     */
     data object CloseButtonClick : ExportAction()
 
+    /**
+     * Indicates the user has clicked the export confirmation button.
+     */
     data object ConfirmExportClick : ExportAction()
 
+    /**
+     * Indicates the user has dismissed the dialog.
+     */
     data object DialogDismiss : ExportAction()
 
-    data class ExportFormatOptionSelect(val option: ExportFormat) : ExportAction()
+    /**
+     * Indicates the user has selected an export format.
+     */
+    data class ExportFormatOptionSelect(val option: ExportVaultFormat) : ExportAction()
 
+    /**
+     * Indicates the user has selected a location for the exported data.
+     */
     data class ExportLocationReceive(val fileUri: Uri) : ExportAction()
 
+    /**
+     * Represents actions the [ExportViewModel] itself may trigger.
+     */
     sealed class Internal : ExportAction() {
 
+        /**
+         * Indicates the result for saving exported data to a URI has been received.
+         */
         data class SaveExportDataToUriResultReceive(
             val result: ExportDataResult,
         ) : Internal()

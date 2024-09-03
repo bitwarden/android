@@ -72,6 +72,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Displays the edit authenticator item screen.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditItemScreen(
@@ -94,7 +95,7 @@ fun EditItemScreen(
                     .makeText(
                         context,
                         event.message(resources),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     )
                     .show()
             }
@@ -103,7 +104,7 @@ fun EditItemScreen(
 
     EditItemDialogs(
         dialogState = state.dialog,
-        onDismissRequest = { viewModel.trySendAction(EditItemAction.DismissDialog) }
+        onDismissRequest = { viewModel.trySendAction(EditItemAction.DismissDialog) },
     )
 
     BitwardenScaffold(
@@ -131,7 +132,7 @@ fun EditItemScreen(
                         },
                         modifier = Modifier.semantics { testTag = "SaveButton" },
                     )
-                }
+                },
             )
         },
         floatingActionButtonPosition = FabPosition.EndOverlay,
@@ -146,66 +147,66 @@ fun EditItemScreen(
                     onIssuerNameTextChange = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.IssuerNameTextChange(it)
+                                EditItemAction.IssuerNameTextChange(it),
                             )
                         }
                     },
                     onUsernameTextChange = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.UsernameTextChange(it)
+                                EditItemAction.UsernameTextChange(it),
                             )
                         }
                     },
                     onToggleFavorite = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.FavoriteToggleClick(it)
+                                EditItemAction.FavoriteToggleClick(it),
                             )
                         }
                     },
                     onTypeOptionClicked = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.TypeOptionClick(it)
+                                EditItemAction.TypeOptionClick(it),
                             )
                         }
                     },
                     onTotpCodeTextChange = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.TotpCodeTextChange(it)
+                                EditItemAction.TotpCodeTextChange(it),
                             )
                         }
                     },
                     onAlgorithmOptionClicked = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.AlgorithmOptionClick(it)
+                                EditItemAction.AlgorithmOptionClick(it),
                             )
                         }
                     },
                     onRefreshPeriodOptionClicked = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.RefreshPeriodOptionClick(it)
+                                EditItemAction.RefreshPeriodOptionClick(it),
                             )
                         }
                     },
                     onNumberOfDigitsChanged = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.NumberOfDigitsOptionClick(it)
+                                EditItemAction.NumberOfDigitsOptionClick(it),
                             )
                         }
                     },
                     onExpandAdvancedOptionsClicked = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.ExpandAdvancedOptionsClick
+                                EditItemAction.ExpandAdvancedOptionsClick,
                             )
                         }
-                    }
+                    },
                 )
             }
 
@@ -218,6 +219,10 @@ fun EditItemScreen(
     }
 }
 
+/**
+ * The top level content UI state for the [EditItemScreen].
+ */
+@Suppress("LongMethod")
 @Composable
 fun EditItemContent(
     modifier: Modifier = Modifier,
@@ -307,11 +312,12 @@ fun EditItemContent(
             onAlgorithmOptionClicked = onAlgorithmOptionClicked,
             onTypeOptionClicked = onTypeOptionClicked,
             onRefreshPeriodOptionClicked = onRefreshPeriodOptionClicked,
-            onNumberOfDigitsChanged = onNumberOfDigitsChanged
+            onNumberOfDigitsChanged = onNumberOfDigitsChanged,
         )
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun AdvancedOptions(
     modifier: Modifier = Modifier,
@@ -332,7 +338,7 @@ private fun AdvancedOptions(
                         bounded = true,
                         color = MaterialTheme.colorScheme.primary,
                     ),
-                    interactionSource = remember { MutableInteractionSource() }
+                    interactionSource = remember { MutableInteractionSource() },
                 ) {
                     onExpandStateChange()
                 },
@@ -350,21 +356,21 @@ private fun AdvancedOptions(
                         R.drawable.ic_chevron_up
                     } else {
                         R.drawable.ic_chevron_down
-                    }
+                    },
                 ),
                 contentDescription = stringResource(
-                    id = R.string.collapse_advanced_options
+                    id = R.string.collapse_advanced_options,
                 ),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
             )
         }
 
         AnimatedVisibility(
             visible = viewState.isAdvancedOptionsExpanded,
-            enter = fadeIn(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
-                + expandVertically(tween(DEFAULT_STAY_TRANSITION_TIME_MS)),
-            exit = fadeOut(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
-                + shrinkVertically(tween(DEFAULT_STAY_TRANSITION_TIME_MS)),
+            enter = fadeIn(tween(DEFAULT_FADE_TRANSITION_TIME_MS)) +
+                expandVertically(tween(DEFAULT_STAY_TRANSITION_TIME_MS)),
+            exit = fadeOut(tween(DEFAULT_FADE_TRANSITION_TIME_MS)) +
+                shrinkVertically(tween(DEFAULT_STAY_TRANSITION_TIME_MS)),
         ) {
             LazyColumn {
                 item {
@@ -418,7 +424,7 @@ private fun AdvancedOptions(
                         .associateWith {
                             stringResource(
                                 id = R.string.refresh_period_seconds,
-                                it.seconds
+                                it.seconds,
                             )
                         }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -440,7 +446,7 @@ private fun AdvancedOptions(
 
                                 onRefreshPeriodOptionClicked(selectedOptionName)
                             }
-                        }
+                        },
                     )
                 }
 
@@ -468,7 +474,7 @@ private fun EditItemDialogs(
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
                     title = dialogState.title,
-                    message = dialogState.message
+                    message = dialogState.message,
                 ),
                 onDismissRequest = onDismissRequest,
             )
@@ -520,7 +526,7 @@ private fun EditItemContentExpandedOptionsPreview() {
             ),
             minDigitsAllowed = 5,
             maxDigitsAllowed = 10,
-        )
+        ),
     )
 }
 
@@ -542,6 +548,6 @@ private fun EditItemContentCollapsedOptionsPreview() {
             ),
             minDigitsAllowed = 5,
             maxDigitsAllowed = 10,
-        )
+        ),
     )
 }

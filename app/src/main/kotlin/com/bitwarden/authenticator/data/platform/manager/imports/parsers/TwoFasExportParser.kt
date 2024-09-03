@@ -45,7 +45,7 @@ class TwoFasExportParser : ExportParser {
                 )
             } else {
                 ExportParseResult.Success(
-                    items = exportData.services.toAuthenticatorItemEntities()
+                    items = exportData.services.toAuthenticatorItemEntities(),
                 )
             }
         } catch (e: SerializationException) {
@@ -60,6 +60,7 @@ class TwoFasExportParser : ExportParser {
     private fun List<TwoFasJsonExport.Service>.toAuthenticatorItemEntities() =
         mapNotNull { it.toAuthenticatorItemEntityOrNull() }
 
+    @Suppress("MaxLineLength")
     private fun TwoFasJsonExport.Service.toAuthenticatorItemEntityOrNull(): AuthenticatorItemEntity {
 
         val type = otp.tokenType

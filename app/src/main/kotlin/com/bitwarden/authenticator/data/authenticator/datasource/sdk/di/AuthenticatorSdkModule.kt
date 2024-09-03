@@ -21,5 +21,4 @@ object AuthenticatorSdkModule {
     fun provideAuthenticatorSdkSource(
         sdkClientManager: SdkClientManager,
     ): AuthenticatorSdkSource = AuthenticatorSdkSourceImpl(sdkClientManager)
-
 }

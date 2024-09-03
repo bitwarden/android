@@ -37,6 +37,7 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 /**
  * The search screen for authenticator items.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemSearchScreen(
@@ -84,8 +85,7 @@ fun ItemSearchScreen(
                 ),
             )
         },
-    )
-    { innerPadding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,7 +107,7 @@ fun ItemSearchScreen(
                 is ItemSearchState.ViewState.Empty -> {
                     ItemSearchEmptyContent(
                         viewState = viewState,
-                        modifier = innerModifier
+                        modifier = innerModifier,
                     )
                 }
 

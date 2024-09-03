@@ -73,12 +73,12 @@ fun VaultVerificationCodeItem(
                     onClick = onItemClick,
                     onLongClick = {
                         shouldShowDropdownMenu = true
-                    }
+                    },
                 )
                 .defaultMinSize(minHeight = 72.dp)
                 .padding(
                     vertical = 8.dp,
-                    horizontal = 16.dp
+                    horizontal = 16.dp,
                 )
                 .then(modifier),
             verticalAlignment = Alignment.CenterVertically,
@@ -120,7 +120,7 @@ fun VaultVerificationCodeItem(
             BitwardenCircularCountdownIndicator(
                 timeLeftSeconds = timeLeftSeconds,
                 periodSeconds = periodSeconds,
-                alertThresholdSeconds = alertThresholdSeconds
+                alertThresholdSeconds = alertThresholdSeconds,
             )
 
             Text(
@@ -145,9 +145,9 @@ fun VaultVerificationCodeItem(
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_edit_item),
-                        contentDescription = stringResource(R.string.edit_item)
+                        contentDescription = stringResource(R.string.edit_item),
                     )
-                }
+                },
             )
             HorizontalDivider()
             DropdownMenuItem(
@@ -163,7 +163,7 @@ fun VaultVerificationCodeItem(
                         painter = painterResource(id = R.drawable.ic_delete_item),
                         contentDescription = stringResource(id = R.string.delete_item),
                     )
-                }
+                },
             )
         }
     }

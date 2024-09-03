@@ -35,5 +35,4 @@ object AuthenticatorRepositoryModule {
         importManager,
         dispatcherManager,
     )
-
 }

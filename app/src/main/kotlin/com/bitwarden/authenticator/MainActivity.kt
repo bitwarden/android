@@ -17,6 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Primary entry point for the application.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -33,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             mainViewModel.trySendAction(
                 MainAction.ReceiveFirstIntent(
-                    intent = intent
-                )
+                    intent = intent,
+                ),
             )
         }
 
@@ -42,11 +45,11 @@ class MainActivity : AppCompatActivity() {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
 
             AuthenticatorTheme(
-                theme = state.theme
+                theme = state.theme,
             ) {
                 RootNavScreen(
                     onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                    onExitApplication = { finishAffinity() }
+                    onExitApplication = { finishAffinity() },
                 )
             }
         }
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         sanitizeIntent()
         mainViewModel.trySendAction(
-            MainAction.ReceiveNewIntent(intent = intent)
+            MainAction.ReceiveNewIntent(intent = intent),
         )
     }
 

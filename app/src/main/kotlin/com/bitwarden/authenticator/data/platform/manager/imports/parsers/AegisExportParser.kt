@@ -13,6 +13,9 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.util.UUID
 
+/**
+ * Implementation of [ExportParser] responsible for parsing exports from the Aegis application.
+ */
 class AegisExportParser : ExportParser {
     @OptIn(ExperimentalSerializationApi::class)
     override fun parse(byteArray: ByteArray): ExportParseResult {
@@ -43,6 +46,7 @@ class AegisExportParser : ExportParser {
     private fun List<AegisJsonExport.Database.Entry>.toAuthenticatorItemEntities() =
         map { it.toAuthenticatorItemEntity() }
 
+    @Suppress("MaxLineLength")
     private fun AegisJsonExport.Database.Entry.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
 
         // Aegis only supports TOTP codes.

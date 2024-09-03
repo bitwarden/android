@@ -49,7 +49,7 @@ class FeatureFlagManagerTest {
     @Test
     fun `getFeatureFlag should return default value if flag doesn't exist`() {
         fakeFeatureFlagRepository.featureFlagsConfiguration = FEATURE_FLAGS_CONFIG.copy(
-            featureFlags = emptyMap()
+            featureFlags = emptyMap(),
         )
 
         val flagValue = featureFlagManager.getFeatureFlag(
@@ -65,5 +65,5 @@ private val FEATURE_FLAGS_CONFIG =
         mapOf(
             LocalFeatureFlag.BitwardenAuthenticationEnabled.name to
                 JsonPrimitive(true),
-        )
+        ),
     )

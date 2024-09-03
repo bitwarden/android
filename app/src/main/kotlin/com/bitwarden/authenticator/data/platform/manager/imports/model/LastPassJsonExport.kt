@@ -3,6 +3,9 @@ package com.bitwarden.authenticator.data.platform.manager.imports.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Models the JSON export file from LastPass.
+ */
 @Serializable
 data class LastPassJsonExport(
     val deviceId: String,
@@ -13,6 +16,9 @@ data class LastPassJsonExport(
     val accounts: List<Account>,
     val folders: List<Folder>,
 ) {
+    /**
+     * Models an account contained within a [LastPassJsonExport].
+     */
     @Serializable
     data class Account(
         @SerialName("accountID")
@@ -31,12 +37,18 @@ data class LastPassJsonExport(
         val folderData: FolderData?,
         val backupInfo: BackupInfo?,
     ) {
+        /**
+         * Models metadata for a [Folder].
+         */
         @Serializable
         data class FolderData(
             val folderId: String,
             val position: Int,
         )
 
+        /**
+         * Models backup file information for an [Account].
+         */
         @Serializable
         data class BackupInfo(
             val creationDate: String,
@@ -45,6 +57,9 @@ data class LastPassJsonExport(
         )
     }
 
+    /**
+     * Models a collection of [Account] objects.
+     */
     @Serializable
     data class Folder(
         val id: Int,

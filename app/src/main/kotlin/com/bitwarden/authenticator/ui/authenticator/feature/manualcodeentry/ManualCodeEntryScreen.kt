@@ -120,19 +120,19 @@ fun ManualCodeEntryScreen(
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
                     title = dialog.title,
-                    message = dialog.message
+                    message = dialog.message,
                 ),
                 onDismissRequest = remember(state) {
                     { viewModel.trySendAction(ManualCodeEntryAction.DismissDialog) }
-                }
+                },
             )
         }
 
         is ManualCodeEntryState.DialogState.Loading -> {
             BitwardenLoadingDialog(
                 visibilityState = LoadingDialogState.Shown(
-                    dialog.message
-                )
+                    dialog.message,
+                ),
             )
         }
 

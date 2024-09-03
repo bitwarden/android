@@ -29,7 +29,7 @@ class FeatureFlagRepositoryTest {
 
             assertEquals(
                 FEATURE_FLAGS_CONFIG,
-                fakeFeatureFlagDiskSource.featureFlagsConfiguration
+                fakeFeatureFlagDiskSource.featureFlagsConfiguration,
             )
         }
 
@@ -49,5 +49,5 @@ private val FEATURE_FLAGS_CONFIG =
         featureFlags = mapOf(
             LocalFeatureFlag.BitwardenAuthenticationEnabled.name to
                 JsonPrimitive(LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue),
-        )
+        ),
     )

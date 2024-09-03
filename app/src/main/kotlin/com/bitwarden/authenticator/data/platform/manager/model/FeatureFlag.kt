@@ -4,7 +4,8 @@ package com.bitwarden.authenticator.data.platform.manager.model
  * Represents feature flags used by the application.
  *
  * @property name The string value of the given key.
- * @property defaultValue The value to be used if the flags value cannot be determined or is not remotely configured.
+ * @property defaultValue The value to be used if the flags value cannot be determined or is not
+ * remotely configured.
  * @property isRemotelyConfigured Indicates if the flag should respect the network value or not.
  */
 sealed class FeatureFlag<out T : Any>(
@@ -37,4 +38,3 @@ sealed class RemoteFeatureFlag<out T : Any>(
     name: String,
     defaultValue: T,
 ) : FeatureFlag<T>(name, defaultValue, isRemotelyConfigured = true)
-

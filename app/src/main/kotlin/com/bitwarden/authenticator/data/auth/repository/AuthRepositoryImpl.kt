@@ -4,6 +4,9 @@ import android.os.SystemClock
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import javax.inject.Inject
 
+/**
+ * Default implementation of [AuthRepository].
+ */
 class AuthRepositoryImpl @Inject constructor(
     private val authDiskSource: AuthDiskSource,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },

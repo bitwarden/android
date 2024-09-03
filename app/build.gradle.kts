@@ -151,8 +151,8 @@ dependencies {
 }
 
 detekt {
+    autoCorrect = true
     config.from(files("$rootDir/detekt-config.yml"))
-    baseline = file("$rootDir/detekt-baseline.xml")
 }
 
 kover {

@@ -23,10 +23,10 @@ fun NavGraphBuilder.settingsGraph(
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
-        route = SETTINGS_GRAPH_ROUTE
+        route = SETTINGS_GRAPH_ROUTE,
     ) {
         composableWithRootPushTransitions(
-            route = SETTINGS_ROUTE
+            route = SETTINGS_ROUTE,
         ) {
             SettingsScreen(
                 onNavigateToTutorial = onNavigateToTutorial,
@@ -35,13 +35,13 @@ fun NavGraphBuilder.settingsGraph(
             )
         }
         tutorialSettingsDestination(
-            onTutorialFinished = { navController.popBackStack() }
+            onTutorialFinished = { navController.popBackStack() },
         )
         exportDestination(
-            onNavigateBack = { navController.popBackStack() }
+            onNavigateBack = { navController.popBackStack() },
         )
         importingDestination(
-            onNavigateBack = { navController.popBackStack() }
+            onNavigateBack = { navController.popBackStack() },
         )
     }
 }

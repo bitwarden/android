@@ -104,7 +104,7 @@ fun VaultVerificationCodeItem(
         BitwardenCircularCountdownIndicator(
             timeLeftSeconds = timeLeftSeconds,
             periodSeconds = periodSeconds,
-            alertThresholdSeconds = alertThresholdSeconds
+            alertThresholdSeconds = alertThresholdSeconds,
         )
 
         Text(
@@ -141,7 +141,7 @@ private fun VerificationCodeItem_preview() {
             onCopyClick = {},
             onItemClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),
-            alertThresholdSeconds = 7
+            alertThresholdSeconds = 7,
         )
     }
 }

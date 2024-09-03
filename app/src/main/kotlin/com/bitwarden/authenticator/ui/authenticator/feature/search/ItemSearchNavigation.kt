@@ -16,7 +16,7 @@ fun NavGraphBuilder.itemSearchDestination(
         route = ITEM_SEARCH_ROUTE,
     ) {
         ItemSearchScreen(
-            onNavigateBack = onNavigateBack
+            onNavigateBack = onNavigateBack,
         )
     }
 }

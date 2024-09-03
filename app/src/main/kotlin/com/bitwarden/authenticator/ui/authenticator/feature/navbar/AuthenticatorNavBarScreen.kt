@@ -154,7 +154,7 @@ private fun AuthenticatorNavBarScaffold(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(appBarHeightPx.toDp())
+                        .height(appBarHeightPx.toDp()),
                 )
             }
         },
@@ -186,6 +186,7 @@ private fun AuthenticatorNavBarScaffold(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun AuthenticatorBottomAppBar(
     navController: NavController,

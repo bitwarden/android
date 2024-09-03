@@ -28,7 +28,7 @@ object AuthenticatorDiskModule {
             .databaseBuilder(
                 context = app,
                 klass = AuthenticatorDatabase::class.java,
-                name = "authenticator_database"
+                name = "authenticator_database",
             )
             .fallbackToDestructiveMigration()
             .addTypeConverter(AuthenticatorItemTypeConverter())

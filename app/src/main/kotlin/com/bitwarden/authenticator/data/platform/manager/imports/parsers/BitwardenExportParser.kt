@@ -17,6 +17,9 @@ import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
 import java.io.IOException
 
+/**
+ * Implementation of [ExportParser] responsible for parsing exports from the Bitwarden application.
+ */
 class BitwardenExportParser(
     private val fileFormat: ImportFileFormat,
 ) : ExportParser {
@@ -42,7 +45,7 @@ class BitwardenExportParser(
                 items = exportData
                     .items
                     .filter { it.login?.totp != null }
-                    .toAuthenticatorItemEntities()
+                    .toAuthenticatorItemEntities(),
             )
         } catch (e: SerializationException) {
             ExportParseResult.Error()
@@ -56,6 +59,7 @@ class BitwardenExportParser(
     private fun List<ExportJsonData.ExportItem>.toAuthenticatorItemEntities() =
         map { it.toAuthenticatorItemEntity() }
 
+    @Suppress("MaxLineLength", "CyclomaticComplexMethod", "LongMethod")
     private fun ExportJsonData.ExportItem.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
         val otpString = requireNotNull(login?.totp)
 

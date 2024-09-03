@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.entity
 
 /**
- * Enum representing the main type options for authenticator items.
+ * Enum representing the supported "type" options for authenticator items.
  */
 enum class AuthenticatorItemType {
 
@@ -17,6 +17,10 @@ enum class AuthenticatorItemType {
     ;
 
     companion object {
+
+        /**
+         * Returns the [AuthenticatorItemType] matching [value], or null.
+         */
         fun fromStringOrNull(value: String): AuthenticatorItemType? =
             entries.find { it.name.equals(value, ignoreCase = true) }
     }

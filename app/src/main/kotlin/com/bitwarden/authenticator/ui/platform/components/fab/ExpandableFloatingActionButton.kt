@@ -38,6 +38,15 @@ import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.theme.Typography
 
+/**
+ * A FAB that expands, when clicked, to display a collection of options that can be clicked.
+ *
+ * @param label [Text] displayed when the FAB is expanded.
+ * @param items [ExpandableFabOption] buttons displayed when the FAB is expanded.
+ * @param expandableFabState [ExpandableFabIcon] displayed in the FAB.
+ * @param onStateChange Lambda invoked when the FAB expanded state changes.
+ */
+@Suppress("LongMethod")
 @Composable
 fun <T : ExpandableFabOption> ExpandableFloatingActionButton(
     modifier: Modifier = Modifier,
@@ -78,7 +87,7 @@ fun <T : ExpandableFabOption> ExpandableFloatingActionButton(
                             onStateChange(expandableFabState.value)
                             expandableFabOption.onFabOptionClick()
                         },
-                        expandableFabOption = expandableFabOption
+                        expandableFabOption = expandableFabOption,
                     )
                 }
             }
@@ -150,31 +159,52 @@ private fun <T : ExpandableFabOption> ExpandableFabOption(
 }
 
 @Composable
-fun rememberExpandableFabState() =
+private fun rememberExpandableFabState() =
     remember { mutableStateOf<ExpandableFabState>(ExpandableFabState.Collapsed) }
 
+/**
+ * Represents options displayed when the FAB is expanded.
+ */
 abstract class ExpandableFabOption(
     val label: Text?,
     val iconData: IconResource,
     val onFabOptionClick: () -> Unit,
 )
 
+/**
+ * Models data for an expandable FAB icon.
+ */
 data class ExpandableFabIcon(
     val iconData: IconResource,
     val iconRotation: Float?,
 )
 
+/**
+ * Models the state of the expandable FAB.
+ */
 sealed class ExpandableFabState {
 
+    /**
+     * Indicates if the FAB is expanded.
+     */
     fun isExpanded() = this is Expanded
 
+    /**
+     * Invert the state of the FAB.
+     */
     fun toggleValue() = if (isExpanded()) {
         Collapsed
     } else {
         Expanded
     }
 
+    /**
+     * Indicates the FAB is collapsed.
+     */
     data object Collapsed : ExpandableFabState()
 
+    /**
+     * Indicates the FAB is expanded.
+     */
     data object Expanded : ExpandableFabState()
 }

@@ -21,8 +21,8 @@ class MainViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
-        theme = settingsRepository.appTheme
-    )
+        theme = settingsRepository.appTheme,
+    ),
 ) {
 
     init {
@@ -71,7 +71,6 @@ class MainViewModel @Inject constructor(
     ) {
         // RFU
     }
-
 }
 
 /**

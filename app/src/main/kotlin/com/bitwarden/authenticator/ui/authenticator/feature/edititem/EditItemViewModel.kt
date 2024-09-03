@@ -35,6 +35,7 @@ private const val KEY_STATE = "state"
 /**
  * View model responsible for handling user interaction with the edit authenticator item screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class EditItemViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
@@ -44,7 +45,7 @@ class EditItemViewModel @Inject constructor(
         itemId = EditItemArgs(savedStateHandle).itemId,
         viewState = EditItemState.ViewState.Loading,
         dialog = null,
-    )
+    ),
 ) {
 
     init {
@@ -76,7 +77,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleExpandAdvancedOptionsClick() {
         updateContent { currentContent ->
             currentContent.copy(
-                isAdvancedOptionsExpanded = currentContent.isAdvancedOptionsExpanded.not()
+                isAdvancedOptionsExpanded = currentContent.isAdvancedOptionsExpanded.not(),
             )
         }
     }
@@ -88,7 +89,7 @@ class EditItemViewModel @Inject constructor(
                     dialog = EditItemState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required.asText(R.string.name.asText()),
-                    )
+                    ),
                 )
             }
             return@onContent
@@ -98,7 +99,7 @@ class EditItemViewModel @Inject constructor(
                     dialog = EditItemState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required.asText(R.string.key.asText()),
-                    )
+                    ),
                 )
             }
             return@onContent
@@ -107,8 +108,8 @@ class EditItemViewModel @Inject constructor(
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.key_is_invalid.asText()
-                    )
+                        message = R.string.key_is_invalid.asText(),
+                    ),
                 )
             }
             return@onContent
@@ -117,8 +118,8 @@ class EditItemViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = EditItemState.DialogState.Loading(
-                    R.string.saving.asText()
-                )
+                    R.string.saving.asText(),
+                ),
             )
         }
         viewModelScope.launch {
@@ -133,7 +134,7 @@ class EditItemViewModel @Inject constructor(
                     digits = content.itemData.digits,
                     issuer = content.itemData.issuer.trim(),
                     favorite = content.itemData.favorite,
-                )
+                ),
             )
             trySendAction(EditItemAction.Internal.UpdateItemResult(result))
         }
@@ -142,7 +143,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleNumberOfDigitsOptionChange(action: EditItemAction.NumberOfDigitsOptionClick) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                digits = action.digits
+                digits = action.digits,
             )
         }
     }
@@ -150,7 +151,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleIssuerNameTextChange(action: EditItemAction.IssuerNameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                issuer = action.issuerName
+                issuer = action.issuerName,
             )
         }
     }
@@ -158,7 +159,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleIssuerTextChange(action: EditItemAction.UsernameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                username = action.username
+                username = action.username,
             )
         }
     }
@@ -166,7 +167,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleFavoriteToggleClick(action: EditItemAction.FavoriteToggleClick) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                favorite = action.favorite
+                favorite = action.favorite,
             )
         }
     }
@@ -174,7 +175,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleTotpCodeTextChange(action: EditItemAction.TotpCodeTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                totpCode = action.totpCode
+                totpCode = action.totpCode,
             )
         }
     }
@@ -182,7 +183,7 @@ class EditItemViewModel @Inject constructor(
     private fun handlePeriodTextChange(action: EditItemAction.RefreshPeriodOptionClick) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                refreshPeriod = action.period
+                refreshPeriod = action.period,
             )
         }
     }
@@ -190,7 +191,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleAlgorithmOptionClick(action: EditItemAction.AlgorithmOptionClick) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                algorithm = action.algorithmOption
+                algorithm = action.algorithmOption,
             )
         }
     }
@@ -202,7 +203,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleTypeOptionClick(action: EditItemAction.TypeOptionClick) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                type = action.typeOption
+                type = action.typeOption,
             )
         }
     }
@@ -236,6 +237,7 @@ class EditItemViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleItemDataReceive(action: EditItemAction.Internal.EditItemDataReceive) {
         when (val itemState = action.itemDataState) {
             is DataState.Error -> {
@@ -258,7 +260,7 @@ class EditItemViewModel @Inject constructor(
                             .data
                             ?.toViewState(expandAdvancedOptions)
                             ?: EditItemState.ViewState.Error(
-                                message = R.string.generic_error_message.asText()
+                                message = R.string.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -267,7 +269,7 @@ class EditItemViewModel @Inject constructor(
             DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = EditItemState.ViewState.Loading
+                        viewState = EditItemState.ViewState.Loading,
                     )
                 }
             }
@@ -294,7 +296,7 @@ class EditItemViewModel @Inject constructor(
                             .data
                             ?.toViewState(expandAdvancedOptions)
                             ?: EditItemState.ViewState.Error(
-                                message = R.string.generic_error_message.asText()
+                                message = R.string.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -512,6 +514,9 @@ sealed class EditItemAction {
         val digits: Int,
     ) : EditItemAction()
 
+    /**
+     * The user has clicked to expand advanced OTP options.
+     */
     data object ExpandAdvancedOptionsClick : EditItemAction()
 
     /**
@@ -543,6 +548,9 @@ enum class AuthenticatorRefreshPeriodOption(val seconds: Int) {
     ;
 
     companion object {
+        /**
+         * Returns a [AuthenticatorRefreshPeriodOption] with the provided [seconds], or null.
+         */
         fun fromSeconds(seconds: Int) = entries.find { it.seconds == seconds }
     }
 }

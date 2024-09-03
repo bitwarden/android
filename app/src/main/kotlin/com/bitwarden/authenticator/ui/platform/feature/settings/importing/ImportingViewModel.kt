@@ -24,7 +24,7 @@ class ImportingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
 ) :
     BaseViewModel<ImportState, ImportEvent, ImportAction>(
-        initialState = ImportState(importFileFormat = ImportFileFormat.BITWARDEN_JSON)
+        initialState = ImportState(importFileFormat = ImportFileFormat.BITWARDEN_JSON),
     ) {
 
     override fun handleAction(action: ImportAction) {
@@ -97,7 +97,7 @@ class ImportingViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = result.message
                                 ?: R.string.import_vault_failure.asText(),
-                        )
+                        ),
                     )
                 }
             }
@@ -107,7 +107,7 @@ class ImportingViewModel @Inject constructor(
                 sendEvent(
                     ImportEvent.ShowToast(
                         message = R.string.import_success.asText(),
-                    )
+                    ),
                 )
                 sendEvent(ImportEvent.NavigateBack)
             }

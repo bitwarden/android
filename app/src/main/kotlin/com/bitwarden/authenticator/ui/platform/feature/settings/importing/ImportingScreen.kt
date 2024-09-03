@@ -42,6 +42,10 @@ import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Top level composable for the importing screen.
+ */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImportingScreen(
@@ -66,7 +70,9 @@ fun ImportingScreen(
         when (event) {
             ImportEvent.NavigateBack -> onNavigateBack()
             is ImportEvent.NavigateToSelectImportFile -> {
-                launcher.launch(intentManager.createFileChooserIntent(event.importFileFormat.mimeType))
+                launcher.launch(
+                    intentManager.createFileChooserIntent(event.importFileFormat.mimeType),
+                )
             }
 
             is ImportEvent.ShowToast -> {
@@ -88,15 +94,15 @@ fun ImportingScreen(
                     {
                         viewModel.trySendAction(ImportAction.DialogDismiss)
                     }
-                }
+                },
             )
         }
 
         is ImportState.DialogState.Loading -> {
             BitwardenLoadingDialog(
                 visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message
-                )
+                    text = dialog.message,
+                ),
             )
         }
 
@@ -151,7 +157,7 @@ private fun ImportScreenContent(
     Column(
         modifier = modifier
             .imePadding()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
