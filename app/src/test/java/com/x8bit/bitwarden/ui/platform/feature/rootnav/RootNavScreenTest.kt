@@ -98,6 +98,14 @@ class RootNavScreenTest : BaseComposeTest() {
             )
         }
 
+        // Make sure navigating to expired registration link route works as expected:
+        rootNavStateFlow.value = RootNavState.ExpiredRegistrationLink
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "expired_registration_link",
+            )
+        }
+
         // Make sure navigating to vault locked works as expected:
         rootNavStateFlow.value = RootNavState.VaultLocked
         composeTestRule.runOnIdle {

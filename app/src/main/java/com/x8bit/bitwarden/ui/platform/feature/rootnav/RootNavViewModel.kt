@@ -302,6 +302,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultUnlockedForAuthRequest : RootNavState()
+
+    /**
+     * App should show the expired registration link screen.
+     */
+    @Parcelize
+    data object ExpiredRegistrationLink : RootNavState()
 }
 
 /**
