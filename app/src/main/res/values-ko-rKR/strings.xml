@@ -82,6 +82,7 @@
   <string name="yes">예</string>
   <string name="account">계정</string>
   <string name="account_created">계정 생성이 완료되었습니다! 이제 로그인하실 수 있습니다.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">항목 추가</string>
   <string name="app_extension">앱 확장 프로그램</string>
   <string name="autofill_accessibility_description">웹 사이트 및 앱에서 자동 완성 서비스를 사용하려면 Bitwarden 접근성 서비스를 사용 설정하세요.</string>

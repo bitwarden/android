@@ -82,6 +82,7 @@
   <string name="yes">Ja</string>
   <string name="account">Account</string>
   <string name="account_created">Je account is aangemaakt! Je kunt nu inloggen.</string>
+  <string name="account_created_success">Je nieuwe account is aangemaakt!</string>
   <string name="add_an_item">Item toevoegen</string>
   <string name="app_extension">App-extensie</string>
   <string name="autofill_accessibility_description">Gebruik de Bitwarden-toegankelijkheidsdienst voor het automatisch invullen van je inloggegevens in apps en op het internet.</string>

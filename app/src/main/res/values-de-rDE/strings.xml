@@ -82,6 +82,7 @@
   <string name="yes">Ja</string>
   <string name="account">Benutzerkonto</string>
   <string name="account_created">Dein neues Konto wurde erstellt! Du kannst dich jetzt anmelden.</string>
+  <string name="account_created_success">Dein neues Konto wurde erstellt!</string>
   <string name="add_an_item">Neuer Eintrag</string>
   <string name="app_extension">App-Erweiterung</string>
   <string name="autofill_accessibility_description">Verwende den Bitwarden Dienst in den Bedienungshilfen, um deine Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</string>

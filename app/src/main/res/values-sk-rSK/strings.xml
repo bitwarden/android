@@ -82,12 +82,13 @@
   <string name="yes">Áno</string>
   <string name="account">Účet</string>
   <string name="account_created">Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Pridať položku</string>
   <string name="app_extension">Rozšírenie aplikácie</string>
   <string name="autofill_accessibility_description">Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie v aplikáciách a na webe.</string>
   <string name="autofill_service">Služba automatického vypĺňania</string>
   <string name="set_bitwarden_as_passkey_manager_description">Nastavte Bitwarden ako poskytovateľa prístupových kľúčov v nastaveniach zariadenia.</string>
-  <string name="avoid_ambiguous_characters">Vyhnúť sa dvojvýznamovým znakom</string>
+  <string name="avoid_ambiguous_characters">Vyhnúť sa zameniteľným znakom</string>
   <string name="bitwarden_app_extension">Bitwarden rozšírenie aplikácie</string>
   <string name="bitwarden_app_extension_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z Bitwarden rozšírenia aplikácie. Ďalšie informácie o používaní Bitwarden rozšírenia aplikácie získate prechodom do obrazovky Nastavení.</string>
   <string name="bitwarden_app_extension_description">Použiť bitwarden v Safari a iných aplikáciach pre automatické vypĺňanie prihlasovacích údajov.</string>

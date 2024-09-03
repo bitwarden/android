@@ -82,6 +82,7 @@
   <string name="yes">Sí</string>
   <string name="account">Compte</string>
   <string name="account_created">El vostre compte s\'ha creat correctament. Ara ja podeu iniciar sessió.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Afegeix un element nou</string>
   <string name="app_extension">Extensió de l\'aplicació</string>
   <string name="autofill_accessibility_description">Utilitzeu el servei d\'accessibilitat de Bitwarden per omplir automàticament els inicis de sessió a través de les aplicacions i de la web.</string>

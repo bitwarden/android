@@ -82,6 +82,7 @@
   <string name="yes">はい</string>
   <string name="account">アカウント</string>
   <string name="account_created">新しいアカウントを作成しました！今すぐログインできます。</string>
+  <string name="account_created_success">新しいアカウントを作成しました！</string>
   <string name="add_an_item">アイテムの追加</string>
   <string name="app_extension">App Extension</string>
   <string name="autofill_accessibility_description">Bitwarden ユーザー補助サービスを使ってアプリやウェブサイトでログイン情報を自動入力します。</string>

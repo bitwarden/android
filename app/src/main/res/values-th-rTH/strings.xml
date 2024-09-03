@@ -82,6 +82,7 @@
   <string name="yes">ใช่</string>
   <string name="account">บัญชี</string>
   <string name="account_created">บัญชีของคุณได้เปิดใช้แล้ว. ตอนนี้คุณสามารถเข้าสู่ระบบได้แล้ว.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">เพิ่มรายการ</string>
   <string name="app_extension">แอปส่วนขยาย</string>
   <string name="autofill_accessibility_description">ใช้บริการ Bitwarden เพิ่อเข้าถึงการกรอกข้อมูลอัตโนมัติเข้าสู่ระบบผ่านแอปพลิเคชันและเว็บ</string>

@@ -82,6 +82,7 @@
   <string name="yes">כן</string>
   <string name="account">חשבון</string>
   <string name="account_created">החשבון שלך נוצר בהצלחה! כעת ניתן להכנס למערכת.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">הוסף פריט</string>
   <string name="app_extension">הרחבת אפליקציה</string>
   <string name="autofill_accessibility_description">השתמש בשירות הנגישות של Bitwarden עבור השלמה אוטמטית של פרטי כניסה לאפליקציות ולאתרים באינטרנט.</string>

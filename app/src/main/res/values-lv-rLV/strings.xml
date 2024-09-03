@@ -82,6 +82,7 @@
   <string name="yes">Jā</string>
   <string name="account">Konts</string>
   <string name="account_created">Jaunais konts ir izveidots. Tagad vari pieteikties.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Pievienot vienumu</string>
   <string name="app_extension">Lietotņu paplašinājums</string>
   <string name="autofill_accessibility_description">Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes dažādās lietotnēs un tīmeklī.</string>

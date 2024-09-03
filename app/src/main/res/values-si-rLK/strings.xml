@@ -82,6 +82,7 @@
   <string name="yes">ඔව්</string>
   <string name="account">ගිණුම</string>
   <string name="account_created">Your new account has been created! You may now log in.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Add an Item</string>
   <string name="app_extension">App extension</string>
   <string name="autofill_accessibility_description">Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</string>

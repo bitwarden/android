@@ -82,6 +82,7 @@
   <string name="yes">Ano</string>
   <string name="account">Účet</string>
   <string name="account_created">Váš účet byl vytvořen! Můžete se přihlásit.</string>
+  <string name="account_created_success">Váš nový účet byl vytvořen!</string>
   <string name="add_an_item">Přidat položku</string>
   <string name="app_extension">Rozšíření aplikace</string>
   <string name="autofill_accessibility_description">Služba přístupnosti Bitwarden umožňuje automatické vyplňování přihlašovacích údajů v aplikacích a na webových stránkách.</string>

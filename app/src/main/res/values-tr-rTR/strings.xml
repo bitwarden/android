@@ -82,6 +82,7 @@
   <string name="yes">Evet</string>
   <string name="account">Hesap</string>
   <string name="account_created">Yeni hesabınız oluşturuldu! Şimdi giriş yapabilirsiniz.</string>
+  <string name="account_created_success">Yeni hesabınız oluşturuldu.</string>
   <string name="add_an_item">Kayıt ekle</string>
   <string name="app_extension">Uygulama uzantısı</string>
   <string name="autofill_accessibility_description">Uygulamalarda ve web\'de giriş bilgilerinizi otomatik doldurmak için Bitwarden erişilebilirlik hizmetini kullanabilirsiniz.</string>

@@ -82,6 +82,7 @@
   <string name="yes">Taip</string>
   <string name="account">Paskyra</string>
   <string name="account_created">Jūsų paskyra sukurta! Galite prisijungti.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Pridėti elementą</string>
   <string name="app_extension">Programos plėtinys</string>
   <string name="autofill_accessibility_description">Naudokite „Bitwarden“ pritaikymo neįgaliesiems paslaugą, kad automatiškai užpildytumėte prisijungimo duomenis programose ir žiniatinklyje.</string>

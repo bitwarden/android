@@ -82,6 +82,7 @@
   <string name="yes">Igen</string>
   <string name="account">Fiók</string>
   <string name="account_created">Fiókodat létrehoztuk. Most már be tudsz jelentkezni.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Elem hozzáadása</string>
   <string name="app_extension">App kiterjesztés</string>
   <string name="autofill_accessibility_description">A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez alkalmazásból és weben.</string>

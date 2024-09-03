@@ -82,6 +82,7 @@
   <string name="yes">ಹೌದು</string>
   <string name="account">ಖಾತೆ</string>
   <string name="account_created">ನಿಮ್ಮ ಹೊಸ ಖಾತೆಯನ್ನು ರಚಿಸಲಾಗಿದೆ! ನೀವು ಈಗ ಲಾಗ್ ಇನ್ ಮಾಡಬಹುದು.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">ಐಟಂ ಸೇರಿಸಿ</string>
   <string name="app_extension">ಅಪ್ಲಿಕೇಶನ್ ವಿಸ್ತರಣೆ</string>
   <string name="autofill_accessibility_description">ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ನಾದ್ಯಂತ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ.</string>

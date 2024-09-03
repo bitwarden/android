@@ -82,6 +82,7 @@
   <string name="yes">Da</string>
   <string name="account">Račun</string>
   <string name="account_created">Tvoj novi račun je kreiran! Sada se možeš prijaviti.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Dodaj stavku</string>
   <string name="app_extension">Proširenje aplikacije</string>
   <string name="autofill_accessibility_description">Koristi uslugu Bitwarden pristupačnosti za auto-ispunu svojih prijava u aplikacijama i na webu.</string>
@@ -614,7 +615,7 @@
   <string name="updating_password">Ažuriranje lozinke</string>
   <string name="update_password_error">Trenutno nije moguće ažurirati lozinku</string>
   <string name="remove_master_password">Ukloni glavnu lozinku</string>
-  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s koristi jedinstvenu prijavu SSO s vlastitim poslužiteljem. Članovima organizacije glavna lozinka više nije potrebna.</string>
   <string name="remove_master_password_warning">%1$s koristi SSO s korisnički upravljanim šifriranjem. Tvoja glavna lozinka biti će uklonjena, a za prijavu će biti potreban SSO.</string>
   <string name="remove_master_password_warning2">Ako ne želiš ukloniti svoju glavnu lozinku, možeš napustiti ovu organizaciju.</string>
   <string name="leave_organization">Napusti organizaciju</string>
@@ -928,7 +929,7 @@
   <string name="user_verification_direction">Provjera korisnika</string>
   <string name="creating_on">Stvaranje na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Za nastavak stvaranja svog računa, prati upute poslane na %1$s.</string>
-  <string name="we_sent_an_email_to">We sent an email to %1$s.</string>
+  <string name="we_sent_an_email_to">Poslana e-pošta na %1$s</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Nastavkom, slažeš se s Uvjetima usluge i Politikom privatnost</string>
   <string name="set_password">Postavi lozinku</string>
   <string name="unsubscribe">Poništi pretplatu</string>
@@ -939,7 +940,7 @@
   <string name="no_email_go_back_to_edit_your_email_address">e-pošta nije stigla? Vrati se na unos adrese.</string>
   <string name="or_log_in_you_may_already_have_an_account">Ili se prijavi, ako već imaš račun.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Primaj e-poštu od Bitwardena s najavamam savjetima i mogućnostima istraživanja. Otkaži pretplatu u bilo kojem trenutku.</string>
-  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Primaj savjete, najave i mogućnosti istraživanja od Bitwardena u svoju Ulaznu poštu. Otkaži pretplatu u bilo kojem trenutku.</string>
   <string name="privacy_prioritized">Privatnost na prvom mjestu</string>
   <string name="welcome_message_1">Spremi prijave, kartice i identitete u svoj sigurni trezor. Bitwarden koristi end-to-end enkripciju bez znanja kako bi zaštitio ono što ti je važno.</string>
   <string name="welcome_message_2">Uključi biometrijsko otključavanje i auto-ispunu za prijavu bez utipkavanja ijednog slova.</string>
@@ -976,13 +977,13 @@
   <string name="generate_button_label">Generiraj</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapiši ovu lozinku i čuvaj ju na tajnom i sigurnom mjestu.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Saznaj više o drugim načinima za sprječavanje blokade računa</string>
-  <string name="help_with_server_geolocations">Help with server geolocations.</string>
-  <string name="email_address_required">Email address (required)</string>
-  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
-  <string name="change_email_address">Change email address</string>
-  <string name="next">Next</string>
-  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
-  <string name="choose_your_master_password">Choose your master password</string>
-  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-  <string name="minimum_characters">%1$s characters</string>
+  <string name="help_with_server_geolocations">Pomoć s geolokacijama poslužitelja.</string>
+  <string name="email_address_required">Adresa e-pošte je obavezna</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Odaberi vezu poslanu e-poštom za potvrdu svoje adrese i nastavi s izradom računa. "</string>
+  <string name="change_email_address">Promjeni adresu e-pošte</string>
+  <string name="next">Sljedeće</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden ne može vratiti izgubljenu ili zaboravljenu glavnu lozinku.</string>
+  <string name="choose_your_master_password">Odaberi svoju glavnu lozinku</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Odaberi jedinstvenu i jaku lozinku za zaštitu svojih podataka.</string>
+  <string name="minimum_characters">%1$s znakova</string>
 </resources>

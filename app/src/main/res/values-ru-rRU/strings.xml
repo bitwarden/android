@@ -82,6 +82,7 @@
   <string name="yes">Да</string>
   <string name="account">Аккаунт</string>
   <string name="account_created">Ваш аккаунт создан! Теперь вы можете войти в систему.</string>
+  <string name="account_created_success">Ваш новый аккаунт создан!</string>
   <string name="add_an_item">Добавить элемент</string>
   <string name="app_extension">Расширение</string>
   <string name="autofill_accessibility_description">Используйте службу специальных возможностей Bitwarden для автоматического заполнения ваших логинов в приложениях и интернете.</string>

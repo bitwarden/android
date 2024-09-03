@@ -82,6 +82,7 @@
   <string name="yes">Si</string>
   <string name="account">Cuenta</string>
   <string name="account_created">¡Tu nueva cuenta ha sido creada! Ahora puedes acceder.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Añadir un elemento</string>
   <string name="app_extension">Extensión de Aplicación</string>
   <string name="autofill_accessibility_description">Utiliza el servicio de accesibilidad de Bitwarden para autorellenar entradas entre aplicaciones y sitios web.</string>

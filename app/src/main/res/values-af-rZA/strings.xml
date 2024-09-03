@@ -82,6 +82,7 @@
   <string name="yes">Ja</string>
   <string name="account">Rekening</string>
   <string name="account_created">U nuwe rekening is geskep! U kan nou aanteken.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Voeg ’n item toe</string>
   <string name="app_extension">Toepuitbreiding</string>
   <string name="autofill_accessibility_description">Gebruik die Bitwarden toeganklikheidsdiens om u aantekeninge oor toeps en die web heen outomaties in te vul.</string>

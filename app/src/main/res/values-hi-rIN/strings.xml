@@ -82,6 +82,7 @@
   <string name="yes">हां</string>
   <string name="account">अकाउंट</string>
   <string name="account_created">आपका नया अकाउंट बनाया गया! अब लॉगइन कर सकते हैं।</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">आइटम बनाएं</string>
   <string name="app_extension">ऐप एक्सटेंशन</string>
   <string name="autofill_accessibility_description">दूसरे ऐप और वेबसाइट पर अपनेआप लॉगइन करने के लिए बिटवार्डन एक्सेसिबिलिटी सर्विस इस्तेमाल करें।</string>

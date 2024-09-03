@@ -82,6 +82,7 @@
   <string name="yes">Ydw</string>
   <string name="account">Cyfrif</string>
   <string name="account_created">Mae eich cyfrif newydd wedi cael ei greu! Gallwch bellach fewngofnodi.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Ychwanegu eitem</string>
   <string name="app_extension">App extension</string>
   <string name="autofill_accessibility_description">Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</string>

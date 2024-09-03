@@ -82,6 +82,7 @@
   <string name="yes">Oo</string>
   <string name="account">Account</string>
   <string name="account_created">Nalikha na ang iyong bagong account! Maaari ka nang mag-log in.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Magdagdag ng Item</string>
   <string name="app_extension">Ekstensyon ng app</string>
   <string name="autofill_accessibility_description">Gamitin ang serbisyo sa aksesibilidad ng Bitwarden para i-autofill ang mga login mo sa mga app at sa web.</string>

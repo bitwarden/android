@@ -82,6 +82,7 @@
   <string name="yes">Oui</string>
   <string name="account">Compte</string>
   <string name="account_created">Votre nouveau compte a été créé ! Vous pouvez maintenant vous identifier.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Ajouter un élément</string>
   <string name="app_extension">Extension de l\'application</string>
   <string name="autofill_accessibility_description">Utilisez le service d\'accessibilité Bitwarden pour saisir automatiquement vos identifiants sur les applications et le web.</string>
