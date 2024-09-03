@@ -34,7 +34,7 @@ jobs:
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/actions/wrapper-validation@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4.0.1
 
       - name: Cache Gradle files
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
