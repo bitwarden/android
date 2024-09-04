@@ -109,11 +109,6 @@ class VaultItemListingViewModel @Inject constructor(
         val fido2AssertionData = specialCircumstance as? SpecialCircumstance.Fido2Assertion
         val fido2GetCredentialsData =
             specialCircumstance as? SpecialCircumstance.Fido2GetCredentials
-        val shouldFinishOnComplete = autofillSelectionData
-            ?.shouldFinishWhenComplete
-            ?: (fido2CreationData != null ||
-                fido2AssertionData != null ||
-                fido2GetCredentialsData != null)
         val dialogState = fido2CreationData
             ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) }
         VaultItemListingState(
@@ -133,7 +128,6 @@ class VaultItemListingViewModel @Inject constructor(
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
             autofillSelectionData = autofillSelectionData?.autofillSelectionData,
-            shouldFinishOnComplete = shouldFinishOnComplete,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             fido2CredentialRequest = fido2CreationData?.fido2CredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertionData?.fido2AssertionRequest,
@@ -1644,7 +1638,6 @@ data class VaultItemListingState(
     val fido2CredentialRequest: Fido2CredentialRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
-    val shouldFinishOnComplete: Boolean = false,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
 ) {

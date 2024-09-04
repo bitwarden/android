@@ -206,7 +206,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     dialogState = VaultItemListingState.DialogState.Loading(
                         message = R.string.loading.asText(),
                     ),
-                    shouldFinishOnComplete = true,
                 ),
                 awaitItem(),
             )
@@ -1295,10 +1294,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayFolderList = emptyList(),
                     ),
                 )
-                    .copy(
-                        autofillSelectionData = autofillSelectionData,
-                        shouldFinishOnComplete = true,
-                    ),
+                    .copy(autofillSelectionData = autofillSelectionData),
                 viewModel.stateFlow.value,
             )
             coVerify {
@@ -1378,10 +1374,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayFolderList = emptyList(),
                     ),
                 )
-                    .copy(
-                        fido2CredentialRequest = fido2CredentialRequest,
-                        shouldFinishOnComplete = true,
-                    ),
+                    .copy(fido2CredentialRequest = fido2CredentialRequest),
                 viewModel.stateFlow.value,
             )
             coVerify {
@@ -1460,10 +1453,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayFolderList = emptyList(),
                     ),
                 )
-                    .copy(
-                        fido2GetCredentialsRequest = fido2GetCredentialRequest,
-                        shouldFinishOnComplete = true,
-                    ),
+                    .copy(fido2GetCredentialsRequest = fido2GetCredentialRequest),
                 viewModel.stateFlow.value,
             )
             coVerify {
@@ -3769,7 +3759,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isPullToRefreshSettingEnabled = false,
             dialogState = null,
             autofillSelectionData = null,
-            shouldFinishOnComplete = false,
             policyDisablesSend = false,
             hasMasterPassword = true,
             fido2CredentialRequest = null,
