@@ -6022,9 +6022,9 @@ class AuthRepositoryTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `validateEmailToken should return expired result when service returns error with expired message`() = runTest {
+    fun `validateEmailToken should return expired result when service returns TokenExpired`() =
+        runTest {
         coEvery {
             identityService
                 .verifyEmailRegistrationToken(
@@ -6033,7 +6033,7 @@ class AuthRepositoryTest {
                         token = EMAIL_VERIFICATION_TOKEN,
                     ),
                 )
-        } returns VerifyEmailTokenResponseJson.Invalid(message = "This jawn expired.").asSuccess()
+        } returns VerifyEmailTokenResponseJson.TokenExpired.asSuccess()
 
         val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 

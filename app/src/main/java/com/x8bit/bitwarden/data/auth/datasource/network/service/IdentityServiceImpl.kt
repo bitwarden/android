@@ -135,14 +135,29 @@ class IdentityServiceImpl(
     ): Result<VerifyEmailTokenResponseJson> = unauthenticatedIdentityApi
         .verifyEmailToken(
             body = body,
-        ).map {
+        )
+        .map {
             VerifyEmailTokenResponseJson.Valid
         }
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
-            bitwardenError.parseErrorBodyOrNull<VerifyEmailTokenResponseJson.Invalid>(
-                code = 400,
-                json = json,
-            ) ?: throw throwable
+            bitwardenError
+                .parseErrorBodyOrNull<VerifyEmailTokenResponseJson.Invalid>(
+                    code = 400,
+                    json = json,
+                )
+                ?.checkForExpiredMessage()
+                ?: throw throwable
         }
 }
+
+/**
+ * If the message body contains text related to the token being expired, return
+ * the TokenExpired type. Otherwise, return the original Invalid response.
+ */
+private fun VerifyEmailTokenResponseJson.Invalid.checkForExpiredMessage() =
+    if (message.contains(other = "expired", ignoreCase = true)) {
+        VerifyEmailTokenResponseJson.TokenExpired
+    } else {
+        this
+    }

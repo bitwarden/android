@@ -385,7 +385,7 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `verifyEmailToken should return Invalid when response is expired error`() = runTest {
+    fun `verifyEmailToken should return TokenExpired when response is expired error`() = runTest {
         val json = """
             {
               "message": "Expired link. Please restart registration or try logging in. You may already have an account"
@@ -401,9 +401,7 @@ class IdentityServiceTest : BaseServiceTest() {
         )
         assertTrue(result.isSuccess)
         assertEquals(
-            VerifyEmailTokenResponseJson.Invalid(
-                message = "Expired link. Please restart registration or try logging in. You may already have an account",
-            ),
+            VerifyEmailTokenResponseJson.TokenExpired,
             result.getOrThrow(),
         )
     }

@@ -1266,18 +1266,16 @@ class AuthRepositoryImpl(
                     email = email,
                     token = token,
                 ),
-            ).fold(
+            )
+            .fold(
                 onSuccess = {
                     when (val json = it) {
+                        VerifyEmailTokenResponseJson.Valid -> EmailTokenResult.Success
                         is VerifyEmailTokenResponseJson.Invalid -> {
-                            if (json.message.contains(other = "expired", ignoreCase = true)) {
-                                EmailTokenResult.Expired
-                            } else {
-                                EmailTokenResult.Error(message = json.message)
-                            }
+                            EmailTokenResult.Error(json.message)
                         }
 
-                        VerifyEmailTokenResponseJson.Valid -> EmailTokenResult.Success
+                        VerifyEmailTokenResponseJson.TokenExpired -> EmailTokenResult.Expired
                     }
                 },
                 onFailure = {

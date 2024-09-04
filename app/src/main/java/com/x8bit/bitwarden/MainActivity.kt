@@ -78,11 +78,13 @@ class MainActivity : AppCompatActivity() {
                     MainEvent.Recreate -> handleRecreate()
                     MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
                     is MainEvent.ShowToast -> {
-                        Toast.makeText(
-                            baseContext,
-                            event.message.invoke(resources),
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        Toast
+                            .makeText(
+                                baseContext,
+                                event.message.invoke(resources),
+                                Toast.LENGTH_SHORT,
+                            )
+                            .show()
                     }
                 }
             }

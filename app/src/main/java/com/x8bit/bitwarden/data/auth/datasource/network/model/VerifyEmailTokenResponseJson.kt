@@ -16,6 +16,7 @@ sealed class VerifyEmailTokenResponseJson {
     /**
      * The token is confirmed as valid from the response.
      */
+    @Serializable
     data object Valid : VerifyEmailTokenResponseJson()
 
     /**
@@ -28,4 +29,10 @@ sealed class VerifyEmailTokenResponseJson {
         @SerialName("message")
         val message: String,
     ) : VerifyEmailTokenResponseJson()
+
+    /**
+     * The token has expired. This is special case of similar to [Invalid].
+     */
+    @Serializable
+    data object TokenExpired : VerifyEmailTokenResponseJson()
 }
