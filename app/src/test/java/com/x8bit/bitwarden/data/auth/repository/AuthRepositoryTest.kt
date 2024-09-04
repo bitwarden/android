@@ -42,6 +42,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
@@ -81,6 +83,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyEmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -5995,6 +5998,69 @@ class AuthRepositoryTest {
         )
         assertEquals(
             SendVerificationEmailResult.Error(null),
+            result,
+        )
+    }
+
+    @Test
+    fun `verifyEmailToken success should return success`() = runTest {
+        coEvery {
+            identityService.verifyEmailToken(
+                VerifyEmailTokenRequestJson(
+                    email = EMAIL,
+                    emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+                ),
+            )
+        } returns VerifyEmailTokenResponseJson.Success.asSuccess()
+
+        val result = repository.verifyEmailToken(
+            email = EMAIL,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+        )
+        assertEquals(
+            VerifyEmailTokenResult.Verified,
+            result,
+        )
+    }
+
+    @Test
+    fun `verifyEmailToken failure with expired link message should return ExpiredLink`() = runTest {
+        coEvery {
+            identityService.verifyEmailToken(
+                VerifyEmailTokenRequestJson(
+                    email = EMAIL,
+                    emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+                ),
+            )
+        } returns Throwable("Expired link").asFailure()
+
+        val result = repository.verifyEmailToken(
+            email = EMAIL,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+        )
+        assertEquals(
+            VerifyEmailTokenResult.LinkExpired,
+            result,
+        )
+    }
+
+    @Test
+    fun `verifyEmailToken generic failure should return error`() = runTest {
+        coEvery {
+            identityService.verifyEmailToken(
+                VerifyEmailTokenRequestJson(
+                    email = EMAIL,
+                    emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+                ),
+            )
+        } returns Throwable("generic fail").asFailure()
+
+        val result = repository.verifyEmailToken(
+            email = EMAIL,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+        )
+        assertEquals(
+            VerifyEmailTokenResult.Error,
             result,
         )
     }

@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEm
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -369,6 +371,35 @@ class IdentityServiceTest : BaseServiceTest() {
         assertTrue(result.isFailure)
     }
 
+    @Test
+    fun `verifyEmailToken should return null when response is empty success`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val result = identityService.verifyEmailToken(VERIFY_EMAIL_REQUEST)
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `verifyEmailToken should return an error when response is an error`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400))
+        val result = identityService.verifyEmailToken(VERIFY_EMAIL_REQUEST)
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `verifyEmailToken failure with expired link should return Invalid`() = runTest {
+        val response = MockResponse().setResponseCode(400).setBody(EXPIRED_LINK_RESPONSE_JSON)
+        server.enqueue(response)
+        val result = identityService.verifyEmailToken(VERIFY_EMAIL_REQUEST)
+        assertEquals(
+            @Suppress("MaxLineLength")
+            VerifyEmailTokenResponseJson.Invalid(
+                errorMessage = "Expired link. Please restart registration or try logging in. You may already have an account.",
+                validationErrors = null,
+            ),
+            result.getOrThrow(),
+        )
+    }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val REFRESH_TOKEN = "refreshToken"
@@ -569,6 +600,14 @@ private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
 {
   "captchaBypassToken": "mock_token"
 }
+
+"""
+
+private const val EXPIRED_LINK_RESPONSE_JSON = """
+{
+  "Object": "error",
+  "Message": "Expired link. Please restart registration or try logging in. You may already have an account."
+}
 """
 
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
@@ -581,4 +620,9 @@ private val SEND_VERIFICATION_EMAIL_REQUEST = SendVerificationEmailRequestJson(
     email = "email@example.com",
     name = "Name Example",
     receiveMarketingEmails = true,
+)
+
+private val VERIFY_EMAIL_REQUEST = VerifyEmailTokenRequestJson(
+    email = "email@example.com",
+    emailVerificationToken = "mock_token",
 )
