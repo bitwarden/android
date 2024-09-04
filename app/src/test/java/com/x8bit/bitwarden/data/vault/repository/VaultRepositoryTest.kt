@@ -140,7 +140,7 @@ class VaultRepositoryTest {
     )
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val userLogoutManager: UserLogoutManager = mockk {
-        every { logout(any(), any()) } just runs
+        every { softLogout(any(), any()) } just runs
     }
     private val fileManager: FileManager = mockk {
         coEvery { delete(*anyVararg()) } just runs
@@ -851,9 +851,8 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockSyncResponse = createMockSyncResponse(number = 1)
-            coEvery { syncService.sync() } returns mockSyncResponse.copy(
-                profile = createMockProfile(number = 1).copy(securityStamp = "newStamp"),
-            )
+            coEvery { syncService.sync() } returns mockSyncResponse
+                .copy(profile = createMockProfile(number = 1).copy(securityStamp = "newStamp"))
                 .asSuccess()
 
             coEvery {
@@ -868,7 +867,7 @@ class VaultRepositoryTest {
             vaultRepository.sync()
 
             coVerify {
-                userLogoutManager.logout(userId = userId, isExpired = true)
+                userLogoutManager.softLogout(userId = userId, isExpired = true)
             }
 
             coVerify(exactly = 0) {

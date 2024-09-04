@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.accessibility.manager
+package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 /**
  * The default implementation for the [AccessibilityAutofillManager].

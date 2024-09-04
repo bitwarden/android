@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.enterpriseSignOnDest
 import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.navigateToEnterpriseSignOn
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
+import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.expiredRegistrationLinkDestination
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
 import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
@@ -187,6 +188,23 @@ fun NavGraphBuilder.authGraph(
             onNavigateToPreventLockout = { navController.navigateToPreventAccountLockout() },
             onNavigateBackWithPassword = {
                 navController.popUpToCompleteRegistration()
+            },
+        )
+        expiredRegistrationLinkDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToStartRegistration = {
+                navController.navigateToStartRegistration(
+                    navOptions = navOptions {
+                        popUpTo(LANDING_ROUTE)
+                    },
+                )
+            },
+            onNavigateToLogin = {
+                navController.navigateToLanding(
+                    navOptions = navOptions {
+                        popUpTo(LANDING_ROUTE)
+                    },
+                )
             },
         )
     }

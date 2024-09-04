@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
+import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.navigateToExpiredRegistrationLinkScreen
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.REMOVE_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.navigateToRemovePassword
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.removePasswordDestination
@@ -95,6 +96,7 @@ fun RootNavScreen(
         RootNavState.Auth,
         is RootNavState.CompleteOngoingRegistration,
         RootNavState.AuthWithWelcome,
+        RootNavState.ExpiredRegistrationLink,
         -> AUTH_GRAPH_ROUTE
 
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
@@ -154,6 +156,11 @@ fun RootNavScreen(
                     verificationToken = currentState.verificationToken,
                     fromEmail = currentState.fromEmail,
                 )
+            }
+
+            RootNavState.ExpiredRegistrationLink -> {
+                navController.navigateToAuthGraph(rootNavOptions)
+                navController.navigateToExpiredRegistrationLinkScreen()
             }
 
             RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
