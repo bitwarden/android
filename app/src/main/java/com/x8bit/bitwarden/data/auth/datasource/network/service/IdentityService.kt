@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 
 /**
  * Provides an API for querying identity endpoints.
@@ -72,4 +74,11 @@ interface IdentityService {
      * Register a new account to Bitwarden using email verification flow.
      */
     suspend fun registerFinish(body: RegisterFinishRequestJson): Result<RegisterResponseJson>
+
+    /**
+     * Verifies that the token received by email is still valid
+     */
+    suspend fun verifyEmailToken(
+        body: VerifyEmailTokenRequestJson,
+    ): Result<VerifyEmailTokenResponseJson>
 }

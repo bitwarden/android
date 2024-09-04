@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
@@ -64,6 +65,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyEmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -1253,6 +1255,32 @@ class AuthRepositoryImpl(
                 },
                 onFailure = {
                     SendVerificationEmailResult.Error(null)
+                },
+            )
+
+    override suspend fun verifyEmailToken(
+        email: String,
+        emailVerificationToken: String,
+    ): VerifyEmailTokenResult =
+        identityService
+            .verifyEmailToken(
+                VerifyEmailTokenRequestJson(
+                    email = email,
+                    emailVerificationToken = emailVerificationToken,
+                ),
+            )
+            .fold(
+                onSuccess = {
+                    VerifyEmailTokenResult.Verified
+                },
+                onFailure = {
+                    // Server sends a message if the link is expired, this is the only way
+                    // to check if the token is expired
+                    if (it.message?.contains("Expired link", ignoreCase = true) == true) {
+                        return VerifyEmailTokenResult.LinkExpired
+                    } else {
+                        return VerifyEmailTokenResult.Error
+                    }
                 },
             )
 

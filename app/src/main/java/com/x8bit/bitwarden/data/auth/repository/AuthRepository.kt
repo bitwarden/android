@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyEmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -377,4 +378,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         name: String,
         receiveMarketingEmails: Boolean,
     ): SendVerificationEmailResult
+
+    /**
+     * Verifies token received by email.
+     */
+    suspend fun verifyEmailToken(
+        email: String,
+        emailVerificationToken: String,
+    ): VerifyEmailTokenResult
 }

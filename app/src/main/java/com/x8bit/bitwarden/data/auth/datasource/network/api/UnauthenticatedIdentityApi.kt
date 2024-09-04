@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequ
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
 import kotlinx.serialization.json.JsonPrimitive
 import retrofit2.Call
 import retrofit2.http.Body
@@ -79,4 +80,9 @@ interface UnauthenticatedIdentityApi {
     suspend fun sendVerificationEmail(
         @Body body: SendVerificationEmailRequestJson,
     ): Result<JsonPrimitive?>
+
+    @POST("/accounts/register/verification-email-clicked")
+    suspend fun verifyEmailToken(
+        @Body body: VerifyEmailTokenRequestJson,
+    ): Result<Unit>
 }
