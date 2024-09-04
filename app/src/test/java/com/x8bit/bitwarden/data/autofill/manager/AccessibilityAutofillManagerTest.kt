@@ -1,5 +1,7 @@
-package com.x8bit.bitwarden.data.accessibility.manager
+package com.x8bit.bitwarden.data.autofill.manager
 
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

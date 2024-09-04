@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.accessibility.di
+package com.x8bit.bitwarden.data.autofill.accessibility.di
 
-import com.x8bit.bitwarden.data.accessibility.manager.AccessibilityAutofillManager
-import com.x8bit.bitwarden.data.accessibility.manager.AccessibilityAutofillManagerImpl
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
