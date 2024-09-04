@@ -64,7 +64,10 @@ class UserLogoutManagerImpl(
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 
-    override fun softLogout(userId: String) {
+    override fun softLogout(userId: String, isExpired: Boolean) {
+        if (isExpired) {
+            showToast(message = R.string.login_expired)
+        }
         authDiskSource.storeAccountTokens(
             userId = userId,
             accountTokens = null,
@@ -74,7 +77,11 @@ class UserLogoutManagerImpl(
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
 
-        switchUserIfAvailable(currentUserId = userId, removeCurrentUserFromAccounts = false)
+        switchUserIfAvailable(
+            currentUserId = userId,
+            removeCurrentUserFromAccounts = false,
+            isExpired = isExpired,
+        )
 
         clearData(userId = userId)
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
