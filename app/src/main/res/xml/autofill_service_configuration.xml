@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:supportsInlineSuggestions="true"
     tools:ignore="UnusedAttribute">
-    <!-- Maintain alphabetical order for these compatibility packages -->
+    <!--
+    Maintain alphabetical order for these compatibility packages and ensure synchronization with
+    the ACCESSIBILITY_SUPPORTED_BROWSERS list within Browsers.kt.
+    -->
     <compatibility-package
         android:name="alook.browser"
         android:maxLongVersionCode="10000000000" />
