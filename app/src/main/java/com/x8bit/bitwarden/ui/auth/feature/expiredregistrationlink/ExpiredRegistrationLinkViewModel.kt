@@ -1,13 +1,17 @@
 package com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink
 
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 /**
  * View model for the [ExpiredRegistrationLinkScreen].
  */
-class ExpiredRegistrationLinkViewModel @Inject constructor() :
-    BaseViewModel<Unit, ExpiredRegistrationLinkEvent, ExpiredRegistrationLinkAction>(
+@HiltViewModel
+class ExpiredRegistrationLinkViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+) : BaseViewModel<Unit, ExpiredRegistrationLinkEvent, ExpiredRegistrationLinkAction>(
         initialState = Unit,
     ) {
     override fun handleAction(action: ExpiredRegistrationLinkAction) {
@@ -21,15 +25,27 @@ class ExpiredRegistrationLinkViewModel @Inject constructor() :
     }
 
     private fun handleRestartRegistrationClicked() {
+        resetPendingAccountAddition()
         sendEvent(ExpiredRegistrationLinkEvent.NavigateToStartRegistration)
     }
 
     private fun handleGoToLoginClicked() {
+        resetPendingAccountAddition()
         sendEvent(ExpiredRegistrationLinkEvent.NavigateToLogin)
     }
 
     private fun handleCloseClicked() {
+        resetPendingAccountAddition()
         sendEvent(ExpiredRegistrationLinkEvent.NavigateBack)
+    }
+
+    /**
+     * Since leaving the expired registration screen takes the user back to the landing
+     * screen we want to update the [AuthRepository] to add a pending account addition.
+     * This will help ensure we are in the correct user state when returning to the landing screen.
+     */
+    private fun resetPendingAccountAddition() {
+        authRepository.hasPendingAccountAddition = true
     }
 }
 

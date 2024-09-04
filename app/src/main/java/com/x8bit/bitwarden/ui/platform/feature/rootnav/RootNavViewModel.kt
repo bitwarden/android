@@ -136,8 +136,7 @@ class RootNavViewModel @Inject constructor(
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink,
-                    is SpecialCircumstance.RegistrationEvent.CompleteRegistration,
+                    is SpecialCircumstance.RegistrationEvent,
                     -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
@@ -153,7 +152,7 @@ class RootNavViewModel @Inject constructor(
 
     private fun getRegistrationEventNavState(
         registrationEvent: SpecialCircumstance.RegistrationEvent,
-    ) = when (registrationEvent) {
+    ): RootNavState = when (registrationEvent) {
         is SpecialCircumstance.RegistrationEvent.CompleteRegistration -> {
             RootNavState.CompleteOngoingRegistration(
                 email = registrationEvent.completeRegistrationData.email,
@@ -164,8 +163,7 @@ class RootNavViewModel @Inject constructor(
         }
 
         SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink -> {
-            // TODO PM-11479
-            RootNavState.Auth
+            RootNavState.ExpiredRegistrationLink
         }
     }
 
