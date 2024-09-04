@@ -36,11 +36,6 @@ val SyncResponseJson.Policy.policyInformation: PolicyInformation?
     get() = data?.toString()?.let {
         var json = Json {
             ignoreUnknownKeys = true
-            explicitNulls = false
-            serializersModule = SerializersModule {
-                contextual(ZonedDateTimeSerializer())
-            }
-            coerceInputValues = true
         }
 
         when (type) {
