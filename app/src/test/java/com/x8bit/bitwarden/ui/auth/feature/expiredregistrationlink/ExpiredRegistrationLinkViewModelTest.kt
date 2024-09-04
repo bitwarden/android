@@ -11,8 +11,8 @@ class ExpiredRegistrationLinkViewModelTest : BaseViewModelTest() {
     @Test
     fun `CloseClicked sends NavigateBack event`() = runTest {
         val viewModel = ExpiredRegistrationLinkViewModel()
-        viewModel.trySendAction(ExpiredRegistrationLinkAction.CloseClicked)
         viewModel.eventFlow.test {
+            viewModel.trySendAction(ExpiredRegistrationLinkAction.CloseClicked)
             assertEquals(ExpiredRegistrationLinkEvent.NavigateBack, awaitItem())
         }
     }
@@ -20,8 +20,8 @@ class ExpiredRegistrationLinkViewModelTest : BaseViewModelTest() {
     @Test
     fun `RestartRegistrationClicked sends NavigateToStartRegistration event`() = runTest {
         val viewModel = ExpiredRegistrationLinkViewModel()
-        viewModel.trySendAction(ExpiredRegistrationLinkAction.RestartRegistrationClicked)
         viewModel.eventFlow.test {
+            viewModel.trySendAction(ExpiredRegistrationLinkAction.RestartRegistrationClicked)
             assertEquals(ExpiredRegistrationLinkEvent.NavigateToStartRegistration, awaitItem())
         }
     }
@@ -29,8 +29,8 @@ class ExpiredRegistrationLinkViewModelTest : BaseViewModelTest() {
     @Test
     fun `GoToLoginClicked sends NavigateToLogin event`() = runTest {
         val viewModel = ExpiredRegistrationLinkViewModel()
-        viewModel.trySendAction(ExpiredRegistrationLinkAction.GoToLoginClicked)
         viewModel.eventFlow.test {
+            viewModel.trySendAction(ExpiredRegistrationLinkAction.GoToLoginClicked)
             assertEquals(ExpiredRegistrationLinkEvent.NavigateToLogin, awaitItem())
         }
     }
