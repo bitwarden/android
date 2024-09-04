@@ -6065,6 +6065,27 @@ class AuthRepositoryTest {
         )
     }
 
+    @Test
+    fun `verifyEmailToken failure without message should return error`() = runTest {
+        coEvery {
+            identityService.verifyEmailToken(
+                VerifyEmailTokenRequestJson(
+                    email = EMAIL,
+                    emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+                ),
+            )
+        } returns Throwable().asFailure()
+
+        val result = repository.verifyEmailToken(
+            email = EMAIL,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+        )
+        assertEquals(
+            VerifyEmailTokenResult.Error,
+            result,
+        )
+    }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
