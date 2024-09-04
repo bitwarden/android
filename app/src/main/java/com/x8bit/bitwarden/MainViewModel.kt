@@ -300,11 +300,11 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             // Attempt to load the environment for the user if they have a pre-auth environment
             // saved.
-            environmentRepository.loadEnvironmentForEmail(data.email)
+            environmentRepository.loadEnvironmentForEmail(userEmail = data.email)
             // Determine if the token is still valid.
             val emailTokenResult = authRepository.validateEmailToken(
-                data.email,
-                data.verificationToken,
+                email = data.email,
+                token = data.verificationToken,
             )
             when (emailTokenResult) {
                 is EmailTokenResult.Error -> {
