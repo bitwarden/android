@@ -99,6 +99,9 @@ class SettingsRepositoryImpl(
             }
             ?: MutableStateFlow(value = null)
 
+    // TODO: this should be backed by disk and should set and clear the sync key (BITAU-103)
+    override var isAuthenticatorSyncEnabled: Boolean = false
+
     override var isIconLoadingDisabled: Boolean
         get() = settingsDiskSource.isIconLoadingDisabled ?: false
         set(value) {

@@ -12,6 +12,7 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -74,6 +75,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     private val viewModel = mockk<AccountSecurityViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
+        every { trySendAction(any()) } just runs
     }
 
     @Before
@@ -1457,6 +1459,35 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText(rowText).assertDoesNotExist()
     }
+
+    @Test
+    fun `sync with Bitwarden authenticator UI should be displayed according to state`() {
+        val toggleText = "Allow Bitwarden Authenticator Syncing"
+        composeTestRule.onNodeWithText(toggleText).assertDoesNotExist()
+
+        mutableStateFlow.update { DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true) }
+        composeTestRule.onNodeWithText(toggleText).performScrollTo().assertIsDisplayed()
+        composeTestRule.onAllNodesWithText(toggleText).filterToOne(isToggleable()).assertIsOff()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                shouldShowEnableAuthenticatorSync = true,
+                isAuthenticatorSyncChecked = true,
+            )
+        }
+        composeTestRule.onNodeWithText(toggleText).assertIsDisplayed()
+        composeTestRule.onAllNodesWithText(toggleText).filterToOne(isToggleable()).assertIsOn()
+    }
+
+    @Test
+    fun `sync with Bitwarden authenticator click should send AuthenticatorSyncToggle action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true) }
+        composeTestRule
+            .onNodeWithText("Allow Bitwarden Authenticator Syncing")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(AccountSecurityAction.AuthenticatorSyncToggle(true)) }
+    }
 }
 
 private val CIPHER = mockk<Cipher>()
@@ -1464,10 +1495,12 @@ private const val USER_ID: String = "activeUserId"
 private val DEFAULT_STATE = AccountSecurityState(
     dialog = null,
     fingerprintPhrase = "fingerprint-placeholder".asText(),
+    isAuthenticatorSyncChecked = false,
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
     userId = USER_ID,
+    shouldShowEnableAuthenticatorSync = false,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
     vaultTimeoutPolicyMinutes = null,

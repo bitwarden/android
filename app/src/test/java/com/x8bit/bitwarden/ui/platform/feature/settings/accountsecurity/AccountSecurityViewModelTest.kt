@@ -8,7 +8,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -24,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.AccountSecurityAction.AuthenticatorSyncToggle
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -32,6 +35,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
@@ -49,6 +53,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
     private val settingsRepository: SettingsRepository = mockk {
+        every { isAuthenticatorSyncEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
         every { isUnlockWithPinEnabled } returns false
         every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
@@ -58,11 +63,21 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
         every { createCipherOrNull(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
+        every { getOrCreateCipher(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
+        every {
+            isBiometricIntegrityValid(
+                userId = DEFAULT_USER_STATE.activeUserId,
+                cipher = CIPHER,
+            )
+        } returns true
     }
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
         } returns mutableActivePolicyFlow
+    }
+    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
+        every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
     }
 
     @Test
@@ -74,19 +89,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when saved state is not set`() {
-        every { settingsRepository.isUnlockWithPinEnabled } returns true
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_STATE.activeUserId)
-        } returns CIPHER
-        every {
-            biometricsEncryptionManager.isBiometricIntegrityValid(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                cipher = CIPHER,
-            )
-        } returns true
         val viewModel = createViewModel(initialState = null)
         assertEquals(
-            DEFAULT_STATE.copy(isUnlockWithPinEnabled = true),
+            DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
         verify {
@@ -127,6 +132,20 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on AuthenticatorSyncToggle should update SettingsRepository and isAuthenticatorSyncChecked`() =
+        runTest {
+            val viewModel = createViewModel()
+            every { settingsRepository.isAuthenticatorSyncEnabled = true } just runs
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(AuthenticatorSyncToggle(enabled = true))
+                assertEquals(DEFAULT_STATE.copy(isAuthenticatorSyncChecked = true), awaitItem())
+            }
+            verify { settingsRepository.isAuthenticatorSyncEnabled = true }
+        }
 
     @Test
     fun `on FingerprintResultReceive should update the fingerprint phrase`() = runTest {
@@ -597,10 +616,46 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when featureFlagManger returns true for AuthenticatorSync, should show authenticator sync UI`() {
+        val vm = createViewModel(
+            initialState = null,
+            featureFlagManager = mockk {
+                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
+                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
+            },
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true),
+            vm.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `when featureFlagManger updates value AuthenticatorSync, should update UI`() = runTest {
+        val featureFlagFlow = MutableStateFlow(false)
+        val vm = createViewModel(
+            initialState = null,
+            featureFlagManager = mockk {
+                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
+                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns featureFlagFlow
+            },
+        )
+        vm.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            featureFlagFlow.value = true
+            assertEquals(DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true), awaitItem())
+            featureFlagFlow.value = false
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,
         authRepository: AuthRepository = this.authRepository,
+        featureFlagManager: FeatureFlagManager = this.featureFlagManager,
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
@@ -608,6 +663,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
+        featureFlagManager = featureFlagManager,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,
@@ -648,6 +704,7 @@ private val DEFAULT_USER_STATE = UserState(
 private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     dialog = null,
     fingerprintPhrase = FINGERPRINT.asText(),
+    isAuthenticatorSyncChecked = false,
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
@@ -656,4 +713,5 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
     vaultTimeoutPolicyMinutes = null,
     vaultTimeoutPolicyAction = null,
+    shouldShowEnableAuthenticatorSync = false,
 )
