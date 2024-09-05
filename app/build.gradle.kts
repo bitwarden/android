@@ -135,6 +135,9 @@ dependencies {
         add("standardImplementation", dependencyNotation)
     }
 
+    // TODO: this should use a versioned aar instead of referencing the project BITAU-94
+    implementation(project(":bridge"))
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.autofill)
