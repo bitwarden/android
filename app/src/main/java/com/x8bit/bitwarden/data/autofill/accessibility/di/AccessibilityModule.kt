@@ -5,6 +5,8 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAuto
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNameManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNameManagerImpl
+import com.x8bit.bitwarden.data.autofill.accessibility.parser.AccessibilityParser
+import com.x8bit.bitwarden.data.autofill.accessibility.parser.AccessibilityParserImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +24,10 @@ object AccessibilityModule {
     @Provides
     fun providesAccessibilityInvokeManager(): AccessibilityAutofillManager =
         AccessibilityAutofillManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesAccessibilityParser(): AccessibilityParser = AccessibilityParserImpl()
 
     @Singleton
     @Provides
