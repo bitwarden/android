@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.bitwarden.bridge"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         // This min value is selected to accommodate known consumers
