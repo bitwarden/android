@@ -5,7 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 
-private const val SETUP_UNLOCK_ROUTE = "setup_unlock"
+/**
+ * Route for [SetupUnlockScreen]
+ */
+const val SETUP_UNLOCK_ROUTE = "setup_unlock"
 
 /**
  * Navigate to the setup unlock screen.
@@ -17,14 +20,10 @@ fun NavController.navigateToSetupUnlockScreen(navOptions: NavOptions? = null) {
 /**
  * Add the setup unlock screen to the nav graph.
  */
-fun NavGraphBuilder.setupUnlockDestination(
-    onNavigateToSetupAutofill: () -> Unit,
-) {
+fun NavGraphBuilder.setupUnlockDestination() {
     composableWithPushTransitions(
         route = SETUP_UNLOCK_ROUTE,
     ) {
-        SetupUnlockScreen(
-            onNavigateToSetupAutofill = onNavigateToSetupAutofill,
-        )
+        SetupUnlockScreen()
     }
 }

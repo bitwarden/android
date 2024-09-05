@@ -61,15 +61,6 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `handleContinueClick sends NavigateToCompleteSetup event`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
-            assertEquals(SetupAutoFillEvent.NavigateToCompleteSetup, awaitItem())
-        }
-    }
-
-    @Test
     fun `handleTurnOnLater click sets dialogState to TurnOnLaterDialog`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterClick)
@@ -77,15 +68,6 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
             SetupAutoFillDialogState.TurnOnLaterDialog,
             viewModel.stateFlow.value.dialogState,
         )
-    }
-
-    @Test
-    fun `handleTurnOnLaterConfirmClick sends NavigateToCompleteSetup event`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
-            assertEquals(SetupAutoFillEvent.NavigateToCompleteSetup, awaitItem())
-        }
     }
 
     @Test

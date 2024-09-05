@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -1083,6 +1084,54 @@ class AuthDiskSourceTest {
             mockAuthenticatorSyncUnlockKey,
             actual,
         )
+    }
+
+    @Test
+    fun `getOnboardingStatus should update SharedPreferences`() {
+        val onboardingStatusBaseKey = "bwPreferencesStorage:onboardingStatus"
+        val mockUserId = "mockUserId"
+        val expectedStatus = OnboardingStatus.AUTOFILL_SETUP
+        fakeSharedPreferences.edit {
+            putString(
+                "${onboardingStatusBaseKey}_$mockUserId",
+                json.encodeToString(expectedStatus),
+            )
+        }
+        val actual = authDiskSource.getOnboardingStatus(userId = mockUserId)
+        assertEquals(
+            expectedStatus,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeOnboardingStatus should update SharedPreferences`() {
+        val onboardingStatusBaseKey = "bwPreferencesStorage:onboardingStatus"
+        val mockUserId = "mockUserId"
+        val mockOnboardingStatus = OnboardingStatus.AUTOFILL_SETUP
+        authDiskSource.storeOnboardingStatus(mockUserId, mockOnboardingStatus)
+
+        val actual = fakeSharedPreferences.getString(
+            "${onboardingStatusBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToString(mockOnboardingStatus),
+            actual,
+        )
+    }
+
+    @Test
+    fun `getOnboardingStatusFlow should react to changes from storeOnboardingStatus`() = runTest {
+        val userId = "userId"
+        authDiskSource.getOnboardingStatusFlow(userId).test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(awaitItem())
+
+            // Updating the repository updates shared preferences
+            authDiskSource.storeOnboardingStatus(userId, OnboardingStatus.AUTOFILL_SETUP)
+            assertEquals(OnboardingStatus.AUTOFILL_SETUP, awaitItem())
+        }
     }
 }
 

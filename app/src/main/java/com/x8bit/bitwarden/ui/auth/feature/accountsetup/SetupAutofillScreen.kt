@@ -57,7 +57,6 @@ import com.x8bit.bitwarden.ui.platform.util.isPortrait
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupAutoFillScreen(
-    onNavigateToCompleteSetup: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SetupAutoFillViewModel = hiltViewModel(),
 ) {
@@ -65,7 +64,6 @@ fun SetupAutoFillScreen(
     val handler = rememberSetupAutoFillHandler(viewModel = viewModel)
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            SetupAutoFillEvent.NavigateToCompleteSetup -> onNavigateToCompleteSetup()
             SetupAutoFillEvent.NavigateToAutofillSettings -> {
                 val showFallback = !intentManager.startSystemAutofillSettingsActivity()
                 if (showFallback) {

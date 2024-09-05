@@ -5,7 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 
-private const val SETUP_AUTO_FILL_ROUTE = "setup_auto_fill"
+/**
+ * Route name for [SetupAutoFillScreen].
+ */
+const val SETUP_AUTO_FILL_ROUTE = "setup_auto_fill"
 
 /**
  * Navigate to the setup auto-fill screen.
@@ -17,14 +20,10 @@ fun NavController.navigateToSetupAutoFillScreen(navOptions: NavOptions? = null) 
 /**
  * Add the setup auto-fil screen to the nav graph.
  */
-fun NavGraphBuilder.setupAutoFillDestination(
-    onNavigateToCompleteSetup: () -> Unit,
-) {
+fun NavGraphBuilder.setupAutoFillDestination() {
     composableWithPushTransitions(
         route = SETUP_AUTO_FILL_ROUTE,
     ) {
-        SetupAutoFillScreen(
-            onNavigateToCompleteSetup = onNavigateToCompleteSetup,
-        )
+        SetupAutoFillScreen()
     }
 }

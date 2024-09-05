@@ -26,15 +26,12 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.annotation.Config
 import javax.crypto.Cipher
 
 class SetupUnlockScreenTest : BaseComposeTest() {
-
-    private var onNavigateToSetupAutofillCalled = false
 
     private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
     private val captureBiometricsCancel = slot<() -> Unit>()
@@ -65,7 +62,6 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     fun setup() {
         composeTestRule.setContent {
             SetupUnlockScreen(
-                onNavigateToSetupAutofill = { onNavigateToSetupAutofillCalled = true },
                 viewModel = viewModel,
                 biometricsManager = biometricsManager,
             )
@@ -89,12 +85,6 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertExists()
             .assertIsDisplayed()
-    }
-
-    @Test
-    fun `NavigateToSetupAutofill event should invoke the navigate to autofill lambda`() {
-        mutableEventFlow.tryEmit(SetupUnlockEvent.NavigateToSetupAutofill)
-        assertTrue(onNavigateToSetupAutofillCalled)
     }
 
     @Test

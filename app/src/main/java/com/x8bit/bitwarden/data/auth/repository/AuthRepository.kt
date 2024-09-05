@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
@@ -386,4 +387,9 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         email: String,
         token: String,
     ): EmailTokenResult
+
+    /**
+     * Update the value of the onboarding status for the user.
+     */
+    fun setOnboardingStatus(userId: String, status: OnboardingStatus?)
 }

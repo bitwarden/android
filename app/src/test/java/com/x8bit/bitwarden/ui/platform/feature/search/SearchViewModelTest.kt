@@ -7,6 +7,7 @@ import app.cash.turbine.turbineScope
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -1424,6 +1425,7 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
     ),
 )
