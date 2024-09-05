@@ -13,14 +13,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 
@@ -37,7 +38,7 @@ fun BitwardenScaffold(
     snackbarHost: @Composable () -> Unit = { },
     floatingActionButton: @Composable () -> Unit = { },
     floatingActionButtonPosition: FabPosition = FabPosition.End,
-    pullToRefreshState: PullToRefreshState? = null,
+    pullToRefreshState: BitwardenPullToRefreshState = rememberBitwardenPullToRefreshState(),
     containerColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults
@@ -48,7 +49,6 @@ fun BitwardenScaffold(
     Scaffold(
         modifier = Modifier
             .semantics { testTagsAsResourceId = true }
-            .run { pullToRefreshState?.let { nestedScroll(it.nestedScrollConnection) } ?: this }
             .then(modifier),
         topBar = topBar,
         bottomBar = bottomBar,
@@ -63,18 +63,50 @@ fun BitwardenScaffold(
         contentColor = contentColor,
         contentWindowInsets = contentWindowInsets,
         content = { paddingValues ->
-            Box {
+            val internalPullToRefreshState = rememberPullToRefreshState()
+            Box(
+                modifier = Modifier.pullToRefresh(
+                    state = internalPullToRefreshState,
+                    isRefreshing = pullToRefreshState.isRefreshing,
+                    onRefresh = pullToRefreshState.onRefresh,
+                    enabled = pullToRefreshState.isEnabled,
+                ),
+            ) {
                 content(paddingValues)
 
-                pullToRefreshState?.let {
-                    PullToRefreshContainer(
-                        state = it,
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .align(Alignment.TopCenter),
-                    )
-                }
+                PullToRefreshDefaults.Indicator(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .align(Alignment.TopCenter),
+                    isRefreshing = pullToRefreshState.isRefreshing,
+                    state = internalPullToRefreshState,
+                )
             }
         },
+    )
+}
+
+/**
+ * The state of the pull-to-refresh.
+ */
+data class BitwardenPullToRefreshState(
+    val isEnabled: Boolean,
+    val isRefreshing: Boolean,
+    val onRefresh: () -> Unit,
+)
+
+/**
+ * Create and remember the default [BitwardenPullToRefreshState].
+ */
+@Composable
+fun rememberBitwardenPullToRefreshState(
+    isEnabled: Boolean = false,
+    isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = { },
+): BitwardenPullToRefreshState = remember(isEnabled, isRefreshing, onRefresh) {
+    BitwardenPullToRefreshState(
+        isEnabled = isEnabled,
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
     )
 }

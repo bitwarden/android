@@ -133,6 +133,7 @@ class VaultItemListingViewModel @Inject constructor(
             fido2CredentialAssertionRequest = fido2AssertionData?.fido2AssertionRequest,
             fido2GetCredentialsRequest = fido2GetCredentialsData?.fido2GetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
+            isRefreshing = false,
         )
     },
 ) {
@@ -298,6 +299,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepository.sync()
@@ -1232,7 +1234,7 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
         }
-        sendEvent(VaultItemListingEvent.DismissPullToRefresh)
+        mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
@@ -1261,7 +1263,7 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 )
             }
-            ?: sendEvent(VaultItemListingEvent.DismissPullToRefresh)
+            ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun vaultLoadingReceive() {
@@ -1286,7 +1288,7 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
         }
-        sendEvent(VaultItemListingEvent.DismissPullToRefresh)
+        mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
@@ -1640,6 +1642,7 @@ data class VaultItemListingState(
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
+    val isRefreshing: Boolean,
 ) {
     /**
      * Whether or not this represents a listing screen for autofill.
@@ -2027,11 +2030,6 @@ data class VaultItemListingState(
  * Models events for the [VaultItemListingScreen].
  */
 sealed class VaultItemListingEvent {
-    /**
-     * Dismisses the pull-to-refresh indicator.
-     */
-    data object DismissPullToRefresh : VaultItemListingEvent()
-
     /**
      * Navigates to the Create Account screen.
      */

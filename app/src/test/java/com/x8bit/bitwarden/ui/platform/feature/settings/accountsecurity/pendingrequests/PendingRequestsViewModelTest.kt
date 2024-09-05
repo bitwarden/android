@@ -376,6 +376,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             authRequests = emptyList(),
             viewState = PendingRequestsState.ViewState.Empty,
             isPullToRefreshSettingEnabled = false,
+            isRefreshing = false,
         )
     }
 }

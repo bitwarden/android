@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.segment
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -16,7 +15,6 @@ import kotlinx.collections.immutable.ImmutableList
  * @param options List of options to display.
  * @param modifier Modifier.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BitwardenSegmentedButton(
     modifier: Modifier = Modifier,

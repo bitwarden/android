@@ -612,7 +612,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowToast(R.string.syncing_complete.asText()),
                     awaitItem(),
                 )
-                assertEquals(VaultEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -660,7 +659,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowToast(R.string.syncing_complete.asText()),
                     awaitItem(),
                 )
-                assertEquals(VaultEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -1591,4 +1589,5 @@ private fun createMockVaultState(
         isIconLoadingDisabled = false,
         hasMasterPassword = true,
         hideNotificationsDialog = true,
+        isRefreshing = false,
     )

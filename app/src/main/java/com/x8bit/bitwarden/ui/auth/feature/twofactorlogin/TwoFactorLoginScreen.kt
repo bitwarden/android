@@ -298,7 +298,6 @@ private fun TwoFactorLoginScreenContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
 private fun TwoFactorLoginScreenContentPreview() {

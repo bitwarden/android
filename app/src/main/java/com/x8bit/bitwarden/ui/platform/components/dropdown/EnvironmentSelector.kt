@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +57,7 @@ fun EnvironmentSelector(
             modifier = Modifier
                 .clip(RoundedCornerShape(28.dp))
                 .clickable(
-                    indication = rememberRipple(
+                    indication = ripple(
                         bounded = true,
                         color = MaterialTheme.colorScheme.primary,
                     ),
