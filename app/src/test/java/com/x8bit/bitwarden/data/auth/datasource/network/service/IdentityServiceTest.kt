@@ -406,6 +406,30 @@ class IdentityServiceTest : BaseServiceTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `verifyEmailToken should return Invalid when response message is non expired error`() = runTest {
+        val messageWithOutExpired = "message without expir... whoops"
+        val json = """
+            {
+              "message": "$messageWithOutExpired"
+            }
+        """.trimIndent()
+        val response = MockResponse().setResponseCode(400).setBody(json)
+        server.enqueue(response)
+        val result = identityService.verifyEmailRegistrationToken(
+            body = VerifyEmailTokenRequestJson(
+                token = EMAIL_TOKEN,
+                email = EMAIL,
+            ),
+        )
+        assertTrue(result.isSuccess)
+        assertEquals(
+            VerifyEmailTokenResponseJson.Invalid(messageWithOutExpired),
+            result.getOrThrow(),
+        )
+    }
+
     @Test
     fun `verifyEmailToken should return an error when response is an un-handled error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(500))
