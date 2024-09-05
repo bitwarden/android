@@ -28,13 +28,15 @@ class DebugMenuViewModel @Inject constructor(
 
     init {
         combine(
+            featureFlagManager.getFeatureFlagFlow(FlagKey.AuthenticatorSync),
             featureFlagManager.getFeatureFlagFlow(FlagKey.EmailVerification),
             featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingCarousel),
             featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
-        ) { (emailVerification, onboardingCarousel, onboardingFlow) ->
+        ) { (authenticatorSync, emailVerification, onboardingCarousel, onboardingFlow) ->
             sendAction(
                 DebugMenuAction.Internal.UpdateFeatureFlagMap(
                     mapOf(
+                        FlagKey.AuthenticatorSync to authenticatorSync,
                         FlagKey.EmailVerification to emailVerification,
                         FlagKey.OnboardingCarousel to onboardingCarousel,
                         FlagKey.OnboardingFlow to onboardingFlow,

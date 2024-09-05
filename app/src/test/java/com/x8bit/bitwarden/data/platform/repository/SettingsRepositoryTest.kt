@@ -1014,6 +1014,18 @@ class SettingsRepositoryTest {
         settingsRepository.initialAutofillDialogShown = false
         assertEquals(false, fakeSettingsDiskSource.initialAutofillDialogShown)
     }
+
+    @Test
+    fun `isAuthenticatorSyncEnabled should default to false`() {
+        assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+    }
+
+    @Test
+    fun `isAuthenticatorSyncEnabled should be kept in memory and update accordingly`() = runTest {
+        assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+        settingsRepository.isAuthenticatorSyncEnabled = true
+        assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
+    }
 }
 
 private const val USER_ID: String = "userId"

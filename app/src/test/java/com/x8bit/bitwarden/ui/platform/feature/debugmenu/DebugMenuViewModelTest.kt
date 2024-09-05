@@ -76,12 +76,14 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 }
 
 private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
+    FlagKey.AuthenticatorSync to true,
     FlagKey.EmailVerification to true,
     FlagKey.OnboardingCarousel to true,
     FlagKey.OnboardingFlow to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
+    FlagKey.AuthenticatorSync to false,
     FlagKey.EmailVerification to false,
     FlagKey.OnboardingCarousel to true,
     FlagKey.OnboardingFlow to false,
