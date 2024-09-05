@@ -7,6 +7,11 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.serialization.json.Json
 
+private val json = Json {
+    ignoreUnknownKeys = true
+    explicitNulls = false
+}
+
 /**
  * Maps the given [SyncResponseJson.Profile.Organization] to an [Organization].
  */
@@ -31,10 +36,6 @@ fun List<SyncResponseJson.Profile.Organization>.toOrganizations(): List<Organiza
  */
 val SyncResponseJson.Policy.policyInformation: PolicyInformation?
     get() = data?.toString()?.let {
-        var json = Json {
-            ignoreUnknownKeys = true
-            explicitNulls = false
-        }
 
         when (type) {
             PolicyTypeJson.MASTER_PASSWORD -> {
