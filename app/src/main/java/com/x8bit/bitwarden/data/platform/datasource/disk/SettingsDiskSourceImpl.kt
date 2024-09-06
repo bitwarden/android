@@ -383,4 +383,16 @@ class SettingsDiskSourceImpl(
         )
         getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
     }
+
+    override fun storeUseHasLoggedInPreviously(userId: String) {
+        putBoolean(
+            key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY.appendIdentifier(userId),
+            value = true,
+        )
+    }
+
+    override fun getUserHasSignedInPreviously(userId: String): Boolean =
+        getBoolean(
+            key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY.appendIdentifier(userId),
+        ) == true
 }

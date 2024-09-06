@@ -233,4 +233,16 @@ interface SettingsRepository {
      * Clears any previously set unlock PIN for the current user.
      */
     fun clearUnlockPin()
+
+    /**
+     * Returns true if the given [userId] has already logged in on this device
+     *
+     * assuming the device storage has not be cleared since install.
+     */
+    fun getUserHasLoggedInValue(userId: String): Boolean
+
+    /**
+     * Record that a user has logged in on this device.
+     */
+    fun storeUserHasLoggedInValue(userId: String)
 }

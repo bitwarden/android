@@ -164,6 +164,7 @@ class AuthRepositoryTest {
     private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
         every { hasUserLoggedInOrCreatedAccount = true } just runs
+        every { storeUserHasLoggedInValue(any()) } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
@@ -1345,6 +1346,7 @@ class AuthRepositoryTest {
                 organizationKeys = orgKeys,
             )
             vaultRepository.syncIfNecessary()
+            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
         assertEquals(LoginResult.Success, result)
     }
@@ -1393,6 +1395,7 @@ class AuthRepositoryTest {
         }
         coVerify(exactly = 0) {
             vaultRepository.syncIfNecessary()
+            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
         assertEquals(LoginResult.Error(errorMessage = null), result)
     }
@@ -1558,6 +1561,7 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
@@ -1650,6 +1654,7 @@ class AuthRepositoryTest {
             coVerify(exactly = 0) {
                 vaultRepository.syncIfNecessary()
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
 
             assertEquals(
@@ -1715,6 +1720,7 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
@@ -1813,6 +1819,7 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 MULTI_USER_STATE,
@@ -2083,6 +2090,7 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 0) {
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
         }
 
@@ -2170,7 +2178,10 @@ class AuthRepositoryTest {
             SINGLE_USER_STATE_1,
             fakeAuthDiskSource.userState,
         )
-        verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        verify {
+            settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+        }
     }
 
     @Test
@@ -2355,12 +2366,13 @@ class AuthRepositoryTest {
                         ),
                     ),
                 )
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
         }
 
     @Test
@@ -2789,6 +2801,7 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,

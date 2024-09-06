@@ -1000,4 +1000,33 @@ class SettingsDiskSourceTest {
 
         assertFalse(fakeSharedPreferences.contains(initialAutofillDialogShownKey))
     }
+
+    @Test
+    fun `record user sign in adds value of true to shared preferences`() {
+        val keyPrefix = "bwPreferencesStorage:hasUserLoggedInOrCreatedAccount"
+        val mockUserId = "mockUserId"
+        settingsDiskSource.storeUseHasLoggedInPreviously(userId = mockUserId)
+
+        val actual = fakeSharedPreferences.getBoolean(
+            key = "${keyPrefix}_$mockUserId",
+            defaultValue = false,
+        )
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `hasUserSignedInPreviously returns true if value is present in shared preferences`() {
+        val mockUserId = "mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean("bwPreferencesStorage:hasUserLoggedInOrCreatedAccount_$mockUserId", true)
+        }
+
+        assertTrue(settingsDiskSource.getUserHasSignedInPreviously(userId = mockUserId))
+    }
+
+    @Test
+    fun `hasUserSignedInPreviously returns false if value is not present in shared preferences`() {
+        assertFalse(settingsDiskSource.getUserHasSignedInPreviously(userId = "haveNotSignedIn"))
+    }
 }

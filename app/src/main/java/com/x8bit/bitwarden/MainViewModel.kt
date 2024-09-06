@@ -30,10 +30,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
@@ -126,6 +128,17 @@ class MainViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            val userState = authRepository
+                .userStateFlow
+                .first()
+            userState
+                ?.accounts
+                ?.forEach {
+                    settingsRepository.storeUserHasLoggedInValue(it.userId)
+                }
+        }
     }
 
     override fun handleAction(action: MainAction) {
