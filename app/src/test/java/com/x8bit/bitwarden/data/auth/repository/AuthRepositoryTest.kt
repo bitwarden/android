@@ -6025,45 +6025,46 @@ class AuthRepositoryTest {
     @Test
     fun `validateEmailToken should return expired result when service returns TokenExpired`() =
         runTest {
-        coEvery {
-            identityService
-                .verifyEmailRegistrationToken(
-                    body = VerifyEmailTokenRequestJson(
-                        email = EMAIL,
-                        token = EMAIL_VERIFICATION_TOKEN,
-                    ),
-                )
-        } returns VerifyEmailTokenResponseJson.TokenExpired.asSuccess()
+            coEvery {
+                identityService
+                    .verifyEmailRegistrationToken(
+                        body = VerifyEmailTokenRequestJson(
+                            email = EMAIL,
+                            token = EMAIL_VERIFICATION_TOKEN,
+                        ),
+                    )
+            } returns VerifyEmailTokenResponseJson.TokenExpired.asSuccess()
 
-        val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
+            val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 
-        assertEquals(
-            EmailTokenResult.Expired,
-            emailTokenResult,
-        )
-    }
+            assertEquals(
+                EmailTokenResult.Expired,
+                emailTokenResult,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validateEmailToken should return error result when service returns error without expired message`() = runTest {
-        val errorMessage = "I haven't heard of second breakfast."
-        coEvery {
-            identityService
-                .verifyEmailRegistrationToken(
-                    body = VerifyEmailTokenRequestJson(
-                        email = EMAIL,
-                        token = EMAIL_VERIFICATION_TOKEN,
-                    ),
-                )
-        } returns VerifyEmailTokenResponseJson.Invalid(message = errorMessage).asSuccess()
+    fun `validateEmailToken should return error result when service returns error without expired message`() =
+        runTest {
+            val errorMessage = "I haven't heard of second breakfast."
+            coEvery {
+                identityService
+                    .verifyEmailRegistrationToken(
+                        body = VerifyEmailTokenRequestJson(
+                            email = EMAIL,
+                            token = EMAIL_VERIFICATION_TOKEN,
+                        ),
+                    )
+            } returns VerifyEmailTokenResponseJson.Invalid(message = errorMessage).asSuccess()
 
-        val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
+            val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 
-        assertEquals(
-            EmailTokenResult.Error(message = errorMessage),
-            emailTokenResult,
-        )
-    }
+            assertEquals(
+                EmailTokenResult.Error(message = errorMessage),
+                emailTokenResult,
+            )
+        }
 
     @Test
     fun `validateEmailToken should return error result when service returns failure`() = runTest {

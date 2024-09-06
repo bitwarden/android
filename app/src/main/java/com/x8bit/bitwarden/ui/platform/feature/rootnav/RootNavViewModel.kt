@@ -136,8 +136,7 @@ class RootNavViewModel @Inject constructor(
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    is SpecialCircumstance.RegistrationEvent,
-                    -> {
+                    is SpecialCircumstance.RegistrationEvent -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
                         )

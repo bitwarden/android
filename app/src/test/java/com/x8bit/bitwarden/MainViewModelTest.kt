@@ -334,7 +334,7 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to CompleteRegistration if token is valid`() {
         val viewModel = createViewModel()
-        val completeRegistrationData = mockk<CompleteRegistrationData>() {
+        val completeRegistrationData = mockk<CompleteRegistrationData> {
             every { email } returns "email"
             every { verificationToken } returns "token"
         }
@@ -361,6 +361,43 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
             specialCircumstanceManager.specialCircumstance,
         )
+
+        verify(exactly = 0) { authRepository.hasPendingAccountAddition = true }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with complete registration data should set pending account addition to true if there is an active user`() {
+        val viewModel = createViewModel()
+        val completeRegistrationData = mockk<CompleteRegistrationData> {
+            every { email } returns "email"
+            every { verificationToken } returns "token"
+        }
+        val mockIntent = mockk<Intent> {
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { authRepository.activeUserId } returns "activeId"
+        every { authRepository.hasPendingAccountAddition = true } just runs
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
+                completeRegistrationData = completeRegistrationData,
+                timestamp = FIXED_CLOCK.millis(),
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+        verify { authRepository.hasPendingAccountAddition = true }
     }
 
     @Suppress("MaxLineLength")
@@ -369,7 +406,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val intentEmail = "email"
         val token = "token"
-        val completeRegistrationData = mockk<CompleteRegistrationData>() {
+        val completeRegistrationData = mockk<CompleteRegistrationData> {
             every { email } returns intentEmail
             every { verificationToken } returns token
         }
@@ -408,7 +445,7 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val intentEmail = "email"
             val token = "token"
-            val completeRegistrationData = mockk<CompleteRegistrationData>() {
+            val completeRegistrationData = mockk<CompleteRegistrationData> {
                 every { email } returns intentEmail
                 every { verificationToken } returns token
             }
@@ -449,7 +486,7 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val intentEmail = "email"
             val token = "token"
-            val completeRegistrationData = mockk<CompleteRegistrationData>() {
+            val completeRegistrationData = mockk<CompleteRegistrationData> {
                 every { email } returns intentEmail
                 every { verificationToken } returns token
             }
