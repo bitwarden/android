@@ -4,6 +4,7 @@
 
 - [Compatibility](#compatibility)
 - [Versioning](#versioning)
+- [Dependencies](#dependencies)
  
 ## Other Documents
 
@@ -34,3 +35,17 @@ Some things to note:
 - All updates should have a corresponding `CHANGELOG.md` entry that at a high-level describes what is being newly introduced in it. For more info, see [Changelog Format Guide](CHANGELOG_FORMAT.MD)
 
 - When incrementing a level any lower-levels should always reset to 0.
+
+## Dependencies
+
+### Application Dependencies
+
+The following is a list of all third-party dependencies required by the SDK. 
+
+> [!IMPORTANT]
+> The SDK does not come packaged with these dependencies, so consumers of the SDK must provide them.
+
+- **kotlinx.serialization**
+    - https://github.com/Kotlin/kotlinx.serialization/
+    - Purpose: JSON serialization library for Kotlin.
+    - License: Apache 2.0
