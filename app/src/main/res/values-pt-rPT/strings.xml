@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN inválido. Tente novamente.</string>
   <string name="launch">Iniciar</string>
   <string name="log_in">Iniciar sessão</string>
+  <string name="log_in_verb">Iniciar sessão</string>
   <string name="log_in_noun">Credencial</string>
   <string name="log_out">Terminar sessão</string>
   <string name="logout_confirmation">Tem a certeza de que pretende terminar sessão?</string>
@@ -988,4 +989,9 @@ Anule a subscrição em qualquer altura.</string>
   <string name="choose_your_master_password">Escolha a sua palavra-passe mestra</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma palavra-passe única e forte para manter as suas informações seguras.</string>
   <string name="minimum_characters">%1$s caracteres</string>
+  <string name="expired_link">Link expirado</string>
+  <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registo ou tente iniciar sessão. É possível que já tenha uma conta.</string>
+  <string name="restart_registration">Reiniciar registo</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

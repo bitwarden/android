@@ -41,6 +41,7 @@
   <string name="invalid_pin">Nederīgs PIN. Jāmēģina vēlreiz.</string>
   <string name="launch">Palaist</string>
   <string name="log_in">Pieteikties</string>
+  <string name="log_in_verb">Pieteikties</string>
   <string name="log_in_noun">Pieteikšanās vienums</string>
   <string name="log_out">Atteikties</string>
   <string name="logout_confirmation">Vai tiešām atteikties?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Jā</string>
   <string name="account">Konts</string>
   <string name="account_created">Jaunais konts ir izveidots. Tagad vari pieteikties.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Jaunais konts tika izveidots.</string>
   <string name="add_an_item">Pievienot vienumu</string>
   <string name="app_extension">Lietotņu paplašinājums</string>
   <string name="autofill_accessibility_description">Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes dažādās lietotnēs un tīmeklī.</string>
@@ -988,4 +989,9 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="choose_your_master_password">Jāizvēlas galvenā parole</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Jāizvēlas vienreizēja un spēcīga parole, lai turētu savu informāciju drošībā.</string>
   <string name="minimum_characters">%1$s rakstzīmes</string>
+  <string name="expired_link">Saitei beidzies derīgums</string>
+  <string name="please_restart_registration_or_try_logging_in">Lūgums sākt reģistrēšanos no jauna vai mēģināt pieteikties. Tev jau varētu būt konts.</string>
+  <string name="restart_registration">Sākt reģistrēšanos no jauna</string>
+  <string name="authenticator_sync">Authentificētāja sinhronizēšana</string>
+  <string name="allow_bitwarden_authenticator_syncing">Ļaut Bitwarden autentificētāja sinhronizēšanu</string>
 </resources>

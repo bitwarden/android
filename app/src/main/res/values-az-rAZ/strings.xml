@@ -41,6 +41,7 @@
   <string name="invalid_pin">Yararsız PIN. Yenidən sınayın.</string>
   <string name="launch">Başlat</string>
   <string name="log_in">Giriş et</string>
+  <string name="log_in_verb">Giriş et</string>
   <string name="log_in_noun">Giriş</string>
   <string name="log_out">Çıxış</string>
   <string name="logout_confirmation">Çıxış etmək istədiyinizə əminsiniz?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Bəli</string>
   <string name="account">Hesab</string>
   <string name="account_created">Yeni hesabınız yaradıldı! İndi giriş edə bilərsiniz.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Yeni hesabınız yaradıldı!</string>
   <string name="add_an_item">Element əlavə et</string>
   <string name="app_extension">Tətbiq uzantısı</string>
   <string name="autofill_accessibility_description">Tətbiqlərdə və vebdə giriş məlumatlarının avto-doldurulması üçün Bitwarden əlçatımlılıq xidmətini istifadə edin.</string>
@@ -987,4 +988,9 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="choose_your_master_password">Ana parolunuzu seçin</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Məlumatlarınızı təhlükəsiz saxlamaq üçün unikal və güclü bir parol seçin.</string>
   <string name="minimum_characters">%1$s xarakter</string>
+  <string name="expired_link">Vaxtı bitmiş keçid</string>
+  <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
+  <string name="restart_registration">Qeydiyyatı yenidən başlat</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

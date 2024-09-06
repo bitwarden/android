@@ -41,6 +41,7 @@
   <string name="invalid_pin">Neplatný PIN kód. Skúste znova.</string>
   <string name="launch">Spustiť</string>
   <string name="log_in">Prihlásiť sa</string>
+  <string name="log_in_verb">Prihlásiť sa</string>
   <string name="log_in_noun">Prihlásenie</string>
   <string name="log_out">Odhlásiť sa</string>
   <string name="logout_confirmation">Naozaj sa chcete odhlásiť?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Áno</string>
   <string name="account">Účet</string>
   <string name="account_created">Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Váš nový účet bol vytvorený!</string>
   <string name="add_an_item">Pridať položku</string>
   <string name="app_extension">Rozšírenie aplikácie</string>
   <string name="autofill_accessibility_description">Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie v aplikáciách a na webe.</string>
@@ -203,7 +204,7 @@
   <string name="on" tools:override="true">Zapnuté</string>
   <string name="status">Stav</string>
   <string name="bitwarden_autofill_service_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</string>
-  <string name="autofill">Automatické dopĺňanie</string>
+  <string name="autofill">Automatické vypĺňanie</string>
   <string name="autofill_or_view">Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</string>
   <string name="bitwarden_autofill_service_match_confirm">Naozaj chcete automaticky vyplniť toto prihlásenie? Nie je to úplná zhoda pre %1$s.</string>
   <string name="matching_items">Zodpovedajúce položky</string>
@@ -326,7 +327,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="collections">Zbierky</string>
   <string name="no_items_collection">V zbierke sa nenachádzajú žiadne položky.</string>
   <string name="no_items_folder">V tomto priečinku sa nenachádzajú žiadne položky.</string>
-  <string name="no_items_trash">V koši nie sú žiadne položky</string>
+  <string name="no_items_trash">V koši nie sú žiadne položky.</string>
   <string name="autofill_accessibility_service">Služba automatického vypĺňania pre zjednodušený prístup</string>
   <string name="autofill_service_description">Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</string>
   <string name="bitwarden_autofill_service_description">Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov do iných aplikácií.</string>
@@ -337,7 +338,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="verify_face_id">Overiť Face ID</string>
   <string name="windows_hello">Windows Hello</string>
   <string name="bitwarden_credential_provider_go_to_settings">Nepodarilo sa automaticky otvoriť nastavenia poskytovateľa poverení pre Android. Môžete otvoriť nastavenie manuálne cez Nastavenia &gt; Systém &gt; Heslá a účty &gt; Heslá, prístupové kľúče a automatické vypĺňanie.</string>
-  <string name="bitwarden_autofill_go_to_settings">Nepodarilo sa automaticky otvoriť nastavenia automatického dopĺňania pre systém Android. Môžete otvoriť nastavenie manuálne cez Nastavenia &gt; Systém &gt; Jazyky a vstup &gt; Rozšírené &gt; Služba automatického dopĺňania.</string>
+  <string name="bitwarden_autofill_go_to_settings">Nepodarilo sa automaticky otvoriť nastavenia automatického vypĺňania pre systém Android. Môžete otvoriť nastavenie manuálne cez Nastavenia &gt; Systém &gt; Jazyky a vstup &gt; Rozšírené &gt; Služba automatického vypĺňania.</string>
   <string name="custom_field_name">Názov vlastného poľa</string>
   <string name="field_type_boolean">Áno/Nie</string>
   <string name="field_type_hidden">Skryté</string>
@@ -362,22 +363,22 @@ Skenovanie prebehne automaticky.</string>
   <string name="hold_yubikey_near_top">Držte vaše Yubikey blízko hornej časti prístroja.</string>
   <string name="try_again">Skúsiť Znovu</string>
   <string name="yubi_key_instruction_ios">Ak chcete pokračovať, podržte YubiKey NEO na zadnej strane prístroja.</string>
-  <string name="bitwarden_autofill_accessibility_service_description2">Služba dostupnosti môže byť užitočné pre aplikácie, ktoré nepodporujú štandardnú službu automatického dopĺňania.</string>
+  <string name="bitwarden_autofill_accessibility_service_description2">Služba dostupnosti môže byť užitočná pre aplikácie, ktoré nepodporujú štandardnú službu automatického vypĺňania.</string>
   <string name="date_password_updated">Heslo bolo aktualizované</string>
   <string name="date_updated">Aktualizované</string>
-  <string name="autofill_activated">Automatické dopĺňanie aktivované!</string>
+  <string name="autofill_activated">Automatické vypĺňanie aktivované!</string>
   <string name="must_log_in_main_app_autofill">Pred použitím automatického vypĺňania sa najskôr musíte prihlásiť v hlavnej bitwarden aplikácií.</string>
   <string name="autofill_setup">Pri prihlasovaní do aplikácií a westránok sú teraz vaše prihlasovacie údaje dostupné priamo z klávesnice.</string>
-  <string name="autofill_setup2">Odporúčame vám vypnúť ostatné aplikácie pre automatické dopĺňanie, ak ich neplánujete používať.</string>
+  <string name="autofill_setup2">Odporúčame vám vypnúť ostatné aplikácie na automatické vypĺňanie, ak ich neplánujete používať.</string>
   <string name="bitwarden_autofill_description">Pri zadávaní hesiel pristupujte v vášmu trezoru priamo z klávesnice.</string>
   <string name="autofill_turn_on">Ak chcete povoliť automatické vypĺňanie, postupujte podľa nasledujúcich inštrukcií:</string>
   <string name="autofill_turn_on1">1. Prejdite do aplikácie \"Nastavenia\" pre iOS</string>
   <string name="autofill_turn_on2">2. Ťuknite na položku \"Heslá\"</string>
   <string name="autofill_turn_on3">3. Klepnite na možnosť \"Automaticky vypĺňať heslá\"</string>
-  <string name="autofill_turn_on4">4. Zapnite automatické dopĺňanie</string>
+  <string name="autofill_turn_on4">4. Zapnite automatické vypĺňanie</string>
   <string name="autofill_turn_on5">5. Vyberte \"Bitwarden\"</string>
   <string name="password_autofill">Automatické vypĺňanie hesiel</string>
-  <string name="bitwarden_autofill_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z Bitwarden rozšírenia pre automatické vypĺňanie. Ďalšie informácie o používaní rozšírenia pre automatické dopĺňanie získate prechodom na obrazovku Nastavení.</string>
+  <string name="bitwarden_autofill_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z rozšírenia Bitwardenu na automatické vypĺňanie. Ďalšie informácie o používaní rozšírenia pre automatické vypĺňanie získate prechodom na obrazovku nastavení.</string>
   <string name="invalid_email">Neplatná emailová adresa.</string>
   <string name="cards">Karty</string>
   <string name="identities">Identity</string>
@@ -444,7 +445,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="clear_clipboard">Vymazať schránku</string>
   <string name="clear_clipboard_description">Automaticky vymazať skopírované hodnoty zo schránky.</string>
   <string name="default_uri_match_detection">Predvolený spôsob detekcie zhody URI</string>
-  <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob mapovania, ktorý bude použitý pre prihlasovacie údaje pri využití funkcí ako je napríklad automatické vypĺňanie hesiel.</string>
+  <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob mapovania, ktorý bude použitý pre prihlasovacie údaje pri využití funkcií, ako je napríklad automatické vypĺňanie hesiel.</string>
   <string name="theme">Motív</string>
   <string name="theme_description">Zmeniť motív aplikácie.</string>
   <string name="theme_default">Predvolené systémom</string>
@@ -460,7 +461,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="ask_to_add_login">Požiadať o pridanie prihlásenia</string>
   <string name="ask_to_add_login_description">Opýtať sa na pridanie prihlasovacích údajov ak ich ešte nemáte v trezore.</string>
   <string name="on_restart">Po reštarte aplikácie</string>
-  <string name="autofill_service_not_enabled">Automatické dopĺňanie umožňuje jednoducho pristupovať k vašemu trezoru z iných stránok a plaikácii. Vyzerá že ste službu automatického dopĺňania pomocou Bitwarden nezapli. Zapnúť ju môžete na obrazove \"Nastavenia\".</string>
+  <string name="autofill_service_not_enabled">Automatické vypĺňanie umožňuje jednoducho pristupovať k vášmu trezoru z iných stránok a aplikácií. Zdá sa, že ste službu automatického vypĺňania pomocou Bitwardenu nezapli. Zapnúť ju môžete na obrazovke \"Nastavenia\".</string>
   <string name="theme_applied_on_restart">Zmena nastavení vzhľadu sa prejaví po opätovnom štarte aplikácie.</string>
   <string name="capitalize">Prvé písmeno veľkým</string>
   <string name="include_number">Zahrnúť číslo</string>
@@ -494,9 +495,9 @@ Skenovanie prebehne automaticky.</string>
   <string name="open">Otvoriť</string>
   <string name="unable_to_save_attachment">Nastal problem pri ukladaní prílohy. Ak problém pretrváva, môžete je uložiť z Webového trezora.</string>
   <string name="save_attachment_success">Príloha úspešne uložená</string>
-  <string name="autofill_tile_accessibility_required">Zapnite službu dostupnosti pre automatické vypĺňanie v nastaveniach Bitwardenu aby ste mohli používať dlaždicu pre automatické dopĺňanie.</string>
+  <string name="autofill_tile_accessibility_required">Zapnite službu dostupnosti pre automatické vypĺňanie v nastaveniach Bitwardenu, aby ste mohli používať dlaždicu pre automatické vypĺňanie.</string>
   <string name="autofill_tile_uri_not_found">Nenájdené žiadne políčka na heslo</string>
-  <string name="soft_deleting">Posielanie do koša...</string>
+  <string name="soft_deleting">Presúvanie do koša…</string>
   <string name="item_soft_deleted">Položka bola poslaná do koša.</string>
   <string name="restore">Obnoviť</string>
   <string name="restoring">Obnovovanie...</string>
@@ -534,16 +535,16 @@ Skenovanie prebehne automaticky.</string>
   <string name="passkey_management">Správa prístupových kľúčov</string>
   <string name="autofill_services">Služba automatického vypĺňania</string>
   <string name="inline_autofill">Použite vnorené automatické vypĺňanie</string>
-  <string name="inline_autofill_description">Ak to podporuje váš vybratý editor IME (klávesnica), použite vnorené automatické dopĺňanie. Ak to vaša konfigurácia nepodporuje (alebo je táto voľba zakázaná), bude použité predvolené automatické vyplnenie.</string>
+  <string name="inline_autofill_description">Ak to podporuje váš vybratý editor IME (klávesnica), použite vnorené automatické vypĺňanie. Ak to vaša konfigurácia nepodporuje (alebo je táto voľba zakázaná), bude použité predvolené automatické vyplnenie.</string>
   <string name="accessibility">Použiť dostupnosť</string>
   <string name="accessibility_description">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. Ak je táto možnosť povolená, pri výbere prihlasovacích polí sa zobrazí vyskakovacie okno.</string>
   <string name="accessibility_description2">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. (Vyžaduje sa povolenie zobrazenia cez iné aplikácie)</string>
   <string name="accessibility_description3">Použite službu zjednodušenia prístupu Bitwardenu pre použitie automatického vypĺňania cez dlaždicu a/alebo zobraziť vyskakovacie okno pomocou zobrazenia cez iné aplikácie (ak je povolené).</string>
-  <string name="accessibility_description4">Vyžaduje sa, aby ste použili dlaždicu rýchlej akcie automatického dopĺňania, alebo aby ste rozšírili službu automatického dopĺňania pomocou funkcie zobrazenia cez iné aplikácie (ak je povolená).</string>
+  <string name="accessibility_description4">Vyžaduje sa, aby ste použili dlaždicu rýchlej akcie automatického vypĺňania, alebo aby ste rozšírili službu automatického vypĺňania pomocou funkcie zobrazenia cez iné aplikácie (ak je povolená).</string>
   <string name="draw_over">Použiť zobrazenie cez iné aplikácie</string>
   <string name="draw_over_description">Ak je táto možnosť povolená, umožňuje službe zjednodušenia prístupu Bitwardenu zobraziť vyskakovacie okno po klepnutí do prihlasovacieho poľa.</string>
   <string name="draw_over_description2">Ak je táto možnosť povolená, umožňuje službe zjednodušenia prístupu Bitwardenu zobraziť vyskakovacie okno po klepnutí do prihlasovacieho poľa a pomáha automaticky vyplniť prihlasovacie polia.</string>
-  <string name="draw_over_description3">Ak je táto možnosť povolená, dostupnosť zobrazí vyskakovacie okno na rozšírenie služby automatického dopĺňania pre staršie aplikácie, ktoré nepodporujú Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov.</string>
+  <string name="draw_over_description3">Ak je táto možnosť povolená, dostupnosť zobrazí vyskakovacie okno na rozšírenie služby automatického vypĺňania pre staršie aplikácie, ktoré nepodporujú Android Autofill Framework na zjednodušenie vypĺňania prihlasovacích údajov.</string>
   <string name="personal_ownership_submit_error">Z dôvodu podnikovej politiky máte obmedzené ukladanie položiek do osobného trezora. Zmeňte možnosť vlastníctvo na organizáciu a vyberte si z dostupných zbierok.</string>
   <string name="personal_ownership_policy_in_effect">Politika organizácie ovplyvňuje vaše možnosti vlastníctva.</string>
   <string name="send">Send</string>
@@ -745,7 +746,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o prihlásenie z:
 %1$s
-Chcete prepnúť na toto konto?</string>
+Chcete prepnúť na tento účet?</string>
   <string name="new_around_here">Ste tu nový?</string>
   <string name="get_master_passwordword_hint">Získať nápoveď pre hlavné heslo</string>
   <string name="logging_in_as_x_on_y">Prihlasujete sa ako %1$s na %2$s</string>
@@ -862,7 +863,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="continue_to_privacy_policy">Pokračovať na zásady ochrany osobných údajov?</string>
   <string name="continue_to_app_store">Pokračovať v obchode s aplikáciami?</string>
   <string name="continue_to_device_settings">Pokračovať do nastavení zariadenia?</string>
-  <string name="two_step_login_description_long">Zabezpečte svoje konto nastavením dvojstupňového prihlasovania vo webovej aplikácii Bitwarden.</string>
+  <string name="two_step_login_description_long">Zabezpečte svoj účet nastavením dvojstupňového prihlasovania vo webovej aplikácii Bitwarden.</string>
   <string name="change_master_password_description_long">Hlavné heslo si môžete zmeniť vo webovej aplikácii Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Údaje do trezora môžete importovať na %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Viac informácií o používaní Bitwardenu nájdete v centre pomoci.</string>
@@ -878,7 +879,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Povolenia vašej organizácie boli aktualizované, čo si vyžaduje nastavenie hlavného hesla.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</string>
-  <string name="choose_a_login_to_save_this_passkey_to">Vyberte prihlásenie na uloženie tohto prístupového kľúča</string>
+  <string name="choose_a_login_to_save_this_passkey_to">Vyberte prihlasovacie údaje na uloženie tohto prístupového kľúča</string>
   <string name="save_passkey_as_new_login">Uložiť prístupový kľúč ako nové prihlásenie</string>
   <string name="save_passkey">Uložiť prístupový kľúč</string>
   <string name="passkeys_for_x">Prístupové kľúče pre %1$s</string>
@@ -988,4 +989,9 @@ Chcete prepnúť na toto konto?</string>
   <string name="choose_your_master_password">Zvoľte si hlavné heslo</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Na udržanie vašich informácií v bezpečí si zvoľte unikátne a silné heslo.</string>
   <string name="minimum_characters">%1$s znakov</string>
+  <string name="expired_link">Platnosť odkazu vypršala</string>
+  <string name="please_restart_registration_or_try_logging_in">Zopakujte registráciu alebo sa pokúste prihlásiť. Možno už účet máte.</string>
+  <string name="restart_registration">Zopakovať registráciu</string>
+  <string name="authenticator_sync">Synchronizácia overovacej aplikácie</string>
+  <string name="allow_bitwarden_authenticator_syncing">Povoliť synchronizáciu Bitwarden Authenticator</string>
 </resources>

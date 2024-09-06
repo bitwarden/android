@@ -41,6 +41,7 @@
   <string name="invalid_pin">Chybný PIN. Zkuste to znovu.</string>
   <string name="launch">Spustit</string>
   <string name="log_in">Přihlásit se</string>
+  <string name="log_in_verb">Přihlásit se</string>
   <string name="log_in_noun">Přihlašovací údaje</string>
   <string name="log_out">Odhlásit se</string>
   <string name="logout_confirmation">Opravdu se chcete odhlásit?</string>
@@ -987,4 +988,9 @@ Chcete se přepnout na tento účet?</string>
   <string name="choose_your_master_password">Zvolte hlavní heslo</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Zvolte jedinečné a silné heslo pro zabezpečení Vašich informací.</string>
   <string name="minimum_characters">%1$s znaků</string>
+  <string name="expired_link">Platnost odkazu vypršela</string>
+  <string name="please_restart_registration_or_try_logging_in">Restartujte registraci nebo se zkuste přihlásit. Možná již máte účet.</string>
+  <string name="restart_registration">Restartovat registraci</string>
+  <string name="authenticator_sync">Synchronizovat ověřovací aplikaci</string>
+  <string name="allow_bitwarden_authenticator_syncing">Povolit synchronizaci ověřovací aplikace Bitwardenu</string>
 </resources>

@@ -41,6 +41,7 @@
   <string name="invalid_pin">Погрешан ПИН. Покушајте поново.</string>
   <string name="launch">Отвори</string>
   <string name="log_in">Пријавите се</string>
+  <string name="log_in_verb">Пријави се</string>
   <string name="log_in_noun">Пријава</string>
   <string name="log_out">Одјави се</string>
   <string name="logout_confirmation">Заиста желите да се одјавите?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Да</string>
   <string name="account">Налог</string>
   <string name="account_created">Ваш налог је креиран! Сада се можете пријавити.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Ваш нови налог је направљен!</string>
   <string name="add_an_item">Додај ставку</string>
   <string name="app_extension">Додатак апликације</string>
   <string name="autofill_accessibility_description">Употребите услугу приступачности Bitwarden-а за ауто-попуњавање пријава у апликацијама и на вебу.</string>
@@ -989,4 +990,9 @@
   <string name="choose_your_master_password">Одаберите вашу главну лозинку</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изаберите јединствену и јаку лозинку да бисте заштитили своје податке.</string>
   <string name="minimum_characters">%1$s знакова</string>
+  <string name="expired_link">Истекла веза</string>
+  <string name="please_restart_registration_or_try_logging_in">Поново покрените регистрацију или покушајте да се пријавите. Можда већ имате налог.</string>
+  <string name="restart_registration">Поново покрените регистрацију</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

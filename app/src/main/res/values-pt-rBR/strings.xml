@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN inválido. Tente novamente.</string>
   <string name="launch">Abrir</string>
   <string name="log_in">Iniciar Sessão</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Encerrar sessão</string>
   <string name="logout_confirmation">Tem certeza que deseja sair?</string>
@@ -988,4 +989,9 @@ Você deseja mudar para esta conta?</string>
   <string name="choose_your_master_password">Escolha sua senha mestra</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma senha única e forte para manter suas informações seguras.</string>
   <string name="minimum_characters">%1$s caracteres</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>
