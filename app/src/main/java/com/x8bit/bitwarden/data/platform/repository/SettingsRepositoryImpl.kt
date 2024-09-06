@@ -494,6 +494,13 @@ class SettingsRepositoryImpl(
         }
     }
 
+    override fun getUserHasLoggedInValue(userId: String): Boolean =
+        settingsDiskSource.getUserHasSignedInPreviously(userId)
+
+    override fun storeUserHasLoggedInValue(userId: String) {
+        settingsDiskSource.storeUseHasLoggedInPreviously(userId)
+    }
+
     /**
      * Check the parameters of the vault unlock policy against the user's
      * settings to determine whether to update the user's settings.

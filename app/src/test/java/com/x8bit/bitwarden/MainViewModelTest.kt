@@ -75,6 +75,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { appThemeStateFlow } returns mutableAppThemeFlow
         every { isScreenCaptureAllowed } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
+        every { storeUserHasLoggedInValue(any()) } just runs
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -753,6 +754,41 @@ class MainViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             assertEquals(MainEvent.NavigateToDebugMenu, awaitItem())
+        }
+    }
+
+    @Test
+    fun `store logged in user status of the any active users on startup if they exist`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        createViewModel()
+        verify(exactly = 1) {
+            settingsRepository.storeUserHasLoggedInValue(userId = DEFAULT_USER_STATE.activeUserId)
+        }
+    }
+
+    @Test
+    fun `store logged in user should recorded each active user`() = runTest {
+        val userId2 = "activeUserId2"
+        val multipleUserState = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT,
+                DEFAULT_ACCOUNT.copy(userId = userId2),
+            ),
+        )
+        mutableUserStateFlow.value = multipleUserState
+        createViewModel()
+        verify(exactly = 1) {
+            settingsRepository.storeUserHasLoggedInValue(userId = DEFAULT_USER_STATE.activeUserId)
+            settingsRepository.storeUserHasLoggedInValue(userId = userId2)
+        }
+    }
+
+    @Test
+    fun `store logged in should not be called when there are no active users`() = runTest {
+        mutableUserStateFlow.value = null
+        createViewModel()
+        verify(exactly = 0) {
+            settingsRepository.storeUserHasLoggedInValue(userId = DEFAULT_USER_STATE.activeUserId)
         }
     }
 

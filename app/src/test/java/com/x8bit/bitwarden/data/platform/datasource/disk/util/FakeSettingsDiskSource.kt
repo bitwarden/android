@@ -60,6 +60,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
+    private val userSignIns = mutableMapOf<String, Boolean>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -276,6 +277,12 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedScreenCaptureAllowed[userId] = isScreenCaptureAllowed
         getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
     }
+
+    override fun storeUseHasLoggedInPreviously(userId: String) {
+        userSignIns[userId] = true
+    }
+
+    override fun getUserHasSignedInPreviously(userId: String): Boolean = userSignIns[userId] == true
 
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
         return mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {

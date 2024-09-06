@@ -553,7 +553,7 @@ class AuthRepositoryImpl(
                 ),
             )
         }
-
+        settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()
         return LoginResult.Success
     }
@@ -1560,6 +1560,7 @@ class AuthRepositoryImpl(
         resendEmailRequestJson = null
         twoFactorDeviceData = null
         settingsRepository.setDefaultsIfNecessary(userId = userId)
+        settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()
         hasPendingAccountAddition = false
         LoginResult.Success

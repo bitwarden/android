@@ -245,4 +245,17 @@ interface SettingsDiskSource {
      * Stores whether or not [isScreenCaptureAllowed] for the given [userId].
      */
     fun storeScreenCaptureAllowed(userId: String, isScreenCaptureAllowed: Boolean?)
+
+    /**
+     * Records a user sign in for the given [userId]. This data is expected to remain on
+     * disk until storage is cleared or the app is uninstalled.
+     */
+    fun storeUseHasLoggedInPreviously(userId: String)
+
+    /**
+     * Checks if a user has signed in previously for the given [userId].
+     *
+     * @see [storeUseHasLoggedInPreviously]
+     */
+    fun getUserHasSignedInPreviously(userId: String): Boolean
 }
