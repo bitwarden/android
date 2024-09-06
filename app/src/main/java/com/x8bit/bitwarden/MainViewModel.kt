@@ -129,6 +129,8 @@ class MainViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
+        // On app launch, mark all active users as having previously logged in.
+        // This covers any users who are active prior to this value being recorded.
         viewModelScope.launch {
             val userState = authRepository
                 .userStateFlow
