@@ -8,7 +8,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.parcelize.Parcelize
-import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 
 /**
  * Represents a special circumstance the app may be in. These circumstances could require some kind
@@ -93,11 +92,9 @@ sealed class SpecialCircumstance : Parcelable {
     /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be
      * cleared after a successful login.
-     *
-     * @see [SpecialCircumstanceManager.clearSpecialCircumstanceAfterLogin]
      */
     @Parcelize
-    sealed class PreLogin : SpecialCircumstance() {
+    sealed class RegistrationEvent : SpecialCircumstance() {
         /**
          * The app was launched via AppLink in order to allow the user complete an ongoing
          * registration.
@@ -106,6 +103,13 @@ sealed class SpecialCircumstance : Parcelable {
         data class CompleteRegistration(
             val completeRegistrationData: CompleteRegistrationData,
             val timestamp: Long,
-        ) : PreLogin()
+        ) : RegistrationEvent()
+
+        /**
+         * The app was launched via AppLink in order to allow the user to complete registration but,
+         * the registration link has expired.
+         */
+        @Parcelize
+        data object ExpiredRegistrationLink : RegistrationEvent()
     }
 }

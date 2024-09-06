@@ -20,7 +20,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.PreLogin
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.RegistrationEvent
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -93,7 +93,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
     }
     private val mutableGeneratorResultFlow = bufferedMutableSharedFlow<GeneratorResult>()
-    private val mockCompleteRegistrationCircumstance = mockk<PreLogin.CompleteRegistration>()
+    private val mockCompleteRegistrationCircumstance =
+        mockk<RegistrationEvent.CompleteRegistration>()
     private val generatorRepository = mockk<GeneratorRepository>(relaxed = true) {
         every { generatorResultFlow } returns mutableGeneratorResultFlow
     }

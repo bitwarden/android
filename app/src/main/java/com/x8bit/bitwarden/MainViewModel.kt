@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
@@ -17,11 +18,15 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
@@ -56,6 +61,7 @@ class MainViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
+    private val environmentRepository: EnvironmentRepository,
     private val savedStateHandle: SavedStateHandle,
     private val clock: Clock,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
@@ -226,14 +232,7 @@ class MainViewModel @Inject constructor(
             }
 
             completeRegistrationData != null -> {
-                if (authRepository.activeUserId != null) {
-                    authRepository.hasPendingAccountAddition = true
-                }
-                specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PreLogin.CompleteRegistration(
-                        completeRegistrationData = completeRegistrationData,
-                        timestamp = clock.millis(),
-                    )
+                handleCompleteRegistrationData(completeRegistrationData)
             }
 
             autofillSaveItem != null -> {
@@ -309,6 +308,47 @@ class MainViewModel @Inject constructor(
     private fun recreateUiAndGarbageCollect() {
         sendEvent(MainEvent.Recreate)
         garbageCollectionManager.tryCollect()
+    }
+
+    private fun handleCompleteRegistrationData(data: CompleteRegistrationData) {
+        viewModelScope.launch {
+            // Attempt to load the environment for the user if they have a pre-auth environment
+            // saved.
+            environmentRepository.loadEnvironmentForEmail(userEmail = data.email)
+            // Determine if the token is still valid.
+            val emailTokenResult = authRepository.validateEmailToken(
+                email = data.email,
+                token = data.verificationToken,
+            )
+            when (emailTokenResult) {
+                is EmailTokenResult.Error -> {
+                    sendEvent(
+                        MainEvent.ShowToast(
+                            message = emailTokenResult
+                                .message
+                                ?.asText()
+                                ?: R.string.there_was_an_issue_validating_the_registration_token
+                                    .asText(),
+                        ),
+                    )
+                }
+                EmailTokenResult.Expired -> {
+                    specialCircumstanceManager.specialCircumstance = SpecialCircumstance
+                        .RegistrationEvent
+                        .ExpiredRegistrationLink
+                }
+                EmailTokenResult.Success -> {
+                    if (authRepository.activeUserId != null) {
+                        authRepository.hasPendingAccountAddition = true
+                    }
+                    specialCircumstanceManager.specialCircumstance =
+                        SpecialCircumstance.RegistrationEvent.CompleteRegistration(
+                            completeRegistrationData = data,
+                            timestamp = clock.millis(),
+                        )
+                }
+            }
+        }
     }
 }
 
@@ -396,4 +436,9 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
+
+    /**
+     * Show a toast with the given [message].
+     */
+    data class ShowToast(val message: Text) : MainEvent()
 }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,6 +53,13 @@ fun ExpiredRegistrationLinkScreen(
             }
         }
     }
+    val sendCloseClicked = remember(viewModel) {
+        {
+            viewModel.trySendAction(ExpiredRegistrationLinkAction.CloseClicked)
+        }
+    }
+
+    BackHandler(onBack = sendCloseClicked)
 
     BitwardenScaffold(
         topBar = {
@@ -61,11 +69,7 @@ fun ExpiredRegistrationLinkScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                     navigationIconContentDescription = stringResource(id = R.string.close),
-                    onNavigationIconClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(ExpiredRegistrationLinkAction.CloseClicked)
-                        }
-                    },
+                    onNavigationIconClick = sendCloseClicked,
                 ),
             )
         },

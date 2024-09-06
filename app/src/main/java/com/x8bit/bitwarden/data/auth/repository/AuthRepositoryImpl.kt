@@ -26,6 +26,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
@@ -41,6 +43,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -1255,6 +1258,31 @@ class AuthRepositoryImpl(
                     SendVerificationEmailResult.Error(null)
                 },
             )
+
+    override suspend fun validateEmailToken(email: String, token: String): EmailTokenResult {
+        return identityService
+            .verifyEmailRegistrationToken(
+                body = VerifyEmailTokenRequestJson(
+                    email = email,
+                    token = token,
+                ),
+            )
+            .fold(
+                onSuccess = {
+                    when (val json = it) {
+                        VerifyEmailTokenResponseJson.Valid -> EmailTokenResult.Success
+                        is VerifyEmailTokenResponseJson.Invalid -> {
+                            EmailTokenResult.Error(json.message)
+                        }
+
+                        VerifyEmailTokenResponseJson.TokenExpired -> EmailTokenResult.Expired
+                    }
+                },
+                onFailure = {
+                    EmailTokenResult.Error(message = null)
+                },
+            )
+    }
 
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
