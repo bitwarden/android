@@ -313,51 +313,51 @@ class SendViewModelTest : BaseViewModelTest() {
         assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `VaultRepository SendData Error should update view state to Error and emit DismissPullToRefresh`() =
-        runTest {
-            val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
-            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+    fun `VaultRepository SendData Error should update view state to Error`() = runTest {
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
-            viewModel.eventFlow.test {
-                mutableSendDataFlow.value = DataState.Error(Throwable("Fail"))
-                assertEquals(SendEvent.DismissPullToRefresh, awaitItem())
-            }
+        viewModel.eventFlow.test {
+            mutableSendDataFlow.value = DataState.Error(Throwable("Fail"))
+        }
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    viewState = SendState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
-                    ),
-                    dialogState = null,
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = SendState.ViewState.Error(
+                    message = R.string.generic_error_message.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                dialogState = null,
+                isRefreshing = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
-    fun `VaultRepository SendData Loaded should update view state and emit DismissPullToRefresh`() =
-        runTest {
-            val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
-            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
-            val viewState = mockk<SendState.ViewState.Content>()
-            val sendData = mockk<SendData> {
-                every {
-                    toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
-                } returns viewState
-            }
-
-            viewModel.eventFlow.test {
-                mutableSendDataFlow.value = DataState.Loaded(sendData)
-                assertEquals(SendEvent.DismissPullToRefresh, awaitItem())
-            }
-
-            assertEquals(
-                DEFAULT_STATE.copy(viewState = viewState, dialogState = null),
-                viewModel.stateFlow.value,
-            )
+    fun `VaultRepository SendData Loaded should update view state`() = runTest {
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+        val viewState = mockk<SendState.ViewState.Content>()
+        val sendData = mockk<SendData> {
+            every {
+                toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
+            } returns viewState
         }
+
+        viewModel.eventFlow.test {
+            mutableSendDataFlow.value = DataState.Loaded(sendData)
+        }
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = viewState,
+                dialogState = null,
+                isRefreshing = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `VaultRepository SendData Loading should update view state to Loading`() {
@@ -372,33 +372,31 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `VaultRepository SendData NoNetwork should update view state to Error and emit DismissPullToRefresh`() =
-        runTest {
-            val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
-            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+    fun `VaultRepository SendData NoNetwork should update view state to Error`() = runTest {
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
-            viewModel.eventFlow.test {
-                mutableSendDataFlow.value = DataState.NoNetwork()
-                assertEquals(SendEvent.DismissPullToRefresh, awaitItem())
-            }
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    viewState = SendState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
-                            .asText()
-                            .concat(
-                                " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
-                            ),
-                    ),
-                    dialogState = null,
-                ),
-                viewModel.stateFlow.value,
-            )
+        viewModel.eventFlow.test {
+            mutableSendDataFlow.value = DataState.NoNetwork()
         }
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = SendState.ViewState.Error(
+                    message = R.string.internet_connection_required_title
+                        .asText()
+                        .concat(
+                            " ".asText(),
+                            R.string.internet_connection_required_message.asText(),
+                        ),
+                ),
+                dialogState = null,
+                isRefreshing = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `VaultRepository SendData Pending should update view state`() {
@@ -470,4 +468,5 @@ private val DEFAULT_STATE: SendState = SendState(
     dialogState = null,
     isPullToRefreshSettingEnabled = false,
     policyDisablesSend = false,
+    isRefreshing = false,
 )

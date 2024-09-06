@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
@@ -263,22 +264,26 @@ class SendScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Loading)
         }
-        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Empty)
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
     }
 
     @Test
@@ -709,6 +714,7 @@ private val DEFAULT_STATE: SendState = SendState(
     dialogState = null,
     isPullToRefreshSettingEnabled = false,
     policyDisablesSend = false,
+    isRefreshing = false,
 )
 
 private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =

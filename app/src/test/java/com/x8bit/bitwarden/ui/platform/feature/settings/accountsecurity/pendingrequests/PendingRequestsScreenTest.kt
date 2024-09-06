@@ -119,6 +119,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
             authRequests = emptyList(),
             viewState = PendingRequestsState.ViewState.Loading,
             isPullToRefreshSettingEnabled = false,
+            isRefreshing = false,
         )
     }
 }

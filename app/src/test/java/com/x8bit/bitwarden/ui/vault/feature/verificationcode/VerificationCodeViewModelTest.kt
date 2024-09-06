@@ -171,7 +171,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeFlow Pending with data should update state to Content`() {
         setupMockUri()
@@ -197,7 +196,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeFlow Pending with no data should call NavigateBack to go to the vault screen`() =
         runTest {
@@ -216,7 +214,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeFlow Error with data should update state to Content`() = runTest {
         setupMockUri()
@@ -233,10 +230,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.eventFlow.test {
-            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-        }
-
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Content(
@@ -247,7 +240,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeFlow Error with no data should call NavigateBack to go to the vault screen`() =
         runTest {
@@ -264,11 +256,9 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeFlow Error with null data should show error screen`() = runTest {
         setupMockUri()
@@ -281,10 +271,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
                 error = IllegalStateException(),
             ),
         )
-
-        viewModel.eventFlow.test {
-            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-        }
 
         assertEquals(
             createVerificationCodeState(
@@ -308,7 +294,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -350,10 +335,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.eventFlow.test {
-            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-        }
-
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Content(
@@ -375,7 +356,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -393,10 +373,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-
-        viewModel.eventFlow.test {
-            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-        }
 
         assertEquals(
             createVerificationCodeState(
@@ -426,7 +402,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -527,6 +502,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
         dialogState = null,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
+        isRefreshing = false,
     )
 
     private fun createDisplayItemList() = listOf(

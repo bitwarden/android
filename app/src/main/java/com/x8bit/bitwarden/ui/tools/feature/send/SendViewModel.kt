@@ -56,6 +56,7 @@ class SendViewModel @Inject constructor(
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
+            isRefreshing = false,
         ),
 ) {
 
@@ -174,9 +175,9 @@ class SendViewModel @Inject constructor(
                             message = R.string.generic_error_message.asText(),
                         ),
                         dialogState = null,
+                        isRefreshing = false,
                     )
                 }
-                sendEvent(SendEvent.DismissPullToRefresh)
             }
 
             is DataState.Loaded -> {
@@ -189,9 +190,9 @@ class SendViewModel @Inject constructor(
                                 .baseWebSendUrl,
                         ),
                         dialogState = null,
+                        isRefreshing = false,
                     )
                 }
-                sendEvent(SendEvent.DismissPullToRefresh)
             }
 
             DataState.Loading -> {
@@ -212,9 +213,9 @@ class SendViewModel @Inject constructor(
                                 ),
                         ),
                         dialogState = null,
+                        isRefreshing = false,
                     )
                 }
-                sendEvent(SendEvent.DismissPullToRefresh)
             }
 
             is DataState.Pending -> {
@@ -317,6 +318,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepo.sync()
@@ -332,6 +334,7 @@ data class SendState(
     val dialogState: DialogState?,
     private val isPullToRefreshSettingEnabled: Boolean,
     val policyDisablesSend: Boolean,
+    val isRefreshing: Boolean,
 ) : Parcelable {
 
     /**
@@ -573,11 +576,6 @@ sealed class SendAction {
  * Models events for the send screen.
  */
 sealed class SendEvent {
-    /**
-     * Dismisses the pull-to-refresh indicator.
-     */
-    data object DismissPullToRefresh : SendEvent()
-
     /**
      * Navigate to the new send screen.
      */

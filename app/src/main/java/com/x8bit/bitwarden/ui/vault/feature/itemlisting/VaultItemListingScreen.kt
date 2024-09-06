@@ -8,11 +8,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +42,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
@@ -65,7 +64,6 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Displays the vault item listing screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultItemListingScreen(
@@ -89,17 +87,16 @@ fun VaultItemListingScreen(
         VaultItemListingUserVerificationHandlers.create(viewModel = viewModel)
     }
 
-    val pullToRefreshState = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled }
-    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
-        if (pullToRefreshState?.isRefreshing == true) {
-            viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
-        }
-    }
+    val pullToRefreshState = rememberBitwardenPullToRefreshState(
+        isEnabled = state.isPullToRefreshEnabled,
+        isRefreshing = state.isRefreshing,
+        onRefresh = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemListingsAction.RefreshPull) }
+        },
+    )
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultItemListingEvent.NavigateBack -> onNavigateBack()
-
-            is VaultItemListingEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
 
             is VaultItemListingEvent.NavigateToVaultItem -> {
                 onNavigateToVaultItem(event.id)
@@ -388,7 +385,7 @@ private fun VaultItemListingDialogs(
 @Composable
 private fun VaultItemListingScaffold(
     state: VaultItemListingState,
-    pullToRefreshState: PullToRefreshState?,
+    pullToRefreshState: BitwardenPullToRefreshState,
     vaultItemListingHandlers: VaultItemListingHandlers,
 ) {
     var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }

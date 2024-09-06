@@ -17,19 +17,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
@@ -70,17 +68,15 @@ fun PendingRequestsScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
-    val pullToRefreshState by rememberUpdatedState(
-        newValue = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled },
+    val pullToRefreshState = rememberBitwardenPullToRefreshState(
+        isEnabled = state.isPullToRefreshEnabled,
+        isRefreshing = state.isRefreshing,
+        onRefresh = remember(viewModel) {
+            { viewModel.trySendAction(PendingRequestsAction.RefreshPull) }
+        },
     )
-    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
-        if (pullToRefreshState?.isRefreshing == true) {
-            viewModel.trySendAction(PendingRequestsAction.RefreshPull)
-        }
-    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            PendingRequestsEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
             is PendingRequestsEvent.NavigateToLoginApproval -> {
                 onNavigateToLoginApproval(event.fingerprint)
@@ -244,7 +240,7 @@ private fun PendingRequestItem(
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(color = MaterialTheme.colorScheme.primary),
                 onClick = { onNavigateToLoginApproval(fingerprintPhrase) },
             ),
         horizontalAlignment = Alignment.Start,

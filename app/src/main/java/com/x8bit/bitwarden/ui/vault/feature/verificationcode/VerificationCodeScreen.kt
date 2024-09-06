@@ -7,10 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.handlers.VerificationCodeHandlers
 import kotlinx.collections.immutable.ImmutableList
@@ -54,16 +53,16 @@ fun VerificationCodeScreen(
         VerificationCodeHandlers.create(viewModel)
     }
 
-    val pullToRefreshState = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled }
-    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
-        if (pullToRefreshState?.isRefreshing == true) {
-            viewModel.trySendAction(VerificationCodeAction.RefreshPull)
-        }
-    }
+    val pullToRefreshState = rememberBitwardenPullToRefreshState(
+        isEnabled = state.isPullToRefreshEnabled,
+        isRefreshing = state.isRefreshing,
+        onRefresh = remember(viewModel) {
+            { viewModel.trySendAction(VerificationCodeAction.RefreshPull) }
+        },
+    )
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is VerificationCodeEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
             is VerificationCodeEvent.NavigateBack -> onNavigateBack()
             is VerificationCodeEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.id)
             is VerificationCodeEvent.NavigateToVaultSearchScreen -> {
@@ -74,7 +73,6 @@ fun VerificationCodeScreen(
 
     VerificationCodeDialogs(dialogState = state.dialogState)
 
-    @OptIn(ExperimentalMaterial3Api::class)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier

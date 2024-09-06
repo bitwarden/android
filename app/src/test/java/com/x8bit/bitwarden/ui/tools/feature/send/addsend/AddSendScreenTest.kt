@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -19,6 +21,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -409,7 +412,9 @@ class AddSendScreenTest : BaseComposeTest() {
     fun `File segmented button click should send FileTypeClick`() {
         composeTestRule
             .onNodeWithText("File")
-            .performClick()
+            // A bug prevents performClick from working here so we
+            // have to perform the semantic action instead.
+            .performSemanticsAction(SemanticsActions.OnClick)
         verify { viewModel.trySendAction(AddSendAction.FileTypeClick) }
     }
 
@@ -417,7 +422,9 @@ class AddSendScreenTest : BaseComposeTest() {
     fun `Text segmented button click should send TextTypeClick`() {
         composeTestRule
             .onAllNodesWithText("Text")[0]
-            .performClick()
+            // A bug prevents performClick from working here so we
+            // have to perform the semantic action instead.
+            .performSemanticsAction(SemanticsActions.OnClick)
         verify { viewModel.trySendAction(AddSendAction.TextTypeClick) }
     }
 
@@ -912,17 +919,20 @@ class AddSendScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = AddSendState.ViewState.Loading)
         }
-        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(viewState = AddSendState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_VIEW_STATE)
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
     }
 
     @Test
