@@ -41,6 +41,7 @@
   <string name="invalid_pin">无效的 PIN 码，请重试。</string>
   <string name="launch">前往</string>
   <string name="log_in">登录</string>
+  <string name="log_in_verb">登录</string>
   <string name="log_in_noun">登录</string>
   <string name="log_out">注销</string>
   <string name="logout_confirmation">确定要注销吗？</string>
@@ -82,7 +83,7 @@
   <string name="yes">是</string>
   <string name="account">账户</string>
   <string name="account_created">您的新账户已创建！您现在可以登录了。</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">您的新账户已成功创建！</string>
   <string name="add_an_item">添加项目</string>
   <string name="app_extension">应用程序扩展</string>
   <string name="autofill_accessibility_description">使用 Bitwarden 无障碍服务在 App 和网站自动填充您的登录项目。</string>
@@ -133,7 +134,7 @@
   <string name="vault_timeout_action">密码库超时动作</string>
   <string name="vault_timeout_log_out_confirmation">超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</string>
   <string name="logging_in">正在登录...</string>
-  <string name="login_or_create_new_account">登录或者新建一个账户来访问您的安全密码库。</string>
+  <string name="login_or_create_new_account">登录或创建一个新账户以访问您的安全密码库。</string>
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
   <string name="master_password_description">主密码是您访问密码库的唯一密码。它非常重要，请您不要忘记。一旦忘记，无任何办法恢复此密码。</string>
@@ -988,4 +989,9 @@
   <string name="choose_your_master_password">选择您的主密码</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">选择一个唯一且强大的密码，以保障您的信息安全。</string>
   <string name="minimum_characters">%1$s 个字符</string>
+  <string name="expired_link">失效链接</string>
+  <string name="please_restart_registration_or_try_logging_in">请重新注册或尝试登录。您可能已经有一个账户了。</string>
+  <string name="restart_registration">重新开始注册</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

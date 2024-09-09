@@ -41,6 +41,7 @@
   <string name="invalid_pin">Vale PIN. Proovi uuesti.</string>
   <string name="launch">Käivita</string>
   <string name="log_in">Logi sisse</string>
+  <string name="log_in_verb">Logi sisse</string>
   <string name="log_in_noun">Sisselogimine</string>
   <string name="log_out">Logi välja</string>
   <string name="logout_confirmation">Oled kindel, et soovid välja logida?</string>
@@ -55,7 +56,7 @@
   <string name="name">Nimi</string>
   <string name="no">Ei</string>
   <string name="notes">Märkmed</string>
-  <string name="ok">Ok</string>
+  <string name="ok">Selge</string>
   <string name="password">Parool</string>
   <string name="save">Salvesta</string>
   <string name="move">Teisalda</string>
@@ -82,12 +83,12 @@
   <string name="yes">Jah</string>
   <string name="account">Konto</string>
   <string name="account_created">Sinu konto on loodud! Võid nüüd sisse logida.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Uus konto loodud!</string>
   <string name="add_an_item">Lisa kirje</string>
   <string name="app_extension">Rakenduse laiendus</string>
   <string name="autofill_accessibility_description">Kasuta Bitwardeni juurdepääsetavuse teenust, et erinevatel veebilehtedel ja rakendustes kontoandmeid sisestada.</string>
   <string name="autofill_service">Automaattäite teenus</string>
-  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Määra Bitwarden enda pääsuvõtme pakkujana telefoni seadetes.</string>
   <string name="avoid_ambiguous_characters">Väldi ebamääraseid kirjamärke</string>
   <string name="bitwarden_app_extension">Bitwarden rakenduse laiendus</string>
   <string name="bitwarden_app_extension_alert2">Lihtsaim viis uute sisselogimise andmete lisamiseks on kasutada Bitwardeni rakenduse laiendust. Lisateavet Bitwardeni rakenduse laienduse kasutamiseks leiad menüüst \"Seaded\".</string>
@@ -149,7 +150,7 @@
   <string name="no_favorites">Hoidlas ei ole lemmikuid.</string>
   <string name="no_items">Hoidlas ei ole kirjeid.</string>
   <string name="no_items_tap">Hoidlas puudub selle veebilehe konto. Vajuta konto lisamiseks.</string>
-  <string name="no_username">No Username</string>
+  <string name="no_username">Kasutajanimi puudub</string>
   <string name="no_username_password_configured">Selle konto jaoks on kasutajanimi või parool seadistamata.</string>
   <string name="ok_got_it">Ok, sain aru!</string>
   <string name="option_defaults">Vaikeväärtused on seatud Bitwardeni paroolide genereerimise tööriista poolt.</string>
@@ -255,7 +256,7 @@ Skaneerimine toimub automaatselt.</string>
   <string name="feature_unavailable">Funktsioon pole saadaval</string>
   <string name="max_file_size">Maksimaalne faili suurus on 100 MB.</string>
   <string name="update_key">Seda funktsiooni ei saa enne krüpteerimise võtme uuendamist kasutada.</string>
-  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
+  <string name="encryption_key_migration_required_description_long">Krüpteerimisvõtme ühendamine nõutud. Palun logi sisse läbi veebibrauseri, et uuendada enda krüpteerimisvõtit.</string>
   <string name="learn_more">Rohkem teavet</string>
   <string name="api_url">API serveri URL</string>
   <string name="custom_environment">Kohandatud keskkond</string>
@@ -303,9 +304,9 @@ Skaneerimine toimub automaatselt.</string>
   <string name="may">Mai</string>
   <string name="middle_name">Teine eesnimi</string>
   <string name="mr">Hr</string>
-  <string name="mrs">Mrs</string>
+  <string name="mrs">Pr</string>
   <string name="ms">Pr</string>
-  <string name="mx">Mx</string>
+  <string name="mx">Lp</string>
   <string name="november">November</string>
   <string name="october">Oktoober</string>
   <string name="passport_number">Passi number</string>
@@ -484,7 +485,7 @@ Skaneerimine toimub automaatselt.</string>
   <string name="code_sent">Kood on saadetud!</string>
   <string name="confirm_your_identity">Jätkamiseks kinnita oma identiteet.</string>
   <string name="export_vault_warning">Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</string>
-  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
+  <string name="export_vault_file_pw_protect_info">See eksporditav fail on parooliga kaitstud ja nõuab dekrüpteerimiseks parooli.</string>
   <string name="export_vault_confirmation_title">Hoidla eksportimise kinnitamine</string>
   <string name="warning">Hoiatus</string>
   <string name="export_vault_failure">Hoidla eksportimisel ilmnes tõrge. Probleemi jätkumisel teosta eksportimine veebihoidla kaudu.</string>
@@ -531,7 +532,7 @@ Skaneerimine toimub automaatselt.</string>
   <string name="terms_of_service">Kasutustingimused</string>
   <string name="privacy_policy">Privaatsuspoliitika</string>
   <string name="accessibility_draw_over_permission_alert">Bitwarden vajab tähelepanu! Vaata Bitwardeni menüüd Seaded -&gt; Automaattäite teenused ning luba valik „Kuva peal“</string>
-  <string name="passkey_management">Passkey management</string>
+  <string name="passkey_management">Pääsuvõtme haldamine</string>
   <string name="autofill_services">Automaattäite teenused</string>
   <string name="inline_autofill">Kasuta klaviatuuriülest sisestust</string>
   <string name="inline_autofill_description">Kasuta klaviatuuriülest sisestust, kui sinu klaviatuur seda toetab. Kui klaviatuur seda funktsiooni ei toeta (või see on väljalülitatud), kasutatakse tavalist Automaattäite meetodit.</string>
@@ -793,12 +794,12 @@ Soovid selle konto peale lülituda?</string>
   <string name="region">Piirkond</string>
   <string name="update_weak_master_password_warning">Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul.</string>
   <string name="current_master_password">Praegune ülemparool</string>
-  <string name="logged_in">Logged in!</string>
-  <string name="approve_with_my_other_device">Approve with my other device</string>
-  <string name="request_admin_approval">Request admin approval</string>
-  <string name="approve_with_master_password">Approve with master password</string>
-  <string name="turn_off_using_public_device">Turn off using a public device</string>
-  <string name="remember_this_device">Remember this device</string>
+  <string name="logged_in">Sisse logitud!</string>
+  <string name="approve_with_my_other_device">Kinnita teises seadmes</string>
+  <string name="request_admin_approval">Küsi administraatori nõusolekut</string>
+  <string name="approve_with_master_password">Kinnita ülemparooliga</string>
+  <string name="turn_off_using_public_device">Lülita see välja, kui oled avalikus seadmes</string>
+  <string name="remember_this_device">Hoia see seade meeles</string>
   <string name="passkey">Pääsukood</string>
   <string name="passkeys">Pääsukoodid</string>
   <string name="application">Rakendus</string>
@@ -988,4 +989,9 @@ Soovid selle konto peale lülituda?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

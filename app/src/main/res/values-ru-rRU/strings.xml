@@ -41,6 +41,7 @@
   <string name="invalid_pin">Неверный PIN. Попробуйте снова.</string>
   <string name="launch">Перейти</string>
   <string name="log_in">Войти</string>
+  <string name="log_in_verb">Войти</string>
   <string name="log_in_noun">Вход</string>
   <string name="log_out">Выход</string>
   <string name="logout_confirmation">Вы действительно хотите выйти?</string>
@@ -990,4 +991,9 @@
   <string name="choose_your_master_password">Задайте мастер-пароль</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Задайте уникальный и надежный пароль, чтобы хранить информацию в безопасности.</string>
   <string name="minimum_characters">Символов: %1$s</string>
+  <string name="expired_link">Истекшая ссылка</string>
+  <string name="please_restart_registration_or_try_logging_in">Пожалуйста, повторите регистрацию или попробуйте авторизоваться. Возможно, у вас уже есть аккаунт.</string>
+  <string name="restart_registration">Перезапустить регистрацию</string>
+  <string name="authenticator_sync">Синхронизация Bitwarden Authenticator</string>
+  <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию Bitwarden Authenticator</string>
 </resources>

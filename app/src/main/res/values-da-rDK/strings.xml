@@ -41,6 +41,7 @@
   <string name="invalid_pin">Ugyldig PIN-kode. Prøv igen.</string>
   <string name="launch">Start</string>
   <string name="log_in">Log ind</string>
+  <string name="log_in_verb">Log ind</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Log ud</string>
   <string name="logout_confirmation">Log ud, sikker?</string>
@@ -929,7 +930,7 @@ Skift til denne konto?</string>
   <string name="self_hosted_server_url">URL til selv-hostet server</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Adgangsnøglehandling mislykkedes, da brugeren ikke kunne bekræftes.</string>
   <string name="user_verification_direction">Brugerbekræftelse</string>
-  <string name="creating_on">Creating on:</string>
+  <string name="creating_on">Opretter den:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Følg vejledningen i e-mailen sendt til %1$s for at fortsætte med kontooprettelsen.</string>
   <string name="we_sent_an_email_to">Vi har sendt en e-mail til %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ved at fortsætte, accepterer du Vilkår for Tjeneste og Fortrolighedspolitik</string>
@@ -988,4 +989,9 @@ Skift til denne konto?</string>
   <string name="choose_your_master_password">Vælg hovedadgangskode</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Vælg en unik og stærk adgangskode for at holde brugeroplysningerne sikre.</string>
   <string name="minimum_characters">%1$s tegn</string>
+  <string name="expired_link">Udløbet link</string>
+  <string name="please_restart_registration_or_try_logging_in">Genstart registreringen eller prøv at logge ind. En konto findes muligvis allerede.</string>
+  <string name="restart_registration">Genstart registrering</string>
+  <string name="authenticator_sync">Authenticator-synk</string>
+  <string name="allow_bitwarden_authenticator_syncing">Tillad Bitwarden Authenticator-synkning</string>
 </resources>

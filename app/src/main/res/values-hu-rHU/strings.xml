@@ -41,6 +41,7 @@
   <string name="invalid_pin">A pinkód érvénytelen. Próbáljuk újra.</string>
   <string name="launch">Indítás</string>
   <string name="log_in">Bejelentkezés</string>
+  <string name="log_in_verb">Bejelentkezés</string>
   <string name="log_in_noun">Bejelentkezés</string>
   <string name="log_out">Kijelentkezés</string>
   <string name="logout_confirmation">Biztos, hogy ki szeretnél jelentkezni?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Igen</string>
   <string name="account">Fiók</string>
   <string name="account_created">Fiókodat létrehoztuk. Most már be tudsz jelentkezni.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Az új fiók létrrejött.</string>
   <string name="add_an_item">Elem hozzáadása</string>
   <string name="app_extension">App kiterjesztés</string>
   <string name="autofill_accessibility_description">A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez alkalmazásból és weben.</string>
@@ -987,4 +988,9 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="choose_your_master_password">Mesterjelszó kiválasztása</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Válasszunk egyedi és erős jelszót az adatok biztonságának megőrzése érdekében.</string>
   <string name="minimum_characters">%1$s karakter</string>
+  <string name="expired_link">A hivatkozás lejárt.</string>
+  <string name="please_restart_registration_or_try_logging_in">Indítsuk újra a regisztrációt vagy próbáljunk meg bejelentkezni. Valószínűleg már létezik a fiók.</string>
+  <string name="restart_registration">Regisztráció újra indítása</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN が間違っています。入力し直してください。</string>
   <string name="launch">開く</string>
   <string name="log_in">ログイン</string>
+  <string name="log_in_verb">ログイン</string>
   <string name="log_in_noun">ログイン</string>
   <string name="log_out">ログアウト</string>
   <string name="logout_confirmation">ログアウトしてもよろしいですか？</string>
@@ -988,4 +989,9 @@
   <string name="choose_your_master_password">マスターパスワードを選択</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">あなたの情報を安全に保つために、ユニークで強力なパスワードを選択してください。</string>
   <string name="minimum_characters">%1$s 文字</string>
+  <string name="expired_link">期限切れのリンク</string>
+  <string name="please_restart_registration_or_try_logging_in">登録を再度始めるか、ログインを試してください。すでにアカウントを持っている可能性があります。</string>
+  <string name="restart_registration">登録を再度始める</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

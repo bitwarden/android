@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN baliogabea. Saiatu berriro.</string>
   <string name="launch">Abiarazi</string>
   <string name="log_in">Hasi saioa</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Saio-hasiera</string>
   <string name="log_out">Itxi saioa</string>
   <string name="logout_confirmation">Ziur zaude saioa itxi nahi duzula?</string>
@@ -986,4 +987,9 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

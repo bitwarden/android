@@ -41,6 +41,7 @@
   <string name="invalid_pin">Неправилен ПИН. Пробвайте отново.</string>
   <string name="launch">Пускане</string>
   <string name="log_in">Вход</string>
+  <string name="log_in_verb">Вписване</string>
   <string name="log_in_noun">Вход</string>
   <string name="log_out">Отписване</string>
   <string name="logout_confirmation">Сигурни ли сте, че искате да се отпишете?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Да</string>
   <string name="account">Регистрация</string>
   <string name="account_created">Абонаментът ви бе създаден. Вече можете да се впишете.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Новата Ви регистрация беше създадена!</string>
   <string name="add_an_item">Добавяне на елемент</string>
   <string name="app_extension">Разширение</string>
   <string name="autofill_accessibility_description">Автоматично дописване на полетата във формулярите в приложенията и уеб чрез услугата за достъпност на Bitwarden.</string>
@@ -988,4 +989,9 @@
   <string name="choose_your_master_password">Изберете главна парола</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изберете уникална и сложна парола, за да запазите информацията си защитена.</string>
   <string name="minimum_characters">%1$s знака</string>
+  <string name="expired_link">Връзка с изтекла давност</string>
+  <string name="please_restart_registration_or_try_logging_in">Моля, рестартирайте процеса на регистрация или опитайте да се впишете. Може вече да имате регистрация.</string>
+  <string name="restart_registration">Рестартиране на регистрацията</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

@@ -41,6 +41,7 @@
   <string name="invalid_pin">Недійсний PIN. Спробуйте знову.</string>
   <string name="launch">Перейти</string>
   <string name="log_in">Увійти</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Вхід</string>
   <string name="log_out">Вийти</string>
   <string name="logout_confirmation">Ви дійсно хочете вийти?</string>
@@ -988,4 +989,9 @@
   <string name="choose_your_master_password">Створити головний пароль</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Створіть унікальний, надійний пароль, щоб захистити вашу інформацію.</string>
   <string name="minimum_characters">%1$s символів</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

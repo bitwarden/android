@@ -41,6 +41,7 @@
   <string name="invalid_pin">Mã PIN không đúng. Thử lại.</string>
   <string name="launch">Khởi chạy</string>
   <string name="log_in">Đăng Nhập</string>
+  <string name="log_in_verb">Đăng nhập</string>
   <string name="log_in_noun">Đăng nhập</string>
   <string name="log_out">Đăng xuất</string>
   <string name="logout_confirmation">Bạn có chắc chắn muốn đăng xuất không?</string>
@@ -82,7 +83,7 @@
   <string name="yes">Có</string>
   <string name="account">Tài khoản</string>
   <string name="account_created">Đã tạo tài khoản. Bạn có thể đăng nhập bây giờ.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">Tài khoản của bạn đã được tạo thành công!</string>
   <string name="add_an_item">Thêm một mục</string>
   <string name="app_extension">Tiện ích mở rộng</string>
   <string name="autofill_accessibility_description">Sử dụng dịch vụ trợ năng của Bitwarden để tự động điền thông tin đăng nhập của bạn vào các ứng dụng và trang web.</string>
@@ -988,4 +989,9 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="choose_your_master_password">Chọn mật khẩu chính của bạn</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Chọn mật khẩu mạnh và duy nhất để giữ thông tin của bạn an toàn.</string>
   <string name="minimum_characters">%1$s ký tự</string>
+  <string name="expired_link">Liên kết đã hết hạn</string>
+  <string name="please_restart_registration_or_try_logging_in">Vui lòng tiến hành đăng ký lại hoặc thử đăng nhập. Bạn có thể đã có tài khoản.</string>
+  <string name="restart_registration">Đăng ký lại</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>
