@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.x8bit.bitwarden.data.platform.processor
 
 import android.content.Intent
 import com.bitwarden.bridge.IBridgeService
@@ -6,6 +6,7 @@ import com.bitwarden.bridge.IBridgeServiceCallback
 import com.bitwarden.bridge.model.EncryptedAddTotpLoginItemData
 import com.bitwarden.bridge.model.SymmetricEncryptionKeyData
 import com.bitwarden.bridge.model.SymmetricEncryptionKeyFingerprintData
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 
 /**

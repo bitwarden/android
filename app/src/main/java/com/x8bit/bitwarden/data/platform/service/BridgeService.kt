@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.service
 
 import android.app.Service
 import android.content.Intent
-import com.x8bit.bitwarden.data.platform.manager.BridgeServiceProcessor
+import com.x8bit.bitwarden.data.platform.processor.BridgeServiceProcessor
 import com.bitwarden.bridge.IBridgeService
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

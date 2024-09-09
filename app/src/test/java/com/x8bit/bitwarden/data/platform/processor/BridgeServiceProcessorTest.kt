@@ -1,5 +1,6 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.x8bit.bitwarden.data.platform.processor
 
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import io.mockk.every
 import io.mockk.mockk
