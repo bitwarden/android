@@ -53,6 +53,9 @@ interface IBridgeService {
     // in the main password manager app.
     Intent createAddTotpLoginItemIntent();
 
+    // Give the given TOTP item data to the main Bitwarden app before launching the add TOTP
+    // item flow. This should be called before launching the intent returned from
+    // createAddTotpLoginItemIntent().
     void setPendingAddTotpLoginItemData(in EncryptedAddTotpLoginItemData data);
 
 }
