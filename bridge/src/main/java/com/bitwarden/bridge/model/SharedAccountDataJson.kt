@@ -1,6 +1,6 @@
 package com.bitwarden.bridge.model
 
-import com.bitwarden.bridge.util.InstantSerializer
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.Instant
@@ -46,7 +46,7 @@ data class SharedAccountDataJson(
         val totpUris: List<String>,
 
         @SerialName("lastSyncTime")
-        @Serializable(with = InstantSerializer::class)
+        @Contextual
         val lastSyncTime: Instant,
     )
 }
