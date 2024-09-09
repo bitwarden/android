@@ -42,6 +42,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
@@ -61,6 +63,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -164,6 +167,7 @@ class AuthRepositoryTest {
     private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
         every { hasUserLoggedInOrCreatedAccount = true } just runs
+        every { storeUserHasLoggedInValue(any()) } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
@@ -1345,6 +1349,7 @@ class AuthRepositoryTest {
                 organizationKeys = orgKeys,
             )
             vaultRepository.syncIfNecessary()
+            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
         assertEquals(LoginResult.Success, result)
     }
@@ -1393,6 +1398,7 @@ class AuthRepositoryTest {
         }
         coVerify(exactly = 0) {
             vaultRepository.syncIfNecessary()
+            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
         assertEquals(LoginResult.Error(errorMessage = null), result)
     }
@@ -1558,6 +1564,7 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
@@ -1650,6 +1657,7 @@ class AuthRepositoryTest {
             coVerify(exactly = 0) {
                 vaultRepository.syncIfNecessary()
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
 
             assertEquals(
@@ -1715,6 +1723,7 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
@@ -1813,6 +1822,7 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 MULTI_USER_STATE,
@@ -2083,6 +2093,7 @@ class AuthRepositoryTest {
 
             coVerify(exactly = 0) {
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
         }
 
@@ -2170,7 +2181,10 @@ class AuthRepositoryTest {
             SINGLE_USER_STATE_1,
             fakeAuthDiskSource.userState,
         )
-        verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        verify {
+            settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+        }
     }
 
     @Test
@@ -2355,12 +2369,13 @@ class AuthRepositoryTest {
                         ),
                     ),
                 )
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
         }
 
     @Test
@@ -2789,6 +2804,7 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
@@ -5996,6 +6012,90 @@ class AuthRepositoryTest {
         assertEquals(
             SendVerificationEmailResult.Error(null),
             result,
+        )
+    }
+
+    @Test
+    fun `validateEmailToken should return success result when service returns success`() = runTest {
+        coEvery {
+            identityService
+                .verifyEmailRegistrationToken(
+                    body = VerifyEmailTokenRequestJson(
+                        email = EMAIL,
+                        token = EMAIL_VERIFICATION_TOKEN,
+                    ),
+                )
+        } returns VerifyEmailTokenResponseJson.Valid.asSuccess()
+
+        val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
+
+        assertEquals(
+            EmailTokenResult.Success,
+            emailTokenResult,
+        )
+    }
+
+    @Test
+    fun `validateEmailToken should return expired result when service returns TokenExpired`() =
+        runTest {
+            coEvery {
+                identityService
+                    .verifyEmailRegistrationToken(
+                        body = VerifyEmailTokenRequestJson(
+                            email = EMAIL,
+                            token = EMAIL_VERIFICATION_TOKEN,
+                        ),
+                    )
+            } returns VerifyEmailTokenResponseJson.TokenExpired.asSuccess()
+
+            val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
+
+            assertEquals(
+                EmailTokenResult.Expired,
+                emailTokenResult,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateEmailToken should return error result when service returns error without expired message`() =
+        runTest {
+            val errorMessage = "I haven't heard of second breakfast."
+            coEvery {
+                identityService
+                    .verifyEmailRegistrationToken(
+                        body = VerifyEmailTokenRequestJson(
+                            email = EMAIL,
+                            token = EMAIL_VERIFICATION_TOKEN,
+                        ),
+                    )
+            } returns VerifyEmailTokenResponseJson.Invalid(message = errorMessage).asSuccess()
+
+            val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
+
+            assertEquals(
+                EmailTokenResult.Error(message = errorMessage),
+                emailTokenResult,
+            )
+        }
+
+    @Test
+    fun `validateEmailToken should return error result when service returns failure`() = runTest {
+        coEvery {
+            identityService
+                .verifyEmailRegistrationToken(
+                    body = VerifyEmailTokenRequestJson(
+                        email = EMAIL,
+                        token = EMAIL_VERIFICATION_TOKEN,
+                    ),
+                )
+        } returns Exception().asFailure()
+
+        val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
+
+        assertEquals(
+            EmailTokenResult.Error(message = null),
+            emailTokenResult,
         )
     }
 

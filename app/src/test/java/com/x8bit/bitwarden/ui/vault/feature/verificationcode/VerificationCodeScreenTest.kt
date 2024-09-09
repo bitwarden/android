@@ -407,4 +407,5 @@ private val DEFAULT_STATE = VerificationCodeState(
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     isPullToRefreshSettingEnabled = false,
     dialogState = null,
+    isRefreshing = false,
 )

@@ -25,7 +25,7 @@ class ExpiredRegistrationLinkScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContentWithBackDispatcher {
             ExpiredRegistrationLinkScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToLogin = { onNavigateToLoginCalled = true },
@@ -33,6 +33,12 @@ class ExpiredRegistrationLinkScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `System back event invokes CloseClicked action`() {
+        backDispatcher?.onBackPressed()
+        verify { viewModel.trySendAction(ExpiredRegistrationLinkAction.CloseClicked) }
     }
 
     @Test

@@ -1026,6 +1026,25 @@ class SettingsRepositoryTest {
         settingsRepository.isAuthenticatorSyncEnabled = true
         assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
     }
+
+    @Test
+    fun `getUserHasLoggedInValue should default to false if no value exists`() {
+        assertFalse(settingsRepository.getUserHasLoggedInValue(userId = "userId"))
+    }
+
+    @Test
+    fun `getUserHasLoggedInValue should return true if it exists`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeUseHasLoggedInPreviously(userId = userId)
+        assertTrue(settingsRepository.getUserHasLoggedInValue(userId = userId))
+    }
+
+    @Test
+    fun `storeUserHasLoggedInValue should store value of true to disk`() {
+        val userId = "userId"
+        settingsRepository.storeUserHasLoggedInValue(userId = userId)
+        assertTrue(fakeSettingsDiskSource.getUserHasSignedInPreviously(userId = userId))
+    }
 }
 
 private const val USER_ID: String = "userId"

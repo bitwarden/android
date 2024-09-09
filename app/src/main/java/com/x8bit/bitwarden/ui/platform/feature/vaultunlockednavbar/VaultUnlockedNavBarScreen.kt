@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
@@ -142,7 +141,6 @@ fun VaultUnlockedNavBarScreen(
  * Scaffold that contains the bottom nav bar for the [VaultUnlockedNavBarScreen]
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 private fun VaultUnlockedNavBarScaffold(
     state: VaultUnlockedNavBarState,

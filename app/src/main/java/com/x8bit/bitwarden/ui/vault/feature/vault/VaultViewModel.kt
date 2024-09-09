@@ -91,6 +91,7 @@ class VaultViewModel @Inject constructor(
             baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             hideNotificationsDialog = isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) || isFdroid,
+            isRefreshing = false,
         )
     },
 ) {
@@ -298,6 +299,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepository.sync()
@@ -510,8 +512,8 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = state.hasMasterPassword,
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
+            isRefreshing = false,
         )
-        sendEvent(VaultEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
@@ -532,9 +534,9 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
                 dialog = null,
+                isRefreshing = false,
             )
         }
-        sendEvent(VaultEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadingReceive() {
@@ -551,8 +553,8 @@ class VaultViewModel @Inject constructor(
             isIconLoadingDisabled = state.isIconLoadingDisabled,
             hasMasterPassword = state.hasMasterPassword,
             errorMessage = R.string.internet_connection_required_message.asText(),
+            isRefreshing = false,
         )
-        sendEvent(VaultEvent.DismissPullToRefresh)
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
@@ -633,6 +635,7 @@ data class VaultState(
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     val hideNotificationsDialog: Boolean,
+    val isRefreshing: Boolean,
 ) : Parcelable {
 
     /**
@@ -922,11 +925,6 @@ data class VaultState(
  */
 sealed class VaultEvent {
     /**
-     * Dismisses the pull-to-refresh indicator.
-     */
-    data object DismissPullToRefresh : VaultEvent()
-
-    /**
      * Navigate to the Vault Search screen.
      */
     data object NavigateToVaultSearchScreen : VaultEvent()
@@ -1186,6 +1184,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     hasMasterPassword: Boolean,
     errorTitle: Text,
     errorMessage: Text,
+    isRefreshing: Boolean,
 ) {
     this.update {
         if (vaultData != null) {
@@ -1201,6 +1200,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     title = errorTitle,
                     message = errorMessage,
                 ),
+                isRefreshing = isRefreshing,
             )
         } else {
             it.copy(
@@ -1208,6 +1208,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     message = errorMessage,
                 ),
                 dialog = null,
+                isRefreshing = isRefreshing,
             )
         }
     }

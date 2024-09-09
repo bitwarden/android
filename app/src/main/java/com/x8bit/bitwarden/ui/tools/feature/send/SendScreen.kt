@@ -12,10 +12,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -39,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -63,18 +62,16 @@ fun SendScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val pullToRefreshState = rememberPullToRefreshState()
-        .takeIf { state.isPullToRefreshEnabled }
-    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
-        if (pullToRefreshState?.isRefreshing == true) {
-            viewModel.trySendAction(SendAction.RefreshPull)
-        }
-    }
+    val pullToRefreshState = rememberBitwardenPullToRefreshState(
+        isEnabled = state.isPullToRefreshEnabled,
+        isRefreshing = state.isRefreshing,
+        onRefresh = remember(viewModel) {
+            { viewModel.trySendAction(SendAction.RefreshPull) }
+        },
+    )
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is SendEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
-
             is SendEvent.NavigateToSearch -> onNavigateToSearchSend(SearchType.Sends.All)
 
             is SendEvent.NavigateNewSend -> onNavigateToAddSend()

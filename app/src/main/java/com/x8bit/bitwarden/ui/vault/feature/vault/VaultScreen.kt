@@ -16,8 +16,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +50,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -70,7 +70,6 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * The vault screen for the application.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun VaultScreen(
@@ -88,16 +87,15 @@ fun VaultScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val pullToRefreshState = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled }
-    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
-        if (pullToRefreshState?.isRefreshing == true) {
-            viewModel.trySendAction(VaultAction.RefreshPull)
-        }
-    }
+    val pullToRefreshState = rememberBitwardenPullToRefreshState(
+        isEnabled = state.isPullToRefreshEnabled,
+        isRefreshing = state.isRefreshing,
+        onRefresh = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.RefreshPull) }
+        },
+    )
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            VaultEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
-
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
 
             VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
@@ -167,7 +165,7 @@ private fun VaultScreenPushNotifications(
 @Composable
 private fun VaultScreenScaffold(
     state: VaultState,
-    pullToRefreshState: PullToRefreshState?,
+    pullToRefreshState: BitwardenPullToRefreshState,
     vaultHandlers: VaultHandlers,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {

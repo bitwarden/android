@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -76,6 +77,15 @@ class MainActivity : AppCompatActivity() {
                     is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
                     MainEvent.Recreate -> handleRecreate()
                     MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                    is MainEvent.ShowToast -> {
+                        Toast
+                            .makeText(
+                                baseContext,
+                                event.message.invoke(resources),
+                                Toast.LENGTH_SHORT,
+                            )
+                            .show()
+                    }
                 }
             }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)

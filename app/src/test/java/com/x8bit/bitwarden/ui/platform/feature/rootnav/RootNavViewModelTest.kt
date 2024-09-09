@@ -663,7 +663,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns false
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -690,7 +690,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns true
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -740,7 +740,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { authRepository.hasPendingAccountAddition } returns true
 
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PreLogin.CompleteRegistration(
+            SpecialCircumstance.RegistrationEvent.CompleteRegistration(
                 CompleteRegistrationData(
                     email = "example@email.com",
                     verificationToken = "token",
@@ -780,6 +780,97 @@ class RootNavViewModelTest : BaseViewModelTest() {
                 fromEmail = true,
                 timestamp = FIXED_CLOCK.instant().toEpochMilli(),
             ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when there are no accounts but there is a ExpiredRegistrationLink special circumstance the nav state should be ExpiredRegistrationLink`() {
+        every { authRepository.hasPendingAccountAddition } returns false
+
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink
+        mutableUserStateFlow.tryEmit(null)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.ExpiredRegistrationLink,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is a ExpiredRegistrationLink special circumstance the nav state should be ExpiredRegistrationLink`() {
+        every { authRepository.hasPendingAccountAddition } returns true
+
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarHexColor",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.ExpiredRegistrationLink,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has a locked vault but there is a ExpiredRegistrationLink special circumstance the nav state should be ExpiredRegistrationLink`() {
+        every { authRepository.hasPendingAccountAddition } returns true
+
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.ExpiredRegistrationLink,
             viewModel.stateFlow.value,
         )
     }
