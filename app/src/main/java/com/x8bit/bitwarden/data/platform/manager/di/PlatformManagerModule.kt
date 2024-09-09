@@ -79,7 +79,7 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideBridgeServiceManager(
+    fun provideBridgeServiceProcessor(
         featureFlagManager: FeatureFlagManager,
     ): BridgeServiceProcessor = BridgeServiceProcessorImpl(
         featureFlagManager = featureFlagManager,
