@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
-class BridgeServiceManagerTest {
+class BridgeServiceProcessorTest {
 
     private val featureFlagManager: FeatureFlagManager = mockk()
 
-    private val bridgeServiceManager = BridgeServiceManagerImpl(
+    private val bridgeServiceManager = BridgeServiceProcessorImpl(
         featureFlagManager = featureFlagManager,
     )
 

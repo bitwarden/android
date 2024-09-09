@@ -20,8 +20,8 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.BridgeServiceManager
-import com.x8bit.bitwarden.data.platform.manager.BridgeServiceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.BridgeServiceProcessor
+import com.x8bit.bitwarden.data.platform.manager.BridgeServiceProcessorImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -81,7 +81,7 @@ object PlatformManagerModule {
     @Singleton
     fun provideBridgeServiceManager(
         featureFlagManager: FeatureFlagManager,
-    ): BridgeServiceManager = BridgeServiceManagerImpl(
+    ): BridgeServiceProcessor = BridgeServiceProcessorImpl(
         featureFlagManager = featureFlagManager,
     )
 

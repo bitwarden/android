@@ -9,11 +9,11 @@ import com.bitwarden.bridge.model.SymmetricEncryptionKeyFingerprintData
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 
 /**
- * Default implementation of [BridgeServiceManager].
+ * Default implementation of [BridgeServiceProcessor].
  */
-class BridgeServiceManagerImpl(
+class BridgeServiceProcessorImpl(
     private val featureFlagManager: FeatureFlagManager,
-) : BridgeServiceManager {
+) : BridgeServiceProcessor {
 
     override val binder: IBridgeService.Stub?
         // TODO: Check for Android API level as well: BITAU-102

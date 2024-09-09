@@ -5,7 +5,7 @@ import com.bitwarden.bridge.IBridgeService
 /**
  * Provides access to [IBridgeService] APIs in an injectable and testable manner.
  */
-interface BridgeServiceManager {
+interface BridgeServiceProcessor {
 
     /**
      * Binder that implements [IBridgeService]. Null can be returned to represent a no-op binder.
