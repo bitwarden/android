@@ -99,8 +99,37 @@ class SettingsRepositoryImpl(
             }
             ?: MutableStateFlow(value = null)
 
-    // TODO: this should be backed by disk and should set and clear the sync key (BITAU-103)
-    override var isAuthenticatorSyncEnabled: Boolean = false
+    override var isAuthenticatorSyncEnabled: Boolean
+        // Authenticator sync is enabled if there is an authenticator sync unlock key for
+        // the current active user:
+        get() = activeUserId
+            ?.let { authDiskSource.getAuthenticatorSyncUnlockKey(userId = it) != null }
+            ?: false
+        set(value) {
+            val userId = activeUserId ?: return
+            // When turning off authenticator sync, set authenticator sync unlock key to
+            // null for the current active user:
+            if (!value) {
+                authDiskSource.storeAuthenticatorSyncUnlockKey(
+                    userId = userId,
+                    authenticatorSyncUnlockKey = null,
+                )
+                return
+            }
+            // When turning on authenticator sync, get a user encryption key from the vault SDK
+            // and store it as a authenticator sync unlock key:
+            unconfinedScope.launch {
+                vaultSdkSource
+                    .getUserEncryptionKey(userId = userId)
+                    .getOrNull()
+                    ?.let {
+                        authDiskSource.storeAuthenticatorSyncUnlockKey(
+                            userId = userId,
+                            authenticatorSyncUnlockKey = it,
+                        )
+                    }
+            }
+        }
 
     override var isIconLoadingDisabled: Boolean
         get() = settingsDiskSource.isIconLoadingDisabled ?: false

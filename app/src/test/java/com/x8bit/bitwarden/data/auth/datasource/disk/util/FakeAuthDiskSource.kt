@@ -46,6 +46,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedPendingAuthRequests = mutableMapOf<String, PendingAuthRequestJson?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
+    private val storedAuthenticationSyncKeys = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
 
     override var userState: UserStateJson? = null
@@ -213,6 +214,16 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeMasterPasswordHash(userId: String, passwordHash: String?) {
         storedMasterPasswordHashes[userId] = passwordHash
+    }
+
+    override fun getAuthenticatorSyncUnlockKey(userId: String): String? =
+        storedAuthenticationSyncKeys[userId]
+
+    override fun storeAuthenticatorSyncUnlockKey(
+        userId: String,
+        authenticatorSyncUnlockKey: String?,
+    ) {
+        storedAuthenticationSyncKeys[userId] = authenticatorSyncUnlockKey
     }
 
     override fun getPolicies(

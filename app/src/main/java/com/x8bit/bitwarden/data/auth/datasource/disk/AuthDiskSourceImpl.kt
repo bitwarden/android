@@ -18,6 +18,7 @@ import java.util.UUID
 
 // These keys should be encrypted
 private const val ACCOUNT_TOKENS_KEY = "accountTokens"
+private const val AUTHENTICATOR_SYNC_UNLOCK_KEY = "authenticatorSyncUnlock"
 private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "userKeyAutoUnlock"
 private const val DEVICE_KEY_KEY = "deviceKey"
@@ -128,9 +129,23 @@ class AuthDiskSourceImpl(
         storeAccountTokens(userId = userId, accountTokens = null)
         storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = null)
         storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = null)
+        storeAuthenticatorSyncUnlockKey(userId = userId, authenticatorSyncUnlockKey = null)
 
         // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
         // indefinitely unless the TDE flow explicitly removes them.
+    }
+
+    override fun getAuthenticatorSyncUnlockKey(userId: String): String? =
+        getEncryptedString(AUTHENTICATOR_SYNC_UNLOCK_KEY.appendIdentifier(userId))
+
+    override fun storeAuthenticatorSyncUnlockKey(
+        userId: String,
+        authenticatorSyncUnlockKey: String?,
+    ) {
+        putEncryptedString(
+            key = AUTHENTICATOR_SYNC_UNLOCK_KEY.appendIdentifier(userId),
+            value = authenticatorSyncUnlockKey,
+        )
     }
 
     override fun getShouldUseKeyConnectorFlow(userId: String): Flow<Boolean?> =
