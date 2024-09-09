@@ -23,7 +23,7 @@ interface IBridgeService {
     // Returns a symmetric key that will be used for encypting all IPC traffic.
     //
     // Consumers should only call this function once to limit the number of times this key is
-    // sent via IPC. Additionally, once the ksy is shared, checkSymmetricEncryptionKeyFingerprint
+    // sent via IPC. Additionally, once the key is shared, checkSymmetricEncryptionKeyFingerprint
     // should be used to safely confirm that the key is valid.
     @nullable SymmetricEncryptionKeyData getSymmetricEncryptionKeyData();
 
@@ -31,10 +31,10 @@ interface IBridgeService {
     // Registration
     // ==============
 
-    // Register the given callback to recieve updates after syncAccounts is called.
+    // Register the given callback to receive updates after syncAccounts is called.
     void registerBridgeServiceCallback(IBridgeServiceCallback callback);
 
-    // Unregister the given callback from reciebing updates.
+    // Unregister the given callback from receiving updates.
     void unregisterBridgeServiceCallback(IBridgeServiceCallback callback);
 
     // ==============
