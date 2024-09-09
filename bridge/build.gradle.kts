@@ -49,5 +49,17 @@ kotlin {
 }
 
 dependencies {
+    // SDK dependencies:
     implementation(libs.kotlinx.serialization)
+
+    // Test environment dependencies:
+    testImplementation(libs.junit.junit5)
+    testImplementation(libs.mockk.mockk)
+    testImplementation(libs.square.turbine)
+}
+
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+    }
 }
