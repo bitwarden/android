@@ -47,9 +47,9 @@ fun SymmetricEncryptionKeyData.toFingerprint(): Result<ByteArray> = runCatching 
 /**
  * Encrypt [SharedAccountData].
  *
- * @param symmetricEncryptionKeyData Symmetric key used for encryption.
- *
  * This is intended to be used by the main Bitwarden app during a [IBridgeService.syncAccounts] call.
+ *
+ * @param symmetricEncryptionKeyData Symmetric key used for encryption.
  */
 fun SharedAccountData.encrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
@@ -70,10 +70,10 @@ fun SharedAccountData.encrypt(
 /**
  * Decrypt [EncryptedSharedAccountData].
  *
- * @param symmetricEncryptionKeyData Symmetric key used for decryption.
- *
  * This is intended to be used by the Bitwarden Authenticator app after receiving an update via
  * [IBridgeServiceCallback].
+ *
+ * @param symmetricEncryptionKeyData Symmetric key used for decryption.
  */
 fun EncryptedSharedAccountData.decrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
@@ -95,10 +95,10 @@ fun EncryptedSharedAccountData.decrypt(
 /**
  * Encrypt [AddTotpLoginItemData].
  *
- * @param symmetricEncryptionKeyData Symmetric key used for encryption.
- *
  * This is intended to be used by the Bitwarden Authenticator app before requesting a new TOTP
  * item be added to the main Bitwarden app.
+ *
+ * @param symmetricEncryptionKeyData Symmetric key used for encryption.
  */
 fun AddTotpLoginItemData.encrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
@@ -119,10 +119,10 @@ fun AddTotpLoginItemData.encrypt(
 /**
  * Decrypt [EncryptedSharedAccountData].
  *
- * @param symmetricEncryptionKeyData Symmetric key used for decryption.
- *
  * This is intended to be used by the main Bitwarden app after receiving a request to add a new
  * TOTP item.
+ *
+ * @param symmetricEncryptionKeyData Symmetric key used for decryption.
  */
 fun EncryptedAddTotpLoginItemData.decrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
