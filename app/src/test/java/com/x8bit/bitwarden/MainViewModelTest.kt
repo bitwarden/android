@@ -595,7 +595,10 @@ class MainViewModelTest : BaseViewModelTest() {
 
         every { intentManager.getShareDataFromIntent(fido2Intent) } returns null
         coEvery {
-            fido2CredentialManager.validateOrigin(any())
+            fido2CredentialManager.validateOrigin(
+                fido2CredentialRequest.callingAppInfo,
+                fido2CredentialRequest.requestJson,
+            )
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
@@ -651,7 +654,10 @@ class MainViewModelTest : BaseViewModelTest() {
         }
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         coEvery {
-            fido2CredentialManager.validateOrigin(any())
+            fido2CredentialManager.validateOrigin(
+                fido2CredentialRequest.callingAppInfo,
+                fido2CredentialRequest.requestJson,
+            )
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
@@ -685,7 +691,10 @@ class MainViewModelTest : BaseViewModelTest() {
         }
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         coEvery {
-            fido2CredentialManager.validateOrigin(any())
+            fido2CredentialManager.validateOrigin(
+                fido2CredentialRequest.callingAppInfo,
+                fido2CredentialRequest.requestJson,
+            )
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(

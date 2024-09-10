@@ -1249,7 +1249,7 @@ private val DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST = RegisterFido2Credential
     isUserVerificationSupported = true,
     selectedCipherView = createMockCipherView(number = 1),
 )
-val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
+private val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
     userId = "mockUserId",
     origin = "www.bitwarden.com",
     requestJson = "requestJson",
