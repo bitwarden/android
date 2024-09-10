@@ -489,6 +489,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but there is an AutofillSelection special circumstance the nav state should be VaultUnlockedForAutofillSelection`() {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,
+            framework = AutofillSelectionData.Framework.AUTOFILL,
             uri = "uri",
         )
         specialCircumstanceManager.specialCircumstance =

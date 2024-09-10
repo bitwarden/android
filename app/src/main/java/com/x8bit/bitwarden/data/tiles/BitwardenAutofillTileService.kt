@@ -8,6 +8,7 @@ import android.service.quicksettings.TileService
 import androidx.annotation.Keep
 import com.x8bit.bitwarden.AccessibilityActivity
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
+import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,7 @@ class BitwardenAutofillTileService : TileService() {
 
     @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun launchAutofill() {
-        accessibilityAutofillManager.isAccessibilityTileClicked = true
+        accessibilityAutofillManager.accessibilityAction = AccessibilityAction.AttemptParseUri
         val intent = Intent(applicationContext, AccessibilityActivity::class.java)
         if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             @Suppress("DEPRECATION")

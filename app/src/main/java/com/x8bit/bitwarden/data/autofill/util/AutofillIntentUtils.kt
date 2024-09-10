@@ -30,18 +30,21 @@ private const val AUTOFILL_BUNDLE_KEY = "autofill-bundle-key"
  */
 fun createAutofillSelectionIntent(
     context: Context,
+    framework: AutofillSelectionData.Framework,
     type: AutofillSelectionData.Type,
     uri: String?,
 ): Intent =
-    Intent(
-        context,
-        MainActivity::class.java,
-    )
+    Intent(context, MainActivity::class.java)
         .apply {
+            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra(
                 AUTOFILL_BUNDLE_KEY,
                 bundleOf(
-                    AUTOFILL_SELECTION_DATA_KEY to AutofillSelectionData(type = type, uri = uri),
+                    AUTOFILL_SELECTION_DATA_KEY to AutofillSelectionData(
+                        framework = framework,
+                        type = type,
+                        uri = uri,
+                    ),
                 ),
             )
         }

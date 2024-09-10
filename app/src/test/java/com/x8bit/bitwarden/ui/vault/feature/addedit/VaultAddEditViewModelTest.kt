@@ -263,6 +263,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `initial add state should be correct when autofill selection`() = runTest {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,
+            framework = AutofillSelectionData.Framework.AUTOFILL,
             uri = "https://www.test.com",
         )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(

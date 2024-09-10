@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -92,6 +94,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    private val accessibilitySelectionManager: AccessibilitySelectionManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val cipherMatchingManager: CipherMatchingManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -104,7 +107,6 @@ class VaultItemListingViewModel @Inject constructor(
         val activeAccountSummary = userState.toActiveAccountSummary()
         val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
-        val autofillSelectionData = specialCircumstance as? SpecialCircumstance.AutofillSelection
         val fido2CreationData = specialCircumstance as? SpecialCircumstance.Fido2Save
         val fido2AssertionData = specialCircumstance as? SpecialCircumstance.Fido2Assertion
         val fido2GetCredentialsData =
@@ -127,7 +129,7 @@ class VaultItemListingViewModel @Inject constructor(
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
-            autofillSelectionData = autofillSelectionData?.autofillSelectionData,
+            autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             fido2CredentialRequest = fido2CreationData?.fido2CredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertionData?.fido2AssertionRequest,
@@ -547,9 +549,19 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
-        if (state.isAutofill) {
-            val cipherView = getCipherViewOrNull(action.id) ?: return
-            autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+        state.autofillSelectionData?.let { autofillSelectionData ->
+            val cipherView = getCipherViewOrNull(cipherId = action.id) ?: return
+            when (autofillSelectionData.framework) {
+                AutofillSelectionData.Framework.ACCESSIBILITY -> {
+                    accessibilitySelectionManager.emitAccessibilitySelection(
+                        cipherView = cipherView,
+                    )
+                }
+
+                AutofillSelectionData.Framework.AUTOFILL -> {
+                    autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+                }
+            }
             return
         }
 

@@ -32,6 +32,7 @@ class AutofillSelectionDataExtensionsTest {
             ),
             AutofillSelectionData(
                 type = AutofillSelectionData.Type.CARD,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = null,
             )
                 .toDefaultAddTypeContent(isIndividualVaultDisabled = false),
@@ -60,6 +61,7 @@ class AutofillSelectionDataExtensionsTest {
             ),
             AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = "https://www.test.com",
             )
                 .toDefaultAddTypeContent(isIndividualVaultDisabled = true),

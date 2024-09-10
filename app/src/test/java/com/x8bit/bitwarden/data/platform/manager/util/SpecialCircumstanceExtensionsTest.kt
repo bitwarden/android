@@ -63,6 +63,7 @@ class SpecialCircumstanceExtensionsTest {
     fun `toAutofillSelectionDataOrNull should return a non-null value for AutofillSelection`() {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,
+            framework = AutofillSelectionData.Framework.AUTOFILL,
             uri = "uri",
         )
         assertEquals(

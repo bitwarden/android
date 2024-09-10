@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
@@ -53,13 +54,14 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
 @Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
-    private val vaultRepository: VaultRepository,
+    vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val savedStateHandle: SavedStateHandle,
@@ -83,6 +85,12 @@ class MainViewModel @Inject constructor(
         specialCircumstanceManager
             .specialCircumstanceStateFlow
             .onEach { specialCircumstance = it }
+            .launchIn(viewModelScope)
+
+        accessibilitySelectionManager
+            .accessibilitySelectionFlow
+            .map { MainAction.Internal.AccessibilitySelectionReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         autofillSelectionManager
@@ -151,6 +159,10 @@ class MainViewModel @Inject constructor(
 
     override fun handleAction(action: MainAction) {
         when (action) {
+            is MainAction.Internal.AccessibilitySelectionReceive -> {
+                handleAccessibilitySelectionReceive(action)
+            }
+
             is MainAction.Internal.AutofillSelectionReceive -> {
                 handleAutofillSelectionReceive(action)
             }
@@ -167,6 +179,12 @@ class MainViewModel @Inject constructor(
 
     private fun handleOpenDebugMenu() {
         sendEvent(MainEvent.NavigateToDebugMenu)
+    }
+
+    private fun handleAccessibilitySelectionReceive(
+        action: MainAction.Internal.AccessibilitySelectionReceive,
+    ) {
+        sendEvent(MainEvent.CompleteAccessibilityAutofill(cipherView = action.cipherView))
     }
 
     private fun handleAutofillSelectionReceive(
@@ -332,11 +350,13 @@ class MainViewModel @Inject constructor(
                         ),
                     )
                 }
+
                 EmailTokenResult.Expired -> {
                     specialCircumstanceManager.specialCircumstance = SpecialCircumstance
                         .RegistrationEvent
                         .ExpiredRegistrationLink
                 }
+
                 EmailTokenResult.Success -> {
                     if (authRepository.activeUserId != null) {
                         authRepository.hasPendingAccountAddition = true
@@ -385,6 +405,14 @@ sealed class MainAction {
      */
     sealed class Internal : MainAction() {
         /**
+         * Indicates the user has manually selected the given [cipherView] for accessibility
+         * autofill.
+         */
+        data class AccessibilitySelectionReceive(
+            val cipherView: CipherView,
+        ) : Internal()
+
+        /**
          * Indicates the user has manually selected the given [cipherView] for autofill.
          */
         data class AutofillSelectionReceive(
@@ -421,6 +449,12 @@ sealed class MainAction {
  * Represents events that are emitted by the [MainViewModel].
  */
 sealed class MainEvent {
+    /**
+     * Event indicating that the user has chosen the given [cipherView] for accessibility autofill
+     * and that the process is ready to complete.
+     */
+    data class CompleteAccessibilityAutofill(val cipherView: CipherView) : MainEvent()
+
     /**
      * Event indicating that the user has chosen the given [cipherView] for autofill and that the
      * process is ready to complete.
