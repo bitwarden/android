@@ -222,6 +222,7 @@ kover {
                 annotatedBy(
                     // Compose previews
                     "androidx.compose.ui.tooling.preview.Preview",
+                    "androidx.compose.ui.tooling.preview.PreviewScreenSizes",
                     // Manually excluded classes/files/etc.
                     "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage",
                 )
