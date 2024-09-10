@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec
 fun generateSecretKey(): Result<SecretKey> = runCatching {
     val keygen = KeyGenerator.getInstance("AES")
     keygen.init(256, SecureRandom())
-    return@runCatching keygen.generateKey()
+    keygen.generateKey()
 }
 
 /**
@@ -41,7 +41,7 @@ fun SymmetricEncryptionKeyData.toFingerprint(): Result<ByteArray> = runCatching 
     val messageDigest = MessageDigest.getInstance("SHA-256")
     messageDigest.reset()
     messageDigest.update(this.symmetricEncryptionKey.byteArray)
-    return@runCatching messageDigest.digest()
+    messageDigest.digest()
 }
 
 /**
@@ -61,7 +61,7 @@ fun SharedAccountData.encrypt(
     val jsonString = JSON.encodeToString(this.toJsonModel())
     val encryptedJsonString = cipher.doFinal(jsonString.encodeToByteArray()).toByteArrayContainer()
 
-    return@runCatching EncryptedSharedAccountData(
+    EncryptedSharedAccountData(
         initializationVector = cipher.iv.toByteArrayContainer(),
         encryptedAccountsJson = encryptedJsonString,
     )
@@ -89,7 +89,7 @@ fun EncryptedSharedAccountData.decrypt(
     val decryptedModel = JSON.decodeFromString<SharedAccountDataJson>(
         cipher.doFinal(this.encryptedAccountsJson.byteArray).decodeToString()
     )
-    return@runCatching decryptedModel.toDomainModel()
+    decryptedModel.toDomainModel()
 }
 
 /**
@@ -110,7 +110,7 @@ fun AddTotpLoginItemData.encrypt(
     val encryptedJsonString =
         cipher.doFinal(JSON.encodeToString(this.toJsonModel()).encodeToByteArray())
 
-    return@runCatching EncryptedAddTotpLoginItemData(
+    EncryptedAddTotpLoginItemData(
         initializationVector = cipher.iv.toByteArrayContainer(),
         encryptedTotpUriJson = encryptedJsonString.toByteArrayContainer(),
     )
@@ -138,7 +138,7 @@ fun EncryptedAddTotpLoginItemData.decrypt(
     val decryptedModel = JSON.decodeFromString<AddTotpLoginItemDataJson>(
         cipher.doFinal(this.encryptedTotpUriJson.byteArray).decodeToString()
     )
-    return@runCatching decryptedModel.toDomainModel()
+    decryptedModel.toDomainModel()
 }
 
 /**
