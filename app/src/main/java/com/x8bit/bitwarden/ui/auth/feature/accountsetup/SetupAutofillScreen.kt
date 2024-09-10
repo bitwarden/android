@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
