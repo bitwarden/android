@@ -46,7 +46,7 @@ android {
         outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "bridge-${version}-${variant.baseName}.aar"
+                val outputFileName = "bridge-${version}-SNAPSHOT-${variant.baseName}.aar"
                 output.outputFileName = outputFileName
             }
     }
