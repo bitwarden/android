@@ -3,6 +3,7 @@
 ## Contents
 
 - [Compatibility](#compatibility)
+- [Building](#building)
 - [Versioning](#versioning)
 - [Dependencies](#dependencies)
  
@@ -15,6 +16,14 @@
 
 - **Minimum SDK**: 28
 - **Target SDK**: 34
+
+## Building
+
+To build an aar for inclusion in consumer applications, run:
+
+    ```sh
+    $ ./gradlew bridge:assembleRelease
+    ```
 
 ## Versioning
 This repository conforms to the following versioning convention:

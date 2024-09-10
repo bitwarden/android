@@ -40,6 +40,16 @@ android {
         buildConfig = true
         aidl = true
     }
+    // Add version name to the output .aar file:
+    libraryVariants.all {
+        val variant = this
+        outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName = "bridge-${version}-${variant.baseName}.aar"
+                output.outputFileName = outputFileName
+            }
+    }
 }
 
 kotlin {
