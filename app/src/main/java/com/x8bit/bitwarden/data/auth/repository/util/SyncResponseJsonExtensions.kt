@@ -7,6 +7,11 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.serialization.json.Json
 
+private val JSON = Json {
+    ignoreUnknownKeys = true
+    explicitNulls = false
+}
+
 /**
  * Maps the given [SyncResponseJson.Profile.Organization] to an [Organization].
  */
@@ -31,21 +36,22 @@ fun List<SyncResponseJson.Profile.Organization>.toOrganizations(): List<Organiza
  */
 val SyncResponseJson.Policy.policyInformation: PolicyInformation?
     get() = data?.toString()?.let {
+
         when (type) {
             PolicyTypeJson.MASTER_PASSWORD -> {
-                Json.decodeFromStringOrNull<PolicyInformation.MasterPassword>(it)
+                JSON.decodeFromStringOrNull<PolicyInformation.MasterPassword>(it)
             }
 
             PolicyTypeJson.PASSWORD_GENERATOR -> {
-                Json.decodeFromStringOrNull<PolicyInformation.PasswordGenerator>(it)
+                JSON.decodeFromStringOrNull<PolicyInformation.PasswordGenerator>(it)
             }
 
             PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
-                Json.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
+                JSON.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
             }
 
             PolicyTypeJson.SEND_OPTIONS -> {
-                Json.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
+                JSON.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
             }
 
             else -> null

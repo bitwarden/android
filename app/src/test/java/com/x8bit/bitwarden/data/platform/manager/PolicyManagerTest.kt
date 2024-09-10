@@ -139,6 +139,34 @@ class PolicyManagerTest {
 
         assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD).isEmpty())
     }
+
+    @Test
+    fun `getActivePolicies returns active and applied PasswordGenerator policies`() {
+        val userState: UserStateJson = mockk {
+            every { activeUserId } returns USER_ID
+        }
+        every { authDiskSource.userState } returns userState
+        every {
+            authDiskSource.getOrganizations(USER_ID)
+        } returns listOf(
+            createMockOrganization(
+                number = 3,
+                isEnabled = true,
+                shouldUsePolicies = true,
+            ),
+        )
+        every {
+            authDiskSource.getPolicies(USER_ID)
+        } returns listOf(
+            createMockPolicy(
+                organizationId = "mockId-3",
+                isEnabled = true,
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+            ),
+        )
+
+        assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR).any())
+    }
 }
 
 private const val USER_ID = "userId"
