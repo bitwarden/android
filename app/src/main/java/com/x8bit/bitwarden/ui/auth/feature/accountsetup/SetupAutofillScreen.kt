@@ -94,7 +94,6 @@ fun SetupAutoFillScreen(
         null -> Unit
     }
 
-    BackHandler(onBack = handler.onTurnOnLaterClick)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     BitwardenScaffold(
         modifier = Modifier
@@ -163,11 +162,9 @@ private fun SetupAutoFillContent(
         )
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenWideSwitch(
-            label =
-            stringResource(
+            label = stringResource(
                 R.string.autofill_services,
             ),
-
             isChecked = autofillEnabled,
             onCheckedChange = onAutofillServiceChanged,
             modifier = Modifier

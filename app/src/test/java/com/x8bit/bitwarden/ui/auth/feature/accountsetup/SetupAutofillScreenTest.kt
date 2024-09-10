@@ -16,6 +16,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -24,8 +25,7 @@ class SetupAutofillScreenTest : BaseComposeTest() {
 
     private var onNavigateToCompleteSetupCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupAutoFillEvent>()
-    private val mutableStateFlow =
-        MutableStateFlow(SetupAutoFillState(dialogState = null, autofillEnabled = false))
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
     private val viewModel = mockk<SetupAutoFillViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
@@ -36,7 +36,7 @@ class SetupAutofillScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContentWithBackDispatcher {
+        composeTestRule.setContent {
             SetupAutoFillScreen(
                 onNavigateToCompleteSetup = { onNavigateToCompleteSetupCalled = true },
                 intentManager = intentManager,
@@ -58,7 +58,9 @@ class SetupAutofillScreenTest : BaseComposeTest() {
 
     @Test
     fun `Turning off autofill should send AutofillServiceChanged with value of false`() {
-        mutableStateFlow.value = mutableStateFlow.value.copy(autofillEnabled = true)
+        mutableStateFlow.update {
+            it.copy(autofillEnabled = true)
+        }
         composeTestRule
             .onNodeWithText("Auto-fill services", ignoreCase = true)
             .performScrollTo()
@@ -91,14 +93,6 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `System back press should send turn on later action`() {
-        backDispatcher?.onBackPressed()
-        verify {
-            viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterClick)
-        }
-    }
-
-    @Test
     fun `NavigateToAutoFillSettings should start system autofill settings activity`() {
         every { intentManager.startSystemAutofillSettingsActivity() } returns true
         mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
@@ -123,9 +117,11 @@ class SetupAutofillScreenTest : BaseComposeTest() {
 
     @Test
     fun `Show autofill fallback dialog when dialog state is AutoFillFallbackDialog`() {
-        mutableStateFlow.value = mutableStateFlow.value.copy(
-            dialogState = SetupAutoFillDialogState.AutoFillFallbackDialog,
-        )
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupAutoFillDialogState.AutoFillFallbackDialog,
+            )
+        }
         composeTestRule
             .onNode(isDialog())
             .assertIsDisplayed()
@@ -141,9 +137,11 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `When autofill fallback dialog is dismissed, sends action to dismiss dialog and is removed when state is null`() {
-        mutableStateFlow.value = mutableStateFlow.value.copy(
-            dialogState = SetupAutoFillDialogState.AutoFillFallbackDialog,
-        )
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupAutoFillDialogState.AutoFillFallbackDialog,
+            )
+        }
         composeTestRule
             .onNode(isDialog())
             .assertIsDisplayed()
@@ -152,15 +150,21 @@ class SetupAutofillScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(SetupAutoFillAction.DismissDialog) }
-        mutableStateFlow.value = mutableStateFlow.value.copy(dialogState = null)
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = null,
+            )
+        }
         composeTestRule.assertNoDialogExists()
     }
 
     @Test
     fun `Show turn on later dialog when dialog state is TurnOnLaterDialog`() {
-        mutableStateFlow.value = mutableStateFlow.value.copy(
-            dialogState = SetupAutoFillDialogState.TurnOnLaterDialog,
-        )
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupAutoFillDialogState.TurnOnLaterDialog,
+            )
+        }
         composeTestRule
             .onNode(isDialog())
             .assertIsDisplayed()
@@ -172,9 +176,11 @@ class SetupAutofillScreenTest : BaseComposeTest() {
 
     @Test
     fun `On confirm click on TurnOnLaterDialog, sends action to turn on later`() {
-        mutableStateFlow.value = mutableStateFlow.value.copy(
-            dialogState = SetupAutoFillDialogState.TurnOnLaterDialog,
-        )
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupAutoFillDialogState.TurnOnLaterDialog,
+            )
+        }
         composeTestRule
             .onNode(isDialog())
             .assertIsDisplayed()
@@ -189,9 +195,11 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `When turn on later dialog is dismissed, sends action to dismiss dialog and is removed when state is null`() {
-        mutableStateFlow.value = mutableStateFlow.value.copy(
-            dialogState = SetupAutoFillDialogState.TurnOnLaterDialog,
-        )
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupAutoFillDialogState.TurnOnLaterDialog,
+            )
+        }
         composeTestRule
             .onNode(isDialog())
             .assertIsDisplayed()
@@ -200,7 +208,13 @@ class SetupAutofillScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(SetupAutoFillAction.DismissDialog) }
-        mutableStateFlow.value = mutableStateFlow.value.copy(dialogState = null)
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = null,
+            )
+        }
         composeTestRule.assertNoDialogExists()
     }
 }
+
+private val DEFAULT_STATE = SetupAutoFillState(dialogState = null, autofillEnabled = false)

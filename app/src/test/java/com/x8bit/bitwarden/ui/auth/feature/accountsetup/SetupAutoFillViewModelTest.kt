@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import app.cash.turbine.test
-import com.google.common.base.Verify.verify
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class SetupAutoFillViewModelTest : BaseViewModelTest() {
@@ -21,20 +21,12 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private val mutableAutoFillEnabledStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository>(relaxed = true) {
         every { isAutofillEnabledStateFlow } returns mutableAutoFillEnabledStateFlow
-        every { disableAutofill() } answers {
-            mutableAutoFillEnabledStateFlow.value = false
-        }
-    }
-
-    private lateinit var viewModel: SetupAutoFillViewModel
-
-    @BeforeEach
-    fun setup() {
-        viewModel = SetupAutoFillViewModel(settingsRepository)
+        every { disableAutofill() } just runs
     }
 
     @Test
     fun `handleAutofillEnabledUpdateReceive updates autofillEnabled state`() {
+        val viewModel = createViewModel()
         assertFalse(viewModel.stateFlow.value.autofillEnabled)
         mutableAutoFillEnabledStateFlow.value = true
 
@@ -44,6 +36,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     @Test
     fun `handleAutofillServiceChanged with autofillEnabled true navigates to autofill settings`() =
         runTest {
+            val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(SetupAutoFillAction.AutofillServiceChanged(true))
                 assertEquals(
@@ -55,8 +48,9 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `handleAutofillServiceChanged with autofillEnabled false disables autofill and cause state update`() =
+    fun `handleAutofillServiceChanged with autofillEnabled false disables autofill`() =
         runTest {
+            val viewModel = createViewModel()
             mutableAutoFillEnabledStateFlow.value = true
             assertTrue(viewModel.stateFlow.value.autofillEnabled)
             viewModel.eventFlow.test {
@@ -64,11 +58,11 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
                 expectNoEvents()
             }
             verify { settingsRepository.disableAutofill() }
-            assertFalse(viewModel.stateFlow.value.autofillEnabled)
         }
 
     @Test
     fun `handleContinueClick sends NavigateToCompleteSetup event`() = runTest {
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
             assertEquals(SetupAutoFillEvent.NavigateToCompleteSetup, awaitItem())
@@ -77,6 +71,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `handleTurnOnLater click sets dialogState to TurnOnLaterDialog`() {
+        val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterClick)
         assertEquals(
             SetupAutoFillDialogState.TurnOnLaterDialog,
@@ -86,6 +81,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `handleTurnOnLaterConfirmClick sends NavigateToCompleteSetup event`() = runTest {
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
             assertEquals(SetupAutoFillEvent.NavigateToCompleteSetup, awaitItem())
@@ -94,6 +90,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `handleDismissDialog sets dialogState to null`() {
+        val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterClick)
         assertEquals(
             SetupAutoFillDialogState.TurnOnLaterDialog,
@@ -105,10 +102,13 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `handleAutoFillServiceFallback sets dialogState to AutoFillFallbackDialog`() {
+        val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.AutoFillServiceFallback)
         assertEquals(
             SetupAutoFillDialogState.AutoFillFallbackDialog,
             viewModel.stateFlow.value.dialogState,
         )
     }
+
+    private fun createViewModel() = SetupAutoFillViewModel(settingsRepository)
 }
