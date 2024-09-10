@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN greșit. Încercați din nou.</string>
   <string name="launch">Lansare</string>
   <string name="log_in">Conectare</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Conectare</string>
   <string name="log_out">Deconectare</string>
   <string name="logout_confirmation">Sigur doriți să vă deconectați?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Da</string>
   <string name="account">Cont</string>
   <string name="account_created">Noul dvs. cont a fost creat! Acum vă puteți autentifica.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Adăugare articol</string>
   <string name="app_extension">Extensie aplicație</string>
   <string name="autofill_accessibility_description">Utilizați serviciul de accesibilitate Bitwarden pentru a completa automat datele de autentificare între aplicații și pagini web.</string>
@@ -987,4 +989,9 @@ Doriți să comutați la acest cont?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

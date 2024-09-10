@@ -41,6 +41,7 @@
   <string name="invalid_pin">\'Di-wastong PIN. Subukan ulit.</string>
   <string name="launch">Buksan</string>
   <string name="log_in">Mag-log in</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Mag-log out</string>
   <string name="logout_confirmation">Sigurado ka bang gusto mong mag-log out?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Oo</string>
   <string name="account">Account</string>
   <string name="account_created">Nalikha na ang iyong bagong account! Maaari ka nang mag-log in.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Magdagdag ng Item</string>
   <string name="app_extension">Ekstensyon ng app</string>
   <string name="autofill_accessibility_description">Gamitin ang serbisyo sa aksesibilidad ng Bitwarden para i-autofill ang mga login mo sa mga app at sa web.</string>
@@ -987,4 +989,9 @@ Gusto mo bang pumunta sa account na ito?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

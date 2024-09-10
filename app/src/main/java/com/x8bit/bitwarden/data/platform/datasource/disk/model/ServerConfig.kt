@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.model
 
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -13,6 +14,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ServerConfig(
+    @SerialName("lastSync")
     val lastSync: Long,
+
+    @SerialName("serverData")
     val serverData: ConfigResponseJson,
 )

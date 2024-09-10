@@ -295,6 +295,10 @@ class AuthDiskSourceTest {
         )
         authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
         authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = "passwordHash")
+        authDiskSource.storeAuthenticatorSyncUnlockKey(
+            userId = userId,
+            authenticatorSyncUnlockKey = "authenticatorSyncUnlockKey",
+        )
 
         authDiskSource.clearData(userId = userId)
 
@@ -318,6 +322,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
         assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
         assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))
+        assertNull(authDiskSource.getAuthenticatorSyncUnlockKey(userId = userId))
     }
 
     @Test
@@ -1038,6 +1043,45 @@ class AuthDiskSourceTest {
         assertEquals(
             json.encodeToJsonElement(accountTokens),
             json.parseToJsonElement(requireNotNull(actual)),
+        )
+    }
+
+    @Test
+    fun `getAuthenticatorSyncUnlockKey should pull from SharedPreferences`() {
+        val authenticatorSyncUnlockKey = "bwSecureStorage:authenticatorSyncUnlock"
+        val mockUserId = "mockUserId"
+        val mockAuthenticatorSyncUnlockKey = "mockAuthSyncUnlockKey"
+        fakeEncryptedSharedPreferences
+            .edit {
+                putString(
+                    "${authenticatorSyncUnlockKey}_$mockUserId",
+                    mockAuthenticatorSyncUnlockKey,
+                )
+            }
+        val actual = authDiskSource.getAuthenticatorSyncUnlockKey(userId = mockUserId)
+        assertEquals(
+            mockAuthenticatorSyncUnlockKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeAuthenticatorSyncUnlockKey should update SharedPreferences`() {
+        val authenticatorSyncUnlockKey = "bwSecureStorage:authenticatorSyncUnlock"
+        val mockUserId = "mockUserId"
+        val mockAuthenticatorSyncUnlockKey = "mockAuthSyncUnlockKey"
+        authDiskSource.storeAuthenticatorSyncUnlockKey(
+            userId = mockUserId,
+            authenticatorSyncUnlockKey = mockAuthenticatorSyncUnlockKey,
+        )
+
+        val actual = fakeEncryptedSharedPreferences.getString(
+            key = "${authenticatorSyncUnlockKey}_$mockUserId",
+            defaultValue = null,
+        )
+        assertEquals(
+            mockAuthenticatorSyncUnlockKey,
+            actual,
         )
     }
 }

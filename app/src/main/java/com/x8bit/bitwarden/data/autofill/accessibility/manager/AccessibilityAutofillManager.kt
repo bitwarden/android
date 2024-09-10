@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.accessibility.manager
+package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 /**
  * A relay manager used to notify the accessibility service to attempt an autofill.

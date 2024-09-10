@@ -41,6 +41,7 @@
   <string name="invalid_pin">Code PIN invalide. Veuillez réessayer.</string>
   <string name="launch">Ouvrir</string>
   <string name="log_in">S\'identifier</string>
+  <string name="log_in_verb">Se connecter</string>
   <string name="log_in_noun">Identifiant</string>
   <string name="log_out">Se déconnecter</string>
   <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter ?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Oui</string>
   <string name="account">Compte</string>
   <string name="account_created">Votre nouveau compte a été créé ! Vous pouvez maintenant vous identifier.</string>
+  <string name="account_created_success">Votre nouveau compte a été créé !</string>
   <string name="add_an_item">Ajouter un élément</string>
   <string name="app_extension">Extension de l\'application</string>
   <string name="autofill_accessibility_description">Utilisez le service d\'accessibilité Bitwarden pour saisir automatiquement vos identifiants sur les applications et le web.</string>
@@ -987,4 +989,9 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Lien expiré</string>
+  <string name="please_restart_registration_or_try_logging_in">Veuillez recommencer l\'inscription ou essayer de vous connecter. Vous avez peut-être déjà un compte.</string>
+  <string name="restart_registration">Recommencer l\'inscription</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

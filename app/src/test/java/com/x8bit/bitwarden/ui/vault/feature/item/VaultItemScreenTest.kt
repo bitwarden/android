@@ -22,7 +22,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
@@ -1364,9 +1363,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule
-            .onNode(isProgressBar)
-            .assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         composeTestRule
             .onNodeWithText("Passkey")
@@ -1411,9 +1409,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule
-            .onNode(isProgressBar)
-            .assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -1434,10 +1431,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule
-            .onNode(isProgressBar)
-            .performScrollTo()
-            .assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -1452,10 +1447,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule
-            .onNode(isProgressBar)
-            .performScrollTo()
-            .assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -1471,9 +1464,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule
-            .onNode(isProgressBar)
-            .assertIsNotDisplayed()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -1680,19 +1672,22 @@ class VaultItemScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Loading)
         }
-        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
                 copy(totpCodeItemData = null)
             }
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
     }
 
     @Test

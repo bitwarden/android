@@ -51,7 +51,7 @@ class SpecialCircumstanceManagerTest {
                 assertNull(awaitItem())
 
                 val preLoginSpecialCircumstance =
-                    mockk<SpecialCircumstance.PreLogin.CompleteRegistration>()
+                    mockk<SpecialCircumstance.RegistrationEvent.CompleteRegistration>()
 
                 specialCircumstanceManager.specialCircumstance = preLoginSpecialCircumstance
                 assertEquals(preLoginSpecialCircumstance, awaitItem())

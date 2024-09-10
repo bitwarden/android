@@ -10,7 +10,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import kotlinx.coroutines.flow.Flow
 
 /**
- * A manager class for handling authentication fo logging in with remote device.
+ * A manager class for handling authentication for logging in with remote device.
  */
 interface AuthRequestManager {
     /**

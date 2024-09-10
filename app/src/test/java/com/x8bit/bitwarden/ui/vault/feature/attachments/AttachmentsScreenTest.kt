@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -89,17 +90,20 @@ class AttachmentsScreenTest : BaseComposeTest() {
     @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = AttachmentsState.ViewState.Loading) }
-        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(viewState = AttachmentsState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
     }
 
     @Test

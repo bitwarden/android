@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParserImpl
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
@@ -32,6 +34,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -56,21 +59,15 @@ object AutofillModule {
     @Provides
     fun provideAutofillCompletionManager(
         autofillParser: AutofillParser,
-        authRepository: AuthRepository,
-        clipboardManager: BitwardenClipboardManager,
         dispatcherManager: DispatcherManager,
-        settingsRepository: SettingsRepository,
-        vaultRepository: VaultRepository,
         organizationEventManager: OrganizationEventManager,
+        totpManager: AutofillTotpManager,
     ): AutofillCompletionManager =
         AutofillCompletionManagerImpl(
-            authRepository = authRepository,
             autofillParser = autofillParser,
-            clipboardManager = clipboardManager,
             dispatcherManager = dispatcherManager,
-            settingsRepository = settingsRepository,
-            vaultRepository = vaultRepository,
             organizationEventManager = organizationEventManager,
+            totpManager = totpManager,
         )
 
     @Singleton
@@ -80,6 +77,25 @@ object AutofillModule {
     ): AutofillParser =
         AutofillParserImpl(
             settingsRepository = settingsRepository,
+        )
+
+    @Singleton
+    @Provides
+    fun providesAutofillTotpManager(
+        @ApplicationContext context: Context,
+        clock: Clock,
+        clipboardManager: BitwardenClipboardManager,
+        authRepository: AuthRepository,
+        settingsRepository: SettingsRepository,
+        vaultRepository: VaultRepository,
+    ): AutofillTotpManager =
+        AutofillTotpManagerImpl(
+            context = context,
+            clock = clock,
+            clipboardManager = clipboardManager,
+            authRepository = authRepository,
+            settingsRepository = settingsRepository,
+            vaultRepository = vaultRepository,
         )
 
     @Singleton

@@ -14,15 +14,15 @@ interface UserLogoutManager {
     val logoutEventFlow: SharedFlow<LogoutEvent>
 
     /**
-     * Completely logs out the given [userId], removing all data.
-     * If [isExpired] is true, a toast will be displayed
-     * letting the user know the session has expired.
+     * Completely logs out the given [userId], removing all data. If [isExpired] is true, a toast
+     * will be displayed letting the user know the session has expired.
      */
     fun logout(userId: String, isExpired: Boolean = false)
 
     /**
      * Partially logs out the given [userId]. All data for the given [userId] will be removed with
-     * the exception of basic account data.
+     * the exception of basic account data. If [isExpired] is true, a toast will be displayed
+     * letting the user know the session has expired.
      */
-    fun softLogout(userId: String)
+    fun softLogout(userId: String, isExpired: Boolean = false)
 }

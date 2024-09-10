@@ -2,11 +2,7 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
-import com.bitwarden.core.DateTime
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilderImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -16,13 +12,9 @@ import com.x8bit.bitwarden.data.autofill.util.createAutofillSelectionResultInten
 import com.x8bit.bitwarden.data.autofill.util.getAutofillAssistStructureOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.util.toAutofillCipherProvider
-import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -31,15 +23,12 @@ import kotlinx.coroutines.launch
  */
 @Suppress("LongParameterList")
 class AutofillCompletionManagerImpl(
-    private val authRepository: AuthRepository,
     private val autofillParser: AutofillParser,
-    private val clipboardManager: BitwardenClipboardManager,
     dispatcherManager: DispatcherManager,
     private val filledDataBuilderProvider: (CipherView) -> FilledDataBuilder =
         { createSingleItemFilledDataBuilder(cipherView = it) },
-    private val settingsRepository: SettingsRepository,
-    private val vaultRepository: VaultRepository,
     private val organizationEventManager: OrganizationEventManager,
+    private val totpManager: AutofillTotpManager,
 ) : AutofillCompletionManager {
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
@@ -82,50 +71,13 @@ class AutofillCompletionManagerImpl(
                     activity.cancelAndFinish()
                     return@launch
                 }
-            tryCopyTotpToClipboard(
-                activity = activity,
-                cipherView = cipherView,
-            )
+            totpManager.tryCopyTotpToClipboard(cipherView = cipherView)
             val resultIntent = createAutofillSelectionResultIntent(dataset)
             activity.setResultAndFinish(resultIntent = resultIntent)
             cipherView.id?.let {
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientAutoFilled(cipherId = it),
                 )
-            }
-        }
-    }
-
-    /**
-     * Attempt to copy the totp code to clipboard. If it succeeds show a toast.
-     *
-     * @param activity An activity for launching a toast.
-     * @param cipherView The [CipherView] for which to generate a TOTP code.
-     */
-    private suspend fun tryCopyTotpToClipboard(
-        activity: Activity,
-        cipherView: CipherView,
-    ) {
-        val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
-        val totpAvailableViaPremiumOrOrganization = isPremium || cipherView.organizationUseTotp
-        val totpCode = cipherView.login?.totp
-        val isTotpDisabled = settingsRepository.isAutoCopyTotpDisabled
-
-        if (!isTotpDisabled && totpAvailableViaPremiumOrOrganization && totpCode != null) {
-            val totpResult = vaultRepository.generateTotp(
-                time = DateTime.now(),
-                totpCode = totpCode,
-            )
-
-            if (totpResult is GenerateTotpResult.Success) {
-                clipboardManager.setText(totpResult.code)
-                Toast
-                    .makeText(
-                        activity.applicationContext,
-                        R.string.verification_code_totp,
-                        Toast.LENGTH_LONG,
-                    )
-                    .show()
             }
         }
     }

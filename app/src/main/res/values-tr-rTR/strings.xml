@@ -41,6 +41,7 @@
   <string name="invalid_pin">Geçersiz PIN. Yeniden deneyin.</string>
   <string name="launch">Aç</string>
   <string name="log_in">Giriş yap</string>
+  <string name="log_in_verb">Giriş yap</string>
   <string name="log_in_noun">Hesap</string>
   <string name="log_out">Çıkış</string>
   <string name="logout_confirmation">Çıkmak istediğinizden emin misiniz?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Evet</string>
   <string name="account">Hesap</string>
   <string name="account_created">Yeni hesabınız oluşturuldu! Şimdi giriş yapabilirsiniz.</string>
+  <string name="account_created_success">Yeni hesabınız oluşturuldu.</string>
   <string name="add_an_item">Kayıt ekle</string>
   <string name="app_extension">Uygulama uzantısı</string>
   <string name="autofill_accessibility_description">Uygulamalarda ve web\'de giriş bilgilerinizi otomatik doldurmak için Bitwarden erişilebilirlik hizmetini kullanabilirsiniz.</string>
@@ -335,7 +337,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="use_face_id_to_unlock">Kilidi Face ID ile aç</string>
   <string name="verify_face_id">Face ID\'yi doğrula</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_credential_provider_go_to_settings">We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</string>
+  <string name="bitwarden_credential_provider_go_to_settings">Android bilgi sağlayıcı ayarları menüsünü otomatik olarak açamadık. Bilgi sağlayıcı ayarları menüsüne kendiniz gitmek için Android Ayarları &gt; Sistem &gt; Parolalar ve hesaplar &gt; Parolalar, geçiş anahtarları ve veri servisleri yolunu izleyebilirsiniz.</string>
   <string name="bitwarden_autofill_go_to_settings">Android otomatik doldurma ayarları menüsünü otomatik olarak açamadık. Lütfen şu yolu izleyerek otomatik doldurma ayarları menüsüne gidin: Android ayarları &gt; Sistem&gt; Dil ve giriş &gt; Gelişmiş &gt; Otomatik doldurma hizmeti.</string>
   <string name="custom_field_name">Özel alan adı</string>
   <string name="field_type_boolean">Boole</string>
@@ -986,4 +988,9 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="choose_your_master_password">Ana parolanızı seçin</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Bilgilerinizi güvende tutmak için başka yerde kullanmadığınız, güçlü bir parola seçin.</string>
   <string name="minimum_characters">%1$s karakter</string>
+  <string name="expired_link">Bağlantının süresi dolmuş</string>
+  <string name="please_restart_registration_or_try_logging_in">Lütfen kaydı yeniden başlatın veya giriş yapmayı deneyin. Mevcut bir hesabınız olabilir.</string>
+  <string name="restart_registration">Kaydı yeniden başlat</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

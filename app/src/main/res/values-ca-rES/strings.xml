@@ -41,6 +41,7 @@
   <string name="invalid_pin">El PIN no és vàlid. Torna-ho a provar.</string>
   <string name="launch">Inicia</string>
   <string name="log_in">Inicia la sessió</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Inici de sessió</string>
   <string name="log_out">Tanca la sessió</string>
   <string name="logout_confirmation">Segur que voleu tancar la sessió?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Sí</string>
   <string name="account">Compte</string>
   <string name="account_created">El vostre compte s\'ha creat correctament. Ara ja podeu iniciar sessió.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Afegeix un element nou</string>
   <string name="app_extension">Extensió de l\'aplicació</string>
   <string name="autofill_accessibility_description">Utilitzeu el servei d\'accessibilitat de Bitwarden per omplir automàticament els inicis de sessió a través de les aplicacions i de la web.</string>
@@ -987,4 +989,9 @@ Voleu canviar a aquest compte?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

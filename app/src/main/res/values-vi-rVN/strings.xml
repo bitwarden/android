@@ -25,7 +25,7 @@
   <string name="favorites">Yêu thích</string>
   <string name="file_bug_report">Gửi báo cáo lỗi</string>
   <string name="file_bug_report_description">Tạo một vấn đề tại trang GitHub của chúng tôi.</string>
-  <string name="fingerprint_direction">Sử dụng dấu vân tay của bạn để tiếp tục.</string>
+  <string name="fingerprint_direction">Dùng vân tay của bạn để xác minh.</string>
   <string name="folder">Thư mục</string>
   <string name="folder_created">Đã tạo thư mục mới.</string>
   <string name="folder_deleted">Đã xóa thư mục.</string>
@@ -41,6 +41,7 @@
   <string name="invalid_pin">Mã PIN không đúng. Thử lại.</string>
   <string name="launch">Khởi chạy</string>
   <string name="log_in">Đăng Nhập</string>
+  <string name="log_in_verb">Đăng nhập</string>
   <string name="log_in_noun">Đăng nhập</string>
   <string name="log_out">Đăng xuất</string>
   <string name="logout_confirmation">Bạn có chắc chắn muốn đăng xuất không?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Có</string>
   <string name="account">Tài khoản</string>
   <string name="account_created">Đã tạo tài khoản. Bạn có thể đăng nhập bây giờ.</string>
+  <string name="account_created_success">Tài khoản của bạn đã được tạo thành công!</string>
   <string name="add_an_item">Thêm một mục</string>
   <string name="app_extension">Tiện ích mở rộng</string>
   <string name="autofill_accessibility_description">Sử dụng dịch vụ trợ năng của Bitwarden để tự động điền thông tin đăng nhập của bạn vào các ứng dụng và trang web.</string>
@@ -130,7 +132,7 @@
   <string name="immediately">Tức thì</string>
   <string name="vault_timeout">Thời gian mở kho</string>
   <string name="vault_timeout_action">Khi hết thời gian mở kho</string>
-  <string name="vault_timeout_log_out_confirmation">Tuỳ chọn đăng xuất sẽ đăng xuất khỏi kho sau khi hết thời gian mở kho và bạn sẽ cần đăng nhập lại để tiếp tục sử dụng. Bạn có chắc muốn sử dụng tuỳ chọn này không?</string>
+  <string name="vault_timeout_log_out_confirmation">Đăng xuất sẽ xóa tất cả quyền truy cập vào kho của bạn và yêu cầu xác minh trực tuyến sau khi hết thời gian chờ. Bạn có chắc chắn muốn sử dụng cài đặt này không?</string>
   <string name="logging_in">Đang đăng nhập...</string>
   <string name="login_or_create_new_account">Đăng nhập hoặc tạo tài khoản mới để truy cập kho mật khẩu của bạn.</string>
   <string name="manage">Quản lý</string>
@@ -419,8 +421,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="clear">Xóa</string>
   <string name="generator">Trình tạo</string>
   <string name="no_folders_to_list">Không có thư mục nào.</string>
-  <string name="fingerprint_phrase">Cụm từ mật khẩu</string>
-  <string name="your_accounts_fingerprint">Cụm từ mật khẩu của tài khoản của bạn</string>
+  <string name="fingerprint_phrase">Cụm vân tay</string>
+  <string name="your_accounts_fingerprint">Cụm vân tay tài khoản của bạn</string>
   <string name="learn_org_confirmation">Bitwarden cho phép bạn chia sẻ các mục trong kho của mình với những người khác bằng cách sử dụng tài khoản tổ chức. Bạn có muốn truy cập trang web bitwarden.com để tìm hiểu thêm không?</string>
   <string name="export_vault">Xuất kho</string>
   <string name="lock_now">Khóa ngay</string>
@@ -753,7 +755,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="log_in_with_another_device">Đăng nhập bằng thiết bị</string>
   <string name="log_in_initiated">Bắt đầu đăng nhập</string>
   <string name="a_notification_has_been_sent_to_your_device">Một thông báo đã được gửi đến thiết bị của bạn.</string>
-  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Vui lòng đảm bảo rằng bạn đã mở khoá kho và cụm từ mật khẩu khớp trên thiết bị khác.</string>
+  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Vui lòng đảm bảo rằng bạn đã mở khoá kho và cụm vân tay khớp trên thiết bị khác.</string>
   <string name="resend_notification">Gửi lại thông báo</string>
   <string name="need_another_option">Tùy chọn khác?</string>
   <string name="view_all_login_options">Xem tất cả các tùy chọn đăng nhập</string>
@@ -982,9 +984,14 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="email_address_required">Địa chỉ email (bắt buộc)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Nhấn vào liên kết trong email để xác minh địa chỉ email của bạn và tiếp tục tạo tài khoản. "</string>
   <string name="change_email_address">Thay đổi địa chỉ email</string>
-  <string name="next">Next</string>
-  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
-  <string name="choose_your_master_password">Choose your master password</string>
-  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-  <string name="minimum_characters">%1$s characters</string>
+  <string name="next">Tiếp theo</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden không thể khôi phục mật khẩu chính bị mất hoặc bị quên.</string>
+  <string name="choose_your_master_password">Chọn mật khẩu chính của bạn</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Chọn mật khẩu mạnh và duy nhất để giữ thông tin của bạn an toàn.</string>
+  <string name="minimum_characters">%1$s ký tự</string>
+  <string name="expired_link">Liên kết đã hết hạn</string>
+  <string name="please_restart_registration_or_try_logging_in">Vui lòng tiến hành đăng ký lại hoặc thử đăng nhập. Bạn có thể đã có tài khoản.</string>
+  <string name="restart_registration">Đăng ký lại</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

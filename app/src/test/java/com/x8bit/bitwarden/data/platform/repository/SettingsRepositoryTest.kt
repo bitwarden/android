@@ -1014,9 +1014,94 @@ class SettingsRepositoryTest {
         settingsRepository.initialAutofillDialogShown = false
         assertEquals(false, fakeSettingsDiskSource.initialAutofillDialogShown)
     }
+
+    @Test
+    fun `isAuthenticatorSyncEnabled should default to false`() {
+        assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+    }
+
+    @Test
+    fun `getUserHasLoggedInValue should default to false if no value exists`() {
+        assertFalse(settingsRepository.getUserHasLoggedInValue(userId = "userId"))
+    }
+
+    @Test
+    fun `getUserHasLoggedInValue should return true if it exists`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeUseHasLoggedInPreviously(userId = userId)
+        assertTrue(settingsRepository.getUserHasLoggedInValue(userId = userId))
+    }
+
+    @Test
+    fun `storeUserHasLoggedInValue should store value of true to disk`() {
+        val userId = "userId"
+        settingsRepository.storeUserHasLoggedInValue(userId = userId)
+        assertTrue(fakeSettingsDiskSource.getUserHasSignedInPreviously(userId = userId))
+    }
+
+    @Test
+    fun `setting isAuthenticatorSyncEnabled to true should generate an authenticator sync key`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { vaultSdkSource.getUserEncryptionKey(USER_ID) }
+                .returns(AUTHENTICATION_SYNC_KEY.asSuccess())
+
+            assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
+
+            settingsRepository.isAuthenticatorSyncEnabled = true
+
+            assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
+            assertEquals(
+                AUTHENTICATION_SYNC_KEY,
+                fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID),
+            )
+            coVerify { vaultSdkSource.getUserEncryptionKey(USER_ID) }
+        }
+
+    @Test
+    fun `setting isAuthenticatorSyncEnabled to false should clear authenticator sync key`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(USER_ID, AUTHENTICATION_SYNC_KEY)
+
+            assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
+
+            settingsRepository.isAuthenticatorSyncEnabled = false
+
+            assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+            assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
+        }
+
+    @Test
+    fun `isAuthenticatorSyncEnabled should be true when there exists an authenticator sync key`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+            fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
+                userId = USER_ID,
+                authenticatorSyncUnlockKey = "fakeKey",
+            )
+            assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
+        }
+
+    @Test
+    fun `isAuthenticatorSyncEnabled should be false when there is no active user`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+            assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isAuthenticatorSyncEnabled should be false when the active user has no authenticator sync key set`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
+        }
 }
 
 private const val USER_ID: String = "userId"
+private const val AUTHENTICATION_SYNC_KEY = "authSyncKey"
 
 private val MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS = TrustedDeviceUserDecryptionOptionsJson(
     encryptedPrivateKey = null,

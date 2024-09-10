@@ -49,6 +49,7 @@ class VerificationCodeViewModel @Inject constructor(
             vaultFilterType = vaultRepository.vaultFilterType,
             viewState = VerificationCodeState.ViewState.Loading,
             dialogState = null,
+            isRefreshing = false,
         )
     },
 ) {
@@ -123,6 +124,7 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepository.sync()
@@ -228,7 +230,7 @@ class VerificationCodeViewModel @Inject constructor(
                 )
             }
         }
-        sendEvent(VerificationCodeEvent.DismissPullToRefresh)
+        mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun vaultPendingReceive(
@@ -248,7 +250,7 @@ class VerificationCodeViewModel @Inject constructor(
             verificationCodeData = verificationCodeData.data,
             clearDialogState = true,
         )
-        sendEvent(VerificationCodeEvent.DismissPullToRefresh)
+        mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun vaultLoadingReceive() {
@@ -271,7 +273,7 @@ class VerificationCodeViewModel @Inject constructor(
                 )
             }
         }
-        sendEvent(VerificationCodeEvent.DismissPullToRefresh)
+        mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun updateStateWithVerificationCodeData(
@@ -339,6 +341,7 @@ data class VerificationCodeState(
     val baseIconUrl: String,
     val dialogState: DialogState?,
     val isPullToRefreshSettingEnabled: Boolean,
+    val isRefreshing: Boolean,
 ) : Parcelable {
 
     /**
@@ -421,12 +424,6 @@ data class VerificationCodeDisplayItem(
  * Models events for the [VerificationCodeScreen].
  */
 sealed class VerificationCodeEvent {
-
-    /**
-     * Dismisses the pull-to-refresh indicator.
-     */
-    data object DismissPullToRefresh : VerificationCodeEvent()
-
     /**
      * Navigate back.
      */

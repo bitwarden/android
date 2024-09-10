@@ -41,6 +41,7 @@
   <string name="invalid_pin">ಅಮಾನ್ಯ ಪಿನ್. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು.</string>
   <string name="launch">ಶುರು</string>
   <string name="log_in">ಲಾಗಿನ್</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">ಲಾಗಿನ್</string>
   <string name="log_out">ಲಾಗ್ ಔಟ್</string>
   <string name="logout_confirmation">ಲಾಗ್ ಔಟ್ ಮಾಡಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
@@ -82,6 +83,7 @@
   <string name="yes">ಹೌದು</string>
   <string name="account">ಖಾತೆ</string>
   <string name="account_created">ನಿಮ್ಮ ಹೊಸ ಖಾತೆಯನ್ನು ರಚಿಸಲಾಗಿದೆ! ನೀವು ಈಗ ಲಾಗ್ ಇನ್ ಮಾಡಬಹುದು.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">ಐಟಂ ಸೇರಿಸಿ</string>
   <string name="app_extension">ಅಪ್ಲಿಕೇಶನ್ ವಿಸ್ತರಣೆ</string>
   <string name="autofill_accessibility_description">ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ನಾದ್ಯಂತ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ.</string>
@@ -987,4 +989,9 @@ Do you want to switch to this account?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

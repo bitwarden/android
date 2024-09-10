@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -71,7 +72,7 @@ private const val MINUTES_PER_HOUR = 60
 /**
  * Displays the account security screen.
  */
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("LongMethod", "LongParameterList", "CyclomaticComplexMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSecurityScreen(
@@ -229,6 +230,19 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(Modifier.height(16.dp))
+            if (state.shouldShowEnableAuthenticatorSync) {
+                SyncWithAuthenticatorRow(
+                    isChecked = state.isAuthenticatorSyncChecked,
+                    onCheckedChange = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                AccountSecurityAction.AuthenticatorSyncToggle(enabled = it),
+                            )
+                        }
+                    },
+                )
+                Spacer(Modifier.height(16.dp))
+            }
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.session_timeout),
                 modifier = Modifier
@@ -643,6 +657,27 @@ private fun SessionTimeoutActionRow(
             )
         }
     }
+}
+
+@Composable
+private fun SyncWithAuthenticatorRow(
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    BitwardenListHeaderText(
+        label = stringResource(R.string.authenticator_sync),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+    BitwardenWideSwitch(
+        label = stringResource(R.string.allow_bitwarden_authenticator_syncing),
+        onCheckedChange = onCheckedChange,
+        isChecked = isChecked,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 }
 
 @Composable

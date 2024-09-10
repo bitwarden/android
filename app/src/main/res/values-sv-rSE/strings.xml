@@ -41,6 +41,7 @@
   <string name="invalid_pin">Ogiltig PIN-kod. Försök igen.</string>
   <string name="launch">Öppna</string>
   <string name="log_in">Logga in</string>
+  <string name="log_in_verb">Logga in</string>
   <string name="log_in_noun">Inloggning</string>
   <string name="log_out">Logga ut</string>
   <string name="logout_confirmation">Är du säker på att du vill logga ut?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Ja</string>
   <string name="account">Konto</string>
   <string name="account_created">Ditt nya konto har skapats! Du kan nu logga in.</string>
+  <string name="account_created_success">Ditt nya konto har skapats!</string>
   <string name="add_an_item">Lägg till objekt</string>
   <string name="app_extension">Apptillägg</string>
   <string name="autofill_accessibility_description">Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i dina inloggningar i applikationer och på webben.</string>
@@ -956,7 +958,7 @@ Vill du byta till detta konto?</string>
   <string name="what_makes_a_password_strong">What makes a password strong?</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">The longer your password, the more difficult it is to hack. The minimum for account creation is 12 characters but if you do 14 characters, the time to crack your password would be centuries!</string>
   <string name="the_strongest_passwords_are_usually">The strongest passwords are usually:</string>
-  <string name="twelve_or_more_characters">12 or more characters</string>
+  <string name="twelve_or_more_characters">12 eller fler tecken</string>
   <string name="random_and_complex_using_numbers_and_special_characters">Random and complex, using numbers and special characters</string>
   <string name="totally_different_from_your_other_passwords">Totally different from your other passwords</string>
   <string name="use_the_generator_to_create_a_strong_unique_password">Use the generator to create a strong, unique password</string>
@@ -988,4 +990,9 @@ Vill du byta till detta konto?</string>
   <string name="choose_your_master_password">Välj ditt huvudlösenord</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s tecken</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

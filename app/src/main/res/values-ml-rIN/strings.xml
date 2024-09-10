@@ -41,6 +41,7 @@
   <string name="invalid_pin">പിൻ അസാധുവാണ്. വീണ്ടും ശ്രമിക്കുക.</string>
   <string name="launch">തുടങ്ങുക</string>
   <string name="log_in">പ്രവേശിക്കുക</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">പ്രവേശനം</string>
   <string name="log_out">ലോഗൗട്ട്</string>
   <string name="logout_confirmation">നിങ്ങൾക്ക് ലോഗ് ഔട്ട് ചെയ്യണമെന്ന് ഉറപ്പാണോ?</string>
@@ -82,6 +83,7 @@
   <string name="yes">അതെ</string>
   <string name="account">അക്കൗണ്ട്</string>
   <string name="account_created">നിങ്ങളുടെ അക്കൗണ്ട് സൃഷ്ടിക്കപ്പെട്ടു! നിങ്ങൾക്ക് ഇനി ലോഗിൻ ചെയ്യാം.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">ഇനം ചേർക്കുക</string>
   <string name="app_extension">ആപ്പ് എക്സ്റ്റൻഷൻ</string>
   <string name="autofill_accessibility_description">Bitwarden ആക്സിസിബിളിറ്റി സർവീസ് ഉപയോഗിച്ച് അപ്പുകളിലും വെബ്സൈറ്റുകളിലും ഓട്ടോമാറ്റിക്കായി  പ്രവേശിക്കുക.</string>
@@ -987,4 +989,9 @@ Do you want to switch to this account?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

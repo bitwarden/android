@@ -358,7 +358,7 @@ class VaultRepositoryImpl(
                         // Log the user out if the stamps do not match
                         localSecurityStamp?.let {
                             if (serverSecurityStamp != localSecurityStamp) {
-                                userLogoutManager.logout(userId = userId, isExpired = true)
+                                userLogoutManager.softLogout(userId = userId, isExpired = true)
                                 return@launch
                             }
                         }

@@ -98,6 +98,14 @@ class RootNavScreenTest : BaseComposeTest() {
             )
         }
 
+        // Make sure navigating to expired registration link route works as expected:
+        rootNavStateFlow.value = RootNavState.ExpiredRegistrationLink
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "expired_registration_link",
+            )
+        }
+
         // Make sure navigating to vault locked works as expected:
         rootNavStateFlow.value = RootNavState.VaultLocked
         composeTestRule.runOnIdle {
@@ -215,6 +223,15 @@ class RootNavScreenTest : BaseComposeTest() {
                 fakeNavHostController.assertLastNavigation(
                     route = "vault_item_listing_as_root/login",
                     navOptions = expectedNavOptions,
+                )
+            }
+
+        // Make sure navigating to the generator shortcut works as expected:
+        rootNavStateFlow.value = RootNavState.GeneratorShortcut
+        composeTestRule
+            .runOnIdle {
+                fakeNavHostController.assertLastNavigation(
+                    route = "generator_modal/password_generator",
                 )
             }
     }

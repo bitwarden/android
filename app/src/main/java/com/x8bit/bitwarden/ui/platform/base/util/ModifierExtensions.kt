@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
@@ -42,14 +43,17 @@ fun Modifier.scrolledContainerBackground(
 ): Modifier {
     val expandedColor = MaterialTheme.colorScheme.surface
     val collapsedColor = MaterialTheme.colorScheme.surfaceContainer
-    return this then drawBehind {
-        drawRect(
-            color = topAppBarScrollBehavior.toScrolledContainerColor(
-                expandedColor = expandedColor,
-                collapsedColor = collapsedColor,
-            ),
-        )
-    }
+    return CombinedModifier(
+        outer = this,
+        inner = drawBehind {
+            drawRect(
+                color = topAppBarScrollBehavior.toScrolledContainerColor(
+                    expandedColor = expandedColor,
+                    collapsedColor = collapsedColor,
+                ),
+            )
+        },
+    )
 }
 
 /**

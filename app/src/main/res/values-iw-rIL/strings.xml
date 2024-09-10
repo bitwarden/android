@@ -41,6 +41,7 @@
   <string name="invalid_pin">קוד PIN שגוי. נסה שוב.</string>
   <string name="launch">הפעל</string>
   <string name="log_in">התחבר</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">כניסה</string>
   <string name="log_out">התנתק</string>
   <string name="logout_confirmation">האם אתה בטוח שברצונך להתנתק?</string>
@@ -82,6 +83,7 @@
   <string name="yes">כן</string>
   <string name="account">חשבון</string>
   <string name="account_created">החשבון שלך נוצר בהצלחה! כעת ניתן להכנס למערכת.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">הוסף פריט</string>
   <string name="app_extension">הרחבת אפליקציה</string>
   <string name="autofill_accessibility_description">השתמש בשירות הנגישות של Bitwarden עבור השלמה אוטמטית של פרטי כניסה לאפליקציות ולאתרים באינטרנט.</string>
@@ -990,4 +992,9 @@ Do you want to switch to this account?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

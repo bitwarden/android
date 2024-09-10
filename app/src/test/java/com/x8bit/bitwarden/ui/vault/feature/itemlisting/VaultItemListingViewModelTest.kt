@@ -206,7 +206,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     dialogState = VaultItemListingState.DialogState.Loading(
                         message = R.string.loading.asText(),
                     ),
-                    shouldFinishOnComplete = true,
                 ),
                 awaitItem(),
             )
@@ -498,10 +497,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultItemListingState.DialogState.Loading(R.string.saving.asText()),
                     viewModel.stateFlow.value.dialogState,
-                )
-                assertEquals(
-                    VaultItemListingEvent.DismissPullToRefresh,
-                    awaitItem(),
                 )
                 assertEquals(
                     VaultItemListingEvent.Fido2UserVerification(
@@ -1196,40 +1191,36 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =
-        runTest {
-            setupMockUri()
+    fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() = runTest {
+        setupMockUri()
 
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
+        val dataState = DataState.Loaded(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            ),
+        )
 
-            val viewModel = createVaultItemListingViewModel()
+        val viewModel = createVaultItemListingViewModel()
 
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-            }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
 
-            assertEquals(
-                createVaultItemListingState(
-                    viewState = VaultItemListingState.ViewState.Content(
-                        displayCollectionList = emptyList(),
-                        displayItemList = listOf(
-                            createMockDisplayItemForCipher(number = 1)
-                                .copy(secondSubtitleTestTag = "PasskeySite"),
-                        ),
-                        displayFolderList = emptyList(),
+        assertEquals(
+            createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
+                    displayFolderList = emptyList(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1295,10 +1286,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayFolderList = emptyList(),
                     ),
                 )
-                    .copy(
-                        autofillSelectionData = autofillSelectionData,
-                        shouldFinishOnComplete = true,
-                    ),
+                    .copy(autofillSelectionData = autofillSelectionData),
                 viewModel.stateFlow.value,
             )
             coVerify {
@@ -1378,10 +1366,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayFolderList = emptyList(),
                     ),
                 )
-                    .copy(
-                        fido2CredentialRequest = fido2CredentialRequest,
-                        shouldFinishOnComplete = true,
-                    ),
+                    .copy(fido2CredentialRequest = fido2CredentialRequest),
                 viewModel.stateFlow.value,
             )
             coVerify {
@@ -1460,10 +1445,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayFolderList = emptyList(),
                     ),
                 )
-                    .copy(
-                        fido2GetCredentialsRequest = fido2GetCredentialRequest,
-                        shouldFinishOnComplete = true,
-                    ),
+                    .copy(fido2GetCredentialsRequest = fido2GetCredentialRequest),
                 viewModel.stateFlow.value,
             )
             coVerify {
@@ -1485,10 +1467,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-            }
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
@@ -1514,10 +1495,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             val viewModel = createVaultItemListingViewModel()
 
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-            }
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
@@ -1636,10 +1615,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Error(
@@ -1666,10 +1643,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
@@ -1701,10 +1676,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
@@ -1731,10 +1704,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
@@ -1753,10 +1724,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Error(
@@ -1787,10 +1756,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
@@ -1821,10 +1788,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
@@ -1850,10 +1815,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
@@ -3769,11 +3732,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isPullToRefreshSettingEnabled = false,
             dialogState = null,
             autofillSelectionData = null,
-            shouldFinishOnComplete = false,
             policyDisablesSend = false,
             hasMasterPassword = true,
             fido2CredentialRequest = null,
             isPremium = true,
+            isRefreshing = false,
         )
 }
 

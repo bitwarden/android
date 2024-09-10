@@ -41,6 +41,7 @@
   <string name="invalid_pin">無效的 PIN 碼，請再試一次。</string>
   <string name="launch">前往</string>
   <string name="log_in">登入</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">登入</string>
   <string name="log_out">登出</string>
   <string name="logout_confirmation">您確定要登出嗎？</string>
@@ -82,6 +83,7 @@
   <string name="yes">是</string>
   <string name="account">帳戶</string>
   <string name="account_created">帳戶建立成功！現在可以登入了。</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">新增項目</string>
   <string name="app_extension">App 延伸功能</string>
   <string name="autofill_accessibility_description">使用 Bitwarden 無障礙服務在應用程式和網站中自動填入您的登入資料。</string>
@@ -987,4 +989,9 @@
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

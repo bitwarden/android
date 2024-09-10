@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
  * - an editable [TextField] populated by a [searchTerm] in the middle.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun BitwardenSearchTopAppBar(
     searchTerm: String,
@@ -79,6 +80,7 @@ fun BitwardenSearchTopAppBar(
                 ),
                 placeholder = { Text(text = placeholder) },
                 value = searchTerm,
+                singleLine = true,
                 onValueChange = onSearchTermChange,
                 trailingIcon = {
                     IconButton(

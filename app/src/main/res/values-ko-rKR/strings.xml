@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN이 잘못되었습니다. 다시 시도해 주세요.</string>
   <string name="launch">열기</string>
   <string name="log_in">로그인</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">로그인</string>
   <string name="log_out">로그아웃</string>
   <string name="logout_confirmation">정말 로그아웃하시겠습니까?</string>
@@ -82,6 +83,7 @@
   <string name="yes">예</string>
   <string name="account">계정</string>
   <string name="account_created">계정 생성이 완료되었습니다! 이제 로그인하실 수 있습니다.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">항목 추가</string>
   <string name="app_extension">앱 확장 프로그램</string>
   <string name="autofill_accessibility_description">웹 사이트 및 앱에서 자동 완성 서비스를 사용하려면 Bitwarden 접근성 서비스를 사용 설정하세요.</string>
@@ -987,4 +989,9 @@
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

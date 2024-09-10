@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -580,12 +581,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Loading)
         }
-        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+        // There are 2 because of the pull-to-refresh
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
         mutableStateFlow.update {
             it.copy(
@@ -596,7 +599,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 ),
             )
         }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+        // Only pull-to-refresh remains
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
     }
 
     @Test

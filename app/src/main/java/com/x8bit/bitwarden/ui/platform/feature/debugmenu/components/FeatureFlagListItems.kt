@@ -22,6 +22,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.DummyString,
     -> Unit
 
+    FlagKey.AuthenticatorSync,
     FlagKey.EmailVerification,
     FlagKey.OnboardingCarousel,
     FlagKey.OnboardingFlow,
@@ -62,6 +63,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
     -> this.keyName
 
+    FlagKey.AuthenticatorSync -> stringResource(R.string.authenticator_sync)
     FlagKey.EmailVerification -> stringResource(R.string.email_verification)
     FlagKey.OnboardingCarousel -> stringResource(R.string.onboarding_carousel)
     FlagKey.OnboardingFlow -> stringResource(R.string.onboarding_flow)

@@ -41,6 +41,7 @@
   <string name="invalid_pin">Неправилен ПИН. Пробвайте отново.</string>
   <string name="launch">Пускане</string>
   <string name="log_in">Вход</string>
+  <string name="log_in_verb">Вписване</string>
   <string name="log_in_noun">Вход</string>
   <string name="log_out">Отписване</string>
   <string name="logout_confirmation">Сигурни ли сте, че искате да се отпишете?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Да</string>
   <string name="account">Регистрация</string>
   <string name="account_created">Абонаментът ви бе създаден. Вече можете да се впишете.</string>
+  <string name="account_created_success">Новата Ви регистрация беше създадена!</string>
   <string name="add_an_item">Добавяне на елемент</string>
   <string name="app_extension">Разширение</string>
   <string name="autofill_accessibility_description">Автоматично дописване на полетата във формулярите в приложенията и уеб чрез услугата за достъпност на Bitwarden.</string>
@@ -304,7 +306,7 @@
   <string name="mr">Г-н</string>
   <string name="mrs">Г-жа</string>
   <string name="ms">Г-ца</string>
-  <string name="mx">Mx</string>
+  <string name="mx">Предпочитам да не посочвам</string>
   <string name="november">ноември</string>
   <string name="october">октомври</string>
   <string name="passport_number">Номер на паспорта</string>
@@ -776,9 +778,9 @@
   <string name="good">Добра</string>
   <string name="strong">Силна</string>
   <string name="check_known_data_breaches_for_this_password">Проверяване в известните случаи на изтекли данни за тази парола</string>
-  <string name="exposed_master_password">Exposed Master Password</string>
+  <string name="exposed_master_password">Разобличена главна парола</string>
   <string name="password_found_in_a_data_breach_alert_description">Паролата е намерена в пробив на данни. Използвайте уникална парола, за да защитите вашия акаунт. Наистина ли искате да използвате слаба парола?</string>
-  <string name="weak_and_exposed_master_password">Weak and Exposed Master Password</string>
+  <string name="weak_and_exposed_master_password">Слаба и разобличена главна парола</string>
   <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Разпозната е слаба парола, която присъства в известен случай на изтекли данни. Използвайте сложна и уникална парола, за да защитите данните си. Наистина ли искате да използвате тази парола?</string>
   <string name="organization_sso_identifier_required">Идентификаторът за еднократн идентификация на организация е задължителен.</string>
   <string name="add_the_key_to_an_existing_or_new_item">Добавяне на ключа към съществуващ или нов елемент</string>
@@ -909,7 +911,7 @@
   <string name="remind_me_later">Напомнете ми по-късно</string>
   <string name="notice">Известие</string>
   <string name="passkeys_not_supported_for_this_app">За това приложение не се поддържат секретни ключове</string>
-  <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Операцията със секретния ключ беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
   <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операцията със секретния ключ беше неуспешна, тъй като подписът в браузъра не съвпада</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Операцията със секретния ключ беше неуспешна, поради липсващи връзки към ресурси</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Операцията със секретния ключ беше неуспешна, тъй като приложението не е намерено измежду връзките към ресурси</string>
@@ -928,7 +930,7 @@
   <string name="self_hosted_server_url">Адрес на собствения сървър</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Операцията със секретния ключ беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
   <string name="user_verification_direction">Потвърждение на потребителя</string>
-  <string name="creating_on">Creating on:</string>
+  <string name="creating_on">Създаден на:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следвайте инструкциите в е-писмото изпратено до %1$s, за да продължите с регистрацията.</string>
   <string name="we_sent_an_email_to">Изпратихме е-писмо до %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ако продължите, Вие се съгласявате с Условията за ползване и Политиката за поверителност</string>
@@ -982,9 +984,14 @@
   <string name="email_address_required">Електронна поща (задължително)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Последвайте връзката в е-писмото, за да потвърдите адреса на е-пощата си и да продължите със създаването на регистрацията си. "</string>
   <string name="change_email_address">Промяна на адреса на е-пощата</string>
-  <string name="next">Next</string>
+  <string name="next">Следващо</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Битуорден не може да възстанови загубена или забравена парола.</string>
   <string name="choose_your_master_password">Изберете главна парола</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изберете уникална и сложна парола, за да запазите информацията си защитена.</string>
   <string name="minimum_characters">%1$s знака</string>
+  <string name="expired_link">Връзка с изтекла давност</string>
+  <string name="please_restart_registration_or_try_logging_in">Моля, рестартирайте процеса на регистрация или опитайте да се впишете. Може вече да имате регистрация.</string>
+  <string name="restart_registration">Рестартиране на регистрацията</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

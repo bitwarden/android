@@ -41,6 +41,7 @@
   <string name="invalid_pin">PIN inválido. Tente novamente.</string>
   <string name="launch">Abrir</string>
   <string name="log_in">Iniciar Sessão</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Encerrar sessão</string>
   <string name="logout_confirmation">Tem certeza que deseja sair?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Sim</string>
   <string name="account">Conta</string>
   <string name="account_created">Sua nova conta foi criada! Agora você pode iniciar sessão.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Adicionar um Item</string>
   <string name="app_extension">Extensão do Aplicativo</string>
   <string name="autofill_accessibility_description">Utilize o serviço de acessibilidade do Bitwarden para autopreencher as suas credenciais entre aplicativos e a web.</string>
@@ -615,7 +617,7 @@ A leitura será feita automaticamente.</string>
   <string name="updating_password">Atualizando senha</string>
   <string name="update_password_error">No momento não é possível atualizar a senha</string>
   <string name="remove_master_password">Remover senha mestra</string>
-  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s está usando SSO com um servidor de chaves auto-hospedado. Uma senha mestra não é mais necessária para se Conectar para membros desta organização.</string>
   <string name="remove_master_password_warning">%1$s está usando o SSO com criptografia gerenciada pelo cliente.  Ao continuar, isso removerá sua Senha Mestra da sua conta e exigirá o SSO para acessar.</string>
   <string name="remove_master_password_warning2">Se não quiser remover sua senha mestra, você pode sair desta organização.</string>
   <string name="leave_organization">Sair da organização</string>
@@ -930,7 +932,7 @@ Você deseja mudar para esta conta?</string>
   <string name="user_verification_direction">Verificação de usuário</string>
   <string name="creating_on">Criando em:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções no e-mail enviado para %1$s para continuar a criar sua conta.</string>
-  <string name="we_sent_an_email_to">We sent an email to %1$s.</string>
+  <string name="we_sent_an_email_to">Enviamos um e-mail para %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, você concorda com os Termos de Serviço e Política de Privacidade</string>
   <string name="set_password">Definir senha</string>
   <string name="unsubscribe">Cancelar inscrição</string>
@@ -941,7 +943,7 @@ Você deseja mudar para esta conta?</string>
   <string name="no_email_go_back_to_edit_your_email_address">Sem e-mail? Volte para editar o seu endereço de e-mail.</string>
   <string name="or_log_in_you_may_already_have_an_account">Ou faça o login, você pode já ter uma conta.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Obtenha e-mails do Bitwarden para anúncios, conselhos e oportunidades de pesquisa. Cancele a inscrição a qualquer momento.</string>
-  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Receba conselhos, anúncios e oportunidades de pesquisa da Bitwarden na sua caixa de entrada. Cancele a assinatura a qualquer momento.</string>
   <string name="privacy_prioritized">Privacidade, priorizado</string>
   <string name="welcome_message_1">Salve suas credenciais, cartões e identidades no seu cofre seguro. O Bitwarden usa criptografia de zero conhecimento, de ponta a ponta para proteger o que é importante para você.</string>
   <string name="welcome_message_2">Configure o desbloqueio biométrico e preenchimento automático para acessar suas contas sem digitar uma única letra.</string>
@@ -978,13 +980,18 @@ Você deseja mudar para esta conta?</string>
   <string name="generate_button_label">Gerar</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Anote esta senha e mantenha-a em algum lugar seguro.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Saiba mais sobre outras formas de evitar o bloqueio da conta</string>
-  <string name="help_with_server_geolocations">Help with server geolocations.</string>
-  <string name="email_address_required">Email address (required)</string>
-  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
-  <string name="change_email_address">Change email address</string>
-  <string name="next">Next</string>
-  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
-  <string name="choose_your_master_password">Choose your master password</string>
-  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-  <string name="minimum_characters">%1$s characters</string>
+  <string name="help_with_server_geolocations">Ajuda com geolocalização de servidores.</string>
+  <string name="email_address_required">Endereço eletrônico (obrigatório)</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Selecione o link na mensagem eletrônica para verificar seu endereço eletrônico e continuar criando sua conta. "</string>
+  <string name="change_email_address">Alterar endereço de endereço eletrônico</string>
+  <string name="next">Avançar</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não pode recuperar uma senha mestra perdida ou esquecida.</string>
+  <string name="choose_your_master_password">Escolha sua senha mestra</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma senha única e forte para manter suas informações seguras.</string>
+  <string name="minimum_characters">%1$s caracteres</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

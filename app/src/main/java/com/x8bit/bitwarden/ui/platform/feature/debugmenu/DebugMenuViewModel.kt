@@ -9,6 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,20 +30,11 @@ class DebugMenuViewModel @Inject constructor(
 
     init {
         combine(
-            featureFlagManager.getFeatureFlagFlow(FlagKey.EmailVerification),
-            featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingCarousel),
-            featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
-        ) { (emailVerification, onboardingCarousel, onboardingFlow) ->
-            sendAction(
-                DebugMenuAction.Internal.UpdateFeatureFlagMap(
-                    mapOf(
-                        FlagKey.EmailVerification to emailVerification,
-                        FlagKey.OnboardingCarousel to onboardingCarousel,
-                        FlagKey.OnboardingFlow to onboardingFlow,
-                    ),
-                ),
-            )
-        }
+            flows = FlagKey.activeFlags.map { flagKey ->
+                featureFlagManager.getFeatureFlagFlow(flagKey).map { flagKey to it }
+            },
+        ) { DebugMenuAction.Internal.UpdateFeatureFlagMap(it.toMap()) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 

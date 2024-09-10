@@ -41,6 +41,7 @@
   <string name="invalid_pin">Μη έγκυρο PIN. Προσπάθηστε ξανά.</string>
   <string name="launch">Εκκίνηση</string>
   <string name="log_in">Σύνδεση</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Σύνδεση</string>
   <string name="log_out">Αποσύνδεση</string>
   <string name="logout_confirmation">Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;</string>
@@ -82,6 +83,7 @@
   <string name="yes">Ναι</string>
   <string name="account">Λογαριασμός</string>
   <string name="account_created">Ο λογαριασμός σας έχει δημιουργηθεί! Τώρα μπορείτε να συνδεθείτε.</string>
+  <string name="account_created_success">Ο νέος σας λογαριασμός έχει δημιουργηθεί!</string>
   <string name="add_an_item">Προσθήκη στοιχείου</string>
   <string name="app_extension">Επέκταση εφαρμογής</string>
   <string name="autofill_accessibility_description">Χρησιμοποιείστε την υπηρεσία προσβασιμότητας Bitwarden, για την αυτόματη συμπλήρωση συνδέσεων σε εφαρμογές και στο διαδίκτυο.</string>
@@ -615,7 +617,7 @@
   <string name="updating_password">Ενημέρωση Κωδικού Πρόσβασης</string>
   <string name="update_password_error">Δεν είναι δυνατή η ενημέρωση του κωδικού πρόσβασης</string>
   <string name="remove_master_password">Αφαίρεση κύριου κωδικού πρόσβασης</string>
-  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">Ο %1$s χρησιμοποιεί SSO με έναν αυτοφιλοξενούμενο διακομιστή κλειδιών. Ένας κύριος κωδικός πρόσβασης δεν απαιτείται πλέον για σύνδεση για τα μέλη αυτού του οργανισμού.</string>
   <string name="remove_master_password_warning">%1$s χρησιμοποιεί SSO με κρυπτογράφηση διαχείρισης πελατών. Συνεχίζοντας θα καταργήσετε τον Κύριο Κωδικό από το λογαριασμό σας και θα απαιτήσετε SSO για να συνδεθείτε.</string>
   <string name="remove_master_password_warning2">Αν δεν θέλετε να αφαιρέσετε τον Κύριο Κωδικό Πρόσβασης, μπορείτε να φύγετε από αυτόν τον οργανισμό.</string>
   <string name="leave_organization">Αποχώρηση από τον οργανισμό</string>
@@ -928,9 +930,9 @@
   <string name="self_hosted_server_url">URL αυτο-εξυπηρετούμενου διακομιστή</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Αποτυχία λειτουργίας κωδικού πρόσβασης, επειδή ο χρήστης δεν μπόρεσε να επαληθευτεί.</string>
   <string name="user_verification_direction">Επαλήθευση χρήστη</string>
-  <string name="creating_on">Creating on:</string>
+  <string name="creating_on">Δημιουργία στις:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Ακολουθήστε τις οδηγίες στο μήνυμα που στάλθηκε στο %1$s για να συνεχίσετε τη δημιουργία του λογαριασμού σας.</string>
-  <string name="we_sent_an_email_to">We sent an email to %1$s.</string>
+  <string name="we_sent_an_email_to">Στείλαμε ένα email στο %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Συνεχίζοντας, συμφωνείτε με τους Όρους Παροχής Υπηρεσιών και την Πολιτική Απορρήτου</string>
   <string name="set_password">Ορισμός κωδικού</string>
   <string name="unsubscribe">Ακύρωση συνδρομής</string>
@@ -941,7 +943,7 @@
   <string name="no_email_go_back_to_edit_your_email_address">Κανένα μήνυμα ηλ. ταχυδρομείου; Πηγαίνετε πίσω για να επεξεργαστείτε τη διεύθυνση ηλ. ταχυδρομείου σας.</string>
   <string name="or_log_in_you_may_already_have_an_account">Ή συνδεθείτε, μπορεί να έχετε ήδη λογαριασμό.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Λάβετε μηνύματα ηλ. ταχυδρομείου από το Bitwarden για ανακοινώσεις, συμβουλές και ερευνητικές ευκαιρίες. Ακυρώστε τη συνδρομή σας ανα πάσα στιγμή.</string>
-  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Λάβετε συμβουλές, ανακοινώσεις και ευκαιρίες έρευνας από το Bitwarden στα εισερχόμενά σας. Μπορείτε να απεγγραφείτε ανα πάσα στιγμή.</string>
   <string name="privacy_prioritized">Προταιρεότητα, η ιδιωτικότητα</string>
   <string name="welcome_message_1">Αποθηκεύστε συνδέσεις, κάρτες και ταυτότητες στο ασφαλές θησαυ/κιό σας. Το Bitwarden χρησιμοποιεί κρυπτογράφηση από άκρο σε άκρο και μηδενικής γνώσης για να προστατεύσει ό,τι είναι σημαντικό για εσάς.</string>
   <string name="welcome_message_2">Ρυθμίστε το βιομετρικό ξεκλείδωμα και την αυτόματη συμπλήρωση για σύνδεση στους λογαριασμούς σας χωρίς να πληκτρολογήσετε ούτε ένα γράμμα.</string>
@@ -978,13 +980,18 @@
   <string name="generate_button_label">Δημιουργία</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Γράψτε αυτόν τον κωδικό πρόσβασης και κρατήστε τον κάπου ασφαλή.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Μάθετε άλλους τρόπους για να αποτρέψετε το κλείδωμα λογαριασμού</string>
-  <string name="help_with_server_geolocations">Help with server geolocations.</string>
-  <string name="email_address_required">Email address (required)</string>
-  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
-  <string name="change_email_address">Change email address</string>
-  <string name="next">Next</string>
-  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
-  <string name="choose_your_master_password">Choose your master password</string>
-  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-  <string name="minimum_characters">%1$s characters</string>
+  <string name="help_with_server_geolocations">Βοήθεια για τον γεωγραφικό εντοπισμό του διακομιστή.</string>
+  <string name="email_address_required">Διεύθυνση ηλ. ταχυδρομείου (απαιτείται)</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Επιλέξτε το σύνδεσμο στο μήνυμα ηλ. ταχυδρομείου για να επαληθεύσετε τη διεύθυνση ηλ. ταχυδρομείου σας και να συνεχίσετε με τη δημιουργία του λογαριασμού σας. "</string>
+  <string name="change_email_address">Αλλαγή διεύθυνσης ηλ. ταχυδρομείου</string>
+  <string name="next">Επόμενο</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Το Bitwarden δεν μπορεί να ανακτήσει έναν χαμένο ή ξεχασμένο κύριο κωδικό πρόσβασης.</string>
+  <string name="choose_your_master_password">Επιλέξτε τον κύριο κωδικό πρόσβασης σας</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Επιλέξτε έναν μοναδικό και ισχυρό κωδικό πρόσβασης για να διατηρήσετε τις πληροφορίες σας ασφαλείς.</string>
+  <string name="minimum_characters">%1$s χαρακτήρες</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

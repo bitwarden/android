@@ -41,6 +41,7 @@
   <string name="invalid_pin">Ongeldige PIN. Probeer weer.</string>
   <string name="launch">Lanseer</string>
   <string name="log_in">Teken aan</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">Aantekening</string>
   <string name="log_out">Teken uit</string>
   <string name="logout_confirmation">Is u seker u wil uitteken?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Ja</string>
   <string name="account">Rekening</string>
   <string name="account_created">U nuwe rekening is geskep! U kan nou aanteken.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">Voeg ’n item toe</string>
   <string name="app_extension">Toepuitbreiding</string>
   <string name="autofill_accessibility_description">Gebruik die Bitwarden toeganklikheidsdiens om u aantekeninge oor toeps en die web heen outomaties in te vul.</string>
@@ -987,4 +989,9 @@ Wil u na die rekening omskakel?</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

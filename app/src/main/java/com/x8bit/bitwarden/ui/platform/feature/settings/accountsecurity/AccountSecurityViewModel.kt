@@ -9,7 +9,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -45,6 +47,7 @@ class AccountSecurityViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val featureFlagManager: FeatureFlagManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
@@ -57,6 +60,7 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityState(
             dialog = null,
             fingerprintPhrase = "".asText(), // This will be filled in dynamically
+            isAuthenticatorSyncChecked = settingsRepository.isAuthenticatorSyncEnabled,
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
                 isBiometricsValid,
             isUnlockWithPasswordEnabled = authRepository
@@ -65,6 +69,9 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.activeAccount
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
+            shouldShowEnableAuthenticatorSync = featureFlagManager.getFeatureFlag(
+                key = FlagKey.AuthenticatorSync,
+            ),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -99,6 +106,13 @@ class AccountSecurityViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.AuthenticatorSync)
+            .onEach {
+                trySendAction(AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate(it))
+            }
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
             trySendAction(
                 AccountSecurityAction.Internal.FingerprintResultReceive(
@@ -110,6 +124,7 @@ class AccountSecurityViewModel @Inject constructor(
 
     override fun handleAction(action: AccountSecurityAction): Unit = when (action) {
         AccountSecurityAction.AccountFingerprintPhraseClick -> handleAccountFingerprintPhraseClick()
+        is AccountSecurityAction.AuthenticatorSyncToggle -> handleAuthenticatorSyncToggle(action)
         AccountSecurityAction.BackClick -> handleBackClick()
         AccountSecurityAction.ChangeMasterPasswordClick -> handleChangeMasterPasswordClick()
         AccountSecurityAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
@@ -135,6 +150,13 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleAccountFingerprintPhraseClick() {
         mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.FingerprintPhrase) }
+    }
+
+    private fun handleAuthenticatorSyncToggle(
+        action: AccountSecurityAction.AuthenticatorSyncToggle,
+    ) {
+        settingsRepository.isAuthenticatorSyncEnabled = action.enabled
+        mutableStateFlow.update { it.copy(isAuthenticatorSyncChecked = action.enabled) }
     }
 
     private fun handleBackClick() = sendEvent(AccountSecurityEvent.NavigateBack)
@@ -292,6 +314,10 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AccountSecurityAction.Internal) {
         when (action) {
+            is AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate -> {
+                handleAuthenticatorSyncFeatureFlagUpdate(action)
+            }
+
             is AccountSecurityAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
@@ -303,6 +329,16 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.PolicyUpdateReceive -> {
                 handlePolicyUpdateReceive(action)
             }
+        }
+    }
+
+    private fun handleAuthenticatorSyncFeatureFlagUpdate(
+        action: AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                shouldShowEnableAuthenticatorSync = action.isEnabled,
+            )
         }
     }
 
@@ -377,9 +413,11 @@ class AccountSecurityViewModel @Inject constructor(
 data class AccountSecurityState(
     val dialog: AccountSecurityDialog?,
     val fingerprintPhrase: Text,
+    val isAuthenticatorSyncChecked: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPasswordEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
+    val shouldShowEnableAuthenticatorSync: Boolean,
     val userId: String,
     val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,
@@ -494,6 +532,13 @@ sealed class AccountSecurityAction {
     data object AccountFingerprintPhraseClick : AccountSecurityAction()
 
     /**
+     * User clicked the authenticator sync toggle.
+     */
+    data class AuthenticatorSyncToggle(
+        val enabled: Boolean,
+    ) : AccountSecurityAction()
+
+    /**
      * User clicked back button.
      */
     data object BackClick : AccountSecurityAction()
@@ -592,6 +637,14 @@ sealed class AccountSecurityAction {
      * Models actions that can be sent by the view model itself.
      */
     sealed class Internal : AccountSecurityAction() {
+
+        /**
+         * The feature flag value for authenticator syncing was updated.
+         */
+        data class AuthenticatorSyncFeatureFlagUpdate(
+            val isEnabled: Boolean,
+        ) : Internal()
+
         /**
          * A biometrics key result has been received.
          */

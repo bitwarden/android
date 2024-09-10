@@ -38,6 +38,7 @@ class PendingRequestsViewModel @Inject constructor(
         authRequests = emptyList(),
         viewState = PendingRequestsState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
+        isRefreshing = false,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
@@ -93,6 +94,7 @@ class PendingRequestsViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         updateAuthRequestList()
     }
 
@@ -169,7 +171,7 @@ class PendingRequestsViewModel @Inject constructor(
                 }
             }
         }
-        sendEvent(PendingRequestsEvent.DismissPullToRefresh)
+        mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
     private fun updateAuthRequestList() {
@@ -190,6 +192,7 @@ data class PendingRequestsState(
     val authRequests: List<AuthRequest>,
     val viewState: ViewState,
     private val isPullToRefreshSettingEnabled: Boolean,
+    val isRefreshing: Boolean,
 ) : Parcelable {
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
@@ -259,11 +262,6 @@ data class PendingRequestsState(
  * Models events for the delete account screen.
  */
 sealed class PendingRequestsEvent {
-    /**
-     * Dismisses the pull-to-refresh indicator.
-     */
-    data object DismissPullToRefresh : PendingRequestsEvent()
-
     /**
      * Navigates back.
      */

@@ -26,7 +26,7 @@ class SpecialCircumstanceManagerImpl(
                 it?.activeAccount?.isLoggedIn == true
             }
             .onEach { _ ->
-                if (specialCircumstance is SpecialCircumstance.PreLogin) {
+                if (specialCircumstance is SpecialCircumstance.RegistrationEvent) {
                     specialCircumstance = null
                 }
             }

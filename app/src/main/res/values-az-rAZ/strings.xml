@@ -41,6 +41,7 @@
   <string name="invalid_pin">Yararsız PIN. Yenidən sınayın.</string>
   <string name="launch">Başlat</string>
   <string name="log_in">Giriş et</string>
+  <string name="log_in_verb">Giriş et</string>
   <string name="log_in_noun">Giriş</string>
   <string name="log_out">Çıxış</string>
   <string name="logout_confirmation">Çıxış etmək istədiyinizə əminsiniz?</string>
@@ -82,6 +83,7 @@
   <string name="yes">Bəli</string>
   <string name="account">Hesab</string>
   <string name="account_created">Yeni hesabınız yaradıldı! İndi giriş edə bilərsiniz.</string>
+  <string name="account_created_success">Yeni hesabınız yaradıldı!</string>
   <string name="add_an_item">Element əlavə et</string>
   <string name="app_extension">Tətbiq uzantısı</string>
   <string name="autofill_accessibility_description">Tətbiqlərdə və vebdə giriş məlumatlarının avto-doldurulması üçün Bitwarden əlçatımlılıq xidmətini istifadə edin.</string>
@@ -615,7 +617,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="updating_password">Parol yenilənir</string>
   <string name="update_password_error">Hazırda parol güncəllənə bilmir</string>
   <string name="remove_master_password">Ana parolu sil</string>
-  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s, self-hosted açar serveri ilə SSO istifadə edir. Bu təşkilatın üzvlərinin giriş etməsi üçün artıq ana parol tələb edilməyəcək.</string>
   <string name="remove_master_password_warning">%1$s müştəri tərəfindən idarə edilən şifrələmə ilə SSO istifadə edir. Davam etsəniz, Ana Parol hesabınızdan silinəcək və giriş etmək üçün SSO tələb olunacaq.</string>
   <string name="remove_master_password_warning2">Ana Parolu silmək istəmirsinizsə, bu təşkilatı tərk edə bilərsiniz.</string>
   <string name="leave_organization">Təşkilatı tərk et</string>
@@ -929,7 +931,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="user_verification_direction">İstifadəçi doğrulama</string>
   <string name="creating_on">Yaradılır:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Hesabınızı yaratmağa davam etmək üçün %1$s ünvanına göndərilən e-poçtdakı təlimatları izləyin.</string>
-  <string name="we_sent_an_email_to">We sent an email to %1$s.</string>
+  <string name="we_sent_an_email_to">%1$s ünvanına bir e-poçt göndərdik.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Davam edərək, Xidmət Şərtləri və Gizlilik Siyasəti ilə razılaşırsınız</string>
   <string name="set_password">Parol ayarla</string>
   <string name="unsubscribe">Abunəlikdən çıx</string>
@@ -940,7 +942,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="no_email_go_back_to_edit_your_email_address">E-poçt gəlməyib? E-poçt ünvanınıza düzəliş etmək üçün geri qayıdın.</string>
   <string name="or_log_in_you_may_already_have_an_account">Ya da bir hesabınız varsa giriş edin.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
-  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
+  <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Gələn qutunuzda Bitwarden-dən məsləhət, elan və araşdırma imkanları ilə bağlı məktublar alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
   <string name="privacy_prioritized">Məxfilik, prioritetdir</string>
   <string name="welcome_message_1">Giriş, kart və kimlik məlumatlarınızı güvənli anbarınızda saxlayın. Bitwarden, sizin üçün mühüm olanları qorumaq üçün zero-knowledge və ucdan-uca şifrələmə istifadə edir.</string>
   <string name="welcome_message_2">Tək bir hərf yazmadan hesablarınıza giriş etmək üçün biometrik kilid açma və avto-doldurma seçimlərini qurun.</string>
@@ -979,11 +981,16 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Hesab kilidlənməsini önləməyin digər yolları haqqında daha ətraflı</string>
   <string name="help_with_server_geolocations">Server coğrafi yerləri ilə bağlı kömək.</string>
   <string name="email_address_required">E-poçt ünvanı (lazımdır)</string>
-  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
-  <string name="change_email_address">Change email address</string>
-  <string name="next">Next</string>
-  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
-  <string name="choose_your_master_password">Choose your master password</string>
-  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-  <string name="minimum_characters">%1$s characters</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"E-poçt ünvanınızı doğrulamaq və hesabınızı yaratmağa davam etmək üçün e-poçtdakı keçidi seçin. "</string>
+  <string name="change_email_address">E-poçt ünvanını dəyişdir</string>
+  <string name="next">Növbəti</string>
+  <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden itmiş və ya unutulmuş ana parolu geri qaytara bilməz.</string>
+  <string name="choose_your_master_password">Ana parolunuzu seçin</string>
+  <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Məlumatlarınızı təhlükəsiz saxlamaq üçün unikal və güclü bir parol seçin.</string>
+  <string name="minimum_characters">%1$s xarakter</string>
+  <string name="expired_link">Vaxtı bitmiş keçid</string>
+  <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
+  <string name="restart_registration">Qeydiyyatı yenidən başlat</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>

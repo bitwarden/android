@@ -41,6 +41,7 @@
   <string name="invalid_pin">செல்லாத கடவெண். மீண்டும் முயலவும்.</string>
   <string name="launch">ஏவு</string>
   <string name="log_in">உள்நுழை</string>
+  <string name="log_in_verb">Log in</string>
   <string name="log_in_noun">உள்நுழைவு</string>
   <string name="log_out">வெளியேறு</string>
   <string name="logout_confirmation">நிச்சயமாக வெளியேற விரும்புகிறீரா?</string>
@@ -82,6 +83,7 @@
   <string name="yes">ஆம்</string>
   <string name="account">கணக்கு</string>
   <string name="account_created">உங்கள் புது கணக்கு உருவாக்கப்பட்டது, நீங்கள் இப்போது உள்நுழையலாம்.</string>
+  <string name="account_created_success">Your new account has been created!</string>
   <string name="add_an_item">ஓர் உருப்படியைச் சேர்</string>
   <string name="app_extension">செயலி நீட்டிப்பு</string>
   <string name="autofill_accessibility_description">செயலிகள் மற்றும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்து.</string>
@@ -987,4 +989,9 @@
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
+  <string name="expired_link">Expired link</string>
+  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
+  <string name="restart_registration">Restart registration</string>
+  <string name="authenticator_sync">Authenticator Sync</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
 </resources>
