@@ -135,7 +135,7 @@ dependencies {
         add("standardImplementation", dependencyNotation)
     }
 
-    // TODO: this should use a versioned aar instead of referencing a local aar BITAU-94
+    // TODO: this should use a versioned AAR instead of referencing a local AAR BITAU-94
     implementation(files("libs/bridge-0.1.0-release.aar"))
 
     implementation(libs.androidx.activity.compose)

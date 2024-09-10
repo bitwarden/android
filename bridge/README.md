@@ -19,7 +19,7 @@
 
 ## Building
 
-To build an aar for inclusion in consumer applications, run:
+To build an AAR for inclusion in consumer applications, run:
 
     ```sh
     $ ./gradlew bridge:assembleRelease
