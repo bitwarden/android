@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 // For more info on versioning, see the README.
-val version = "0.1.0"
+val version = "0.2.0"
 
 plugins {
     alias(libs.plugins.android.library)
