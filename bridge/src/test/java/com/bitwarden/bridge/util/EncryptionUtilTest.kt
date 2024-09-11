@@ -19,32 +19,6 @@ import javax.crypto.KeyGenerator
 
 class EncryptionUtilTest {
 
-    private val TEST_SHARED_ACCOUNT_DATA = SharedAccountData(
-        accounts = listOf(
-            SharedAccountData.Account(
-                userId = "userId",
-                name = "Johnny Appleseed",
-                email = "johnyapples@test.com",
-                environmentLabel = "bitwarden.com",
-                totpUris = listOf("test.com"),
-                lastSyncTime = Instant.parse("2024-09-10T10:15:30.00Z")
-            )
-        )
-    )
-
-    private val TEST_ADD_TOTP_ITEM = AddTotpLoginItemData(
-        totpUri = "test.com"
-    )
-
-    private val TEST_SYMMETRIC_KEY = SymmetricEncryptionKeyData(
-        symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
-    )
-
-    private val TEST_ENCRYPTED_SHARED_ACCOUNT_DATA =
-        TEST_SHARED_ACCOUNT_DATA.encrypt(TEST_SYMMETRIC_KEY).getOrThrow()
-
-    private val TEST_ENCRYPTED_ADD_TOTP_ITEM = TEST_ADD_TOTP_ITEM.encrypt(TEST_SYMMETRIC_KEY).getOrThrow()
-
     @Test
     fun `generateSecretKey should return success`() {
         val secretKey = generateSecretKey()
@@ -84,7 +58,7 @@ class EncryptionUtilTest {
 
     @Test
     fun `encrypt SharedAccountData should return success`() {
-        val result = TEST_SHARED_ACCOUNT_DATA.encrypt(TEST_SYMMETRIC_KEY)
+        val result = SHARED_ACCOUNT_DATA.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
     }
 
@@ -94,16 +68,16 @@ class EncryptionUtilTest {
         every {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
         } throws NoSuchAlgorithmException()
-        val result = TEST_SHARED_ACCOUNT_DATA.encrypt(TEST_SYMMETRIC_KEY)
+        val result = SHARED_ACCOUNT_DATA.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
         unmockkStatic(Cipher::class)
     }
 
     @Test
     fun `decrypt EncryptedSharedAccountData should return success`() {
-        val result = TEST_ENCRYPTED_SHARED_ACCOUNT_DATA.decrypt(TEST_SYMMETRIC_KEY)
+        val result = ENCRYPTED_SHARED_ACCOUNT_DATA.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
-        assertEquals(TEST_SHARED_ACCOUNT_DATA, result.getOrThrow())
+        assertEquals(SHARED_ACCOUNT_DATA, result.getOrThrow())
     }
 
     @Test
@@ -112,26 +86,26 @@ class EncryptionUtilTest {
         every {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
         } throws NoSuchAlgorithmException()
-        val result = TEST_ENCRYPTED_SHARED_ACCOUNT_DATA.decrypt(TEST_SYMMETRIC_KEY)
+        val result = ENCRYPTED_SHARED_ACCOUNT_DATA.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
         unmockkStatic(Cipher::class)
     }
 
     @Test
     fun `encrypting and decrypting SharedAccountData should leave the data untransformed`() {
-        val result = TEST_SHARED_ACCOUNT_DATA
-            .encrypt(TEST_SYMMETRIC_KEY)
+        val result = SHARED_ACCOUNT_DATA
+            .encrypt(SYMMETRIC_KEY)
             .getOrThrow()
-            .decrypt(TEST_SYMMETRIC_KEY)
+            .decrypt(SYMMETRIC_KEY)
         assertEquals(
-            TEST_SHARED_ACCOUNT_DATA,
+            SHARED_ACCOUNT_DATA,
             result.getOrThrow()
         )
     }
 
     @Test
     fun `encrypt AddTotpLoginItemData should return success`() {
-        val result = TEST_ADD_TOTP_ITEM.encrypt(TEST_SYMMETRIC_KEY)
+        val result = ADD_TOTP_ITEM.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
     }
 
@@ -141,14 +115,14 @@ class EncryptionUtilTest {
         every {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
         } throws NoSuchAlgorithmException()
-        val result = TEST_ADD_TOTP_ITEM.encrypt(TEST_SYMMETRIC_KEY)
+        val result = ADD_TOTP_ITEM.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
         unmockkStatic(Cipher::class)
     }
 
     @Test
     fun `decrypt EncryptedAddTotpLoginItemData should return success`() {
-        val result = TEST_ENCRYPTED_ADD_TOTP_ITEM.decrypt(TEST_SYMMETRIC_KEY)
+        val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
     }
 
@@ -158,21 +132,46 @@ class EncryptionUtilTest {
         every {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
         } throws NoSuchAlgorithmException()
-        val result = TEST_ENCRYPTED_ADD_TOTP_ITEM.decrypt(TEST_SYMMETRIC_KEY)
+        val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
         unmockkStatic(Cipher::class)
     }
 
     @Test
     fun `encrypting and decrypting AddTotpLoginItemData should leave the data untransformed`() {
-        val result = TEST_ADD_TOTP_ITEM
-            .encrypt(TEST_SYMMETRIC_KEY)
+        val result = ADD_TOTP_ITEM
+            .encrypt(SYMMETRIC_KEY)
             .getOrThrow()
-            .decrypt(TEST_SYMMETRIC_KEY)
+            .decrypt(SYMMETRIC_KEY)
         assertEquals(
-            TEST_ADD_TOTP_ITEM,
+            ADD_TOTP_ITEM,
             result.getOrThrow()
         )
     }
-
 }
+
+private val SHARED_ACCOUNT_DATA = SharedAccountData(
+    accounts = listOf(
+        SharedAccountData.Account(
+            userId = "userId",
+            name = "Johnny Appleseed",
+            email = "johnyapples@test.com",
+            environmentLabel = "bitwarden.com",
+            totpUris = listOf("test.com"),
+            lastSyncTime = Instant.parse("2024-09-10T10:15:30.00Z")
+        )
+    )
+)
+
+private val ADD_TOTP_ITEM = AddTotpLoginItemData(
+    totpUri = "test.com"
+)
+
+private val SYMMETRIC_KEY = SymmetricEncryptionKeyData(
+    symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
+)
+
+private val ENCRYPTED_SHARED_ACCOUNT_DATA =
+    SHARED_ACCOUNT_DATA.encrypt(SYMMETRIC_KEY).getOrThrow()
+
+private val ENCRYPTED_ADD_TOTP_ITEM = ADD_TOTP_ITEM.encrypt(SYMMETRIC_KEY).getOrThrow()
