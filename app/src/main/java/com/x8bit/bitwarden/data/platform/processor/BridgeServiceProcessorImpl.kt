@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.processor
 
 import android.content.Intent
+import android.os.Build
 import com.bitwarden.bridge.IBridgeService
 import com.bitwarden.bridge.IBridgeServiceCallback
 import com.bitwarden.bridge.model.EncryptedAddTotpLoginItemData
@@ -8,6 +9,7 @@ import com.bitwarden.bridge.model.SymmetricEncryptionKeyData
 import com.bitwarden.bridge.model.SymmetricEncryptionKeyFingerprintData
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 
 /**
  * Default implementation of [BridgeServiceProcessor].
@@ -17,14 +19,17 @@ class BridgeServiceProcessorImpl(
 ) : BridgeServiceProcessor {
 
     override val binder: IBridgeService.Stub?
-        // TODO: Check for Android API level as well: BITAU-102
         get() {
-            return if (featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync)) {
-                defaultBinder
-            } else {
-                // If the feature flag is not enabled, return a null binder which will no-op all
-                // service calls.
+            return if (
+                !featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) ||
+                isBuildVersionBelow(Build.VERSION_CODES.S)
+            ) {
+                // If the feature flag is not enabled, OR if version is below Android 12,
+                // return a null binder which will no-op all service calls
                 null
+            } else {
+                // Otherwise, return real binder implementation:
+                defaultBinder
             }
         }
 
