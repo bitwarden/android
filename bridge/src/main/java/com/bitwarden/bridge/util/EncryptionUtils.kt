@@ -70,12 +70,9 @@ fun SharedAccountData.encrypt(
 /**
  * Decrypt [EncryptedSharedAccountData].
  *
- * This is intended to be used by the Bitwarden Authenticator app after receiving an update via
- * [IBridgeServiceCallback].
- *
  * @param symmetricEncryptionKeyData Symmetric key used for decryption.
  */
-fun EncryptedSharedAccountData.decrypt(
+internal fun EncryptedSharedAccountData.decrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
 ): Result<SharedAccountData> = runCatching {
     val encodedKey = symmetricEncryptionKeyData
@@ -119,12 +116,9 @@ fun AddTotpLoginItemData.encrypt(
 /**
  * Decrypt [EncryptedSharedAccountData].
  *
- * This is intended to be used by the main Bitwarden app after receiving a request to add a new
- * TOTP item.
- *
  * @param symmetricEncryptionKeyData Symmetric key used for decryption.
  */
-fun EncryptedAddTotpLoginItemData.decrypt(
+internal fun EncryptedAddTotpLoginItemData.decrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
 ): Result<AddTotpLoginItemData> = runCatching {
     val encodedKey = symmetricEncryptionKeyData
