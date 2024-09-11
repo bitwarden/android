@@ -1,13 +1,17 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,9 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
  * Top level composable for the Auto-fill setup screen.
@@ -131,33 +138,10 @@ private fun SetupAutoFillContent(
     Column(
         modifier = modifier,
     ) {
-        // Animated Image placeholder TODO PM-10843
-        Image(
-            painter = rememberVectorPainter(id = R.drawable.account_setup),
-            contentDescription = null,
+        SetupAutoFillContentHeader(
             modifier = Modifier
-                .standardHorizontalMargin()
-                .align(Alignment.CenterHorizontally),
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.turn_on_autofill),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .align(Alignment.CenterHorizontally),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.use_autofill_to_log_into_your_accounts),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .align(Alignment.CenterHorizontally),
+                .align(Alignment.CenterHorizontally)
+                .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenWideSwitch(
@@ -190,6 +174,57 @@ private fun SetupAutoFillContent(
     }
 }
 
+@Composable
+private fun SetupAutoFillContentHeader(
+    modifier: Modifier = Modifier,
+    configuration: Configuration = LocalConfiguration.current,
+) {
+    if (configuration.isPortrait) {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            OrderedHeaderContent()
+        }
+    } else {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            OrderedHeaderContent()
+        }
+    }
+}
+
+@Composable
+private fun OrderedHeaderContent() {
+    // Animated Image placeholder TODO PM-10843
+    Image(
+        painter = rememberVectorPainter(id = R.drawable.account_setup),
+        contentDescription = null,
+    )
+    Spacer(modifier = Modifier.size(24.dp))
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.turn_on_autofill),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.use_autofill_to_log_into_your_accounts),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            // Apply similar line breaks to design
+            modifier = Modifier.sizeIn(maxWidth = 300.dp),
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun SetupAutoFillContentDisabled_preview() {
@@ -203,7 +238,7 @@ private fun SetupAutoFillContentDisabled_preview() {
     }
 }
 
-@Preview(showBackground = true)
+@PreviewScreenSizes
 @Composable
 private fun SetupAutoFillContentEnabled_preview() {
     BitwardenTheme {
