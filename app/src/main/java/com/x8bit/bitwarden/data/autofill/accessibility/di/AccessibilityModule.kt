@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.di
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.PowerManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
@@ -12,6 +13,8 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNa
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNameManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.parser.AccessibilityParser
 import com.x8bit.bitwarden.data.autofill.accessibility.parser.AccessibilityParserImpl
+import com.x8bit.bitwarden.data.autofill.accessibility.processor.BitwardenAccessibilityProcessor
+import com.x8bit.bitwarden.data.autofill.accessibility.processor.BitwardenAccessibilityProcessorImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
@@ -43,7 +46,7 @@ object AccessibilityModule {
 
     @Singleton
     @Provides
-    fun providesAccessibilityInvokeManager(): AccessibilityAutofillManager =
+    fun providesAccessibilityAutofillManager(): AccessibilityAutofillManager =
         AccessibilityAutofillManagerImpl()
 
     @Singleton
@@ -54,6 +57,23 @@ object AccessibilityModule {
     @Provides
     fun providesAccessibilitySelectionManager(): AccessibilitySelectionManager =
         AccessibilitySelectionManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesBitwardenAccessibilityProcessor(
+        @ApplicationContext context: Context,
+        accessibilityParser: AccessibilityParser,
+        accessibilityAutofillManager: AccessibilityAutofillManager,
+        launcherPackageNameManager: LauncherPackageNameManager,
+        powerManager: PowerManager,
+    ): BitwardenAccessibilityProcessor =
+        BitwardenAccessibilityProcessorImpl(
+            context = context,
+            accessibilityParser = accessibilityParser,
+            accessibilityAutofillManager = accessibilityAutofillManager,
+            launcherPackageNameManager = launcherPackageNameManager,
+            powerManager = powerManager,
+        )
 
     @Singleton
     @Provides
@@ -71,4 +91,10 @@ object AccessibilityModule {
     fun providesPackageManager(
         @ApplicationContext context: Context,
     ): PackageManager = context.packageManager
+
+    @Singleton
+    @Provides
+    fun providesPowerManager(
+        @ApplicationContext context: Context,
+    ): PowerManager = context.getSystemService(PowerManager::class.java)
 }
