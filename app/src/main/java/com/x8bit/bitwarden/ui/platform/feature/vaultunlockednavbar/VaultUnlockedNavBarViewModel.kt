@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -38,13 +39,13 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
 
         when (specialCircumstancesManager.specialCircumstance) {
             SpecialCircumstance.GeneratorShortcut -> {
-                sendEvent(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
+                sendEvent(VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen)
                 specialCircumstancesManager.specialCircumstance = null
             }
 
             SpecialCircumstance.VaultShortcut -> {
                 sendEvent(
-                    VaultUnlockedNavBarEvent.NavigateToVaultScreen(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = state.vaultNavBarLabelRes,
                         contentDescRes = state.vaultNavBarContentDescriptionRes,
                     ),
@@ -217,5 +218,31 @@ sealed class VaultUnlockedNavBarEvent {
      */
     data object NavigateToSettingsScreen : VaultUnlockedNavBarEvent() {
         override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Settings
+    }
+
+    /**
+     * Shortcut events should to be considered [BackgroundEvent] as they are fired
+     * outside of normal lifecycle aware events and should not be ignored by filter.
+     */
+    sealed class Shortcut : VaultUnlockedNavBarEvent(), BackgroundEvent {
+        /**
+         * Navigate to the Generator screen via a shortcut.
+         */
+        data object NavigateToGeneratorScreen : Shortcut() {
+            override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Generator
+        }
+
+        /**
+         * Navigate to the Vault screen via a shortcut.
+         */
+        data class NavigateToVaultScreen(
+            val labelRes: Int,
+            val contentDescRes: Int,
+        ) : Shortcut() {
+            override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Vault(
+                labelRes = labelRes,
+                contentDescriptionRes = contentDescRes,
+            )
+        }
     }
 }
