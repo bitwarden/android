@@ -14,6 +14,8 @@ import org.junit.Assert.assertEquals
 
 class FakeAuthDiskSource : AuthDiskSource {
 
+    override var authenticatorSyncSymmetricKey: ByteArray? = null
+
     override val uniqueAppId: String = "testUniqueAppId"
 
     override var rememberedEmailAddress: String? = null

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import androidx.core.content.edit
 import app.cash.turbine.test
+import com.bitwarden.bridge.util.generateSecretKey
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -1132,6 +1133,25 @@ class AuthDiskSourceTest {
             authDiskSource.storeOnboardingStatus(userId, OnboardingStatus.AUTOFILL_SETUP)
             assertEquals(OnboardingStatus.AUTOFILL_SETUP, awaitItem())
         }
+    }
+
+    fun `authenticatorSyncSymmetricKey should store and update from EncryptedSharedPreferences`() {
+        val sharedPrefsKey = "bwSecureStorage:authenticatorSyncSymmetric"
+
+        // Shared preferences and the repository start with the same value:
+        assertNull(authDiskSource.authenticatorSyncSymmetricKey)
+        assertNull(fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null))
+
+        // Updating the repository updates shared preferences:
+        val symmetricKey = generateSecretKey().getOrThrow().encoded
+        authDiskSource.authenticatorSyncSymmetricKey = symmetricKey
+        assertEquals(
+            symmetricKey.toString(Charsets.ISO_8859_1),
+            fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null),
+        )
+
+        // Retrieving the key from repository should give same byte array despite String conversion:
+        assertTrue(authDiskSource.authenticatorSyncSymmetricKey.contentEquals(symmetricKey))
     }
 }
 
