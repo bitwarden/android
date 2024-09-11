@@ -22,16 +22,16 @@ class EncryptionUtilTest {
     @Test
     fun `generateSecretKey should return success`() {
         val secretKey = generateSecretKey()
-        assert(secretKey.isSuccess)
+        assertTrue(secretKey.isSuccess)
         assertNotNull(secretKey.getOrNull())
     }
 
     @Test
-    fun `when KeyGenerator getInstance throws, generateSecretKey should return failure`() {
+    fun `generateSecretKey should return failure when KeyGenerator getInstance throws`() {
         mockkStatic(KeyGenerator::class)
         every { KeyGenerator.getInstance("AES") } throws NoSuchAlgorithmException()
         val secretKey = generateSecretKey()
-        assert(secretKey.isFailure)
+        assertTrue(secretKey.isFailure)
         unmockkStatic(KeyGenerator::class)
     }
 
