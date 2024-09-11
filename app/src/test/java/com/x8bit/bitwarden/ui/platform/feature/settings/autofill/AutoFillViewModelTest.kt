@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test
 
 class AutoFillViewModelTest : BaseViewModelTest() {
 
+    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(false)
     private val mutableIsAutofillEnabledStateFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } returns true
@@ -33,6 +34,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { isAutofillSavePromptDisabled = any() } just runs
         every { defaultUriMatchType } returns UriMatchType.DOMAIN
         every { defaultUriMatchType = any() } just runs
+        every { isAccessibilityEnabledStateFlow } returns mutableIsAccessibilityEnabledStateFlow
         every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
         every { disableAutofill() } just runs
     }
@@ -104,6 +106,26 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `changes in accessibility enabled status should update the state`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        mutableIsAccessibilityEnabledStateFlow.value = true
+
+        assertEquals(
+            DEFAULT_STATE.copy(isAccessibilityAutofillEnabled = true),
+            viewModel.stateFlow.value,
+        )
+
+        mutableIsAccessibilityEnabledStateFlow.value = false
+
+        assertEquals(
+            DEFAULT_STATE.copy(isAccessibilityAutofillEnabled = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `changes in autofill enabled status should update the state`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
@@ -146,6 +168,16 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `on UseAccessibilityAutofillClick should emit NavigateToAccessibilitySettings`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AutoFillAction.UseAccessibilityAutofillClick)
+            assertEquals(AutoFillEvent.NavigateToAccessibilitySettings, awaitItem())
+        }
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
     @Test
@@ -244,6 +276,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAskToAddLoginEnabled = false,
+    isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = true,

@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -49,6 +50,7 @@ class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    accessibilityEnabledManager: AccessibilityEnabledManager,
     policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
@@ -292,6 +294,9 @@ class SettingsRepositoryImpl(
                 blockedAutofillUris = value,
             )
         }
+
+    override val isAccessibilityEnabledStateFlow: StateFlow<Boolean> =
+        accessibilityEnabledManager.isAccessibilityEnabledStateFlow
 
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
         autofillEnabledManager.isAutofillEnabledStateFlow
