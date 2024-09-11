@@ -22,7 +22,7 @@ data class StartRegistrationHandler(
     val onServerGeologyHelpClick: () -> Unit,
     val onBackClick: () -> Unit,
 ) {
-
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [StartRegistrationHandler] by binding actions to the provided

@@ -15,6 +15,7 @@ data class AttachmentsHandlers(
     val onDeleteClick: (attachmentId: String) -> Unit,
     val onDismissRequest: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates the [AttachmentsHandlers] using the [AttachmentsViewModel] to send desired

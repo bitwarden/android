@@ -43,6 +43,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onPasswordVisibilityChange: (Boolean) -> Unit,
     val onClearFido2CredentialClick: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

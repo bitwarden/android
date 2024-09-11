@@ -1810,6 +1810,7 @@ data class GeneratorState(
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSWORD.labelRes
 
+                    @Suppress("UndocumentedPublicClass")
                     companion object {
                         private const val DEFAULT_PASSWORD_LENGTH: Int = 14
                         private const val MIN_NUMBERS: Int = 1
@@ -1845,6 +1846,7 @@ data class GeneratorState(
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSPHRASE.labelRes
 
+                    @Suppress("UndocumentedPublicClass")
                     companion object {
                         private const val DEFAULT_PASSPHRASE_SEPARATOR: Char = '-'
                         private const val DEFAULT_NUM_WORDS: Int = 3

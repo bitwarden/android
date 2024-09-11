@@ -35,6 +35,7 @@ data class VaultHandlers(
     val overflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
     val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [VaultHandlers] by binding actions to the provided

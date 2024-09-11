@@ -17,6 +17,7 @@ data class TrustedDeviceHandlers(
     val onApproveWithPasswordClick: () -> Unit,
     val onNotYouButtonClick: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [TrustedDeviceHandlers] by binding actions to the provided

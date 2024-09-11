@@ -16,6 +16,7 @@ data class SetupUnlockHandler(
     val onSetUpLaterClick: () -> Unit,
     val unlockWithBiometricToggle: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [SetupUnlockHandler] by binding actions to the provided

@@ -37,6 +37,7 @@ data class EnvironmentUrlDataJson(
     @SerialName("events")
     val events: String? = null,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Default [EnvironmentUrlDataJson] for the US region.

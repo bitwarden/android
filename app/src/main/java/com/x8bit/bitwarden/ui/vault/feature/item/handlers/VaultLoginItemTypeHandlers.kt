@@ -18,6 +18,7 @@ data class VaultLoginItemTypeHandlers(
     val onPasswordHistoryClick: () -> Unit,
     val onShowPasswordClick: (isVisible: Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates the [VaultLoginItemTypeHandlers] using the [viewModel] to send desired actions.

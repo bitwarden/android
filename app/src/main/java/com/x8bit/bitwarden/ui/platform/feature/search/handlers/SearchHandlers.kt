@@ -20,6 +20,7 @@ data class SearchHandlers(
     val onVaultFilterSelect: (VaultFilterType) -> Unit,
     val onOverflowItemClick: (ListingItemOverflowAction) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [SearchHandlers] by binding actions to the provided

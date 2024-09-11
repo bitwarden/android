@@ -94,6 +94,7 @@ sealed class PolicyInformation {
         @SerialName("includeNumber")
         val includeNumber: Boolean?,
     ) : PolicyInformation() {
+        @Suppress("UndocumentedPublicClass")
         companion object {
             const val TYPE_PASSWORD: String = "password"
             const val TYPE_PASSPHRASE: String = "passphrase"
