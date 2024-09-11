@@ -19,6 +19,7 @@ sealed class FlagKey<out T : Any> {
      */
     abstract val isRemotelyConfigured: Boolean
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * List of all flag keys to consider

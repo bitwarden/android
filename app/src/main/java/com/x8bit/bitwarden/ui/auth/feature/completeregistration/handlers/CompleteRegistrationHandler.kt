@@ -21,6 +21,7 @@ class CompleteRegistrationHandler(
     val onLearnToPreventLockout: () -> Unit,
     val onCallToAction: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Create [CompleteRegistrationHandler] with the given [viewModel] to send actions to.

@@ -32,7 +32,7 @@ class LegacySecureStorageMigratorImpl(
         }
     }
 
-    companion object {
+    private companion object {
         private const val ENCRYPTED_BASE_KEY: String = "bwSecureStorage"
     }
 }

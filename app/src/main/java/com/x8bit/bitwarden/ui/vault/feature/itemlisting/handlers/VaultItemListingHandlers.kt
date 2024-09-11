@@ -26,6 +26,7 @@ data class VaultItemListingHandlers(
     val lockClick: () -> Unit,
     val overflowItemClick: (action: ListingItemOverflowAction) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [VaultItemListingHandlers] by binding actions to the provided

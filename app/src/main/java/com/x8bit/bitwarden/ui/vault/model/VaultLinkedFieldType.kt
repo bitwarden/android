@@ -45,6 +45,7 @@ enum class VaultLinkedFieldType(
     FULL_NAME(id = 418.toUInt(), label = R.string.full_name.asText()),
     ;
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Helper function to get the LinkedCustomFieldType from the id

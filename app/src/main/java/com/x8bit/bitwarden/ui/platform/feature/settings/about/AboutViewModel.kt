@@ -104,6 +104,7 @@ class AboutViewModel @Inject constructor(
         )
     }
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Create initial state for the About View model.

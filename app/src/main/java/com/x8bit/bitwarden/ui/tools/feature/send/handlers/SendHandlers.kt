@@ -18,6 +18,7 @@ data class SendHandlers(
     val onDeleteSendClick: (SendState.ViewState.Content.SendItem) -> Unit,
     val onRemovePasswordClick: (SendState.ViewState.Content.SendItem) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [SendHandlers] by binding actions to the provided [SendViewModel].

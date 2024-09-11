@@ -1348,6 +1348,7 @@ private data class PasswordHandlers(
     val onPasswordMinSpecialCharactersChange: (Int) -> Unit,
     val onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         @Suppress("LongMethod")
         fun create(viewModel: GeneratorViewModel): PasswordHandlers {
@@ -1433,6 +1434,7 @@ private data class PassphraseHandlers(
     val onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
     val onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         fun create(viewModel: GeneratorViewModel): PassphraseHandlers {
             return PassphraseHandlers(
@@ -1482,6 +1484,7 @@ private data class PassphraseHandlers(
 private data class UsernameTypeHandlers(
     val onUsernameTooltipClicked: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         fun create(viewModel: GeneratorViewModel): UsernameTypeHandlers {
             return UsernameTypeHandlers(
@@ -1513,6 +1516,7 @@ private data class ForwardedEmailAliasHandlers(
     val onForwardEmailDomainNameTextChange: (String) -> Unit,
     val onSimpleLoginApiKeyTextChange: (String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         @Suppress("LongMethod")
         fun create(viewModel: GeneratorViewModel): ForwardedEmailAliasHandlers {
@@ -1647,6 +1651,7 @@ private data class ForwardedEmailAliasHandlers(
 private data class PlusAddressedEmailHandlers(
     val onEmailChange: (String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         fun create(viewModel: GeneratorViewModel): PlusAddressedEmailHandlers {
             return PlusAddressedEmailHandlers(
@@ -1676,6 +1681,7 @@ private data class PlusAddressedEmailHandlers(
 private data class CatchAllEmailHandlers(
     val onDomainChange: (String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         fun create(viewModel: GeneratorViewModel): CatchAllEmailHandlers {
             return CatchAllEmailHandlers(
@@ -1706,6 +1712,7 @@ private data class RandomWordHandlers(
     val onCapitalizeChange: (Boolean) -> Unit,
     val onIncludeNumberChange: (Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         fun create(viewModel: GeneratorViewModel): RandomWordHandlers {
             return RandomWordHandlers(

@@ -39,6 +39,7 @@ data class VaultAddEditCommonHandlers(
     val onCollectionSelect: (VaultCollection) -> Unit,
     val onHiddenFieldVisibilityChange: (Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

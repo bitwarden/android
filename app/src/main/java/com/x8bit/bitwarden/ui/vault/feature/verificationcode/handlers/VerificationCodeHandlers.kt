@@ -16,6 +16,7 @@ data class VerificationCodeHandlers(
     val lockClick: () -> Unit,
     val copyClick: (text: String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [VerificationCodeHandlers] by binding actions to the provided

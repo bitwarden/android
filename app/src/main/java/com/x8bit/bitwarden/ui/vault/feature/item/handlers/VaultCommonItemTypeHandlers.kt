@@ -22,6 +22,7 @@ data class VaultCommonItemTypeHandlers(
     ) -> Unit,
     val onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [VaultCommonItemTypeHandlers] by binding actions
