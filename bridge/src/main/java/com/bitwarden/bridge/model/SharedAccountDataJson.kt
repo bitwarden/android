@@ -13,7 +13,7 @@ import java.time.Instant
  * @param accounts The list of shared accounts.
  */
 @Serializable
-internal class SharedAccountDataJson(
+internal data class SharedAccountDataJson(
     @SerialName("accounts")
     val accounts: List<AccountJson>,
 ) {
