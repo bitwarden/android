@@ -1435,6 +1435,7 @@ private const val CIPHER_ID = "mockId-1"
 private val AUTOFILL_SELECTION_DATA =
     AutofillSelectionData(
         type = AutofillSelectionData.Type.LOGIN,
+        framework = AutofillSelectionData.Framework.AUTOFILL,
         uri = AUTOFILL_URI,
     )
 

@@ -2041,6 +2041,7 @@ private val ACCOUNT_SUMMARIES = listOf(
 private val AUTOFILL_SELECTION_DATA =
     AutofillSelectionData(
         type = AutofillSelectionData.Type.LOGIN,
+        framework = AutofillSelectionData.Framework.AUTOFILL,
         uri = "https:://www.test.com",
     )
 

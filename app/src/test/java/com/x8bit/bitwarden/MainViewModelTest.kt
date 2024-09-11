@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
@@ -70,6 +72,8 @@ import java.time.ZoneOffset
 class MainViewModelTest : BaseViewModelTest() {
 
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
+    private val accessibilitySelectionManager: AccessibilitySelectionManager =
+        AccessibilitySelectionManagerImpl()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
@@ -218,6 +222,20 @@ class MainViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 garbageCollectionManager.tryCollect()
+            }
+        }
+
+    @Test
+    fun `accessibility selection updates should emit CompleteAccessibilityAutofill events`() =
+        runTest {
+            val viewModel = createViewModel()
+            val cipherView = mockk<CipherView>()
+            viewModel.eventFlow.test {
+                accessibilitySelectionManager.emitAccessibilitySelection(cipherView = cipherView)
+                assertEquals(
+                    MainEvent.CompleteAccessibilityAutofill(cipherView = cipherView),
+                    awaitItem(),
+                )
             }
         }
 
@@ -964,6 +982,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
+        accessibilitySelectionManager = accessibilitySelectionManager,
         autofillSelectionManager = autofillSelectionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
