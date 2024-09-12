@@ -29,7 +29,7 @@ data class Fido2DialogHandlers(
         fun create(viewModel: Fido2ViewModel): Fido2DialogHandlers =
             Fido2DialogHandlers(
                 onDismissDialogClick = {
-                    viewModel.trySendAction(Fido2Action.DismissDialogClick)
+                    viewModel.trySendAction(Fido2Action.DismissErrorDialogClick)
                 },
                 onDismissUserVerification = {
                     viewModel.trySendAction(Fido2Action.DismissBitwardenUserVerification)

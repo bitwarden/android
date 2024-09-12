@@ -76,8 +76,13 @@ class Fido2ViewModel @Inject constructor(
 
     override fun handleAction(action: Fido2Action) {
         when (action) {
-            Fido2Action.DismissDialogClick -> {
+            Fido2Action.DismissErrorDialogClick -> {
                 clearDialogState()
+                sendEvent(
+                    Fido2Event.CompleteFido2GetCredentialsRequest(
+                        result = Fido2GetCredentialsResult.Error,
+                    ),
+                )
             }
 
             is Fido2Action.Internal -> {
@@ -804,9 +809,9 @@ sealed class Fido2Event {
 sealed class Fido2Action {
 
     /**
-     * Indicates the user dismissed the dialog.
+     * Indicates the user dismissed the error dialog.
      */
-    data object DismissDialogClick : Fido2Action()
+    data object DismissErrorDialogClick : Fido2Action()
 
     /**
      * Indicates the user has cancelled user verification.

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.autofill.fido2
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -46,7 +45,6 @@ fun Fido2Screen(
     }
 
     EventsEffect(viewModel = viewModel) { event ->
-        Log.d("PASSKEY", "Fido2Screen: event received with: event = $event")
         when (event) {
             is Fido2Event.CompleteFido2GetCredentialsRequest -> {
                 fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
@@ -80,7 +78,7 @@ fun Fido2Screen(
 
     Fido2Dialogs(
         dialogState = state.dialog,
-        onDismissDialogClick = dialogHandlers.onDismissDialogClick,
+        onDismissErrorClick = dialogHandlers.onDismissDialogClick,
         onDismissUserVerification = dialogHandlers.onDismissUserVerification,
         onSubmitMasterPasswordFido2Verification = { password, selectedCipherId ->
             dialogHandlers.onSubmitMasterPasswordFido2Verification(password, selectedCipherId)
@@ -112,7 +110,7 @@ fun Fido2Screen(
 @Composable
 private fun Fido2Dialogs(
     dialogState: Fido2State.DialogState?,
-    onDismissDialogClick: () -> Unit,
+    onDismissErrorClick: () -> Unit,
     onDismissUserVerification: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, selectedCipherId: String) -> Unit,
     onSubmitPinFido2Verification: (pin: String, selectedCipherId: String) -> Unit,
@@ -131,7 +129,7 @@ private fun Fido2Dialogs(
         is Fido2State.DialogState.Error -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(dialogState.title, dialogState.message),
-                onDismissRequest = onDismissDialogClick,
+                onDismissRequest = onDismissErrorClick,
             )
         }
 
