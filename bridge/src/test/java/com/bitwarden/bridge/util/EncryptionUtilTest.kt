@@ -1,5 +1,6 @@
 package com.bitwarden.bridge.util
 
+import android.security.keystore.KeyProperties
 import com.bitwarden.bridge.model.AddTotpLoginItemData
 import com.bitwarden.bridge.model.SharedAccountData
 import com.bitwarden.bridge.model.SymmetricEncryptionKeyData
@@ -10,6 +11,7 @@ import io.mockk.unmockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -20,7 +22,7 @@ import javax.crypto.KeyGenerator
 class EncryptionUtilTest {
 
     @Test
-    fun `generateSecretKey should return success`() {
+    fun `generateSecretKey should return success when there are no internal exceptions`() {
         val secretKey = generateSecretKey()
         assertTrue(secretKey.isSuccess)
         assertNotNull(secretKey.getOrNull())
@@ -36,7 +38,7 @@ class EncryptionUtilTest {
     }
 
     @Test
-    fun `toFingerprint should return success when encryption succeeds`() {
+    fun `toFingerprint should return success when there are no internal exceptions`() {
         val keyData = SymmetricEncryptionKeyData(
             symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
         )
@@ -57,7 +59,7 @@ class EncryptionUtilTest {
     }
 
     @Test
-    fun `encrypt SharedAccountData should return success`() {
+    fun `encrypt SharedAccountData should return success when there are no internal exceptions`() {
         val result = SHARED_ACCOUNT_DATA.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
     }
@@ -66,7 +68,7 @@ class EncryptionUtilTest {
     fun `encrypt SharedAccountData should return failure when generateCipher fails`() {
         mockkStatic(Cipher::class)
         every {
-            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+            Cipher.getInstance(CIPHER_TRANSFORMATION)
         } throws NoSuchAlgorithmException()
         val result = SHARED_ACCOUNT_DATA.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
@@ -74,7 +76,8 @@ class EncryptionUtilTest {
     }
 
     @Test
-    fun `decrypt EncryptedSharedAccountData should return success`() {
+    @Suppress("MaxLineLength")
+    fun `decrypt EncryptedSharedAccountData should return success when there are no internal exceptions`() {
         val result = ENCRYPTED_SHARED_ACCOUNT_DATA.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
         assertEquals(SHARED_ACCOUNT_DATA, result.getOrThrow())
@@ -84,7 +87,7 @@ class EncryptionUtilTest {
     fun `decrypt EncryptedSharedAccountData should return failure when generateCipher fails`() {
         mockkStatic(Cipher::class)
         every {
-            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+            Cipher.getInstance(CIPHER_TRANSFORMATION)
         } throws NoSuchAlgorithmException()
         val result = ENCRYPTED_SHARED_ACCOUNT_DATA.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
@@ -104,7 +107,8 @@ class EncryptionUtilTest {
     }
 
     @Test
-    fun `encrypt AddTotpLoginItemData should return success`() {
+    @Suppress("MaxLineLength")
+    fun `encrypt AddTotpLoginItemData should return success wwhen there are no internal exceptions`() {
         val result = ADD_TOTP_ITEM.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
     }
@@ -113,7 +117,7 @@ class EncryptionUtilTest {
     fun `encrypt AddTotpLoginItemData should return failure when generateCipher fails`() {
         mockkStatic(Cipher::class)
         every {
-            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+            Cipher.getInstance(CIPHER_TRANSFORMATION)
         } throws NoSuchAlgorithmException()
         val result = ADD_TOTP_ITEM.encrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
@@ -121,7 +125,8 @@ class EncryptionUtilTest {
     }
 
     @Test
-    fun `decrypt EncryptedAddTotpLoginItemData should return success`() {
+    @Suppress("MaxLIneLength")
+    fun `decrypt EncryptedAddTotpLoginItemData should return success when there are no internal exceptions`() {
         val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
     }
@@ -130,7 +135,7 @@ class EncryptionUtilTest {
     fun `decrypt EncryptedAddTotpLoginItemData should return failure when generateCipher fails`() {
         mockkStatic(Cipher::class)
         every {
-            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+            Cipher.getInstance(CIPHER_TRANSFORMATION)
         } throws NoSuchAlgorithmException()
         val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isFailure)
@@ -182,3 +187,7 @@ private val ENCRYPTED_SHARED_ACCOUNT_DATA =
     SHARED_ACCOUNT_DATA.encrypt(SYMMETRIC_KEY).getOrThrow()
 
 private val ENCRYPTED_ADD_TOTP_ITEM = ADD_TOTP_ITEM.encrypt(SYMMETRIC_KEY).getOrThrow()
+
+private const val CIPHER_TRANSFORMATION = KeyProperties.KEY_ALGORITHM_AES + "/" +
+    KeyProperties.BLOCK_MODE_CBC + "/" +
+    "PKCS5PADDING"

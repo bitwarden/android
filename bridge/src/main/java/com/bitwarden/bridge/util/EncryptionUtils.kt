@@ -1,7 +1,7 @@
 package com.bitwarden.bridge.util
 
+import android.security.keystore.KeyProperties
 import com.bitwarden.bridge.IBridgeService
-import com.bitwarden.bridge.IBridgeServiceCallback
 import com.bitwarden.bridge.model.AddTotpLoginItemData
 import com.bitwarden.bridge.model.AddTotpLoginItemDataJson
 import com.bitwarden.bridge.model.EncryptedAddTotpLoginItemData
@@ -12,7 +12,6 @@ import com.bitwarden.bridge.model.SymmetricEncryptionKeyData
 import com.bitwarden.bridge.model.toByteArrayContainer
 import kotlinx.serialization.encodeToString
 import java.security.MessageDigest
-import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -25,8 +24,8 @@ import javax.crypto.spec.SecretKeySpec
  * This is intended to be used for implementing [IBridgeService.getSymmetricEncryptionKeyData].
  */
 fun generateSecretKey(): Result<SecretKey> = runCatching {
-    val keygen = KeyGenerator.getInstance("AES")
-    keygen.init(256, SecureRandom())
+    val keygen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES)
+    keygen.init(256)
     keygen.generateKey()
 }
 
@@ -38,7 +37,7 @@ fun generateSecretKey(): Result<SecretKey> = runCatching {
  * to verify that they have the correct symmetric key without actually having to send the key.
  */
 fun SymmetricEncryptionKeyData.toFingerprint(): Result<ByteArray> = runCatching {
-    val messageDigest = MessageDigest.getInstance("SHA-256")
+    val messageDigest = MessageDigest.getInstance(KeyProperties.DIGEST_SHA256)
     messageDigest.reset()
     messageDigest.update(this.symmetricEncryptionKey.byteArray)
     messageDigest.digest()
@@ -148,14 +147,18 @@ fun ByteArray.toSymmetricEncryptionKeyData(): SymmetricEncryptionKeyData =
  * Convert the given [ByteArray] to a [SecretKey].
  */
 private fun ByteArray.toSecretKey(): SecretKey =
-    SecretKeySpec(this, 0, this.size, "AES")
+    SecretKeySpec(this, 0, this.size, KeyProperties.KEY_ALGORITHM_AES)
 
 /**
  * Helper function for generating a [Cipher] that can be used for encrypting/decrypting using
  * [SymmetricEncryptionKeyData].
  */
 private fun generateCipher(): Cipher =
-    Cipher.getInstance("AES/CBC/PKCS5PADDING")
+    Cipher.getInstance(
+        KeyProperties.KEY_ALGORITHM_AES + "/" +
+            KeyProperties.BLOCK_MODE_CBC + "/" +
+            "PKCS5PADDING"
+    )
 
 /**
  * Helper function for converting [SharedAccountData] to a serializable [SharedAccountDataJson].
