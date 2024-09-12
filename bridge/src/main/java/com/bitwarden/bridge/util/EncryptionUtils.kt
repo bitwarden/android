@@ -136,6 +136,15 @@ internal fun EncryptedAddTotpLoginItemData.decrypt(
 }
 
 /**
+ * Helper function for converting a [ByteArray] to a type safe [SymmetricEncryptionKeyData].
+ *
+ * This is useful since callers may be storing encryption key data as a [ByteArray] under the hood
+ * and must convert to a [SymmetricEncryptionKeyData] to use the SDK's encryption APIs.
+ */
+fun ByteArray.toSymmetricEncryptionKeyData(): SymmetricEncryptionKeyData =
+    SymmetricEncryptionKeyData(toByteArrayContainer())
+
+/**
  * Convert the given [ByteArray] to a [SecretKey].
  */
 private fun ByteArray.toSecretKey(): SecretKey =

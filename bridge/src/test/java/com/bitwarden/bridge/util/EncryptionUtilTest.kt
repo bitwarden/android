@@ -148,6 +148,13 @@ class EncryptionUtilTest {
             result.getOrThrow()
         )
     }
+
+    @Test
+    fun `toSymmetricEncryptionKeyData should wrap the given ByteArray`() {
+        val sourceArray = generateSecretKey().getOrThrow().encoded
+        val wrappedArray = sourceArray.toSymmetricEncryptionKeyData()
+        assertTrue(sourceArray.contentEquals(wrappedArray.symmetricEncryptionKey.byteArray))
+    }
 }
 
 private val SHARED_ACCOUNT_DATA = SharedAccountData(
