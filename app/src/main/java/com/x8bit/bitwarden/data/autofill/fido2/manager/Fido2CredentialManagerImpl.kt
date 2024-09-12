@@ -14,9 +14,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
@@ -95,13 +93,13 @@ class Fido2CredentialManagerImpl(
     }
 
     override suspend fun validateOrigin(
-        fido2CredentialRequest: Fido2CredentialRequest,
+        callingAppInfo: CallingAppInfo,
+        relyingPartyId: String,
     ): Fido2ValidateOriginResult {
-        val callingAppInfo = fido2CredentialRequest.callingAppInfo
         return if (callingAppInfo.isOriginPopulated()) {
             validatePrivilegedAppOrigin(callingAppInfo)
         } else {
-            validateCallingApplicationAssetLinks(fido2CredentialRequest)
+            validateCallingApplicationAssetLinks(callingAppInfo, relyingPartyId)
         }
     }
 
@@ -136,40 +134,52 @@ class Fido2CredentialManagerImpl(
         val clientData = request.clientDataHash
             ?.let { ClientData.DefaultWithCustomHash(hash = it) }
             ?: ClientData.DefaultWithExtraData(androidPackageName = callingAppInfo.getAppOrigin())
-        val origin = request.origin
+        val origin = callingAppInfo.origin
             ?: getOriginUrlFromAssertionOptionsOrNull(request.requestJson)
             ?: return Fido2CredentialAssertionResult.Error
+        val relyingPartyId = json
+            .decodeFromStringOrNull<PasskeyAssertionOptions>(request.requestJson)
+            ?.relyingPartyId
+            ?: return Fido2CredentialAssertionResult.Error
 
-        return vaultSdkSource
-            .authenticateFido2Credential(
-                request = AuthenticateFido2CredentialRequest(
-                    userId = userId,
-                    origin = origin,
-                    requestJson = """{"publicKey": ${request.requestJson}}""",
-                    clientData = clientData,
-                    selectedCipherView = selectedCipherView,
-                    isUserVerificationSupported = true,
-                ),
-                fido2CredentialStore = this,
-            )
-            .map { it.toAndroidFido2PublicKeyCredential() }
-            .mapCatching { json.encodeToString(it) }
-            .fold(
-                onSuccess = { Fido2CredentialAssertionResult.Success(it) },
-                onFailure = { Fido2CredentialAssertionResult.Error },
-            )
+        val validateOriginResult = validateOrigin(
+            callingAppInfo = callingAppInfo,
+            relyingPartyId = relyingPartyId,
+        )
+
+        return when (validateOriginResult) {
+            is Fido2ValidateOriginResult.Error -> {
+                Fido2CredentialAssertionResult.Error
+            }
+
+            Fido2ValidateOriginResult.Success -> {
+                vaultSdkSource
+                    .authenticateFido2Credential(
+                        request = AuthenticateFido2CredentialRequest(
+                            userId = userId,
+                            origin = origin,
+                            requestJson = """{"publicKey": ${request.requestJson}}""",
+                            clientData = clientData,
+                            selectedCipherView = selectedCipherView,
+                            isUserVerificationSupported = true,
+                        ),
+                        fido2CredentialStore = this,
+                    )
+                    .map { it.toAndroidFido2PublicKeyCredential() }
+                    .mapCatching { json.encodeToString(it) }
+                    .fold(
+                        onSuccess = { Fido2CredentialAssertionResult.Success(it) },
+                        onFailure = { Fido2CredentialAssertionResult.Error },
+                    )
+            }
+        }
     }
 
     private suspend fun validateCallingApplicationAssetLinks(
-        fido2CredentialRequest: Fido2CredentialRequest,
+        callingAppInfo: CallingAppInfo,
+        relyingPartyId: String,
     ): Fido2ValidateOriginResult {
-        val callingAppInfo = fido2CredentialRequest.callingAppInfo
-        return fido2CredentialRequest
-            .requestJson
-            .getRpId(json)
-            .flatMap { rpId ->
-                digitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = rpId)
-            }
+        return digitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = relyingPartyId)
             .onFailure {
                 return Fido2ValidateOriginResult.Error.AssetLinkNotFound
             }
@@ -246,20 +256,6 @@ class Fido2CredentialManagerImpl(
                 ?: false
         }
             .takeUnless { it.isEmpty() }
-
-    private fun String.getRpId(json: Json): Result<String> {
-        return try {
-            json
-                .decodeFromString<PasskeyAttestationOptions>(this)
-                .relyingParty
-                .id
-                .asSuccess()
-        } catch (e: SerializationException) {
-            e.asFailure()
-        } catch (e: IllegalArgumentException) {
-            e.asFailure()
-        }
-    }
 
     override fun hasAuthenticationAttemptsRemaining(): Boolean =
         authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS

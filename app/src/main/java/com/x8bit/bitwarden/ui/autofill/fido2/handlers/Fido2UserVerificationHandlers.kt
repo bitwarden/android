@@ -14,6 +14,7 @@ data class Fido2UserVerificationHandlers(
     val onUserVerificationCancelled: () -> Unit,
     val onUserVerificationNotSupported: (selectedCipherId: String?) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

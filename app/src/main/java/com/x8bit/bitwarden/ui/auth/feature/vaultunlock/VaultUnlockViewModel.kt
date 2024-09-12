@@ -226,7 +226,7 @@ class VaultUnlockViewModel @Inject constructor(
         if (state.input.isEmpty()) {
             mutableStateFlow.update {
                 it.copy(
-                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                         it.vaultUnlockType.emptyInputDialogMessage,
                     ),
                 )

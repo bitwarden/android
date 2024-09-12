@@ -19,6 +19,7 @@ data class Fido2DialogHandlers(
     val onRetryFido2PinVerification: (selectedCipherId: String) -> Unit,
     val onRetryPinSetUpFido2Verification: (selectedCipherId: String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**
