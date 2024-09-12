@@ -91,12 +91,9 @@ internal fun EncryptedSharedAccountData.decrypt(
 /**
  * Encrypt [AddTotpLoginItemData].
  *
- * This is intended to be used by the Bitwarden Authenticator app before requesting a new TOTP
- * item be added to the main Bitwarden app.
- *
  * @param symmetricEncryptionKeyData Symmetric key used for encryption.
  */
-fun AddTotpLoginItemData.encrypt(
+internal fun AddTotpLoginItemData.encrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
 ): Result<EncryptedAddTotpLoginItemData> = runCatching {
     val encodedKey = symmetricEncryptionKeyData.symmetricEncryptionKey.byteArray
