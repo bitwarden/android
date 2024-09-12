@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * @param totpUri A TOTP code URI to be added to the Bitwarden app.
  */
 @Serializable
-data class AddTotpLoginItemDataJson(
+internal data class AddTotpLoginItemDataJson(
     @SerialName("totpUri")
     val totpUri: String,
 )
