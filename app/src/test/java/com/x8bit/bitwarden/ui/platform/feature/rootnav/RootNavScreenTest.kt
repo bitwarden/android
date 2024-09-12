@@ -225,15 +225,6 @@ class RootNavScreenTest : BaseComposeTest() {
                     navOptions = expectedNavOptions,
                 )
             }
-
-        // Make sure navigating to the generator shortcut works as expected:
-        rootNavStateFlow.value = RootNavState.GeneratorShortcut
-        composeTestRule
-            .runOnIdle {
-                fakeNavHostController.assertLastNavigation(
-                    route = "generator_modal/password_generator",
-                )
-            }
     }
 }
 

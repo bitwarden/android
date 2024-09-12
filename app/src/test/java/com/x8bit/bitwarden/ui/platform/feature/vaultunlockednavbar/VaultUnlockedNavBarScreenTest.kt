@@ -82,6 +82,24 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToVaultScreen shortcut event should navigate to VaultScreen`() {
+        mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
+        composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("send_graph") }
+        mutableEventFlow.tryEmit(
+            VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
+                labelRes = R.string.my_vault,
+                contentDescRes = R.string.my_vault,
+            ),
+        )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_graph",
+                navOptions = expectedNavOptions,
+            )
+        }
+    }
+
+    @Test
     fun `send tab click should send SendTabClick action`() {
         composeTestRule.onNodeWithText("Send").performClick()
         verify { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) }
@@ -112,6 +130,20 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
         composeTestRule.apply {
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
             mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
+            runOnIdle {
+                fakeNavHostController.assertLastNavigation(
+                    route = "generator_graph",
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `NavigateToGeneratorScreen  shortcut event should navigate to GeneratorScreen`() {
+        composeTestRule.apply {
+            runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
+            mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
                     route = "generator_graph",
