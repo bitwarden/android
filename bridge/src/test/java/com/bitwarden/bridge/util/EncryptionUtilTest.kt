@@ -36,7 +36,7 @@ class EncryptionUtilTest {
     }
 
     @Test
-    fun `toFingerprint should return success`() {
+    fun `toFingerprint should return success when encryption succeeds`() {
         val keyData = SymmetricEncryptionKeyData(
             symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
         )
