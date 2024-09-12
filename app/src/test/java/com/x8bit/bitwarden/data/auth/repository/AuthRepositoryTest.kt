@@ -142,7 +142,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthRepositoryTest {
@@ -5149,9 +5148,6 @@ class AuthRepositoryTest {
         } returns OrganizationDomainSsoDetailsResponseJson(
             isSsoAvailable = true,
             organizationIdentifier = "Test Org",
-            domainName = "bitwarden.com",
-            isSsoRequired = false,
-            verifiedDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
         )
             .asSuccess()
         val result = repository.getOrganizationDomainSsoDetails(email)
