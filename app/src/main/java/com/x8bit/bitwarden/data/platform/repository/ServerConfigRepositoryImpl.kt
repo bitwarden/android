@@ -59,7 +59,7 @@ class ServerConfigRepositoryImpl(
         return localConfig
     }
 
-    companion object {
+    private companion object {
         private const val MINIMUM_CONFIG_SYNC_INTERVAL_SEC: Long = 60 * 60
     }
 }

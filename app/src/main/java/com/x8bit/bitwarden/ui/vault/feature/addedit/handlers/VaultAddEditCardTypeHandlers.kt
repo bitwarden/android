@@ -30,6 +30,7 @@ data class VaultAddEditCardTypeHandlers(
     val onSecurityCodeVisibilityChange: (Boolean) -> Unit,
     val onNumberVisibilityChange: (Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

@@ -16,6 +16,7 @@ data class SetupAutoFillHandler(
     val onConfirmTurnOnLaterClick: () -> Unit,
     val sendAutoFillServiceFallback: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Convenience function for creating a [SetupAutoFillHandler] with a

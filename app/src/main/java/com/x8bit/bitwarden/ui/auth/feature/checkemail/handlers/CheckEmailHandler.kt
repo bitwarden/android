@@ -14,6 +14,7 @@ class CheckEmailHandler(
     val onBackClick: () -> Unit,
     val onLoginClick: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Create [CheckEmailHandler] with the given [viewModel] to send actions to.

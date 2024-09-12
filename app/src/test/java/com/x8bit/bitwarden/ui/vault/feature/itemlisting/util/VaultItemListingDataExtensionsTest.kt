@@ -488,6 +488,7 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = null,
             ),
             fido2CreationData = null,
@@ -572,6 +573,7 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = null,
             ),
             fido2CreationData = null,
@@ -694,6 +696,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = AutofillSelectionData(
                     type = AutofillSelectionData.Type.LOGIN,
+                    framework = AutofillSelectionData.Framework.AUTOFILL,
                     uri = "https://www.test.com",
                 ),
                 fido2CreationData = null,

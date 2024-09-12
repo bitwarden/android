@@ -47,8 +47,6 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.x8bit.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
-import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorModal
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
@@ -115,7 +113,6 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForFido2GetCredentials,
-        is RootNavState.GeneratorShortcut,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -219,11 +216,6 @@ fun RootNavScreen(
                     vaultItemListingType = VaultItemListingType.Login,
                     navOptions = rootNavOptions,
                 )
-            }
-
-            RootNavState.GeneratorShortcut -> {
-                navController.navigateToVaultUnlockedGraph(rootNavOptions)
-                navController.navigateToGeneratorModal(mode = GeneratorMode.Modal.Password)
             }
         }
     }

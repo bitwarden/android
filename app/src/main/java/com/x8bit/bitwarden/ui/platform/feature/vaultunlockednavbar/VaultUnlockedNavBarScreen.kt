@@ -88,7 +88,9 @@ fun VaultUnlockedNavBarScreen(
         navController.apply {
             val navOptions = vaultUnlockedNavBarScreenNavOptions(tabToNavigateTo = event.tab)
             when (event) {
-                is VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
+                is VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen,
+                is VaultUnlockedNavBarEvent.NavigateToVaultScreen,
+                -> {
                     navigateToVaultGraph(navOptions)
                 }
 
@@ -96,7 +98,9 @@ fun VaultUnlockedNavBarScreen(
                     navigateToSendGraph(navOptions)
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
+                VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
+                VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
+                -> {
                     navigateToGeneratorGraph(navOptions)
                 }
 

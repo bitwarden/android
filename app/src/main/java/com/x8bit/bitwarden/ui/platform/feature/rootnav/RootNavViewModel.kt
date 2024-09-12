@@ -131,9 +131,7 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    SpecialCircumstance.GeneratorShortcut -> {
-                        RootNavState.GeneratorShortcut
-                    }
+                    SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
@@ -322,12 +320,6 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object ExpiredRegistrationLink : RootNavState()
-
-    /**
-     * App should show the password generator modal.
-     */
-    @Parcelize
-    data object GeneratorShortcut : RootNavState()
 }
 
 /**

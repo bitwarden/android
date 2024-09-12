@@ -21,6 +21,7 @@ data class VaultItemListingUserVerificationHandlers(
     val onUserVerificationCancelled: () -> Unit,
     val onUserVerificationNotSupported: (selectedCipherId: String?) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

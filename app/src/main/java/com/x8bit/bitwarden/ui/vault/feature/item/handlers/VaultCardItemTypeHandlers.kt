@@ -13,6 +13,7 @@ data class VaultCardItemTypeHandlers(
     val onShowNumberClick: (Boolean) -> Unit,
     val onShowSecurityCodeClick: (Boolean) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

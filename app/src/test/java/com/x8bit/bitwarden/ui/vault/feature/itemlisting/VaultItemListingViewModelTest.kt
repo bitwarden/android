@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
@@ -94,6 +96,8 @@ import java.time.ZoneOffset
 @Suppress("LargeClass")
 class VaultItemListingViewModelTest : BaseViewModelTest() {
 
+    private val accessibilitySelectionManager: AccessibilitySelectionManager =
+        AccessibilitySelectionManagerImpl()
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
 
     private var mockFilteredCiphers: List<CipherView>? = null
@@ -311,6 +315,49 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ItemClick for vault item when accessibility autofill should post to the accessibilitySelectionManager`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+            coEvery {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView),
+                )
+            } returns DecryptFido2CredentialAutofillViewResult.Error
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = AutofillSelectionData(
+                    type = AutofillSelectionData.Type.LOGIN,
+                    framework = AutofillSelectionData.Framework.ACCESSIBILITY,
+                    uri = "https://www.test.com",
+                ),
+                shouldFinishWhenComplete = true,
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+
+            accessibilitySelectionManager.accessibilitySelectionFlow.test {
+                viewModel.trySendAction(VaultItemListingsAction.ItemClick(id = "mockId-1"))
+                assertEquals(cipherView, awaitItem())
+            }
+            coVerify(exactly = 1) {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView),
+                )
+            }
+        }
+
     @Test
     fun `ItemClick for vault item when autofill should post to the AutofillSelectionManager`() =
         runTest {
@@ -328,6 +375,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 SpecialCircumstance.AutofillSelection(
                     autofillSelectionData = AutofillSelectionData(
                         type = AutofillSelectionData.Type.LOGIN,
+                        framework = AutofillSelectionData.Framework.AUTOFILL,
                         uri = "https://www.test.com",
                     ),
                     shouldFinishWhenComplete = true,
@@ -1250,6 +1298,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val autofillSelectionData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = "https://www.test.com",
             )
             specialCircumstanceManager.specialCircumstance =
@@ -3794,6 +3843,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
+            accessibilitySelectionManager = accessibilitySelectionManager,
             autofillSelectionManager = autofillSelectionManager,
             cipherMatchingManager = cipherMatchingManager,
             specialCircumstanceManager = specialCircumstanceManager,

@@ -26,6 +26,7 @@ data class AddSendHandlers(
     val onExpirationDateChange: (ZonedDateTime?) -> Unit,
     val onClearExpirationDateClick: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [AddSendHandlers] by binding actions to the provided

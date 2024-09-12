@@ -34,6 +34,7 @@ fun FilledData.buildVaultItemDataset(
 ): Dataset {
     val intent = createAutofillSelectionIntent(
         context = autofillAppInfo.context,
+        framework = AutofillSelectionData.Framework.AUTOFILL,
         type = when (this.originalPartition) {
             is AutofillPartition.Card -> AutofillSelectionData.Type.CARD
             is AutofillPartition.Login -> AutofillSelectionData.Type.LOGIN

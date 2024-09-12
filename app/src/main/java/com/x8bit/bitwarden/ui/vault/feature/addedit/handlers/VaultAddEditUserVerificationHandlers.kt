@@ -24,6 +24,7 @@ data class VaultAddEditUserVerificationHandlers(
     val onUserVerificationCancelled: () -> Unit,
     val onUserVerificationNotSupported: () -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

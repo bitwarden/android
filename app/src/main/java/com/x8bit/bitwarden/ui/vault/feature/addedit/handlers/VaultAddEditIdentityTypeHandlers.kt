@@ -46,6 +46,7 @@ data class VaultAddEditIdentityTypeHandlers(
     val onZipTextChange: (String) -> Unit,
     val onCountryTextChange: (String) -> Unit,
 ) {
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**
