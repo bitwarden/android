@@ -553,6 +553,23 @@ class VaultRepositoryImpl(
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
+    override suspend fun unlockVaultWithAuthenticatorSyncKey(
+        userId: String,
+        decryptedAuthenticatorSyncKey: String,
+    ): VaultUnlockResult {
+        return unlockVaultForUser(
+            userId = userId,
+            initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                decryptedUserKey = decryptedAuthenticatorSyncKey,
+            ),
+        )
+            .also {
+                if (it is VaultUnlockResult.Success) {
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
+                }
+            }
+    }
+
     override suspend fun unlockVaultWithBiometrics(): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
         val biometricsKey = authDiskSource

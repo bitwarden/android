@@ -1243,6 +1243,130 @@ class VaultRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithAuthenticatorSyncKey with VaultLockManager Success and a stored encrypted pin should unlock for the current user, derive a new pin-protected key, and return Success`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val encryptedPin = "encryptedPin"
+            val privateKey = "mockPrivateKey-1"
+            val pinProtectedUserKey = "pinProtectedUserkey"
+            val authenticatorSyncUnlockKey = "asdf1234"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.derivePinProtectedUserKey(
+                    userId = userId,
+                    encryptedPin = encryptedPin,
+                )
+            } returns pinProtectedUserKey.asSuccess()
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.apply {
+                storeAuthenticatorSyncUnlockKey(
+                    userId = userId,
+                    authenticatorSyncUnlockKey = authenticatorSyncUnlockKey,
+                )
+                storePrivateKey(userId = userId, privateKey = privateKey)
+                storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+                storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = null,
+                    inMemoryOnly = true,
+                )
+            }
+
+            val result = vaultRepository.unlockVaultWithAuthenticatorSyncKey(
+                userId = userId,
+                decryptedAuthenticatorSyncKey = authenticatorSyncUnlockKey,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            fakeAuthDiskSource.assertPinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+                inMemoryOnly = true,
+            )
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+            coEvery {
+                vaultSdkSource.derivePinProtectedUserKey(
+                    userId = userId,
+                    encryptedPin = encryptedPin,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithAuthenticatorSyncKey with VaultLockManager Success and no encrypted PIN should unlock for the current user and return Success`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val privateKey = "mockPrivateKey-1"
+            val authenticatorSyncUnlockKey = "asdf1234"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.apply {
+                storeAuthenticatorSyncUnlockKey(
+                    userId = userId,
+                    authenticatorSyncUnlockKey = authenticatorSyncUnlockKey,
+                )
+                storePrivateKey(userId = userId, privateKey = privateKey)
+            }
+
+            val result = vaultRepository.unlockVaultWithAuthenticatorSyncKey(
+                userId = userId,
+                decryptedAuthenticatorSyncKey = authenticatorSyncUnlockKey,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+            coVerify(exactly = 0) {
+                vaultSdkSource.derivePinProtectedUserKey(any(), any())
+            }
+        }
+
     @Test
     fun `unlockVaultWithMasterPassword with missing user state should return InvalidStateError`() =
         runTest {

@@ -168,6 +168,18 @@ interface VaultRepository : CipherManager, VaultLockManager {
     fun emitTotpCodeResult(totpCodeResult: TotpCodeResult)
 
     /**
+     * Attempt to unlock the vault using the stored authenticator sync unlock key for the
+     * given user.
+     *
+     * @param userId ID of the user's vault to unlock.
+     * @param decryptedAuthenticatorSyncKey The authenticator sync unlock key for the user.
+     */
+    suspend fun unlockVaultWithAuthenticatorSyncKey(
+        userId: String,
+        decryptedAuthenticatorSyncKey: String,
+    ): VaultUnlockResult
+
+    /**
      * Attempt to unlock the vault using the stored biometric key for the currently active user.
      */
     suspend fun unlockVaultWithBiometrics(): VaultUnlockResult
