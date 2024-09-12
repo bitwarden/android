@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
+import com.x8bit.bitwarden.data.platform.repository.BridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
@@ -80,8 +81,12 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideBridgeServiceProcessor(
+        bridgeRepository: BridgeRepository,
+        dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
     ): BridgeServiceProcessor = BridgeServiceProcessorImpl(
+        bridgeRepository = bridgeRepository,
+        dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
     )
 

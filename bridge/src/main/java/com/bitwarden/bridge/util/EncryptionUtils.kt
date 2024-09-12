@@ -9,6 +9,7 @@ import com.bitwarden.bridge.model.EncryptedSharedAccountData
 import com.bitwarden.bridge.model.SharedAccountData
 import com.bitwarden.bridge.model.SharedAccountDataJson
 import com.bitwarden.bridge.model.SymmetricEncryptionKeyData
+import com.bitwarden.bridge.model.SymmetricEncryptionKeyFingerprintData
 import com.bitwarden.bridge.model.toByteArrayContainer
 import kotlinx.serialization.encodeToString
 import java.security.MessageDigest
@@ -36,12 +37,13 @@ fun generateSecretKey(): Result<SecretKey> = runCatching {
  * [IBridgeService.checkSymmetricEncryptionKeyFingerprint], which allows callers of the service
  * to verify that they have the correct symmetric key without actually having to send the key.
  */
-fun SymmetricEncryptionKeyData.toFingerprint(): Result<ByteArray> = runCatching {
-    val messageDigest = MessageDigest.getInstance(KeyProperties.DIGEST_SHA256)
-    messageDigest.reset()
-    messageDigest.update(this.symmetricEncryptionKey.byteArray)
-    messageDigest.digest()
-}
+fun SymmetricEncryptionKeyData.toFingerprint(): Result<SymmetricEncryptionKeyFingerprintData> =
+    runCatching {
+        val messageDigest = MessageDigest.getInstance(KeyProperties.DIGEST_SHA256)
+        messageDigest.reset()
+        messageDigest.update(this.symmetricEncryptionKey.byteArray)
+        SymmetricEncryptionKeyFingerprintData(messageDigest.digest().toByteArrayContainer())
+    }
 
 /**
  * Encrypt [SharedAccountData].
