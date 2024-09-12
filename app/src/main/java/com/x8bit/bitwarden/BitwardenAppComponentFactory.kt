@@ -6,12 +6,15 @@ import android.os.Build
 import androidx.annotation.Keep
 import androidx.core.app.AppComponentFactory
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
+import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
 import com.x8bit.bitwarden.data.autofill.fido2.BitwardenFido2ProviderService
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.tiles.BitwardenAutofillTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenGeneratorTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenVaultTileService
 
+private const val LEGACY_ACCESSIBILITY_SERVICE_NAME =
+    "com.x8bit.bitwarden.Accessibility.AccessibilityService"
 private const val LEGACY_AUTOFILL_SERVICE_NAME = "com.x8bit.bitwarden.Autofill.AutofillService"
 private const val LEGACY_CREDENTIAL_SERVICE_NAME =
     "com.x8bit.bitwarden.Autofill.CredentialProviderService"
@@ -33,6 +36,7 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
      * the legacy Xamarin app service name but the service name in this app is different.
      *
      * Services currently being managed:
+     * * [BitwardenAccessibilityService]
      * * [BitwardenAutofillService]
      * * [BitwardenAutofillTileService]
      * * [BitwardenFido2ProviderService]
@@ -44,6 +48,14 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
         className: String,
         intent: Intent?,
     ): Service = when (className) {
+        LEGACY_ACCESSIBILITY_SERVICE_NAME -> {
+            super.instantiateServiceCompat(
+                cl,
+                BitwardenAccessibilityService::class.java.name,
+                intent,
+            )
+        }
+
         LEGACY_AUTOFILL_SERVICE_NAME -> {
             super.instantiateServiceCompat(cl, BitwardenAutofillService::class.java.name, intent)
         }
