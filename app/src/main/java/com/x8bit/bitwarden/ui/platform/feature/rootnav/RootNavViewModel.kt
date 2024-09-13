@@ -98,6 +98,7 @@ class RootNavViewModel @Inject constructor(
                     -> RootNavState.OnboardingAccountLockSetup
                     OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
                     OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
+                    OnboardingStatus.FINAL_STEP -> TODO("PM-12076 complete navigation wiring")
                 }
             }
 
