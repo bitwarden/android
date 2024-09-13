@@ -556,19 +556,12 @@ class VaultRepositoryImpl(
     override suspend fun unlockVaultWithAuthenticatorSyncKey(
         userId: String,
         decryptedUserKey: String,
-    ): VaultUnlockResult {
-        return unlockVaultForUser(
-            userId = userId,
-            initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                decryptedUserKey = decryptedUserKey,
-            ),
-        )
-            .also {
-                if (it is VaultUnlockResult.Success) {
-                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
-                }
-            }
-    }
+    ): VaultUnlockResult = unlockVaultForUser(
+        userId = userId,
+        initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+            decryptedUserKey = decryptedUserKey,
+        ),
+    )
 
     override suspend fun unlockVaultWithBiometrics(): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
