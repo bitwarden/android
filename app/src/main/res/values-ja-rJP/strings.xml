@@ -329,6 +329,7 @@
   <string name="no_items_folder">このフォルダーにはアイテムがありません。</string>
   <string name="no_items_trash">ごみ箱にアイテムはありません。</string>
   <string name="autofill_accessibility_service">自動入力ユーザー補助サービス</string>
+  <string name="autofill_accessibility_summary">他のアプリやウェブ上でのユーザー名やパスワードの入力を手助けします。</string>
   <string name="autofill_service_description">Bitwarden 自動入力サービスは Android の Autofill Framework を使ってログイン情報やクレジットカード、ID情報をお使いのアプリに入力するのを補助します。</string>
   <string name="bitwarden_autofill_service_description">Bitwarden 自動入力サービスを使ってログイン情報やクレジットカード、ID情報などをアプリで自動入力します。</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">自動入力設定を開く</string>
@@ -992,6 +993,12 @@
   <string name="expired_link">期限切れのリンク</string>
   <string name="please_restart_registration_or_try_logging_in">登録を再度始めるか、ログインを試してください。すでにアカウントを持っている可能性があります。</string>
   <string name="restart_registration">登録を再度始める</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">認証システムの同期</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden 認証システムの同期を許可する</string>
+  <string name="there_was_an_issue_validating_the_registration_token">登録トークンの検証中に問題が発生しました。</string>
+  <string name="turn_on_autofill">自動入力をオンにする</string>
+  <string name="use_autofill_to_log_into_your_accounts">自動入力を使用するとワンタップでアカウントにログインできます。</string>
+  <string name="turn_on_later">後でオンにする</string>
+  <string name="turn_on_autofill_later">後で自動入力をオンにしますか？</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">いつでも「設定」からこのステップに戻れます。</string>
 </resources>

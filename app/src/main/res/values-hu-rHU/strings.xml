@@ -328,6 +328,7 @@
   <string name="no_items_folder">Nincsenek elemek ebben a mappában.</string>
   <string name="no_items_trash">Nincs elem a lomtárban.</string>
   <string name="autofill_accessibility_service">Automatikus kitöltés akadálymentesítő szolgáltatás</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">A Bitwarden automatikus kitöltési szolgáltatása az Android automatikus kitöltő keretrendszerét használja a bejelentkezési adatok, hitelkártyaadatok és azonosítóadatok kitöltésére az eszközén telepített más alkalmazásokban.</string>
   <string name="bitwarden_autofill_service_description">A Bitwarden automatikus kitöltési szolgáltatás használata a bejelentkezési-, hitelkártya- és azonosítóadatok kitöltéséhez más alkalmazásokban.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Automatikus kitöltés beállításainak megnyitása</string>
@@ -991,6 +992,12 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="expired_link">A hivatkozás lejárt.</string>
   <string name="please_restart_registration_or_try_logging_in">Indítsuk újra a regisztrációt vagy próbáljunk meg bejelentkezni. Valószínűleg már létezik a fiók.</string>
   <string name="restart_registration">Regisztráció újra indítása</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Hitelesítő szinkronizálás</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden Hitelesítő szinkronizálás engedélyezése</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Hiba történt a regisztrációs vezérkód érvényesítése során.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

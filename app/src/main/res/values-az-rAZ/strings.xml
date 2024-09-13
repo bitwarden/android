@@ -329,6 +329,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="no_items_folder">Bu qovluqda heç bir element yoxdur.</string>
   <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
   <string name="autofill_accessibility_service">Avto-doldurma əlçatımlılıq xidməti</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwarden avto-doldurma xidməti, giriş məlumatlarının cihazınızdakı digər tətbiqlərdə doldurmasına kömək etməsi üçün Android Avto-doldurma Çərçivəsini istifadə edir.</string>
   <string name="bitwarden_autofill_service_description">Giriş məlumatlarını digər tətbiqlərdə doldurmaq üçün Bitwarden avto-doldurma xidmətini istifadə edin.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Avto-doldurma ayarlarını aç</string>
@@ -991,6 +992,12 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="expired_link">Vaxtı bitmiş keçid</string>
   <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
   <string name="restart_registration">Qeydiyyatı yenidən başlat</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Kimlik doğrulayıcı sinxrn</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden Kimlik doğrulayıcı sinxronlaşdırmasına icazə ver</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Qeydiyyat jetonu doğrulanarkən bir problem baş verdi.</string>
+  <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
+  <string name="use_autofill_to_log_into_your_accounts">Tək toxunuşda hesablarınıza giriş etmək üçün avto-doldurmanı istifadə edin.</string>
+  <string name="turn_on_later">Daha sonra işə sal</string>
+  <string name="turn_on_autofill_later">Avto-doldurma daha sonra işə salınsın?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Bu addımı tamamlamaq üçün istənilən vaxt Ayarlara gedə bilərsiniz.</string>
 </resources>

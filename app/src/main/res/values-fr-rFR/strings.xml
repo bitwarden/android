@@ -329,6 +329,7 @@ La numérisation se fera automatiquement.</string>
   <string name="no_items_folder">Il n\'y a aucun élément dans ce dossier.</string>
   <string name="no_items_trash">Il n\'y a aucun élément dans la corbeille.</string>
   <string name="autofill_accessibility_service">Service d\'accessibilité de saisie automatique</string>
+  <string name="autofill_accessibility_summary">Aide à remplir les champs de nom d\'utilisateur et de mot de passe dans d\'autres applications et sur le Web.</string>
   <string name="autofill_service_description">Le service de saisie automatique Bitwarden utilise Android Autofill Framework pour aider à la saisie des informations de connexion dans d\'autres applications sur votre appareil.</string>
   <string name="bitwarden_autofill_service_description">Utilisez le service de saisie automatique Bitwarden pour remplir les informations de connexion dans d\'autres applications.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Ouvrir les paramètres de remplissage automatique</string>
@@ -994,4 +995,10 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="restart_registration">Recommencer l\'inscription</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Un problème est survenu lors de la validation du jeton d\'enregistrement.</string>
+  <string name="turn_on_autofill">Activer le remplissage automatique</string>
+  <string name="use_autofill_to_log_into_your_accounts">Utilisez le remplissage automatique pour vous connecter à vos comptes en un seul clic.</string>
+  <string name="turn_on_later">Activer plus tard</string>
+  <string name="turn_on_autofill_later">Activer le remplissage automatique plus tard ?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Vous pouvez revenir compléter cette étape à tout moment dans les paramètres.</string>
 </resources>
