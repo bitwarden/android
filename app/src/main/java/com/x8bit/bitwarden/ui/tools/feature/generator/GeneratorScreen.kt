@@ -369,6 +369,7 @@ private fun ScrollContent(
                     onSubStateOptionClicked = onPasscodeSubStateOptionClicked,
                     passwordHandlers = passwordHandlers,
                     passphraseHandlers = passphraseHandlers,
+                    overridePasswordPolicyRestriction = state.overridePassword
                 )
             }
 
@@ -459,8 +460,9 @@ private fun ColumnScope.PasscodeTypeItems(
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
+    overridePasswordPolicyRestriction: Boolean,
 ) {
-    PasscodeOptionsItem(passcodeState, onSubStateOptionClicked)
+    PasscodeOptionsItem(passcodeState, onSubStateOptionClicked, overridePasswordPolicyRestriction)
 
     when (val selectedType = passcodeState.selectedType) {
         is GeneratorState.MainType.Passcode.PasscodeType.Password -> {
@@ -483,6 +485,7 @@ private fun ColumnScope.PasscodeTypeItems(
 private fun PasscodeOptionsItem(
     currentSubState: GeneratorState.MainType.Passcode,
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
+    overridePasswordPolicyRestriction: Boolean,
 ) {
     val possibleSubStates = GeneratorState.MainType.Passcode.PasscodeTypeOption.entries
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
@@ -496,6 +499,7 @@ private fun PasscodeOptionsItem(
                 optionsWithStrings.entries.first { it.value == selectedOption }.key
             onSubStateOptionClicked(selectedOptionId)
         },
+        isEnabled = !overridePasswordPolicyRestriction,
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()

@@ -182,7 +182,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `activePolicyFlow changes should update state`() = runTest {
         val payload = mapOf(
-            "defaultType" to JsonNull,
+            "overridePasswordType" to JsonNull,
             "minLength" to JsonPrimitive(10),
             "useUpper" to JsonPrimitive(true),
             "useNumbers" to JsonPrimitive(true),
