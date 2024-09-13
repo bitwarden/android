@@ -1105,9 +1105,12 @@ class SettingsRepositoryTest {
         }
 
     @Test
-    fun `isAuthenticatorSyncEnabled set to false should clear authenticator sync key`() =
+    @Suppress("MaxLineLength")
+    fun `isAuthenticatorSyncEnabled set to false should clear authenticator sync key and leave symmetric sync key untouched`() =
         runTest {
+            val syncSymmetricKey = generateSecretKey().getOrThrow().encoded
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncSymmetricKey
             fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(USER_ID, AUTHENTICATION_SYNC_KEY)
 
             assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
@@ -1116,6 +1119,7 @@ class SettingsRepositoryTest {
 
             assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
             assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
+            assertTrue(fakeAuthDiskSource.authenticatorSyncSymmetricKey.contentEquals(syncSymmetricKey))
         }
 
     @Test
