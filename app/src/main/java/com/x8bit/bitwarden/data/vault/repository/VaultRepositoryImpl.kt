@@ -555,12 +555,12 @@ class VaultRepositoryImpl(
 
     override suspend fun unlockVaultWithAuthenticatorSyncKey(
         userId: String,
-        decryptedAuthenticatorSyncKey: String,
+        decryptedUserKey: String,
     ): VaultUnlockResult {
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                decryptedUserKey = decryptedAuthenticatorSyncKey,
+                decryptedUserKey = decryptedUserKey,
             ),
         )
             .also {

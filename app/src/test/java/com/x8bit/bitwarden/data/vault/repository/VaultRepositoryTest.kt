@@ -1287,7 +1287,7 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithAuthenticatorSyncKey(
                 userId = userId,
-                decryptedAuthenticatorSyncKey = authenticatorSyncUnlockKey,
+                decryptedUserKey = authenticatorSyncUnlockKey,
             )
 
             assertEquals(VaultUnlockResult.Success, result)
@@ -1346,7 +1346,7 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithAuthenticatorSyncKey(
                 userId = userId,
-                decryptedAuthenticatorSyncKey = authenticatorSyncUnlockKey,
+                decryptedUserKey = authenticatorSyncUnlockKey,
             )
 
             assertEquals(VaultUnlockResult.Success, result)

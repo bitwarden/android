@@ -172,11 +172,11 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * given user.
      *
      * @param userId ID of the user's vault to unlock.
-     * @param decryptedAuthenticatorSyncKey The authenticator sync unlock key for the user.
+     * @param decryptedUserKey The authenticator sync unlock key for the user.
      */
     suspend fun unlockVaultWithAuthenticatorSyncKey(
         userId: String,
-        decryptedAuthenticatorSyncKey: String,
+        decryptedUserKey: String,
     ): VaultUnlockResult
 
     /**
