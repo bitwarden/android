@@ -175,15 +175,13 @@ val AuthDiskSource.activeUserIdChangesFlow: Flow<String?>
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 val AuthDiskSource.onboardingStatusChangesFlow: Flow<OnboardingStatus?>
-    get() {
-        return activeUserIdChangesFlow
+    get() = activeUserIdChangesFlow
             .flatMapLatest { activeUserId ->
                 activeUserId
                     ?.let { this.getOnboardingStatusFlow(userId = it) }
                     ?: flowOf(null)
             }
             .distinctUntilChanged()
-    }
 
 val AuthDiskSource.currentOnboardingStatus: OnboardingStatus?
     get() = this

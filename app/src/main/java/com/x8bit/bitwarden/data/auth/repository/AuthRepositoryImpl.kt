@@ -1417,10 +1417,6 @@ class AuthRepositoryImpl(
             }
         }
 
-    private fun getOnboardingStatus(
-        userId: String,
-    ): OnboardingStatus? = authDiskSource.getOnboardingStatus(userId = userId)
-
     /**
      * Update the saved state with the force password reset reason.
      */

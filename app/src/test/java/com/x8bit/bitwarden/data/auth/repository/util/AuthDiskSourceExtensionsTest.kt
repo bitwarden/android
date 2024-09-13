@@ -496,6 +496,16 @@ class AuthDiskSourceExtensionsTest {
             assertNull(awaitItem())
         }
     }
+
+    @Test
+    fun `currentOnboardingStatus should return the current onboarding status`() {
+        authDiskSource.storeOnboardingStatus(MOCK_USER_ID, OnboardingStatus.COMPLETE)
+        authDiskSource.userState = MOCK_USER_STATE
+        assertEquals(
+            OnboardingStatus.COMPLETE,
+            authDiskSource.currentOnboardingStatus,
+        )
+    }
 }
 
 private const val MOCK_USER_ID: String = "mockId-1"

@@ -84,6 +84,7 @@ class RootNavViewModel @Inject constructor(
                     RootNavState.Auth
                 }
             }
+
             userState.activeAccount.isVaultUnlocked &&
                 userState.shouldShowRemovePassword(authState = action.authState) -> {
                 RootNavState.RemovePassword
