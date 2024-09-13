@@ -9,7 +9,7 @@ class PolicyInformationPasswordGeneratorExtensionsTest {
     fun `toStrictestPolicy should select the strictest version of each rule`() {
         assertEquals(
             PolicyInformation.PasswordGenerator(
-                defaultType = null,
+                overridePasswordType = null,
                 minLength = 4,
                 capitalize = true,
                 includeNumber = true,
@@ -27,7 +27,7 @@ class PolicyInformationPasswordGeneratorExtensionsTest {
 }
 
 private val POLICY_1 = PolicyInformation.PasswordGenerator(
-    defaultType = null,
+    overridePasswordType = null,
     minLength = 0,
     capitalize = false,
     includeNumber = true,
@@ -41,7 +41,7 @@ private val POLICY_1 = PolicyInformation.PasswordGenerator(
 )
 
 private val POLICY_2 = PolicyInformation.PasswordGenerator(
-    defaultType = null,
+    overridePasswordType = null,
     minLength = 0,
     capitalize = false,
     includeNumber = false,
@@ -55,7 +55,7 @@ private val POLICY_2 = PolicyInformation.PasswordGenerator(
 )
 
 private val POLICY_3 = PolicyInformation.PasswordGenerator(
-    defaultType = null,
+    overridePasswordType = null,
     minLength = 4,
     capitalize = true,
     includeNumber = false,

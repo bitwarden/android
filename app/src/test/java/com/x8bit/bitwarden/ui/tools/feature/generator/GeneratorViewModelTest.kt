@@ -2369,7 +2369,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private fun setupMockPassphraseTypePolicy() {
         fakeGeneratorRepository.setMockPasswordGeneratorPolicy(
             PolicyInformation.PasswordGenerator(
-                defaultType = "passphrase",
+                overridePasswordType = "passphrase",
                 minLength = null,
                 useUpper = false,
                 useLower = false,

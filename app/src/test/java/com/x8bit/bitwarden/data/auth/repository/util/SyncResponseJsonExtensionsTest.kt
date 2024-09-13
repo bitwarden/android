@@ -81,7 +81,7 @@ class SyncResponseJsonExtensionsTest {
     @Test
     fun `policyInformation converts the PasswordGenerator Json data to policy information`() {
         val policyInformation = PolicyInformation.PasswordGenerator(
-            defaultType = "password",
+            overridePasswordType = "password",
             minLength = null,
             useUpper = true,
             useLower = true,

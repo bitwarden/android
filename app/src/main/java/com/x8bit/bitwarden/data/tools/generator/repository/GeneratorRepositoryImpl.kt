@@ -222,7 +222,7 @@ class GeneratorRepositoryImpl(
         var isPassphrasePresent = false
         policies
             .forEach { policy ->
-                if (policy.defaultType == PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE) {
+                if (policy.overridePasswordType == PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE) {
                     isPassphrasePresent = true
                 }
                 minLength = max(minLength ?: 0, policy.minLength ?: 0)
@@ -239,7 +239,7 @@ class GeneratorRepositoryImpl(
 
         // Only return a new policy if any policy settings were actually provided
         return PolicyInformation.PasswordGenerator(
-            defaultType = if (isPassphrasePresent) {
+            overridePasswordType = if (isPassphrasePresent) {
                 PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE
             } else {
                 PolicyInformation.PasswordGenerator.TYPE_PASSWORD

@@ -758,7 +758,7 @@ class GeneratorRepositoryTest {
             val policy = repository.getPasswordGeneratorPolicy()
 
             val expectedPolicy = PolicyInformation.PasswordGenerator(
-                defaultType = "password",
+                overridePasswordType = "password",
                 minLength = null,
                 useUpper = false,
                 useLower = false,
@@ -778,7 +778,7 @@ class GeneratorRepositoryTest {
     @Test
     fun `getPasswordGeneratorPolicy applies strictest settings from multiple policies`() = runTest {
         val policy1 = PolicyInformation.PasswordGenerator(
-            defaultType = "password",
+            overridePasswordType = "password",
             minLength = 8,
             useUpper = true,
             useLower = true,
@@ -791,7 +791,7 @@ class GeneratorRepositoryTest {
             includeNumber = true,
         )
         val policy2 = PolicyInformation.PasswordGenerator(
-            defaultType = "passphrase", // Different type, more specific in this context
+            overridePasswordType = "passphrase", // Different type, more specific in this context
             minLength = 12, // More strict
             useUpper = true,
             useLower = true,
@@ -827,7 +827,7 @@ class GeneratorRepositoryTest {
 
         // The expected combined policy
         val expectedPolicy = PolicyInformation.PasswordGenerator(
-            defaultType = "passphrase",
+            overridePasswordType = "passphrase",
             minLength = 12,
             useUpper = true,
             useLower = true,

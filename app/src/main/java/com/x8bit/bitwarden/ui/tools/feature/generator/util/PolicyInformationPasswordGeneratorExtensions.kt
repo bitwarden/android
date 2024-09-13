@@ -10,7 +10,7 @@ fun List<PolicyInformation.PasswordGenerator>.toStrictestPolicy():
     PolicyInformation.PasswordGenerator {
     return PolicyInformation.PasswordGenerator(
         capitalize = mapNotNull { it.capitalize }.any { it },
-        defaultType = firstNotNullOfOrNull { it.defaultType },
+        overridePasswordType = firstNotNullOfOrNull { it.overridePasswordType },
         includeNumber = mapNotNull { it.includeNumber }.any { it },
         minLength = mapNotNull { it.minLength }.maxOrNull(),
         minNumberWords = mapNotNull { it.minNumberWords }.maxOrNull(),
