@@ -43,8 +43,8 @@ class SetupCompleteViewModelTest : BaseViewModelTest() {
     fun `When CompleteSetup action is sent user state is updated with onboarding COMPLETE`() {
         val viewModel = createViewModel()
         assertEquals(
-            DEFAULT_USER_ID,
-            viewModel.stateFlow.value.userId,
+            SetupCompleteState(userId = DEFAULT_USER_ID),
+            viewModel.stateFlow.value,
         )
         viewModel.trySendAction(SetupCompleteAction.CompleteSetup)
         verify {
