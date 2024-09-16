@@ -382,60 +382,16 @@ data class SyncResponseJson(
         /**
          * Represents permissions in the vault response.
          *
-         * @property shouldManageGroups If groups should be managed.
          * @property shouldManageResetPassword If reset password should be managed.
-         * @property shouldAccessReports If reports should be accessed.
          * @property shouldManagePolicies If policies should be managed.
-         * @property shouldDeleteAnyCollection If collections should be accessed.
-         * @property shouldManageSso If sso should be managed.
-         * @property shouldDeleteAssignedCollections If assigned collection should be deleted.
-         * @property shouldManageUsers If users should be managed.
-         * @property shouldAccessImportExport If import/export should be accessed.
-         * @property shouldEditAnyCollection If any collection should be edited.
-         * @property shouldAccessEventLogs If event logs should be accessed.
-         * @property shouldCreateNewCollections If new collections should be created.
-         * @property shouldEditAssignedCollections If assigned collections should be edited.
          */
         @Serializable
         data class Permissions(
-            @SerialName("manageGroups")
-            val shouldManageGroups: Boolean,
-
             @SerialName("manageResetPassword")
             val shouldManageResetPassword: Boolean,
 
-            @SerialName("accessReports")
-            val shouldAccessReports: Boolean,
-
             @SerialName("managePolicies")
             val shouldManagePolicies: Boolean,
-
-            @SerialName("deleteAnyCollection")
-            val shouldDeleteAnyCollection: Boolean,
-
-            @SerialName("manageSso")
-            val shouldManageSso: Boolean,
-
-            @SerialName("deleteAssignedCollections")
-            val shouldDeleteAssignedCollections: Boolean,
-
-            @SerialName("manageUsers")
-            val shouldManageUsers: Boolean,
-
-            @SerialName("accessImportExport")
-            val shouldAccessImportExport: Boolean,
-
-            @SerialName("editAnyCollection")
-            val shouldEditAnyCollection: Boolean,
-
-            @SerialName("accessEventLogs")
-            val shouldAccessEventLogs: Boolean,
-
-            @SerialName("createNewCollections")
-            val shouldCreateNewCollections: Boolean,
-
-            @SerialName("editAssignedCollections")
-            val shouldEditAssignedCollections: Boolean,
         )
     }
 
