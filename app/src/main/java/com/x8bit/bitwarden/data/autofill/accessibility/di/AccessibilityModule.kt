@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAuto
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManagerImpl
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNameManager
@@ -48,6 +50,11 @@ object AccessibilityModule {
     @Provides
     fun providesAccessibilityAutofillManager(): AccessibilityAutofillManager =
         AccessibilityAutofillManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesAccessibilityEnabledManager(): AccessibilityEnabledManager =
+        AccessibilityEnabledManagerImpl()
 
     @Singleton
     @Provides

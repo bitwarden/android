@@ -542,6 +542,7 @@ Scanning will happen automatically.</string>
   <string name="accessibility_description2">Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be turned on as well)</string>
   <string name="accessibility_description3">Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if turned on).</string>
   <string name="accessibility_description4">Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if turned on).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Use draw-over</string>
   <string name="draw_over_description">Allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</string>
   <string name="draw_over_description2">If turned on, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</string>

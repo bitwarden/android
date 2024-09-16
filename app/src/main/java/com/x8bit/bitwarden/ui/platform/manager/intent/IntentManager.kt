@@ -28,6 +28,11 @@ interface IntentManager {
     fun startCustomTabsActivity(uri: Uri)
 
     /**
+     * Attempts to start the system accessibility settings activity.
+     */
+    fun startSystemAccessibilitySettingsActivity()
+
+    /**
      * Attempts to start the system autofill settings activity. The return value indicates whether
      * or not this was successful.
      */
