@@ -13,15 +13,6 @@ import com.x8bit.bitwarden.data.tiles.BitwardenAutofillTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenGeneratorTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenVaultTileService
 
-private const val LEGACY_ACCESSIBILITY_SERVICE_NAME =
-    "com.x8bit.bitwarden.Accessibility.AccessibilityService"
-private const val LEGACY_AUTOFILL_SERVICE_NAME = "com.x8bit.bitwarden.Autofill.AutofillService"
-private const val LEGACY_CREDENTIAL_SERVICE_NAME =
-    "com.x8bit.bitwarden.Autofill.CredentialProviderService"
-private const val LEGACY_AUTOFILL_TILE_SERVICE_NAME = "com.x8bit.bitwarden.AutofillTileService"
-private const val LEGACY_VAULT_TILE_SERVICE_NAME = "com.x8bit.bitwarden.MyVaultTileService"
-private const val LEGACY_GENERATOR_TILE_SERVICE_NAME = "com.x8bit.bitwarden.GeneratorTileService"
-
 /**
  * A factory class that allows us to intercept when a manifest element is being instantiated
  * and modify various characteristics before initialization.
