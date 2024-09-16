@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -196,6 +197,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                 ),
             )
@@ -280,6 +282,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                 ),
             )
@@ -1529,6 +1532,7 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -1546,6 +1550,7 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
     ),
 )

@@ -225,6 +225,16 @@ class RootNavScreenTest : BaseComposeTest() {
                     navOptions = expectedNavOptions,
                 )
             }
+
+        // Make sure navigating to onboarding graph works as expected:
+        rootNavStateFlow.value =
+            RootNavState.OnboardingAccountLockSetup
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "setup_unlock",
+                navOptions = expectedNavOptions,
+            )
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -30,6 +31,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+        every { setOnboardingStatus(userId = any(), status = any()) } just runs
     }
     private val settingsRepository = mockk<SettingsRepository> {
         every { isUnlockWithPinEnabled } returns false
@@ -50,20 +52,26 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClick should emit NavigateToSetupAutofill`() = runTest {
+    fun `ContinueClick should call setOnboardingStatus`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-            assertEquals(SetupUnlockEvent.NavigateToSetupAutofill, awaitItem())
+        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
+        verify {
+            authRepository.setOnboardingStatus(
+                userId = DEFAULT_USER_ID,
+                status = OnboardingStatus.AUTOFILL_SETUP,
+            )
         }
     }
 
     @Test
-    fun `SetUpLaterClick should emit NavigateToSetupAutofill`() = runTest {
+    fun `SetUpLaterClick should call setOnboardingStatus`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-            assertEquals(SetupUnlockEvent.NavigateToSetupAutofill, awaitItem())
+        viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
+        verify {
+            authRepository.setOnboardingStatus(
+                userId = DEFAULT_USER_ID,
+                status = OnboardingStatus.AUTOFILL_SETUP,
+            )
         }
     }
 
@@ -302,6 +310,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
     ),
 )

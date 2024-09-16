@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
@@ -109,6 +110,7 @@ fun UserStateJson.toUserState(
     userOrganizationsList: List<UserOrganizations>,
     userIsUsingKeyConnectorList: List<UserKeyConnectorState>,
     hasPendingAccountAddition: Boolean,
+    onboardingStatus: OnboardingStatus?,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
@@ -171,6 +173,9 @@ fun UserStateJson.toUserState(
                     isUsingKeyConnector = userIsUsingKeyConnectorList
                         .find { it.userId == userId }
                         ?.isUsingKeyConnector == true,
+                    // If the user exists with no onboarding status we can assume they have been
+                    // using the app prior to the release of the onboarding flow.
+                    onboardingStatus = onboardingStatus ?: OnboardingStatus.COMPLETE,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,

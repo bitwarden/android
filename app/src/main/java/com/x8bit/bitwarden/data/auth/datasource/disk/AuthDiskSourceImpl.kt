@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
@@ -42,6 +43,7 @@ private const val POLICIES_KEY = "policies"
 private const val SHOULD_TRUST_DEVICE_KEY = "shouldTrustDevice"
 private const val TDE_LOGIN_COMPLETE = "tdeLoginComplete"
 private const val USES_KEY_CONNECTOR = "usesKeyConnector"
+private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -67,6 +69,8 @@ class AuthDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
     private val mutableAccountTokensFlowMap =
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
+    private val mutableOnboardingStatusFlowMap =
+        mutableMapOf<String, MutableSharedFlow<OnboardingStatus?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     override var userState: UserStateJson?
@@ -405,6 +409,25 @@ class AuthDiskSourceImpl(
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
     }
 
+    override fun getOnboardingStatus(userId: String): OnboardingStatus? {
+        return getString(key = ONBOARDING_STATUS_KEY.appendIdentifier(userId))?.let {
+            json.decodeFromStringOrNull(it)
+        }
+    }
+
+    override fun storeOnboardingStatus(userId: String, onboardingStatus: OnboardingStatus?) {
+        putString(
+            key = ONBOARDING_STATUS_KEY.appendIdentifier(userId),
+            value = onboardingStatus?.let { json.encodeToString(it) },
+        )
+        getMutableOnboardingStatusFlow(userId = userId).tryEmit(onboardingStatus)
+    }
+
+    override fun getOnboardingStatusFlow(userId: String): Flow<OnboardingStatus?> {
+        return getMutableOnboardingStatusFlow(userId = userId)
+            .onSubscription { emit(getOnboardingStatus(userId = userId)) }
+    }
+
     private fun generateAndStoreUniqueAppId(): String =
         UUID
             .randomUUID()
@@ -412,6 +435,13 @@ class AuthDiskSourceImpl(
             .also {
                 putString(key = UNIQUE_APP_ID_KEY, value = it)
             }
+
+    private fun getMutableOnboardingStatusFlow(
+        userId: String,
+    ): MutableSharedFlow<OnboardingStatus?> =
+        mutableOnboardingStatusFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableShouldUseKeyConnectorFlowMap(
         userId: String,

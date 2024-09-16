@@ -72,11 +72,12 @@ class SetupAutoFillViewModel @Inject constructor(
     }
 
     private fun handleTurnOnLaterConfirmClick() {
-        sendEvent(SetupAutoFillEvent.NavigateToCompleteSetup)
+        // TODO PM-10631 record user chose to turn on later for settings badging.
+        // TODO PM-10632 update status to complete setup step.
     }
 
     private fun handleContinueClick() {
-        sendEvent(SetupAutoFillEvent.NavigateToCompleteSetup)
+        // TODO PM-10632 update status to complete setup step.
     }
 
     private fun handleAutofillServiceChanged(action: SetupAutoFillAction.AutofillServiceChanged) {
@@ -115,10 +116,6 @@ sealed class SetupAutoFillDialogState {
  * UI Events for the Auto-fill setup screen.
  */
 sealed class SetupAutoFillEvent {
-    /**
-     * Navigate to the complete setup screen.
-     */
-    data object NavigateToCompleteSetup : SetupAutoFillEvent()
 
     /**
      * Navigate to the autofill settings screen.

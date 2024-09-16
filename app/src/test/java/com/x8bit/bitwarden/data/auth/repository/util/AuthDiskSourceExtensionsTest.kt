@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
@@ -471,6 +472,39 @@ class AuthDiskSourceExtensionsTest {
             authDiskSource.userState = null
             assertNull(awaitItem())
         }
+    }
+
+    @Test
+    fun `userStateChangesFlow should emit changes when user state changes`() = runTest {
+        authDiskSource.storeOnboardingStatus(MOCK_USER_ID, OnboardingStatus.NOT_STARTED)
+        authDiskSource.onboardingStatusChangesFlow.test {
+            assertNull(awaitItem())
+            authDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+
+                OnboardingStatus.NOT_STARTED,
+                awaitItem(),
+            )
+            authDiskSource.userState = MOCK_USER_STATE.copy(
+                accounts = mapOf(
+                    MOCK_USER_ID to MOCK_ACCOUNT,
+                    "mockId-2" to mockk(),
+                ),
+            )
+            expectNoEvents()
+            authDiskSource.userState = null
+            assertNull(awaitItem())
+        }
+    }
+
+    @Test
+    fun `currentOnboardingStatus should return the current onboarding status`() {
+        authDiskSource.storeOnboardingStatus(MOCK_USER_ID, OnboardingStatus.COMPLETE)
+        authDiskSource.userState = MOCK_USER_STATE
+        assertEquals(
+            OnboardingStatus.COMPLETE,
+            authDiskSource.currentOnboardingStatus,
+        )
     }
 }
 
