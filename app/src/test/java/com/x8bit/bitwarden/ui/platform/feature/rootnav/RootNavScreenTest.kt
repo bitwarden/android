@@ -226,12 +226,32 @@ class RootNavScreenTest : BaseComposeTest() {
                 )
             }
 
-        // Make sure navigating to onboarding graph works as expected:
+        // Make sure navigating to account lock setup works as expected:
         rootNavStateFlow.value =
             RootNavState.OnboardingAccountLockSetup
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "setup_unlock",
+                navOptions = expectedNavOptions,
+            )
+        }
+
+        // Make sure navigating to account autofill setup works as expected:
+        rootNavStateFlow.value =
+            RootNavState.OnboardingAutoFillSetup
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "setup_auto_fill",
+                navOptions = expectedNavOptions,
+            )
+        }
+
+        // Make sure navigating to account setup complete works as expected:
+        rootNavStateFlow.value =
+            RootNavState.OnboardingStepsComplete
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "setup_complete",
                 navOptions = expectedNavOptions,
             )
         }

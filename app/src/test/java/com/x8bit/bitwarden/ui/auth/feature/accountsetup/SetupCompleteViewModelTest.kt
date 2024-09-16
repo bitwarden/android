@@ -5,7 +5,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,8 +20,9 @@ class SetupCompleteViewModelTest : BaseViewModelTest() {
         every { activeUserId } returns DEFAULT_USER_ID
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(mockUserState)
-    private val authRepository: AuthRepository = mockk(relaxed = true) {
+    private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+        every { setOnboardingStatus(any(), any()) } just runs
     }
 
     @Test
