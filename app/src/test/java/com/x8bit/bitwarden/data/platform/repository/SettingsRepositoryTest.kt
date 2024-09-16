@@ -1175,6 +1175,19 @@ class SettingsRepositoryTest {
         fakeSettingsDiskSource.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
         assertTrue(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
     }
+
+    @Test
+    fun `getUnlockSettingBadge get value of false if does not exist`() {
+        val userId = "userId"
+        assertFalse(settingsRepository.getShowUnlockSettingBadge(userId = userId))
+    }
+
+    @Test
+    fun `getShowUnlockSettingBadge should return the value saved to disk`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
+        assertTrue(settingsRepository.getShowUnlockSettingBadge(userId = userId))
+    }
 }
 
 private const val USER_ID: String = "userId"

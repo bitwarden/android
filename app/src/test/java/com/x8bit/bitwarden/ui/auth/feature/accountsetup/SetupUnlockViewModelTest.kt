@@ -40,6 +40,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         every { isUnlockWithPinEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
         every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledStateFlow
+        every { storeShowUnlockSettingBadge(any(), any()) } just runs
     }
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
         every { getOrCreateCipher(userId = DEFAULT_USER_ID) } returns CIPHER
@@ -80,6 +81,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
+            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_USER_ID, true)
         }
     }
 

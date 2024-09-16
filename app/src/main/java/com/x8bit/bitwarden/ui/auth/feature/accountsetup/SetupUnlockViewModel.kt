@@ -95,6 +95,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleSetUpLaterClick() {
+        settingsRepository.storeShowUnlockSettingBadge(state.userId, true)
         updateOnboardingStatusToNextStep()
     }
 
