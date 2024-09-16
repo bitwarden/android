@@ -142,10 +142,6 @@ class FakeGeneratorRepository : GeneratorRepository {
         mutablePasswordHistoryStateFlow.value = LocalDataState.Loaded(emptyList())
     }
 
-    override fun getPasswordGeneratorPolicy(): PolicyInformation.PasswordGenerator? {
-        return passwordGeneratorPolicy
-    }
-
     /**
      * Sets the mock result for the generatePassword function.
      */
@@ -194,10 +190,6 @@ class FakeGeneratorRepository : GeneratorRepository {
      */
     fun setMockRandomWordResult(result: GeneratedRandomWordUsernameResult) {
         generateRandomWordUsernameResult = result
-    }
-
-    fun setMockPasswordGeneratorPolicy(policy: PolicyInformation.PasswordGenerator?) {
-        this.passwordGeneratorPolicy = policy
     }
 
     /**

@@ -6,7 +6,6 @@ import app.cash.turbine.turbineScope
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -391,8 +390,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for passphrase state updates generatedText and saves passphrase generation options on successful passphrase generation`() =
         runTest {
-            setupMockPassphraseTypePolicy()
-
             val updatedGeneratedPassphrase = "updatedPassphrase"
 
             val viewModel = createViewModel(initialPassphraseState)
@@ -435,8 +432,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for passphrase state sends ShowSnackbar event on passphrase generation failure`() =
         runTest {
-            setupMockPassphraseTypePolicy()
-
             val viewModel = createViewModel(initialPassphraseState)
 
             fakeGeneratorRepository.setMockGeneratePassphraseResult(
@@ -1420,7 +1415,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            setupMockPassphraseTypePolicy()
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassphrase"),
             )
@@ -2365,24 +2359,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             set("generator_website", website)
         },
     )
-
-    private fun setupMockPassphraseTypePolicy() {
-        fakeGeneratorRepository.setMockPasswordGeneratorPolicy(
-            PolicyInformation.PasswordGenerator(
-                overridePasswordType = "passphrase",
-                minLength = null,
-                useUpper = false,
-                useLower = false,
-                useNumbers = false,
-                useSpecial = false,
-                minNumbers = null,
-                minSpecial = null,
-                minNumberWords = null,
-                capitalize = false,
-                includeNumber = false,
-            ),
-        )
-    }
 
     //endregion Helper Functions
 }
