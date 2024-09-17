@@ -108,7 +108,7 @@ sealed class DebugMenuAction {
     data object NavigateBack : DebugMenuAction()
 
     /**
-     * The user has clicked "reset" button. For the feature flag section.
+     * The user has clicked "reset" button for the feature flag section.
      */
     data object ResetFeatureFlagValues : DebugMenuAction()
 
