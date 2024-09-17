@@ -19,7 +19,7 @@ class CrashLogsManagerImpl(
         get() = settingsRepository.isCrashLoggingEnabled
         set(value) {
             settingsRepository.isCrashLoggingEnabled = value
-            Firebase.crashlytics.setCrashlyticsCollectionEnabled(value)
+            Firebase.crashlytics.isCrashlyticsCollectionEnabled = value
         }
 
     override fun trackNonFatalException(e: Exception) {
