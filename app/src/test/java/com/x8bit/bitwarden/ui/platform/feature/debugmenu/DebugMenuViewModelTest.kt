@@ -23,9 +23,10 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         every { getFeatureFlagFlow<Boolean>(any()) } returns flowOf(true)
     }
 
-    private val mockDebugMenuRepository = mockk<DebugMenuRepository>(relaxed = true) {
+    private val mockDebugMenuRepository = mockk<DebugMenuRepository> {
         coEvery { resetFeatureFlagOverrides() } just runs
         every { updateFeatureFlag<Boolean>(any(), any()) } just runs
+        every { resetOnboardingStatusForCurrentUser() } just runs
     }
 
     @Test
@@ -67,6 +68,13 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
             DebugMenuAction.UpdateFeatureFlag(FlagKey.EmailVerification, false),
         )
         verify { mockDebugMenuRepository.updateFeatureFlag(FlagKey.EmailVerification, false) }
+    }
+
+    @Test
+    fun `handleResetOnboardingStatus should reset the onboarding status`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ReStartOnboarding)
+        verify { mockDebugMenuRepository.resetOnboardingStatusForCurrentUser() }
     }
 
     private fun createViewModel(): DebugMenuViewModel = DebugMenuViewModel(

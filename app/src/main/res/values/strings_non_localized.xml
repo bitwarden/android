@@ -14,5 +14,8 @@
     <string name="feature_flags">Feature Flags:</string>
     <string name="debug_menu">Debug Menu</string>
     <string name="reset_values">Reset values</string>
+    <string name="onboarding_override">Onboarding Status Override</string>
+    <string name="restart_onboarding_cta">Restart Onboarding</string>
+    <string name="restart_onboarding_details">This will reset the onboarding status for the current user, if available. After clicking the button you will immediately be redirected to the onboarding flow. Onboarding flag must be enabled.</string>
     <!-- /Debug Menu -->
 </resources>

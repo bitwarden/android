@@ -44,7 +44,12 @@ class DebugMenuViewModel @Inject constructor(
             is DebugMenuAction.Internal.UpdateFeatureFlagMap -> handleUpdateFeatureFlagMap(action)
             DebugMenuAction.NavigateBack -> handleNavigateBack()
             DebugMenuAction.ResetFeatureFlagValues -> handleResetFeatureFlagValues()
+            DebugMenuAction.ReStartOnboarding -> handleResetOnboardingStatus()
         }
+    }
+
+    private fun handleResetOnboardingStatus() {
+        debugMenuRepository.resetOnboardingStatusForCurrentUser()
     }
 
     private fun handleResetFeatureFlagValues() {
@@ -103,9 +108,14 @@ sealed class DebugMenuAction {
     data object NavigateBack : DebugMenuAction()
 
     /**
-     * The user has clicked "reset" button.
+     * The user has clicked "reset" button. For the feature flag section.
      */
     data object ResetFeatureFlagValues : DebugMenuAction()
+
+    /**
+     * The user has clicked the restart onboarding button for the onboarding section.
+     */
+    data object ReStartOnboarding : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.
