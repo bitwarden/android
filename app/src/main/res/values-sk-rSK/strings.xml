@@ -329,6 +329,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="no_items_folder">V tomto priečinku sa nenachádzajú žiadne položky.</string>
   <string name="no_items_trash">V koši nie sú žiadne položky.</string>
   <string name="autofill_accessibility_service">Služba automatického vypĺňania pre zjednodušený prístup</string>
+  <string name="autofill_accessibility_summary">Pomáha s vypĺňaním polí používateľského mena a hesla v iných aplikáciách a na webe.</string>
   <string name="autofill_service_description">Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</string>
   <string name="bitwarden_autofill_service_description">Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov do iných aplikácií.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Otvoriť nastavenia automatického vypĺňania</string>
@@ -994,4 +995,10 @@ Chcete prepnúť na tento účet?</string>
   <string name="restart_registration">Zopakovať registráciu</string>
   <string name="authenticator_sync">Synchronizácia overovacej aplikácie</string>
   <string name="allow_bitwarden_authenticator_syncing">Povoliť synchronizáciu Bitwarden Authenticator</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Vyskytol sa problém s overením registračného tokenu.</string>
+  <string name="turn_on_autofill">Zapnúť automatické dopĺňanie</string>
+  <string name="use_autofill_to_log_into_your_accounts">Použiť automatické dopĺňanie na prihlásenie jedným ťuknutím.</string>
+  <string name="turn_on_later">Zapnúť neskôr</string>
+  <string name="turn_on_autofill_later">Zapnúť automatické dopĺňanie neskôr?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">K tomuto kroku sa môžete kedykoľvek vrátiť a dokončiť ho v Nastaveniach.</string>
 </resources>

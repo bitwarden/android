@@ -41,7 +41,7 @@
   <string name="invalid_pin">Neispravan PIN. Pokušaj ponovo.</string>
   <string name="launch">Otvori web stranicu</string>
   <string name="log_in">Prijavi se</string>
-  <string name="log_in_verb">Log in</string>
+  <string name="log_in_verb">Prijavi se</string>
   <string name="log_in_noun">Prijava</string>
   <string name="log_out">Odjavi se</string>
   <string name="logout_confirmation">Sigurno se želiš odjaviti?</string>
@@ -328,6 +328,7 @@
   <string name="no_items_folder">Nema stavki u ovoj mapi.</string>
   <string name="no_items_trash">Nema stavki u smeću.</string>
   <string name="autofill_accessibility_service">Usluga auto-ispune kroz pristupačnost</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Usluga Bitwarden auto-ispune koristi Android Autofill Framework za pomoć pri ispunjavanju prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama na tvojem uređaju.</string>
   <string name="bitwarden_autofill_service_description">Koristi uslugu Bitwarden auto-ispune za ispunjavanje prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Otvori postavke auto-ispune</string>
@@ -987,9 +988,15 @@
   <string name="choose_your_master_password">Odaberi svoju glavnu lozinku</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Odaberi jedinstvenu i jaku lozinku za zaštitu svojih podataka.</string>
   <string name="minimum_characters">%1$s znakova</string>
-  <string name="expired_link">Expired link</string>
-  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
-  <string name="restart_registration">Restart registration</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="expired_link">Istekla poveznica</string>
+  <string name="please_restart_registration_or_try_logging_in">Ponovo pokreni registraciju ili se pokušaj prijaviti. Možda već imaš račun.</string>
+  <string name="restart_registration">Ponovno pokreni registraciju</string>
+  <string name="authenticator_sync">Sinkornizacija s Autentifikatorom</string>
+  <string name="allow_bitwarden_authenticator_syncing">Dozvoli sinkronizaciju s Bitwarden Autentifikatorom</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

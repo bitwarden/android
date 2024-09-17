@@ -329,6 +329,7 @@
   <string name="no_items_folder">В этой папке нет элементов.</string>
   <string name="no_items_trash">В корзине нет элементов.</string>
   <string name="autofill_accessibility_service">Служба специальных возможностей автозаполнения</string>
+  <string name="autofill_accessibility_summary">Помощь в заполнении имени пользователя и пароля в других приложениях и в интернете.</string>
   <string name="autofill_service_description">Служба автозаполнения Bitwarden использует фреймворк автозаполнения Android для заполнения логинов, номеров карт и личной информации в других приложениях на устройстве.</string>
   <string name="bitwarden_autofill_service_description">Используйте службу автозаполнения Bitwarden для заполнения логинов, номеров карт и личной информации в других приложениях.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Открыть настройки автозаполнения</string>
@@ -996,4 +997,10 @@
   <string name="restart_registration">Перезапустить регистрацию</string>
   <string name="authenticator_sync">Синхронизация Bitwarden Authenticator</string>
   <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию Bitwarden Authenticator</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Возникла проблема при проверке токена регистрации.</string>
+  <string name="turn_on_autofill">Включить автозаполнение</string>
+  <string name="use_autofill_to_log_into_your_accounts">Используйте автозаполнение для авторизации в ваших аккаунтах одним нажатием.</string>
+  <string name="turn_on_later">Включить позже</string>
+  <string name="turn_on_autofill_later">Включить автозаполнение позже?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Вы можете вернуться к выполнению этого шага в любое время в Настройках.</string>
 </resources>

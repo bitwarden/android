@@ -329,6 +329,7 @@ La scansione è automatica.</string>
   <string name="no_items_folder">Nessun elemento in questa cartella</string>
   <string name="no_items_trash">Nessun elemento nel cestino</string>
   <string name="autofill_accessibility_service">Servizio di accessibilità di riempimento automatico</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Il servizio di riempimento automatico di Bitwarden usa la struttura di riempimento automatico di Android per aiutare a inserire le tue credenziali su altre app nel tuo dispositivo.</string>
   <string name="bitwarden_autofill_service_description">Usa il servizio di riempimento automatico di Bitwarden per riempire le informazioni su login, carte di credito e identità su altre app.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Apri impostazioni di riempimento automatico</string>
@@ -993,4 +994,10 @@ Vuoi passare a questo account?</string>
   <string name="restart_registration">Riprova la registrazione</string>
   <string name="authenticator_sync">Sync Authenticator</string>
   <string name="allow_bitwarden_authenticator_syncing">Permetti il sync di Bitwarden Authenticator</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Attiva il riempimento automatico</string>
+  <string name="use_autofill_to_log_into_your_accounts">Usa riempimento automatico per accedere ai tuoi account con un solo tocco.</string>
+  <string name="turn_on_later">Attiva più tardi</string>
+  <string name="turn_on_autofill_later">Attivare il riempimento automatico più tardi?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Puoi completare questo passaggio in qualsiasi momento tornando nelle Impostazioni.</string>
 </resources>
