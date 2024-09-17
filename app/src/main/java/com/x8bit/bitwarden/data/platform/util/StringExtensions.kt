@@ -27,6 +27,12 @@ fun String.isAndroidApp(): Boolean =
     this.startsWith(ANDROID_APP_PROTOCOL)
 
 /**
+ * Whether this [String] starts with an http or https protocol.
+ */
+fun String.hasHttpProtocol(): Boolean =
+    this.startsWith(prefix = "http://") || this.startsWith(prefix = "https://")
+
+/**
  * Try and extract the web host from this [String] if it represents an Android app.
  */
 fun String.getWebHostFromAndroidUriOrNull(): String? =
