@@ -208,4 +208,8 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     }
 }
 
-private val DEFAULT_STATE = SetupAutoFillState(dialogState = null, autofillEnabled = false)
+private val DEFAULT_STATE = SetupAutoFillState(
+    userId = "userId",
+    dialogState = null,
+    autofillEnabled = false,
+)

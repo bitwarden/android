@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
@@ -22,6 +25,15 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository>(relaxed = true) {
         every { isAutofillEnabledStateFlow } returns mutableAutoFillEnabledStateFlow
         every { disableAutofill() } just runs
+    }
+
+    private val mockUserState = mockk<UserState> {
+        every { activeUserId } returns DEFAULT_USER_ID
+    }
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(mockUserState)
+    private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+        every { setOnboardingStatus(any(), any()) } just runs
     }
 
     @Test
@@ -92,5 +104,31 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         )
     }
 
-    private fun createViewModel() = SetupAutoFillViewModel(settingsRepository)
+    @Test
+    fun `handleTurnOnLaterConfirmClick sets onboarding status to FINAL_STEP`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
+        verify {
+            authRepository.setOnboardingStatus(
+                DEFAULT_USER_ID,
+                OnboardingStatus.FINAL_STEP,
+            )
+        }
+    }
+
+    @Test
+    fun `handleContinueClick sets onboarding status to FINAL_STEP`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+        verify {
+            authRepository.setOnboardingStatus(
+                DEFAULT_USER_ID,
+                OnboardingStatus.FINAL_STEP,
+            )
+        }
+    }
+
+    private fun createViewModel() = SetupAutoFillViewModel(settingsRepository, authRepository)
 }
+
+private const val DEFAULT_USER_ID = "userId"
