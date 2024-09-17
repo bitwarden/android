@@ -32,4 +32,9 @@ interface DebugMenuRepository {
      * Reset all feature flag overrides to their default values or values from the network.
      */
     fun resetFeatureFlagOverrides()
+
+    /**
+     * Resets the onboarding status to NOT_STARTED for the current active user, if applicable.
+     */
+    fun resetOnboardingStatusForCurrentUser()
 }

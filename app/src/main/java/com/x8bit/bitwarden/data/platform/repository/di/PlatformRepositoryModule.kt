@@ -93,8 +93,10 @@ object PlatformRepositoryModule {
     fun provideDebugMenuRepository(
         featureFlagOverrideDiskSource: FeatureFlagOverrideDiskSource,
         serverConfigRepository: ServerConfigRepository,
+        authDiskSource: AuthDiskSource,
     ): DebugMenuRepository = DebugMenuRepositoryImpl(
         featureFlagOverrideDiskSource = featureFlagOverrideDiskSource,
         serverConfigRepository = serverConfigRepository,
+        authDiskSource = authDiskSource,
     )
 }
