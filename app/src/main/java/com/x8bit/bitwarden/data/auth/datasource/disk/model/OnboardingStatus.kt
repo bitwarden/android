@@ -28,6 +28,12 @@ enum class OnboardingStatus {
     AUTOFILL_SETUP,
 
     /**
+     * The user is completing the final step of the onboarding process.
+     */
+    @SerialName("finalStep")
+    FINAL_STEP,
+
+    /**
      * The user has completed all onboarding steps.
      */
     @SerialName("complete")
