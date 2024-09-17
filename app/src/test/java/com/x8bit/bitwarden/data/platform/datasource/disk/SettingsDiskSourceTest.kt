@@ -52,6 +52,20 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `appLanguageFlow should react to changes in appLanguage`() = runTest {
+        val appLanguage = AppLanguage.ENGLISH_BRITISH
+        settingsDiskSource.appLanguageFlow.test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(settingsDiskSource.appLanguage)
+            assertNull(awaitItem())
+
+            // Updating the repository updates shared preferences
+            settingsDiskSource.appLanguage = appLanguage
+            assertEquals(appLanguage, awaitItem())
+        }
+    }
+
+    @Test
     fun `setting appLanguage should update SharedPreferences`() {
         val appLanguageKey = "bwPreferencesStorage:appLocale"
         val appLanguage = AppLanguage.ENGLISH
