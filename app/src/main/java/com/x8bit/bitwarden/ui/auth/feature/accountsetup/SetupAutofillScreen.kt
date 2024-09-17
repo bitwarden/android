@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -198,8 +199,15 @@ private fun SetupAutoFillContentHeader(
 
 @Composable
 private fun OrderedHeaderContent() {
+    val nightMode = LocalConfiguration.current.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    val resource = remember(nightMode) {
+        when (nightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> R.drawable.img_setup_autofill_dark
+            else -> R.drawable.img_setup_autofill_light
+        }
+    }
     BitwardenGifImage(
-        resId = R.drawable.img_setup_autofill,
+        resId = resource,
         modifier = Modifier
             .clip(
                 RoundedCornerShape(
@@ -207,11 +215,11 @@ private fun OrderedHeaderContent() {
                     topEnd = 16.dp,
                     bottomStart = 0.dp,
                     bottomEnd = 0.dp,
-                )
+                ),
             )
             .size(
                 width = 230.dp,
-                height = 280.dp
+                height = 280.dp,
             ),
     )
     Spacer(modifier = Modifier.size(24.dp))
