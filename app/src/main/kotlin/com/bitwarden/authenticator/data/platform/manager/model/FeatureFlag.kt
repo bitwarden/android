@@ -29,6 +29,14 @@ sealed class LocalFeatureFlag<out T : Any>(
         name = "bitwarden-authentication-enabled",
         defaultValue = false,
     )
+
+    /**
+     * Indicates whether syncing with the main Bitwarden password manager app should be enabled.
+     */
+    data object PasswordManagerSync : LocalFeatureFlag<Boolean>(
+        name = "enable-password-manager-sync-android",
+        defaultValue = false,
+    )
 }
 
 /**

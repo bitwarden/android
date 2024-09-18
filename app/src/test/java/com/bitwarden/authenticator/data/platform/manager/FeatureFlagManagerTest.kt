@@ -58,6 +58,11 @@ class FeatureFlagManagerTest {
 
         assertFalse(flagValue)
     }
+
+    @Test
+    fun `PasswordManagerSync should default to false`() {
+        assertFalse(LocalFeatureFlag.PasswordManagerSync.defaultValue)
+    }
 }
 
 private val FEATURE_FLAGS_CONFIG =
