@@ -369,7 +369,7 @@ private fun ScrollContent(
                     onSubStateOptionClicked = onPasscodeSubStateOptionClicked,
                     passwordHandlers = passwordHandlers,
                     passphraseHandlers = passphraseHandlers,
-                    overridePasswordPolicyRestriction = state.overridePassword
+                    overridePasswordPolicyRestriction = state.overridePassword,
                 )
             }
 

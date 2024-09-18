@@ -13,7 +13,7 @@ fun List<PolicyInformation.PasswordGenerator>.toStrictestPolicy():
         capitalize = mapNotNull { it.capitalize }.any { it },
         overridePasswordType = mapNotNull { it.overridePasswordType }.reduceOrNull { acc, value ->
             when {
-                //password should be prioritized over passphrase, else we keep the value
+                // password should be prioritized over passphrase, else we keep the value
                 acc == TYPE_PASSWORD -> acc
                 value == TYPE_PASSWORD -> value
                 else -> value

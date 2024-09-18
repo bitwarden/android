@@ -280,7 +280,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    @Suppress("CyclomaticComplexMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun loadPasscodeOptions(selectedType: Passcode) {
         val options = generatorRepository.getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
