@@ -1245,7 +1245,7 @@ class VaultRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `unlockVaultWithAuthenticatorSyncKey with VaultLockManager Success should return Success`() =
+    fun `unlockVaultWithDecryptedUserKey with VaultLockManager Success should return Success`() =
         runTest {
             val userId = MOCK_USER_STATE.activeUserId
             val authenticatorSyncUnlockKey = "asdf1234"
@@ -1292,7 +1292,7 @@ class VaultRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `unlockVaultWithAuthenticatorSyncKey with VaultLockManager InvalidStateError should return InvalidStateError`() =
+    fun `unlockVaultWithDecryptedUserKey with VaultLockManager InvalidStateError should return InvalidStateError`() =
         runTest {
             val userId = MOCK_USER_STATE.activeUserId
             val authenticatorSyncUnlockKey = "asdf1234"
