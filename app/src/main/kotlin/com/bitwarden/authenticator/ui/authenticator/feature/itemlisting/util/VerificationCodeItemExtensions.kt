@@ -16,12 +16,10 @@ fun List<VerificationCodeItem>.toViewState(
         ItemListingState.ViewState.Content(
             favoriteItems = this
                 .filter { it.favorite }
-                .sortedBy { it.issuer }
                 .map {
                     it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds)
                 },
             itemList = filterNot { it.favorite }
-                .sortedBy { it.issuer }
                 .map {
                     it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds)
                 },

@@ -12,6 +12,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
+import com.bitwarden.authenticator.data.authenticator.repository.util.sortAlphabetically
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
@@ -113,7 +114,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 mutableCiphersStateFlow.value = DataState.Loading
             }
             .onEach {
-                mutableCiphersStateFlow.value = DataState.Loaded(it)
+                mutableCiphersStateFlow.value = DataState.Loaded(it.sortAlphabetically())
             }
             .launchIn(unconfinedScope)
     }

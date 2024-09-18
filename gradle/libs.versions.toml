@@ -54,6 +54,7 @@ roboelectric = "4.13"
 sonarqube = "5.1.0.4882" 
 turbine = "1.1.0"
 zxing = "3.5.3"
+testng = "6.9.6"
 
 [libraries]
 # Format: <maintainer>-<artifact-name>
@@ -121,6 +122,7 @@ square-okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", v
 square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 square-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

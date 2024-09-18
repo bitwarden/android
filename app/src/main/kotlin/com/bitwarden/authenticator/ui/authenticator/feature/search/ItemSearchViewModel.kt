@@ -1,12 +1,14 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.authenticator.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
@@ -21,22 +23,25 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+private const val KEY_STATE = "state"
+
 /**
  * View model for the item search screen.
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class ItemSearchViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val authenticatorRepository: AuthenticatorRepository,
-) :
-    BaseViewModel<ItemSearchState, ItemSearchEvent, ItemSearchAction>(
-        initialState = ItemSearchState(
+) : BaseViewModel<ItemSearchState, ItemSearchEvent, ItemSearchAction>(
+    initialState = savedStateHandle[KEY_STATE]
+        ?: ItemSearchState(
             searchTerm = "",
             viewState = ItemSearchState.ViewState.Loading,
             dialogState = null,
         ),
-    ) {
+) {
 
     init {
         authenticatorRepository
@@ -221,7 +226,8 @@ class ItemSearchViewModel @Inject constructor(
 
             isNotEmpty() -> {
                 ItemSearchState.ViewState.Content(
-                    displayItems = toDisplayItemList(),
+                    displayItems = toDisplayItemList()
+                        .sortAlphabetically(),
                 )
             }
 
@@ -249,17 +255,31 @@ class ItemSearchViewModel @Inject constructor(
             startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
             supportingLabel = label,
         )
+
+    /**
+     * Sort a list of [ItemSearchState.DisplayItem] by their titles alphabetically giving digits and
+     * special characters higher precedence.
+     */
+    @Suppress("MaxLineLength")
+    private fun List<ItemSearchState.DisplayItem>.sortAlphabetically() =
+        this.sortedWith { item1, item2 ->
+            SpecialCharWithPrecedenceComparator.compare(
+                item1.issuer.orEmpty(),
+                item2.issuer.orEmpty(),
+            )
+        }
     //endregion Utility Functions
 }
 
 /**
  * Represents the overall state for the [ItemSearchScreen].
  */
+@Parcelize
 data class ItemSearchState(
     val searchTerm: String,
     val viewState: ViewState,
     val dialogState: DialogState?,
-) {
+) : Parcelable {
     /**
      * Represents the specific view state for the search screen.
      */
