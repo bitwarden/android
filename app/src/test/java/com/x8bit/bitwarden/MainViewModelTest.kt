@@ -5,6 +5,7 @@ import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -613,7 +614,10 @@ class MainViewModelTest : BaseViewModelTest() {
 
         every { intentManager.getShareDataFromIntent(fido2Intent) } returns null
         coEvery {
-            fido2CredentialManager.validateOrigin(any())
+            fido2CredentialManager.validateOrigin(
+                fido2CredentialRequest.callingAppInfo,
+                fido2CredentialRequest.requestJson,
+            )
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
@@ -669,7 +673,10 @@ class MainViewModelTest : BaseViewModelTest() {
         }
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         coEvery {
-            fido2CredentialManager.validateOrigin(any())
+            fido2CredentialManager.validateOrigin(
+                fido2CredentialRequest.callingAppInfo,
+                fido2CredentialRequest.requestJson,
+            )
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
@@ -703,7 +710,10 @@ class MainViewModelTest : BaseViewModelTest() {
         }
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
         coEvery {
-            fido2CredentialManager.validateOrigin(any())
+            fido2CredentialManager.validateOrigin(
+                fido2CredentialRequest.callingAppInfo,
+                fido2CredentialRequest.requestJson,
+            )
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
@@ -1021,6 +1031,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     trustedDevice = null,
     hasMasterPassword = true,
     isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
 )
 
 private val DEFAULT_USER_STATE = UserState(

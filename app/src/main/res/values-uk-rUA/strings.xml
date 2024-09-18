@@ -41,7 +41,7 @@
   <string name="invalid_pin">Недійсний PIN. Спробуйте знову.</string>
   <string name="launch">Перейти</string>
   <string name="log_in">Увійти</string>
-  <string name="log_in_verb">Log in</string>
+  <string name="log_in_verb">Увійти</string>
   <string name="log_in_noun">Вхід</string>
   <string name="log_out">Вийти</string>
   <string name="logout_confirmation">Ви дійсно хочете вийти?</string>
@@ -329,6 +329,7 @@
   <string name="no_items_folder">У цій теці немає записів.</string>
   <string name="no_items_trash">У смітнику немає записів.</string>
   <string name="autofill_accessibility_service">Служба спеціальних можливостей автозаповнення</string>
+  <string name="autofill_accessibility_summary">Допомога із заповненням полів імені користувача і пароля в інших програмах і в інтернеті.</string>
   <string name="autofill_service_description">Служба автозаповнення Bitwarden використовує Android Autofill Framework для введення облікових даних в інших програмах на вашому пристрої.</string>
   <string name="bitwarden_autofill_service_description">Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити облікові дані в інших програмах.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Відкрити налаштування автозаповнення</string>
@@ -989,9 +990,15 @@
   <string name="choose_your_master_password">Створити головний пароль</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Створіть унікальний, надійний пароль, щоб захистити вашу інформацію.</string>
   <string name="minimum_characters">%1$s символів</string>
-  <string name="expired_link">Expired link</string>
-  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
-  <string name="restart_registration">Restart registration</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="expired_link">Протерміноване посилання</string>
+  <string name="please_restart_registration_or_try_logging_in">Перезапустіть реєстрацію або спробуйте увійти. Можливо, ви вже маєте обліковий запис.</string>
+  <string name="restart_registration">Перезапустити реєстрацію</string>
+  <string name="authenticator_sync">Синхронізація автентифікатора</string>
+  <string name="allow_bitwarden_authenticator_syncing">Дозволити синхронізацію Bitwarden Authentificator</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Під час перевірки токена реєстрації виникла проблема.</string>
+  <string name="turn_on_autofill">Увімкніть автозаповнення</string>
+  <string name="use_autofill_to_log_into_your_accounts">Використовуйте автозаповнення для входу в облікові записи одним дотиком.</string>
+  <string name="turn_on_later">Увімкнути пізніше</string>
+  <string name="turn_on_autofill_later">Увімкнути автозаповнення пізніше?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Ви можете виконати цей крок будь-коли в налаштуваннях.</string>
 </resources>

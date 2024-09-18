@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util
 
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -128,6 +129,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 trustedDevice = null,
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
+                onboardingStatus = OnboardingStatus.COMPLETE,
             ),
         ),
     )

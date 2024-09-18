@@ -41,7 +41,7 @@
   <string name="invalid_pin">Ungültiger PIN. Bitte erneut versuchen.</string>
   <string name="launch">Öffnen</string>
   <string name="log_in">Anmelden</string>
-  <string name="log_in_verb">Log in</string>
+  <string name="log_in_verb">Anmelden</string>
   <string name="log_in_noun">Zugangsdaten</string>
   <string name="log_out">Abmelden</string>
   <string name="logout_confirmation">Bist du sicher, dass du dich abmelden möchtest?</string>
@@ -329,6 +329,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="no_items_folder">Es sind keine Objekte in diesem Ordner.</string>
   <string name="no_items_trash">Es sind keine Einträge im Papierkorb.</string>
   <string name="autofill_accessibility_service">Auto-Fill Bedienungshilfe</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Der Auto-Ausfüllen-Dienst von Bitwarden benutzt das Android Autofill Framework, um Zugangsdaten in anderen Apps auf deinem Gerät auszufüllen.</string>
   <string name="bitwarden_autofill_service_description">Verwende den Auto-Ausfüllen-Dienst von Bitwarden, um Anmeldedaten in anderen Apps auszufüllen.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Öffne Auto-Fill Einstellungen</string>
@@ -988,9 +989,15 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="choose_your_master_password">Wähle dein Master-Passwort</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wähle ein einzigartiges und starkes Passwort, damit deine Informationen sicher sind.</string>
   <string name="minimum_characters">%1$s Zeichen</string>
-  <string name="expired_link">Expired link</string>
-  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
-  <string name="restart_registration">Restart registration</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="expired_link">Abgelaufener Link</string>
+  <string name="please_restart_registration_or_try_logging_in">Bitte starte die Registrierung neu oder versuche dich anzumelden. Möglicherweise hast du bereits ein Konto.</string>
+  <string name="restart_registration">Registrierung neu starten</string>
+  <string name="authenticator_sync">Authenticator-Synchronisation</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden Authenticator Synchronisation erlauben</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Es gab ein Problem bei der Validierung des Registrierung-Tokens.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

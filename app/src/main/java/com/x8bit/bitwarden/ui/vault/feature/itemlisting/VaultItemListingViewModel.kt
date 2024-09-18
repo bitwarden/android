@@ -157,8 +157,8 @@ class VaultItemListingViewModel @Inject constructor(
                 .fido2CredentialRequest
                 ?.let { request ->
                     sendAction(
-                        VaultItemListingsAction.Internal.ValidateFido2OriginResultReceive(
-                            result = fido2CredentialManager.validateOrigin(request),
+                        VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive(
+                            request = request,
                         ),
                     )
                 }
@@ -692,6 +692,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun authenticateFido2Credential(
+        relyingPartyId: String,
         request: Fido2CredentialAssertionRequest,
         cipherView: CipherView,
     ) {
@@ -701,23 +702,28 @@ class VaultItemListingViewModel @Inject constructor(
                 return
             }
         viewModelScope.launch {
-            val result = fido2CredentialManager
-                .authenticateFido2Credential(
-                    userId = activeUserId,
-                    selectedCipherView = cipherView,
-                    request = Fido2CredentialAssertionRequest(
-                        cipherId = request.cipherId,
-                        credentialId = request.credentialId,
-                        requestJson = request.requestJson,
-                        clientDataHash = request.clientDataHash,
-                        packageName = request.packageName,
-                        signingInfo = request.signingInfo,
-                        origin = request.origin,
-                    ),
+            val validateOriginResult = fido2CredentialManager
+                .validateOrigin(
+                    callingAppInfo = request.callingAppInfo,
+                    relyingPartyId = relyingPartyId,
                 )
-            sendAction(
-                VaultItemListingsAction.Internal.Fido2AssertionResultReceive(result),
-            )
+            when (validateOriginResult) {
+                is Fido2ValidateOriginResult.Error -> {
+                    handleFido2OriginValidationFail(validateOriginResult)
+                }
+
+                Fido2ValidateOriginResult.Success -> {
+                    sendAction(
+                        VaultItemListingsAction.Internal.Fido2AssertionResultReceive(
+                            result = fido2CredentialManager.authenticateFido2Credential(
+                                userId = activeUserId,
+                                selectedCipherView = cipherView,
+                                request = request,
+                            ),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -956,8 +962,8 @@ class VaultItemListingViewModel @Inject constructor(
                 handlePolicyUpdateReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.ValidateFido2OriginResultReceive -> {
-                handleValidateFido2OriginResultReceive(action)
+            is VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive -> {
+                handleFido2RegisterCredentialRequestReceive(action)
             }
 
             is VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive -> {
@@ -1224,10 +1230,16 @@ class VaultItemListingViewModel @Inject constructor(
                 .specialCircumstance
                 ?.toFido2AssertionRequestOrNull()
                 ?.let { request ->
-                    authenticateFido2Credential(
-                        request = request,
-                        cipherView = cipherView,
-                    )
+                    fido2CredentialManager
+                        .getPasskeyAssertionOptionsOrNull(request.requestJson)
+                        ?.relyingPartyId
+                        ?.let { relyingPartyId ->
+                            authenticateFido2Credential(
+                                relyingPartyId = relyingPartyId,
+                                request = request,
+                                cipherView = cipherView,
+                            )
+                        }
                 }
             ?: showFido2ErrorDialog()
     }
@@ -1317,6 +1329,33 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleFido2RegisterCredentialRequestReceive(
+        action: VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive,
+    ) {
+        viewModelScope.launch {
+            val options = fido2CredentialManager
+                .getPasskeyAttestationOptionsOrNull(requestJson = action.request.requestJson)
+                ?: run {
+                    showFido2ErrorDialog()
+                    return@launch
+                }
+            val validateOriginResult = fido2CredentialManager
+                .validateOrigin(
+                    callingAppInfo = action.request.callingAppInfo,
+                    relyingPartyId = options.relyingParty.id,
+                )
+            when (validateOriginResult) {
+                is Fido2ValidateOriginResult.Error -> {
+                    handleFido2OriginValidationFail(validateOriginResult)
+                }
+
+                Fido2ValidateOriginResult.Success -> {
+                    observeVaultData()
+                }
+            }
+        }
+    }
+
     private fun handleFido2RegisterCredentialResultReceive(
         action: VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
@@ -1335,20 +1374,6 @@ class VaultItemListingViewModel @Inject constructor(
             }
         }
         sendEvent(VaultItemListingEvent.CompleteFido2Registration(action.result))
-    }
-
-    private fun handleValidateFido2OriginResultReceive(
-        action: VaultItemListingsAction.Internal.ValidateFido2OriginResultReceive,
-    ) {
-        when (val result = action.result) {
-            is Fido2ValidateOriginResult.Error -> {
-                handleFido2OriginValidationFail(result)
-            }
-
-            Fido2ValidateOriginResult.Success -> {
-                handleFido2OriginValidationSuccess()
-            }
-        }
     }
 
     private fun handleFido2OriginValidationFail(error: Fido2ValidateOriginResult.Error) {
@@ -1389,10 +1414,6 @@ class VaultItemListingViewModel @Inject constructor(
                 ),
             )
         }
-    }
-
-    private fun handleFido2OriginValidationSuccess() {
-        observeVaultData()
     }
 
     private fun handleFido2AssertionDataReceive(
@@ -1453,14 +1474,24 @@ class VaultItemListingViewModel @Inject constructor(
                 return
             }
 
+        val relyingPartyId = assertionOptions.relyingPartyId
+            ?: run {
+                showFido2ErrorDialog()
+                return
+            }
+
         if (fido2CredentialManager.isUserVerified) {
-            authenticateFido2Credential(request, selectedCipher)
+            authenticateFido2Credential(relyingPartyId, request, selectedCipher)
             return
         }
 
         when (assertionOptions.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
-                authenticateFido2Credential(request, selectedCipher)
+                authenticateFido2Credential(
+                    relyingPartyId,
+                    request,
+                    selectedCipher,
+                )
             }
 
             UserVerificationRequirement.PREFERRED -> {
@@ -2425,11 +2456,10 @@ sealed class VaultItemListingsAction {
         ) : Internal()
 
         /**
-         * Indicates that a result for validating the relying party's origin during a FIDO 2
-         * request.
+         * Indicates that a FIDO 2 credential registration has been received.
          */
-        data class ValidateFido2OriginResultReceive(
-            val result: Fido2ValidateOriginResult,
+        data class Fido2RegisterCredentialRequestReceive(
+            val request: Fido2CredentialRequest,
         ) : Internal()
 
         /**

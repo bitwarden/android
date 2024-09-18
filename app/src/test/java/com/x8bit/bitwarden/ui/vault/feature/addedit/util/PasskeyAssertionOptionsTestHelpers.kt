@@ -12,6 +12,7 @@ fun createMockPasskeyAssertionOptions(
     number: Int,
     userVerificationRequirement: UserVerificationRequirement =
         UserVerificationRequirement.PREFERRED,
+    relyingPartyId: String? = "mockRelyingPartyId-$number",
 ) = PasskeyAssertionOptions(
     challenge = "mockChallenge-$number",
     allowCredentials = listOf(
@@ -21,6 +22,6 @@ fun createMockPasskeyAssertionOptions(
             transports = listOf("mockPublicKeyCredentialDescriptorTransports-$number"),
         ),
     ),
-    relyingPartyId = "mockRelyingPartyId-$number",
+    relyingPartyId = relyingPartyId,
     userVerification = userVerificationRequirement,
 )

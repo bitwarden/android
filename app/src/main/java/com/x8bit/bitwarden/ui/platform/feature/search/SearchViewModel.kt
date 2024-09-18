@@ -3,10 +3,12 @@ package com.x8bit.bitwarden.ui.platform.feature.search
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -66,6 +68,7 @@ class SearchViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
+    private val accessibilitySelectionManager: AccessibilitySelectionManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val organizationEventManager: OrganizationEventManager,
     private val vaultRepo: VaultRepository,
@@ -160,7 +163,7 @@ class SearchViewModel @Inject constructor(
 
     private fun handleAutofillItemClick(action: SearchAction.AutofillItemClick) {
         val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
-        autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+        useCipherForAutofill(cipherView = cipherView)
     }
 
     private fun handleAutofillAndSaveItemClick(action: SearchAction.AutofillAndSaveItemClick) {
@@ -497,7 +500,7 @@ class SearchViewModel @Inject constructor(
             UpdateCipherResult.Success -> {
                 // Complete the autofill selection flow
                 val cipherView = getCipherViewOrNull(cipherId = action.cipherId) ?: return
-                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+                useCipherForAutofill(cipherView = cipherView)
             }
         }
     }
@@ -620,6 +623,20 @@ class SearchViewModel @Inject constructor(
                     )
                 }
             }
+    }
+
+    private fun useCipherForAutofill(cipherView: CipherView) {
+        when (state.autofillSelectionData?.framework) {
+            AutofillSelectionData.Framework.ACCESSIBILITY -> {
+                accessibilitySelectionManager.emitAccessibilitySelection(cipherView = cipherView)
+            }
+
+            AutofillSelectionData.Framework.AUTOFILL -> {
+                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+            }
+
+            null -> Unit
+        }
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {

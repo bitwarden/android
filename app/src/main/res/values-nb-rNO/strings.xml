@@ -329,6 +329,7 @@ Skanning skjer automatisk.</string>
   <string name="no_items_folder">Det er ingen gjenstander i denne mappen.</string>
   <string name="no_items_trash">Det er ingen elementer i papirkurven.</string>
   <string name="autofill_accessibility_service">Auto-utfyllingstilgjengelighetstjeneste</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwarden sin autofylltjeneste bruker Android Autofill Framework for å fylle inn innlogginger, bankkort og identifikasjonsinfo inn i andre apper på din enhet.</string>
   <string name="bitwarden_autofill_service_description">Bruk Bitwarden sin autofylltjeneste for å fylle ut innlogginger, bankkort og identifikasjonsinfo i andre apper.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Åpne auto-utfyllingsinnstillingene</string>
@@ -994,4 +995,10 @@ Vil du bytte til denne kontoen?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

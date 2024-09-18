@@ -329,6 +329,7 @@
   <string name="no_items_folder">در این پوشه موردی برای نمایش نیست.</string>
   <string name="no_items_trash">هیچ موردی در سطل زباله وجود ندارد.</string>
   <string name="autofill_accessibility_service">سرویس دستیابی به پر کردن خودکار</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">سرویس پر کردن خودکار Bitwarden با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه ها در دستگاه شما کمک می کند.</string>
   <string name="bitwarden_autofill_service_description">از سرویس پر کردن خودکار Bitwarden برای پر کردن ورودها، کارت‌های اعتباری، و اطلاعات هویتی درون برنامه‌ها استفاده کنید.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">باز کردن تنظیمات پر کردن خودکار</string>
@@ -994,4 +995,10 @@
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

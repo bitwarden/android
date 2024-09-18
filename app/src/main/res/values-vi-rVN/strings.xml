@@ -329,6 +329,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="no_items_folder">Không có mục nào trong thư mục này.</string>
   <string name="no_items_trash">Không có gì trong thùng rác</string>
   <string name="autofill_accessibility_service">Tự động điền bằng trợ năng</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Điền tự động của Bitwarden sử dụng Android Autofill Framework để điền thông tin đăng nhập vào các ứng dụng trên thiết bị của bạn.</string>
   <string name="bitwarden_autofill_service_description">Dùng Điền tự động của Bitwarden để điền thông tin đăng nhập vào các ứng dụng.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Mở cài đặt Tự động điền</string>
@@ -992,6 +993,12 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="expired_link">Liên kết đã hết hạn</string>
   <string name="please_restart_registration_or_try_logging_in">Vui lòng tiến hành đăng ký lại hoặc thử đăng nhập. Bạn có thể đã có tài khoản.</string>
   <string name="restart_registration">Đăng ký lại</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Đồng bộ Xác minh</string>
+  <string name="allow_bitwarden_authenticator_syncing">Cho phép Đồng bộ Xác minh Bitwarden</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Đã xảy ra sự cố khi xác thực token đăng ký.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

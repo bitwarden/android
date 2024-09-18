@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -85,6 +86,7 @@ class UserStateExtensionsTest {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -110,6 +112,7 @@ class UserStateExtensionsTest {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -139,6 +142,7 @@ class UserStateExtensionsTest {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -168,6 +172,7 @@ class UserStateExtensionsTest {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                 ),
             )
@@ -212,6 +217,7 @@ class UserStateExtensionsTest {
                 trustedDevice = null,
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
+                onboardingStatus = OnboardingStatus.COMPLETE,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -254,6 +260,7 @@ class UserStateExtensionsTest {
                 trustedDevice = null,
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
+                onboardingStatus = OnboardingStatus.COMPLETE,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -300,6 +307,7 @@ class UserStateExtensionsTest {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                 ),
             )
@@ -326,6 +334,7 @@ class UserStateExtensionsTest {
                 trustedDevice = null,
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
+                onboardingStatus = OnboardingStatus.COMPLETE,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -381,6 +390,7 @@ class UserStateExtensionsTest {
                 trustedDevice = null,
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
+                onboardingStatus = OnboardingStatus.COMPLETE,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -437,6 +447,7 @@ class UserStateExtensionsTest {
                 trustedDevice = null,
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
+                onboardingStatus = OnboardingStatus.COMPLETE,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

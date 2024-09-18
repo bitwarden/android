@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -87,6 +88,18 @@ class RootNavViewModel @Inject constructor(
             userState.activeAccount.isVaultUnlocked &&
                 userState.shouldShowRemovePassword(authState = action.authState) -> {
                 RootNavState.RemovePassword
+            }
+
+            userState.activeAccount.isVaultUnlocked &&
+                userState.activeAccount.onboardingStatus != OnboardingStatus.COMPLETE -> {
+                when (userState.activeAccount.onboardingStatus) {
+                    OnboardingStatus.NOT_STARTED,
+                    OnboardingStatus.ACCOUNT_LOCK_SETUP,
+                    -> RootNavState.OnboardingAccountLockSetup
+                    OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
+                    OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
+                    OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
+                }
             }
 
             userState.activeAccount.isVaultUnlocked -> {
@@ -320,6 +333,24 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object ExpiredRegistrationLink : RootNavState()
+
+    /**
+     * App should show the set up account lock onboarding screen.
+     */
+    @Parcelize
+    data object OnboardingAccountLockSetup : RootNavState()
+
+    /**
+     * App should show the set up autofill onboarding screen.
+     */
+    @Parcelize
+    data object OnboardingAutoFillSetup : RootNavState()
+
+    /**
+     * App should show the onboarding steps complete screen.
+     */
+    @Parcelize
+    data object OnboardingStepsComplete : RootNavState()
 }
 
 /**

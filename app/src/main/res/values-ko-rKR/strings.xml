@@ -329,6 +329,7 @@
   <string name="no_items_folder">이 폴더에 항목이 없습니다.</string>
   <string name="no_items_trash">휴지통에 아무 항목도 없습니다.</string>
   <string name="autofill_accessibility_service">자동 완성 접근성 서비스</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwarden 자동 완성 서비스는 기기의 다른 앱에서 로그인, 신용 카드 및 신원 정보를 입력하기 위해 Android 자동완성 프레임워크를 사용합니다.</string>
   <string name="bitwarden_autofill_service_description">다른 앱에서 로그인, 신용 카드, 신원 정보를 자동으로 채우려면 Bitwarden 자동완성 서비스를 사용하세요.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">자동완성 설정 열기</string>
@@ -994,4 +995,10 @@
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

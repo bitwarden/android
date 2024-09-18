@@ -329,6 +329,7 @@ El escaneo se realizará automáticamente.</string>
   <string name="no_items_folder">No hay elementos en esta carpeta.</string>
   <string name="no_items_trash">No hay elementos en la papelera.</string>
   <string name="autofill_accessibility_service">Servicio de accesibilidad de autorellenado</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">El servicio de autocompletar de Bitwarden utiliza el Marco de Autocompletar de Android para ayudarte a completar información de inicios de sesión en otras aplicaciones en tu dispositivo.</string>
   <string name="bitwarden_autofill_service_description">Utiliza el servicio de accesibilidad de Bitwarden para autorrellenar entradas.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Abrir opciones de autorellenado</string>
@@ -995,4 +996,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

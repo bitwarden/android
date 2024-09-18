@@ -329,6 +329,7 @@
   <string name="no_items_folder">此文件夹中没有项目。</string>
   <string name="no_items_trash">回收站中没有项目。</string>
   <string name="autofill_accessibility_service">自动填充无障碍服务</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来协助将登录信息填充到你设备上的其他 App 中。</string>
   <string name="bitwarden_autofill_service_description">使用 Bitwarden 自动填充服务将登录信息填充到其他 App 中。</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">打开自动填充设置</string>
@@ -960,7 +961,7 @@
   <string name="twelve_or_more_characters">至少 12 个字符</string>
   <string name="random_and_complex_using_numbers_and_special_characters">随机且复杂，包含数字和特殊字符</string>
   <string name="totally_different_from_your_other_passwords">与其他密码完全不一样</string>
-  <string name="use_the_generator_to_create_a_strong_unique_password">使用此生成器创建一个强大且唯一的密码</string>
+  <string name="use_the_generator_to_create_a_strong_unique_password">使用生成器创建强大且唯一的密码</string>
   <string name="try_it_out">试试看</string>
   <string name="account_setup">账户设置</string>
   <string name="set_up_unlock">设置解锁</string>
@@ -992,6 +993,12 @@
   <string name="expired_link">失效链接</string>
   <string name="please_restart_registration_or_try_logging_in">请重新注册或尝试登录。您可能已经有一个账户了。</string>
   <string name="restart_registration">重新开始注册</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">验证器同步</string>
+  <string name="allow_bitwarden_authenticator_syncing">允许 Bitwarden 验证器同步</string>
+  <string name="there_was_an_issue_validating_the_registration_token">验证注册令牌时出现问题。</string>
+  <string name="turn_on_autofill">打开自动填充</string>
+  <string name="use_autofill_to_log_into_your_accounts">使用自动填充功能，只需点击一次即可登录您的账户。</string>
+  <string name="turn_on_later">稍后打开</string>
+  <string name="turn_on_autofill_later">稍后打开自动填充吗？</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">您可以随时在「设置」中完成此步骤。</string>
 </resources>

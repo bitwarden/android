@@ -15,6 +15,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_AUTO_FILL_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_COMPLETE_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_UNLOCK_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupCompleteScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupCompleteDestination
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
 import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
@@ -90,6 +99,9 @@ fun RootNavScreen(
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
         setupDebugMenuDestination(onNavigateBack = { navController.popBackStack() })
+        setupUnlockDestination()
+        setupAutoFillDestination()
+        setupCompleteDestination()
     }
 
     val targetRoute = when (state) {
@@ -114,6 +126,10 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForFido2GetCredentials,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
+
+        RootNavState.OnboardingAccountLockSetup -> SETUP_UNLOCK_ROUTE
+        RootNavState.OnboardingAutoFillSetup -> SETUP_AUTO_FILL_ROUTE
+        RootNavState.OnboardingStepsComplete -> SETUP_COMPLETE_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
 
@@ -216,6 +232,18 @@ fun RootNavScreen(
                     vaultItemListingType = VaultItemListingType.Login,
                     navOptions = rootNavOptions,
                 )
+            }
+
+            RootNavState.OnboardingAccountLockSetup -> {
+                navController.navigateToSetupUnlockScreen(rootNavOptions)
+            }
+
+            RootNavState.OnboardingAutoFillSetup -> {
+                navController.navigateToSetupAutoFillScreen(rootNavOptions)
+            }
+
+            RootNavState.OnboardingStepsComplete -> {
+                navController.navigateToSetupCompleteScreen(rootNavOptions)
             }
         }
     }

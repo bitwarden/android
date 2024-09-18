@@ -329,6 +329,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="no_items_folder">Bu klasörde hiç kayıt yok.</string>
   <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
   <string name="autofill_accessibility_service">Otomatik doldur erişilebilirlik hizmeti</string>
+  <string name="autofill_accessibility_summary">Diğer uygulamalarda ve web\'de kullanıcı adlarını ve parolaları doldurmaya yardımcı ol.</string>
   <string name="autofill_service_description">Bitwarden otomatik doldurma hizmeti, cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi\'ni kullanır.</string>
   <string name="bitwarden_autofill_service_description">Diğer uygulamalarda hesap bilgilerinizi doldurmak için Bitwarden otomatik doldurma hizmetini kullanabilirsiniz.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Otomatik doldurma ayarlarını aç</string>
@@ -993,4 +994,10 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="restart_registration">Kaydı yeniden başlat</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

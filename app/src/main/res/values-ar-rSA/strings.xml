@@ -329,6 +329,7 @@
   <string name="no_items_folder">لا توجد عناصر في هذا المجلد.</string>
   <string name="no_items_trash">لا توجد عناصر في سلة المهملات.</string>
   <string name="autofill_accessibility_service">الوصول لخدمة الملء التلقائي</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">تستخدم خدمة Bitwarden للتعبئة التلقائية إطار التشغيل التلقائي لأندرويد للمساعدة في ملء معلومات تسجيل الدخول في تطبيقات أخرى على جهازك.</string>
   <string name="bitwarden_autofill_service_description">استخدم خدمة إمكانية الوصول إلى bitwarden لملء بيانات الاعتماد الخاصة بك تلقائيًا.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">فتح إعدادات الملء التلقائي</string>
@@ -994,4 +995,10 @@
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>

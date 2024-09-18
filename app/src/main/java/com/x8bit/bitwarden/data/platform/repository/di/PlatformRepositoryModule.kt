@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository.di
 
 import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
@@ -71,6 +72,7 @@ object PlatformRepositoryModule {
         settingsDiskSource: SettingsDiskSource,
         vaultSdkSource: VaultSdkSource,
         encryptionManager: BiometricsEncryptionManager,
+        accessibilityEnabledManager: AccessibilityEnabledManager,
         dispatcherManager: DispatcherManager,
         policyManager: PolicyManager,
     ): SettingsRepository =
@@ -81,6 +83,7 @@ object PlatformRepositoryModule {
             settingsDiskSource = settingsDiskSource,
             vaultSdkSource = vaultSdkSource,
             biometricsEncryptionManager = encryptionManager,
+            accessibilityEnabledManager = accessibilityEnabledManager,
             dispatcherManager = dispatcherManager,
             policyManager = policyManager,
         )
@@ -90,8 +93,10 @@ object PlatformRepositoryModule {
     fun provideDebugMenuRepository(
         featureFlagOverrideDiskSource: FeatureFlagOverrideDiskSource,
         serverConfigRepository: ServerConfigRepository,
+        authDiskSource: AuthDiskSource,
     ): DebugMenuRepository = DebugMenuRepositoryImpl(
         featureFlagOverrideDiskSource = featureFlagOverrideDiskSource,
         serverConfigRepository = serverConfigRepository,
+        authDiskSource = authDiskSource,
     )
 }

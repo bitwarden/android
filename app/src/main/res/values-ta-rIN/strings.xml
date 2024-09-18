@@ -329,6 +329,7 @@
   <string name="no_items_folder">இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="autofill_accessibility_service">தன்னிரப்பி அணுகல்தன்மை சேவை</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwarden தன்னிரப்பி சேவை உள்நுழைவு தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்ப உதவ Android தன்னிரப்பி சட்டகத்தைப் பயன்படுத்துகிறது.</string>
   <string name="bitwarden_autofill_service_description">பிற செயலிகளினுள்ளே உள்நுழைவு தகவலை நிரப்ப Bitwarden தன்னிரப்பி சேவை பயன்படுத்து.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">தன்னிரப்பல் அமைவுகளைத் திற</string>
@@ -994,4 +995,10 @@
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
 </resources>
