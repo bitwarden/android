@@ -61,7 +61,7 @@ class AccessibilityParserTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `parseForUriOrPackageName should return the site url as a URI when package is a supported browser and URL is found`() {
+    fun `parseForUriOrPackageName should return the site url un-augmented with https protocol as a URI when package is a supported browser and URL is found`() {
         val testBrowser = Browser(packageName = "com.android.chrome", urlFieldId = "url_bar")
         val url = "https://www.google.com"
         val urlNode = mockk<AccessibilityNodeInfo> {
@@ -76,6 +76,52 @@ class AccessibilityParserTest {
             } returns listOf(urlNode)
         }
         val expectedResult = url.toUri()
+
+        val result = accessibilityParser.parseForUriOrPackageName(rootNode = rootNode)
+
+        assertEquals(expectedResult, result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parseForUriOrPackageName should return the site url un-augmented with http protocol as a URI when package is a supported browser and URL is found`() {
+        val testBrowser = Browser(packageName = "com.android.chrome", urlFieldId = "url_bar")
+        val url = "http://www.google.com"
+        val urlNode = mockk<AccessibilityNodeInfo> {
+            every { text } returns url
+        }
+        val rootNode = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns testBrowser.packageName
+            every {
+                findAccessibilityNodeInfosByViewId(
+                    "$packageName:id/${testBrowser.possibleUrlFieldIds.first()}",
+                )
+            } returns listOf(urlNode)
+        }
+        val expectedResult = url.toUri()
+
+        val result = accessibilityParser.parseForUriOrPackageName(rootNode = rootNode)
+
+        assertEquals(expectedResult, result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parseForUriOrPackageName should return the site url augmented with https protocol as a URI when package is a supported browser and URL is found`() {
+        val testBrowser = Browser(packageName = "com.android.chrome", urlFieldId = "url_bar")
+        val url = "www.google.com"
+        val urlNode = mockk<AccessibilityNodeInfo> {
+            every { text } returns url
+        }
+        val rootNode = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns testBrowser.packageName
+            every {
+                findAccessibilityNodeInfosByViewId(
+                    "$packageName:id/${testBrowser.possibleUrlFieldIds.first()}",
+                )
+            } returns listOf(urlNode)
+        }
+        val expectedResult = "https://$url".toUri()
 
         val result = accessibilityParser.parseForUriOrPackageName(rootNode = rootNode)
 
