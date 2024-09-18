@@ -1271,7 +1271,7 @@ class VaultRepositoryTest {
                 storePrivateKey(userId = userId, privateKey = privateKey)
             }
 
-            val result = vaultRepository.unlockVaultWithAuthenticatorSyncKey(
+            val result = vaultRepository.unlockVaultWithDecryptedUserKey(
                 userId = userId,
                 decryptedUserKey = authenticatorSyncUnlockKey,
             )
@@ -1318,7 +1318,7 @@ class VaultRepositoryTest {
                 storePrivateKey(userId = userId, privateKey = privateKey)
             }
 
-            val result = vaultRepository.unlockVaultWithAuthenticatorSyncKey(
+            val result = vaultRepository.unlockVaultWithDecryptedUserKey(
                 userId = userId,
                 decryptedUserKey = authenticatorSyncUnlockKey,
             )

@@ -553,7 +553,7 @@ class VaultRepositoryImpl(
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
-    override suspend fun unlockVaultWithAuthenticatorSyncKey(
+    override suspend fun unlockVaultWithDecryptedUserKey(
         userId: String,
         decryptedUserKey: String,
     ): VaultUnlockResult = unlockVaultForUser(

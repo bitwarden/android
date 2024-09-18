@@ -168,13 +168,13 @@ interface VaultRepository : CipherManager, VaultLockManager {
     fun emitTotpCodeResult(totpCodeResult: TotpCodeResult)
 
     /**
-     * Attempt to unlock the vault using the stored authenticator sync unlock key for the
-     * given user.
+     * Attempt to unlock the vault using a user unlock key.
      *
      * @param userId ID of the user's vault to unlock.
-     * @param decryptedUserKey The authenticator sync unlock key for the user.
+     * @param decryptedUserKey A decrypted unlock key for the user (ex: their authenticator
+     * sync unlock key)
      */
-    suspend fun unlockVaultWithAuthenticatorSyncKey(
+    suspend fun unlockVaultWithDecryptedUserKey(
         userId: String,
         decryptedUserKey: String,
     ): VaultUnlockResult
