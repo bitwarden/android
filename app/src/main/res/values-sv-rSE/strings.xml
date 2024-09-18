@@ -114,7 +114,7 @@
     <string name="import_success">Vault import successful</string>
     <string name="key_is_invalid">Key is invalid.</string>
     <string name="favorite_tooltip">Spara som favorit</string>
-    <string name="favorite">Favorite</string>
+    <string name="favorite">Favorit</string>
     <string name="favorites">Favoriter</string>
     <string name="backup">Backup</string>
     <string name="data_backup_title">Data backup</string>
