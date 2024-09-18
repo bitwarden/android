@@ -85,10 +85,6 @@ class Fido2ViewModel @Inject constructor(
                 )
             }
 
-            is Fido2Action.Internal -> {
-                handleInternalAction(action)
-            }
-
             Fido2Action.DeviceUserVerificationFail,
             Fido2Action.DeviceUserVerificationLockOut,
                 -> handleDeviceUserVerificationFail()
@@ -128,6 +124,10 @@ class Fido2ViewModel @Inject constructor(
             is Fido2Action.RetryFido2PinVerificationClick -> {
                 handleRetryFido2PinVerificationClick(action)
             }
+
+            is Fido2Action.Internal -> {
+                handleInternalAction(action)
+            }
         }
     }
 
@@ -138,15 +138,11 @@ class Fido2ViewModel @Inject constructor(
             }
 
             is Fido2Action.Internal.GetCredentialsResultReceive -> {
-                handleGetCredentialsResultReceive(action.request, action.credentials)
+                handleGetCredentialsResultReceive(action)
             }
 
-            is Fido2Action.Internal.Fido2AssertionResultReceive -> {
-                handleFido2AssertionResultReceive(action)
-            }
-
-            is Fido2Action.Internal.ValidateFido2PasswordResultReceive -> {
-                handleValidateFido2PasswordResultReceive(action)
+            is Fido2Action.Internal.AuthenticateCredentialResultReceive -> {
+                handleAuthenticateCredentialResultReceive(action)
             }
 
             is Fido2Action.Internal.ValidateFido2PinResultReceive -> {
@@ -196,7 +192,7 @@ class Fido2ViewModel @Inject constructor(
             state
                 .fido2GetCredentialsRequest
                 ?.let { getCredentialsRequest ->
-                    getFido2CredentialsForSelection(getCredentialsRequest, data)
+                    getFido2CredentialAutofillViewsForSelection(getCredentialsRequest, data)
                 }
                 ?: state
                     .fido2AssertCredentialRequest
@@ -210,7 +206,7 @@ class Fido2ViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getFido2CredentialsForSelection(
+    private suspend fun getFido2CredentialAutofillViewsForSelection(
         fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
         data: VaultData,
     ) {
@@ -220,25 +216,21 @@ class Fido2ViewModel @Inject constructor(
             )
             ?.relyingPartyId
             ?: run {
-                showFido2ErrorDialog(
-                    title = R.string.generic_error_message.asText(),
-                    message = R.string.passkey_operation_failed_because_app_could_not_be_verified
-                        .asText(),
-                )
+                sendAction(Fido2Action.Internal.GetCredentialsResultReceive.Error)
                 return
             }
         val credentials = data
             .toFido2CredentialAutofillViews()
             .filter { it.rpId == relyingPartyId }
-        trySendAction(
-            Fido2Action.Internal.GetCredentialsResultReceive(
+        sendAction(
+            Fido2Action.Internal.GetCredentialsResultReceive.Success(
                 request = fido2GetCredentialsRequest,
                 credentials = credentials,
             ),
         )
     }
 
-    private suspend fun startFido2CredentialAssertion(
+    private fun startFido2CredentialAssertion(
         fido2AssertCredentialRequest: Fido2CredentialAssertionRequest,
         data: VaultData,
     ) {
@@ -247,50 +239,39 @@ class Fido2ViewModel @Inject constructor(
             .filter { it.isActiveWithFido2Credentials }
             .find { it.id == fido2AssertCredentialRequest.cipherId }
             ?: run {
-                showFido2ErrorDialog(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_passkey_does_not_exist
-                        .asText(),
+                trySendAction(
+                    Fido2Action.Internal.AuthenticateCredentialResultReceive.Error(
+                        R.string.passkey_operation_failed_because_passkey_does_not_exist.asText(),
+                    ),
                 )
                 return
             }
-        verifyUserAndAuthenticateCredential(
-            request = fido2AssertCredentialRequest,
-            selectedCipher = selectedCipher,
-        )
-    }
-
-    private suspend fun verifyUserAndAuthenticateCredential(
-        request: Fido2CredentialAssertionRequest,
-        selectedCipher: CipherView,
-    ) {
         val assertionOptions = fido2CredentialManager
-            .getPasskeyAssertionOptionsOrNull(request.requestJson)
+            .getPasskeyAssertionOptionsOrNull(fido2AssertCredentialRequest.requestJson)
             ?: run {
-                showFido2ErrorDialog(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_app_could_not_be_verified
-                        .asText(),
+                trySendAction(
+                    Fido2Action.Internal.AuthenticateCredentialResultReceive.Error(
+                        R.string.passkey_operation_failed_because_app_could_not_be_verified
+                            .asText(),
+                    ),
                 )
                 return
             }
-        if (fido2CredentialManager.isUserVerified) {
-            authenticateFido2Credential(request, selectedCipher)
-            return
-        }
-        when (assertionOptions.userVerification) {
-            UserVerificationRequirement.DISCOURAGED -> {
-                authenticateFido2Credential(request, selectedCipher)
+
+        when {
+            fido2CredentialManager.isUserVerified ||
+                assertionOptions.userVerification == UserVerificationRequirement.DISCOURAGED -> {
+                trySendAction(Fido2Action.DeviceUserVerificationSuccess(selectedCipher))
             }
 
-            UserVerificationRequirement.PREFERRED -> {
+            assertionOptions.userVerification == UserVerificationRequirement.PREFERRED -> {
                 sendUserVerificationEvent(
                     isRequired = false,
                     selectedCipher = selectedCipher,
                 )
             }
 
-            UserVerificationRequirement.REQUIRED -> {
+            assertionOptions.userVerification == UserVerificationRequirement.REQUIRED -> {
                 sendUserVerificationEvent(
                     isRequired = true,
                     selectedCipher = selectedCipher,
@@ -304,19 +285,49 @@ class Fido2ViewModel @Inject constructor(
     }
 
     private fun handleGetCredentialsResultReceive(
-        request: Fido2GetCredentialsRequest,
-        credentials: List<Fido2CredentialAutofillView>,
+        action: Fido2Action.Internal.GetCredentialsResultReceive,
     ) {
-        sendEvent(
-            Fido2Event.CompleteFido2GetCredentialsRequest(
-                Fido2GetCredentialsResult.Success(
-                    userId = request.userId,
-                    options = request.option,
-                    credentials = credentials,
-                    alternateAccounts = emptyList(),
-                ),
-            ),
-        )
+        when (action) {
+            Fido2Action.Internal.GetCredentialsResultReceive.Error -> {
+                showFido2ErrorDialog(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.passkey_operation_failed_because_app_could_not_be_verified
+                        .asText(),
+                )
+            }
+
+            is Fido2Action.Internal.GetCredentialsResultReceive.Success -> {
+                sendEvent(
+                    Fido2Event.CompleteFido2GetCredentialsRequest(
+                        Fido2GetCredentialsResult.Success(
+                            userId = action.request.userId,
+                            options = action.request.option,
+                            credentials = action.credentials,
+                            alternateAccounts = emptyList(),
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleAuthenticateCredentialResultReceive(
+        action: Fido2Action.Internal.AuthenticateCredentialResultReceive,
+    ) {
+        when (action) {
+            is Fido2Action.Internal.AuthenticateCredentialResultReceive.Error -> {
+                showFido2ErrorDialog(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = action.message,
+                )
+            }
+
+            is Fido2Action.Internal.AuthenticateCredentialResultReceive.Success -> {
+                fido2CredentialManager.isUserVerified = false
+                clearDialogState()
+                sendEvent(Fido2Event.CompleteFido2Assertion(action.result))
+            }
+        }
     }
 
     private fun handleVaultDataLoading() {
@@ -346,7 +357,6 @@ class Fido2ViewModel @Inject constructor(
     }
 
     private fun handleDeviceUserVerificationFail() {
-        fido2CredentialManager.isUserVerified = false
         showUserVerificationErrorDialog()
     }
 
@@ -420,29 +430,13 @@ class Fido2ViewModel @Inject constructor(
         action: Fido2Action.MasterPasswordFido2VerificationSubmit,
     ) {
         viewModelScope.launch {
+            clearDialogState()
             val result = authRepository.validatePassword(action.password)
-            sendAction(
-                Fido2Action.Internal.ValidateFido2PasswordResultReceive(
-                    result = result,
-                    selectedCipherId = action.selectedCipherId,
-                ),
-            )
-        }
-    }
+            when (result) {
+                ValidatePasswordResult.Error -> showUserVerificationErrorDialog()
 
-    private fun handleValidateFido2PasswordResultReceive(
-        action: Fido2Action.Internal.ValidateFido2PasswordResultReceive,
-    ) {
-        clearDialogState()
-
-        when (action.result) {
-            ValidatePasswordResult.Error -> {
-                showUserVerificationErrorDialog()
-            }
-
-            is ValidatePasswordResult.Success -> {
-                viewModelScope.launch {
-                    if (action.result.isValid) {
+                is ValidatePasswordResult.Success -> {
+                    if (result.isValid) {
                         handleValidBitwardenAuthentication(action.selectedCipherId)
                     } else {
                         handleInvalidAuthentication(
@@ -612,9 +606,10 @@ class Fido2ViewModel @Inject constructor(
                     cipherView = cipherView,
                 )
             }
-            ?: showFido2ErrorDialog(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.generic_error_message.asText(),
+            ?: sendAction(
+                Fido2Action.Internal.AuthenticateCredentialResultReceive.Error(
+                    R.string.generic_error_message.asText(),
+                ),
             )
     }
 
@@ -626,41 +621,25 @@ class Fido2ViewModel @Inject constructor(
             .authenticateFido2Credential(
                 userId = request.userId,
                 selectedCipherView = cipherView,
-                request = Fido2CredentialAssertionRequest(
-                    userId = request.userId,
-                    cipherId = request.cipherId,
-                    credentialId = request.credentialId,
-                    requestJson = request.requestJson,
-                    clientDataHash = request.clientDataHash,
-                    packageName = request.packageName,
-                    signingInfo = request.signingInfo,
-                    origin = request.origin,
-                ),
+                request = request,
             )
         sendAction(
-            Fido2Action.Internal.Fido2AssertionResultReceive(result),
+            Fido2Action.Internal.AuthenticateCredentialResultReceive.Success(
+                result = result,
+            ),
         )
     }
 
-    private fun handleFido2AssertionResultReceive(
-        action: Fido2Action.Internal.Fido2AssertionResultReceive,
-    ) {
-        fido2CredentialManager.isUserVerified = false
-        clearDialogState()
-        sendEvent(Fido2Event.CompleteFido2Assertion(action.result))
-    }
-
     private fun showUserVerificationErrorDialog() {
+        fido2CredentialManager.isUserVerified = false
+        fido2CredentialManager.authenticationAttempts = 0
         showFido2ErrorDialog(
             title = R.string.an_error_has_occurred.asText(),
             message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
-    private fun showFido2ErrorDialog(
-        title: Text,
-        message: Text,
-    ) {
+    private fun showFido2ErrorDialog(title: Text, message: Text) {
         mutableStateFlow.update {
             it.copy(
                 dialog = Fido2State.DialogState.Error(title, message),
@@ -693,9 +672,7 @@ class Fido2ViewModel @Inject constructor(
             )
 
         return when (decryptFido2CredentialAutofillViewsResult) {
-            DecryptFido2CredentialAutofillViewResult.Error -> {
-                emptyList()
-            }
+            DecryptFido2CredentialAutofillViewResult.Error -> emptyList()
 
             is DecryptFido2CredentialAutofillViewResult.Success -> {
                 decryptFido2CredentialAutofillViewsResult.fido2CredentialAutofillViews
@@ -913,28 +890,44 @@ sealed class Fido2Action {
 
         /**
          * Indicates the result of a [Fido2GetCredentialsRequest] has been received.
-         * @property request in the starting intent.
-         * @property credentials matching the relying party request.
          */
-        data class GetCredentialsResultReceive(
-            val request: Fido2GetCredentialsRequest,
-            val credentials: List<Fido2CredentialAutofillView>,
-        ) : Internal()
+        sealed class GetCredentialsResultReceive : Internal() {
+            /**
+             * Indicates the [Fido2GetCredentialsRequest] was processed without error.
+             * @property request in the starting intent.
+             * @property credentials matching the relying party request.
+             */
+            data class Success(
+                val request: Fido2GetCredentialsRequest,
+                val credentials: List<Fido2CredentialAutofillView>,
+            ) : GetCredentialsResultReceive()
+
+            /**
+             * Indicates there was an error while retrieving the credentials.
+             */
+            data object Error : GetCredentialsResultReceive()
+        }
 
         /**
          * Indicates the result of a [Fido2CredentialAssertionRequest] has been received.
          */
-        data class Fido2AssertionResultReceive(
-            val result: Fido2CredentialAssertionResult,
-        ) : Internal()
+        sealed class AuthenticateCredentialResultReceive : Internal() {
 
-        /**
-         * Indicates the result of master password verification has been received.
-         */
-        data class ValidateFido2PasswordResultReceive(
-            val result: ValidatePasswordResult,
-            val selectedCipherId: String,
-        ) : Internal()
+            /**
+             * Indicates the [Fido2CredentialAssertionRequest] was processed without error.
+             * @property result of the credential authentication.
+             */
+            data class Success(
+                val result: Fido2CredentialAssertionResult,
+            ) : AuthenticateCredentialResultReceive()
+
+            /**
+             * Indicates credential authentication failed.
+             */
+            data class Error(
+                val message: Text,
+            ) : AuthenticateCredentialResultReceive()
+        }
 
         /**
          * Indicates the result of PIN verification has been received.

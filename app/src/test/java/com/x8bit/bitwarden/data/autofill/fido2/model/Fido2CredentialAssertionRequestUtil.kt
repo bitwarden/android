@@ -11,4 +11,5 @@ fun createMockFido2CredentialAssertionRequest(number: Int = 1): Fido2CredentialA
         packageName = "mockPackageName-$number",
         signingInfo = SigningInfo(),
         origin = "mockOrigin-$number",
+        userId = "mockUserId-$number",
     )

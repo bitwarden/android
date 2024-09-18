@@ -558,4 +558,6 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     showBiometricInvalidatedMessage = false,
     userId = ACTIVE_ACCOUNT_SUMMARY.userId,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+    fido2AssertCredentialRequest = null,
+    fido2GetCredentialsRequest = null,
 )

@@ -19,7 +19,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
@@ -1428,84 +1427,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `vaultDataStateFlow Loaded with Fido2GetCredentials special circumstance should update ViewState to Content with filtered data`() =
-        runTest {
-            setupMockUri()
-
-            val cipherView1 = createMockCipherView(
-                number = 1,
-                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
-            )
-            val cipherView2 = createMockCipherView(
-                number = 2,
-                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
-            )
-
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-            )
-            coEvery {
-                vaultRepository.getDecryptedFido2CredentialAutofillViews(
-                    cipherViewList = listOf(cipherView1, cipherView2),
-                )
-            } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
-
-            mockFilteredCiphers = listOf(cipherView1)
-
-            val fido2GetCredentialRequest = Fido2GetCredentialsRequest(
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = "mockOrigin",
-                candidateQueryData = mockk(),
-                clientDataHash = byteArrayOf(0),
-                id = "mockId",
-            )
-
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.Fido2GetCredentials(
-                    fido2GetCredentialsRequest = fido2GetCredentialRequest,
-                )
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    cipherViewList = listOf(cipherView1, cipherView2),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
-
-            val viewModel = createVaultItemListingViewModel()
-
-            mutableVaultDataStateFlow.value = dataState
-
-            assertEquals(
-                createVaultItemListingState(
-                    viewState = VaultItemListingState.ViewState.Content(
-                        displayCollectionList = emptyList(),
-                        displayItemList = listOf(
-                            createMockDisplayItemForCipher(number = 1)
-                                .copy(
-                                    secondSubtitleTestTag = "PasskeySite",
-                                ),
-                        ),
-                        displayFolderList = emptyList(),
-                    ),
-                )
-                    .copy(fido2GetCredentialsRequest = fido2GetCredentialRequest),
-                viewModel.stateFlow.value,
-            )
-            coVerify {
-                vaultRepository.getDecryptedFido2CredentialAutofillViews(
-                    cipherViewList = listOf(cipherView1, cipherView2),
-                )
-            }
-        }
-
     @Test
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems`() =
         runTest {
@@ -2270,38 +2191,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `DismissFido2ErrorDialogClick should clear dialog state then complete FIDO 2 assertion with error when assertion request is not null`() =
-        runTest {
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
-                createMockFido2CredentialAssertionRequest(number = 1),
-            )
-            val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
-            every {
-                vaultRepository
-                    .ciphersStateFlow
-                    .value
-                    .data
-            } returns listOf(
-                createMockCipherView(
-                    number = 1,
-                    fido2Credentials = mockFido2CredentialList,
-                ),
-            )
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
-            viewModel.eventFlow.test {
-                assertEquals(
-                    VaultItemListingEvent.CompleteFido2Assertion(
-                        result = Fido2CredentialAssertionResult.Error,
-                    ),
-                    awaitItem(),
-                )
-                assertNull(viewModel.stateFlow.value.dialogState)
             }
         }
 

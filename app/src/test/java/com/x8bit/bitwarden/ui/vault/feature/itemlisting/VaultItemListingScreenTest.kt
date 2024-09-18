@@ -17,8 +17,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -1780,24 +1778,6 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
         verify {
             fido2CompletionManager.completeFido2Registration(result)
-        }
-    }
-
-    @Test
-    fun `CompleteFido2Assertion event should call Fido2CompletionManager with result`() {
-        val result = Fido2CredentialAssertionResult.Success("mockResponse")
-        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Assertion(result))
-        verify {
-            fido2CompletionManager.completeFido2Assertion(result)
-        }
-    }
-
-    @Test
-    fun `CompleteFido2GetCredentials event should call Fido2CompletionManager with result`() {
-        val result = Fido2GetCredentialsResult.Success(mockk(), mockk())
-        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2GetCredentialsRequest(result))
-        verify {
-            fido2CompletionManager.completeFido2GetCredentialRequest(result)
         }
     }
 

@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -72,6 +73,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
         every { isUserVerified } returns true
         every { isUserVerified = any() } just runs
+    }
+    private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
+        every { specialCircumstance } returns null
     }
 
     @Test
@@ -474,7 +478,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.validation_field_required.asText(
                         initialState.vaultUnlockType.unlockScreenInputLabel,
                     ),
@@ -633,7 +637,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.validation_field_required.asText(
                         initialState.vaultUnlockType.unlockScreenInputLabel,
                     ),
@@ -1000,6 +1004,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         environmentRepo = environmentRepo,
         biometricsEncryptionManager = biometricsEncryptionManager,
         fido2CredentialManager = fido2CredentialManager,
+        specialCircumstanceManager = specialCircumstanceManager,
     )
 }
 
@@ -1031,6 +1036,8 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     showBiometricInvalidatedMessage = false,
     userId = USER_ID,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+    fido2GetCredentialsRequest = null,
+    fido2AssertCredentialRequest = null,
 )
 
 private val TRUSTED_DEVICE: UserState.TrustedDevice = UserState.TrustedDevice(

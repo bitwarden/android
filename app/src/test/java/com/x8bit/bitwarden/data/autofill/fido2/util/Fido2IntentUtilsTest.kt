@@ -165,6 +165,7 @@ class Fido2IntentUtilsTest {
         val intent = mockk<Intent> {
             every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
             every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
         }
         val mockOption = GetPublicKeyCredentialOption(
             requestJson = "requestJson",
@@ -192,6 +193,7 @@ class Fido2IntentUtilsTest {
             Fido2CredentialAssertionRequest(
                 cipherId = "mockCipherId",
                 credentialId = "mockCredentialId",
+                userId = "mockUserId",
                 requestJson = mockOption.requestJson,
                 clientDataHash = mockOption.clientDataHash,
                 packageName = mockCallingAppInfo.packageName,
@@ -294,7 +296,9 @@ class Fido2IntentUtilsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `getFido2GetCredentialsRequestOrNull should return Fido2GetCredentialRequest when present`() {
-        val intent = mockk<Intent>()
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+        }
         val mockOption = BeginGetPublicKeyCredentialOption(
             candidateQueryData = bundleOf(),
             id = "mockId",
@@ -318,6 +322,7 @@ class Fido2IntentUtilsTest {
 
         assertEquals(
             Fido2GetCredentialsRequest(
+                userId = "mockUserId",
                 candidateQueryData = mockOption.candidateQueryData,
                 id = mockOption.id,
                 requestJson = mockOption.requestJson,
