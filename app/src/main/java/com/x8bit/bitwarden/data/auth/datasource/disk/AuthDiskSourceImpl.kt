@@ -19,6 +19,7 @@ import java.util.UUID
 
 // These keys should be encrypted
 private const val ACCOUNT_TOKENS_KEY = "accountTokens"
+private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY = "authenticatorSyncSymmetric"
 private const val AUTHENTICATOR_SYNC_UNLOCK_KEY = "authenticatorSyncUnlock"
 private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "userKeyAutoUnlock"
@@ -92,6 +93,14 @@ class AuthDiskSourceImpl(
         // being stored separately in encrypted shared preferences.
         migrateAccountTokens()
     }
+
+    override var authenticatorSyncSymmetricKey: ByteArray?
+        set(value) {
+            val asString = value?.let { value.toString(Charsets.ISO_8859_1) }
+            putEncryptedString(AUTHENTICATOR_SYNC_SYMMETRIC_KEY, asString)
+        }
+        get() = getEncryptedString(AUTHENTICATOR_SYNC_SYMMETRIC_KEY)
+            ?.toByteArray(Charsets.ISO_8859_1)
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()

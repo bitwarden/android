@@ -12,6 +12,13 @@ import kotlinx.coroutines.flow.Flow
  */
 @Suppress("TooManyFunctions")
 interface AuthDiskSource {
+
+    /**
+     * The currently persisted authenticator sync symmetric key. This key is used for
+     * encrypting IPC traffic.
+     */
+    var authenticatorSyncSymmetricKey: ByteArray?
+
     /**
      * Retrieves a unique ID for the application that is stored locally. This will generate a new
      * one if it does not yet exist and it will only be reset for new installs or when clearing
