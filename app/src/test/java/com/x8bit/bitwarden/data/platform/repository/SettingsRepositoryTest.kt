@@ -1153,14 +1153,14 @@ class SettingsRepositoryTest {
     fun `storeShowAutoFillSettingBadge should store value of false to disk`() {
         val userId = "userId"
         settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = false)
-        assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId))
+        assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
     }
 
     @Test
     fun `storeShowAutoFillSettingBadge should store value of true to disk`() {
         val userId = "userId"
         settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
-        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId))
+        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
     }
 
     @Test

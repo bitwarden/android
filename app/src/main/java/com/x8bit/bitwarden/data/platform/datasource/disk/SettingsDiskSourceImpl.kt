@@ -397,12 +397,12 @@ class SettingsDiskSourceImpl(
             key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY.appendIdentifier(userId),
         ) == true
 
-    override fun getShowAutoFillSettingBadge(userId: String): Boolean =
+    override fun getShowAutoFillSettingBadge(userId: String): Boolean? =
         getBoolean(
             key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
-        ) == true
+        )
 
-    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean) =
+    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) =
         putBoolean(
             key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
             value = showBadge,

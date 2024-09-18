@@ -263,11 +263,11 @@ interface SettingsDiskSource {
      * Gets whether or not the given [userId] has signalled they want to enable autofill in
      * onboarding.
      */
-    fun getShowAutoFillSettingBadge(userId: String): Boolean
+    fun getShowAutoFillSettingBadge(userId: String): Boolean?
 
     /**
      * Stores the given value for whether or not the given [userId] has signalled they want to
      * enable autofill in onboarding.
      */
-    fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean)
+    fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?)
 }

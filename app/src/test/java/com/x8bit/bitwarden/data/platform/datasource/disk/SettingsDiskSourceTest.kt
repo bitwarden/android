@@ -1051,6 +1051,6 @@ class SettingsDiskSourceTest {
             putBoolean(showAutofillSettingBadgeKey, true)
         }
 
-        assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = mockUserId))
+        assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = mockUserId)!!)
     }
 }

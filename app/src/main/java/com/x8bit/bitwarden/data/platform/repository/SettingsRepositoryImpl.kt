@@ -539,7 +539,7 @@ class SettingsRepositoryImpl(
     }
 
     override fun getShowAutoFillSettingBadge(userId: String): Boolean =
-        settingsDiskSource.getShowAutoFillSettingBadge(userId)
+        settingsDiskSource.getShowAutoFillSettingBadge(userId) ?: false
 
     override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean) {
         settingsDiskSource.storeShowAutoFillSettingBadge(userId, showBadge)

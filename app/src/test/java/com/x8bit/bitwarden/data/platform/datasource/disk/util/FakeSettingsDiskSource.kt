@@ -285,11 +285,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun getUserHasSignedInPreviously(userId: String): Boolean = userSignIns[userId] == true
 
-    override fun getShowAutoFillSettingBadge(userId: String): Boolean =
-        userShowAutoFillBadge[userId] == true
+    override fun getShowAutoFillSettingBadge(userId: String): Boolean? =
+        userShowAutoFillBadge[userId]
 
-    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean) {
-        userShowAutoFillBadge[userId] = showBadge
+    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) {
+        showBadge?.let {
+            userShowAutoFillBadge[userId] = it
+        }
     }
 
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
