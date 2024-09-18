@@ -75,10 +75,11 @@ class BitwardenAccessibilityProcessorImpl(
         attemptFill: AccessibilityAction.AttemptFill,
     ) {
         val loginView = attemptFill.cipherView.login ?: return
-        val fields = accessibilityParser.parseForFillableFields(rootNode = rootNode)
-        fields.usernameFields.forEach { usernameField ->
-            usernameField.fillTextField(value = loginView.username)
-        }
+        val fields = accessibilityParser.parseForFillableFields(
+            rootNode = rootNode,
+            uri = attemptFill.uri,
+        )
+        fields.usernameField?.fillTextField(value = loginView.username)
         fields.passwordFields.forEach { passwordField ->
             passwordField.fillTextField(value = loginView.password)
         }
