@@ -6,6 +6,6 @@ import android.view.accessibility.AccessibilityNodeInfo
  * Represents the fillable fields for accessibility based autofill.
  */
 data class FillableFields(
-    val usernameFields: List<AccessibilityNodeInfo>,
+    val usernameField: AccessibilityNodeInfo?,
     val passwordFields: List<AccessibilityNodeInfo>,
 )

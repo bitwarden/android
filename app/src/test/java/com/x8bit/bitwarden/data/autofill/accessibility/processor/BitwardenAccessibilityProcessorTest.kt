@@ -279,7 +279,7 @@ class BitwardenAccessibilityProcessorTest {
             every { fillTextField(testPassword) } just runs
         }
         val fillableFields = FillableFields(
-            usernameFields = listOf(mockUsernameField),
+            usernameField = mockUsernameField,
             passwordFields = listOf(mockPasswordField),
         )
         val uri = mockk<Uri>()
@@ -293,7 +293,7 @@ class BitwardenAccessibilityProcessorTest {
         every { accessibilityAutofillManager.accessibilityAction } returns attemptFill
         every { accessibilityAutofillManager.accessibilityAction = null } just runs
         every {
-            accessibilityParser.parseForFillableFields(rootNode = rootNode)
+            accessibilityParser.parseForFillableFields(rootNode = rootNode, uri = uri)
         } returns fillableFields
 
         bitwardenAccessibilityProcessor.processAccessibilityEvent(
@@ -307,7 +307,7 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager.accessibilityAction
             accessibilityAutofillManager.accessibilityAction = null
             cipherView.login
-            accessibilityParser.parseForFillableFields(rootNode = rootNode)
+            accessibilityParser.parseForFillableFields(rootNode = rootNode, uri = uri)
             mockUsernameField.fillTextField(testUsername)
             mockPasswordField.fillTextField(testPassword)
         }
