@@ -46,6 +46,7 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     fun `Turning on autofill should send AutofillServiceChanged with value of true`() {
         composeTestRule
             .onNodeWithText("Auto-fill services")
+            .performScrollTo()
             .performClick()
 
         verify {

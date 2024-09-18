@@ -20,7 +20,6 @@ import com.bumptech.glide.integration.compose.GlideImage
  * in the optional [darkModeResId]. You would need to save these in your resources with unique
  * names.
  *
- * @sample
  * ```Kotlin
  * BitwardenGifImage(
  *   resId = R.drawable.img_setup_autofill_light,
