@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -67,7 +68,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
-        sendEvent(SetupUnlockEvent.NavigateToSetupAutofill)
+        updateOnboardingStatusToNextStep()
     }
 
     private fun handleEnableBiometricsClick() {
@@ -94,7 +95,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleSetUpLaterClick() {
-        sendEvent(SetupUnlockEvent.NavigateToSetupAutofill)
+        updateOnboardingStatusToNextStep()
     }
 
     private fun handleDismissDialog() {
@@ -173,6 +174,10 @@ class SetupUnlockViewModel @Inject constructor(
             }
         }
     }
+
+    private fun updateOnboardingStatusToNextStep() {
+        authRepository.setOnboardingStatus(state.userId, OnboardingStatus.AUTOFILL_SETUP)
+    }
 }
 
 /**
@@ -219,10 +224,6 @@ data class SetupUnlockState(
  * Models events for the setup unlock screen.
  */
 sealed class SetupUnlockEvent {
-    /**
-     * Navigate to autofill setup.
-     */
-    data object NavigateToSetupAutofill : SetupUnlockEvent()
 
     /**
      * Shows the prompt for biometrics using with the given [cipher].

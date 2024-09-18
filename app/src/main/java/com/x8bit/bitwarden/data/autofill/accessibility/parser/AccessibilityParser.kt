@@ -11,7 +11,7 @@ interface AccessibilityParser {
     /**
      * Parses the fillable fields from [rootNode].
      */
-    fun parseForFillableFields(rootNode: AccessibilityNodeInfo): FillableFields
+    fun parseForFillableFields(rootNode: AccessibilityNodeInfo, uri: Uri): FillableFields
 
     /**
      * Parses the [Uri] from [rootNode] and returns a url, package name.

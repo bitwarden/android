@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
@@ -370,6 +371,7 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
     ),
 )

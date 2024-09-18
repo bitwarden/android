@@ -83,19 +83,8 @@ fun createMockPermissions(
     shouldManageResetPassword: Boolean = false,
 ): SyncResponseJson.Profile.Permissions =
     SyncResponseJson.Profile.Permissions(
-        shouldManageGroups = false,
         shouldManageResetPassword = shouldManageResetPassword,
-        shouldAccessReports = false,
         shouldManagePolicies = false,
-        shouldDeleteAnyCollection = false,
-        shouldManageSso = false,
-        shouldDeleteAssignedCollections = false,
-        shouldManageUsers = false,
-        shouldAccessImportExport = false,
-        shouldEditAnyCollection = false,
-        shouldAccessEventLogs = false,
-        shouldCreateNewCollections = false,
-        shouldEditAssignedCollections = false,
     )
 
 /**

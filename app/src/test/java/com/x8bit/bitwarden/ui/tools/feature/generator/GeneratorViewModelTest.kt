@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -2406,6 +2407,7 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
     ),
 )

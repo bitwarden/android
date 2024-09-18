@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -11,6 +12,13 @@ import kotlinx.coroutines.flow.Flow
  */
 @Suppress("TooManyFunctions")
 interface AuthDiskSource {
+
+    /**
+     * The currently persisted authenticator sync symmetric key. This key is used for
+     * encrypting IPC traffic.
+     */
+    var authenticatorSyncSymmetricKey: ByteArray?
+
     /**
      * Retrieves a unique ID for the application that is stored locally. This will generate a new
      * one if it does not yet exist and it will only be reset for new installs or when clearing
@@ -282,4 +290,20 @@ interface AuthDiskSource {
      * Stores the [accountTokens] for the given [userId].
      */
     fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?)
+
+    /**
+     * Gets the onboarding status for the given [userId].
+     */
+    fun getOnboardingStatus(userId: String): OnboardingStatus?
+
+    /**
+     * Stores the [onboardingStatus] for the given [userId].
+     */
+    fun storeOnboardingStatus(userId: String, onboardingStatus: OnboardingStatus?)
+
+    /**
+     *  Emits updates that track [getOnboardingStatus]. This will replay the last known value,
+     *  if any exists.
+     */
+    fun getOnboardingStatusFlow(userId: String): Flow<OnboardingStatus?>
 }

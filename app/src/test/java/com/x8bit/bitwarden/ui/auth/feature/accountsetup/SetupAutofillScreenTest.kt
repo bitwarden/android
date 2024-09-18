@@ -17,13 +17,11 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SetupAutofillScreenTest : BaseComposeTest() {
 
-    private var onNavigateToCompleteSetupCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupAutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
@@ -38,7 +36,6 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     fun setup() {
         composeTestRule.setContent {
             SetupAutoFillScreen(
-                onNavigateToCompleteSetup = { onNavigateToCompleteSetupCalled = true },
                 intentManager = intentManager,
                 viewModel = viewModel,
             )
@@ -107,12 +104,6 @@ class SetupAutofillScreenTest : BaseComposeTest() {
         every { intentManager.startSystemAutofillSettingsActivity() } returns false
         mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
         verify { viewModel.trySendAction(SetupAutoFillAction.AutoFillServiceFallback) }
-    }
-
-    @Test
-    fun `NavigateToCompleteSetup should call onNavigateToCompleteSetup`() {
-        mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToCompleteSetup)
-        assertTrue(onNavigateToCompleteSetupCalled)
     }
 
     @Test
@@ -217,4 +208,8 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     }
 }
 
-private val DEFAULT_STATE = SetupAutoFillState(dialogState = null, autofillEnabled = false)
+private val DEFAULT_STATE = SetupAutoFillState(
+    userId = "userId",
+    dialogState = null,
+    autofillEnabled = false,
+)

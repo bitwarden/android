@@ -10,6 +10,7 @@ import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
@@ -3897,6 +3898,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     trustedDevice = null,
                     hasMasterPassword = true,
                     isUsingKeyConnector = false,
+                    onboardingStatus = OnboardingStatus.COMPLETE,
                 ),
             ),
             hasPendingAccountAddition = false,

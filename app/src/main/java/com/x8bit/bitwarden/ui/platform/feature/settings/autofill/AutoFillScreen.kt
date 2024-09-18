@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
@@ -66,6 +67,10 @@ fun AutoFillScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AutoFillEvent.NavigateBack -> onNavigateBack.invoke()
+
+            AutoFillEvent.NavigateToAccessibilitySettings -> {
+                intentManager.startSystemAccessibilitySettingsActivity()
+            }
 
             AutoFillEvent.NavigateToAutofillSettings -> {
                 val isSuccess = intentManager.startSystemAutofillSettingsActivity()
@@ -171,6 +176,15 @@ fun AutoFillScreen(
                     withDivider = false,
                 )
             }
+            AccessibilityAutofillSwitch(
+                isAccessibilityAutoFillEnabled = state.isAccessibilityAutofillEnabled,
+                onCheckedChange = remember(viewModel) {
+                    { viewModel.trySendAction(AutoFillAction.UseAccessibilityAutofillClick) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.additional_options),
@@ -223,6 +237,43 @@ fun AutoFillScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
+    }
+}
+
+@Composable
+private fun AccessibilityAutofillSwitch(
+    isAccessibilityAutoFillEnabled: Boolean,
+    onCheckedChange: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
+    BitwardenWideSwitch(
+        label = stringResource(id = R.string.accessibility),
+        description = stringResource(id = R.string.accessibility_description5),
+        isChecked = isAccessibilityAutoFillEnabled,
+        onCheckedChange = {
+            if (isAccessibilityAutoFillEnabled) {
+                onCheckedChange()
+            } else {
+                shouldShowDialog = true
+            }
+        },
+        modifier = modifier.testTag(tag = "AccessibilityAutofillSwitch"),
+    )
+
+    if (shouldShowDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.accessibility_service_disclosure),
+            message = stringResource(id = R.string.accessibility_disclosure_text),
+            confirmButtonText = stringResource(id = R.string.accept),
+            dismissButtonText = stringResource(id = R.string.decline),
+            onConfirmClick = {
+                onCheckedChange()
+                shouldShowDialog = false
+            },
+            onDismissClick = { shouldShowDialog = false },
+            onDismissRequest = { shouldShowDialog = false },
+        )
     }
 }
 

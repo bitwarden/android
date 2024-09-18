@@ -1,9 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.printToLog
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -100,8 +103,46 @@ class DebugMenuScreenTest : BaseComposeTest() {
     fun `reset feature flag values should send action when clicked`() {
         composeTestRule
             .onNodeWithText("Reset Values", ignoreCase = true)
+            .performScrollTo()
             .performClick()
 
         verify { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
+    }
+
+    @Test
+    fun `restart onboarding should send action when clicked`() {
+        mutableStateFlow.tryEmit(
+            DebugMenuState(
+                featureFlags = mapOf(
+                    FlagKey.OnboardingFlow to true,
+                ),
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Restart Onboarding", ignoreCase = true)
+            .performScrollTo()
+            .assertIsEnabled()
+            .performClick()
+
+        verify { viewModel.trySendAction(DebugMenuAction.ReStartOnboarding) }
+    }
+
+    @Test
+    fun `no restart onboarding should not send action when not enabled`() {
+        mutableStateFlow.tryEmit(
+            DebugMenuState(
+                featureFlags = mapOf(
+                    FlagKey.OnboardingFlow to false,
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Restart Onboarding", ignoreCase = true)
+            .performScrollTo()
+            .assertIsNotEnabled()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.ReStartOnboarding) }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -130,6 +131,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     trustedDevice = null,
                     hasMasterPassword = true,
                     isUsingKeyConnector = false,
+                    onboardingStatus = OnboardingStatus.COMPLETE,
                 ),
             ),
         )

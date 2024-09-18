@@ -102,6 +102,10 @@ class IntentManagerImpl(
             .launchUrl(context, uri)
     }
 
+    override fun startSystemAccessibilitySettingsActivity() {
+        context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+    }
+
     override fun startSystemAutofillSettingsActivity(): Boolean =
         try {
             val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)

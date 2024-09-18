@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,9 +18,13 @@ import javax.inject.Inject
 @HiltViewModel
 class SetupAutoFillViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
+    private val authRepository: AuthRepository,
 ) :
     BaseViewModel<SetupAutoFillState, SetupAutoFillEvent, SetupAutoFillAction>(
-        initialState = SetupAutoFillState(dialogState = null, autofillEnabled = false),
+        initialState = run {
+            val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
+            SetupAutoFillState(userId = userId, dialogState = null, autofillEnabled = false)
+        },
     ) {
 
     init {
@@ -72,11 +78,12 @@ class SetupAutoFillViewModel @Inject constructor(
     }
 
     private fun handleTurnOnLaterConfirmClick() {
-        sendEvent(SetupAutoFillEvent.NavigateToCompleteSetup)
+        // TODO PM-10631 record user chose to turn on later for settings badging.
+        updateOnboardingStatusToNextStep()
     }
 
     private fun handleContinueClick() {
-        sendEvent(SetupAutoFillEvent.NavigateToCompleteSetup)
+        updateOnboardingStatusToNextStep()
     }
 
     private fun handleAutofillServiceChanged(action: SetupAutoFillAction.AutofillServiceChanged) {
@@ -86,12 +93,20 @@ class SetupAutoFillViewModel @Inject constructor(
             settingsRepository.disableAutofill()
         }
     }
+
+    private fun updateOnboardingStatusToNextStep() =
+        authRepository
+            .setOnboardingStatus(
+                userId = state.userId,
+                status = OnboardingStatus.FINAL_STEP,
+            )
 }
 
 /**
  * UI State for the Auto-fill setup screen.
  */
 data class SetupAutoFillState(
+    val userId: String,
     val dialogState: SetupAutoFillDialogState?,
     val autofillEnabled: Boolean,
 )
@@ -115,10 +130,6 @@ sealed class SetupAutoFillDialogState {
  * UI Events for the Auto-fill setup screen.
  */
 sealed class SetupAutoFillEvent {
-    /**
-     * Navigate to the complete setup screen.
-     */
-    data object NavigateToCompleteSetup : SetupAutoFillEvent()
 
     /**
      * Navigate to the autofill settings screen.

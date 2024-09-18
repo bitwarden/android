@@ -31,6 +31,9 @@ class AutoFillViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: AutoFillState(
             isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
+            isAccessibilityAutofillEnabled = settingsRepository
+                .isAccessibilityEnabledStateFlow
+                .value,
             isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
             isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
@@ -46,6 +49,15 @@ class AutoFillViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         settingsRepository
+            .isAccessibilityEnabledStateFlow
+            .map {
+                AutoFillAction.Internal.AccessibilityEnabledUpdateReceive(
+                    isAccessibilityEnabled = it,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        settingsRepository
             .isAutofillEnabledStateFlow
             .map {
                 AutoFillAction.Internal.AutofillEnabledUpdateReceive(isAutofillEnabled = it)
@@ -54,17 +66,28 @@ class AutoFillViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    override fun handleAction(action: AutoFillAction): Unit = when (action) {
+    override fun handleAction(action: AutoFillAction) = when (action) {
         is AutoFillAction.AskToAddLoginClick -> handleAskToAddLoginClick(action)
         is AutoFillAction.AutoFillServicesClick -> handleAutoFillServicesClick(action)
         AutoFillAction.BackClick -> handleBackClick()
         is AutoFillAction.CopyTotpAutomaticallyClick -> handleCopyTotpAutomaticallyClick(action)
         is AutoFillAction.DefaultUriMatchTypeSelect -> handleDefaultUriMatchTypeSelect(action)
         AutoFillAction.BlockAutoFillClick -> handleBlockAutoFillClick()
+        AutoFillAction.UseAccessibilityAutofillClick -> handleUseAccessibilityAutofillClick()
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
         AutoFillAction.PasskeyManagementClick -> handlePasskeyManagementClick()
-        is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
-            handleAutofillEnabledUpdateReceive(action)
+        is AutoFillAction.Internal -> handleInternalAction(action)
+    }
+
+    private fun handleInternalAction(action: AutoFillAction.Internal) {
+        when (action) {
+            is AutoFillAction.Internal.AccessibilityEnabledUpdateReceive -> {
+                handleAccessibilityEnabledUpdateReceive(action)
+            }
+
+            is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
+                handleAutofillEnabledUpdateReceive(action)
+            }
         }
     }
 
@@ -92,6 +115,10 @@ class AutoFillViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isCopyTotpAutomaticallyEnabled = action.isEnabled) }
     }
 
+    private fun handleUseAccessibilityAutofillClick() {
+        sendEvent(AutoFillEvent.NavigateToAccessibilitySettings)
+    }
+
     private fun handleUseInlineAutofillClick(action: AutoFillAction.UseInlineAutofillClick) {
         settingsRepository.isInlineAutofillEnabled = action.isEnabled
         mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = action.isEnabled) }
@@ -105,6 +132,14 @@ class AutoFillViewModel @Inject constructor(
         settingsRepository.defaultUriMatchType = action.defaultUriMatchType
         mutableStateFlow.update {
             it.copy(defaultUriMatchType = action.defaultUriMatchType)
+        }
+    }
+
+    private fun handleAccessibilityEnabledUpdateReceive(
+        action: AutoFillAction.Internal.AccessibilityEnabledUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isAccessibilityAutofillEnabled = action.isAccessibilityEnabled)
         }
     }
 
@@ -127,6 +162,7 @@ class AutoFillViewModel @Inject constructor(
 @Parcelize
 data class AutoFillState(
     val isAskToAddLoginEnabled: Boolean,
+    val isAccessibilityAutofillEnabled: Boolean,
     val isAutoFillServicesEnabled: Boolean,
     val isCopyTotpAutomaticallyEnabled: Boolean,
     val isUseInlineAutoFillEnabled: Boolean,
@@ -151,6 +187,11 @@ sealed class AutoFillEvent {
      * Navigate back.
      */
     data object NavigateBack : AutoFillEvent()
+
+    /**
+     * Navigates to the system accessibility settings selection screen.
+     */
+    data object NavigateToAccessibilitySettings : AutoFillEvent()
 
     /**
      * Navigates to the system autofill settings selection screen.
@@ -218,6 +259,11 @@ sealed class AutoFillAction {
     data object BlockAutoFillClick : AutoFillAction()
 
     /**
+     * User clicked use accessibility autofill switch.
+     */
+    data object UseAccessibilityAutofillClick : AutoFillAction()
+
+    /**
      * User clicked use inline autofill button.
      */
     data class UseInlineAutofillClick(
@@ -233,6 +279,12 @@ sealed class AutoFillAction {
      * Internal actions.
      */
     sealed class Internal : AutoFillAction() {
+        /**
+         * An update for changes in the [isAccessibilityEnabled] value.
+         */
+        data class AccessibilityEnabledUpdateReceive(
+            val isAccessibilityEnabled: Boolean,
+        ) : Internal()
 
         /**
          * An update for changes in the [isAutofillEnabled] value.

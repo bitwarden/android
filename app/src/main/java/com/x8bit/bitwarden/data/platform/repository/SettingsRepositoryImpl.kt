@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
+import com.bitwarden.bridge.util.generateSecretKey
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -49,6 +51,7 @@ class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    accessibilityEnabledManager: AccessibilityEnabledManager,
     policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
@@ -117,7 +120,9 @@ class SettingsRepositoryImpl(
                 return
             }
             // When turning on authenticator sync, get a user encryption key from the vault SDK
-            // and store it as a authenticator sync unlock key:
+            // and store it as a authenticator sync unlock key. Also, generate a
+            // symmetric sync key if needed:
+            generateSymmetricSyncKeyIfNecessary()
             unconfinedScope.launch {
                 vaultSdkSource
                     .getUserEncryptionKey(userId = userId)
@@ -292,6 +297,9 @@ class SettingsRepositoryImpl(
                 blockedAutofillUris = value,
             )
         }
+
+    override val isAccessibilityEnabledStateFlow: StateFlow<Boolean> =
+        accessibilityEnabledManager.isAccessibilityEnabledStateFlow
 
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
         autofillEnabledManager.isAutofillEnabledStateFlow
@@ -528,6 +536,20 @@ class SettingsRepositoryImpl(
 
     override fun storeUserHasLoggedInValue(userId: String) {
         settingsDiskSource.storeUseHasLoggedInPreviously(userId)
+    }
+
+    /**
+     * If there isn't already one generated, generate a symmetric sync key that would be used
+     * for communicating via IPC.
+     */
+    private fun generateSymmetricSyncKeyIfNecessary() {
+        // If there is already an authenticator sync symmetric key, do nothing:
+        if (authDiskSource.authenticatorSyncSymmetricKey != null) {
+            return
+        }
+        // Otherwise, generate and store a key:
+        val secretKey = generateSecretKey().getOrNull() ?: return
+        authDiskSource.authenticatorSyncSymmetricKey = secretKey.encoded
     }
 
     /**

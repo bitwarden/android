@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.util.findLastSubstringIndicesOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
+import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
 import com.x8bit.bitwarden.data.platform.util.parseDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
@@ -46,6 +47,21 @@ class StringExtensionsTest {
     @Test
     fun `isAndroidApp should return false when doesn't start with android app protocol`() {
         assertFalse("com.x8bit.bitwarden".isAndroidApp())
+    }
+
+    @Test
+    fun `hasHttpProtocol should return false when doesn't start with an appropriate protocol`() {
+        assertFalse("androidapp://com.x8bit.bitwarden".hasHttpProtocol())
+    }
+
+    @Test
+    fun `hasHttpProtocol should return true when it starts with the http protocol`() {
+        assertTrue("http://www.google.com".hasHttpProtocol())
+    }
+
+    @Test
+    fun `hasHttpProtocol should return true when it starts with the https protocol`() {
+        assertTrue("https://www.google.com".hasHttpProtocol())
     }
 
     @Test

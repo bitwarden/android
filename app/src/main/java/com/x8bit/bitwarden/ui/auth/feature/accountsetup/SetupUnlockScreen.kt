@@ -62,7 +62,6 @@ import com.x8bit.bitwarden.ui.platform.util.isPortrait
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupUnlockScreen(
-    onNavigateToSetupAutofill: () -> Unit,
     viewModel: SetupUnlockViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
 ) {
@@ -71,7 +70,6 @@ fun SetupUnlockScreen(
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(value = false) }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            SetupUnlockEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
             is SetupUnlockEvent.ShowBiometricsPrompt -> {
                 showBiometricsPrompt = true
                 biometricsManager.promptBiometrics(

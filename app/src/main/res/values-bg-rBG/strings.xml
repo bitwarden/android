@@ -329,6 +329,7 @@
   <string name="no_items_folder">Няма елементи в тази папка.</string>
   <string name="no_items_trash">Няма записи в кошчето.</string>
   <string name="autofill_accessibility_service">Услуга за автоматично дописване</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Услугата на Битуорден за автоматично дописване разчита на инфраструктурата на Андроид на устройството ви за дописване, за да може да попълва полета с идентификационна информация и банкови карти.</string>
   <string name="bitwarden_autofill_service_description">Използване на услугата на Битуорден за автоматично дописване при вписване, на банкови карти и други данни за идентификация.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Към настройките на автоматичното дописване</string>
@@ -992,6 +993,12 @@
   <string name="expired_link">Връзка с изтекла давност</string>
   <string name="please_restart_registration_or_try_logging_in">Моля, рестартирайте процеса на регистрация или опитайте да се впишете. Може вече да имате регистрация.</string>
   <string name="restart_registration">Рестартиране на регистрацията</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Синхронизиране на удостоверителя</string>
+  <string name="allow_bitwarden_authenticator_syncing">Разрешаване на Битуорден да синхронизира удостоверителя</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Имаше проблем с проверката на идентификатора за регистриране.</string>
+  <string name="turn_on_autofill">Включете автоматичното попълване</string>
+  <string name="use_autofill_to_log_into_your_accounts">Използвайте автоматичното попълване, за да се вписвате с едно докосване.</string>
+  <string name="turn_on_later">Включване по-късно</string>
+  <string name="turn_on_autofill_later">Искате да включите автоматичното попълване по-късно?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Можете да се върнете и да завършите тази стъпка по всяко време в Настройките.</string>
 </resources>

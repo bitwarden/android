@@ -134,6 +134,15 @@ interface SettingsRepository {
     var blockedAutofillUris: List<String>
 
     /**
+     * Emits updates whenever there is a change in the app's status for accessibility-based
+     * autofill.
+     *
+     * Note that the correct value is only populated upon subscription so calling [StateFlow.value]
+     * may result in an out-of-date value.
+     */
+    val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
+
+    /**
      * Emits updates whenever there is a change in the app's status for supporting autofill.
      *
      * Note that the correct value is only populated upon subscription so calling [StateFlow.value]

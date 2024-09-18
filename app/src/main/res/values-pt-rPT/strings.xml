@@ -329,6 +329,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="no_items_folder">Não existem itens nesta pasta.</string>
   <string name="no_items_trash">Não existem itens no lixo.</string>
   <string name="autofill_accessibility_service">Serviço de acessibilidade de preenchimento automático</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">O serviço de preenchimento automático do Bitwarden utiliza o Android Autofill Framework para ajudar a preencher as informações de início de sessão noutras aplicações no seu dispositivo.</string>
   <string name="bitwarden_autofill_service_description">Utilize o serviço de preenchimento automático do Bitwarden para preencher informações de início de sessão noutras aplicações.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Abrir definições de preenchimento automático</string>
@@ -992,6 +993,12 @@ Anule a subscrição em qualquer altura.</string>
   <string name="expired_link">Link expirado</string>
   <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registo ou tente iniciar sessão. É possível que já tenha uma conta.</string>
   <string name="restart_registration">Reiniciar registo</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Sincronização do autenticador</string>
+  <string name="allow_bitwarden_authenticator_syncing">Permitir a sincronização do Bitwarden Authenticator</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Ocorreu um problema com a validação do token de registo.</string>
+  <string name="turn_on_autofill">Ativar o preenchimento automático</string>
+  <string name="use_autofill_to_log_into_your_accounts">Utilize o preenchimento automático para iniciar sessão nas suas contas com um simples toque.</string>
+  <string name="turn_on_later">Ativar mais tarde</string>
+  <string name="turn_on_autofill_later">Ativar o preenchimento automático mais tarde?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Pode voltar a concluir este passo em qualquer altura nas Definições.</string>
 </resources>

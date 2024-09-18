@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 /**
@@ -167,3 +169,22 @@ val AuthDiskSource.activeUserIdChangesFlow: Flow<String?>
         .userStateFlow
         .map { it?.activeUserId }
         .distinctUntilChanged()
+
+/**
+ * Returns a [Flow] that emits every time the active user's onboarding status is changed
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+val AuthDiskSource.onboardingStatusChangesFlow: Flow<OnboardingStatus?>
+    get() = activeUserIdChangesFlow
+            .flatMapLatest { activeUserId ->
+                activeUserId
+                    ?.let { this.getOnboardingStatusFlow(userId = it) }
+                    ?: flowOf(null)
+            }
+            .distinctUntilChanged()
+
+val AuthDiskSource.currentOnboardingStatus: OnboardingStatus?
+    get() = this
+        .userState
+        ?.activeUserId
+        ?.let { this.getOnboardingStatus(userId = it) }

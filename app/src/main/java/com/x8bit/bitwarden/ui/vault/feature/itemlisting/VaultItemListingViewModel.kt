@@ -102,8 +102,6 @@ class VaultItemListingViewModel @Inject constructor(
         val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val fido2CreationData = specialCircumstance as? SpecialCircumstance.Fido2Save
-        val fido2AssertionData = specialCircumstance as? SpecialCircumstance.Fido2Assertion
-        val fido2GetCredentialsData =
             specialCircumstance as? SpecialCircumstance.Fido2GetCredentials
         val dialogState = fido2CreationData
             ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) }
@@ -1308,10 +1306,6 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun handleFido2OriginValidationSuccess() {
-        observeVaultData()
-    }
-
     private fun updateStateWithVaultData(vaultData: VaultData, clearDialogState: Boolean) {
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -1363,10 +1357,6 @@ class VaultItemListingViewModel @Inject constructor(
             .data
             ?.cipherViewList
             ?.firstOrNull { it.id == cipherId }
-
-    private fun sendUserVerificationEvent(isRequired: Boolean, selectedCipher: CipherView) {
-        sendEvent(VaultItemListingEvent.Fido2UserVerification(isRequired, selectedCipher))
-    }
 
     /**
      * Takes the given vault data and filters it for autofill if necessary.

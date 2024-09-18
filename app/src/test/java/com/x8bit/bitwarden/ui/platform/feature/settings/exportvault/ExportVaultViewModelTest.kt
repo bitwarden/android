@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.exporters.ExportFormat
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -722,6 +723,7 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         ),
     ),
 )

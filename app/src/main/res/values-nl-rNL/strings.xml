@@ -329,6 +329,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="no_items_folder">Er zijn geen items in deze map.</string>
   <string name="no_items_trash">Er zijn geen items in de prullenbak.</string>
   <string name="autofill_accessibility_service">Toegankelijkheidsdienst</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">De Dienst Automatisch aanvullen van Bitwarden gebruikt het Android Autofill Framework om je te helpen met het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op je apparaat.</string>
   <string name="bitwarden_autofill_service_description">Gebruik de Bitwarden Dienst Automatische aanvullen voor het automatisch invullen van je inloggevens.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Open instellingen voor automatisch invullen</string>
@@ -994,4 +995,10 @@ Wilt u naar dit account wisselen?</string>
   <string name="restart_registration">Registratie herstarten</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Synchroniseren Bitwarden Authenticator toestaan</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Er is een probleem opgetreden bij het valideren van het registratietoken.</string>
+  <string name="turn_on_autofill">2. Automatisch invullen inschakelen</string>
+  <string name="use_autofill_to_log_into_your_accounts">Gebruik automatisch invullen om met een enkele tik in te loggen op je accounts.</string>
+  <string name="turn_on_later">Later inschakelen</string>
+  <string name="turn_on_autofill_later">Automatisch aanvullen later inschakelen?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Je kunt deze stap op ieder moment afronden via Instellingen.</string>
 </resources>
