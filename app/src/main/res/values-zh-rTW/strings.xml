@@ -138,7 +138,7 @@
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">兩次填寫的主密碼不一致。</string>
   <string name="master_password_description">主密碼是用於存取密碼庫的密碼。它非常重要，請您不要忘記它。若您忘記了主密碼，沒有任何方法能將其復原。</string>
-  <string name="master_password_hint">主密碼提示（可省略）</string>
+  <string name="master_password_hint_optional">主密碼提示（可省略）</string>
   <string name="master_password_hint_description">主密碼提示可以在您忘記主密碼時幫助您回憶主密碼。</string>
   <string name="master_password_length_val_message_x">主密碼需要至少 %1$s 個字元。</string>
   <string name="min_numbers">最少數字位數</string>

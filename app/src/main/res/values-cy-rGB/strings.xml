@@ -138,7 +138,7 @@
   <string name="manage">Rheoli</string>
   <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
   <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
-  <string name="master_password_hint">Awgrym o\'ch prif gyfrinair (dewisol)</string>
+  <string name="master_password_hint_optional">Awgrym o\'ch prif gyfrinair (dewisol)</string>
   <string name="master_password_hint_description">Gall awgrym o\'ch prif gyfrinair eich helpu i\'w gofio os ydych chi\'n ei anghofio.</string>
   <string name="master_password_length_val_message_x">Rhaid i\'ch prif gyfrinair gynnwys o leiaf %1$s nod.</string>
   <string name="min_numbers">Isafswm rhifau</string>

@@ -138,7 +138,7 @@
   <string name="manage">Управление</string>
   <string name="master_password_confirmation_val_message">Неверное подтверждение пароля.</string>
   <string name="master_password_description">Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</string>
-  <string name="master_password_hint">Подсказка к мастер-паролю (необяз.)</string>
+  <string name="master_password_hint_optional">Подсказка к мастер-паролю (необяз.)</string>
   <string name="master_password_hint_description">Подсказка к мастер-паролю может помочь вам его вспомнить.</string>
   <string name="master_password_length_val_message_x">Мастер-пароль должен содержать не менее %1$s символов.</string>
   <string name="min_numbers">Минимум цифр</string>

@@ -138,7 +138,7 @@
   <string name="manage">Διαχείριση</string>
   <string name="master_password_confirmation_val_message">Η επιβεβαίωση του κύριου κωδικού δεν είναι σωστή.</string>
   <string name="master_password_description">Ο κύριος κωδικός χρησιμοποιείται για πρόσβαση στο vault σας. Είναι πολύ σημαντικό να μην τον ξεχάσετε. Δεν υπάρχει τρόπος να τον ανακτήσετε σε αυτή την περίπτωση.</string>
-  <string name="master_password_hint">Υπόδειξη κύριου κωδικού (προαιρετικό)</string>
+  <string name="master_password_hint_optional">Υπόδειξη κύριου κωδικού (προαιρετικό)</string>
   <string name="master_password_hint_description">Η υπόδειξη κύριου κωδικού μπορεί να σας βοηθήσει να θυμηθείτε τον κωδικό σας αν τον ξεχάσετε.</string>
   <string name="master_password_length_val_message_x">Ο κύριος κωδικός πρέπει να έχει μήκος τουλάχιστον %1$s χαρακτήρες.</string>
   <string name="min_numbers">Ελάχιστα αριθμητικά ψηφία</string>

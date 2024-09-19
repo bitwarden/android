@@ -236,7 +236,7 @@ private fun CompleteRegistrationContent(
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password),
+            label = stringResource(id = R.string.master_password_required),
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
             value = passwordInput,
@@ -257,7 +257,7 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenPasswordField(
-            label = stringResource(id = R.string.retype_master_password),
+            label = stringResource(id = R.string.retype_master_password_required),
             value = confirmPasswordInput,
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
@@ -270,7 +270,7 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
-            label = stringResource(id = R.string.master_password_hint),
+            label = stringResource(R.string.master_password_hint),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
             hint = if (showNewOnboardingUi) {

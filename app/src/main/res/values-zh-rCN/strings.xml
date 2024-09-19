@@ -138,7 +138,7 @@
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
   <string name="master_password_description">主密码是您访问密码库的唯一密码。它非常重要，请您不要忘记。一旦忘记，无任何办法恢复此密码。</string>
-  <string name="master_password_hint">主密码提示（可选）</string>
+  <string name="master_password_hint_optional">主密码提示（可选）</string>
   <string name="master_password_hint_description">主密码提示可以在您忘记密码时帮您回忆起来。</string>
   <string name="master_password_length_val_message_x">主密码必须至少 %1$s 个字符长度。</string>
   <string name="min_numbers">数字最少个数</string>

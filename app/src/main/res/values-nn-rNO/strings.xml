@@ -138,7 +138,7 @@
   <string name="manage">Handsam</string>
   <string name="master_password_confirmation_val_message">Passorda stemmer ikkje.</string>
   <string name="master_password_description">Hovudpassordet er passordet du brukar for å få tilgjenge til kvelvet ditt. Det er veldig viktig at du ikkje gløymer hovudpassordet ditt. Det er umogleg å få tilbake passordet om du so gløymer det.</string>
-  <string name="master_password_hint">Vink til hovudpassord (valfritt)</string>
+  <string name="master_password_hint_optional">Vink til hovudpassord (valfritt)</string>
   <string name="master_password_hint_description">Eit hovudpassordvink kan hjelpa deg med å hugsa passordet ditt om du gløymer det.</string>
   <string name="master_password_length_val_message_x">Hovudpassordet ditt må vera minst %1$s teikn langt.</string>
   <string name="min_numbers">Min. tal på nummer</string>

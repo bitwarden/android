@@ -138,7 +138,7 @@
   <string name="manage">Verwalten</string>
   <string name="master_password_confirmation_val_message">Passwortbestätigung ist nicht korrekt.</string>
   <string name="master_password_description">Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt es zurückzusetzen.</string>
-  <string name="master_password_hint">Master-Passwort-Hinweis (optional)</string>
+  <string name="master_password_hint_optional">Master-Passwort-Hinweis (optional)</string>
   <string name="master_password_hint_description">Ein Hinweis auf dein Master-Passwort kann dir helfen, dich an das Passwort zu erinnern, solltest du es vergessen.</string>
   <string name="master_password_length_val_message_x">Das Master-Passwort muss mindestens %1$s Zeichen lang sein.</string>
   <string name="min_numbers">Mindestanzahl Ziffern</string>

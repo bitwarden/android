@@ -138,7 +138,7 @@
   <string name="manage">Upravljanje</string>
   <string name="master_password_confirmation_val_message">Potvrda lozinke nije tačna.</string>
   <string name="master_password_description">Glavna lozinka je lozinka koju koristite za pristup Vašem trezoru. Veoma je važno da ne zaboravite glavnu lozinku. Ne postoji način da povratite lozinku u slučaju da je zaboravite.</string>
-  <string name="master_password_hint">Nagoveštaj za glavnu lozinku (opcionalno)</string>
+  <string name="master_password_hint_optional">Nagoveštaj za glavnu lozinku (opcionalno)</string>
   <string name="master_password_hint_description">Nagoveštaj glavne lozinke može Vam pomoći da zapamtite lozinku ako je zaboravite.</string>
   <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
   <string name="min_numbers">Minimalno brojeva</string>

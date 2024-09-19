@@ -138,7 +138,7 @@
   <string name="manage">Bestuur</string>
   <string name="master_password_confirmation_val_message">Wagwoordbevestiging is verkeerd.</string>
   <string name="master_password_description">Die hoofwagwoord is die wagwoord wat u gebruik vir toegang tot die kluis. Dit is baie belangrik dat u dit onthou. Dit kan op geen manier teruggevind word indien u dit vergeet nie.</string>
-  <string name="master_password_hint">Hoofwagwoordwenk (opsioneel)</string>
+  <string name="master_password_hint_optional">Hoofwagwoordwenk (opsioneel)</string>
   <string name="master_password_hint_description">’n Hoofwagwoordwenk kan u help om u wagwoord te onthou indien u dit sou vergeet.</string>
   <string name="master_password_length_val_message_x">Die hoofwagwoord moet ten minste %1$s karakters lank wees.</string>
   <string name="min_numbers">Min. aantal syfers</string>

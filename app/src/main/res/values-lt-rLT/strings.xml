@@ -138,7 +138,7 @@
   <string name="manage">Tvarkyti</string>
   <string name="master_password_confirmation_val_message">Slaptažodžio patvirtinimas neteisingas.</string>
   <string name="master_password_description">Pagrindinis slaptažodis yra slaptažodis, kurį naudojate norėdami pasiekti savo saugyklą. Labai svarbu nepamiršti pagrindinio slaptažodžio. Negalėsite atkurti slaptažodį, jei jį pamiršote.</string>
-  <string name="master_password_hint">Pagrindinio slaptažodžio užuomina (neprivaloma)</string>
+  <string name="master_password_hint_optional">Pagrindinio slaptažodžio užuomina (neprivaloma)</string>
   <string name="master_password_hint_description">Pagrindinio slaptažodžio užuomina gali padėti prisiminti slaptažodį, jei jį pamiršite.</string>
   <string name="master_password_length_val_message_x">Pagrindinis slaptažodis turi būti bent %1$s simbolių ilgio.</string>
   <string name="min_numbers">Mažiausiai skaičių</string>

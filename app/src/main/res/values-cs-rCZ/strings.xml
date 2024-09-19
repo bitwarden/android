@@ -138,7 +138,7 @@
   <string name="manage">Správa</string>
   <string name="master_password_confirmation_val_message">Potvrzení hesla se neshoduje.</string>
   <string name="master_password_description">Hlavní heslo je heslo, které používáte k přístupu do Vašeho trezoru. Je velmi důležité, abyste jej nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste jej zapomněli.</string>
-  <string name="master_password_hint">Nápověda k hlavnímu heslu (volitelné)</string>
+  <string name="master_password_hint_optional">Nápověda k hlavnímu heslu (volitelné)</string>
   <string name="master_password_hint_description">Nápověda k hlavnímu heslu Vám pomůže vzpomenout si heslo, pokud ho zapomenete.</string>
   <string name="master_password_length_val_message_x">Hlavní heslo musí obsahovat alespoň %1$s znaků.</string>
   <string name="min_numbers">Minimální počet číslic</string>

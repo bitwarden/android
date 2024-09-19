@@ -138,7 +138,7 @@
   <string name="manage">נהל</string>
   <string name="master_password_confirmation_val_message">שדה אימות סיסמה שגוי.</string>
   <string name="master_password_description">הסיסמה הראשית היא הסיסמה שבאמצעותה תיגש לכספת שלך. חשוב מאוד שלא תשכח את הסיסמה הזו. אין שום דרך לשחזר אותה במקרה ושכחת אותה.</string>
-  <string name="master_password_hint">רמז לסיסמה ראשית (אופציונאלי)</string>
+  <string name="master_password_hint_optional">רמז לסיסמה ראשית (אופציונאלי)</string>
   <string name="master_password_hint_description">רמז לסיסמה הראשית יכול לעזור במקרה ושכחת את הסיסמה.</string>
   <string name="master_password_length_val_message_x">הסיסמה הראשית חייבת להיות לפחות באורך %1$s תווים.</string>
   <string name="min_numbers">מינימום ספרות</string>

@@ -138,7 +138,7 @@
   <string name="manage">Gerir</string>
   <string name="master_password_confirmation_val_message">A confirmação da palavra-passe não está correta.</string>
   <string name="master_password_description">A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não há forma de recuperar a palavra-passe no caso de a esquecer.</string>
-  <string name="master_password_hint">Dica da palavra-passe mestra (opcional)</string>
+  <string name="master_password_hint_optional">Dica da palavra-passe mestra (opcional)</string>
   <string name="master_password_hint_description">Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela.</string>
   <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s caracteres.</string>
   <string name="min_numbers">Mínimo de números</string>

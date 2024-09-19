@@ -138,7 +138,7 @@
   <string name="manage">Beheer</string>
   <string name="master_password_confirmation_val_message">De wachtwoorden komen niet overeen.</string>
   <string name="master_password_description">Het hoofdwachtwoord is het wachtwoord waarmee je toegang krijgt tot je beveiligde kluis. Het is belangrijk dat je het hoofdwachtwoord niet vergeet, want er is geen manier om het te herstellen.</string>
-  <string name="master_password_hint">Hoofdwachtwoordhint (optioneel)</string>
+  <string name="master_password_hint_optional">Hoofdwachtwoordhint (optioneel)</string>
   <string name="master_password_hint_description">Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</string>
   <string name="master_password_length_val_message_x">Hoofdwachtwoord moet minstens %1$s karakters lang zijn.</string>
   <string name="min_numbers">Min. aantal cijfers</string>

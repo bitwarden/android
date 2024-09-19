@@ -138,7 +138,7 @@
   <string name="manage">Gestisci</string>
   <string name="master_password_confirmation_val_message">Conferma correttamente la password</string>
   <string name="master_password_description">La password principale ti serve per accedere alla tua cassaforte. È molto importante non dimenticarla. Non possiamo aiutarti a recuperare questa password se la dimentichi.</string>
-  <string name="master_password_hint">Suggerimento per la password principale (opzionale)</string>
+  <string name="master_password_hint_optional">Suggerimento per la password principale (opzionale)</string>
   <string name="master_password_hint_description">Questo suggerimento può aiutarti a ricordare la password nel caso in cui la dimenticassi.</string>
   <string name="master_password_length_val_message_x">Inserisci una password lunga almeno %1$s caratteri</string>
   <string name="min_numbers">Numero minimo di numeri</string>

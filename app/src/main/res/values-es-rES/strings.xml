@@ -138,7 +138,7 @@
   <string name="manage">Gestionar</string>
   <string name="master_password_confirmation_val_message">La confirmación de la contraseña no es correcta.</string>
   <string name="master_password_description">La contraseña maestra es la clave que utilizas para acceder a tu caja fuerte. Es muy importante que no olvides tu contraseña maestra. No hay forma de recuperarla si la olvidas.</string>
-  <string name="master_password_hint">Pista de contraseña maestra (opcional)</string>
+  <string name="master_password_hint_optional">Pista de contraseña maestra (opcional)</string>
   <string name="master_password_hint_description">Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides.</string>
   <string name="master_password_length_val_message_x">La contraseña maestra debe tener al menos %1$s caracteres.</string>
   <string name="min_numbers">Mínimo de caracteres numéricos</string>

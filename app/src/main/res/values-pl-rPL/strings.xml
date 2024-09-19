@@ -138,7 +138,7 @@
   <string name="manage">Zarządzaj</string>
   <string name="master_password_confirmation_val_message">Potwierdzenie hasła nie pasuje.</string>
   <string name="master_password_description">Hasło główne zapewnia dostęp do sejfu. To bardzo ważne, aby je pamiętać, ponieważ zapomnianego hasła nie będzie można odzyskać.</string>
-  <string name="master_password_hint">Podpowiedź do hasła głównego (opcjonalnie)</string>
+  <string name="master_password_hint_optional">Podpowiedź do hasła głównego (opcjonalnie)</string>
   <string name="master_password_hint_description">Podpowiedź do hasła głównego może pomóc Ci przypomnieć hasło, jeśli je zapomnisz.</string>
   <string name="master_password_length_val_message_x">Hasło główne musi zawierać co najmniej %1$s znaków.</string>
   <string name="min_numbers">Minimalna liczba cyfr</string>

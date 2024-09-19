@@ -138,7 +138,7 @@
   <string name="manage">관리</string>
   <string name="master_password_confirmation_val_message">비밀번호 확인과 비밀번호가 일치하지 않습니다.</string>
   <string name="master_password_description">마스터 비밀번호는 보관함을 열 때 필요한 비밀번호입니다. 절대 마스터 비밀번호를 잊어버리지 마세요. 잊어버리면 복구할 수 있는 방법이 없습니다.</string>
-  <string name="master_password_hint">마스터 비밀번호 힌트 (선택)</string>
+  <string name="master_password_hint_optional">마스터 비밀번호 힌트 (선택)</string>
   <string name="master_password_hint_description">마스터 비밀번호 힌트는 마스터 비밀번호를 잊었을 때 도움이 될 수 있습니다.</string>
   <string name="master_password_length_val_message_x">마스터 비밀번호는 최소 %1$s자 이상이어야 합니다.</string>
   <string name="min_numbers">숫자 최소 개수</string>

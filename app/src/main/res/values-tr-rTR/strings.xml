@@ -138,7 +138,7 @@
   <string name="manage">Yönet</string>
   <string name="master_password_confirmation_val_message">Parola onayı doğru değil.</string>
   <string name="master_password_description">Ana parola, kasanıza ulaşmak için kullanacağınız paroladır. Ana parolanızı unutmamanız çok önemlidir. Unutursanız parolalarınızı asla kurtaramazsınız.</string>
-  <string name="master_password_hint">Ana parola ipucu (isteğe bağlı)</string>
+  <string name="master_password_hint_optional">Ana parola ipucu (isteğe bağlı)</string>
   <string name="master_password_hint_description">Ana parolanızı unutursanız bu ipucuna bakınca size ana parolanızı hatırlatacak bir şey yazabilirsiniz.</string>
   <string name="master_password_length_val_message_x">Ana parola en az %1$s karakter uzunluğunda olmalıdır.</string>
   <string name="min_numbers">En az rakam</string>

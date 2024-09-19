@@ -138,7 +138,7 @@
   <string name="manage">Gérer</string>
   <string name="master_password_confirmation_val_message">La confirmation du mot de passe est erronée.</string>
   <string name="master_password_description">Le mot de passe principal est le mot de passe que vous utilisez pour accéder à votre coffre. Il est très important de ne pas oublier votre mot de passe principal. Il n\'existe aucun moyen de récupérer le mot de passe si vous l\'oubliez.</string>
-  <string name="master_password_hint">Indice du mot de passe principal (facultatif)</string>
+  <string name="master_password_hint_optional">Indice du mot de passe principal (facultatif)</string>
   <string name="master_password_hint_description">Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l\'oubliez.</string>
   <string name="master_password_length_val_message_x">Le mot de passe principal doit comporter au moins %1$s caractères.</string>
   <string name="min_numbers">Chiffres minimum</string>

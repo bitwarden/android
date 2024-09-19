@@ -138,7 +138,7 @@
   <string name="manage">إدارة</string>
   <string name="master_password_confirmation_val_message">تأكيد كلمة المرور غير صحيح.</string>
   <string name="master_password_description">كلمة المرور الرئيسية هي كلمة المرور المستخدمة للوصول إلى الخزنة الخاصة بك. من المهم جدا ً ألا تنسى ذلك. لا توجد طريقة للعثور عليها إذا نسيت.</string>
-  <string name="master_password_hint">فهرس كلمة المرور الرئيسية (اختياري)</string>
+  <string name="master_password_hint_optional">فهرس كلمة المرور الرئيسية (اختياري)</string>
   <string name="master_password_hint_description">يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</string>
   <string name="master_password_length_val_message_x">كلمة المرور الرئيسية يجب أن تكون على الأقل %1$s حرفاً.</string>
   <string name="min_numbers">الحد الأدنى للأرقام</string>

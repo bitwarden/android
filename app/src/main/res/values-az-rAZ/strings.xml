@@ -138,7 +138,7 @@
   <string name="manage">İdarə et</string>
   <string name="master_password_confirmation_val_message">Parol təsdiqləmə doğru deyil.</string>
   <string name="master_password_description">Ana parol, anbarınıza müraciət etmək üçün istifadə edəcəyiniz şifrədir. Ana parolu yadda saxlamaq çox vacibdir. Unutsanız, parolu bərpa etməyin heç bir yolu yoxdur.</string>
-  <string name="master_password_hint">Ana parol məsləhəti (ixtiyari)</string>
+  <string name="master_password_hint_optional">Ana parol məsləhəti (ixtiyari)</string>
   <string name="master_password_hint_description">Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</string>
   <string name="master_password_length_val_message_x">Ana parol ən azı %1$s simvol uzunluğunda olmalıdır.</string>
   <string name="min_numbers">Minimum rəqəm</string>

@@ -138,7 +138,7 @@
   <string name="manage">Hantera</string>
   <string name="master_password_confirmation_val_message">Bekräftelsen för huvudlösenordet stämde ej.</string>
   <string name="master_password_description">Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det inte går att återställa lösenordet om du skulle glömma bort det.</string>
-  <string name="master_password_hint">Huvudlösenordsledtråd (valfri)</string>
+  <string name="master_password_hint_optional">Huvudlösenordsledtråd (valfri)</string>
   <string name="master_password_hint_description">En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</string>
   <string name="master_password_length_val_message_x">Huvudlösenordet måste vara minst %1$s tecken långt.</string>
   <string name="min_numbers">Minsta antal siffror</string>

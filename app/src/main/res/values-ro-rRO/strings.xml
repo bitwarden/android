@@ -138,7 +138,7 @@
   <string name="manage">Gestionare</string>
   <string name="master_password_confirmation_val_message">Confirmarea parolei nu este corectă.</string>
   <string name="master_password_description">Parola principală este parola pe care o utilizați pentru a vă accesa seiful. Este foarte important să nu uitați această parolă. Nu există nicio modalitate de a recupera parola în cazul în care ați uitat-o.</string>
-  <string name="master_password_hint">Indiciu pentru parola principală (opțional)</string>
+  <string name="master_password_hint_optional">Indiciu pentru parola principală (opțional)</string>
   <string name="master_password_hint_description">Un indiciu pentru parola principală vă poate ajuta să v-o reamintiți dacă o uitați.</string>
   <string name="master_password_length_val_message_x">Parola principală trebuie să aibă cel puțin %1$s caractere.</string>
   <string name="min_numbers">Minimum de cifre</string>

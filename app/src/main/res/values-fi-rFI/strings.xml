@@ -138,7 +138,7 @@
   <string name="manage">Hallitse</string>
   <string name="master_password_confirmation_val_message">Salasanan vahvistus ei täsmää.</string>
   <string name="master_password_description">Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen.</string>
-  <string name="master_password_hint">Pääsalasanan vihje (valinnainen)</string>
+  <string name="master_password_hint_optional">Pääsalasanan vihje (valinnainen)</string>
   <string name="master_password_hint_description">Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</string>
   <string name="master_password_length_val_message_x">Pääsalasanan tulee sisältää vähintään %1$s merkkiä.</string>
   <string name="min_numbers">Numeroita vähintään</string>

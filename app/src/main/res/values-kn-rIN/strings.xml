@@ -138,7 +138,7 @@
   <string name="manage">ವ್ಯವಸ್ಥಾಪಕ</string>
   <string name="master_password_confirmation_val_message">ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಣ ಸರಿಯಾಗಿಲ್ಲ.</string>
   <string name="master_password_description">ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಲು ನೀವು ಬಳಸುವ ಪಾಸ್ವರ್ಡ್ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಆಗಿದೆ. ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆಯದಿರುವುದು ಬಹಳ ಮುಖ್ಯ. ನೀವು ಅದನ್ನು ಮರೆತ ಸಂದರ್ಭದಲ್ಲಿ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಮರುಪಡೆಯಲು ಯಾವುದೇ ಮಾರ್ಗವಿಲ್ಲ.</string>
-  <string name="master_password_hint">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಸುಳಿವು (ಐಚ್ಛಿಕ)</string>
+  <string name="master_password_hint_optional">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಸುಳಿವು (ಐಚ್ಛಿಕ)</string>
   <string name="master_password_hint_description">ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆತರೆ ಅದನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವು ನಿಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</string>
   <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
   <string name="min_numbers">ಕನಿಷ್ಠ ಸಂಖ್ಯೆಗಳು</string>
