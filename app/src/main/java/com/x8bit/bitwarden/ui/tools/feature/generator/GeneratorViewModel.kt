@@ -140,7 +140,7 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handleOnResumed() {
         // when the screen resumes we need to refresh the options for the current option from
-        // disk in the even they were changed while the screen was in the foreground.
+        // disk in the event they were changed while the screen was in the foreground.
         loadOptions(shouldUseStorageOptions = true)
     }
 
@@ -277,20 +277,28 @@ class GeneratorViewModel @Inject constructor(
     private fun loadOptions(shouldUseStorageOptions: Boolean = false) {
         when (val selectedType = state.selectedType) {
             is Passcode -> {
-                val savedOptionsType: Passcode.PasscodeType? = generatorRepository
-                    .getPasscodeGenerationOptions()
-                    ?.passcodeType
-                    .takeIf { shouldUseStorageOptions }
-                val mainType = savedOptionsType?.let { Passcode(it) } ?: selectedType
+                val mainType = if (shouldUseStorageOptions) {
+                    generatorRepository
+                        .getPasscodeGenerationOptions()
+                        ?.passcodeType
+                        ?.let { Passcode(it) }
+                        ?: selectedType
+                } else {
+                    selectedType
+                }
                 loadPasscodeOptions(selectedType = mainType)
             }
 
             is Username -> {
-                val savedOptionsType = generatorRepository
-                    .getUsernameGenerationOptions()
-                    ?.usernameType
-                    .takeIf { shouldUseStorageOptions }
-                val mainType = savedOptionsType?.let { Username(it) } ?: selectedType
+                val mainType = if (shouldUseStorageOptions) {
+                    generatorRepository
+                        .getUsernameGenerationOptions()
+                        ?.usernameType
+                        ?.let { Username(it) }
+                        ?: selectedType
+                } else {
+                    selectedType
+                }
                 loadUsernameOptions(
                     selectedType = mainType,
                     forceRegeneration = mainType.selectedType !is ForwardedEmailAlias,

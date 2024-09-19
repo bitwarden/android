@@ -545,7 +545,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
 
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -573,7 +574,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
 
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -642,8 +644,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
-
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -670,8 +672,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
-
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -1002,7 +1004,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Test
@@ -1030,7 +1033,8 @@ class GeneratorScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
