@@ -1690,6 +1690,11 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `send LifecycleResumed action on screen resume`() {
+        verify { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
+    }
+
     //endregion Random Word Tests
 
     private fun updateState(state: GeneratorState) {

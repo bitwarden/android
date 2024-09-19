@@ -134,7 +134,14 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainTypeOptionSelect -> handleMainTypeOptionSelect(action)
             is GeneratorAction.MainType -> handleMainTypeAction(action)
             is GeneratorAction.Internal -> handleInternalAction(action)
+            GeneratorAction.LifecycleResume -> handleOnResumed()
         }
+    }
+
+    private fun handleOnResumed() {
+        // when the screen resumes we need to refresh the options for the current option from
+        // disk in the even they were changed while the screen was in the foreground.
+        loadOptions(shouldUseStorageOptions = true)
     }
 
     @Suppress("MaxLineLength")
@@ -267,16 +274,28 @@ class GeneratorViewModel @Inject constructor(
 
     //region Generation Handlers
 
-    private fun loadOptions() {
+    private fun loadOptions(shouldUseStorageOptions: Boolean = false) {
         when (val selectedType = state.selectedType) {
-            is Passcode -> loadPasscodeOptions(
-                selectedType = selectedType,
-            )
+            is Passcode -> {
+                val savedOptionsType: Passcode.PasscodeType? = generatorRepository
+                    .getPasscodeGenerationOptions()
+                    ?.passcodeType
+                    .takeIf { shouldUseStorageOptions }
+                val mainType = savedOptionsType?.let { Passcode(it) } ?: selectedType
+                loadPasscodeOptions(selectedType = mainType)
+            }
 
-            is Username -> loadUsernameOptions(
-                selectedType = selectedType,
-                forceRegeneration = selectedType.selectedType !is ForwardedEmailAlias,
-            )
+            is Username -> {
+                val savedOptionsType = generatorRepository
+                    .getUsernameGenerationOptions()
+                    ?.usernameType
+                    .takeIf { shouldUseStorageOptions }
+                val mainType = savedOptionsType?.let { Username(it) } ?: selectedType
+                loadUsernameOptions(
+                    selectedType = mainType,
+                    forceRegeneration = mainType.selectedType !is ForwardedEmailAlias,
+                )
+            }
         }
     }
 
@@ -2102,6 +2121,11 @@ data class GeneratorState(
  * the generator feature, ensuring type safety and clear, structured action definitions.
  */
 sealed class GeneratorAction {
+
+    /**
+     * Indicates the UI has been entered a resumed lifecycle state.
+     */
+    data object LifecycleResume : GeneratorAction()
 
     /**
      * Indicates that the overflow option for password history has been clicked.
