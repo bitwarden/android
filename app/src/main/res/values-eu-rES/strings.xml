@@ -138,7 +138,7 @@
   <string name="manage">Kudeatu</string>
   <string name="master_password_confirmation_val_message">Pasahitzaren baieztapena ez da zuzena.</string>
   <string name="master_password_description">Pasahitz nagusia, kutxa gotorrera sartzeko erabiltzen duzun pasahitza da. Oso garrantzitsua da ez ahaztea, ahazten baduzu, ez dago pasahitza berreskuratzeko modurik.</string>
-  <string name="master_password_hint_optional">Pasahitz nagusirako pista (aukerakoa)</string>
+  <string name="master_password_hint">Pasahitz nagusirako pista (aukerakoa)</string>
   <string name="master_password_hint_description">Pasahitz nagusia ahazten baduzu, pista batek pasahitza gogoratzen lagunduko dizu.</string>
   <string name="master_password_length_val_message_x">Pasahitz nagusiak %1$s karaktere izan behar ditu gutxienez.</string>
   <string name="min_numbers">Gutxieneko zenbaki kopurua</string>

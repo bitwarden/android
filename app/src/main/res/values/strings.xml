@@ -139,7 +139,7 @@
   <string name="manage">Manage</string>
   <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
   <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
-  <string name="master_password_hint_optional">Master password hint (optional)</string>
+  <string name="master_password_hint">Master password hint (optional)</string>
   <string name="master_password_hint_description">A master password hint can help you remember your password if you forget it.</string>
   <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
   <string name="min_numbers">Minimum numbers</string>
@@ -1006,6 +1006,6 @@ Do you want to switch to this account?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
     <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
   <string name="youre_all_set">You\'re all set!</string>
-  <string name="master_password_hint">Master password hint</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

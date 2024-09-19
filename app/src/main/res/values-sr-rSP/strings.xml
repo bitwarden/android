@@ -138,7 +138,7 @@
   <string name="manage">Управљати</string>
   <string name="master_password_confirmation_val_message">Потврђена лозинка није тачна.</string>
   <string name="master_password_description">Главна Лозинка је лозинка коју користите за приступ Вашем сефу. Врло је важно да је не заборавите. Не постоји начин да повратите лозинку у случају да је заборавите.</string>
-  <string name="master_password_hint_optional">Савет Главне Лозинке (опционо)</string>
+  <string name="master_password_hint">Савет Главне Лозинке (опционо)</string>
   <string name="master_password_hint_description">Савет Главне Лозинке може да Вам помогне да се потсетите ако је заборавите.</string>
   <string name="master_password_length_val_message_x">Главна лозинка треба имати барем %1$s карактера.</string>
   <string name="min_numbers">Минимално Бројева</string>

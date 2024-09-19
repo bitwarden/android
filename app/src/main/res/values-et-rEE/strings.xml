@@ -138,7 +138,7 @@
   <string name="manage">Halda</string>
   <string name="master_password_confirmation_val_message">Parooli kinnitus ei ole õige.</string>
   <string name="master_password_description">Ülemparool on parool, millega pääsed oma kontole ligi. On äärmiselt tähtis, et ülemparool ei ununeks. Selle parooli taastamine ei ole mingil moel võimalik.</string>
-  <string name="master_password_hint_optional">Ülemparooli vihje (ei ole kohustuslik)</string>
+  <string name="master_password_hint">Ülemparooli vihje (ei ole kohustuslik)</string>
   <string name="master_password_hint_description">Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</string>
   <string name="master_password_length_val_message_x">Ülemparool peab olema vähemalt %1$s tähemärgi pikkune.</string>
   <string name="min_numbers">Vähim arv numbreid</string>

@@ -138,7 +138,7 @@
   <string name="manage">Administra</string>
   <string name="master_password_confirmation_val_message">La confirmació de la contrasenya no és correcta.</string>
   <string name="master_password_description">La contrasenya mestra és la clau que utilitzeu per accedir a la vostra caixa forta. És molt important que no la oblideu. No hi ha manera de recuperar-la en cas de perdre-la.</string>
-  <string name="master_password_hint_optional">Pista de la contrasenya mestra (opcional)</string>
+  <string name="master_password_hint">Pista de la contrasenya mestra (opcional)</string>
   <string name="master_password_hint_description">Una pista de contrasenya mestra pot ajudar-vos a recordar-la si la oblideu.</string>
   <string name="master_password_length_val_message_x">La contrasenya mestra ha de contenir almenys %1$s caràcters.</string>
   <string name="min_numbers">Mínim de caràcters numèrics</string>

@@ -138,7 +138,7 @@
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">パスワードの確認が正しくありません。</string>
   <string name="master_password_description">マスターパスワードは、パスワード保管庫へのアクセスに使用するパスワードです。マスターパスワードを忘れないように注意してください。忘れた場合、パスワードを回復する方法はありません。</string>
-  <string name="master_password_hint_optional">マスターパスワードのヒント (省略可能)</string>
+  <string name="master_password_hint">マスターパスワードのヒント (省略可能)</string>
   <string name="master_password_hint_description">マスターパスワードのヒントは、パスワードを忘れた場合に役立ちます。</string>
   <string name="master_password_length_val_message_x">マスターパスワードは、少なくとも%1$s文字以上で設定してください。</string>
   <string name="min_numbers">数字の最小個数</string>

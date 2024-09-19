@@ -170,7 +170,7 @@ private fun SetPasswordScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenTextField(
-            label = stringResource(id = R.string.master_password_hint_optional),
+            label = stringResource(id = R.string.master_password_hint),
             value = state.passwordHintInput,
             onValueChange = onPasswordHintInputChanged,
             hint = stringResource(id = R.string.master_password_hint_description),

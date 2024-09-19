@@ -138,7 +138,7 @@
   <string name="manage">Керування</string>
   <string name="master_password_confirmation_val_message">Підтвердження пароля неправильне.</string>
   <string name="master_password_description">Головний пароль використовується для доступу до вашого сховища. Дуже важливо, щоб ви запам\'ятали його. Якщо ви забудете головний пароль, його неможливо буде відновити.</string>
-  <string name="master_password_hint_optional">Підказка для головного пароля (необов\'язково)</string>
+  <string name="master_password_hint">Підказка для головного пароля (необов\'язково)</string>
   <string name="master_password_hint_description">Якщо ви забудете головний пароль, підказка може допомогти вам згадати його.</string>
   <string name="master_password_length_val_message_x">Довжина головного пароля має бути принаймні %1$s символів.</string>
   <string name="min_numbers">Мінімум цифр</string>

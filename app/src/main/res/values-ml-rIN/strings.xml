@@ -138,7 +138,7 @@
   <string name="manage">നിയന്ത്രിക്കുക</string>
   <string name="master_password_confirmation_val_message">പാസ്‌വേഡ് സ്ഥിരീകരണം ശെരി അല്ല.</string>
   <string name="master_password_description">നിങ്ങളുടെ വാൾട്ടിലേക്ക് പ്രവേശിക്കാൻ ഉപയോഗിക്കുന്ന പാസ്‌വേഡാണ് പ്രാഥമിക പാസ്‌വേഡ്. നിങ്ങളുടെ പ്രാഥമിക പാസ്‌വേഡ് മറക്കാതിരിക്കുക എന്നത് വളരെ പ്രധാനമാണ്. നിങ്ങൾ പാസ്‌വേഡ് മറന്ന സാഹചര്യത്തിൽ, പാസ്‌വേഡ് വീണ്ടെടുക്കാൻ ഒരു മാർഗവുമില്ല.</string>
-  <string name="master_password_hint_optional">പ്രാഥമിക പാസ്‌വേഡ് സൂചന (ഇഷ്ടാനുസൃതമായ)</string>
+  <string name="master_password_hint">പ്രാഥമിക പാസ്‌വേഡ് സൂചന (ഇഷ്ടാനുസൃതമായ)</string>
   <string name="master_password_hint_description">നിങ്ങളുടെ പാസ്‌വേഡ് മറന്നാൽ അത് ഓർമ്മിക്കാൻ ഒരു പ്രാഥമിക പാസ്‌വേഡ് സൂചന സഹായിക്കും.</string>
   <string name="master_password_length_val_message_x">പ്രാഥമിക പാസ്‌വേഡിന് കുറഞ്ഞത് %1$s പ്രതീകങ്ങളെങ്കിലും ദൈർഘ്യമുണ്ടായിരിക്കണം.</string>
   <string name="min_numbers">കുറഞ്ഞ സംഖ്യകൾ</string>

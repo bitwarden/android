@@ -138,7 +138,7 @@
   <string name="manage">Behandle</string>
   <string name="master_password_confirmation_val_message">Passordbekreftelsen er ikke riktig.</string>
   <string name="master_password_description">Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer hovedpassordet. Det er ikke mulig å gjenopprette passordet dersom du glemmer det.</string>
-  <string name="master_password_hint_optional">Et hint for hovedpassordet (valgfritt)</string>
+  <string name="master_password_hint">Et hint for hovedpassordet (valgfritt)</string>
   <string name="master_password_hint_description">Et hint om hovedpassordet kan hjelpe deg å huske passordet om du skulle glemme det.</string>
   <string name="master_password_length_val_message_x">Hovedpassordet må være minst %1$s tegn.</string>
   <string name="min_numbers">Minst antall siffer</string>

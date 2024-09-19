@@ -138,7 +138,7 @@
   <string name="manage">Управление</string>
   <string name="master_password_confirmation_val_message">Потвърждението не съвпада с паролата.</string>
   <string name="master_password_description">С главната парола получавате достъп до трезора си, не я губете! Ако я забравите, не съществува никакъв начин за нейното възстановяване.</string>
-  <string name="master_password_hint_optional">Подсказка за главната парола (по избор)</string>
+  <string name="master_password_hint">Подсказка за главната парола (по избор)</string>
   <string name="master_password_hint_description">Подсказката помага да си спомните паролата, ако сте я забравили.</string>
   <string name="master_password_length_val_message_x">Главната парола трябва да е дълга поне %1$s знака.</string>
   <string name="min_numbers">Минимален брой цифри</string>

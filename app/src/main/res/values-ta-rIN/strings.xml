@@ -138,7 +138,7 @@
   <string name="manage">நிர்வகி</string>
   <string name="master_password_confirmation_val_message">கடவுச்சொல் உறுதிப்படுத்தல் சரியானதல்ல.</string>
   <string name="master_password_description">உங்கள் பெட்டகத்தை அணுக நீங்கள் பயன்படுத்தும் கடவுச்சொல் பிரதான கடவுச்சொல். உங்கள் பிரதான கடவுச்சொல்லை நீங்கள் மறந்துவிடாதது மிகவும் முக்கியம். கடவுச்சொல்லை நீங்கள் மறந்துவிட்டால் அதை மீட்டெடுக்க வழி இல்லை.</string>
-  <string name="master_password_hint_optional">பிரதான கடவுச்சொல் குறிப்பு (விரும்பினால்)</string>
+  <string name="master_password_hint">பிரதான கடவுச்சொல் குறிப்பு (விரும்பினால்)</string>
   <string name="master_password_hint_description">உங்கள் கடவுச்சொல்லை மறந்துவிட்டால் அதை நினைவுபடுத்த பிரதான கடவுச்சொல் குறிப்பு உதவும்.</string>
   <string name="master_password_length_val_message_x">பிரதான கடவுச்சொல் குறைந்தது %1$s வரியுருக்கள் இருக்க வேண்டும்.</string>
   <string name="min_numbers">குறைந்தபட்ச எண்கள்</string>

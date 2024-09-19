@@ -138,7 +138,7 @@
   <string name="manage">จัดการ</string>
   <string name="master_password_confirmation_val_message">การยืนยันรหัสผ่านไม่ถูกต้อง</string>
   <string name="master_password_description">รหัสผ่านหลักคือรหัสผ่านที่คุณใช้เพื่อเข้าถึงห้องนิรภัยของคุณ เป็นเรื่องสำคัญมากที่คุณจะไม่ลืมรหัสผ่านหลักของคุณ ไม่มีวิธีการกู้คืนรหัสผ่านในกรณีที่คุณลืมรหัสผ่าน</string>
-  <string name="master_password_hint_optional">คำใบ้รหัสผ่านหลัก (ไม่จำเป็น)</string>
+  <string name="master_password_hint">คำใบ้รหัสผ่านหลัก (ไม่จำเป็น)</string>
   <string name="master_password_hint_description">คำแนะนำเกี่ยวกับรหัสผ่านหลักสามารถช่วยให้คุณจดจำรหัสผ่านได้หากลืม</string>
   <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
   <string name="min_numbers">จำนวนตัวเลขต่ำสุด</string>

@@ -138,7 +138,7 @@
   <string name="manage">मैनेज करें</string>
   <string name="master_password_confirmation_val_message">पासवर्ड गलत है।</string>
   <string name="master_password_description">मास्टर पासवर्ड वो पासवर्ड है जो तिजोरी एक्सेस करने के लिए इस्तेमाल होता है। मास्टर पासवर्ड ना भूलना बहुत ज़रूरी है। भूलने के बाद पासवर्ड वापस पाना मुमकिन नहीं है।</string>
-  <string name="master_password_hint_optional">मास्टर पासवर्ड हिंट (ज़रूरी नहीं)</string>
+  <string name="master_password_hint">मास्टर पासवर्ड हिंट (ज़रूरी नहीं)</string>
   <string name="master_password_hint_description">मास्टर पासवर्ड हिंट पासवर्ड भूल जाने के हालत में उसको याद करने में मदद करता है।</string>
   <string name="master_password_length_val_message_x">मास्टर पासवर्ड कम-से-कम %1$s अक्षर लंबा होना चाहिए।</string>
   <string name="min_numbers">कम-से-कम इतने नंबर</string>

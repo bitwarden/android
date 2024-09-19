@@ -247,7 +247,7 @@ fun CreateAccountScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenTextField(
-                label = stringResource(id = R.string.master_password_hint_optional),
+                label = stringResource(id = R.string.master_password_hint),
                 value = state.passwordHintInput,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(PasswordHintChange(it)) }

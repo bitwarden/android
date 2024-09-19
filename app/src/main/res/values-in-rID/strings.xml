@@ -138,7 +138,7 @@
   <string name="manage">Kelola</string>
   <string name="master_password_confirmation_val_message">Konfirmasi kata sandi tidak benar.</string>
   <string name="master_password_description">Kata sandi utama adalah kata sandi yang Anda gunakan untuk mengakses brankas Anda. Sangat penting bahwa Anda tidak lupa kata sandi utama Anda. Tidak ada cara untuk memulihkan kata sandi jika Anda melupakannya.</string>
-  <string name="master_password_hint_optional">Petunjuk Kata Sandi Utama (pilihan)</string>
+  <string name="master_password_hint">Petunjuk Kata Sandi Utama (pilihan)</string>
   <string name="master_password_hint_description">Petunjuk kata sandi utama dapat membantu Anda mengingat kata sandi Anda jika Anda melupakannya.</string>
   <string name="master_password_length_val_message_x">Kata sandi utama sedikitnya harus %1$s karakter.</string>
   <string name="min_numbers">Angka Minimum</string>

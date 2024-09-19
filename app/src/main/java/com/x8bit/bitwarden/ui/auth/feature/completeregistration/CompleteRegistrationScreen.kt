@@ -279,9 +279,9 @@ private fun CompleteRegistrationContent(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
             label = stringResource(
-                id = R.string.master_password_hint
+                id = R.string.master_password_hint_not_specified
                     .takeIf { showNewOnboardingUi }
-                    ?: R.string.master_password_hint_optional,
+                    ?: R.string.master_password_hint,
             ),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,

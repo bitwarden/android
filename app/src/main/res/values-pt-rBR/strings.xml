@@ -138,7 +138,7 @@
   <string name="manage">Gerenciar</string>
   <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
   <string name="master_password_description">A senha mestra é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha mestra. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</string>
-  <string name="master_password_hint_optional">Dica de senha mestra (opcional)</string>
+  <string name="master_password_hint">Dica de senha mestra (opcional)</string>
   <string name="master_password_hint_description">Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</string>
   <string name="master_password_length_val_message_x">A senha mestra deve ter pelo menos %1$s caracteres.</string>
   <string name="min_numbers">Números mínimos</string>

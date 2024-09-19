@@ -138,7 +138,7 @@
   <string name="manage">Upravljaj</string>
   <string name="master_password_confirmation_val_message">Potrditev gesla ni pravilna.</string>
   <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
-  <string name="master_password_hint_optional">Namig za glavno geslo (neobvezno)</string>
+  <string name="master_password_hint">Namig za glavno geslo (neobvezno)</string>
   <string name="master_password_hint_description">Namig vam lahko pomaga, da se spomnite glavnega gesla, če bi ga pozabili.</string>
   <string name="master_password_length_val_message_x">Glavno geslo mora vsebovati vsaj %1$s znakov.</string>
   <string name="min_numbers">Minimalno števk</string>

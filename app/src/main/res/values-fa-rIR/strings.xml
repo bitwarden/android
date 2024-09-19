@@ -138,7 +138,7 @@
   <string name="manage">مدیریت</string>
   <string name="master_password_confirmation_val_message">تأیید کلمه عبور صحیح نیست.</string>
   <string name="master_password_description">کلمه عبور اصلی، کلمه عبوری است که شما برای دسترسی به گاوصندوق خود استفاده می‌کنید. به یاد داشتن کلمه عبور اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</string>
-  <string name="master_password_hint_optional">یادآور کلمه عبور اصلی (اختیاری)</string>
+  <string name="master_password_hint">یادآور کلمه عبور اصلی (اختیاری)</string>
   <string name="master_password_hint_description">یادآور کلمه عبور اصلی کمک می‌کند در صورت فراموشی آن را به یاد بیارید.</string>
   <string name="master_password_length_val_message_x">طول کلمه عبور اصلی باید حداقل %1$s کاراکتر باشد.</string>
   <string name="min_numbers">حداقل اعداد</string>

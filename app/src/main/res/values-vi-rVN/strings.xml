@@ -138,7 +138,7 @@
   <string name="manage">Quản lý</string>
   <string name="master_password_confirmation_val_message">Mật khẩu nhập lại không trùng khớp.</string>
   <string name="master_password_description">Mật khẩu chính là mật khẩu bạn sử dụng để truy cập kho mật khẩu của bạn. Nó rất quan trọng vì sẽ không có cách nào để lấy lại mật khẩu nếu bạn quên.</string>
-  <string name="master_password_hint_optional">Gợi ý mật khẩu chính (tùy chọn)</string>
+  <string name="master_password_hint">Gợi ý mật khẩu chính (tùy chọn)</string>
   <string name="master_password_hint_description">Một gợi ý mật khẩu có thể giúp bạn nhớ lại mật khẩu chính của bạn nếu bạn quên nó.</string>
   <string name="master_password_length_val_message_x">Mật khẩu chính phải có tối thiểu %1$s kí tự.</string>
   <string name="min_numbers">Số chữ số</string>

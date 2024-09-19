@@ -138,7 +138,7 @@
   <string name="manage">Кіраванне</string>
   <string name="master_password_confirmation_val_message">Няправільна пацвярджэнне пароля.</string>
   <string name="master_password_description">Асноўны пароль — гэта ключ, які выкарыстоўваецца для доступу да вашага сховішча. Ён вельмі важны, таму не забывайце яго. Аднавіць асноўны пароль немагчыма ў выпадку, калі вы яго забылі.</string>
-  <string name="master_password_hint_optional">Падказка да асноўнага пароля (неабавязкова)</string>
+  <string name="master_password_hint">Падказка да асноўнага пароля (неабавязкова)</string>
   <string name="master_password_hint_description">Падказка да асноўнага пароля можа дапамагчы вам успомніць яго, калі вы яго забылі.</string>
   <string name="master_password_length_val_message_x">Асноўны пароль павінен змяшчаць прынамсі %1$s сімвалаў.</string>
   <string name="min_numbers">Мінімум лічбаў</string>

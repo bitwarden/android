@@ -138,7 +138,7 @@
   <string name="manage">Kezelés</string>
   <string name="master_password_confirmation_val_message">A megadott két jelszó nem egyezik.</string>
   <string name="master_password_description">A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</string>
-  <string name="master_password_hint_optional">Mesterjelszó emlékeztető (nem kötelező)</string>
+  <string name="master_password_hint">Mesterjelszó emlékeztető (nem kötelező)</string>
   <string name="master_password_hint_description">A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</string>
   <string name="master_password_length_val_message_x">A mesterjelszónak legalább %1$s karakter hosszúnak kell lennie.</string>
   <string name="min_numbers">Legalább ennyi szám</string>

@@ -138,7 +138,7 @@
   <string name="manage">Pārvaldīt</string>
   <string name="master_password_confirmation_val_message">Paroles apstiprinājums nav pareizs.</string>
   <string name="master_password_description">Galvenā parole ir parole, kas tiek izmantota, lai piekļūtu glabātavai. Ir ļoti svarīgi, ka tā netiek aizmirsta, jo tādā gadījumā to nav iespējams atgūt.</string>
-  <string name="master_password_hint_optional">Galvenās paroles norāde (nav nepieciešama)</string>
+  <string name="master_password_hint">Galvenās paroles norāde (nav nepieciešama)</string>
   <string name="master_password_hint_description">Galvenās paroles norāde var palīdzēt atcerēties paroli, ja tā ir aizmirsta.</string>
   <string name="master_password_length_val_message_x">Galvenajai parolei ir jābūt vismaz %1$s rakstzīmes garai.</string>
   <string name="min_numbers">Mazākais pieļaujamais ciparu skaits</string>

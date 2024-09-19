@@ -138,7 +138,7 @@
   <string name="manage">পরিচালনা</string>
   <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
   <string name="master_password_description">প্রধান পাসওয়ার্ড হল সেই পাসওয়ার্ডটি যা আপনি নিজের ভল্ট ব্যাবহার করতে ব্যবহার করেন। এটি খুব গুরুত্বপূর্ণ যে আপনি নিজের প্রধান পাসওয়ার্ডটি ভুলে যাবেন না। আপনি যদি ভুলে গিয়ে থাকেন তবে পাসওয়ার্ডটি পুনরুদ্ধার করার কোনও উপায় নেই।</string>
-  <string name="master_password_hint_optional">প্রধান পাসওয়ার্ড ইঙ্গিত (ঐচ্ছিক)</string>
+  <string name="master_password_hint">প্রধান পাসওয়ার্ড ইঙ্গিত (ঐচ্ছিক)</string>
   <string name="master_password_hint_description">যদি আপনি আপনার পাসওয়ার্ড ভুলে যান তাহলে একটি প্রধান পাসওয়ার্ডের ইঙ্গিতটি আপনাকে মনে করাতে সাহায্য করতে পারে।</string>
   <string name="master_password_length_val_message_x">মাস্টার পাসওয়ার্ড কমপক্ষে %1$s অক্ষরের হতে হবে।</string>
   <string name="min_numbers">সর্বনিম্ন সংখ্যা</string>

@@ -138,7 +138,7 @@
   <string name="manage">Håndtér</string>
   <string name="master_password_confirmation_val_message">Adgangskodebekræftelse er forkert.</string>
   <string name="master_password_description">Hovedadgangskoden er den adgangskode, man benytter for at tilgå sin boks. Det er meget vigtigt, at man ikke glemmer sin hovedadgangskode, da der ikke er nogen måde, hvorpå koden kan genoprettes, dersom den glemmes.</string>
-  <string name="master_password_hint_optional">Hovedadgangskodetip (valgfrit)</string>
+  <string name="master_password_hint">Hovedadgangskodetip (valgfrit)</string>
   <string name="master_password_hint_description">Et hovedeadgangskodentip kan være en hjælpe til at huske adgangskoden, hvis den glemmes.</string>
   <string name="master_password_length_val_message_x">Hovedadgangskoden skal udgøre mindst %1$s tegn.</string>
   <string name="min_numbers">Minnimumsantal cifre</string>
