@@ -426,6 +426,7 @@ data class EditItemState(
         ) : DialogState()
     }
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         const val MIN_ALLOWED_CODE_DIGITS = 5
         const val MAX_ALLOWED_CODE_DIGITS = 10
@@ -547,6 +548,7 @@ enum class AuthenticatorRefreshPeriodOption(val seconds: Int) {
     NINETY(seconds = 90),
     ;
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Returns a [AuthenticatorRefreshPeriodOption] with the provided [seconds], or null.

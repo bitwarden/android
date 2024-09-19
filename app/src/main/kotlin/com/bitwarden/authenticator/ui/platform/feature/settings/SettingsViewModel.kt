@@ -226,6 +226,7 @@ class SettingsViewModel @Inject constructor(
         )
     }
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         private fun createInitialState(
             clock: Clock,

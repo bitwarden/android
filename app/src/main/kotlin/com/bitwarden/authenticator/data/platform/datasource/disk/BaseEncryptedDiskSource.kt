@@ -25,6 +25,7 @@ abstract class BaseEncryptedDiskSource(
         value: String?,
     ): Unit = encryptedSharedPreferences.edit { putString(key, value) }
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         const val ENCRYPTED_BASE_KEY: String = "bwSecureStorage"
     }

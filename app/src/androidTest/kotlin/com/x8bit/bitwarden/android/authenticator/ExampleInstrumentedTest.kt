@@ -128,6 +128,7 @@ class ExampleInstrumentedTest {
         Screengrab.screenshot("UniqueCodesSlide_Light")
     }
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         @JvmField
         @ClassRule

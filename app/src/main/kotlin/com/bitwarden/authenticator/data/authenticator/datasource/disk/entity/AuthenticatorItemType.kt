@@ -16,6 +16,7 @@ enum class AuthenticatorItemType {
     STEAM,
     ;
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
 
         /**

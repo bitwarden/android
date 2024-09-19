@@ -121,6 +121,7 @@ abstract class BaseDiskSource(
             .forEach { sharedPreferences.edit { remove(it) } }
     }
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         const val BASE_KEY: String = "bwPreferencesStorage"
     }

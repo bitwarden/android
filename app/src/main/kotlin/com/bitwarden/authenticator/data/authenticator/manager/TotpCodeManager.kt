@@ -25,6 +25,7 @@ interface TotpCodeManager {
         item: AuthenticatorItemEntity,
     ): StateFlow<DataState<VerificationCodeItem?>>
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         const val ALGORITHM_PARAM = "algorithm"
         const val DIGITS_PARAM = "digits"

@@ -21,6 +21,7 @@ enum class AuthenticatorItemAlgorithm {
     SHA512,
     ;
 
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Returns a [AuthenticatorItemAlgorithm] with a name matching [value], or null.

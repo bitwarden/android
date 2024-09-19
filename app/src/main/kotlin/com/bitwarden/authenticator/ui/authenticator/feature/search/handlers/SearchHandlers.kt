@@ -16,6 +16,7 @@ class SearchHandlers(
      * Creates an instance of [SearchHandlers] by binding actions to the provided
      * [ItemSearchViewModel].
      */
+    @Suppress("UndocumentedPublicClass")
     companion object {
         /**
          * Creates an instance of [SearchHandlers] by binding actions to the provided
