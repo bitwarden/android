@@ -101,25 +101,3 @@ fun NavGraphBuilder.composableWithRootPushTransitions(
         content = content,
     )
 }
-
-/**
- * A wrapper around [NavGraphBuilder.composable] that supplies fade transitions.
- */
-@OmitFromCoverage
-fun NavGraphBuilder.composableWithFadeTransitions(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    deepLinks: List<NavDeepLink> = emptyList(),
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
-) {
-    this.composable(
-        route = route,
-        arguments = arguments,
-        deepLinks = deepLinks,
-        enterTransition = TransitionProviders.Enter.fadeIn,
-        exitTransition = TransitionProviders.Exit.fadeOut,
-        popEnterTransition = TransitionProviders.Enter.fadeIn,
-        popExitTransition = TransitionProviders.Exit.fadeOut,
-        content = content,
-    )
-}

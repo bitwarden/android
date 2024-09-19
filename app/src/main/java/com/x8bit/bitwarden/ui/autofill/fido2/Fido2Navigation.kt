@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithFadeTransitions
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 
 const val FIDO_2_GRAPH_ROUTE = "fido2_graph"
 private const val FIDO_2_ROUTE = "fido2"
@@ -34,7 +34,7 @@ fun NavGraphBuilder.fido2Graph() {
  * Add the FIDO 2 screen to the nav graph.
  */
 fun NavGraphBuilder.fido2Destination() {
-    composableWithFadeTransitions(
+    composableWithRootPushTransitions(
         route = FIDO_2_ROUTE,
     ) {
         Fido2Screen()
