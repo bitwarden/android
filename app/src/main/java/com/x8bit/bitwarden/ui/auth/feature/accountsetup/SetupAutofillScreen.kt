@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -42,9 +43,9 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.image.BitwardenGifImage
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -136,6 +137,7 @@ private fun SetupAutoFillContent(
     Column(
         modifier = modifier,
     ) {
+        Spacer(Modifier.height(8.dp))
         SetupAutoFillContentHeader(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -196,10 +198,21 @@ private fun SetupAutoFillContentHeader(
 
 @Composable
 private fun OrderedHeaderContent() {
-    // Animated Image placeholder TODO PM-10843
-    Image(
-        painter = rememberVectorPainter(id = R.drawable.account_setup),
-        contentDescription = null,
+    BitwardenGifImage(
+        resId = R.drawable.img_setup_autofill,
+        modifier = Modifier
+            .clip(
+                RoundedCornerShape(
+                    topStart = 16.dp,
+                    topEnd = 16.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp,
+                ),
+            )
+            .size(
+                width = 230.dp,
+                height = 280.dp,
+            ),
     )
     Spacer(modifier = Modifier.size(24.dp))
     Column(
