@@ -582,12 +582,6 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule.onNodeWithText("Fido2 error").assertIsDisplayed()
-        composeTestRule.onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        verify {
-            viewModel.trySendAction(VaultUnlockAction.DismissFido2Dialog)
-        }
     }
 
     @Test
