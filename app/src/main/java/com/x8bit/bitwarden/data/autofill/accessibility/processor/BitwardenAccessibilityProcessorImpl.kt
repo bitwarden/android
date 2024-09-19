@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNa
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.parser.AccessibilityParser
 import com.x8bit.bitwarden.data.autofill.accessibility.util.fillTextField
+import com.x8bit.bitwarden.data.autofill.accessibility.util.isSystemPackage
 import com.x8bit.bitwarden.data.autofill.accessibility.util.shouldSkipPackage
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSelectionIntent
@@ -28,10 +29,16 @@ class BitwardenAccessibilityProcessorImpl(
         val rootNode = rootAccessibilityNodeInfo ?: return
         // Ignore the event when the phone is inactive
         if (!powerManager.isInteractive) return
-        // We skip if the package is not supported
-        if (rootNode.shouldSkipPackage) return
-        // We skip any package that is a launcher
-        if (launcherPackageNameManager.launcherPackages.any { it == rootNode.packageName }) return
+        // We skip if the system package
+        if (rootNode.isSystemPackage) return
+        // We skip any package that is a launcher or unsupported
+        if (rootNode.shouldSkipPackage ||
+            launcherPackageNameManager.launcherPackages.any { it == rootNode.packageName }
+        ) {
+            // Clear the action since this event needs to be ignored completely
+            accessibilityAutofillManager.accessibilityAction = null
+            return
+        }
 
         // Only process the event if the tile was clicked
         val accessibilityAction = accessibilityAutofillManager.accessibilityAction ?: return
