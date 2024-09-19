@@ -141,7 +141,8 @@ fun CompleteRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account
+                title = stringResource(
+                    id = R.string.create_account
                     .takeIf { state.onboardingEnabled }
                     ?: R.string.set_password),
                 scrollBehavior = scrollBehavior,
