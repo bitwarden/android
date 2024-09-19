@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.autofill.fido2.model
 
-import android.content.pm.SigningInfo
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
@@ -16,9 +15,6 @@ data class Fido2GetCredentialsRequest(
     val userId: String,
     val requestJson: String,
     val clientDataHash: ByteArray? = null,
-    private val packageName: String,
-    private val signingInfo: SigningInfo,
-    private val origin: String?,
 ) : Parcelable {
     val option: BeginGetPublicKeyCredentialOption
         get() = BeginGetPublicKeyCredentialOption(

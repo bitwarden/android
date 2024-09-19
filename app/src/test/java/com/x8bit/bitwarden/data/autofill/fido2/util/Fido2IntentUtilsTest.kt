@@ -322,14 +322,11 @@ class Fido2IntentUtilsTest {
 
         assertEquals(
             Fido2GetCredentialsRequest(
-                userId = "mockUserId",
                 candidateQueryData = mockOption.candidateQueryData,
                 id = mockOption.id,
+                userId = "mockUserId",
                 requestJson = mockOption.requestJson,
                 clientDataHash = mockOption.clientDataHash,
-                packageName = mockCallingAppInfo.packageName,
-                signingInfo = mockCallingAppInfo.signingInfo,
-                origin = mockCallingAppInfo.origin,
             ),
             result,
         )

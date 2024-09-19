@@ -95,10 +95,6 @@ fun Intent.getFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? {
         .firstNotNullOfOrNull { it as? BeginGetPublicKeyCredentialOption }
         ?: return null
 
-    val callingAppInfo = systemRequest
-        .callingAppInfo
-        ?: return null
-
     val userId = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
@@ -108,8 +104,5 @@ fun Intent.getFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? {
         userId = userId,
         requestJson = option.requestJson,
         clientDataHash = option.clientDataHash,
-        packageName = callingAppInfo.packageName,
-        signingInfo = callingAppInfo.signingInfo,
-        origin = callingAppInfo.origin,
     )
 }
