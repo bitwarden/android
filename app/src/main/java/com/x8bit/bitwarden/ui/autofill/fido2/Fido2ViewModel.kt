@@ -225,10 +225,8 @@ class Fido2ViewModel @Inject constructor(
             .associate {
                 val cipherName = data
                     .cipherViewList
-                    .find { cipher -> cipher.id == it.cipherId }
-                    ?.name
-                    // This should never happen, but we display "Bitwarden" if it does.
-                    ?: "Bitwarden"
+                    .first { cipher -> cipher.id == it.cipherId }
+                    .name
 
                 cipherName to it
             }
