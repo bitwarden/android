@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.credentials.CreatePublicKeyCredentialResponse
@@ -109,20 +108,19 @@ class Fido2CompletionManagerImpl(
                             .createFido2GetCredentialPendingIntent(
                                 action = GET_PASSKEY_INTENT,
                                 userId = result.userId,
-                                credentialId = it.credentialId.toString(),
-                                cipherId = it.cipherId,
+                                credentialId = it.value.credentialId.toString(),
+                                cipherId = it.value.cipherId,
                                 requestCode = Random.nextInt(),
                             )
                         PublicKeyCredentialEntry
                             .Builder(
                                 context = activity,
-                                username = it.userNameForUi
+                                username = it.value.userNameForUi
                                     ?: activity.getString(R.string.no_username),
                                 pendingIntent = pendingIntent,
                                 beginGetPublicKeyCredentialOption = result.options,
                             )
-                            .setIcon(Icon.createWithResource(activity, R.drawable.icon))
-                            .setDisplayName("Bitwarden")
+                            .setDisplayName(it.key)
                             .build()
                     }
                 val authActions = result.alternateAccounts.toAuthenticationActions()

@@ -177,7 +177,7 @@ class Fido2CompletionManagerTest {
                     Fido2GetCredentialsResult.Success(
                         options = mockk(),
                         userId = "activeUserId",
-                        credentials = emptyList(),
+                        credentials = emptyMap(),
                         alternateAccounts = emptyList(),
                     ),
                 )
@@ -195,7 +195,7 @@ class Fido2CompletionManagerTest {
 
             val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
-            val mockFido2AutofillViewList = listOf(mockFido2AutofillView)
+            val mockFido2AutofillViewMap = mapOf("mockCipherName" to mockFido2AutofillView)
 
             every {
                 anyConstructed<PublicKeyCredentialEntry.Builder>().build()
@@ -216,7 +216,7 @@ class Fido2CompletionManagerTest {
                     Fido2GetCredentialsResult.Success(
                         options = mockk(),
                         userId = "activeUserId",
-                        credentials = mockFido2AutofillViewList,
+                        credentials = mockFido2AutofillViewMap,
                         alternateAccounts = emptyList(),
                     ),
                 )
@@ -246,7 +246,7 @@ class Fido2CompletionManagerTest {
             val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
                 .copy(userNameForUi = null)
-            val mockFido2AutofillViewList = listOf(mockFido2AutofillView)
+            val mockFido2AutofillViewMap = mapOf("mockCipherName" to mockFido2AutofillView)
 
             every {
                 anyConstructed<PublicKeyCredentialEntry.Builder>().build()
@@ -267,7 +267,7 @@ class Fido2CompletionManagerTest {
                     Fido2GetCredentialsResult.Success(
                         options = mockk(),
                         userId = "activeUserId",
-                        credentials = mockFido2AutofillViewList,
+                        credentials = mockFido2AutofillViewMap,
                         alternateAccounts = emptyList(),
                     ),
                 )

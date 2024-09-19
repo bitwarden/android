@@ -219,9 +219,19 @@ class Fido2ViewModel @Inject constructor(
                 sendAction(Fido2Action.Internal.GetCredentialsResultReceive.Error)
                 return
             }
-        val credentials = data
+        val credentials: Map<String, Fido2CredentialAutofillView> = data
             .toFido2CredentialAutofillViews()
             .filter { it.rpId == relyingPartyId }
+            .associate {
+                val cipherName = data
+                    .cipherViewList
+                    .find { cipher -> cipher.id == it.cipherId }
+                    ?.name
+                    // This should never happen, but we display "Bitwarden" if it does.
+                    ?: "Bitwarden"
+
+                cipherName to it
+            }
         sendAction(
             Fido2Action.Internal.GetCredentialsResultReceive.Success(
                 request = fido2GetCredentialsRequest,
@@ -899,7 +909,7 @@ sealed class Fido2Action {
              */
             data class Success(
                 val request: Fido2GetCredentialsRequest,
-                val credentials: List<Fido2CredentialAutofillView>,
+                val credentials: Map<String, Fido2CredentialAutofillView>,
             ) : GetCredentialsResultReceive()
 
             /**

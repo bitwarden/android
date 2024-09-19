@@ -18,7 +18,7 @@ sealed class Fido2GetCredentialsResult {
     data class Success(
         val userId: String,
         val options: BeginGetPublicKeyCredentialOption,
-        val credentials: List<Fido2CredentialAutofillView>,
+        val credentials: Map<String, Fido2CredentialAutofillView>,
         val alternateAccounts: List<AccountSummary>,
     ) : Fido2GetCredentialsResult()
 

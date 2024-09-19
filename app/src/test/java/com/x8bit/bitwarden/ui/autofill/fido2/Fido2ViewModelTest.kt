@@ -1276,7 +1276,7 @@ class Fido2ViewModelTest : BaseViewModelTest() {
                         viewModel.trySendAction(
                             Fido2Action.Internal.GetCredentialsResultReceive.Success(
                                 request = this,
-                                credentials = listOf(mockAutofillView),
+                                credentials = mapOf("mockCipherName" to mockAutofillView),
                             ),
                         )
 

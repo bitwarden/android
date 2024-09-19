@@ -19,8 +19,14 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -71,6 +77,10 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             )
         } just runs
     }
+    private val fido2CompletionManager: Fido2CompletionManager = mockk {
+        every { completeFido2Assertion(any()) } just runs
+        every { completeFido2GetCredentialRequest(any()) } just runs
+    }
 
     @Before
     fun setUp() {
@@ -78,6 +88,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             VaultUnlockScreen(
                 viewModel = viewModel,
                 biometricsManager = biometricsManager,
+                fido2CompletionManager = fido2CompletionManager,
             )
         }
     }
@@ -114,6 +125,28 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2GetCredentialsError should call completeFido2GetCredentialRequest on fido2CompletionManager`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2GetCredentialsError)
+        verify(exactly = 1) {
+            fido2CompletionManager.completeFido2GetCredentialRequest(
+                result = Fido2GetCredentialsResult.Error,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `onFido2AssertCredentialError should call completeFido2AssertCredential on fido2CompletionManager`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2AssertCredentialError)
+        verify(exactly = 1) {
+            fido2CompletionManager.completeFido2Assertion(
+                result = Fido2CredentialAssertionResult.Error,
+            )
+        }
+    }
+
     @Test
     fun `account icon click should show the account switcher`() {
         composeTestRule.assertSwitcherIsNotDisplayed(
@@ -123,6 +156,34 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         composeTestRule.performAccountIconClick()
 
         composeTestRule.assertSwitcherIsDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
+    }
+
+    @Test
+    fun `account icon click should be ignored when unlocking for FIDO 2 credential discovery`() {
+        mutableStateFlow.update {
+            it.copy(
+                fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1),
+            )
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
+    }
+
+    @Test
+    fun `account icon click should be ignored when unlock for FIDO 2 credential assertion`() {
+        mutableStateFlow.update {
+            it.copy(
+                fido2AssertCredentialRequest = createMockFido2CredentialAssertionRequest(
+                    number = 1,
+                ),
+            )
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = ACCOUNT_SUMMARIES,
         )
     }
@@ -510,6 +571,39 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             .onNodeWithText("Your vault is locked. Verify your master password to continue.")
             .assertDoesNotExist()
         composeTestRule.onNodeWithText("Unlock").assertDoesNotExist()
+    }
+
+    @Test
+    fun `Fido2Error dialog should be displayed based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Fido2Error("Fido2 error".asText()),
+            )
+        }
+        composeTestRule.onNodeWithText("Fido2 error").assertIsDisplayed()
+        composeTestRule.onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultUnlockAction.DismissFido2Dialog)
+        }
+    }
+
+    @Test
+    fun `OK click on the Fido2Error dialog should send the DismissFido2Dialog action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Fido2Error("Fido2 error".asText()),
+            )
+        }
+        composeTestRule.onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultUnlockAction.DismissFido2Dialog)
+        }
     }
 }
 

@@ -207,7 +207,7 @@ class RootNavScreenTest : BaseComposeTest() {
         composeTestRule
             .runOnIdle {
                 fakeNavHostController.assertLastNavigation(
-                    route = "vault_item_listing_as_root/login",
+                    route = "fido2_graph",
                     navOptions = expectedNavOptions,
                 )
             }
@@ -221,7 +221,7 @@ class RootNavScreenTest : BaseComposeTest() {
         composeTestRule
             .runOnIdle {
                 fakeNavHostController.assertLastNavigation(
-                    route = "vault_item_listing_as_root/login",
+                    route = "fido2_graph",
                     navOptions = expectedNavOptions,
                 )
             }

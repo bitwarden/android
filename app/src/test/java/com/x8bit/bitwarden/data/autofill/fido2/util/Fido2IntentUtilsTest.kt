@@ -249,6 +249,7 @@ class Fido2IntentUtilsTest {
     @Test
     fun `getFido2AssertionRequestOrNull should return null when credential id is not in extras`() {
         val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
             every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns null
         }
         val mockOption = GetPublicKeyCredentialOption(
@@ -272,8 +273,32 @@ class Fido2IntentUtilsTest {
     @Test
     fun `getFido2AssertionRequestOrNull should return null when cipher id is not in extras`() {
         val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
             every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
             every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns null
+        }
+        val mockOption = GetPublicKeyCredentialOption(
+            requestJson = "requestJson",
+            clientDataHash = byteArrayOf(0),
+            allowedProviders = emptySet(),
+        )
+        val mockProviderGetCredentialRequest = ProviderGetCredentialRequest(
+            credentialOptions = listOf(mockOption),
+            callingAppInfo = mockk(),
+        )
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
+        } returns mockProviderGetCredentialRequest
+
+        val assertionRequest = intent.getFido2AssertionRequestOrNull()
+
+        assertNull(assertionRequest)
+    }
+
+    @Test
+    fun `getFido2AssertionRequestOrNull should return null when user id is not in extras`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
         }
         val mockOption = GetPublicKeyCredentialOption(
             requestJson = "requestJson",
@@ -370,8 +395,10 @@ class Fido2IntentUtilsTest {
     }
 
     @Test
-    fun `getFido2GetCredentialRequestOrNull should return null when calling app info is null`() {
-        val intent = mockk<Intent>()
+    fun `getFido2GetCredentialRequestOrNull should return null when user id is not in extras`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
+        }
         val mockOption = createMockBeginGetPublicKeyCredentialOption(number = 1)
         every { PendingIntentHandler.retrieveBeginGetCredentialRequest(intent) } returns mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)

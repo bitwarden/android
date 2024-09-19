@@ -263,32 +263,41 @@ class Fido2ProviderProcessorImpl(
                 result
                     .fido2CredentialAutofillViews
                     .filter { it.rpId == relyingPartyId }
+                    .associate {
+                        val cipherName = cipherViews
+                            .find { view -> view.id == it.cipherId }
+                            ?.name
+                            ?: "Bitwarden"
+                        cipherName to it
+                    }
                     .toCredentialEntries(userId, option)
             }
         }
     }
 
-    private fun List<Fido2CredentialAutofillView>.toCredentialEntries(
+    private fun Map<String, Fido2CredentialAutofillView>.toCredentialEntries(
         userId: String,
         option: BeginGetPublicKeyCredentialOption,
     ): List<CredentialEntry> =
         this
             .map {
+                val username = it.value.userNameForUi
+                    ?: context.getString(R.string.no_username)
                 PublicKeyCredentialEntry
                     .Builder(
                         context = context,
-                        username = it.userNameForUi ?: context.getString(R.string.no_username),
+                        username = username,
                         pendingIntent = intentManager
                             .createFido2GetCredentialPendingIntent(
                                 action = GET_PASSKEY_INTENT,
                                 userId = userId,
-                                credentialId = it.credentialId.toString(),
-                                cipherId = it.cipherId,
+                                credentialId = it.value.credentialId.toString(),
+                                cipherId = it.value.cipherId,
                                 requestCode = requestCode.getAndIncrement(),
                             ),
                         beginGetPublicKeyCredentialOption = option,
                     )
-                    .setDisplayName("Bitwarden")
+                    .setDisplayName(it.key)
                     .build()
             }
 
