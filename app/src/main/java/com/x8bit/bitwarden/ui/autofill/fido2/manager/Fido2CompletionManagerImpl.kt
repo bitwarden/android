@@ -123,13 +123,12 @@ class Fido2CompletionManagerImpl(
                             .setDisplayName(it.key)
                             .build()
                     }
-                val authActions = result.alternateAccounts.toAuthenticationActions()
                 PendingIntentHandler
                     .setBeginGetCredentialResponse(
                         resultIntent,
                         BeginGetCredentialResponse(
                             credentialEntries = credentialEntries,
-                            authenticationActions = authActions,
+                            authenticationActions = emptyList(),
                         ),
                     )
             }

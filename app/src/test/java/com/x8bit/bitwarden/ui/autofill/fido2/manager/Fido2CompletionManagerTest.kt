@@ -180,7 +180,6 @@ class Fido2CompletionManagerTest {
                         options = mockk(),
                         userId = "activeUserId",
                         credentials = emptyMap(),
-                        alternateAccounts = emptyList(),
                     ),
                 )
 
@@ -219,7 +218,6 @@ class Fido2CompletionManagerTest {
                         options = mockk(),
                         userId = "activeUserId",
                         credentials = mockFido2AutofillViewMap,
-                        alternateAccounts = emptyList(),
                     ),
                 )
 
@@ -271,7 +269,6 @@ class Fido2CompletionManagerTest {
                         options = mockk(),
                         userId = "activeUserId",
                         credentials = mockFido2AutofillViewMap,
-                        alternateAccounts = emptyList(),
                     ),
                 )
 

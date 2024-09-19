@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.autofill.fido2.model
 
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 
 /**
  * Represents the result of a FIDO 2 Get Credentials request.
@@ -12,14 +11,13 @@ sealed class Fido2GetCredentialsResult {
      * Indicates credentials were successfully queried.
      *
      * @param options Original request options provided by the relying party.
-     * @param credentials Collection of [Fido2CredentialAutofillView]s matching the original request
-     * parameters. This may be an empty list if no matching values were found.
+     * @param credentials Map of Cipher Names and their [Fido2CredentialAutofillView]s matching the
+     * original request parameters. This may be an empty map if no matching values were found.
      */
     data class Success(
         val userId: String,
         val options: BeginGetPublicKeyCredentialOption,
         val credentials: Map<String, Fido2CredentialAutofillView>,
-        val alternateAccounts: List<AccountSummary>,
     ) : Fido2GetCredentialsResult()
 
     /**

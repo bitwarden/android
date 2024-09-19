@@ -313,7 +313,6 @@ class Fido2ViewModel @Inject constructor(
                             userId = action.request.userId,
                             options = action.request.option,
                             credentials = action.credentials,
-                            alternateAccounts = emptyList(),
                         ),
                     ),
                 )
