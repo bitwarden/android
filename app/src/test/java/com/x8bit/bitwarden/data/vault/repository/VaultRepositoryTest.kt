@@ -1244,6 +1244,100 @@ class VaultRepositoryTest {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `unlockVaultWithDecryptedUserKey with VaultLockManager Success should return Success`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val authenticatorSyncUnlockKey = "asdf1234"
+            val privateKey = "mockPrivateKey-1"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.apply {
+                storeAuthenticatorSyncUnlockKey(
+                    userId = userId,
+                    authenticatorSyncUnlockKey = authenticatorSyncUnlockKey,
+                )
+                storePrivateKey(userId = userId, privateKey = privateKey)
+            }
+
+            val result = vaultRepository.unlockVaultWithDecryptedUserKey(
+                userId = userId,
+                decryptedUserKey = authenticatorSyncUnlockKey,
+            )
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `unlockVaultWithDecryptedUserKey with VaultLockManager InvalidStateError should return InvalidStateError`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val authenticatorSyncUnlockKey = "asdf1234"
+            val privateKey = "mockPrivateKey-1"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.InvalidStateError
+            fakeAuthDiskSource.apply {
+                storeAuthenticatorSyncUnlockKey(
+                    userId = userId,
+                    authenticatorSyncUnlockKey = authenticatorSyncUnlockKey,
+                )
+                storePrivateKey(userId = userId, privateKey = privateKey)
+            }
+
+            val result = vaultRepository.unlockVaultWithDecryptedUserKey(
+                userId = userId,
+                decryptedUserKey = authenticatorSyncUnlockKey,
+            )
+            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = authenticatorSyncUnlockKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+        }
+
+    @Test
     fun `unlockVaultWithMasterPassword with missing user state should return InvalidStateError`() =
         runTest {
             fakeAuthDiskSource.userState = null
