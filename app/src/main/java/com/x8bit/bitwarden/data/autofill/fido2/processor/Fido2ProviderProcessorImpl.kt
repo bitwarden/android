@@ -260,45 +260,45 @@ class Fido2ProviderProcessorImpl(
             }
 
             is DecryptFido2CredentialAutofillViewResult.Success -> {
-                result
-                    .fido2CredentialAutofillViews
+                val autoFillViews = result.fido2CredentialAutofillViews
                     .filter { it.rpId == relyingPartyId }
-                    .associate {
-                        val cipherName = cipherViews
-                            .first { view -> view.id == it.cipherId }
-                            .name
-                        cipherName to it
+
+                cipherViews
+                    .associate { cipherView ->
+                        cipherView.name to autoFillViews.find { it.cipherId == cipherView.id }
                     }
                     .toCredentialEntries(userId, option)
             }
         }
     }
 
-    private fun Map<String, Fido2CredentialAutofillView>.toCredentialEntries(
+    private fun Map<String, Fido2CredentialAutofillView?>.toCredentialEntries(
         userId: String,
         option: BeginGetPublicKeyCredentialOption,
-    ): List<CredentialEntry> =
-        this
-            .map {
-                val username = it.value.userNameForUi
-                    ?: context.getString(R.string.no_username)
-                PublicKeyCredentialEntry
-                    .Builder(
-                        context = context,
-                        username = username,
-                        pendingIntent = intentManager
-                            .createFido2GetCredentialPendingIntent(
-                                action = GET_PASSKEY_INTENT,
-                                userId = userId,
-                                credentialId = it.value.credentialId.toString(),
-                                cipherId = it.value.cipherId,
-                                requestCode = requestCode.getAndIncrement(),
-                            ),
-                        beginGetPublicKeyCredentialOption = option,
-                    )
-                    .setDisplayName(it.key)
-                    .build()
-            }
+    ): List<CredentialEntry> = mapNotNull {
+        // Skip this entry if the autofill view is null.
+        val autofillView = it.value
+            ?: return@mapNotNull null
+        val username = autofillView.userNameForUi
+            ?: context.getString(R.string.no_username)
+        val displayName = it.key
+        PublicKeyCredentialEntry
+            .Builder(
+                context = context,
+                username = username,
+                pendingIntent = intentManager
+                    .createFido2GetCredentialPendingIntent(
+                        action = GET_PASSKEY_INTENT,
+                        userId = userId,
+                        credentialId = autofillView.credentialId.toString(),
+                        cipherId = autofillView.cipherId,
+                        requestCode = requestCode.getAndIncrement(),
+                    ),
+                beginGetPublicKeyCredentialOption = option,
+            )
+            .setDisplayName(displayName)
+            .build()
+    }
 
     override fun processClearCredentialStateRequest(
         request: ProviderClearCredentialStateRequest,

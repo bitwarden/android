@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2Credential
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -455,6 +456,10 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processGetCredentialRequest should invoke callback with filtered and discovered passkeys`() {
+        val userState = UserState(
+            activeUserId = "mockUserId-0",
+            accounts = createMockAccounts(1),
+        )
         val mockOption = BeginGetPublicKeyCredentialOption(
             candidateQueryData = Bundle(),
             id = "",
@@ -465,20 +470,28 @@ class Fido2ProviderProcessorTest {
         }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<BeginGetCredentialResponse>()
-        val mockCipherViews = listOf(createMockCipherView(number = 1))
+        val mockCipherView = createMockCipherView(
+            number = 1,
+            fido2Credentials = listOf(createMockSdkFido2Credential(number = 1)),
+        )
+        val mockCipherViews = listOf(mockCipherView)
         val mockFido2CredentialAutofillViews = listOf(
-            createMockFido2CredentialAutofillView(number = 1),
+            createMockFido2CredentialAutofillView(
+                number = 1,
+                cipherId = mockCipherView.id,
+                rpId = "mockRelyingPartyId-1",
+            ),
         )
         val mockIntent: PendingIntent = mockk()
         val mockPublicKeyCredentialEntry: PublicKeyCredentialEntry = mockk()
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        mutableUserStateFlow.value = userState
         mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { context.getString(any(), any()) } returns "mockEmail-0"
         every { callback.onResult(capture(captureSlot)) } just runs
         coEvery {
             vaultRepository.silentlyDiscoverCredentials(
-                userId = DEFAULT_USER_STATE.activeUserId,
+                userId = userState.activeUserId,
                 fido2CredentialStore = fido2CredentialStore,
                 relyingPartyId = "mockRelyingPartyId-1",
             )
@@ -488,17 +501,10 @@ class Fido2ProviderProcessorTest {
         } returns DecryptFido2CredentialAutofillViewResult.Success(mockFido2CredentialAutofillViews)
         every {
             intentManager.createFido2GetCredentialPendingIntent(
-                action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
-                userId = DEFAULT_USER_STATE.activeUserId,
+                action = GET_PASSKEY_INTENT,
+                userId = userState.activeUserId,
                 credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
                 cipherId = mockFido2CredentialAutofillViews.first().cipherId,
-                requestCode = any(),
-            )
-        } returns mockIntent
-        every {
-            intentManager.createFido2UnlockPendingIntent(
-                action = UNLOCK_ACCOUNT_INTENT,
-                userId = "mockUserId-0",
                 requestCode = any(),
             )
         } returns mockIntent
@@ -512,15 +518,6 @@ class Fido2ProviderProcessorTest {
 
         verify(exactly = 0) { callback.onError(any()) }
         // TODO: [PM-9515] Uncomment when SDK bug is fixed.
-        // verify(exactly = 1) {
-        //    callback.onResult(any())
-        //    intentManager.createFido2GetCredentialPendingIntent(
-        //        action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
-        //        credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
-        //        cipherId = mockFido2CredentialAutofillViews.first().cipherId,
-        //        requestCode = any(),
-        //    )
-        // }
         // coVerify(exactly = 1) {
         //    vaultRepository.silentlyDiscoverCredentials(
         //        userId = DEFAULT_USER_STATE.activeUserId,

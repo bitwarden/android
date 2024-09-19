@@ -142,11 +142,12 @@ fun createMockSdkFido2Credential(
 fun createMockFido2CredentialAutofillView(
     number: Int,
     cipherId: String? = null,
+    rpId: String = "mockRpId-$number",
 ): Fido2CredentialAutofillView =
     Fido2CredentialAutofillView(
         credentialId = "mockCredentialId-$number".encodeToByteArray(),
         cipherId = cipherId ?: "mockCipherId-$number",
-        rpId = "mockRpId-$number",
+        rpId = rpId,
         userNameForUi = "mockUserNameForUi-$number",
         userHandle = "mockUserHandle-$number".encodeToByteArray(),
     )
