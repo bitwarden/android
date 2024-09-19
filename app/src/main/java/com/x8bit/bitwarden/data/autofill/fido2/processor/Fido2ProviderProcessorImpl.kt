@@ -265,9 +265,8 @@ class Fido2ProviderProcessorImpl(
                     .filter { it.rpId == relyingPartyId }
                     .associate {
                         val cipherName = cipherViews
-                            .find { view -> view.id == it.cipherId }
-                            ?.name
-                            ?: "Bitwarden"
+                            .first { view -> view.id == it.cipherId }
+                            .name
                         cipherName to it
                     }
                     .toCredentialEntries(userId, option)
