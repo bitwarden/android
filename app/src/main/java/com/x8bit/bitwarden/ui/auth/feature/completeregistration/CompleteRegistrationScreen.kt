@@ -141,11 +141,9 @@ fun CompleteRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = if (state.onboardingEnabled) {
-                    stringResource(id = R.string.create_account)
-                } else {
-                    stringResource(id = R.string.set_password)
-                },
+                title = stringResource(id = R.string.create_account
+                    .takeIf { state.onboardingEnabled }
+                    ?: R.string.set_password),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
@@ -236,9 +234,11 @@ private fun CompleteRegistrationContent(
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password_required)
-                .takeIf { showNewOnboardingUi }
-                ?: stringResource(id = R.string.master_password),
+            label = stringResource(
+                id = R.string.master_password_required
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.master_password,
+            ),
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
             value = passwordInput,
@@ -261,9 +261,11 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenPasswordField(
-            label = stringResource(id = R.string.retype_master_password_required)
-                .takeIf { showNewOnboardingUi }
-                ?: stringResource(id = R.string.retype_master_password),
+            label = stringResource(
+                id = R.string.retype_master_password_required
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.retype_master_password,
+            ),
             value = confirmPasswordInput,
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
@@ -276,14 +278,18 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
-            label = stringResource(R.string.master_password_hint)
-                .takeIf { showNewOnboardingUi }
-                ?: stringResource(R.string.master_password_hint_optional),
+            label = stringResource(
+                id = R.string.master_password_hint
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.master_password_hint_optional,
+            ),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
-            hint = stringResource(R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password)
-                .takeIf { showNewOnboardingUi }
-                ?: stringResource(id = R.string.master_password_hint_description),
+            hint = stringResource(
+                id = R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.master_password_hint_description,
+            ),
             modifier = Modifier
                 .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
