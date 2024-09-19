@@ -87,6 +87,16 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
 
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(
+                    vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                    isBiometricsEnabled = true,
+                    isVaultUnlocked = false,
+                ),
+            ),
+        )
+
         viewModel.eventFlow.test {
             assertEquals(VaultUnlockEvent.PromptForBiometrics(CIPHER), awaitItem())
         }
