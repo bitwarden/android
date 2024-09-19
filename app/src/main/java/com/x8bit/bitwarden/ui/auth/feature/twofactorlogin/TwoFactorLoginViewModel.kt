@@ -209,7 +209,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 sendEvent(
                     event = authUrl
                         ?.let { TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)) }
-                        ?: TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
+                        ?: TwoFactorLoginEvent.ShowToast(R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText()),
                 )
             }
 
