@@ -1289,7 +1289,7 @@ class Fido2ViewModelTest : BaseViewModelTest() {
 
                             val success = result as Fido2GetCredentialsResult.Success
                             assertEquals(
-                                listOf(mockAutofillView),
+                                mapOf("mockCipherName" to mockAutofillView),
                                 success.credentials,
                             )
                         }
