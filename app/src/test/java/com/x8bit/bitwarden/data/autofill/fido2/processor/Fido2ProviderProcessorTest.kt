@@ -296,10 +296,10 @@ class Fido2ProviderProcessorTest {
             )
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onResult(capture(captureSlot)) } just runs
-        every { context.getString(any()) } returns "mockTitle"
+        every { context.getString(any(), any()) } returns "mockTitle"
         every {
             intentManager.createFido2UnlockPendingIntent(
-                action = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT",
+                action = UNLOCK_ACCOUNT_INTENT,
                 userId = DEFAULT_USER_STATE.activeUserId,
                 requestCode = any(),
             )
@@ -341,8 +341,16 @@ class Fido2ProviderProcessorTest {
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<GetCredentialException>()
         mutableUserStateFlow.value = DEFAULT_USER_STATE
+        every { context.getString(any(), any()) } returns "mockEmail-0"
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onError(capture(captureSlot)) } just runs
+        every {
+            intentManager.createFido2UnlockPendingIntent(
+                action = UNLOCK_ACCOUNT_INTENT,
+                userId = "mockUserId-0",
+                requestCode = 0,
+            )
+        } returns mockk()
 
         fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
 
@@ -370,8 +378,16 @@ class Fido2ProviderProcessorTest {
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<GetCredentialException>()
         mutableUserStateFlow.value = DEFAULT_USER_STATE
+        every { context.getString(any(), any()) } returns "mockEmail-0"
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onError(capture(captureSlot)) } just runs
+        every {
+            intentManager.createFido2UnlockPendingIntent(
+                action = UNLOCK_ACCOUNT_INTENT,
+                userId = "mockUserId-0",
+                requestCode = 0,
+            )
+        } returns mockk()
 
         fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
 
@@ -398,8 +414,16 @@ class Fido2ProviderProcessorTest {
         val mockCipherViews = listOf(createMockCipherView(number = 1))
         mutableUserStateFlow.value = DEFAULT_USER_STATE
         mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
+        every { context.getString(any(), any()) } returns "mockEmail-0"
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onError(capture(captureSlot)) } just runs
+        every {
+            intentManager.createFido2UnlockPendingIntent(
+                action = UNLOCK_ACCOUNT_INTENT,
+                userId = "mockUserId-0",
+                requestCode = 0,
+            )
+        } returns mockk()
         coEvery {
             vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
         } returns DecryptFido2CredentialAutofillViewResult.Error
@@ -450,6 +474,7 @@ class Fido2ProviderProcessorTest {
         mutableUserStateFlow.value = DEFAULT_USER_STATE
         mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
         every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { context.getString(any(), any()) } returns "mockEmail-0"
         every { callback.onResult(capture(captureSlot)) } just runs
         coEvery {
             vaultRepository.silentlyDiscoverCredentials(
@@ -467,6 +492,13 @@ class Fido2ProviderProcessorTest {
                 userId = DEFAULT_USER_STATE.activeUserId,
                 credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
                 cipherId = mockFido2CredentialAutofillViews.first().cipherId,
+                requestCode = any(),
+            )
+        } returns mockIntent
+        every {
+            intentManager.createFido2UnlockPendingIntent(
+                action = UNLOCK_ACCOUNT_INTENT,
+                userId = "mockUserId-0",
                 requestCode = any(),
             )
         } returns mockIntent
