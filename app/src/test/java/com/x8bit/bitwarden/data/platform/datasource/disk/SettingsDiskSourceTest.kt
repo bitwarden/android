@@ -1075,6 +1075,6 @@ class SettingsDiskSourceTest {
             putBoolean(showUnlockSettingBadgeKey, true)
         }
 
-        assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = mockUserId))
+        assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = mockUserId)!!)
     }
 }

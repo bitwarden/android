@@ -546,7 +546,7 @@ class SettingsRepositoryImpl(
     }
 
     override fun getShowUnlockSettingBadge(userId: String): Boolean =
-        settingsDiskSource.getShowUnlockSettingBadge(userId)
+        settingsDiskSource.getShowUnlockSettingBadge(userId) ?: false
 
     override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean) {
         settingsDiskSource.storeShowUnlockSettingBadge(userId, showBadge)

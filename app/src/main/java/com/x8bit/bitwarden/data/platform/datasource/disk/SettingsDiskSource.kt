@@ -275,11 +275,11 @@ interface SettingsDiskSource {
      * Gets whether or not the given [userId] has signalled they want to enable unlock options
      * later, during onboarding.
      */
-    fun getShowUnlockSettingBadge(userId: String): Boolean
+    fun getShowUnlockSettingBadge(userId: String): Boolean?
 
     /**
      * Stores the given value for whether or not the given [userId] has signalled they want to
      * set up unlock options later, during onboarding.
      */
-    fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean)
+    fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?)
 }

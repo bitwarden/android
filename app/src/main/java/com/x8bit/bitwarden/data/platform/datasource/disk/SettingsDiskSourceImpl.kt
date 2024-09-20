@@ -409,12 +409,12 @@ class SettingsDiskSourceImpl(
             value = showBadge,
         )
 
-    override fun getShowUnlockSettingBadge(userId: String): Boolean =
+    override fun getShowUnlockSettingBadge(userId: String): Boolean? =
         getBoolean(
             key = SHOW_UNLOCK_SETTING_BADGE.appendIdentifier(userId),
-        ) == true
+        )
 
-    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean) =
+    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?) =
         putBoolean(
             key = SHOW_UNLOCK_SETTING_BADGE.appendIdentifier(userId),
             value = showBadge,
