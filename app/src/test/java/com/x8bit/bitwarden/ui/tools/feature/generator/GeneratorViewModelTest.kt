@@ -930,8 +930,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `No LifecycleResumedAction should use VM state options derived state over VM state`() =
+    fun `No loadOptions with default arguments should use VM state options derived state over VM state`() =
         runTest {
             val initialState = initialUsernameState.copy(
                 selectedType = GeneratorState.MainType.Username(
@@ -941,18 +942,25 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createViewModel(initialState)
-            fakeGeneratorRepository.saveUsernameGenerationOptions(
-                UsernameGenerationOptions(
-                    type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
-                ),
-            )
-            val expectedStateAfterLoadOptions =
-                initialState.copy(generatedText = "email+abcd1234@address.com")
+            // the state is updated via the call to `loadOptions()` in the init block
             viewModel.stateFlow.test {
                 assertEquals(
-                    expectedStateAfterLoadOptions,
-                    awaitItem(),
+                    initialState.copy(generatedText = "email+abcd1234@address.com"),
+                    awaitItem()
                 )
+                // Setting the repository options to RANDOM_WORD to show this does NOT get used.
+                fakeGeneratorRepository.saveUsernameGenerationOptions(
+                    UsernameGenerationOptions(
+                        type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+                    ),
+                )
+                // When this action is handled there will be another call to `loadOptions()`
+                // since we are using the default arguments with `shouldUseStorageOptions` set to
+                // false we should not expect a state update.
+                viewModel.trySendAction(
+                    GeneratorAction.Internal.PasswordGeneratorPolicyReceive(policies = emptyList()),
+                )
+                expectNoEvents()
             }
         }
 
