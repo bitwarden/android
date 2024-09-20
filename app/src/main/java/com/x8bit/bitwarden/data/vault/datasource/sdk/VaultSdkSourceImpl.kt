@@ -10,6 +10,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
@@ -492,7 +493,7 @@ class VaultSdkSourceImpl(
 
                 val result = client
                     .register(
-                        origin = request.origin,
+                        origin = Origin.Web(v1 = request.origin),
                         request = request.requestJson,
                         clientData = request.clientData,
                     )
@@ -525,7 +526,7 @@ class VaultSdkSourceImpl(
                     )
 
                 val result = client.authenticate(
-                    origin = request.origin,
+                    origin = Origin.Web(v1 = request.origin),
                     request = request.requestJson,
                     clientData = request.clientData,
                 )
