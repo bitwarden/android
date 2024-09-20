@@ -541,7 +541,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             isEnabled = true,
             data = JsonObject(
                 mapOf(
-                    "defaultType" to JsonNull,
+                    "overridePasswordType" to JsonNull,
                     "minLength" to JsonPrimitive(10),
                     "useUpper" to JsonPrimitive(true),
                     "useNumbers" to JsonPrimitive(true),
@@ -594,7 +594,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             isEnabled = true,
             data = JsonObject(
                 mapOf(
-                    "defaultType" to JsonNull,
+                    "overridePasswordType" to JsonNull,
                     "minLength" to JsonPrimitive(10),
                     "useUpper" to JsonPrimitive(true),
                     "useNumbers" to JsonPrimitive(true),
@@ -633,6 +633,78 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         includeNumberEnabled = false,
                     ),
                 ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `Policy should overwrite passwordType if has overridePasswordType`() {
+        val policy = createMockPolicy(
+            number = 1,
+            type = PolicyTypeJson.PASSWORD_GENERATOR,
+            isEnabled = true,
+            data = JsonObject(
+                mapOf(
+                    "overridePasswordType" to JsonPrimitive("passphrase"),
+                ),
+            ),
+        )
+        every {
+            policyManager.getActivePolicies(any())
+        } returns listOf(policy)
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            initialPasscodeState.copy(
+                generatedText = "updatedPassphrase",
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
+                ),
+                overridePassword = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `Policy should should prioritize password if multiple have OverridePasswordType`() {
+        val policies = listOf(
+            createMockPolicy(
+                number = 1,
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = JsonObject(
+                    mapOf(
+                        "overridePasswordType" to JsonPrimitive("passphrase"),
+                    ),
+                ),
+            ),
+            createMockPolicy(
+                number = 1,
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = JsonObject(
+                    mapOf(
+                        "overridePasswordType" to JsonPrimitive("password"),
+                    ),
+                ),
+            ),
+        )
+        every {
+            policyManager.getActivePolicies(any())
+        } returns policies
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            initialPasscodeState.copy(
+                generatedText = "defaultPassword",
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState.MainType.Passcode.PasscodeType.Password(),
+                ),
+                overridePassword = true,
             ),
             viewModel.stateFlow.value,
         )
