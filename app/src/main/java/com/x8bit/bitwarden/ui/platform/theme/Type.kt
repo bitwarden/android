@@ -238,6 +238,7 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
             alignment = LineHeightStyle.Alignment.Center,
             trim = LineHeightStyle.Trim.None,
         ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
 )
 
