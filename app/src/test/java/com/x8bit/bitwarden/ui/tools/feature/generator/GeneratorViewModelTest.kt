@@ -936,7 +936,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val initialState = initialUsernameState.copy(
                 selectedType = GeneratorState.MainType.Username(
                     selectedType = GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
-                        email = "email",
+                        email = "currentEmail",
                     ),
                 ),
             )
