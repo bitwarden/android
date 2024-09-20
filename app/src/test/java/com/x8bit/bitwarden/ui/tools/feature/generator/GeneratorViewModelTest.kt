@@ -41,7 +41,6 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -932,35 +931,30 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `No LifecycleResumedAction should use VM state options derived state over VM state`() {
-        val initialState = initialUsernameState.copy(
-            selectedType = GeneratorState.MainType.Username(
-                selectedType = GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
-                    email = "currentEmail",
+    fun `No LifecycleResumedAction should use VM state options derived state over VM state`() =
+        runTest {
+            val initialState = initialUsernameState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    selectedType = GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                        email = "email",
+                    ),
                 ),
-            ),
-        )
-        val viewModel = createViewModel(initialState)
-        fakeGeneratorRepository.saveUsernameGenerationOptions(
-            UsernameGenerationOptions(
-                type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
-            ),
-        )
-        val stateIfUsingTheDiskOption = initialState.copy(
-            selectedType = GeneratorState.MainType.Username(
-                selectedType = GeneratorState.MainType.Username.UsernameType.RandomWord(),
-            ),
-            generatedText = "randomWord",
-        )
-        assertNotEquals(
-            stateIfUsingTheDiskOption,
-            viewModel.stateFlow.value,
-        )
-        assertEquals(
-            initialState.copy(generatedText = "email+abcd1234@address.com"),
-            viewModel.stateFlow.value,
-        )
-    }
+            )
+            val viewModel = createViewModel(initialState)
+            fakeGeneratorRepository.saveUsernameGenerationOptions(
+                UsernameGenerationOptions(
+                    type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+                ),
+            )
+            val expectedStateAfterLoadOptions =
+                initialState.copy(generatedText = "email+abcd1234@address.com")
+            viewModel.stateFlow.test {
+                assertEquals(
+                    expectedStateAfterLoadOptions,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Nested
     inner class PasswordActions {
