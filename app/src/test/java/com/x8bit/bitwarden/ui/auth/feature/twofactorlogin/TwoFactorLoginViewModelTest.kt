@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
-import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
@@ -66,7 +65,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         mockkStatic(
             ::generateUriForCaptcha,
             ::generateUriForWebAuth,
-            String::base64UrlEncode,
+            String::base64UrlDecodeOrNull,
         )
         mockkStatic(Uri::class)
         every {

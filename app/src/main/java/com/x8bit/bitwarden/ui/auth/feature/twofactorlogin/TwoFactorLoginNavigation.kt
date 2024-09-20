@@ -5,6 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
+import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val EMAIL_ADDRESS = "email_address"
@@ -15,14 +17,12 @@ private const val TWO_FACTOR_LOGIN_ROUTE =
 
 /**
  * Class to retrieve Two-Factor Login arguments from the [SavedStateHandle].
- *
- * @property base64EncodedPassword Base64 URL encoded password input.
  */
 @OmitFromCoverage
-data class TwoFactorLoginArgs(val emailAddress: String, val base64EncodedPassword: String?) {
+data class TwoFactorLoginArgs(val emailAddress: String, val password: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         emailAddress = checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-        base64EncodedPassword = savedStateHandle[PASSWORD],
+        password = savedStateHandle.get<String>(PASSWORD)?.base64UrlDecodeOrNull(),
     )
 }
 
@@ -31,11 +31,11 @@ data class TwoFactorLoginArgs(val emailAddress: String, val base64EncodedPasswor
  */
 fun NavController.navigateToTwoFactorLogin(
     emailAddress: String,
-    base64EncodedPassword: String?,
+    password: String?,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = "$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?$PASSWORD=$base64EncodedPassword",
+        route = "$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?$PASSWORD=${password?.base64UrlEncode()}",
         navOptions = navOptions,
     )
 }

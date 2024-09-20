@@ -111,7 +111,7 @@ fun NavGraphBuilder.authGraph(
             onNavigateToTwoFactorLogin = { emailAddress ->
                 navController.navigateToTwoFactorLogin(
                     emailAddress = emailAddress,
-                    base64EncodedPassword = null,
+                    password = null,
                 )
             },
         )
@@ -154,7 +154,7 @@ fun NavGraphBuilder.authGraph(
             onNavigateToTwoFactorLogin = { emailAddress, password ->
                 navController.navigateToTwoFactorLogin(
                     emailAddress = emailAddress,
-                    base64EncodedPassword = password,
+                    password = password,
                 )
             },
         )
@@ -163,7 +163,7 @@ fun NavGraphBuilder.authGraph(
             onNavigateToTwoFactorLogin = {
                 navController.navigateToTwoFactorLogin(
                     emailAddress = it,
-                    base64EncodedPassword = null,
+                    password = null,
                 )
             },
         )
