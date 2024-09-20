@@ -50,6 +50,7 @@
   <string name="account_already_added">Обліковий запис вже додано</string>
   <string name="switch_to_already_added_account_confirmation">Бажаєте перемкнутися на нього зараз?</string>
   <string name="master_password">Головний пароль</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Більше</string>
   <string name="my_vault">Моє сховище</string>
   <string name="authenticator">Автентифікатор</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Розкажіть іншим про свої враження, залишивши хороший відгук!</string>
   <string name="regenerate_password">Генерувати новий</string>
   <string name="retype_master_password">Введіть головний пароль ще раз</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Шукати у сховищі</string>
   <string name="security">Безпека</string>
   <string name="select">Обрати</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">Використовуйте службу спеціальних можливостей Bitwarden для заповнення паролів у програмах і на вебсайтах. (Необхідно увімкнути накладання)</string>
   <string name="accessibility_description3">Використовуйте службу спеціальних можливостей Bitwarden для використання панелі швидких дій автозаповнення, а також для показу спливного повідомлення з накладанням (якщо увімкнено).</string>
   <string name="accessibility_description4">Обов\'язкове використання панелі швидких дій автозаповнення, або виклику служби автозаповнення з накладанням (якщо увімкнено).</string>
+  <string name="accessibility_description5">Необхідно використовувати плитку швидких дій для автозаповнення.</string>
   <string name="draw_over">Використовувати накладання</string>
   <string name="draw_over_description">Якщо увімкнено, дозволяє службі спеціальних можливостей Bitwarden показувати спливне повідомлення при виборі полів входу.</string>
   <string name="draw_over_description2">Якщо увімкнено, служба спеціальних можливостей Bitwarden показуватиме спливне повідомлення при виборі полів входу, щоб допомогти автоматично заповнити ваші облікові дані.</string>
@@ -1001,4 +1004,8 @@
   <string name="turn_on_later">Увімкнути пізніше</string>
   <string name="turn_on_autofill_later">Увімкнути автозаповнення пізніше?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Ви можете виконати цей крок будь-коли в налаштуваннях.</string>
+  <string name="what_bitwarden_has_to_offer">Тепер ви можете автоматично заповнювати облікові дані для входу в програмах і на вебсайтах, використовуючи свої збережені паролі. Дослідіть інші можливості, які пропонує Bitwarden.</string>
+  <string name="youre_all_set">Усе налаштовано!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

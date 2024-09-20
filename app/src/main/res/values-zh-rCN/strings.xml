@@ -50,6 +50,7 @@
   <string name="account_already_added">账户已添加</string>
   <string name="switch_to_already_added_account_confirmation">您想现在就切换过去吗？</string>
   <string name="master_password">主密码</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">更多</string>
   <string name="my_vault">我的密码库</string>
   <string name="authenticator">身份验证器</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">我们期待您的好评！</string>
   <string name="regenerate_password">重新生成密码</string>
   <string name="retype_master_password">再次输入主密码</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">搜索密码库</string>
   <string name="security">安全</string>
   <string name="select">选择</string>
@@ -329,7 +331,7 @@
   <string name="no_items_folder">此文件夹中没有项目。</string>
   <string name="no_items_trash">回收站中没有项目。</string>
   <string name="autofill_accessibility_service">自动填充无障碍服务</string>
-  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+  <string name="autofill_accessibility_summary">在其他应 App 和网站上辅助填写用户名和密码字段。</string>
   <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来协助将登录信息填充到你设备上的其他 App 中。</string>
   <string name="bitwarden_autofill_service_description">使用 Bitwarden 自动填充服务将登录信息填充到其他 App 中。</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">打开自动填充设置</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">使用 Bitwarden 无障碍服务来自动填充您在 App 和网络上的登录信息。（需同时启用 Draw-Over 功能）</string>
   <string name="accessibility_description3">使用 Bitwarden 无障碍服务来使用自动填充快速行动磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</string>
   <string name="accessibility_description4">要求使用自动填充快速行动磁贴，或通过使用 Draw-Over （若已启用）来增强自动填充服务。</string>
+  <string name="accessibility_description5">已请求使用自动填充快速操作图块。</string>
   <string name="draw_over">使用 Draw-Over</string>
   <string name="draw_over_description">允许 Bitwarden 无障碍服务在登录字段选中时显示弹出窗口。</string>
   <string name="draw_over_description2">如果开启，当登录字段选中时，Bitwarden 无障碍服务将显示一个弹出窗口以帮助自动填充您的登录信息。</string>
@@ -1001,4 +1004,8 @@
   <string name="turn_on_later">稍后打开</string>
   <string name="turn_on_autofill_later">稍后打开自动填充吗？</string>
   <string name="return_to_complete_this_step_anytime_in_settings">您可以随时在「设置」中完成此步骤。</string>
+  <string name="what_bitwarden_has_to_offer">您现在可以使用自动填充功能，使用保存的密码来登录 App 和网站。也可以探索 Bitwarden 为您提供的其他便捷功能。</string>
+  <string name="youre_all_set">一切就绪！</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

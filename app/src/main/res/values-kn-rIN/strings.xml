@@ -50,6 +50,7 @@
   <string name="account_already_added">Account already added</string>
   <string name="switch_to_already_added_account_confirmation">Would you like to switch to it now?</string>
   <string name="master_password">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">ಹೆಚ್ಚು</string>
   <string name="my_vault">ನನ್ನ ವಾಲ್ಟ್</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">ಉತ್ತಮ ವಿಮರ್ಶೆಯೊಂದಿಗೆ ನಮಗೆ ಸಹಾಯ ಮಾಡಲು ದಯವಿಟ್ಟು ಪರಿಗಣಿಸಿ!</string>
   <string name="regenerate_password">ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ಪುನರುತ್ಪಾದಿಸಿ</string>
   <string name="retype_master_password">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ಮರು-ಟೈಪ್ ಮಾಡಿ</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">ವಾಲ್ಟ್ ಹುಡುಕಿ</string>
   <string name="security">ಭದ್ರತೆ</string>
   <string name="select">ಆಯ್ಕೆಮಾಡಿ</string>
@@ -542,6 +544,7 @@ Scanning will happen automatically.</string>
   <string name="accessibility_description2">ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ನಾದ್ಯಂತ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ. (ಡ್ರಾ-ಓವರ್ ಅನ್ನು ಸಹ ಸಕ್ರಿಯಗೊಳಿಸಬೇಕಾಗಿದೆ)</string>
   <string name="accessibility_description3">ಆಟೋಫಿಲ್ ಕ್ವಿಕ್-ಆಕ್ಷನ್ ಟೈಲ್ ಅನ್ನು ಬಳಸಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ, ಮತ್ತು / ಅಥವಾ ಡ್ರಾ-ಓವರ್ ಬಳಸಿ ಪಾಪ್ಅಪ್ ಅನ್ನು ತೋರಿಸಿ (ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ).</string>
   <string name="accessibility_description4">ಆಟೋಫಿಲ್ ಕ್ವಿಕ್-ಆಕ್ಷನ್ ಟೈಲ್ ಅನ್ನು ಬಳಸಲು ಅಥವಾ ಡ್ರಾ-ಓವರ್ (ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ) ಬಳಸುವ ಮೂಲಕ ಆಟೋಫಿಲ್ ಸೇವೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ಅಗತ್ಯವಿದೆ.</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">ಡ್ರಾ-ಓವರ್ ಬಳಸಿ</string>
   <string name="draw_over_description">ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ, ಲಾಗಿನ್ ಕ್ಷೇತ್ರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿದಾಗ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಪಾಪ್ಅಪ್ ಪ್ರದರ್ಶಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="draw_over_description2">ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ, ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಭರ್ತಿ ಮಾಡಲು ಸಹಾಯ ಮಾಡಲು ಲಾಗಿನ್ ಕ್ಷೇತ್ರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿದಾಗ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆ ಪಾಪ್ಅಪ್ ಅನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ.</string>
@@ -1001,4 +1004,8 @@ Do you want to switch to this account?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

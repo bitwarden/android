@@ -50,6 +50,7 @@
   <string name="account_already_added">Conta já adicionada</string>
   <string name="switch_to_already_added_account_confirmation">Você gostaria de mudar para ela agora?</string>
   <string name="master_password">Senha mestra</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Mais</string>
   <string name="my_vault">Meu cofre</string>
   <string name="authenticator">Autenticação</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Por favor considere ajudar-nos com uma boa avaliação!</string>
   <string name="regenerate_password">Gerar nova senha</string>
   <string name="retype_master_password">Digite novamente a senha mestra</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Pesquisar cofre</string>
   <string name="security">Segurança</string>
   <string name="select">Selecionar</string>
@@ -542,6 +544,7 @@ A leitura será feita automaticamente.</string>
   <string name="accessibility_description2">Utilize o Serviço de Acessibilidade do Bitwarden para autopreencher as suas credenciais entre aplicativos e a web. (Requer \"Sobrepor a\" para ser ativado também)</string>
   <string name="accessibility_description3">Utilize o Serviço de Acessibilidade do Bitwarden para utilizar o Bloco de Ação Rápida de Autopreenchimento, e/ou mostre um pop-up usando \"Sobrepor a\" (se ativado).</string>
   <string name="accessibility_description4">Necessário para usar o Bloco de Ação Rápida de Autopreenchimento, ou para aumentar o Serviço de Autopreenchimento usando \"Sobrepor a\" (se habilitado).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Usar Sobrepor a</string>
   <string name="draw_over_description">Quando ativado, permite que o Serviço de Acessibilidade do Bitwarden exiba uma janela quando os campos de \"login\" são selecionados.</string>
   <string name="draw_over_description2">Se ativado, o Serviço de Acessibilidade do Bitwarden exibirá um \"pop-up\" quando os campos de \"login\" são selecionados para ajudar a preencher automaticamente suas credenciais.</string>
@@ -1001,4 +1004,8 @@ Você deseja mudar para esta conta?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>
