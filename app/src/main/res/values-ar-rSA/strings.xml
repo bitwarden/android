@@ -50,6 +50,7 @@
   <string name="account_already_added">تمت إضافة الحساب بالفعل</string>
   <string name="switch_to_already_added_account_confirmation">هل ترغب في التبديل إليه الآن؟</string>
   <string name="master_password">كلمة المرور الرئيسية</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">المزيد</string>
   <string name="my_vault">خزانتي</string>
   <string name="authenticator">المصادقة</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">شكرا على مساعدتنا من خلال كتابة تعليق إيجابي!</string>
   <string name="regenerate_password">إعادة توليد كلمة المرور</string>
   <string name="retype_master_password">إعادة إدخال كلمة المرور الرئيسية</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">البحث في الخزنة</string>
   <string name="security">الأمان</string>
   <string name="select">تحديد</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">استخدم خدمة إمكانية الوصول إلى Bitwarden لملء تسجيلات الدخول الخاصة بك تلقائياً عبر التطبيقات و الويب. (يتطلب السحب من أجل تمكينه أيضا)</string>
   <string name="accessibility_description3">استخدم خدمة الوصول Bitwarden لاستخدام ساحة التعبئة التلقائية السريعة، و/أو إظهار نافذة منبثقة باستخدام السحب فوق (إذا تم تفعيلها).</string>
   <string name="accessibility_description4">مطلوب لاستخدام ساحة التعبئة التلقائية للإجراء السريع، أو لزيادة خدمة التعبئة التلقائية باستخدام السحب فوق (إذا تم تمكينه).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">إستخدام السحب</string>
   <string name="draw_over_description">عند التمكين، يسمح لخدمة الوصول إلى Bitwarden لعرض نافذة منبثقة عند تحديد حقول الدخول.</string>
   <string name="draw_over_description2">في حالة التمكين، ستعرض خدمة Bitwarden إمكانية الوصول نافذة منبثقة عند تحديد حقول تسجيل الدخول للمساعدة في ملء تسجيلات الدخول الخاصة بك تلقائيا.</string>
@@ -1001,4 +1004,8 @@
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

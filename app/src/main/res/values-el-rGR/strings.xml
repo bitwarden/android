@@ -50,6 +50,7 @@
   <string name="account_already_added">Ο λογαριασμός έχει ήδη προστεθεί</string>
   <string name="switch_to_already_added_account_confirmation">Θα θέλατε να το αλλάξετε τώρα?</string>
   <string name="master_password">Κύριος κωδικός</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Περισσότερα</string>
   <string name="my_vault">Το θυσαυ/κιό μου</string>
   <string name="authenticator">Αυθεντικοποιητής</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Παρακαλούμε σκεφτείτε να μας βοηθήσετε με μια καλή κριτική!</string>
   <string name="regenerate_password">Επαναδημιουργία κωδικού</string>
   <string name="retype_master_password">Εισάγετε ξανά τον κύριο κωδικό</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Αναζήτηση στο θυσαυ/κιό</string>
   <string name="security">Ασφάλεια</string>
   <string name="select">Επιλογή</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να συμπληρώσετε αυτόματα τις συνδέσεις σας σε εφαρμογές και στον ιστό. (Απαιτείται η ενεργοποίηση του Draw-Over)</string>
   <string name="accessibility_description3">Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να χρησιμοποιήσετε το Πλακάκι γρήγορης δράσης αυτόματης συμπλήρωσης ή / και να εμφανιστεί ένα αναδυόμενο παράθυρο χρησιμοποιώντας το Draw-Over (εάν είναι ενεργοποιημένο).</string>
   <string name="accessibility_description4">Απαιτείται να χρησιμοποιήσετε το Πλακάκι αυτόματης συμπλήρωσης αυτόματης συμπλήρωσης ή για να αυξήσετε την υπηρεσία αυτόματης συμπλήρωσης χρησιμοποιώντας το Draw-Over (εάν είναι ενεργοποιημένο).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Χρησιμοποιήστε το Draw-Over</string>
   <string name="draw_over_description">Όταν είναι ενεργοποιημένο, επιτρέπει στην υπηρεσία προσβασιμότητας Bitwarden να εμφανίζει ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης.</string>
   <string name="draw_over_description2">Εάν είναι ενεργοποιημένη, η υπηρεσία προσβασιμότητας Bitwarden θα εμφανίσει ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης για να βοηθούν στην αυτόματη συμπλήρωση των συνδέσεων σας.</string>
@@ -1001,4 +1004,8 @@
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

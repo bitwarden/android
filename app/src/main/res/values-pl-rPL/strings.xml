@@ -50,6 +50,7 @@
   <string name="account_already_added">Konto zostało już dodane</string>
   <string name="switch_to_already_added_account_confirmation">Czy chcesz przełączyć się teraz?</string>
   <string name="master_password">Hasło główne</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Więcej</string>
   <string name="my_vault">Mój sejf</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Wesprzyj nas pozytywną opinią!</string>
   <string name="regenerate_password">Wygeneruj ponownie hasło</string>
   <string name="retype_master_password">Wpisz ponownie hasło główne</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Szukaj w sejfie</string>
   <string name="security">Zabezpieczenia</string>
   <string name="select">Wybierz</string>
@@ -542,6 +544,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="accessibility_description2">Użyj usługi ułatwienia dostępu Bitwarden, aby korzystać z autouzupełniania danych logowania w aplikacjach i na stronach internetowych. (wymaga włączonej opcji wyświetlania nad innymi aplikacjami)</string>
   <string name="accessibility_description3">Użyj usługi ułatwienia dostępu Bitwarden, aby korzystać z szybkiego autouzupełniania i okna wyświetlanego nad innymi aplikacjami (jeśli funkcja jest włączona).</string>
   <string name="accessibility_description4">Funkcja wymagana, aby korzystać z szybkiego autouzupełniania lub usługi autouzupełniania wyświetlanej nad innymi aplikacjami (jeśli funkcja jest włączona).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Użyj opcji wyświetlania nad innymi aplikacjami</string>
   <string name="draw_over_description">Jeśli funkcja jest włączona, usługa ułatwienia dostępu Bitwarden wyświetla okno, podczas zaznaczania pól służących do logowania.</string>
   <string name="draw_over_description2">Jeśli funkcja jest włączona, usługa ułatwienia dostępu Bitwarden wyświetla okno, podczas zaznaczania pól służących do logowania. Usługa automatycznie wypełnia dane logowania.</string>
@@ -1001,4 +1004,8 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

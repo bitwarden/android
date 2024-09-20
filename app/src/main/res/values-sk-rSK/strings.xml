@@ -17,10 +17,10 @@
   <string name="do_you_really_want_to_delete">Naozaj chcete odstrániť? Nedá sa to vrátiť späť.</string>
   <string name="edit">Upraviť</string>
   <string name="edit_folder">Upraviť priečinok</string>
-  <string name="email">Email</string>
-  <string name="email_address">Emailová adresa</string>
+  <string name="email">E-mail</string>
+  <string name="email_address">E-mailová adresa</string>
   <string name="email_us">Napíšte nám</string>
-  <string name="email_us_description">Získajte pomoc alebo zanechajte spätnú väzbu zaslaním emailu.</string>
+  <string name="email_us_description">Získajte pomoc alebo zanechajte spätnú väzbu zaslaním e-mailu.</string>
   <string name="enter_pin">Zadajte PIN kód.</string>
   <string name="favorites">Obľúbené</string>
   <string name="file_bug_report">Nahlásiť chybu</string>
@@ -50,6 +50,7 @@
   <string name="account_already_added">Účet je už pridaný</string>
   <string name="switch_to_already_added_account_confirmation">Chceli by ste naň prejsť teraz?</string>
   <string name="master_password">Hlavné heslo</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Viac</string>
   <string name="my_vault">Môj trezor</string>
   <string name="authenticator">Overovateľ</string>
@@ -95,8 +96,8 @@
   <string name="bitwarden_app_extension_description">Použiť bitwarden v Safari a iných aplikáciach pre automatické vypĺňanie prihlasovacích údajov.</string>
   <string name="bitwarden_autofill_service">Služba automatického vypĺňania Bitwardenom</string>
   <string name="bitwarden_autofill_accessibility_service_description">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov.</string>
-  <string name="change_email">Zmeniť email</string>
-  <string name="change_email_confirmation">Svoju emailovú adresu môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
+  <string name="change_email">Zmeniť e-mail</string>
+  <string name="change_email_confirmation">Svoju e-mailovú adresu môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
   <string name="change_master_password">Zmeniť hlavné heslo</string>
   <string name="close">Zavrieť</string>
   <string name="continue_text">Pokračovať</string>
@@ -104,21 +105,21 @@
   <string name="creating_account">Vytvára sa účet...</string>
   <string name="edit_item">Upraviť položku</string>
   <string name="enable_automatic_syncing">Zapnúť automatickú synchronizáciu</string>
-  <string name="enter_email_for_hint">Zadajte emailovú adresu na zaslanie nápovedy pre vaše hlavné heslo.</string>
+  <string name="enter_email_for_hint">Zadajte e-mailovú adresu na zaslanie nápovede k vášmu hlavnému heslu.</string>
   <string name="exntesion_reenable">Znovu zapnúť rozšírenie aplikácie</string>
   <string name="extension_almost_done">Takmer hotovo!</string>
   <string name="extension_enable">Zapnúť rozšírenie aplikácie</string>
-  <string name="extension_in_safari">V Safari nájdete bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku menu).</string>
+  <string name="extension_in_safari">V Safari nájdete Bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku ponuky).</string>
   <string name="extension_instant_access">Získajte okamžitý prístup k vašim heslám!</string>
   <string name="extension_ready">Ste pripravený prihlásiť sa!</string>
   <string name="extension_setup">Vaše prihlasovacie údaje sú teraz ľahko prístupné zo Safari, Chrome a ďalších podporovaných aplikácií.</string>
-  <string name="extension_setup2">V Safari a Chrome nájdete bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku menu).</string>
+  <string name="extension_setup2">V Safari a Chrome nájdete Bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku ponuky).</string>
   <string name="extension_tap_icon">Klepnite na ikonu bitwarden v menu na spustenie rozšírenia.</string>
   <string name="extension_turn_on">Pre zapnutie bitwardenu v Safari a iných aplikáciach, klepnite na ikonu \"viac\" v spodnom riadku menu.</string>
   <string name="favorite">Obľúbené</string>
   <string name="fingerprint">Odtlačok prsta</string>
   <string name="generate_password">Generovať heslo</string>
-  <string name="get_password_hint">Získať nápovedu pre hlavné heslo</string>
+  <string name="get_password_hint">Získať nápoveď k hlavnému heslu</string>
   <string name="import_items">Importovať položky</string>
   <string name="import_items_confirmation">Môžete hromadne importovať položky z webového trezoru bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
   <string name="import_items_description">Rýchlo hromadne importovať vaše prihlasovacie údaje z iných aplikácií na správu hesiel.</string>
@@ -138,8 +139,8 @@
   <string name="manage">Spravovať</string>
   <string name="master_password_confirmation_val_message">Potvrdenie hesla nie je správne.</string>
   <string name="master_password_description">Hlavné heslo je heslo, ktoré použijete na prístup k svojmu trezoru. Je veľmi dôležité, aby ste svoje hlavné heslo nezabudli. Neexistuje možnosť, ako heslo obnoviť v prípade, že ho zabudnete.</string>
-  <string name="master_password_hint">Nápoveda k hlavnému heslo (voliteľné)</string>
-  <string name="master_password_hint_description">Nápoveda k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</string>
+  <string name="master_password_hint">Nápoveď k hlavnému heslu (voliteľné)</string>
+  <string name="master_password_hint_description">Nápoveď k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</string>
   <string name="master_password_length_val_message_x">Hlavné heslo musí obsahovať aspoň %1$s znakov.</string>
   <string name="min_numbers">Minimum číslic</string>
   <string name="min_special">Minimum špeciálnych</string>
@@ -158,14 +159,15 @@
   <string name="other">Ostatné</string>
   <string name="password_generated">Heslo vytvorené.</string>
   <string name="password_generator">Generátor hesla</string>
-  <string name="password_hint">Nápoveda pre heslo</string>
-  <string name="password_hint_alert">Poslali sme vám email s nápovedou k hlavnému heslu.</string>
+  <string name="password_hint">Nápoveď k heslu</string>
+  <string name="password_hint_alert">Poslali sme vám e-mail s nápoveďou k hlavnému heslu.</string>
   <string name="password_override_alert">Naozaj chcete prepísať aktuálne heslo?</string>
   <string name="push_notification_alert">bitwarden udržuje váš trezor automaticky synchronizovaný použitím push notifikácií. Pre čo najlepší priebeh, prosím potvrďte nasledujúcu výzvu pre zapnutie push notifikácií.</string>
   <string name="rate_the_app">Ohodnotiť aplikáciu</string>
   <string name="rate_the_app_description">Prosíme, zvážte pomôcť nám dobrým hodnotením!</string>
   <string name="regenerate_password">Vygenerovať nové heslo</string>
   <string name="retype_master_password">Znovu zadajte hlavné heslo</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Prehľadávať trezor</string>
   <string name="security">Zabezpečenie</string>
   <string name="select">Vybrať</string>
@@ -215,16 +217,16 @@
   <string name="cannot_open_app">Nemožno spustiť aplikáciu \"%1$s\".</string>
   <string name="authenticator_app_title">Overovacia aplikácia</string>
   <string name="enter_verification_code_app">Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</string>
-  <string name="enter_verification_code_email">Zadajte 6-miestny verifikačný kód, ktorý bol zaslaný emailom na %1$s.</string>
+  <string name="enter_verification_code_email">Zadajte 6-miestny verifikačný kód, ktorý bol zaslaný e-mailom na %1$s.</string>
   <string name="login_unavailable">Prihlásenie nedostupné</string>
   <string name="no_two_step_available">Tento účet má povolené dvojstupňové prihlásenie, ale žiadny z konfigurovaných poskytovateľov nie je podporovaný na tomto zariadení. Prosím, použite podporované zariadenie a/alebo pridajte poskytovateľa, ktorý je lepšie podporovaný na zariadeniach (napríklad overovaciu aplikáciu).</string>
   <string name="recovery_code_title">Záchranný kód</string>
   <string name="remember_me">Zapamätať si ma</string>
-  <string name="send_verification_code_again">Znovu zaslať overovací kód emailom</string>
+  <string name="send_verification_code_again">Znovu zaslať overovací kód e-mailom</string>
   <string name="two_step_login_options">Možnosti dvojstupňového prihlásenia</string>
   <string name="use_another_two_step_method">Použiť inú dvojstupňovú metódu prihlásenia</string>
-  <string name="verification_email_not_sent">Nepodarilo sa odoslať overovací email. Skúste znova.</string>
-  <string name="verification_email_sent">Overovací email bol odoslaný.</string>
+  <string name="verification_email_not_sent">Nepodarilo sa odoslať overovací e-mail. Skúste znova.</string>
+  <string name="verification_email_sent">Overovací e-mail bol odoslaný.</string>
   <string name="yubi_key_instruction">Pre pokračovanie podržte vaše YubiKey NEO na zadnej strane zariadenia.</string>
   <string name="yubi_key_title">YubiKey NEO bezpečnostný kľúč</string>
   <string name="add_new_attachment">Pridať novú prílohu</string>
@@ -380,7 +382,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="autofill_turn_on5">5. Vyberte \"Bitwarden\"</string>
   <string name="password_autofill">Automatické vypĺňanie hesiel</string>
   <string name="bitwarden_autofill_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z rozšírenia Bitwardenu na automatické vypĺňanie. Ďalšie informácie o používaní rozšírenia pre automatické vypĺňanie získate prechodom na obrazovku nastavení.</string>
-  <string name="invalid_email">Neplatná emailová adresa.</string>
+  <string name="invalid_email">Neplatná e-mailová adresa.</string>
   <string name="cards">Karty</string>
   <string name="identities">Identity</string>
   <string name="logins">Prihlasovacie údaje</string>
@@ -485,7 +487,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="send_verification_code_to_email">Poslať overovací kód na váš e-mail</string>
   <string name="code_sent">Kód bol odoslaný!</string>
   <string name="confirm_your_identity">Ak chcete pokračovať, potvrďte svoju identitu.</string>
-  <string name="export_vault_warning">Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať.</string>
+  <string name="export_vault_warning">Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. e-mail). Okamžite ho odstráňte, keď ho prestanete používať.</string>
   <string name="export_vault_file_pw_protect_info">Tento exportovaný súbor bude chránený heslom a na dešifrovanie bude potrebné heslo súboru.</string>
   <string name="export_vault_confirmation_title">Potvrdiť export trezoru</string>
   <string name="warning">Upozornenie</string>
@@ -542,6 +544,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="accessibility_description2">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. (Vyžaduje sa povolenie zobrazenia cez iné aplikácie)</string>
   <string name="accessibility_description3">Použite službu zjednodušenia prístupu Bitwardenu pre použitie automatického vypĺňania cez dlaždicu a/alebo zobraziť vyskakovacie okno pomocou zobrazenia cez iné aplikácie (ak je povolené).</string>
   <string name="accessibility_description4">Vyžaduje sa, aby ste použili dlaždicu rýchlej akcie automatického vypĺňania, alebo aby ste rozšírili službu automatického vypĺňania pomocou funkcie zobrazenia cez iné aplikácie (ak je povolená).</string>
+  <string name="accessibility_description5">Vyžaduje sa pre použitie dlaždice rýchleho automatického vypĺňania.</string>
   <string name="draw_over">Použiť zobrazenie cez iné aplikácie</string>
   <string name="draw_over_description">Ak je táto možnosť povolená, umožňuje službe zjednodušenia prístupu Bitwardenu zobraziť vyskakovacie okno po klepnutí do prihlasovacieho poľa.</string>
   <string name="draw_over_description2">Ak je táto možnosť povolená, umožňuje službe zjednodušenia prístupu Bitwardenu zobraziť vyskakovacie okno po klepnutí do prihlasovacieho poľa a pomáha automaticky vyplniť prihlasovacie polia.</string>
@@ -603,7 +606,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="share_on_save">Po uložení zdieľať tento Send</string>
   <string name="send_disabled_warning">Z dôvodu podnikovej politiky môžete odstrániť iba existujúci Send.</string>
   <string name="about_send">O Sende</string>
-  <string name="hide_email">Skryť moju emailovú adresu pred príjemcami</string>
+  <string name="hide_email">Skryť moju e-mailovú adresu pred príjemcami</string>
   <string name="send_options_policy_in_effect">Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</string>
   <string name="send_file_premium_required">Bezplatné účty sú obmedzené len na zdieľanie textu. Na odosielanie súborov cez Send sa vyžaduje prémiové členstvo.</string>
   <string name="send_file_email_verification_required">Na odosielanie súborov cez Send musíte overiť svoj e-mail.</string>
@@ -728,7 +731,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
-  <string name="forward_email">ForwardEmail</string>
+  <string name="forward_email">ForwardE-mail</string>
   <string name="api_access_token">Prístupový token API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Naozaj chcete prepísať aktuálne používateľské meno?</string>
   <string name="generate_username">Vygenerovať používateľské meno</string>
@@ -749,7 +752,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
 %1$s
 Chcete prepnúť na tento účet?</string>
   <string name="new_around_here">Ste tu nový?</string>
-  <string name="get_master_passwordword_hint">Získať nápoveď pre hlavné heslo</string>
+  <string name="get_master_passwordword_hint">Získať nápoveď k hlavnému heslu</string>
   <string name="logging_in_as_x_on_y">Prihlasujete sa ako %1$s na %2$s</string>
   <string name="not_you">Nie ste to vy?</string>
   <string name="log_in_with_master_password">Prihlásenie pomocou hlavného hesla</string>
@@ -933,14 +936,14 @@ Chcete prepnúť na tento účet?</string>
   <string name="user_verification_direction">Overenie používateľa</string>
   <string name="creating_on">Vytvorené na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Na vytvorenie účtu postupujte podľa pokynov v e-maile zaslanom na %1$s.</string>
-  <string name="we_sent_an_email_to">Poslali sme email na adresu %1$s.</string>
+  <string name="we_sent_an_email_to">Poslali sme e-mail na adresu %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ak budete pokračovať, tak súhlasíte s Podmienkami používania a Zásadami ochrany osobných údajov</string>
   <string name="set_password">Nastaviť heslo</string>
   <string name="unsubscribe">Odhlásiť sa z odberu</string>
   <string name="check_your_email">Skontrolujte si svoj e-mail</string>
-  <string name="open_email_app">Otvoriť emailovú aplikáciu</string>
+  <string name="open_email_app">Otvoriť e-mailovú aplikáciu</string>
   <string name="go_back">Prejsť späť</string>
-  <string name="email_verified">Email bol overený</string>
+  <string name="email_verified">E-mail bol overený</string>
   <string name="no_email_go_back_to_edit_your_email_address">Žiadny e-mail? Vráťte sa späť a upravte e-mailovú adresu.</string>
   <string name="or_log_in_you_may_already_have_an_account">Alebo sa prihláste, možno už účet máte.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu. Odhlásiť dá môžete kedykoľvek.</string>
@@ -973,7 +976,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="never_lose_access_to_your_vault">Nikdy nestraťte svoj účet</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Najlepší spôsob, ako zabezpečiť, aby ste mali vždy prístup k svojmu účtu, je nastaviť ochranné opatrenia hneď od začiatku.</string>
   <string name="create_a_hint">Vytvorte si nápoveď</string>
-  <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Nápoveď vám bude zaslaná na email keď o ňu požiadate.</string>
+  <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Nápoveď vám bude zaslaná na e-mail, keď o ňu požiadate.</string>
   <string name="write_your_password_down">Zapíšte si heslo</string>
   <string name="keep_it_secret_keep_it_safe">Uistite sa že ste si zapísané heslo uložili na tajnom a bezpečnom mieste.</string>
   <string name="prevent_account_lockout">Nevymknite sa z účtu</string>
@@ -982,7 +985,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Toto heslo si zapíšte a uložte na bezpečné miesto.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Prečítajte si o ďalších spôsoboch, ako zabrániť zablokovaniu účtu</string>
   <string name="help_with_server_geolocations">Pomoc pri určovaní geografickej polohy servera.</string>
-  <string name="email_address_required">Emailová adresa (povinná)</string>
+  <string name="email_address_required">E-mailová adresa (povinná)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Odkazom v e-maile overte svoju e-mailovú adresu a pokračujte vo vytváraní konta. "</string>
   <string name="change_email_address">Zmeniť e-mailovú adresu</string>
   <string name="next">Ďalej</string>
@@ -1001,4 +1004,8 @@ Chcete prepnúť na tento účet?</string>
   <string name="turn_on_later">Zapnúť neskôr</string>
   <string name="turn_on_autofill_later">Zapnúť automatické dopĺňanie neskôr?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">K tomuto kroku sa môžete kedykoľvek vrátiť a dokončiť ho v Nastaveniach.</string>
+  <string name="what_bitwarden_has_to_offer">Na prihlasovanie do aplikácií a webových lokalít pomocou uložených hesiel môžete teraz používať automatické vypĺňanie. Teraz môžete preskúmať všetko ostatné, čo Bitwarden ponúka.</string>
+  <string name="youre_all_set">Všetko je pripravené!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

@@ -50,6 +50,7 @@
   <string name="account_already_added">Account already added</string>
   <string name="switch_to_already_added_account_confirmation">Would you like to switch to it now?</string>
   <string name="master_password">പ്രാഥമിക പാസ്‌വേഡ്</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">കൂടുതൽ</string>
   <string name="my_vault">എൻ്റെ വാൾട്</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">ഒരു നല്ല അവലോകനത്തിന് ഞങ്ങളെ സഹായിക്കുന്നത് പരിഗണിക്കുക!</string>
   <string name="regenerate_password">പാസ്സ്‌വേഡ് വീണ്ടും സൃഷ്ടിക്കുക</string>
   <string name="retype_master_password">പ്രാഥമിക പാസ്‌വേഡ് വീണ്ടും ടൈപ്പ്‌ ചെയ്യുക</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">വാൾട് തിരയുന്നു</string>
   <string name="security">സുരക്ഷ</string>
   <string name="select">തിരഞ്ഞെടുക്കുക</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">അപ്ലിക്കേഷനുകളിലും വെബിലുടനീളം നിങ്ങളുടെ ലോഗിനുകൾ യാന്ത്രികമായി പൂരിപ്പിക്കുന്നതിന് ബിറ്റ്വാർഡൻ പ്രവേശനക്ഷമത സേവനം ഉപയോഗിക്കുക. (പ്രവർത്തനക്ഷമമാക്കുന്നതിന് ഡ്രോ-ഓവർ ആവശ്യമാണ്)</string>
   <string name="accessibility_description3">ഓട്ടോഫിൽ ക്വിക്ക്-ആക്ഷൻ ടൈൽ ഉപയോഗിക്കുന്നതിന് ബിറ്റ്വാർഡൻ പ്രവേശനക്ഷമത സേവനം ഉപയോഗിക്കുക, കൂടാതെ / അല്ലെങ്കിൽ ഡ്രോ-ഓവർ ഉപയോഗിച്ച് ഒരു പോപ്പ്അപ്പ് കാണിക്കുക (പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ).</string>
   <string name="accessibility_description4">ഓട്ടോഫിൽ ക്വിക്ക്-ആക്ഷൻ ടൈൽ ഉപയോഗിക്കുന്നതിനോ ഡ്രോ-ഓവർ ഉപയോഗിച്ച് പ്രവർത്തനക്ഷമമാക്കിയ ഓട്ടോഫിൽ സേവനം വർദ്ധിപ്പിക്കുന്നതിനോ ആവശ്യമാണ് (പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">ഡ്രോ ഓവർ ഉപയോഗിക്കുക</string>
   <string name="draw_over_description">പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുമ്പോൾ, ലോഗിൻ ഫീൽഡുകൾ തിരഞ്ഞെടുക്കുമ്പോൾ ഒരു പോപ്പ്അപ്പ് പ്രദർശിപ്പിക്കാൻ ബിറ്റ്വാർഡൻ പ്രവേശന സേവനത്തെ അനുവദിക്കുന്നു.</string>
   <string name="draw_over_description2">പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, നിങ്ങളുടെ ലോഗിനുകൾ യാന്ത്രികമായി പൂരിപ്പിക്കുന്നതിന് സഹായിക്കുന്നതിന് ലോഗിൻ ഫീൽഡുകൾ തിരഞ്ഞെടുക്കുമ്പോൾ ബിറ്റ്വാർഡൻ പ്രവേശന സേവനം ഒരു പോപ്പ്അപ്പ് പ്രദർശിപ്പിക്കും.</string>
@@ -1001,4 +1004,8 @@ Do you want to switch to this account?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>
