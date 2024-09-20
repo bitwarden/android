@@ -62,6 +62,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
+    private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -290,6 +291,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) {
         userShowAutoFillBadge[userId] = showBadge
+    }
+
+    override fun getShowUnlockSettingBadge(userId: String): Boolean? =
+        userShowUnlockBadge[userId]
+
+    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?) {
+        userShowUnlockBadge[userId] = showBadge
     }
 
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {

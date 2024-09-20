@@ -270,4 +270,16 @@ interface SettingsDiskSource {
      * enable autofill in onboarding.
      */
     fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?)
+
+    /**
+     * Gets whether or not the given [userId] has signalled they want to enable unlock options
+     * later, during onboarding.
+     */
+    fun getShowUnlockSettingBadge(userId: String): Boolean?
+
+    /**
+     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * set up unlock options later, during onboarding.
+     */
+    fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?)
 }

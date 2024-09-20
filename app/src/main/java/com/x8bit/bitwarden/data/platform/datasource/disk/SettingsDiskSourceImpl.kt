@@ -34,6 +34,7 @@ private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
+private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -405,6 +406,17 @@ class SettingsDiskSourceImpl(
     override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) =
         putBoolean(
             key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
+            value = showBadge,
+        )
+
+    override fun getShowUnlockSettingBadge(userId: String): Boolean? =
+        getBoolean(
+            key = SHOW_UNLOCK_SETTING_BADGE.appendIdentifier(userId),
+        )
+
+    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?) =
+        putBoolean(
+            key = SHOW_UNLOCK_SETTING_BADGE.appendIdentifier(userId),
             value = showBadge,
         )
 }

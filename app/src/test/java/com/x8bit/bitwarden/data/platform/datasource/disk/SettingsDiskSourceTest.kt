@@ -1053,4 +1053,28 @@ class SettingsDiskSourceTest {
 
         assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = mockUserId)!!)
     }
+
+    @Test
+    fun `storeShowUnlockSettingBadge should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val showUnlockSettingBadgeKey =
+            "bwPreferencesStorage:showUnlockSettingBadge_$mockUserId"
+        settingsDiskSource.storeShowUnlockSettingBadge(
+            userId = mockUserId,
+            showBadge = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(showUnlockSettingBadgeKey, false))
+    }
+
+    @Test
+    fun `getShowUnlockSettingBadge should pull value from shared preferences`() {
+        val mockUserId = "mockUserId"
+        val showUnlockSettingBadgeKey =
+            "bwPreferencesStorage:showUnlockSettingBadge_$mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean(showUnlockSettingBadgeKey, true)
+        }
+
+        assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = mockUserId)!!)
+    }
 }
