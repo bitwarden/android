@@ -33,6 +33,7 @@ private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
+private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -395,4 +396,15 @@ class SettingsDiskSourceImpl(
         getBoolean(
             key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY.appendIdentifier(userId),
         ) == true
+
+    override fun getShowAutoFillSettingBadge(userId: String): Boolean? =
+        getBoolean(
+            key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
+        )
+
+    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) =
+        putBoolean(
+            key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
+            value = showBadge,
+        )
 }

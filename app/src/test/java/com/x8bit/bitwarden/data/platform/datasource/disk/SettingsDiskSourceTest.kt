@@ -1029,4 +1029,28 @@ class SettingsDiskSourceTest {
     fun `hasUserSignedInPreviously returns false if value is not present in shared preferences`() {
         assertFalse(settingsDiskSource.getUserHasSignedInPreviously(userId = "haveNotSignedIn"))
     }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val showAutofillSettingBadgeKey =
+            "bwPreferencesStorage:showAutofillSettingBadge_$mockUserId"
+        settingsDiskSource.storeShowAutoFillSettingBadge(
+            userId = mockUserId,
+            showBadge = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(showAutofillSettingBadgeKey, false))
+    }
+
+    @Test
+    fun `getShowAutoFillSettingBadge should pull value from shared preferences`() {
+        val mockUserId = "mockUserId"
+        val showAutofillSettingBadgeKey =
+            "bwPreferencesStorage:showAutofillSettingBadge_$mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean(showAutofillSettingBadgeKey, true)
+        }
+
+        assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = mockUserId)!!)
+    }
 }

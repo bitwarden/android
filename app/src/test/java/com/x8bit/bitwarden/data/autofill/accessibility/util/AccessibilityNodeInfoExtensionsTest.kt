@@ -106,6 +106,43 @@ class AccessibilityNodeInfoExtensionsTest {
     }
 
     @Test
+    fun `isSystemPackage when packageName is null should return false`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns null
+        }
+
+        assertFalse(accessibilityNodeInfo.isSystemPackage)
+    }
+
+    @Test
+    fun `isSystemPackage when packageName is blank should return false`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns ""
+        }
+
+        assertFalse(accessibilityNodeInfo.isSystemPackage)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isSystemPackage when packageName is populated with non system UI package should return false`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns "com.x8bit.bitwarden.beta"
+        }
+
+        assertFalse(accessibilityNodeInfo.isSystemPackage)
+    }
+
+    @Test
+    fun `isSystemPackage when packageName is system UI package should return true`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns "com.android.systemui"
+        }
+
+        assertTrue(accessibilityNodeInfo.isSystemPackage)
+    }
+
+    @Test
     fun `shouldSkipPackage when packageName is null should return true`() {
         val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
             every { packageName } returns null
@@ -118,15 +155,6 @@ class AccessibilityNodeInfoExtensionsTest {
     fun `shouldSkipPackage when packageName is blank should return true`() {
         val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
             every { packageName } returns ""
-        }
-
-        assertTrue(accessibilityNodeInfo.shouldSkipPackage)
-    }
-
-    @Test
-    fun `shouldSkipPackage when packageName is system UI package should return true`() {
-        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
-            every { packageName } returns "com.android.systemui"
         }
 
         assertTrue(accessibilityNodeInfo.shouldSkipPackage)

@@ -33,14 +33,18 @@ private val PACKAGE_NAME_BLOCK_LIST: List<String> = listOf(
 val AccessibilityNodeInfo.shouldSkipPackage: Boolean
     get() {
         val packageName = this.packageName.takeUnless { it.isNullOrBlank() } ?: return true
-        if (packageName == PACKAGE_NAME_SYSTEM_UI) return true
         if (packageName.startsWith(prefix = PACKAGE_NAME_BITWARDEN_PREFIX)) return true
         if (packageName.contains(other = PACKAGE_NAME_LAUNCHER_PARTIAL, ignoreCase = true)) {
             return true
         }
-        if (PACKAGE_NAME_BLOCK_LIST.contains(packageName)) return true
-        return false
+        return PACKAGE_NAME_BLOCK_LIST.contains(packageName)
     }
+
+/**
+ * Returns true if the event is from the system UI package.
+ */
+val AccessibilityNodeInfo.isSystemPackage: Boolean
+    get() = this.packageName == PACKAGE_NAME_SYSTEM_UI
 
 /**
  * Fills the [AccessibilityNodeInfo] text field with the [value] provided.

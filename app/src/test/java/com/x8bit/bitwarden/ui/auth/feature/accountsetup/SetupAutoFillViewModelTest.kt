@@ -22,9 +22,10 @@ import org.junit.jupiter.api.Test
 class SetupAutoFillViewModelTest : BaseViewModelTest() {
 
     private val mutableAutoFillEnabledStateFlow = MutableStateFlow(false)
-    private val settingsRepository = mockk<SettingsRepository>(relaxed = true) {
+    private val settingsRepository = mockk<SettingsRepository> {
         every { isAutofillEnabledStateFlow } returns mutableAutoFillEnabledStateFlow
         every { disableAutofill() } just runs
+        every { storeShowAutoFillSettingBadge(any(), any()) } just runs
     }
 
     private val mockUserState = mockk<UserState> {
@@ -127,8 +128,22 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
             )
         }
     }
+    @Test
+    fun `handleTurnOnLaterConfirmClick sets showAutoFillSettingBadge to true`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
+        verify {
+            settingsRepository.storeShowAutoFillSettingBadge(
+                userId = DEFAULT_USER_ID,
+                showBadge = true,
+            )
+        }
+    }
 
-    private fun createViewModel() = SetupAutoFillViewModel(settingsRepository, authRepository)
+    private fun createViewModel() = SetupAutoFillViewModel(
+        settingsRepository = settingsRepository,
+        authRepository = authRepository,
+    )
 }
 
 private const val DEFAULT_USER_ID = "userId"

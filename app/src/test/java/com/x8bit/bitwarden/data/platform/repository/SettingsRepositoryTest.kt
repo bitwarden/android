@@ -1148,6 +1148,33 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
         }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should store value of false to disk`() {
+        val userId = "userId"
+        settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
+    }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should store value of true to disk`() {
+        val userId = "userId"
+        settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
+    }
+
+    @Test
+    fun `getShowAutoFillSettingBadge get value of false if does not exist`() {
+        val userId = "userId"
+        assertFalse(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
+    }
+
+    @Test
+    fun `getShowAutoFillSettingBadge should return the value saved to disk`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
+        assertTrue(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
+    }
 }
 
 private const val USER_ID: String = "userId"
