@@ -856,6 +856,114 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `LifecycleResumedAction should use storage options derived state over VM state`() {
+        val initialState = initialUsernameState.copy(
+            selectedType = GeneratorState.MainType.Username(
+                selectedType = GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                    email = "currentEmail",
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+        fakeGeneratorRepository.saveUsernameGenerationOptions(
+            UsernameGenerationOptions(
+                type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            ),
+        )
+        val expectedState = initialState.copy(
+            selectedType = GeneratorState.MainType.Username(
+                selectedType = GeneratorState.MainType.Username.UsernameType.RandomWord(),
+            ),
+            generatedText = "randomWord",
+        )
+        viewModel.trySendAction(GeneratorAction.LifecycleResume)
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `LifecycleResumedAction should use passcode storage options derived state over VM state`() {
+        val initialState = initialPasscodeState
+        val viewModel = createViewModel(initialState)
+        fakeGeneratorRepository.savePasscodeGenerationOptions(
+            PasscodeGenerationOptions(
+                type = PasscodeGenerationOptions.PasscodeType.PASSPHRASE,
+                length = 14,
+                allowAmbiguousChar = false,
+                hasNumbers = false,
+                minNumber = 3,
+                hasUppercase = false,
+                minUppercase = null,
+                hasLowercase = false,
+                minLowercase = null,
+                allowSpecial = false,
+                minSpecial = 0,
+                numWords = 3,
+                wordSeparator = "-",
+                allowCapitalize = false,
+                allowIncludeNumber = false,
+            ),
+        )
+        val expectedState = initialState.copy(
+            selectedType = GeneratorState.MainType.Passcode(
+                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
+                    numWords = 3,
+                    minNumWords = 3,
+                    maxNumWords = 20,
+                    wordSeparator = '-',
+                    capitalize = false,
+                    capitalizeEnabled = true,
+                    includeNumber = false,
+                    includeNumberEnabled = true,
+
+                ),
+            ),
+            generatedText = "updatedPassphrase",
+        )
+        viewModel.trySendAction(GeneratorAction.LifecycleResume)
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `No loadOptions with default arguments should use VM state options derived state over VM state`() =
+        runTest {
+            val initialState = initialUsernameState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    selectedType = GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                        email = "currentEmail",
+                    ),
+                ),
+            )
+            val viewModel = createViewModel(initialState)
+            // the state is updated via the call to `loadOptions()` in the init block
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState.copy(generatedText = "email+abcd1234@address.com"),
+                    awaitItem(),
+                )
+                // Setting the repository options to RANDOM_WORD to show this does NOT get used.
+                fakeGeneratorRepository.saveUsernameGenerationOptions(
+                    UsernameGenerationOptions(
+                        type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+                    ),
+                )
+                // When this action is handled there will be another call to `loadOptions()`
+                // since we are using the default arguments with `shouldUseStorageOptions` set to
+                // false we should not expect a state update.
+                viewModel.trySendAction(
+                    GeneratorAction.Internal.PasswordGeneratorPolicyReceive(policies = emptyList()),
+                )
+                expectNoEvents()
+            }
+        }
+
     @Nested
     inner class PasswordActions {
         private val defaultPasswordState = createPasswordState()
