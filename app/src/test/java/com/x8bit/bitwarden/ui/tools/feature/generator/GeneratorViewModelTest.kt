@@ -886,6 +886,52 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `LifecycleResumedAction should use passcode storage options derived state over VM state`() {
+        val initialState = initialPasscodeState
+        val viewModel = createViewModel(initialState)
+        fakeGeneratorRepository.savePasscodeGenerationOptions(
+            PasscodeGenerationOptions(
+                type = PasscodeGenerationOptions.PasscodeType.PASSPHRASE,
+                length = 14,
+                allowAmbiguousChar = false,
+                hasNumbers = false,
+                minNumber = 3,
+                hasUppercase = false,
+                minUppercase = null,
+                hasLowercase = false,
+                minLowercase = null,
+                allowSpecial = false,
+                minSpecial = 0,
+                numWords = 3,
+                wordSeparator = "-",
+                allowCapitalize = false,
+                allowIncludeNumber = false,
+            ),
+        )
+        val expectedState = initialState.copy(
+            selectedType = GeneratorState.MainType.Passcode(
+                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
+                    numWords = 3,
+                    minNumWords = 3,
+                    maxNumWords = 20,
+                    wordSeparator = '-',
+                    capitalize = false,
+                    capitalizeEnabled = true,
+                    includeNumber = false,
+                    includeNumberEnabled = true,
+
+                ),
+            ),
+            generatedText = "updatedPassphrase",
+        )
+        viewModel.trySendAction(GeneratorAction.LifecycleResume)
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `No LifecycleResumedAction should use VM state options derived state over VM state`() {
         val initialState = initialUsernameState.copy(
             selectedType = GeneratorState.MainType.Username(
