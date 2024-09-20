@@ -60,7 +60,6 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.nonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
@@ -302,7 +301,7 @@ private fun CompleteRegistrationContent(
                     id = R.string.learn_about_other_ways_to_prevent_account_lockout,
                 ),
                 onClick = handler.onLearnToPreventLockout,
-                style = nonMaterialTypography.labelMediumProminent,
+                style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.standardHorizontalMargin(),
             )
         }

@@ -6,7 +6,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * Update Text UI common for all item types.
@@ -23,7 +22,7 @@ fun VaultItemUpdateText(
     ) {
         Text(
             text = header,
-            style = LocalNonMaterialTypography.current.labelMediumProminent,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
