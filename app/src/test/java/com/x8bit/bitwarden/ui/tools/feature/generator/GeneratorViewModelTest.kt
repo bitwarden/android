@@ -946,7 +946,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(
                     initialState.copy(generatedText = "email+abcd1234@address.com"),
-                    awaitItem()
+                    awaitItem(),
                 )
                 // Setting the repository options to RANDOM_WORD to show this does NOT get used.
                 fakeGeneratorRepository.saveUsernameGenerationOptions(
