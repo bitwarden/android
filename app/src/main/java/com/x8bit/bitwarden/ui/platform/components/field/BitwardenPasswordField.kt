@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
@@ -77,7 +78,7 @@ fun BitwardenPasswordField(
         modifier = modifier
             .tabNavigation()
             .focusRequester(focusRequester),
-        textStyle = MaterialTheme.typography.bodyLarge,
+        textStyle = LocalNonMaterialTypography.current.sensitiveInfoSmall,
         label = { Text(text = label) },
         value = value,
         onValueChange = onValueChange,
