@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 
 /**
@@ -140,7 +139,7 @@ fun VaultItemSecureNoteContent(
             ) {
                 Text(
                     text = "${stringResource(id = R.string.date_updated)}: ",
-                    style = LocalNonMaterialTypography.current.labelMediumProminent,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(

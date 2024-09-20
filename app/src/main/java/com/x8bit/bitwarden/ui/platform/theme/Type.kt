@@ -228,30 +228,6 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
-    bodySmallProminent = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W700,
-        letterSpacing = 0.4.sp,
-        lineHeightStyle = LineHeightStyle(
-            alignment = LineHeightStyle.Alignment.Center,
-            trim = LineHeightStyle.Trim.None,
-        ),
-        platformStyle = PlatformTextStyle(includeFontPadding = false),
-    ),
-    labelMediumProminent = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W600,
-        letterSpacing = 0.5.sp,
-        lineHeightStyle = LineHeightStyle(
-            alignment = LineHeightStyle.Alignment.Center,
-            trim = LineHeightStyle.Trim.None,
-        ),
-        platformStyle = PlatformTextStyle(includeFontPadding = false),
-    ),
     eyebrowMedium = TextStyle(
         fontSize = 12.sp,
         lineHeight = 18.sp,
@@ -269,8 +245,6 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
  * Models typography that live outside of the Material Theme spec.
  */
 data class NonMaterialTypography(
-    val bodySmallProminent: TextStyle,
-    val labelMediumProminent: TextStyle,
     val sensitiveInfoSmall: TextStyle,
     val sensitiveInfoMedium: TextStyle,
     val eyebrowMedium: TextStyle,
@@ -302,8 +276,6 @@ private fun Typography_preview() {
         Text(text = "Label small", style = Typography.labelSmall)
         Text(text = "Sensitive info small", style = nonMaterialTypography.sensitiveInfoSmall)
         Text(text = "Sensitive info medium", style = nonMaterialTypography.sensitiveInfoMedium)
-        Text(text = "Body small prominent", style = nonMaterialTypography.bodySmallProminent)
-        Text(text = "Label medium prominent", style = nonMaterialTypography.labelMediumProminent)
         Text(text = "Eyebrow medium", style = nonMaterialTypography.eyebrowMedium)
     }
 }
