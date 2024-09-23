@@ -50,6 +50,7 @@
   <string name="account_already_added">A fiók már hozzáadásra került.</string>
   <string name="switch_to_already_added_account_confirmation">Szeretnénk most átkapcsolni erre?</string>
   <string name="master_password">Mesterjelszó</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Továbbiak</string>
   <string name="my_vault">Saját széf</string>
   <string name="authenticator">Hitelesítő</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Egy jó értékeléssel mindig segíted a munkánkat!</string>
   <string name="regenerate_password">Jelszó újragenerálása</string>
   <string name="retype_master_password">Mesterjelszó ismételt beírása</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Keresés a széfben</string>
   <string name="security">Biztonság</string>
   <string name="select">Kijelölés</string>
@@ -328,7 +330,7 @@
   <string name="no_items_folder">Nincsenek elemek ebben a mappában.</string>
   <string name="no_items_trash">Nincs elem a lomtárban.</string>
   <string name="autofill_accessibility_service">Automatikus kitöltés akadálymentesítő szolgáltatás</string>
-  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+  <string name="autofill_accessibility_summary">Segítségnyújtás a felhasználónév és jelszó mezők kitöltésében más alkalmazásokban és a weben.</string>
   <string name="autofill_service_description">A Bitwarden automatikus kitöltési szolgáltatása az Android automatikus kitöltő keretrendszerét használja a bejelentkezési adatok, hitelkártyaadatok és azonosítóadatok kitöltésére az eszközén telepített más alkalmazásokban.</string>
   <string name="bitwarden_autofill_service_description">A Bitwarden automatikus kitöltési szolgáltatás használata a bejelentkezési-, hitelkártya- és azonosítóadatok kitöltéséhez más alkalmazásokban.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Automatikus kitöltés beállításainak megnyitása</string>
@@ -541,6 +543,7 @@
   <string name="accessibility_description2">Használjuk a Bitwarden Kisegítő Szolgáltatást a bejelentkezések automatikus kitöltéséhez az alkalmazásokban és az interneten. (Megköveteli a Felülrajzolás engedélyezését is)</string>
   <string name="accessibility_description3">Használjuk a Bitwarden Kisegítő Szolgáltatást az Automatikus kitöltés gyorsműveleti csempe használatához és/vagy egy felugró ablak megjelenítéséhez a Felülrajzolás használatával (ha engedélyezve van).</string>
   <string name="accessibility_description4">Szükséges az Automatikus kitöltés gyorsműveleti csempe használatához, vagy az automatikus kitöltési szolgáltatás bővítéséhez a Felülrajzolás használatával (ha engedélyezve van).</string>
+  <string name="accessibility_description5">Az automatikus kitöltési gyorsművelet csempe használatához szükséges.</string>
   <string name="draw_over">Felülrajzolás használata</string>
   <string name="draw_over_description">Engedélyezve a Bitwarden Akadálymentes Szolgáltatás egy felbukkanó ablakot jelenít meg, amikor a bejelentkezési mezők kiválasztottak.</string>
   <string name="draw_over_description2">Engedélyezve a Bitwarden Kisegítő Szolgáltatás egy felbukkanó ablakot jelenít meg a bejelentkezések automatikus kitöltéséhez, amikor a bejelentkezési mezők kiválasztottak.</string>
@@ -1000,4 +1003,8 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">Mostantól az automatikus kitöltéssel bejelentkezhetünk az alkalmazásokba és webhelyekre a mentett jelszavakkal. Most mindent felfedezhetünk, amit a Bitwarden kínál.</string>
+  <string name="youre_all_set">Készen is vagyunk!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

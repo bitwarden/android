@@ -50,6 +50,7 @@
   <string name="account_already_added">Rekening reeds toegevoeg</string>
   <string name="switch_to_already_added_account_confirmation">Wil u nou daarheen wissel?</string>
   <string name="master_password">Hoofwagwoord</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Nog</string>
   <string name="my_vault">My kluis</string>
   <string name="authenticator">Waarmerker</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Help ons asb. met ’n gunstige resensie!</string>
   <string name="regenerate_password">Hergenereer wagwoord</string>
   <string name="retype_master_password">Tik weer hoofwagwoord in</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Deursoek kluis</string>
   <string name="security">Sekuriteit</string>
   <string name="select">Kies</string>
@@ -542,6 +544,7 @@ Skandering gebeur outomaties.</string>
   <string name="accessibility_description2">Gebruik die Bitwarden toeganklikheidsdiens om u aantekeninge oor toeps en die web heen in te vul. (Vereis dat Bo-op ook geaktiveer is)</string>
   <string name="accessibility_description3">Gebruik die Bitwarden Toeganklikheidsdiens om die Outovul-kitsaksieteël te gebruik en/of ’n opwipvenster met Bo-op (indien geaktiveer) te toon.</string>
   <string name="accessibility_description4">Word vereis om die Outovul-kitsaksieteël te gebruik of om die Outovuldiens aan te vul deur Bo-op (indien geaktiveer) te gebruik.</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Gebruik Bo-op</string>
   <string name="draw_over_description">Indien dit geaktiveer is kan die Bitwarden Toeganklikheidsdiens ’n opwipvenster toon wanneer aantekenvelde gekies word.</string>
   <string name="draw_over_description2">Indien geaktiveer sal die Bitwarden Toeganklikheidsdiens ’n opwipvenster toon wanneer aantekenvelde gekies word om te help met outovul van aantekeninge.</string>
@@ -1001,4 +1004,8 @@ Wil u na die rekening omskakel?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

@@ -27,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithRe
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -351,7 +350,7 @@ private fun PasswordHistoryCount(
     ) {
         Text(
             text = "${stringResource(id = R.string.password_history)}: ",
-            style = LocalNonMaterialTypography.current.labelMediumProminent,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(

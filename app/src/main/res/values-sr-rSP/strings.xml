@@ -50,6 +50,7 @@
   <string name="account_already_added">Налог је већ додат</string>
   <string name="switch_to_already_added_account_confirmation">Да ли желите да га отворите сада?</string>
   <string name="master_password">Главна Лозинка</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Више</string>
   <string name="my_vault">Мој Сеф</string>
   <string name="authenticator">Аутентификатор</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Молимо вас да размотрите да нам помогнете уз добру оцену!</string>
   <string name="regenerate_password">Поново генериши лозинку</string>
   <string name="retype_master_password">Поновити Главну Лозинку</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Претражи сеф</string>
   <string name="security">Сигурност</string>
   <string name="select">Изабери</string>
@@ -329,7 +331,7 @@
   <string name="no_items_folder">Нема ставке у овој фасцикли.</string>
   <string name="no_items_trash">У отпад нема ставке.</string>
   <string name="autofill_accessibility_service">Услуга приступачности ауто-попуњавања</string>
-  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+  <string name="autofill_accessibility_summary">Помозите при попуњавању поља за корисничко име и лозинку у другим апликацијама и на вебу.</string>
   <string name="autofill_service_description">Bitwarden услуга ауто-пуњења користи Android Autofill Framework да би помогао у попуњавању података за пријављивање, кредитне картице и податке о идентитету у друге апликације на уређају.</string>
   <string name="bitwarden_autofill_service_description">Употребите Bitwarden услуга ауто-пуњења да би попуњавало податке за пријављивање, кредитне картице и податке о идентитету у друге апликације.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Отворити подешавања ауто-пуњења</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">Користите Bitwarden услугу приступачности да бисте ауто-пунили своје пријаве у апликацијама и на вебу. (Захтева и омогућавање превлачења)</string>
   <string name="accessibility_description3">Употребите Bitwarden сервис приступачности за уотребу Ауто-пуњење брзе акције, и/или приказати искачући прозор помоћу Превлачење (ако је омогућено).</string>
   <string name="accessibility_description4">Потребно за употребу Љуто-пуњење брзе акције, или са се повећа сервис са превачење (ако је омогућено).</string>
+  <string name="accessibility_description5">Неопходно је за коришћење плочице брзе акције ауто-попуњавања.</string>
   <string name="draw_over">Употреби превлачење</string>
   <string name="draw_over_description">Када је омогућено, омогућава Bitwarden-а да приказује искачући прозор када су изабрана поља за пријављивање.</string>
   <string name="draw_over_description2">Ако је омогућено, Bitwarden ће приказати искачући прозор када су изабрана поља за пријаву за помагање у ауто-пуњење ваших пријава.</string>
@@ -996,10 +999,14 @@
   <string name="restart_registration">Поново покрените регистрацију</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
-  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
-  <string name="turn_on_autofill">Turn on autofill</string>
-  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
-  <string name="turn_on_later">Turn on later</string>
-  <string name="turn_on_autofill_later">Turn on autofill later?</string>
-  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Дошло је до проблема са валидацијом регистрационог токена.</string>
+  <string name="turn_on_autofill">Омогућите ауто-пуњење</string>
+  <string name="use_autofill_to_log_into_your_accounts">Користите ауто-пуњење да бисте се пријавили на своје налоге једним додиром.</string>
+  <string name="turn_on_later">Упалити касније</string>
+  <string name="turn_on_autofill_later">Упалити ауто-пуњење касније?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Можете се вратити да бисте завршили овај корак у било ком тренутку у подешавањима.</string>
+  <string name="what_bitwarden_has_to_offer">Сада можете да користите аутоматско попуњавање за пријављивање у апликације и веб локације помоћу сачуваних лозинки. Сада можете истражити све остало што Bitwarden може да понуди.</string>
+  <string name="youre_all_set">Спремни сте!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

@@ -50,6 +50,7 @@
   <string name="account_already_added">החשבון כבר קיים</string>
   <string name="switch_to_already_added_account_confirmation">האם תרצה לעבור לחשבון כעת?</string>
   <string name="master_password">סיסמה ראשית</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">הגדרות נוספות</string>
   <string name="my_vault">הכספת שלי</string>
   <string name="authenticator">מאמת</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">אם נהנית מהתוכנה, בבקשה דרג את התוכנה וכתוב דירוג עם חוות דעת טובה!</string>
   <string name="regenerate_password">צור סיסמה חדשה</string>
   <string name="retype_master_password">הקלד שוב סיסמה הראשית</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">חיפוש בכספת</string>
   <string name="security">אבטחה</string>
   <string name="select">בחר</string>
@@ -544,6 +546,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="accessibility_description2">השתמש בשירות הנגישות של Bitwarden עבור השלמה אוטומטית בחיבור לאתרים בתוך אפליקציות ואתרים ברשת. (מחייב הפעלה של אופציית ציור-על = Draw-Over)</string>
   <string name="accessibility_description3">השתמש בשירות הנגישות של Bitwarden עבור הצגת מסגרת ההשלמה האוטומטית, ו\או עבור הצגת חלון צף בעזרת Draw-Over (אם אפשרות זו פועלת)</string>
   <string name="accessibility_description4">יש להשתמש בחלון פעולה-מהירה למילוי אוטומטי, או להציג את חלון שירות המילוי האוטומטי באמצעות \'ציור מעל אפליקציות אחרות\' (אם מאופשר).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">השתמש ב\"ציור מעל אפליקציות\"</string>
   <string name="draw_over_description">כאשר מופעל, שירות הנגישות של Bitwarden יוכל להציג חלון קופץ בלחיצה על שדות שם משתמש וסיסמה.</string>
   <string name="draw_over_description2">אם מאופשר, שירות הנגישות של Bitwarden יציג חלון קופץ כשבוחרים שדות שם משתמש וסיסמה כדי לסייע במילוי-אוטומטי של פרטי החיבור שלך.</string>
@@ -1004,4 +1007,8 @@ Do you want to switch to this account?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

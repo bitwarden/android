@@ -50,6 +50,7 @@
   <string name="account_already_added">Уліковы запіс ужо дададзены</string>
   <string name="switch_to_already_added_account_confirmation">Хочаце пераключыцца на яго зараз?</string>
   <string name="master_password">Асноўны пароль</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Больш</string>
   <string name="my_vault">Маё сховішча</string>
   <string name="authenticator">Аўтэнтыфікатар</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Падумайце пра тое, каб дапамагчы нам добрым водгукам!</string>
   <string name="regenerate_password">Паўторна генерыраваць пароль</string>
   <string name="retype_master_password">Увядзіце асноўны пароль паўторна</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Пошук у сховішчы</string>
   <string name="security">Бяспека</string>
   <string name="select">Выбраць</string>
@@ -541,6 +543,7 @@
   <string name="accessibility_description2">Выкарыстоўвайце службу спецыяльных магчымасцей Bitwarden для аўтазапаўнення вашых лагінаў у разнастайных праграмах (неабходна ўключыць функцыю \"Па-над усімі праграмамі\").</string>
   <string name="accessibility_description3">Выкарыстоўвайце службу спецыяльных магчымасцей Bitwarden, каб скарыстацца панэллю хуткага аўтазапаўнення, а таксама для паказу ўсплывальнага акна з выкарыстаннем параметра \"Па-над усімі праграмамі\" (калі ён уключаны).</string>
   <string name="accessibility_description4">Патрабуецца для выкарыстання панэлі хуткага аўтазапаўнення або для дапаўнення службы аўтазапаўнення пры выкарыстанні параметра \"Па-над усімі праграмамі\" (калі ён уключаны).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Выкарыстоўваць \"Па-над усімі праграмамі\"</string>
   <string name="draw_over_description">Калі ўключана, дазваляе службе спецыяльных магчымасцей Bitwarden паказваць усплывальную панэль пры выбары палёў уваходу.</string>
   <string name="draw_over_description2">Калі ўключана, служба спецыяльных магчымасцей Bitwarden пакажа ўсплывальнае апавяшчэнне пры выбары палёў для ўваходу, каб дапамагчы аўтаматычна запоўніць вашы ўліковыя даныя.</string>
@@ -1000,4 +1003,8 @@
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

@@ -78,7 +78,7 @@ class SetupAutoFillViewModel @Inject constructor(
     }
 
     private fun handleTurnOnLaterConfirmClick() {
-        // TODO PM-10631 record user chose to turn on later for settings badging.
+        settingsRepository.storeShowAutoFillSettingBadge(state.userId, true)
         updateOnboardingStatusToNextStep()
     }
 

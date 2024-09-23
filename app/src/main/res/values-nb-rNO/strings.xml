@@ -50,6 +50,7 @@
   <string name="account_already_added">Kontoen er allerede lagt til</string>
   <string name="switch_to_already_added_account_confirmation">Ønsker du å bytte til den nå?</string>
   <string name="master_password">Hovedpassord</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Mer</string>
   <string name="my_vault">Mitt hvelv</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Tenk gjerne på om du vil skrive en anmeldelse om oss!</string>
   <string name="regenerate_password">Generer nytt passord</string>
   <string name="retype_master_password">Skriv inn hovedpassordet på nytt</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Søk i hvelvet</string>
   <string name="security">Sikkerhet</string>
   <string name="select">Velg</string>
@@ -542,6 +544,7 @@ Skanning skjer automatisk.</string>
   <string name="accessibility_description2">Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger på apper og på nettet. (Krever Draw-Over for å også aktiveres)</string>
   <string name="accessibility_description3">Bruk Bitwarden sin tilgjengelighetstjeneste for å bruke Autofill Quick-Action Tile, og/eller vis et popup ved å bruke Draw-Over (hvis aktivert).</string>
   <string name="accessibility_description4">Påkrevd for å bruke Autofill Quick-Action Tile, eller for å utvide Autofill Service ved å bruke Draw-Over (hvis aktivert).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Bruk Draw-Ower</string>
   <string name="draw_over_description">Når dette er aktivert, tillater Bitwarden å vise et sprettoppvindu når innloggingsfelt velges.</string>
   <string name="draw_over_description2">Dersom det er aktivert, vil Bitwarden sin tilgjengelighetstjeneste vise en popup når innloggingsfelt er valgt for å hjelpe deg med automatisk utfylling av dine innlogginger.</string>
@@ -1001,4 +1004,8 @@ Vil du bytte til denne kontoen?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

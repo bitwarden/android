@@ -50,6 +50,7 @@
   <string name="account_already_added">Cont deja adăugat</string>
   <string name="switch_to_already_added_account_confirmation">Vreți să comutați la el acum?</string>
   <string name="master_password">Parolă principală</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Mai multe</string>
   <string name="my_vault">Seiful meu</string>
   <string name="authenticator">Autentificator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</string>
   <string name="regenerate_password">Regenerare parolă</string>
   <string name="retype_master_password">Reintroducere parolă principală</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Căutare în seif</string>
   <string name="security">Securitate</string>
   <string name="select">Selectare</string>
@@ -542,6 +544,7 @@ Scanarea se va face automat.</string>
   <string name="accessibility_description2">Utilizați Serviciul de Accesibilitate Bitwarden pentru auto-completarea conectărilor dvs. în aplicații și pe web. (Necesită de asemenea să activați \"Afișare peste\")</string>
   <string name="accessibility_description3">Folosiți Serviciul de Accesibilitate Bitwarden pentru a utiliza fila \"Acțiune rapidă de auto-completare\" și/sau a afișa o fereastră pop-up folosind \"Afișare peste\" (dacă este activat).</string>
   <string name="accessibility_description4">Necesar la folosirea filei \"Acțiune rapidă de auto-completare\" sau la îmbunătățirea Serviciului de auto-completare folosind \"Afișare peste\" (dacă este activat).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Folosire „Afișare peste”</string>
   <string name="draw_over_description">Permite Serviciului de accesibilitate Bitwarden să afișeze o fereastră pop-up atunci când sunt selectate câmpurile de autentificare.</string>
   <string name="draw_over_description2">Dacă este activat, Serviciul de Accesibilitate Bitwarden va afișa o fereastră pop-up când câmpurile de conectare sunt selectate pentru a ajuta la auto-completare datelor de autentificare.</string>
@@ -1001,4 +1004,8 @@ Doriți să comutați la acest cont?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

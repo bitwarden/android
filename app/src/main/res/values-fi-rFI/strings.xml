@@ -50,6 +50,7 @@
   <string name="account_already_added">Tili on jo lisätty</string>
   <string name="switch_to_already_added_account_confirmation">Haluatko vaihtaa siihen nyt?</string>
   <string name="master_password">Pääsalasana</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Lisää</string>
   <string name="my_vault">Oma holvi</string>
   <string name="authenticator">Todentaja</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Harkitse tukemistamme hyvällä arvostelulla!</string>
   <string name="regenerate_password">Luo uusi salasana</string>
   <string name="retype_master_password">Syötä pääsalasana uudelleen</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Etsi holvista</string>
   <string name="security">Suojaus</string>
   <string name="select">Valitse</string>
@@ -329,7 +331,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="no_items_folder">Kansiossa ei ole kohteita.</string>
   <string name="no_items_trash">Roskakorissa ei ole kohteita.</string>
   <string name="autofill_accessibility_service">Automaattitäytön esteettömyyspalvelu</string>
-  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+  <string name="autofill_accessibility_summary">Avusta muiden sovellusten ja verkkosivustojen käyttäjätunnus- ja salasanakenttien täytössä.</string>
   <string name="autofill_service_description">Bitwardenin automaattitäytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen täyttöön laitteen muissa sovelluksissa.</string>
   <string name="bitwarden_autofill_service_description">Käytä Bitwardenin automaattitäytön palvelua kirjautumistietojen täyttöön muissa sovelluksissa.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Avaa \"Automaattinen täyttö -palvelu\" -asetukset</string>
@@ -542,6 +544,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="accessibility_description2">Käytä Bitwardenin esteettömyyspalvelua kirjautumistietojen automaattiseen täyttöön sovelluksissa ja verkkosivustoilla (myös \"Näkyminen muiden päällä\" -asetuksen on oltava käytössä).</string>
   <string name="accessibility_description3">Käytä Bitwardenin esteettömyyspalvelua käyttääksesi Automaattisen täytön pikavalintapalkkia ja/tai näytä palkki käyttäen \"Näkyminen muiden päällä\" -asetusta.</string>
   <string name="accessibility_description4">Vaaditaan automaattisen täytön pikavalintapalkin käyttöön tai automaattisen täytön laajentamiseen \"Näkyminen muiden päällä\" -asetuksella.</string>
+  <string name="accessibility_description5">Vaaditaan automaattitäytön pikavalintapalkin käyttöön.</string>
   <string name="draw_over">Näkyminen muiden päällä</string>
   <string name="draw_over_description">Sallii Bitwardenin esteettömyyspalvelun näyttää pikavalintapalkin aktiivisten kirjautumiskenttien ohessa.</string>
   <string name="draw_over_description2">Kun käytössä, Bitwardenin esteettömyyspalvelu näyttää aktiivisten kirjautumiskenttien ohessa pikavalintapalkin helpottaakseen kirjautumistietojen automaattista täyttöä.</string>
@@ -993,12 +996,16 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="expired_link">Vanhentunut linkki</string>
   <string name="please_restart_registration_or_try_logging_in">Aloita rekisteröityminen alusta tai yritä kirjautua sisään uudelleen. Sinulla saattaa jo olla tili.</string>
   <string name="restart_registration">Aloita rekisteröityminen alusta</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
-  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
-  <string name="turn_on_autofill">Turn on autofill</string>
-  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
-  <string name="turn_on_later">Turn on later</string>
-  <string name="turn_on_autofill_later">Turn on autofill later?</string>
-  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="authenticator_sync">Authenticator-synkronointi</string>
+  <string name="allow_bitwarden_authenticator_syncing">Salli Bitwarden Authenticator -synkronointi</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Ongelma vahvistettaessa rekisteröintitunnistetta.</string>
+  <string name="turn_on_autofill">Kytke automaattitäyttö käyttöön</string>
+  <string name="use_autofill_to_log_into_your_accounts">Automaattitäytön avulla kirjaudut tileillesi yhdellä napautuksella.</string>
+  <string name="turn_on_later">Kytke käyttöön myöhemmin</string>
+  <string name="turn_on_autofill_later">Kytketäänkö automaattitäyttö käyttöön myöhemmin?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Asetuksista voit palata viimeistelemään tämän vaiheen milloin tahansa.</string>
+  <string name="what_bitwarden_has_to_offer">Nyt voit kirjautua sovelluksiin ja verkkosivustoille tallennetuilla salasanoillasi, ja olet vapaa tutustumaan Bitwardenin muihin ominaisuuksiin.</string>
+  <string name="youre_all_set">Kaikki on valmista!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

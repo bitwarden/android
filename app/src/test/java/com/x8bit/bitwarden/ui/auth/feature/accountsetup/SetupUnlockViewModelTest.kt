@@ -21,6 +21,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -33,9 +34,13 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { setOnboardingStatus(userId = any(), status = any()) } just runs
     }
+
+    private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
         every { isUnlockWithPinEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
+        every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledStateFlow
+        every { storeShowUnlockSettingBadge(any(), any()) } just runs
     }
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
         every { getOrCreateCipher(userId = DEFAULT_USER_ID) } returns CIPHER
@@ -51,8 +56,10 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus`() = runTest {
+    fun `ContinueClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() =
+        runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify {
@@ -63,8 +70,10 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `SetUpLaterClick should call setOnboardingStatus`() = runTest {
+    fun `SetUpLaterClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() =
+        runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
         verify {
@@ -72,8 +81,39 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
+            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_USER_ID, true)
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled`() =
+        runTest {
+            mutableAutofillEnabledStateFlow.update { true }
+            val viewModel = createViewModel()
+            viewModel.trySendAction(SetupUnlockAction.ContinueClick)
+            verify {
+                authRepository.setOnboardingStatus(
+                    userId = DEFAULT_USER_ID,
+                    status = OnboardingStatus.FINAL_STEP,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled`() =
+        runTest {
+            mutableAutofillEnabledStateFlow.update { true }
+            val viewModel = createViewModel()
+            viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
+            verify {
+                authRepository.setOnboardingStatus(
+                    userId = DEFAULT_USER_ID,
+                    status = OnboardingStatus.FINAL_STEP,
+                )
+            }
+        }
 
     @Test
     fun `on UnlockWithBiometricToggle false should call clearBiometricsKey and update the state`() =

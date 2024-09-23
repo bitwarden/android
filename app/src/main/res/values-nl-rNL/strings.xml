@@ -50,6 +50,7 @@
   <string name="account_already_added">Account is al toegevoegd</string>
   <string name="switch_to_already_added_account_confirmation">Wil je er nu naar overschakelen?</string>
   <string name="master_password">Hoofdwachtwoord</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Meer</string>
   <string name="my_vault">Mijn kluis</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Help ons met een goede recensie!</string>
   <string name="regenerate_password">Opnieuw genereren</string>
   <string name="retype_master_password">Hoofdwachtwoord opnieuw invoeren</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Kluis doorzoeken</string>
   <string name="security">Beveiliging</string>
   <string name="select">Selecteren</string>
@@ -329,7 +331,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="no_items_folder">Er zijn geen items in deze map.</string>
   <string name="no_items_trash">Er zijn geen items in de prullenbak.</string>
   <string name="autofill_accessibility_service">Toegankelijkheidsdienst</string>
-  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+  <string name="autofill_accessibility_summary">Help met het invullen van velden voor gebruikersnaam en wachtwoord in andere apps en op het web.</string>
   <string name="autofill_service_description">De Dienst Automatisch aanvullen van Bitwarden gebruikt het Android Autofill Framework om je te helpen met het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op je apparaat.</string>
   <string name="bitwarden_autofill_service_description">Gebruik de Bitwarden Dienst Automatische aanvullen voor het automatisch invullen van je inloggevens.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Open instellingen voor automatisch invullen</string>
@@ -542,6 +544,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="accessibility_description2">Gebruik de Bitwarden Toegankelijkheidsservice voor het automatisch aanvullen van je inloggegevens automatisch in apps en het web. (Vereist dat Bovenop weergeven ook is ingeschakeld)</string>
   <string name="accessibility_description3">Gebruik de Bitwarden Toegankelijkheidsservice voor het aanbieden van Automatisch aanvullen en/of een popup bovenop aan te bieden (indien ingeschakeld).</string>
   <string name="accessibility_description4">Dit is vereist om Automatisch aanvullen aan te bieden of om Automatisch Aanvullen bovenop weer te geven (indien ingeschakeld).</string>
+  <string name="accessibility_description5">Vereist voor het gebruik van Autofill Quick-Action Tile.</string>
   <string name="draw_over">Bovenop weergeven gebruiken</string>
   <string name="draw_over_description">Als dit is ingeschakeld, kan de Bitwarden Toegankelijkheidsservice een popup bij inlogvelden weergeven.</string>
   <string name="draw_over_description2">Indien ingeschakeld, zal de Bitwarden Toegankelijkheidsservice een popup weergeven bij inlogvelden om te helpen met het automatisch aanvullen van inloggegevens.</string>
@@ -1001,4 +1004,8 @@ Wilt u naar dit account wisselen?</string>
   <string name="turn_on_later">Later inschakelen</string>
   <string name="turn_on_autofill_later">Automatisch aanvullen later inschakelen?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Je kunt deze stap op ieder moment afronden via Instellingen.</string>
+  <string name="what_bitwarden_has_to_offer">Je kunt nu automatisch invullen om in te loggen op apps en websites met je opgeslagen wachtwoorden. Nu kun je alles ontdekken wat Bitwarden te bieden heeft.</string>
+  <string name="youre_all_set">Je bent helemaal klaar!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

@@ -50,6 +50,7 @@
   <string name="account_already_added">이미 추가된 계정입니다.</string>
   <string name="switch_to_already_added_account_confirmation">해당 계정으로 전환할까요?</string>
   <string name="master_password">마스터 비밀번호</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">자세히</string>
   <string name="my_vault">내 보관함</string>
   <string name="authenticator">인증기</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">좋은 리뷰를 남겨 저희를 도와주세요!</string>
   <string name="regenerate_password">비밀번호 재생성</string>
   <string name="retype_master_password">마스터 비밀번호 다시 입력</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">보관함 검색</string>
   <string name="security">보안</string>
   <string name="select">선택</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">앱과 웹에 로그인하기 위해 Bitwarden Accessibility Service를 사용해주세요. (다른 앱 위에 표시 활성화 필요)</string>
   <string name="accessibility_description3">Autofill Quick-Action Tile 및 (활성화 시) 다른 앱 위에 표시를 사용한 팝업을 위해 Bitwarden Accessibility Service를 사용해주세요.</string>
   <string name="accessibility_description4">Autofill Quick-Action Tile을 사용하기 위해 필요합니다. 또는 (활성화 시) 다른 앱 위에 표시를 사용해서 자동 채우기 서비스를 구현합니다.</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">다른 앱 위에 그리기 사용</string>
   <string name="draw_over_description">활성화되면 Bitwarden Accessibility Service가 로그인 부분에 팝업을 표시합니다.</string>
   <string name="draw_over_description2">활성화되면 Bitwarden Accessibility Service가 로그인을 자동으로 채우기 위해 로그인 부분에 팝업을 표시합니다.</string>
@@ -1001,4 +1004,8 @@
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

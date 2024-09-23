@@ -95,6 +95,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleSetUpLaterClick() {
+        settingsRepository.storeShowUnlockSettingBadge(state.userId, true)
         updateOnboardingStatusToNextStep()
     }
 
@@ -176,7 +177,12 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun updateOnboardingStatusToNextStep() {
-        authRepository.setOnboardingStatus(state.userId, OnboardingStatus.AUTOFILL_SETUP)
+        val nextStep = if (settingsRepository.isAutofillEnabledStateFlow.value) {
+            OnboardingStatus.FINAL_STEP
+        } else {
+            OnboardingStatus.AUTOFILL_SETUP
+        }
+        authRepository.setOnboardingStatus(state.userId, nextStep)
     }
 }
 

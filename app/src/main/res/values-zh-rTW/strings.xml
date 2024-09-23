@@ -50,6 +50,7 @@
   <string name="account_already_added">已新增帳戶</string>
   <string name="switch_to_already_added_account_confirmation">您想現在就切換過去嗎？</string>
   <string name="master_password">主密碼</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">更多</string>
   <string name="my_vault">我的密碼庫</string>
   <string name="authenticator">驗證器</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">請給予我們好評！</string>
   <string name="regenerate_password">重新產生密碼</string>
   <string name="retype_master_password">再次輸入主密碼</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">搜尋密碼庫</string>
   <string name="security">安全</string>
   <string name="select">選擇</string>
@@ -542,6 +544,7 @@
   <string name="accessibility_description2">使用 Bitwarden 無障礙服務在應用程式和網站上自動填入您的登入資料。（需同時啟用 Draw-Over 功能）</string>
   <string name="accessibility_description3">使用 Bitwarden 無障礙服務來使用自動填入快速控制圖塊，和/或使用 Draw-Over 來顯示彈出式視窗（如果已開啟）。</string>
   <string name="accessibility_description4">需要使用自動填入快速控制圖塊，或透過使用 Draw-Over（如果已開啟）來增強自動填入服務。</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">使用 Draw-Over</string>
   <string name="draw_over_description">啟用後，在選擇登入欄位時將允許 Bitwarden 無障礙服務顯示彈出式視窗。</string>
   <string name="draw_over_description2">若啟用，當選擇登入欄位自動填入您的登入資料時，Bitwarden 無障礙服務將顯示一個彈出式視窗。</string>
@@ -1001,4 +1004,8 @@
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>
