@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -247,8 +246,6 @@ private fun AccessibilityAutofillSwitch(
     onCheckedChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: This should be visible in all variants once the feature is complete (PM-12014)
-    if (!BuildConfig.DEBUG) return
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
     BitwardenWideSwitch(
         label = stringResource(id = R.string.accessibility),

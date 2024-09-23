@@ -50,6 +50,7 @@
   <string name="account_already_added">Akun telah ditambahkan</string>
   <string name="switch_to_already_added_account_confirmation">Apakah anda ingin beralih akun sekarang?</string>
   <string name="master_password">Kata Sandi Utama</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Lainnya</string>
   <string name="my_vault">Brankas Saya</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Mohon pertimbangkan membantu kami dengan ulasan yang baik!</string>
   <string name="regenerate_password">Buat Ulang Sandi</string>
   <string name="retype_master_password">Ketik Ulang Sandi Utama</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Cari Brankas</string>
   <string name="security">Keamanan</string>
   <string name="select">Pilih</string>
@@ -329,6 +331,7 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="no_items_folder">Tidak ada item di folder ini.</string>
   <string name="no_items_trash">Tidak ada item di sampah.</string>
   <string name="autofill_accessibility_service">Layanan Aksesibilitas Isi Otomatis</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Layanan pengisian otomatis bitwarden menggunakan Kerangka Kerja Pengisian Otomatis Android untuk membantu dalam mengisi info masuk, kartu kredit, dan informasi identitas ke aplikasi lain di perangkat Anda.</string>
   <string name="bitwarden_autofill_service_description">Gunakan layanan pengisian otomatis bitwarden untuk mengisi info masuk, kartu kredit, dan informasi identitas ke aplikasi lainnya.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Buka Setelan Isi Otomatis</string>
@@ -541,6 +544,7 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="accessibility_description2">Gunakan Layanan Aksesibilitas Bitwarden untuk mengisi login Anda secara otomatis di seluruh aplikasi dan web. (Membutuhkan Draw-Over untuk diaktifkan juga)</string>
   <string name="accessibility_description3">Gunakan Layanan Aksesibilitas Bitwarden untuk menggunakan Ubin Tindakan Cepat IsiOtomatis, dan / atau tampilkan munculan menggunakan Draw-Over (jika diaktifkan).</string>
   <string name="accessibility_description4">Diperlukan untuk menggunakan Ubin Tindakan Cepat IsiOtomatis, atau untuk menambah Layanan IsiOtomatis dengan menggunakan Draw-Over (jika diaktifkan).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Gunakan Draw-Over</string>
   <string name="draw_over_description">Saat diaktifkan, izinkan Layanan Aksesibilitas Bitwarden untuk menampilkan munculan saat kolom login dipilih.</string>
   <string name="draw_over_description2">Jika diaktifkan, Layanan Aksesibilitas Bitwarden akan menampilkan munculan ketika kolom login dipilih untuk membantu pengisian login Anda secara otomatis.</string>
@@ -994,4 +998,14 @@ Do you want to switch to this account?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

@@ -94,7 +94,7 @@ fun LoginScreen(
             }
 
             is LoginEvent.NavigateToTwoFactorLogin -> {
-                onNavigateToTwoFactorLogin(event.emailAddress, event.base64EncodedPassword)
+                onNavigateToTwoFactorLogin(event.emailAddress, event.password)
             }
 
             is LoginEvent.ShowToast -> {

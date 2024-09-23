@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
-import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
@@ -72,7 +71,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 isRememberMeEnabled = false,
                 captchaToken = null,
                 email = args.emailAddress,
-                password = args.base64EncodedPassword?.base64UrlDecodeOrNull(),
+                password = args.password,
             )
         },
 ) {
@@ -209,7 +208,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 sendEvent(
                     event = authUrl
                         ?.let { TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)) }
-                        ?: TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
+                        ?: TwoFactorLoginEvent.ShowToast(R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText()),
                 )
             }
 

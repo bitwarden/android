@@ -46,6 +46,7 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     fun `Turning on autofill should send AutofillServiceChanged with value of true`() {
         composeTestRule
             .onNodeWithText("Auto-fill services")
+            .performScrollTo()
             .performClick()
 
         verify {
@@ -208,4 +209,8 @@ class SetupAutofillScreenTest : BaseComposeTest() {
     }
 }
 
-private val DEFAULT_STATE = SetupAutoFillState(dialogState = null, autofillEnabled = false)
+private val DEFAULT_STATE = SetupAutoFillState(
+    userId = "userId",
+    dialogState = null,
+    autofillEnabled = false,
+)

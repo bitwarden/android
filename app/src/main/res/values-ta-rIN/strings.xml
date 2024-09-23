@@ -50,6 +50,7 @@
   <string name="account_already_added">கணக்கு ஏற்கனவே சேர்க்கப்பட்டது</string>
   <string name="switch_to_already_added_account_confirmation">அதற்கு இப்போது நிலைமாற விரும்புகிறீரா?</string>
   <string name="master_password">பிரதான கடவுச்சொல்</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">மேலும்</string>
   <string name="my_vault">என் பெட்டகம்</string>
   <string name="authenticator">அங்கீகரிப்பாளர்</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">ஒரு நல்ல விமர்சனம் மூலம் எங்களுக்கு உதவ தயவுசெய்து கருதுங்கள்!</string>
   <string name="regenerate_password">கடவுச்சொல்லை மீண்டுமுருவாக்கு</string>
   <string name="retype_master_password">பிரதான கடவுச்சொல்லை மீண்டும் தட்டு</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">பெட்டகத்தைத் தேடுக</string>
   <string name="security">பாதுகாப்பு</string>
   <string name="select">தேர்ந்தெடு</string>
@@ -329,6 +331,7 @@
   <string name="no_items_folder">இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="autofill_accessibility_service">தன்னிரப்பி அணுகல்தன்மை சேவை</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwarden தன்னிரப்பி சேவை உள்நுழைவு தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்ப உதவ Android தன்னிரப்பி சட்டகத்தைப் பயன்படுத்துகிறது.</string>
   <string name="bitwarden_autofill_service_description">பிற செயலிகளினுள்ளே உள்நுழைவு தகவலை நிரப்ப Bitwarden தன்னிரப்பி சேவை பயன்படுத்து.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">தன்னிரப்பல் அமைவுகளைத் திற</string>
@@ -541,6 +544,7 @@
   <string name="accessibility_description2">செயலிகளிலும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து. (மேலே-வரைதலும் இயங்க வேண்டும்)</string>
   <string name="accessibility_description3">தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்த மற்றும்/அல்லது மேலே-வரைதல்(இயங்கினால்) கொண்டு popup காட்ட Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து.</string>
   <string name="accessibility_description4">தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்தவோ மேலே-வரைதல்(இயங்கினால்) கொண்டு தன்னிரப்பிச் சேவையை ஆதரவுமிகுதியாக்கவோ தேவைப்படுகிறது.</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">மேலே-வரைதல் பயன்படுத்து</string>
   <string name="draw_over_description">இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது ஒரு popup காண்பிக்க  Bitwarden அணுகல்தன்மை சேவையை அனுமதிக்கிறது.</string>
   <string name="draw_over_description2">இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது உமது உள்நுழைவுகளைத் தன்னிரப்ப உதவ Bitwarden அணுகல்தன்மை சேவை ஒரு popup காண்பிக்கும்.</string>
@@ -994,4 +998,14 @@
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

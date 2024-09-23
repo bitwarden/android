@@ -50,6 +50,7 @@
   <string name="account_already_added">アカウントは追加済みです</string>
   <string name="switch_to_already_added_account_confirmation">今すぐ切り替えますか？</string>
   <string name="master_password">マスターパスワード</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">詳細</string>
   <string name="my_vault">保管庫</string>
   <string name="authenticator">認証システム</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">良いレビューで私たちを助けてください！</string>
   <string name="regenerate_password">パスワードを再生成</string>
   <string name="retype_master_password">マスターパスワードを再入力</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">保管庫を検索</string>
   <string name="security">セキュリティ</string>
   <string name="select">選択</string>
@@ -329,6 +331,7 @@
   <string name="no_items_folder">このフォルダーにはアイテムがありません。</string>
   <string name="no_items_trash">ごみ箱にアイテムはありません。</string>
   <string name="autofill_accessibility_service">自動入力ユーザー補助サービス</string>
+  <string name="autofill_accessibility_summary">他のアプリやウェブ上でのユーザー名やパスワードの入力を手助けします。</string>
   <string name="autofill_service_description">Bitwarden 自動入力サービスは Android の Autofill Framework を使ってログイン情報やクレジットカード、ID情報をお使いのアプリに入力するのを補助します。</string>
   <string name="bitwarden_autofill_service_description">Bitwarden 自動入力サービスを使ってログイン情報やクレジットカード、ID情報などをアプリで自動入力します。</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">自動入力設定を開く</string>
@@ -541,6 +544,7 @@
   <string name="accessibility_description2">アプリやウェブでログイン情報を自動入力するのに Bitwarden ユーザー補助サービスを使用します（重ねて表示も有効化する必要があります）。</string>
   <string name="accessibility_description3">自動入力クイック設定タイルを使用し、またはポップアップを重ねて表示するために、Bitwarden ユーザー補助サービスを使用します（有効化されている場合）。</string>
   <string name="accessibility_description4">自動入力クイック設定タイルを使用し、または重ねて表示により自動入力サービスを拡張する（有効化されている場合）ために必要です。</string>
+  <string name="accessibility_description5">自動入力クイックアクションタイルを使用するために必要です。</string>
   <string name="draw_over">重ねて表示を使用する</string>
   <string name="draw_over_description">有効化すると、ログインフィールドが選択されたときに Bitwarden ユーザー補助サービスがポップアップを表示します。</string>
   <string name="draw_over_description2">有効化すると、ログインフィールドが選択されたときにログイン情報の自動入力を補助するために Bitwarden ユーザー補助サービスがポップアップを表示します。</string>
@@ -992,6 +996,16 @@
   <string name="expired_link">期限切れのリンク</string>
   <string name="please_restart_registration_or_try_logging_in">登録を再度始めるか、ログインを試してください。すでにアカウントを持っている可能性があります。</string>
   <string name="restart_registration">登録を再度始める</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">認証システムの同期</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden 認証システムの同期を許可する</string>
+  <string name="there_was_an_issue_validating_the_registration_token">登録トークンの検証中に問題が発生しました。</string>
+  <string name="turn_on_autofill">自動入力をオンにする</string>
+  <string name="use_autofill_to_log_into_your_accounts">自動入力を使用するとワンタップでアカウントにログインできます。</string>
+  <string name="turn_on_later">後でオンにする</string>
+  <string name="turn_on_autofill_later">後で自動入力をオンにしますか？</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">いつでも「設定」からこのステップに戻れます。</string>
+  <string name="what_bitwarden_has_to_offer">自動入力を使用して、保存したパスワードを使ってアプリやウェブサイトにログインできるようになりました。これで、Bitwarden が提供しているすべての機能の確認が終わりました。</string>
+  <string name="youre_all_set">準備完了です！</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

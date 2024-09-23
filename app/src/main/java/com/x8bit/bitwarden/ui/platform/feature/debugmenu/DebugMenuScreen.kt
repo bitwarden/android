@@ -2,17 +2,25 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,12 +54,15 @@ fun DebugMenuScreen(
             DebugMenuEvent.NavigateBack -> onNavigateBack()
         }
     }
-
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     BitwardenScaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(R.string.debug_menu),
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(R.drawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
@@ -65,16 +76,31 @@ fun DebugMenuScreen(
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding),
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             FeatureFlagContent(
                 featureFlagMap = state.featureFlags,
-                onValueChange = { key, value ->
-                    viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
+                onValueChange = remember(viewModel) {
+                    { key, value ->
+                        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
+                    }
                 },
-                onResetValues = {
-                    viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
+                onResetValues = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
+                    }
+                },
+            )
+            Spacer(Modifier.height(12.dp))
+            OnboardingOverrideContent(
+                enabled = (state.featureFlags[FlagKey.OnboardingFlow] as? Boolean) == true,
+                onStartOnboarding = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(DebugMenuAction.ReStartOnboarding)
+                    }
                 },
             )
         }
@@ -106,7 +132,7 @@ private fun FeatureFlagContent(
             )
             HorizontalDivider()
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.reset_values),
             onClick = onResetValues,
@@ -115,6 +141,41 @@ private fun FeatureFlagContent(
                 .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+private fun OnboardingOverrideContent(
+    enabled: Boolean,
+    onStartOnboarding: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        BitwardenListHeaderText(
+            label = stringResource(R.string.onboarding_override),
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(12.dp))
+        BitwardenFilledButton(
+            label = stringResource(R.string.restart_onboarding_cta),
+            onClick = onStartOnboarding,
+            isEnabled = enabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.restart_onboarding_details),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .standardHorizontalMargin(),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -131,5 +192,13 @@ private fun FeatureFlagContent_preview() {
             onValueChange = { _, _ -> },
             onResetValues = { },
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun OnboardingOverrideContent_preview() {
+    BitwardenTheme {
+        OnboardingOverrideContent(onStartOnboarding = {}, enabled = true)
     }
 }

@@ -50,6 +50,7 @@
   <string name="account_already_added">Kontot har redan lagts till</string>
   <string name="switch_to_already_added_account_confirmation">Vill du byta till det nu?</string>
   <string name="master_password">Huvudlösenord</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Mer</string>
   <string name="my_vault">Mitt valv</string>
   <string name="authenticator">Autentiserare</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Överväg gärna att hjälpa oss genom att ge oss en bra recension!</string>
   <string name="regenerate_password">Återskapa lösenord</string>
   <string name="retype_master_password">Ange huvudlösenordet igen</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Sök i valvet</string>
   <string name="security">Säkerhet</string>
   <string name="select">Välj</string>
@@ -330,6 +332,7 @@ Skanningen sker automatiskt.</string>
   <string name="no_items_folder">Det finns inga objekt i den här mappen.</string>
   <string name="no_items_trash">Det finns inga objekt i papperskorgen.</string>
   <string name="autofill_accessibility_service">Tillgänglighetstjänst för automatisk ifyllnad</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwardens tjänst för automatisk ifyllnad använder Android Autofill Framework för att hjälpa till att fylla i inloggningsuppgifter i andra appar på din enhet.</string>
   <string name="bitwarden_autofill_service_description">Använd Bitwardens automatiska ifyllnadstjänst för att fylla i inloggningsuppgifter i andra appar.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Öppna inställningar för automatisk ifyllnad</string>
@@ -533,7 +536,7 @@ Skanningen sker automatiskt.</string>
   <string name="terms_of_service">Användarvillkor</string>
   <string name="privacy_policy">Integritetspolicy</string>
   <string name="accessibility_draw_over_permission_alert">Bitwarden behöver din uppmärksamhet - Aktivera \"Överlappning\" under \"Tjänster för automatisk ifyllnad\" i Bitwardens inställningar</string>
-  <string name="passkey_management">Passkey hantering</string>
+  <string name="passkey_management">Nyckelhantering</string>
   <string name="autofill_services">Tjänster för automatisk ifyllnad</string>
   <string name="inline_autofill">Använd flytande automatisk ifyllnad</string>
   <string name="inline_autofill_description">Använd flytande automatisk ifyllnad om ditt valda IME (tangentbord) stöder det. Om din konfiguration inte stöds (eller detta alternativ är inaktiverat), kommer den vanliga överlappningen för automatisk ifyllnad att användas.</string>
@@ -542,6 +545,7 @@ Skanningen sker automatiskt.</string>
   <string name="accessibility_description2">Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i dina inloggningar mellan appar och webben. (Kräver att överlappning också är aktiverad)</string>
   <string name="accessibility_description3">Använd Bitwardens tillgänglighetstjänst för att använda snabbåtgärdsbrickan för automatisk ifyllnad och/eller visa ett popup-fönster med överlappning (om aktiverat).</string>
   <string name="accessibility_description4">Krävs för att använda snabbåtgärdsbrickan för automatisk ifyllnad eller för att komplettera tjänsten för automatisk ifyllnad genom att använda överlappning (om aktiverat).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Använd överlappning</string>
   <string name="draw_over_description">Om aktiverad tillåts Bitwardens tillgänglighetstjänst att visa ett popup-fönster när inloggningsfält är valda.</string>
   <string name="draw_over_description2">Om aktiverad kommer Bitwardens tillgänglighetstjänst att visa ett popup-fönster när inloggningsfält markeras för att bistå automatisk ifyllnad av dina inloggningar.</string>
@@ -881,8 +885,8 @@ Vill du byta till detta konto?</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Din organisation kräver att du anger ett huvudlösenord.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ställ in ett upplåsningsalternativ för att ändra vad som händer när tidsgränsen uppnås.</string>
   <string name="choose_a_login_to_save_this_passkey_to">Välj en inloggning för att spara denna lösennyckel till</string>
-  <string name="save_passkey_as_new_login">Spara passkey som ny inloggning</string>
-  <string name="save_passkey">Spara passkey</string>
+  <string name="save_passkey_as_new_login">Spara nyckel som ny inloggning</string>
+  <string name="save_passkey">Spara nyckel</string>
   <string name="passkeys_for_x">Passkeys för %1$s</string>
   <string name="passwords_for_x">Lösenord för %1$s</string>
   <string name="overwrite_passkey">Skriv över passkey?</string>
@@ -995,4 +999,14 @@ Vill du byta till detta konto?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Slå på Autofyll</string>
+  <string name="use_autofill_to_log_into_your_accounts">Använd autofyll för att logga in på dina konton med ett tryck.</string>
+  <string name="turn_on_later">Slå på senare</string>
+  <string name="turn_on_autofill_later">Slå på autofyll senare?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Huvudlösenordsledtråd</string>
+  <string name="master_password_important_hint">Viktigt: Ditt huvudlösenord kan inte återställas om du glömmer det! Minst 12 tecken.</string>
 </resources>

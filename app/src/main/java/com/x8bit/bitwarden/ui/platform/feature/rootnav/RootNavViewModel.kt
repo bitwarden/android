@@ -97,6 +97,7 @@ class RootNavViewModel @Inject constructor(
                     OnboardingStatus.ACCOUNT_LOCK_SETUP,
                     -> RootNavState.OnboardingAccountLockSetup
                     OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
+                    OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
                     OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
                 }
             }
@@ -344,6 +345,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object OnboardingAutoFillSetup : RootNavState()
+
+    /**
+     * App should show the onboarding steps complete screen.
+     */
+    @Parcelize
+    data object OnboardingStepsComplete : RootNavState()
 }
 
 /**

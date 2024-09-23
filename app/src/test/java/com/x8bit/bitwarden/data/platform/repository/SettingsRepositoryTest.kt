@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import app.cash.turbine.test
+import com.bitwarden.bridge.util.generateSecretKey
 import com.bitwarden.core.DerivePinKeyResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -42,6 +43,7 @@ import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -1060,12 +1062,13 @@ class SettingsRepositoryTest {
     }
 
     @Test
-    fun `setting isAuthenticatorSyncEnabled to true should generate an authenticator sync key`() =
+    @Suppress("MaxLineLength")
+    fun `isAuthenticatorSyncEnabled set to true should generate an authenticator sync key and also a symmetric key if none exists`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { vaultSdkSource.getUserEncryptionKey(USER_ID) }
                 .returns(AUTHENTICATION_SYNC_KEY.asSuccess())
-
+            fakeAuthDiskSource.authenticatorSyncSymmetricKey = null
             assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
 
             settingsRepository.isAuthenticatorSyncEnabled = true
@@ -1075,13 +1078,39 @@ class SettingsRepositoryTest {
                 AUTHENTICATION_SYNC_KEY,
                 fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID),
             )
+            assertNotNull(fakeAuthDiskSource.authenticatorSyncSymmetricKey)
             coVerify { vaultSdkSource.getUserEncryptionKey(USER_ID) }
         }
 
     @Test
-    fun `setting isAuthenticatorSyncEnabled to false should clear authenticator sync key`() =
+    @Suppress("MaxLineLength")
+    fun `isAuthenticatorSyncEnabled set to true should generate an authenticator sync key and leave symmetric key untouched if already set`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { vaultSdkSource.getUserEncryptionKey(USER_ID) }
+                .returns(AUTHENTICATION_SYNC_KEY.asSuccess())
+            val symmetricKey = generateSecretKey().getOrThrow().encoded
+            fakeAuthDiskSource.authenticatorSyncSymmetricKey = symmetricKey
+            assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
+
+            settingsRepository.isAuthenticatorSyncEnabled = true
+
+            assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
+            assertEquals(
+                AUTHENTICATION_SYNC_KEY,
+                fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID),
+            )
+            fakeAuthDiskSource.authenticatorSyncSymmetricKey.contentEquals(symmetricKey)
+            coVerify { vaultSdkSource.getUserEncryptionKey(USER_ID) }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isAuthenticatorSyncEnabled set to false should clear authenticator sync key and leave symmetric sync key untouched`() =
+        runTest {
+            val syncSymmetricKey = generateSecretKey().getOrThrow().encoded
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncSymmetricKey
             fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(USER_ID, AUTHENTICATION_SYNC_KEY)
 
             assertTrue(settingsRepository.isAuthenticatorSyncEnabled)
@@ -1090,6 +1119,7 @@ class SettingsRepositoryTest {
 
             assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
             assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
+            assertTrue(fakeAuthDiskSource.authenticatorSyncSymmetricKey.contentEquals(syncSymmetricKey))
         }
 
     @Test
@@ -1118,6 +1148,60 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
         }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should store value of false to disk`() {
+        val userId = "userId"
+        settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
+    }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should store value of true to disk`() {
+        val userId = "userId"
+        settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
+    }
+
+    @Test
+    fun `getShowAutoFillSettingBadge get value of false if does not exist`() {
+        val userId = "userId"
+        assertFalse(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
+    }
+
+    @Test
+    fun `getShowAutoFillSettingBadge should return the value saved to disk`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
+        assertTrue(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
+    }
+
+    @Test
+    fun `storeShowUnlockSettingBadge should store value of false to disk`() {
+        val userId = "userId"
+        settingsRepository.storeShowUnlockSettingBadge(userId = userId, showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = userId)!!)
+    }
+
+    @Test
+    fun `storeShowUnlockSettingBadge should store value of true to disk`() {
+        val userId = "userId"
+        settingsRepository.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = userId)!!)
+    }
+
+    @Test
+    fun `getUnlockSettingBadge get value of false if does not exist`() {
+        val userId = "userId"
+        assertFalse(settingsRepository.getShowUnlockSettingBadge(userId = userId))
+    }
+
+    @Test
+    fun `getShowUnlockSettingBadge should return the value saved to disk`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
+        assertTrue(settingsRepository.getShowUnlockSettingBadge(userId = userId))
+    }
 }
 
 private const val USER_ID: String = "userId"

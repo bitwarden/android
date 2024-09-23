@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 import android.content.Context
-import android.provider.Settings
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import io.mockk.every
@@ -22,11 +22,7 @@ import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccessibilityActivityManagerTest {
-    private val context: Context = mockk {
-        every { applicationContext } returns this
-        every { packageName } returns "com.x8bit.bitwarden"
-        every { contentResolver } returns mockk()
-    }
+    private val context: Context = mockk()
     private val accessibilityEnabledManager: AccessibilityEnabledManager =
         AccessibilityEnabledManagerImpl()
     private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
@@ -38,24 +34,23 @@ class AccessibilityActivityManagerTest {
     }
 
     // We will construct an instance here just to hook the various dependencies together internally
-    @Suppress("unused")
-    private val autofillActivityManager: AccessibilityActivityManager =
-        AccessibilityActivityManagerImpl(
+    private lateinit var autofillActivityManager: AccessibilityActivityManager
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(Context::isAccessibilityServiceEnabled)
+        every { context.isAccessibilityServiceEnabled } returns false
+        autofillActivityManager = AccessibilityActivityManagerImpl(
             context = context,
             accessibilityEnabledManager = accessibilityEnabledManager,
             appForegroundManager = appForegroundManager,
             lifecycleScope = lifecycleScope,
         )
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(Settings.Secure::getString)
-        mockkSettingsSecureGetString(value = null)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(Settings.Secure::getString)
+        unmockkStatic(Context::isAccessibilityServiceEnabled)
     }
 
     @Test
@@ -66,10 +61,7 @@ class AccessibilityActivityManagerTest {
 
                 // An update is received when both the accessibility state and foreground state
                 // change
-                @Suppress("MaxLineLength")
-                mockkSettingsSecureGetString(
-                    value = "com.x8bit.bitwarden/com.x8bit.bitwarden.Accessibility.AccessibilityService",
-                )
+                every { context.isAccessibilityServiceEnabled } returns true
                 mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
                 assertTrue(awaitItem())
 
@@ -78,7 +70,7 @@ class AccessibilityActivityManagerTest {
                 expectNoEvents()
 
                 // An update is not received when only the accessibility state changes
-                mockkSettingsSecureGetString(value = "com.x8bit.bitwarden/AccessibilityService")
+                every { context.isAccessibilityServiceEnabled } returns false
                 expectNoEvents()
 
                 // An update is received after both states have changed
@@ -86,10 +78,4 @@ class AccessibilityActivityManagerTest {
                 assertFalse(awaitItem())
             }
         }
-
-    private fun mockkSettingsSecureGetString(value: String?) {
-        every {
-            Settings.Secure.getString(any(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-        } returns value
-    }
 }

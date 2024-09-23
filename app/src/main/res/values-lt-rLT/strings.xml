@@ -50,6 +50,7 @@
   <string name="account_already_added">Paskyra jau sukurta</string>
   <string name="switch_to_already_added_account_confirmation">Ar norėtume prisijungti dabar?</string>
   <string name="master_password">Pagrindinis slaptažodis</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Daugiau</string>
   <string name="my_vault">Mano tvarkyklė</string>
   <string name="authenticator">Autentifikavimas</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Apsvarstykite galimybę mums padėti palikdami gerą atsiliepimą!</string>
   <string name="regenerate_password">Generuoti slaptažodį iš naujo</string>
   <string name="retype_master_password">Pakartokite pagrindinį slaptažodį</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Ieškoti saugykloje</string>
   <string name="security">Apsauga</string>
   <string name="select">Pasirinkti</string>
@@ -329,6 +331,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="no_items_folder">Šiame aplanke elementų nėra.</string>
   <string name="no_items_trash">Šiukšliadėžėje elementų nėra.</string>
   <string name="autofill_accessibility_service">Automatinio užpildymo pritaikymo neįgaliesiems paslauga</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">„Bitwarden“ automatinio pildymo paslauga naudoja „Android“ automatinio pildymo sistemą, kad padėtų užpildyti prisijungimo informaciją į kitas jūsų įrenginio programas.</string>
   <string name="bitwarden_autofill_service_description">Norėdami užpildyti prisijungimo informaciją į kitas programas, naudokite „Bitwarden“ automatinio pildymo paslaugą.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Atidarykite automatinio pildymo nustatymus</string>
@@ -541,6 +544,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="accessibility_description2">Naudokite „Bitwarden“ pritaikymo neįgaliesiems paslaugą, kad automatiškai užpildytumėte prisijungimo duomenis programose ir žiniatinklyje. (Taip pat reikia įjungti Draw-Over)</string>
   <string name="accessibility_description3">Naudokite „Bitwarden“ pritaikymo neįgaliesiems paslaugą, kad galėtumėte naudoti automatinio pildymo greito veiksmo plytelę ir (arba) rodyti iššokantįjį langą naudodami „Draw-Over“ (jei įjungta).</string>
   <string name="accessibility_description4">Būtina naudoti automatinio pildymo greito veiksmo plytelę arba papildyti automatinio pildymo paslaugą naudojant „Draw-Over“ (jei įjungta).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Naudokite pertraukimą</string>
   <string name="draw_over_description">Leidžia „Bitwarden“ pritaikymo neįgaliesiems paslaugai rodyti iššokantįjį langą, kai pasirenkami prisijungimo laukai.</string>
   <string name="draw_over_description2">Jei įjungta, „Bitwarden“ pritaikymo neįgaliesiems paslauga parodys iššokantįjį langą, kai bus pasirinkti prisijungimo laukai, padedantys automatiškai užpildyti prisijungimo duomenis.</string>
@@ -994,4 +998,14 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

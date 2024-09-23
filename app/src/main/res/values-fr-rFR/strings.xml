@@ -50,6 +50,7 @@
   <string name="account_already_added">Compte déjà ajouté</string>
   <string name="switch_to_already_added_account_confirmation">Souhaitez-vous y passer maintenant ?</string>
   <string name="master_password">Mot de passe principal</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Plus</string>
   <string name="my_vault">Mon coffre</string>
   <string name="authenticator">Authentificateur</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Merci de nous aider en rédigeant un commentaire positif !</string>
   <string name="regenerate_password">Regénérer un mot de passe</string>
   <string name="retype_master_password">Ressaisir le mot de passe principal</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Rechercher dans le coffre</string>
   <string name="security">Sécurité</string>
   <string name="select">Sélectionner</string>
@@ -329,6 +331,7 @@ La numérisation se fera automatiquement.</string>
   <string name="no_items_folder">Il n\'y a aucun élément dans ce dossier.</string>
   <string name="no_items_trash">Il n\'y a aucun élément dans la corbeille.</string>
   <string name="autofill_accessibility_service">Service d\'accessibilité de saisie automatique</string>
+  <string name="autofill_accessibility_summary">Aide à remplir les champs de nom d\'utilisateur et de mot de passe dans d\'autres applications et sur le Web.</string>
   <string name="autofill_service_description">Le service de saisie automatique Bitwarden utilise Android Autofill Framework pour aider à la saisie des informations de connexion dans d\'autres applications sur votre appareil.</string>
   <string name="bitwarden_autofill_service_description">Utilisez le service de saisie automatique Bitwarden pour remplir les informations de connexion dans d\'autres applications.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Ouvrir les paramètres de remplissage automatique</string>
@@ -541,6 +544,7 @@ La numérisation se fera automatiquement.</string>
   <string name="accessibility_description2">Utilisez le service d\'accessibilité Bitwarden pour saisir automatiquement vos identifiants sur les applications et le web (requiert également l\'activation de la superposition).</string>
   <string name="accessibility_description3">Utilisez le service d\'accessibilité Bitwarden pour utiliser la tuile de remplissage automatique rapide et/ou afficher une popup en utilisant la superposition (si activée).</string>
   <string name="accessibility_description4">Requis pour utiliser la tuile de remplissage automatique rapide ou pour améliorer le service de remplissage automatique en utilisant la superposition (si activée).</string>
+  <string name="accessibility_description5">Nécessaire pour utiliser la tuile d\'action rapide de remplissage automatique.</string>
   <string name="draw_over">Utiliser la superposition</string>
   <string name="draw_over_description">Activer cette option permet au service d\'accessibilité de Bitwarden d\'afficher une popup lorsque les champs d\'identifiants sont sélectionnés.</string>
   <string name="draw_over_description2">S\'il est activé, le service d\'accessibilité Bitwarden affichera une fenêtre popup lorsque les champs de connexion sont sélectionnés afin de faciliter la saisie automatique de vos identifiants.</string>
@@ -994,4 +998,14 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="restart_registration">Recommencer l\'inscription</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Un problème est survenu lors de la validation du jeton d\'enregistrement.</string>
+  <string name="turn_on_autofill">Activer le remplissage automatique</string>
+  <string name="use_autofill_to_log_into_your_accounts">Utilisez le remplissage automatique pour vous connecter à vos comptes en un seul clic.</string>
+  <string name="turn_on_later">Activer plus tard</string>
+  <string name="turn_on_autofill_later">Activer le remplissage automatique plus tard ?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Vous pouvez revenir compléter cette étape à tout moment dans les paramètres.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

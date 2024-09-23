@@ -50,6 +50,7 @@
   <string name="account_already_added">Kontua gehitu da</string>
   <string name="switch_to_already_added_account_confirmation">Orain aldatu nahi duzu?</string>
   <string name="master_password">Pasahitz nagusia</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Gehiago</string>
   <string name="my_vault">Kutxa Gotorra</string>
   <string name="authenticator">Autentifikatzailea</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Mesedez, aipu on batekin lagundu!</string>
   <string name="regenerate_password">Berrezarri pasahitza</string>
   <string name="retype_master_password">Idatzi berriro pasahitz nagusia</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Kutxa Gotorrean bilatu</string>
   <string name="security">Segurtasuna</string>
   <string name="select">Hautatu</string>
@@ -328,6 +330,7 @@
   <string name="no_items_folder">Karpeta honetan ez dago elementurik.</string>
   <string name="no_items_trash">Zakarrontzian ez dago elementurik.</string>
   <string name="autofill_accessibility_service">Automatikoki betetzeko erabilerraztasun zerbitzua</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">Bitwardenen automatikoki betetzeko zerbitzuak Android Autofill Framework erabiltzen du zure gailuko beste aplikazio batzuetan saio-hasierako informazioa betetzen laguntzeko.</string>
   <string name="bitwarden_autofill_service_description">Erabili Bitwarden automatikoki betetzeko zerbitzua saio-hasierako informazioa beste aplikazio batzuetan betetzeko.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Ireki auto-betetze ezarpenak</string>
@@ -540,6 +543,7 @@
   <string name="accessibility_description2">Erabili Bitwarden erabilerraztasun zerbitzua zure saio hasierak aplikazioen eta webgunearen bidez automatikoki betetzeko. (Gainjartzeak gaituta egon behar du)</string>
   <string name="accessibility_description3">Erabili Bitwarden erabilerraztasun zerbitzua auto-betetze ekintza azkarreko mosaikoa erabiltzeko eta/edo erakutsi popup bat gainjartzea erabiliz (gaituta badago).</string>
   <string name="accessibility_description4">Ekintza azkarreko mosaikoa erabili behar da auto-betetzerako, edo auto-betetze zerbitzua hobetu, gainjartzea erabiliz (gaituta badago).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Erabili gainjartzea</string>
   <string name="draw_over_description">Gaituta dagoenean, Bitwarden erabilerraztasun zerbitzuari popup bat erakusteko aukera ematen dio sarbide eremuak hautatzean.</string>
   <string name="draw_over_description2">Gaituta badago, Bitwarden erabilerraztasun zerbitzuak popup bat erakutsiko du saio-hasierako eremuak hautatzen direnean, saio hasierak automatikoki betetzen laguntzeko.</string>
@@ -992,4 +996,14 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

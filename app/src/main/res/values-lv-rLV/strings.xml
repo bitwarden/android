@@ -50,6 +50,7 @@
   <string name="account_already_added">Konts jau ir pievienots</string>
   <string name="switch_to_already_added_account_confirmation">Vai pārslēgties uz to?</string>
   <string name="master_password">Galvenā parole</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Vairāk</string>
   <string name="my_vault">Mana glabātava</string>
   <string name="authenticator">Autentificētājs</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Lūdzu, apsver palīdzēt mums ar labu atsauksmi!</string>
   <string name="regenerate_password">Pārizveidot paroli</string>
   <string name="retype_master_password">Atkārtoti ievadīt galveno paroli</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Meklēt glabātavā</string>
   <string name="security">Drošība</string>
   <string name="select">Atlasīt</string>
@@ -329,6 +331,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="no_items_folder">Šajā mapē nav vienumu.</string>
   <string name="no_items_trash">Atkritnē nav vienumu.</string>
   <string name="autofill_accessibility_service">Automātiskās aizpildes pieejamības pakalpojums</string>
+  <string name="autofill_accessibility_summary">Palīdzēt ar lietotājvārda un paroles lauku aizpildīšanu citās lietotnēs tīmeklī.</string>
   <string name="autofill_service_description">Bitwarden automātiskās aizpildes pakalpojums izmanto Android automātiskās aizpildes ietvaru, lai palīdzētu aizpildīt pieteikšanās, kredītkartes, un identitātes informācijas veidnes citās ierīces lietotnēs.</string>
   <string name="bitwarden_autofill_service_description">Bitwarden automātiskā aizpilde ir izmantojama, lai aizpildītu pieteikšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Atvērt automātiskās aizpildes iestatījumus</string>
@@ -541,6 +544,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="accessibility_description2">Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pierakstīšanās veidnes dažādās lietotnēs un tīmeklī (ir nepieciešams ieslēgt arī \"Rādīt pāri\").</string>
   <string name="accessibility_description3">Bitwarden pieejamības pakalpojums tiek izmantots, lai lietotu automātiskās aizpildes ātrās darbības laukumu un/vai parādītu uznirstošo logu, izmantojot rādīšanu pāri (ja ieslēgta).</string>
   <string name="accessibility_description4">Nepieciešams, lai izmantotu automātiskās aizpildes ātrās darbības laukumu vai pastiprinātu automātisko aizpildi, izmantojot rādīšanu pāri (ja iespējota).</string>
+  <string name="accessibility_description5">Nepieciešams, lai izmantotu automātiskāš aizpildes ātrās piekļuves darbības lauciņu.</string>
   <string name="draw_over">Izmantot rādīšanu pāri</string>
   <string name="draw_over_description">Ļauj Bitwarden pieejamības pakalpojumam attēlot uznirstošo logu, kad tiek atlasīti pieteikšanās lauki.</string>
   <string name="draw_over_description2">Ja ieslēgts, Bitwarden pieejamības pakalpojums attēlos uznirstošo logu, kad pieteikšanās lauki tiek atlasīti, lai palīdzētu automātiski aizpildīt pieteikšanās veidnes.</string>
@@ -957,7 +961,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="what_makes_a_password_strong">Kas paroli padara stipru?</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Jo garāka parole, jo grūtāk ir to uzlauzt. Mazākais rakstzīmju skaits konta izveidošanai ir 12, bet, ja izvēlas 14, paredzamais paroles uzlaušanas laiks būtu vairāki gadsimti.</string>
   <string name="the_strongest_passwords_are_usually">Stiprākās paroles parasti ir:</string>
-  <string name="twelve_or_more_characters">ar 12 vai vaairāk rakstzīmēm</string>
+  <string name="twelve_or_more_characters">Ar 12 vai vairāk rakstzīmēm</string>
   <string name="random_and_complex_using_numbers_and_special_characters">Nenoteiktas un sarežģītas, saturot skaitļus un īpašās rakstzīmes</string>
   <string name="totally_different_from_your_other_passwords">Pilnībā atšķiras no citām parolēm</string>
   <string name="use_the_generator_to_create_a_strong_unique_password">Ir izmantojams veidotājs, lai izveidotu stipru, vienreizēju paroli</string>
@@ -994,4 +998,14 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="restart_registration">Sākt reģistrēšanos no jauna</string>
   <string name="authenticator_sync">Authentificētāja sinhronizēšana</string>
   <string name="allow_bitwarden_authenticator_syncing">Ļaut Bitwarden autentificētāja sinhronizēšanu</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Bija sarežģījumi reģistrācijas koda pārbaudīšanā.</string>
+  <string name="turn_on_autofill">Ieslēgt automātisko aizpildi</string>
+  <string name="use_autofill_to_log_into_your_accounts">Automātiskā aizpilde ir izmantojama, lai pieteiktos savos kontos ar vienu piesitienu.</string>
+  <string name="turn_on_later">Ieslēgt vēlāk</string>
+  <string name="turn_on_autofill_later">Ieslēgt automātisko aizpildi vēlāk?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Pie šī soļa pabeigšanas var agriezties jebkurā brīdī iestatījumos.</string>
+  <string name="what_bitwarden_has_to_offer">Tagad var izmantot automātisko aizpildi, lai pieteiktos lietotnēs un tīmekļvietnēs ar savām saglabātajām parolēm. Tagad ir izpētāms viss pārējais, kas ir Bitwarden piedāvājumā.</string>
+  <string name="youre_all_set">Viss ir gatavs.</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

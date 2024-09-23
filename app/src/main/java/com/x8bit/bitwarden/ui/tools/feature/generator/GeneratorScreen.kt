@@ -54,9 +54,11 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -106,6 +108,16 @@ fun GeneratorScreen(
     val context = LocalContext.current
     val resources = context.resources
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LivecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.trySendAction(GeneratorAction.LifecycleResume)
+            }
+
+            else -> Unit
+        }
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {

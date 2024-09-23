@@ -50,6 +50,7 @@
   <string name="account_already_added">Account already added</string>
   <string name="switch_to_already_added_account_confirmation">Would you like to switch to it now?</string>
   <string name="master_password">Master password</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">More</string>
   <string name="my_vault">My vault</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Please consider helping us out with a good review!</string>
   <string name="regenerate_password">Regenerate password</string>
   <string name="retype_master_password">Re-type master password</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Search vault</string>
   <string name="security">ආරක්ෂාව</string>
   <string name="select">Select</string>
@@ -329,6 +331,7 @@ Scanning will happen automatically.</string>
   <string name="no_items_folder">There are no items in this folder.</string>
   <string name="no_items_trash">There are no items in the trash.</string>
   <string name="autofill_accessibility_service">Auto-fill Accessibility Service</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</string>
   <string name="bitwarden_autofill_service_description">Use the Bitwarden auto-fill service to fill login information into other apps.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Open Autofill Settings</string>
@@ -541,6 +544,7 @@ Scanning will happen automatically.</string>
   <string name="accessibility_description2">Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be turned on as well)</string>
   <string name="accessibility_description3">Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if turned on).</string>
   <string name="accessibility_description4">Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if turned on).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Use draw-over</string>
   <string name="draw_over_description">Allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</string>
   <string name="draw_over_description2">If turned on, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</string>
@@ -994,4 +998,14 @@ Do you want to switch to this account?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

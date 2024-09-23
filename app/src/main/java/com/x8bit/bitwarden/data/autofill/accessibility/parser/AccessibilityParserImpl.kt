@@ -3,18 +3,35 @@ package com.x8bit.bitwarden.data.autofill.accessibility.parser
 import android.net.Uri
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityNodeInfoManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.FillableFields
 import com.x8bit.bitwarden.data.autofill.accessibility.util.getSupportedBrowserOrNull
+import com.x8bit.bitwarden.data.autofill.accessibility.util.isEditText
+import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull
+import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 
 /**
  * The default implementation for the [AccessibilityParser].
  */
-class AccessibilityParserImpl : AccessibilityParser {
-    override fun parseForFillableFields(rootNode: AccessibilityNodeInfo): FillableFields {
-        // TODO: Parse for username and password fields (PM-11486)
+class AccessibilityParserImpl(
+    private val accessibilityNodeInfoManager: AccessibilityNodeInfoManager,
+) : AccessibilityParser {
+    override fun parseForFillableFields(
+        rootNode: AccessibilityNodeInfo,
+        uri: Uri,
+    ): FillableFields {
+        val nodes = accessibilityNodeInfoManager
+            .findAccessibilityNodeInfoList(rootNode = rootNode) {
+                it.isEditText || it.isPassword
+            }
+        val passwordNodes = nodes.filter { it.isPassword }
         return FillableFields(
-            usernameFields = listOf(),
-            passwordFields = listOf(),
+            usernameField = accessibilityNodeInfoManager.findUsernameAccessibilityNodeInfo(
+                uri = uri,
+                allNodes = nodes,
+                passwordNodes = passwordNodes,
+            ),
+            passwordFields = passwordNodes,
         )
     }
 
@@ -29,10 +46,19 @@ class AccessibilityParserImpl : AccessibilityParser {
                 rootNode
                     .findAccessibilityNodeInfosByViewId("$packageName:id/$viewId")
                     .map { accessibilityNodeInfo ->
-                        browser.urlExtractor(accessibilityNodeInfo.text.toString())
+                        browser
+                            .urlExtractor(accessibilityNodeInfo.text.toString())
+                            ?.trim()
+                            ?.let { rawUrl ->
+                                if (rawUrl.contains(other = ".") && !rawUrl.hasHttpProtocol()) {
+                                    "https://$rawUrl"
+                                } else {
+                                    rawUrl
+                                }
+                            }
                     }
             }
             .firstOrNull()
-            ?.toUri()
+            ?.toUriOrNull()
     }
 }

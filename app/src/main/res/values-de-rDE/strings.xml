@@ -41,7 +41,7 @@
   <string name="invalid_pin">Ungültiger PIN. Bitte erneut versuchen.</string>
   <string name="launch">Öffnen</string>
   <string name="log_in">Anmelden</string>
-  <string name="log_in_verb">Log in</string>
+  <string name="log_in_verb">Anmelden</string>
   <string name="log_in_noun">Zugangsdaten</string>
   <string name="log_out">Abmelden</string>
   <string name="logout_confirmation">Bist du sicher, dass du dich abmelden möchtest?</string>
@@ -50,6 +50,7 @@
   <string name="account_already_added">Konto bereits hinzugefügt</string>
   <string name="switch_to_already_added_account_confirmation">Möchtest du jetzt dazu wechseln?</string>
   <string name="master_password">Master-Passwort</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Mehr</string>
   <string name="my_vault">Mein Tresor</string>
   <string name="authenticator">Authenticator</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Wir würden uns freuen, wenn du uns mit einer positiven Bewertung helfen könntest!</string>
   <string name="regenerate_password">Passwort neu generieren</string>
   <string name="retype_master_password">Master-Passwort wiederholen</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Tresor durchsuchen</string>
   <string name="security">Sicherheit</string>
   <string name="select">Auswählen</string>
@@ -329,6 +331,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="no_items_folder">Es sind keine Objekte in diesem Ordner.</string>
   <string name="no_items_trash">Es sind keine Einträge im Papierkorb.</string>
   <string name="autofill_accessibility_service">Auto-Fill Bedienungshilfe</string>
+  <string name="autofill_accessibility_summary">Unterstützung beim Ausfüllen von Benutzernamen und Passwort in anderen Apps und im Web.</string>
   <string name="autofill_service_description">Der Auto-Ausfüllen-Dienst von Bitwarden benutzt das Android Autofill Framework, um Zugangsdaten in anderen Apps auf deinem Gerät auszufüllen.</string>
   <string name="bitwarden_autofill_service_description">Verwende den Auto-Ausfüllen-Dienst von Bitwarden, um Anmeldedaten in anderen Apps auszufüllen.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Öffne Auto-Fill Einstellungen</string>
@@ -541,6 +544,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="accessibility_description2">Verwende die Bitwarden Bedienungshilfe, um deine Zugangsdaten in Apps und im Web automatisch auszufüllen. (Benötigt das Überschreiben ebenfalls aktiviert ist)</string>
   <string name="accessibility_description3">Verwende die Bitwarden Bedienungshilfe, um die Auto-Ausfüllen-Schnellaktionskachel zu verwenden und/oder ein Pop-up mit Überschreiben anzuzeigen (wenn aktiviert).</string>
   <string name="accessibility_description4">Benötigt, um die Auto-Ausfüllen-Schnellaktionskachel zu verwenden oder um die Auto-Ausfüllen-Funktion durch Überschreiben (falls aktiviert) zu ermöglichen.</string>
+  <string name="accessibility_description5">Benötigt für die Verwendung der Auto-Ausfüllen-Schnellaktionskachel.</string>
   <string name="draw_over">Überschreiben verwenden</string>
   <string name="draw_over_description">Erlaubt es der Bitwarden Bedienungshilfe ein Pop-up anzuzeigen, wenn Anmeldefelder ausgewählt sind.</string>
   <string name="draw_over_description2">Wenn aktiviert, wird die Bitwarden Bedienungshilfe ein Pop-up anzeigen, falls Anmeldefelder ausgewählt sind, um bei der automatischen Ausfüllung deiner Zugangsdaten zu helfen.</string>
@@ -988,9 +992,19 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="choose_your_master_password">Wähle dein Master-Passwort</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wähle ein einzigartiges und starkes Passwort, damit deine Informationen sicher sind.</string>
   <string name="minimum_characters">%1$s Zeichen</string>
-  <string name="expired_link">Expired link</string>
-  <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
-  <string name="restart_registration">Restart registration</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="expired_link">Abgelaufener Link</string>
+  <string name="please_restart_registration_or_try_logging_in">Bitte starte die Registrierung neu oder versuche dich anzumelden. Möglicherweise hast du bereits ein Konto.</string>
+  <string name="restart_registration">Registrierung neu starten</string>
+  <string name="authenticator_sync">Authenticator-Synchronisation</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden Authenticator Synchronisation erlauben</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Es gab ein Problem bei der Validierung des Registrierung-Tokens.</string>
+  <string name="turn_on_autofill">Auto-Ausfüllen einschalten</string>
+  <string name="use_autofill_to_log_into_your_accounts">Verwende Auto-Ausfüllen, um dich mit einem einzigen Fingertipp bei deinen Konten anzumelden.</string>
+  <string name="turn_on_later">Später einschalten</string>
+  <string name="turn_on_autofill_later">Auto-Ausfüllen später einschalten?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Du kannst diesen Schritt in den Einstellungen jederzeit fortsetzen und abschließen.</string>
+  <string name="what_bitwarden_has_to_offer">Du kannst nun Auto-Ausfüllen verwenden, um dich mit deinen gespeicherten Passwörtern bei Apps und Websites anzumelden. Du kannst jetzt alles erkunden, was Bitwarden sonst noch zu bieten hat.</string>
+  <string name="youre_all_set">Du bist bereit!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

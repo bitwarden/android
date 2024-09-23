@@ -50,6 +50,7 @@
   <string name="account_already_added">El compte ja s\'ha afegit</string>
   <string name="switch_to_already_added_account_confirmation">T\'agradaria canviar-lo ara?</string>
   <string name="master_password">Contrasenya mestra</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Més</string>
   <string name="my_vault">Caixa forta</string>
   <string name="authenticator">Autenticador</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Considereu ajudar-nos amb una bona valoració!</string>
   <string name="regenerate_password">Regenera contrasenya</string>
   <string name="retype_master_password">Torneu a escriure la contrasenya mestra</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Cerca en la caixa forta</string>
   <string name="security">Seguretat</string>
   <string name="select">Selecciona</string>
@@ -329,6 +331,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="no_items_folder">No hi ha elements en aquesta carpeta.</string>
   <string name="no_items_trash">No hi ha elements a la paperera.</string>
   <string name="autofill_accessibility_service">Ompli automàticament el servei d\'accessibilitat</string>
+  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
   <string name="autofill_service_description">El servei d\'emplenament automàtic de Bitwarden utilitza el marc d\'emplenament automàtic d\'Android per ajudar a omplir els inicis de sessió, les targetes de crèdit i la informació d\'identitat en altres aplicacions del dispositiu.</string>
   <string name="bitwarden_autofill_service_description">Utilitzeu el servei d\'emplenament automàtic de Bitwarden per omplir els inicis de sessió, les targetes de crèdit i la informació d\'identitat en altres aplicacions.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Configuració d\'emplenament automàtic</string>
@@ -541,6 +544,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="accessibility_description2">Utilitzeu el servei d’accessibilitat Bitwarden per omplir els vostres inicis de sessió automàticament a través d’aplicacions i del web. (Cal que també estiga habilitat el Dibuixa-sobre)</string>
   <string name="accessibility_description3">Utilitzeu el servei d’accessibilitat Bitwarden per utilitzar el mosaic d’acció ràpida d’emplenament automàtic o mostrar una finestra emergent mitjançant Dibuixa-sobre (si està activat).</string>
   <string name="accessibility_description4">Cal utilitzar el mosaic d’acció ràpida d’emplenament automàtic o augmentar el servei d’emplenament automàtic mitjançant Dibuixa-sobre (si està activat).</string>
+  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
   <string name="draw_over">Use Dibuixa-sobre</string>
   <string name="draw_over_description">Quan està habilitat, permet al servei d\'accessibilitat Bitwarden mostrar una finestra emergent quan se seleccionen els camps d\'inici de sessió.</string>
   <string name="draw_over_description2">Si està habilitat, el servei d’accessibilitat Bitwarden mostrarà una finestra emergent quan se seleccionen els camps d’inici de sessió per ajudar-vos a omplir automàticament els vostres inicis de sessió.</string>
@@ -994,4 +998,14 @@ Voleu canviar a aquest compte?</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
   <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="turn_on_autofill">Turn on autofill</string>
+  <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
+  <string name="turn_on_later">Turn on later</string>
+  <string name="turn_on_autofill_later">Turn on autofill later?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
+  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="youre_all_set">You\'re all set!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

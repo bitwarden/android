@@ -50,6 +50,7 @@
   <string name="account_already_added">Аккаунт уже добавлен</string>
   <string name="switch_to_already_added_account_confirmation">Хотите переключиться на него?</string>
   <string name="master_password">Мастер-пароль</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Еще</string>
   <string name="my_vault">Хранилище</string>
   <string name="authenticator">Аутентификатор</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Пожалуйста, подумайте о том, чтобы помочь нам хорошим отзывом!</string>
   <string name="regenerate_password">Создать новый пароль</string>
   <string name="retype_master_password">Введите мастер-пароль повторно</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Поиск в хранилище</string>
   <string name="security">Безопасность</string>
   <string name="select">Выбрать</string>
@@ -329,6 +331,7 @@
   <string name="no_items_folder">В этой папке нет элементов.</string>
   <string name="no_items_trash">В корзине нет элементов.</string>
   <string name="autofill_accessibility_service">Служба специальных возможностей автозаполнения</string>
+  <string name="autofill_accessibility_summary">Помощь в заполнении имени пользователя и пароля в других приложениях и в интернете.</string>
   <string name="autofill_service_description">Служба автозаполнения Bitwarden использует фреймворк автозаполнения Android для заполнения логинов, номеров карт и личной информации в других приложениях на устройстве.</string>
   <string name="bitwarden_autofill_service_description">Используйте службу автозаполнения Bitwarden для заполнения логинов, номеров карт и личной информации в других приложениях.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Открыть настройки автозаполнения</string>
@@ -541,6 +544,7 @@
   <string name="accessibility_description2">При помощи службы специальных возможностей Bitwarden вы можете автоматически заполнять ваши логины в приложениях и в интернете. (Также необходимо включить опцию \'Поверх других приложений\')</string>
   <string name="accessibility_description3">Используйте службу специальных возможностей Bitwarden для панели быстрого автозаполнения и/или отображения всплывающего окна с помощью опции \'Поверх других приложений\' (если она включена).</string>
   <string name="accessibility_description4">Требуется для использования панели быстрого автозаполнения или для дополнения сервиса автозаполнения при использовании опции \'Поверх других приложений\' (если она включена).</string>
+  <string name="accessibility_description5">Требуется для использования быстрого действия Автозаполнение.</string>
   <string name="draw_over">Поверх других приложений</string>
   <string name="draw_over_description">При включении, разрешает службе специальных возможностей Bitwarden отображать всплывающую панель при выборе полей авторизации.</string>
   <string name="draw_over_description2">При включении, служба специальных возможностей Bitwarden отобразит всплывающую панель при выборе полей авторизации, чтобы помочь автоматически заполнить ваши учетные данные.</string>
@@ -996,4 +1000,14 @@
   <string name="restart_registration">Перезапустить регистрацию</string>
   <string name="authenticator_sync">Синхронизация Bitwarden Authenticator</string>
   <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию Bitwarden Authenticator</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Возникла проблема при проверке токена регистрации.</string>
+  <string name="turn_on_autofill">Включить автозаполнение</string>
+  <string name="use_autofill_to_log_into_your_accounts">Используйте автозаполнение для авторизации в ваших аккаунтах одним нажатием.</string>
+  <string name="turn_on_later">Включить позже</string>
+  <string name="turn_on_autofill_later">Включить автозаполнение позже?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Вы можете вернуться к выполнению этого шага в любое время в Настройках.</string>
+  <string name="what_bitwarden_has_to_offer">Теперь вы можете использовать автозаполнение для авторизации в приложениях и на веб-сайтах, используя сохраненные пароли. Познакомьтесь со всем, что может предложить Bitwarden.</string>
+  <string name="youre_all_set">Все готово!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

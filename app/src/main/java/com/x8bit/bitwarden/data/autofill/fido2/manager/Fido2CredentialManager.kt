@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
+import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -26,10 +27,11 @@ interface Fido2CredentialManager {
     var authenticationAttempts: Int
 
     /**
-     * Attempt to validate the RP and origin of the provided [fido2CredentialRequest].
+     * Attempt to validate the RP and origin of the provided [callingAppInfo] and [relyingPartyId].
      */
     suspend fun validateOrigin(
-        fido2CredentialRequest: Fido2CredentialRequest,
+        callingAppInfo: CallingAppInfo,
+        relyingPartyId: String,
     ): Fido2ValidateOriginResult
 
     /**

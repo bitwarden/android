@@ -50,6 +50,7 @@
   <string name="account_already_added">Регистрацията вече е добавена</string>
   <string name="switch_to_already_added_account_confirmation">Искате ли да превключите към нея сега?</string>
   <string name="master_password">Главна парола</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Още</string>
   <string name="my_vault">Моят трезор</string>
   <string name="authenticator">Удостоверител</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Молим да ни помогнете, като оставите положителен отзив!</string>
   <string name="regenerate_password">Друга парола</string>
   <string name="retype_master_password">Въведете пак главната парола</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Търсене в трезора</string>
   <string name="security">Сигурност</string>
   <string name="select">Избор</string>
@@ -329,6 +331,7 @@
   <string name="no_items_folder">Няма елементи в тази папка.</string>
   <string name="no_items_trash">Няма записи в кошчето.</string>
   <string name="autofill_accessibility_service">Услуга за автоматично дописване</string>
+  <string name="autofill_accessibility_summary">Помощ с попълването на полета за потребителско име и парола в други приложения и в уеб сайтове.</string>
   <string name="autofill_service_description">Услугата на Битуорден за автоматично дописване разчита на инфраструктурата на Андроид на устройството ви за дописване, за да може да попълва полета с идентификационна информация и банкови карти.</string>
   <string name="bitwarden_autofill_service_description">Използване на услугата на Битуорден за автоматично дописване при вписване, на банкови карти и други данни за идентификация.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Към настройките на автоматичното дописване</string>
@@ -541,6 +544,7 @@
   <string name="accessibility_description2">Използване на технологиите за достъпност на Битуорден за автоматичното дописване в уеб и приложенията. Изисква включването на изобразяване отгоре</string>
   <string name="accessibility_description3">Използване на технологиите за достъпност на Битуорден за автоматичното дописване в уеб и приложенията с прозорче за бързо действие или изскачащ прозорец.</string>
   <string name="accessibility_description4">Изисква се за прозорчето за бързо действие или изскачащия прозорец при ползване на услугите за дописване.</string>
+  <string name="accessibility_description5">Това е необходимо, ако искате да използвате плочката за бързо действие за автоматично попълване.</string>
   <string name="draw_over">Изобразяване отгоре</string>
   <string name="draw_over_description">Когато е включено, услугата за достъпност на Битуорден ще показват изскачащо прозорче при избор на полета за вписване.</string>
   <string name="draw_over_description2">Когато е включено, услугите за достъпност на Битуорден ще показват изскачащо прозорче, когато са избрани полета за вписване.</string>
@@ -992,6 +996,16 @@
   <string name="expired_link">Връзка с изтекла давност</string>
   <string name="please_restart_registration_or_try_logging_in">Моля, рестартирайте процеса на регистрация или опитайте да се впишете. Може вече да имате регистрация.</string>
   <string name="restart_registration">Рестартиране на регистрацията</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Синхронизиране на удостоверителя</string>
+  <string name="allow_bitwarden_authenticator_syncing">Разрешаване на Битуорден да синхронизира удостоверителя</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Имаше проблем с проверката на идентификатора за регистриране.</string>
+  <string name="turn_on_autofill">Включете автоматичното попълване</string>
+  <string name="use_autofill_to_log_into_your_accounts">Използвайте автоматичното попълване, за да се вписвате с едно докосване.</string>
+  <string name="turn_on_later">Включване по-късно</string>
+  <string name="turn_on_autofill_later">Искате да включите автоматичното попълване по-късно?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Можете да се върнете и да завършите тази стъпка по всяко време в Настройките.</string>
+  <string name="what_bitwarden_has_to_offer">Вече можете да използвате автоматичното попълване, за да се вписвате в уеб сайтове и приложения използвайки запазените си пароли. Сега можете да разгледате всичко останало, което Битуорден предлага.</string>
+  <string name="youre_all_set">Всичко е готово!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

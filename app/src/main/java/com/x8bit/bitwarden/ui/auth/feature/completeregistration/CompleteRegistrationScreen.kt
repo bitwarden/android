@@ -60,7 +60,6 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.nonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
@@ -141,11 +140,10 @@ fun CompleteRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = if (state.onboardingEnabled) {
-                    stringResource(id = R.string.create_account)
-                } else {
-                    stringResource(id = R.string.set_password)
-                },
+                title = stringResource(
+                    id = R.string.create_account
+                    .takeIf { state.onboardingEnabled }
+                    ?: R.string.set_password),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
@@ -236,11 +234,17 @@ private fun CompleteRegistrationContent(
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password),
+            label = stringResource(
+                id = R.string.master_password_required
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.master_password,
+            ),
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
             value = passwordInput,
             onValueChange = handler.onPasswordInputChange,
+            hint = stringResource(id = R.string.master_password_important_hint)
+                .takeIf { !showNewOnboardingUi },
             modifier = Modifier
                 .testTag("MasterPasswordEntry")
                 .fillMaxWidth()
@@ -257,7 +261,11 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenPasswordField(
-            label = stringResource(id = R.string.retype_master_password),
+            label = stringResource(
+                id = R.string.retype_master_password_required
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.retype_master_password,
+            ),
             value = confirmPasswordInput,
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
@@ -270,16 +278,18 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
-            label = stringResource(id = R.string.master_password_hint),
+            label = stringResource(
+                id = R.string.master_password_hint_not_specified
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.master_password_hint,
+            ),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
-            hint = if (showNewOnboardingUi) {
-                stringResource(
-                    R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password,
-                )
-            } else {
-                stringResource(id = R.string.master_password_description)
-            },
+            hint = stringResource(
+                id = R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password
+                    .takeIf { showNewOnboardingUi }
+                    ?: R.string.master_password_hint_description,
+            ),
             modifier = Modifier
                 .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
@@ -291,7 +301,7 @@ private fun CompleteRegistrationContent(
                     id = R.string.learn_about_other_ways_to_prevent_account_lockout,
                 ),
                 onClick = handler.onLearnToPreventLockout,
-                style = nonMaterialTypography.labelMediumProminent,
+                style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.standardHorizontalMargin(),
             )
         }

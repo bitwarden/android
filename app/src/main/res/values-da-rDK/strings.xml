@@ -50,6 +50,7 @@
   <string name="account_already_added">Konto allerede tilføjet</string>
   <string name="switch_to_already_added_account_confirmation">Skift til den nu?</string>
   <string name="master_password">Hovedadgangskode</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Flere</string>
   <string name="my_vault">Min boks</string>
   <string name="authenticator">Godkender</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Overvej venligst at hjælpe os med en god anmeldelse!</string>
   <string name="regenerate_password">Regenerér adgangskode</string>
   <string name="retype_master_password">Angiv hovedadgangskode igen</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Søg i boks</string>
   <string name="security">Sikkerhed</string>
   <string name="select">Vælg</string>
@@ -329,6 +331,7 @@ Skanning vil ske automatisk.</string>
   <string name="no_items_folder">Der er ingen emner i denne mappe.</string>
   <string name="no_items_trash">Der er ingen emner i papirkurven.</string>
   <string name="autofill_accessibility_service">Autoudfyld Tilgængelighedstjeneste</string>
+  <string name="autofill_accessibility_summary">Assisterer med at udfylde brugernavn- og adgangskodefelter i andre apps og på nettet.</string>
   <string name="autofill_service_description">Bitwarden-autoudfyldnigstjenesten bruger Androids Autofill Framework til at assistere med at udfylde loginoplysninger i andre apps på enheden.</string>
   <string name="bitwarden_autofill_service_description">Brug Bitwarden-autoudfyldningstjenesten til at udfylde loginoplysninger i andre apps.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Åbn Autoudfyld-indstillinger</string>
@@ -541,6 +544,7 @@ Skanning vil ske automatisk.</string>
   <string name="accessibility_description2">Brug Bitwarden-tilgængelighedstjenesten til at autoudfylde logins på tværs af apps og internet (kræver også at \"Tegn over\" er aktiveret)</string>
   <string name="accessibility_description3">Brug Bitwarden-tilgængelighedstjenesten til at benytte Autoudfyld Hurtig-handlingsflisen, og/eller vise en pop op vha. \"Tegn over\" (hvis aktiveret).</string>
   <string name="accessibility_description4">Kræves for brug af Autoudfyld Hurtig-handlingsflisen, eller for at udvide Autofyldningtjenesten vha. \"Tegn over\" (hvis aktiveret).</string>
+  <string name="accessibility_description5">Kræves for brug af Autoudfyld Hurtig-handlingsflisen.</string>
   <string name="draw_over">Brug \"Tegn over\"</string>
   <string name="draw_over_description">Tillader Bitwarden-tilgængelighedstjenesten at vise en pop op, når login-felter vælges.</string>
   <string name="draw_over_description2">Hvis aktiveret, vil Bitwarden-tilgængelighedstjenesten vise en pop op, når login-felter vælges for at assistere med autoudfyldning af logins.</string>
@@ -994,4 +998,14 @@ Skift til denne konto?</string>
   <string name="restart_registration">Genstart registrering</string>
   <string name="authenticator_sync">Authenticator-synk</string>
   <string name="allow_bitwarden_authenticator_syncing">Tillad Bitwarden Authenticator-synkning</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Der var et problem med at validere registreringstokenet.</string>
+  <string name="turn_on_autofill">Slå Autoudfyldning til</string>
+  <string name="use_autofill_to_log_into_your_accounts">Brug autofyld for at logge ind på konti med ét tryk.</string>
+  <string name="turn_on_later">Slå til senere</string>
+  <string name="turn_on_autofill_later">Slå autofyld til senere?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Dette trin kan når som helst fuldføres via Indstillinger.</string>
+  <string name="what_bitwarden_has_to_offer">Man kan nu bruge autofyld til at logge ind på apps og websteder med sine gemte adgangskoder. Nu kan man tjekke alt andet, Bitwarden har at tilbyde.</string>
+  <string name="youre_all_set">Så er alt klar!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

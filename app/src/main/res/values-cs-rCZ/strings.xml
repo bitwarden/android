@@ -50,6 +50,7 @@
   <string name="account_already_added">Účet byl již přidán</string>
   <string name="switch_to_already_added_account_confirmation">Chcete se na něj nyní přepnout?</string>
   <string name="master_password">Hlavní heslo</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Více</string>
   <string name="my_vault">Můj trezor</string>
   <string name="authenticator">Ověřovací aplikace</string>
@@ -133,7 +134,7 @@
   <string name="vault_timeout">Časový limit trezoru</string>
   <string name="vault_timeout_action">Akce při vypršení časového limitu trezoru</string>
   <string name="vault_timeout_log_out_confirmation">Po vypršení časového limitu dojde k odhlášení. Přístup k trezoru bude odebrán a pro opětovné přihlášení bude vyžadováno online ověření. Opravdu chcete použít toto nastavení?</string>
-  <string name="logging_in">Přihlašování…</string>
+  <string name="logging_in">Přihlašování...</string>
   <string name="login_or_create_new_account">Pro přístup do Vašeho bezpečného trezoru se přihlaste nebo si vytvořte nový účet.</string>
   <string name="manage">Správa</string>
   <string name="master_password_confirmation_val_message">Potvrzení hesla se neshoduje.</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Pomozte nám napsáním dobré recenze!</string>
   <string name="regenerate_password">Vygenerovat jiné heslo</string>
   <string name="retype_master_password">Znovu zadejte hlavní heslo</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Prohledat trezor</string>
   <string name="security">Zabezpečení</string>
   <string name="select">Vybrat</string>
@@ -329,6 +331,7 @@ Načtení proběhne automaticky.</string>
   <string name="no_items_folder">V této složce nejsou žádné položky.</string>
   <string name="no_items_trash">V koši nejsou žádné položky.</string>
   <string name="autofill_accessibility_service">Služba přístupnosti automatického vyplňování</string>
+  <string name="autofill_accessibility_summary">Pomůže při vyplňování uživatelského jména a hesla v jiných aplikacích a na webu.</string>
   <string name="autofill_service_description">Služba automatického vyplňování používá Android Autofill Framework k vyplnění přihlašovacích údajů do jiných aplikací na Vašem zařízení.</string>
   <string name="bitwarden_autofill_service_description">Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů, platebních karet či identit v ostatních aplikacích.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Otevřít nastavení automatického vyplňování</string>
@@ -541,6 +544,7 @@ Načtení proběhne automaticky.</string>
   <string name="accessibility_description2">Použije službu přístupnosti aplikace Bitwarden k automatickému vyplnění přihlašovacích údajů napříč aplikacemi a weby (vykreslování přes ostatní aplikace musí být povoleno).</string>
   <string name="accessibility_description3">Použije službu přístupnosti aplikace Bitwarden pro dlaždici rychlého automatického vyplnění anebo zobrazení překryvného okna (pokud je povoleno).</string>
   <string name="accessibility_description4">Vyžadováno pro použití dlaždice rychlého automatického vyplnění nebo rozšíření služby automatického vyplnění pomocí vykreslování přes ostatní aplikace (pokud je povoleno).</string>
+  <string name="accessibility_description5">Vyžadováno pro použití v dlaždici rychlé akce automatického vyplňování.</string>
   <string name="draw_over">Použít vykreslování přes ostatní aplikace</string>
   <string name="draw_over_description">Služba přístupnosti aplikace Bitwarden umožní zobrazovat vyskakovací okno při výběru pole s přihlašovacími údaji.</string>
   <string name="draw_over_description2">Pokud je povoleno, služba usnadnění Bitwardenu zobrazí vyskakovací okno při výběru přihlašovacích polí pro automatické vyplňování přihlašovacích údajů.</string>
@@ -993,4 +997,14 @@ Chcete se přepnout na tento účet?</string>
   <string name="restart_registration">Restartovat registraci</string>
   <string name="authenticator_sync">Synchronizovat ověřovací aplikaci</string>
   <string name="allow_bitwarden_authenticator_syncing">Povolit synchronizaci ověřovací aplikace Bitwardenu</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Vyskytl se problém při ověřování registračního tokenu.</string>
+  <string name="turn_on_autofill">Zapnout automatické vyplňování</string>
+  <string name="use_autofill_to_log_into_your_accounts">Použijte automatické vyplňování pro přihlášení do svých účtů jediným klepnutím.</string>
+  <string name="turn_on_later">Zapnout později</string>
+  <string name="turn_on_autofill_later">Zapnout automatické vyplňování později?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">K dokončení tohoto kroku se můžete kdykoliv vrátit v Nastavení.</string>
+  <string name="what_bitwarden_has_to_offer">K přihlašování do aplikací a na webové stránky pomocí uložených hesel můžete nyní používat automatické vyplňování. Nyní můžete prozkoumat vše ostatní, co Bitwarden nabízí.</string>
+  <string name="youre_all_set">Vše je nastaveno!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

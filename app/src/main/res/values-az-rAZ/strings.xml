@@ -50,6 +50,7 @@
   <string name="account_already_added">Hesab artıq əlavə edildi</string>
   <string name="switch_to_already_added_account_confirmation">Buna indi keçmək istəyirsiniz?</string>
   <string name="master_password">Ana parol</string>
+  <string name="master_password_required">Master password (required)</string>
   <string name="more">Daha çox</string>
   <string name="my_vault">Anbarım</string>
   <string name="authenticator">Kimlik doğrulayıcı</string>
@@ -166,6 +167,7 @@
   <string name="rate_the_app_description">Gözəl bir rəy ilə bizə dəstək ola bilərsiniz!</string>
   <string name="regenerate_password">Parolu yenidən yarat</string>
   <string name="retype_master_password">Ana parolu yenidən yaz</string>
+  <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Anbarda axtar</string>
   <string name="security">Güvənlik</string>
   <string name="select">Seçin</string>
@@ -329,6 +331,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="no_items_folder">Bu qovluqda heç bir element yoxdur.</string>
   <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
   <string name="autofill_accessibility_service">Avto-doldurma əlçatımlılıq xidməti</string>
+  <string name="autofill_accessibility_summary">Digər tətbiqlərdə və vebdə istifadəçi adı və parol xanalarının doldurulmasına kömək edin.</string>
   <string name="autofill_service_description">Bitwarden avto-doldurma xidməti, giriş məlumatlarının cihazınızdakı digər tətbiqlərdə doldurmasına kömək etməsi üçün Android Avto-doldurma Çərçivəsini istifadə edir.</string>
   <string name="bitwarden_autofill_service_description">Giriş məlumatlarını digər tətbiqlərdə doldurmaq üçün Bitwarden avto-doldurma xidmətini istifadə edin.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Avto-doldurma ayarlarını aç</string>
@@ -541,6 +544,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="accessibility_description2">Saytda və vebdə giriş məlumatlarınızı avto-doldurmaq üçün Bitwarden Əlçatımlılıq Xidmətini istifadə edin. (\"Üzərində göstər\" seçimi açıq olmalıdır)</string>
   <string name="accessibility_description3">Avto-doldurma cəld əməliyyat qutusunu istifadə etmək üçün Bitwarden əlçatımlılıq xidmətini istifadə edin və/və ya \"Üzərində göstər\"i (əgər fəaldırsa) istifadə edərək açılan bir pəncərə göstərə bilərsiniz.</string>
   <string name="accessibility_description4">Avto-doldurma cəld əməliyyat qutusunu istifadə etmək və ya \"Üzərində göstər\"i (əgər fəaldırsa) istifadə edərək Avto-doldurma xidmətini təqlid etmək tələb olunur.</string>
+  <string name="accessibility_description5">Avto-doldurma Cəld Əməliyyat xanasını istifadə etmək tələb olunur.</string>
   <string name="draw_over">\"Üzərində göstər\"i istifadə edin</string>
   <string name="draw_over_description">Giriş xanalarını seçdikdə Bitwarden Əlçatımlılıq Xidmətinin açılan pəncərə göstərməsinə icazə verir.</string>
   <string name="draw_over_description2">İşə salındıqda Bitwarden Əlçatımlılıq Xidməti, giriş məlumatlarınızın avto-doldurmasına kömək etmək üçün giriş xanaları seçildikdə açılan pəncərə göstərəcək.</string>
@@ -991,6 +995,16 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="expired_link">Vaxtı bitmiş keçid</string>
   <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
   <string name="restart_registration">Qeydiyyatı yenidən başlat</string>
-  <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="authenticator_sync">Kimlik doğrulayıcı sinxrn</string>
+  <string name="allow_bitwarden_authenticator_syncing">Bitwarden Kimlik doğrulayıcı sinxronlaşdırmasına icazə ver</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Qeydiyyat jetonu doğrulanarkən bir problem baş verdi.</string>
+  <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
+  <string name="use_autofill_to_log_into_your_accounts">Tək toxunuşda hesablarınıza giriş etmək üçün avto-doldurmanı istifadə edin.</string>
+  <string name="turn_on_later">Daha sonra işə sal</string>
+  <string name="turn_on_autofill_later">Avto-doldurma daha sonra işə salınsın?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Bu addımı tamamlamaq üçün istənilən vaxt Ayarlara gedə bilərsiniz.</string>
+  <string name="what_bitwarden_has_to_offer">Artıq saxlanılmış parollarınızı istifadə edərək tətbiq və veb saytlara giriş etmək üçün avto-doldurmanı istifadə edə bilərsiniz. Artıq, Bitwarden-nin təklif etdiyi hər şeyi kəşf edə bilərsiniz.</string>
+  <string name="youre_all_set">Artıq hazırsınız!</string>
+  <string name="master_password_hint_not_specified">Master password hint</string>
+  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>

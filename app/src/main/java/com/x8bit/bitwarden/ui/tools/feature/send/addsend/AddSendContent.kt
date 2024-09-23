@@ -46,7 +46,6 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningTex
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
 import kotlinx.collections.immutable.persistentListOf
 
@@ -472,7 +471,7 @@ private fun AddSendOptions(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = it.toString(),
-                            style = LocalNonMaterialTypography.current.bodySmallProminent,
+                            style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
