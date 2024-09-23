@@ -102,7 +102,6 @@ class VaultItemListingViewModel @Inject constructor(
         val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val fido2CreationData = specialCircumstance as? SpecialCircumstance.Fido2Save
-            specialCircumstance as? SpecialCircumstance.Fido2GetCredentials
         val dialogState = fido2CreationData
             ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) }
         VaultItemListingState(
