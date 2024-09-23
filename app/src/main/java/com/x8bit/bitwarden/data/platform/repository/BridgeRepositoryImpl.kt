@@ -25,6 +25,9 @@ class BridgeRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
 ) : BridgeRepository {
 
+    override val authenticatorSyncSymmetricKey: ByteArray?
+        get() = authDiskSource.authenticatorSyncSymmetricKey
+
     @Suppress("LongMethod")
     override suspend fun getSharedAccounts(): SharedAccountData {
         val allAccounts = authRepository.userStateFlow.value?.accounts ?: emptyList()
@@ -111,7 +114,4 @@ class BridgeRepositoryImpl(
             SharedAccountData(it)
         }
     }
-
-    override val authenticatorSyncSymmetricKey: ByteArray?
-        get() = authDiskSource.authenticatorSyncSymmetricKey
 }

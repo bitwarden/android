@@ -10,6 +10,12 @@ import com.bitwarden.bridge.model.SharedAccountData
 interface BridgeRepository {
 
     /**
+     * The currently persisted authenticator sync symmetric key. This key is used for
+     * encrypting IPC traffic.
+     */
+    val authenticatorSyncSymmetricKey: ByteArray?
+
+    /**
      * Get a list of shared account data. This function will go through all accounts and for each
      * one, check to see if the user has Authenticator account syncing enabled and if they
      * do, it will query and decrypt the user's shared account data.
@@ -18,10 +24,4 @@ interface BridgeRepository {
      * accessed will be omitted from the list.
      */
     suspend fun getSharedAccounts(): SharedAccountData
-
-    /**
-     * The currently persisted authenticator sync symmetric key. This key is used for
-     * encrypting IPC traffic.
-     */
-    val authenticatorSyncSymmetricKey: ByteArray?
 }
