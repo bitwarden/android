@@ -32,86 +32,88 @@ class BridgeRepositoryImpl(
     override suspend fun getSharedAccounts(): SharedAccountData {
         val allAccounts = authRepository.userStateFlow.value?.accounts ?: emptyList()
 
-        return allAccounts.mapNotNull { account ->
-            val userId = account.userId
+        return allAccounts
+            .mapNotNull { account ->
+                val userId = account.userId
 
-            // Grab the user's authenticator sync unlock key. If it is null,
-            // the user has not enabled authenticator sync.
-            val decryptedUserKey = authDiskSource.getAuthenticatorSyncUnlockKey(userId)
-                ?: return@mapNotNull null
+                // Grab the user's authenticator sync unlock key. If it is null,
+                // the user has not enabled authenticator sync.
+                val decryptedUserKey = authDiskSource.getAuthenticatorSyncUnlockKey(userId)
+                    ?: return@mapNotNull null
 
-            // Wait for any unlocking actions to finish:
-            vaultRepository.vaultUnlockDataStateFlow.first {
-                it.statusFor(userId) != VaultUnlockData.Status.UNLOCKING
-            }
+                // Wait for any unlocking actions to finish:
+                vaultRepository.vaultUnlockDataStateFlow.first {
+                    it.statusFor(userId) != VaultUnlockData.Status.UNLOCKING
+                }
 
-            // Unlock vault if necessary:
-            val isVaultAlreadyUnlocked = vaultRepository.isVaultUnlocked(userId = userId)
-            if (!isVaultAlreadyUnlocked) {
-                val unlockResult = vaultRepository
-                    .unlockVaultWithDecryptedUserKey(
-                        userId = userId,
-                        decryptedUserKey = decryptedUserKey,
-                    )
-
-                when (unlockResult) {
-                    is VaultUnlockResult.AuthenticationError,
-                    VaultUnlockResult.GenericError,
-                    VaultUnlockResult.InvalidStateError,
-                    -> {
-                        // Not being able to unlock the user's vault with the
-                        // decrypted unlock key is an unexpected case, but if it does
-                        // happen we omit the account from list of shared accounts
-                        // and remove that user's authenticator sync unlock key.
-                        // This gives the user a way to potentially re-enable syncing
-                        // (going to Account Security and re-enabling the toggle)
-                        authDiskSource.storeAuthenticatorSyncUnlockKey(
+                // Unlock vault if necessary:
+                val isVaultAlreadyUnlocked = vaultRepository.isVaultUnlocked(userId = userId)
+                if (!isVaultAlreadyUnlocked) {
+                    val unlockResult = vaultRepository
+                        .unlockVaultWithDecryptedUserKey(
                             userId = userId,
-                            authenticatorSyncUnlockKey = null,
+                            decryptedUserKey = decryptedUserKey,
                         )
-                        return@mapNotNull null
+
+                    when (unlockResult) {
+                        is VaultUnlockResult.AuthenticationError,
+                        VaultUnlockResult.GenericError,
+                        VaultUnlockResult.InvalidStateError,
+                        -> {
+                            // Not being able to unlock the user's vault with the
+                            // decrypted unlock key is an unexpected case, but if it does
+                            // happen we omit the account from list of shared accounts
+                            // and remove that user's authenticator sync unlock key.
+                            // This gives the user a way to potentially re-enable syncing
+                            // (going to Account Security and re-enabling the toggle)
+                            authDiskSource.storeAuthenticatorSyncUnlockKey(
+                                userId = userId,
+                                authenticatorSyncUnlockKey = null,
+                            )
+                            return@mapNotNull null
+                        }
+                        // Proceed
+                        VaultUnlockResult.Success -> Unit
                     }
-                    // Proceed
-                    VaultUnlockResult.Success -> Unit
-                }
-            }
-
-            // Vault is unlocked, query vault disk source for totp logins:
-            val totpUris = vaultDiskSource
-                .getCiphers(userId)
-                .first()
-                // Filter out any ciphers without a totp item:
-                .filter { it.login?.totp != null }
-                .mapNotNull {
-                    // Decrypt each cipher and take just totp codes:
-                    vaultSdkSource
-                        .decryptCipher(
-                            userId = userId,
-                            cipher = it.toEncryptedSdkCipher(),
-                        )
-                        .getOrNull()
-                        ?.login
-                        ?.totp
                 }
 
-            val lastSyncTime =
-                settingsDiskSource.getLastSyncTime(userId) ?: return@mapNotNull null
+                // Vault is unlocked, query vault disk source for totp logins:
+                val totpUris = vaultDiskSource
+                    .getCiphers(userId)
+                    .first()
+                    // Filter out any ciphers without a totp item:
+                    .filter { it.login?.totp != null }
+                    .mapNotNull {
+                        // Decrypt each cipher and take just totp codes:
+                        vaultSdkSource
+                            .decryptCipher(
+                                userId = userId,
+                                cipher = it.toEncryptedSdkCipher(),
+                            )
+                            .getOrNull()
+                            ?.login
+                            ?.totp
+                    }
 
-            // Lock the user's vault if we unlocked it for this operation:
-            if (!isVaultAlreadyUnlocked) {
-                vaultRepository.lockVault(userId)
+                val lastSyncTime =
+                    settingsDiskSource.getLastSyncTime(userId) ?: return@mapNotNull null
+
+                // Lock the user's vault if we unlocked it for this operation:
+                if (!isVaultAlreadyUnlocked) {
+                    vaultRepository.lockVault(userId)
+                }
+
+                SharedAccountData.Account(
+                    userId = account.userId,
+                    name = account.name,
+                    email = account.email,
+                    environmentLabel = account.environment.label,
+                    lastSyncTime = lastSyncTime,
+                    totpUris = totpUris,
+                )
             }
-
-            SharedAccountData.Account(
-                userId = account.userId,
-                name = account.name,
-                email = account.email,
-                environmentLabel = account.environment.label,
-                lastSyncTime = lastSyncTime,
-                totpUris = totpUris,
-            )
-        }.let {
-            SharedAccountData(it)
-        }
+            .let {
+                SharedAccountData(it)
+            }
     }
 }
