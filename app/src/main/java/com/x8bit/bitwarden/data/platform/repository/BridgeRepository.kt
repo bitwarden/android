@@ -3,9 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.bitwarden.bridge.model.SharedAccountData
 
 /**
- * Provides an API for querying disk sources required by [BridgeRepositoryImpl].
- *
- * Note: this repository should not be injected anywhere other than [BridgeRepositoryImpl].
+ * Provides an API for querying disk sources required by Bridge service implementation.
  */
 interface BridgeRepository {
 
