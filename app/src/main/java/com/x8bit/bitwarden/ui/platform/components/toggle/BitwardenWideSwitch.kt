@@ -99,6 +99,7 @@ fun BitwardenWideSwitch(
         Switch(
             modifier = Modifier
                 .height(56.dp),
+            enabled = enabled,
             checked = isChecked,
             onCheckedChange = null,
         )
