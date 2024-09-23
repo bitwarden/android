@@ -23,6 +23,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -45,6 +47,12 @@ class BridgeServiceProcessorTest {
             featureFlagManager = featureFlagManager,
             dispatcherManager = FakeDispatcherManager(),
         )
+    }
+
+    @AfterEach
+    fun teardown() {
+        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(SharedAccountData::encrypt)
     }
 
     @Test
