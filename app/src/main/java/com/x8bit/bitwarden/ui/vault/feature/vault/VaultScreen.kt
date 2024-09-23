@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -50,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
@@ -258,17 +256,12 @@ private fun VaultScreenScaffold(
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
-                FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                BitwardenFloatingActionButton(
                     onClick = vaultHandlers.addItemClickAction,
-                    modifier = Modifier.testTag("AddItemButton"),
-                ) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_plus),
-                        contentDescription = stringResource(id = R.string.add_item),
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                }
+                    painter = rememberVectorPainter(id = R.drawable.ic_plus),
+                    contentDescription = stringResource(id = R.string.add_item),
+                    modifier = Modifier.testTag(tag = "AddItemButton"),
+                )
             }
         },
         pullToRefreshState = pullToRefreshState,
