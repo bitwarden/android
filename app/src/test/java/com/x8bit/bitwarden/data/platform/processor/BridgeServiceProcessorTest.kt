@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -117,7 +118,7 @@ class BridgeServiceProcessorTest {
         every {
             bridgeRepository.authenticatorSyncSymmetricKey
         } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
-        assert(binder.checkSymmetricEncryptionKeyFingerprint(SYMMETRIC_KEY_FINGERPRINT))
+        assertTrue(binder.checkSymmetricEncryptionKeyFingerprint(SYMMETRIC_KEY_FINGERPRINT))
     }
 
     @Test
