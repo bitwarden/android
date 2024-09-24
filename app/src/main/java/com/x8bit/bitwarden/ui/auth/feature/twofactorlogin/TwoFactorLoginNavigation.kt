@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
@@ -48,6 +50,13 @@ fun NavGraphBuilder.twoFactorLoginDestination(
 ) {
     composableWithSlideTransitions(
         route = TWO_FACTOR_LOGIN_ROUTE,
+        arguments = listOf(
+            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
+            navArgument(PASSWORD) {
+                type = NavType.StringType
+                nullable = true
+            },
+        ),
     ) {
         TwoFactorLoginScreen(
             onNavigateBack = onNavigateBack,
