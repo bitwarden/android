@@ -4,9 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -42,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
@@ -435,16 +433,12 @@ private fun VaultItemListingScaffold(
         },
         floatingActionButton = {
             if (state.itemListingType.hasFab) {
-                FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
-                    modifier = Modifier.testTag("AddItemButton"),
-                ) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_plus),
-                        contentDescription = stringResource(id = R.string.add_item),
-                    )
-                }
+                    painter = rememberVectorPainter(id = R.drawable.ic_plus),
+                    contentDescription = stringResource(id = R.string.add_item),
+                    modifier = Modifier.testTag(tag = "AddItemButton"),
+                )
             }
         },
         pullToRefreshState = pullToRefreshState,

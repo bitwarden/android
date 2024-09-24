@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -39,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -239,20 +237,16 @@ fun VaultItemScreen(
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
-                FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                BitwardenFloatingActionButton(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultItemAction.Common.EditClick) }
                     },
+                    painter = rememberVectorPainter(id = R.drawable.ic_edit),
+                    contentDescription = stringResource(id = R.string.edit_item),
                     modifier = Modifier
-                        .testTag("EditItemButton")
+                        .testTag(tag = "EditItemButton")
                         .padding(bottom = 16.dp),
-                ) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_edit),
-                        contentDescription = stringResource(id = R.string.edit_item),
-                    )
-                }
+                )
             }
         },
     ) { innerPadding ->

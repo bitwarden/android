@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
@@ -88,21 +87,16 @@ fun FoldersScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            BitwardenFloatingActionButton(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
                 },
+                painter = rememberVectorPainter(id = R.drawable.ic_plus),
+                contentDescription = stringResource(id = R.string.add_item),
                 modifier = Modifier
-                    .testTag("AddItemButton")
+                    .testTag(tag = "AddItemButton")
                     .navigationBarsPadding(),
-            ) {
-                Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus),
-                    contentDescription = stringResource(id = R.string.add_item),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
+            )
         },
     ) { innerPadding ->
         when (val viewState = state.value.viewState) {

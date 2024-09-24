@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +43,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
@@ -132,19 +132,14 @@ fun BlockAutoFillScreen(
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
-                FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                BitwardenFloatingActionButton(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
                     },
-                    modifier = Modifier.testTag("AddItemButton"),
-                ) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_plus),
-                        contentDescription = stringResource(id = R.string.add_item),
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                }
+                    painter = rememberVectorPainter(id = R.drawable.ic_plus),
+                    contentDescription = stringResource(id = R.string.add_item),
+                    modifier = Modifier.testTag(tag = "AddItemButton"),
+                )
             }
         },
     ) { innerPadding ->
