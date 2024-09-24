@@ -56,6 +56,13 @@
 
 ## Dependencies
 
+### SDK
+
+The Android application consumes the internal [Bitwarden SDK](https://github.com/bitwarden/sdk), by
+default it consumes the published artifacts however by setting `localSdk` in `user.properties` you
+can configure it to load the SDK from your local maven artifactory. This is particularly useful when
+developing new SDK capabilities.
+
 ### Application Dependencies
 
 The following is a list of all third-party dependencies included as part of the application beyond the standard Android SDK.
