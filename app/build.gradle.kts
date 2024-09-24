@@ -2,6 +2,8 @@ import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFile
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -18,6 +20,16 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.sonarqube)
+}
+
+/**
+ * Loads local user-specific build properties that are not checked into source control.
+ */
+val userProperties = Properties().apply {
+    val buildPropertiesFile = File(rootDir, "user.properties")
+    if (buildPropertiesFile.exists()) {
+        FileInputStream(buildPropertiesFile).use { load(it) }
+    }
 }
 
 android {
@@ -132,7 +144,7 @@ kotlin {
 
 configurations.all {
     resolutionStrategy.dependencySubstitution {
-        if (project.hasProperty("localSdk")) {
+        if (userProperties.containsKey("localSdk")) {
             substitute(module("com.bitwarden:sdk-android"))
                 .using(module("com.bitwarden:sdk-android:LOCAL"))
         }
@@ -321,4 +333,4 @@ tasks {
     getByName("sonar") {
         dependsOn("check")
     }
-} 
+}
