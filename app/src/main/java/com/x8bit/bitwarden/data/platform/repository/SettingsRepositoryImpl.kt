@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
-import com.bitwarden.bridge.util.generateSecretKey
+import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation

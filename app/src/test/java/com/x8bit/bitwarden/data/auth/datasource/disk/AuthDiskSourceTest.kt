@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import androidx.core.content.edit
 import app.cash.turbine.test
-import com.bitwarden.bridge.util.generateSecretKey
+import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
