@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 
 /**
@@ -56,21 +55,13 @@ fun SendEmpty(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        BitwardenFilledTonalButton(
             onClick = onAddItemClick,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            ),
+            label = stringResource(id = R.string.add_a_send),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.add_a_send),
-                style = MaterialTheme.typography.labelLarge,
-            )
-        }
+        )
         Spacer(modifier = Modifier.weight(1F))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
