@@ -80,7 +80,7 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticatorBridgeServiceProcessor(
+    fun provideAuthenticatorBridgeProcessor(
         authenticatorBridgeRepository: AuthenticatorBridgeRepository,
         dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,

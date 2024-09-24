@@ -45,7 +45,7 @@ class AuthenticatorBridgeRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
 
-    private val bridgeRepository = AuthenticatorBridgeRepositoryImpl(
+    private val authenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
         authRepository = authRepository,
         authDiskSource = fakeAuthDiskSource,
         vaultRepository = vaultRepository,
@@ -129,7 +129,7 @@ class AuthenticatorBridgeRepositoryTest {
     @Suppress("MaxLineLength")
     fun `syncAccounts with user 1 vault unlocked and all data present should send expected shared accounts data`() =
         runTest {
-            val sharedAccounts = bridgeRepository.getSharedAccounts()
+            val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
             assertEquals(
                 BOTH_ACCOUNT_SUCCESS,
                 sharedAccounts,
@@ -155,7 +155,7 @@ class AuthenticatorBridgeRepositoryTest {
     fun `syncAccounts when userStateFlow is null should return an empty list`() = runTest {
         every { authRepository.userStateFlow } returns MutableStateFlow(null)
 
-        val sharedData = bridgeRepository.getSharedAccounts()
+        val sharedData = authenticatorBridgeRepository.getSharedAccounts()
 
         assertTrue(sharedData.accounts.isEmpty())
         verify { authRepository.userStateFlow }
@@ -172,7 +172,7 @@ class AuthenticatorBridgeRepositoryTest {
 
             assertEquals(
                 SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)),
-                bridgeRepository.getSharedAccounts(),
+                authenticatorBridgeRepository.getSharedAccounts(),
             )
 
             verify { authRepository.userStateFlow }
@@ -199,7 +199,7 @@ class AuthenticatorBridgeRepositoryTest {
             } returns VaultUnlockResult.Success
             every { vaultRepository.lockVault(USER_1_ID) } returns Unit
 
-            val sharedAccounts = bridgeRepository.getSharedAccounts()
+            val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
             assertEquals(
                 BOTH_ACCOUNT_SUCCESS,
                 sharedAccounts,
@@ -232,7 +232,7 @@ class AuthenticatorBridgeRepositoryTest {
     @Test
     fun `syncAccounts when getLastSyncTime is null should omit account from list`() = runTest {
         fakeSettingsDiskSource.storeLastSyncTime(USER_1_ID, null)
-        val sharedAccounts = bridgeRepository.getSharedAccounts()
+        val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
         assertEquals(SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)), sharedAccounts)
         verify { vaultRepository.vaultUnlockDataStateFlow }
         verify { vaultDiskSource.getCiphers(USER_1_ID) }
@@ -261,7 +261,7 @@ class AuthenticatorBridgeRepositoryTest {
                 vaultRepository.unlockVaultWithDecryptedUserKey(USER_1_ID, USER_1_UNLOCK_KEY)
             } returns VaultUnlockResult.InvalidStateError
 
-            val sharedAccounts = bridgeRepository.getSharedAccounts()
+            val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
             assertEquals(SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)), sharedAccounts)
             assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_1_ID))
             verify { vaultRepository.vaultUnlockDataStateFlow }
@@ -298,7 +298,7 @@ class AuthenticatorBridgeRepositoryTest {
             )
             every { vaultRepository.vaultUnlockDataStateFlow } returns vaultUnlockStateFlow
             val deferred = async {
-                val sharedAccounts = bridgeRepository.getSharedAccounts()
+                val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
                 assertEquals(BOTH_ACCOUNT_SUCCESS, sharedAccounts)
             }
 
@@ -336,12 +336,12 @@ class AuthenticatorBridgeRepositoryTest {
     @Test
     fun `authenticatorSyncSymmetricKey should read from authDiskSource`() {
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = null
-        assertNull(bridgeRepository.authenticatorSyncSymmetricKey)
+        assertNull(authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
 
         val syncKey = generateSecretKey().getOrThrow().encoded
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
 
-        assertEquals(syncKey, bridgeRepository.authenticatorSyncSymmetricKey)
+        assertEquals(syncKey, authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
     }
 }
 
