@@ -26,7 +26,23 @@ class AuthenticatorBridgeRepositoryImpl(
 ) : AuthenticatorBridgeRepository {
 
     override val authenticatorSyncSymmetricKey: ByteArray?
-        get() = authDiskSource.authenticatorSyncSymmetricKey
+        get() {
+            val doAnyAccountsHaveAuthenticatorSyncEnabled = authRepository
+                .userStateFlow
+                .value
+                ?.accounts
+                ?.any {
+                    // Authenticator sync is enabled if any accounts have an authenticator
+                    // sync key stored:
+                    authDiskSource.getAuthenticatorSyncUnlockKey(it.userId) != null
+                }
+                ?: false
+            return if (doAnyAccountsHaveAuthenticatorSyncEnabled) {
+                authDiskSource.authenticatorSyncSymmetricKey
+            } else {
+                null
+            }
+        }
 
     @Suppress("LongMethod")
     override suspend fun getSharedAccounts(): SharedAccountData {
