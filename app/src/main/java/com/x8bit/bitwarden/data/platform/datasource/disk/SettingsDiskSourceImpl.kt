@@ -58,6 +58,12 @@ class SettingsDiskSourceImpl(
     private val mutablePullToRefreshEnabledFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableShowAutoFillSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShowUnlockSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -334,39 +340,6 @@ class SettingsDiskSourceImpl(
         )
     }
 
-    private fun getMutableLastSyncFlow(
-        userId: String,
-    ): MutableSharedFlow<Instant?> =
-        mutableLastSyncFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
-    private fun getMutableVaultTimeoutActionFlow(
-        userId: String,
-    ): MutableSharedFlow<VaultTimeoutAction?> =
-        mutableVaultTimeoutActionFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
-    private fun getMutableVaultTimeoutInMinutesFlow(
-        userId: String,
-    ): MutableSharedFlow<Int?> =
-        mutableVaultTimeoutInMinutesFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
-    private fun getMutablePullToRefreshEnabledFlowMap(
-        userId: String,
-    ): MutableSharedFlow<Boolean?> =
-        mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
-    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> =
-        mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
     override fun getScreenCaptureAllowed(userId: String): Boolean? {
         return getBoolean(key = SCREEN_CAPTURE_ALLOW_KEY.appendIdentifier(userId))
     }
@@ -403,20 +376,76 @@ class SettingsDiskSourceImpl(
             key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
         )
 
-    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) =
+    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?) {
         putBoolean(
             key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
             value = showBadge,
         )
+        getMutableShowAutoFillSettingBadgeFlow(userId).tryEmit(showBadge)
+    }
+
+    override fun getShowAutoFillSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowAutoFillSettingBadgeFlow(userId)
+            .onSubscription { emit(getShowAutoFillSettingBadge(userId)) }
 
     override fun getShowUnlockSettingBadge(userId: String): Boolean? =
         getBoolean(
             key = SHOW_UNLOCK_SETTING_BADGE.appendIdentifier(userId),
         )
 
-    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?) =
+    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?) {
         putBoolean(
             key = SHOW_UNLOCK_SETTING_BADGE.appendIdentifier(userId),
             value = showBadge,
         )
+        getMutableShowUnlockSettingBadgeFlow(userId).tryEmit(showBadge)
+    }
+
+    override fun getShowUnlockSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowUnlockSettingBadgeFlow(userId = userId)
+            .onSubscription { emit(getShowUnlockSettingBadge(userId)) }
+
+    private fun getMutableLastSyncFlow(
+        userId: String,
+    ): MutableSharedFlow<Instant?> =
+        mutableLastSyncFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableVaultTimeoutActionFlow(
+        userId: String,
+    ): MutableSharedFlow<VaultTimeoutAction?> =
+        mutableVaultTimeoutActionFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableVaultTimeoutInMinutesFlow(
+        userId: String,
+    ): MutableSharedFlow<Int?> =
+        mutableVaultTimeoutInMinutesFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePullToRefreshEnabledFlowMap(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> =
+        mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableShowAutoFillSettingBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> = mutableShowAutoFillSettingBadgeFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
+
+    private fun getMutableShowUnlockSettingBadgeFlow(userId: String): MutableSharedFlow<Boolean?> =
+        mutableShowUnlockSettingBadgeFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 }

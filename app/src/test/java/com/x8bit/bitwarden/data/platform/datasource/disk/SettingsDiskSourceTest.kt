@@ -1055,6 +1055,23 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `storeShowAutoFillSettingBadge should update the flow value`() = runTest {
+        val mockUserId = "mockUserId"
+        settingsDiskSource.storeShowAutoFillSettingBadge(mockUserId, true)
+        settingsDiskSource.getShowAutoFillSettingBadgeFlow(userId = mockUserId).test {
+            // The initial values of the Flow are in sync
+            assertTrue(awaitItem() ?: false)
+            assertTrue(awaitItem() ?: false)
+
+            // update the value to false
+            settingsDiskSource.storeShowAutoFillSettingBadge(
+                userId = mockUserId, false,
+            )
+            assertFalse(awaitItem() ?: true)
+        }
+    }
+
+    @Test
     fun `storeShowUnlockSettingBadge should update SharedPreferences`() {
         val mockUserId = "mockUserId"
         val showUnlockSettingBadgeKey =
@@ -1076,5 +1093,22 @@ class SettingsDiskSourceTest {
         }
 
         assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = mockUserId)!!)
+    }
+
+    @Test
+    fun `storeShowUnlockSettingsBadge should update the flow value`() = runTest {
+        val mockUserId = "mockUserId"
+        settingsDiskSource.storeShowUnlockSettingBadge(mockUserId, true)
+        settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = mockUserId).test {
+            // The initial values of the Flow are in sync
+            assertTrue(awaitItem() ?: false)
+            assertTrue(awaitItem() ?: false)
+
+            // update the value to false
+            settingsDiskSource.storeShowUnlockSettingBadge(
+                userId = mockUserId, false,
+            )
+            assertFalse(awaitItem() ?: true)
+        }
     }
 }
