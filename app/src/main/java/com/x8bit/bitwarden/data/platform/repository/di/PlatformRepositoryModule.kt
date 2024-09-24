@@ -13,8 +13,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServic
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.repository.BridgeRepository
-import com.x8bit.bitwarden.data.platform.repository.BridgeRepositoryImpl
+import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
+import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -42,14 +42,14 @@ object PlatformRepositoryModule {
 
     @Provides
     @Singleton
-    fun providesBridgeRepository(
+    fun providesAuthenticatorBridgeRepository(
         authRepository: AuthRepository,
         authDiskSource: AuthDiskSource,
         vaultRepository: VaultRepository,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         settingsDiskSource: SettingsDiskSource,
-    ): BridgeRepository = BridgeRepositoryImpl(
+    ): AuthenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
         authRepository = authRepository,
         authDiskSource = authDiskSource,
         vaultRepository = vaultRepository,

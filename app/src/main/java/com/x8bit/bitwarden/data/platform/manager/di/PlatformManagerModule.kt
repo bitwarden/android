@@ -20,8 +20,8 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
-import com.x8bit.bitwarden.data.platform.processor.BridgeServiceProcessor
-import com.x8bit.bitwarden.data.platform.processor.BridgeServiceProcessorImpl
+import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessor
+import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessorImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -51,7 +51,7 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
-import com.x8bit.bitwarden.data.platform.repository.BridgeRepository
+import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
@@ -80,12 +80,12 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideBridgeServiceProcessor(
-        bridgeRepository: BridgeRepository,
+    fun provideAuthenticatorBridgeServiceProcessor(
+        authenticatorBridgeRepository: AuthenticatorBridgeRepository,
         dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
-    ): BridgeServiceProcessor = BridgeServiceProcessorImpl(
-        bridgeRepository = bridgeRepository,
+    ): AuthenticatorBridgeProcessor = AuthenticatorBridgeProcessorImpl(
+        authenticatorBridgeRepository = authenticatorBridgeRepository,
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
     )
