@@ -18,7 +18,7 @@ interface IBridgeService {
     String getVersionNumber();
 
     // Returns true when the given symmetric fingerprint data matches that contained by the SDK.
-    boolean checkSymmetricEncryptionKeyFingerprint(in SymmetricEncryptionKeyFingerprintData data);
+    boolean checkSymmetricEncryptionKeyFingerprint(in SymmetricEncryptionKeyFingerprintData symmetricKeyFingerprint);
 
     // Returns a symmetric key that will be used for encypting all IPC traffic.
     //
