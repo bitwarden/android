@@ -182,7 +182,7 @@ private fun SharedAccountData.toJsonModel() = SharedAccountDataJson(
  */
 private fun SharedAccountDataJson.toDomainModel() = SharedAccountData(
     accounts = this.accounts.map { account ->
-        com.bitwarden.authenticatorbridge.model.SharedAccountData.Account(
+        SharedAccountData.Account(
             userId = account.userId,
             name = account.name,
             environmentLabel = account.environmentLabel,
