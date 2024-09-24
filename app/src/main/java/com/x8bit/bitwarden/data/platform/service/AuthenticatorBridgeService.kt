@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.service
 
 import android.app.Service
 import android.content.Intent
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessor
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -10,6 +11,7 @@ import javax.inject.Inject
  * Service exposed via a custom permission
  */
 @AndroidEntryPoint
+@OmitFromCoverage
 class AuthenticatorBridgeService : Service() {
 
     @Inject
