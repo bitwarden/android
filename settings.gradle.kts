@@ -33,6 +33,7 @@ dependencyResolutionManagement {
                 password = userProperties["gitHubToken"] as String? ?: System.getenv("GITHUB_TOKEN")
             }
         }
+        mavenLocal()
     }
 }
 

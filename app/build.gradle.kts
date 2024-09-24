@@ -130,6 +130,15 @@ kotlin {
     }
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        if (project.hasProperty("localSdk")) {
+            substitute(module("com.bitwarden:sdk-android"))
+                .using(module("com.bitwarden:sdk-android:LOCAL"))
+        }
+    }
+}
+
 dependencies {
     fun standardImplementation(dependencyNotation: Any) {
         add("standardImplementation", dependencyNotation)
