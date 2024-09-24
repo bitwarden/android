@@ -7,10 +7,8 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -42,7 +40,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.Clock
 import javax.inject.Singleton
-import kotlin.math.max
 
 /**
  * Default implementation of [GeneratorRepository].
@@ -203,73 +200,6 @@ class GeneratorRepositoryImpl(
                     GeneratedForwardedServiceUsernameResult.InvalidRequest(it.message)
                 },
             )
-
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
-    override fun getPasswordGeneratorPolicy(): PolicyInformation.PasswordGenerator? {
-        val policies: List<PolicyInformation.PasswordGenerator> = policyManager.getActivePolicies()
-
-        var minLength: Int? = null
-        var useUpper = false
-        var useLower = false
-        var useNumbers = false
-        var useSpecial = false
-        var minNumbers: Int? = null
-        var minSpecial: Int? = null
-        var minNumberWords: Int? = null
-        var capitalize = false
-        var includeNumber = false
-
-        var isPassphrasePresent = false
-        policies
-            .forEach { policy ->
-                if (policy.defaultType == PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE) {
-                    isPassphrasePresent = true
-                }
-                minLength = max(minLength ?: 0, policy.minLength ?: 0)
-                useUpper = useUpper || policy.useUpper == true
-                useLower = useLower || policy.useLower == true
-                useNumbers = useNumbers || policy.useNumbers == true
-                useSpecial = useSpecial || policy.useSpecial == true
-                minNumbers = max(minNumbers ?: 0, policy.minNumbers ?: 0)
-                minSpecial = max(minSpecial ?: 0, policy.minSpecial ?: 0)
-                minNumberWords = max(minNumberWords ?: 0, policy.minNumberWords ?: 0)
-                capitalize = capitalize || policy.capitalize == true
-                includeNumber = includeNumber || policy.includeNumber == true
-            }
-
-        // Only return a new policy if any policy settings were actually provided
-        return PolicyInformation.PasswordGenerator(
-            defaultType = if (isPassphrasePresent) {
-                PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE
-            } else {
-                PolicyInformation.PasswordGenerator.TYPE_PASSWORD
-            },
-            minLength = minLength,
-            useUpper = useUpper,
-            useLower = useLower,
-            useNumbers = useNumbers,
-            useSpecial = useSpecial,
-            minNumbers = minNumbers,
-            minSpecial = minSpecial,
-            minNumberWords = minNumberWords,
-            capitalize = capitalize,
-            includeNumber = includeNumber,
-        ).takeIf {
-            listOf(
-                minLength,
-                useUpper,
-                useLower,
-                useNumbers,
-                useSpecial,
-                minNumbers,
-                minSpecial,
-                minNumberWords,
-                capitalize,
-                includeNumber,
-            )
-                .any { it != null }
-        }
-    }
 
     override fun getPasscodeGenerationOptions(): PasscodeGenerationOptions? {
         val userId = authDiskSource.userState?.activeUserId

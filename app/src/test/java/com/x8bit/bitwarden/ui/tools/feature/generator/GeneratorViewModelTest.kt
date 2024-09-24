@@ -7,7 +7,6 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -183,7 +182,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `activePolicyFlow changes should update state`() = runTest {
         val payload = mapOf(
-            "defaultType" to JsonNull,
+            "overridePasswordType" to JsonNull,
             "minLength" to JsonPrimitive(10),
             "useUpper" to JsonPrimitive(true),
             "useNumbers" to JsonPrimitive(true),
@@ -392,8 +391,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for passphrase state updates generatedText and saves passphrase generation options on successful passphrase generation`() =
         runTest {
-            setupMockPassphraseTypePolicy()
-
             val updatedGeneratedPassphrase = "updatedPassphrase"
 
             val viewModel = createViewModel(initialPassphraseState)
@@ -436,8 +433,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for passphrase state sends ShowSnackbar event on passphrase generation failure`() =
         runTest {
-            setupMockPassphraseTypePolicy()
-
             val viewModel = createViewModel(initialPassphraseState)
 
             fakeGeneratorRepository.setMockGeneratePassphraseResult(
@@ -546,7 +541,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             isEnabled = true,
             data = JsonObject(
                 mapOf(
-                    "defaultType" to JsonNull,
+                    "overridePasswordType" to JsonNull,
                     "minLength" to JsonPrimitive(10),
                     "useUpper" to JsonPrimitive(true),
                     "useNumbers" to JsonPrimitive(true),
@@ -599,7 +594,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             isEnabled = true,
             data = JsonObject(
                 mapOf(
-                    "defaultType" to JsonNull,
+                    "overridePasswordType" to JsonNull,
                     "minLength" to JsonPrimitive(10),
                     "useUpper" to JsonPrimitive(true),
                     "useNumbers" to JsonPrimitive(true),
@@ -638,6 +633,78 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         includeNumberEnabled = false,
                     ),
                 ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `Policy should overwrite passwordType if has overridePasswordType`() {
+        val policy = createMockPolicy(
+            number = 1,
+            type = PolicyTypeJson.PASSWORD_GENERATOR,
+            isEnabled = true,
+            data = JsonObject(
+                mapOf(
+                    "overridePasswordType" to JsonPrimitive("passphrase"),
+                ),
+            ),
+        )
+        every {
+            policyManager.getActivePolicies(any())
+        } returns listOf(policy)
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            initialPasscodeState.copy(
+                generatedText = "updatedPassphrase",
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
+                ),
+                overridePassword = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `Policy should should prioritize password if multiple have OverridePasswordType`() {
+        val policies = listOf(
+            createMockPolicy(
+                number = 1,
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = JsonObject(
+                    mapOf(
+                        "overridePasswordType" to JsonPrimitive("passphrase"),
+                    ),
+                ),
+            ),
+            createMockPolicy(
+                number = 1,
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = JsonObject(
+                    mapOf(
+                        "overridePasswordType" to JsonPrimitive("password"),
+                    ),
+                ),
+            ),
+        )
+        every {
+            policyManager.getActivePolicies(any())
+        } returns policies
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            initialPasscodeState.copy(
+                generatedText = "defaultPassword",
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState.MainType.Passcode.PasscodeType.Password(),
+                ),
+                overridePassword = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -1529,7 +1596,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            setupMockPassphraseTypePolicy()
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassphrase"),
             )
@@ -2474,24 +2540,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             set("generator_website", website)
         },
     )
-
-    private fun setupMockPassphraseTypePolicy() {
-        fakeGeneratorRepository.setMockPasswordGeneratorPolicy(
-            PolicyInformation.PasswordGenerator(
-                defaultType = "passphrase",
-                minLength = null,
-                useUpper = false,
-                useLower = false,
-                useNumbers = false,
-                useSpecial = false,
-                minNumbers = null,
-                minSpecial = null,
-                minNumberWords = null,
-                capitalize = false,
-                includeNumber = false,
-            ),
-        )
-    }
 
     //endregion Helper Functions
 }

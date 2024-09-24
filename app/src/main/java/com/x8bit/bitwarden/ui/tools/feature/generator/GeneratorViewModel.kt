@@ -307,7 +307,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    @Suppress("CyclomaticComplexMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun loadPasscodeOptions(selectedType: Passcode) {
         val options = generatorRepository.getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
@@ -315,7 +315,22 @@ class GeneratorViewModel @Inject constructor(
         val policy = policyManager
             .getActivePolicies<PolicyInformation.PasswordGenerator>()
             .toStrictestPolicy()
-        when (selectedType.selectedType) {
+
+        val passwordType = if (!policy.overridePasswordType.isNullOrBlank()) {
+            mutableStateFlow.update {
+                it.copy(overridePassword = true)
+            }
+            Passcode(
+                selectedType = policy.overridePasswordType.toSelectedType(),
+            )
+        } else {
+            mutableStateFlow.update {
+                it.copy(overridePassword = false)
+            }
+            selectedType
+        }
+
+        when (passwordType.selectedType) {
             is Passphrase -> {
                 val minNumWords = policy.minNumberWords ?: Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
                 val passphrase = Passphrase(
@@ -1713,6 +1728,7 @@ data class GeneratorState(
     val currentEmailAddress: String,
     val isUnderPolicy: Boolean = false,
     val website: String? = null,
+    var overridePassword: Boolean = false,
 ) : Parcelable {
 
     /**
