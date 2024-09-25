@@ -334,7 +334,14 @@ class AuthenticatorBridgeRepositoryTest {
         }
 
     @Test
-    fun `authenticatorSyncSymmetricKey should read from authDiskSource`() {
+    @Suppress("MaxLineLength")
+    fun `authenticatorSyncSymmetricKey should read from authDiskSource when one user has authenticator sync enabled`() {
+        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
+        fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
+            userId = USER_1_ID,
+            authenticatorSyncUnlockKey = USER_1_UNLOCK_KEY,
+        )
+
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = null
         assertNull(authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
 
@@ -342,6 +349,29 @@ class AuthenticatorBridgeRepositoryTest {
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
 
         assertEquals(syncKey, authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
+        verify { authRepository.userStateFlow }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `authenticatorSyncSymmetricKey should return null when no user has authenticator sync enabled`() {
+        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
+        fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
+            userId = USER_1_ID,
+            authenticatorSyncUnlockKey = null,
+        )
+        fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
+            userId = USER_2_ID,
+            authenticatorSyncUnlockKey = null,
+        )
+
+        fakeAuthDiskSource.authenticatorSyncSymmetricKey = null
+        assertNull(authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
+
+        val syncKey = generateSecretKey().getOrThrow().encoded
+        fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
+        assertNull(authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
+        verify { authRepository.userStateFlow }
     }
 }
 
