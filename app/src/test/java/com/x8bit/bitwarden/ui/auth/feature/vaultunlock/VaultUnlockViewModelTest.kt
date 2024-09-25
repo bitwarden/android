@@ -460,7 +460,35 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 assertEquals(VaultUnlockEvent.PromptForBiometrics(CIPHER), awaitItem())
                 expectNoEvents()
             }
-            verify {
+            // The initial state causes this to be called as well as the change.
+            verify(exactly = 2) {
+                encryptionManager.getOrCreateCipher(USER_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `switching accounts should not prompt for biometrics if new account has biometrics enabled`() =
+        runTest {
+            val account = DEFAULT_ACCOUNT.copy(
+                isVaultUnlocked = false,
+                isBiometricsEnabled = true,
+            )
+            val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
+            val viewModel = createViewModel(state = initialState)
+            mutableUserStateFlow.update {
+                it?.copy(
+                    activeUserId = account.userId,
+                    accounts = listOf(account),
+                    hasPendingAccountAddition = true,
+                )
+            }
+
+            viewModel.eventFlow.test {
+                expectNoEvents()
+            }
+            // Only the call for the initial state should be called.
+            verify(exactly = 1) {
                 encryptionManager.getOrCreateCipher(USER_ID)
             }
         }

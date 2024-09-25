@@ -310,6 +310,8 @@ class VaultUnlockViewModel @Inject constructor(
 
         // If the Vault is already unlocked, do nothing.
         if (userState.activeAccount.isVaultUnlocked) return
+        // If the user state has changed to add a new account, do nothing.
+        if (userState.hasPendingAccountAddition) return
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
