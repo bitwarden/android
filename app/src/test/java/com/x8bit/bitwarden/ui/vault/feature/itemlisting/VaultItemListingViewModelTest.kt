@@ -794,6 +794,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     sendViewList = emptyList(),
                 ),
             )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = AutofillSelectionData(
+                        type = AutofillSelectionData.Type.LOGIN,
+                        framework = AutofillSelectionData.Framework.AUTOFILL,
+                        uri = "https://www.test.com",
+                    ),
+                    shouldFinishWhenComplete = true,
+                )
             val viewModel = createVaultItemListingViewModel()
             coEvery {
                 authRepository.validatePassword(password = password)
@@ -812,6 +821,49 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherView,
                     awaitItem(),
                 )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for accessibility autofill should post to the AccessibilitySelectionManager`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            val cipherId = "mockId-1"
+            val password = "password"
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = AutofillSelectionData(
+                        type = AutofillSelectionData.Type.LOGIN,
+                        framework = AutofillSelectionData.Framework.ACCESSIBILITY,
+                        uri = "https://www.test.com",
+                    ),
+                    shouldFinishWhenComplete = true,
+                )
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            accessibilitySelectionManager.accessibilitySelectionFlow.test {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                        password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
+                            cipherId = cipherId,
+                        ),
+                    ),
+                )
+                assertEquals(cipherView, awaitItem())
             }
         }
 
