@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirma
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenRemovalConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -240,10 +240,7 @@ private fun AnimatedAccountSwitcher(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
-                )
+                BitwardenHorizontalDivider()
             }
             if (accountSummaries.size < MAXIMUM_ACCOUNT_LIMIT && isAddAccountAvailable) {
                 item {
