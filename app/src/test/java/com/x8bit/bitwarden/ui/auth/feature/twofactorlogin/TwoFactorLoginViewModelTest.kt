@@ -362,7 +362,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick login should emit ShowToast when auth method is Duo and authUrl is null`() =
+    fun `ContinueButtonClick login should show a dialog when auth method is Duo and authUrl is null`() =
         runTest {
             val authMethodsData = mapOf(
                 TwoFactorAuthMethod.DUO to JsonObject(
@@ -376,15 +376,25 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 twoFactorProviders = null,
             )
             every { authRepository.twoFactorResponse } returns response
-            val viewModel = createViewModel(
-                state = DEFAULT_STATE.copy(
-                    authMethod = TwoFactorAuthMethod.DUO,
-                ),
+            val state = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.DUO,
             )
-            viewModel.eventFlow.test {
+            val viewModel = createViewModel(
+                state = state,
+            )
+            viewModel.stateFlow.test {
+                assertEquals(
+                    state,
+                    awaitItem(),
+                )
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.ShowToast(R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText()),
+                    state.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
+                        ),
+                    ),
                     awaitItem(),
                 )
             }
