@@ -1,13 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.components.appbar.action
 
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 
 /**
  * Represents the Bitwarden search action item.
@@ -24,15 +23,12 @@ fun BitwardenSearchActionItem(
     contentDescription: String,
     onClick: () -> Unit,
 ) {
-    IconButton(
+    BitwardenStandardIconButton(
+        vectorIconRes = R.drawable.ic_search,
+        contentDescription = contentDescription,
         onClick = onClick,
-        modifier = Modifier.testTag("SearchButton"),
-    ) {
-        Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_search),
-            contentDescription = contentDescription,
-        )
-    }
+        modifier = Modifier.testTag(tag = "SearchButton"),
+    )
 }
 
 @Preview(showBackground = true)

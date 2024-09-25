@@ -21,8 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.TopAppBarDefaults
@@ -68,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -264,18 +263,14 @@ private fun StartRegistrationContent(
                     .testTag("RegionSelectorDropdown"),
             )
             if (isNewOnboardingUiEnabled) {
-                IconButton(
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_tooltip_small,
+                    contentDescription = stringResource(R.string.help_with_server_geolocations),
                     onClick = handler.onServerGeologyHelpClick,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     // Align with design but keep accessible touch target of IconButton.
                     modifier = Modifier.offset(y = (-8f).dp, x = 16.dp),
-                ) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_tooltip_small),
-                        contentDescription = stringResource(R.string.help_with_server_geolocations),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(18.dp),
-                    )
-                }
+                )
             }
         }
         Spacer(modifier = Modifier.height(24.dp))

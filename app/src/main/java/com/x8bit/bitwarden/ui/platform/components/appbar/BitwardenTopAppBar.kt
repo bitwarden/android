@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.appbar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
@@ -24,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -90,16 +89,14 @@ fun BitwardenTopAppBar(
     val navigationIconContent: @Composable () -> Unit = remember(navigationIcon) {
         {
             navigationIcon?.let {
-                IconButton(
+                BitwardenStandardIconButton(
+                    painter = it.navigationIcon,
+                    contentDescription = it.navigationIconContentDescription,
                     onClick = it.onNavigationIconClick,
-                    modifier = Modifier.testTag("CloseButton"),
-                ) {
-                    Icon(
-                        modifier = Modifier.mirrorIfRtl(),
-                        painter = it.navigationIcon,
-                        contentDescription = it.navigationIconContentDescription,
-                    )
-                }
+                    modifier = Modifier
+                        .testTag(tag = "CloseButton")
+                        .mirrorIfRtl(),
+                )
             }
         }
     }

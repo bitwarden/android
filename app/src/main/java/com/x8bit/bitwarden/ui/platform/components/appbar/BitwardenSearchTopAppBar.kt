@@ -3,8 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components.appbar
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,7 +23,7 @@ import androidx.compose.ui.text.input.ImeAction
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -58,16 +56,14 @@ fun BitwardenSearchTopAppBar(
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             navigationIcon?.let {
-                IconButton(
+                BitwardenStandardIconButton(
+                    painter = it.navigationIcon,
+                    contentDescription = it.navigationIconContentDescription,
                     onClick = it.onNavigationIconClick,
-                    modifier = Modifier.testTag("CloseButton"),
-                ) {
-                    Icon(
-                        modifier = Modifier.mirrorIfRtl(),
-                        painter = it.navigationIcon,
-                        contentDescription = it.navigationIconContentDescription,
-                    )
-                }
+                    modifier = Modifier
+                        .testTag(tag = "CloseButton")
+                        .mirrorIfRtl(),
+                )
             }
         },
         title = {
@@ -83,14 +79,11 @@ fun BitwardenSearchTopAppBar(
                 singleLine = true,
                 onValueChange = onSearchTermChange,
                 trailingIcon = {
-                    IconButton(
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_close,
+                        contentDescription = stringResource(id = R.string.clear),
                         onClick = { onSearchTermChange("") },
-                    ) {
-                        Icon(
-                            painter = rememberVectorPainter(id = R.drawable.ic_close),
-                            contentDescription = stringResource(id = R.string.clear),
-                        )
-                    }
+                    )
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier

@@ -1,11 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components.field
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,8 +25,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
@@ -103,25 +99,19 @@ fun BitwardenPasswordField(
             }
         },
         trailingIcon = {
-            IconButton(
-                onClick = { showPasswordChange.invoke(!showPassword) },
-            ) {
-                @DrawableRes
-                val painterRes = if (showPassword) {
+            BitwardenStandardIconButton(
+                modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
+                vectorIconRes = if (showPassword) {
                     R.drawable.ic_visibility_off
                 } else {
                     R.drawable.ic_visibility
-                }
-
-                @StringRes
-                val contentDescriptionRes = if (showPassword) R.string.hide else R.string.show
-                Icon(
-                    modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
-                    painter = rememberVectorPainter(id = painterRes),
-                    contentDescription = stringResource(id = contentDescriptionRes),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+                },
+                contentDescription = stringResource(
+                    id = if (showPassword) R.string.hide else R.string.show,
+                ),
+                onClick = { showPasswordChange.invoke(!showPassword) },
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         },
     )
     if (autoFocus) {
