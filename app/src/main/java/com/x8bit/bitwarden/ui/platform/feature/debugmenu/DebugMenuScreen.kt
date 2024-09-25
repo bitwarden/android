@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -32,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -123,14 +123,14 @@ private fun FeatureFlagContent(
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        HorizontalDivider()
+        BitwardenHorizontalDivider()
         featureFlagMap.forEach { featureFlag ->
             featureFlag.key.ListItemContent(
                 currentValue = featureFlag.value,
                 onValueChange = onValueChange,
                 modifier = Modifier.standardHorizontalMargin(),
             )
-            HorizontalDivider()
+            BitwardenHorizontalDivider()
         }
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledButton(
@@ -156,7 +156,7 @@ private fun OnboardingOverrideContent(
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        HorizontalDivider()
+        BitwardenHorizontalDivider()
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.restart_onboarding_cta),

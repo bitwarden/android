@@ -6,14 +6,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
@@ -112,9 +111,7 @@ fun VaultContent(
             }
 
             item {
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
+                BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp),
@@ -198,9 +195,7 @@ fun VaultContent(
 
         if (state.folderItems.isNotEmpty()) {
             item {
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
+                BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp),
@@ -238,9 +233,7 @@ fun VaultContent(
 
         if (state.noFolderItems.isNotEmpty()) {
             item {
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
+                BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp),
@@ -287,9 +280,7 @@ fun VaultContent(
 
         if (state.collectionItems.isNotEmpty()) {
             item {
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
+                BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp),
@@ -322,9 +313,7 @@ fun VaultContent(
         }
 
         item {
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+            BitwardenHorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = 16.dp),

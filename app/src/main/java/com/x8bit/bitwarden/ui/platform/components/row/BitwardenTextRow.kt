@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
@@ -19,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 
 /**
  * Represents a clickable row of text and can contains an optional [content] that appears to the
@@ -88,11 +88,7 @@ fun BitwardenTextRow(
             content?.invoke()
         }
         if (withDivider) {
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 16.dp),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
-            )
+            BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
         }
     }
 }
