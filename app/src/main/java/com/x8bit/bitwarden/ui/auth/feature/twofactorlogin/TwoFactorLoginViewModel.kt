@@ -205,7 +205,8 @@ class TwoFactorLoginViewModel @Inject constructor(
             -> {
                 val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
                 // The url should not be empty unless the environment is somehow not supported.
-                authUrl?.let {
+                authUrl
+                    ?.let {
                     TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it))
                 } ?: mutableStateFlow.update {
                     it.copy(
