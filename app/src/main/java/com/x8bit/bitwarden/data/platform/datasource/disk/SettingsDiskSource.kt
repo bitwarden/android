@@ -272,6 +272,11 @@ interface SettingsDiskSource {
     fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?)
 
     /**
+     * Emits updates that track [getShowAutoFillSettingBadge] for the given [userId].
+     */
+    fun getShowAutoFillSettingBadgeFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Gets whether or not the given [userId] has signalled they want to enable unlock options
      * later, during onboarding.
      */
@@ -282,4 +287,9 @@ interface SettingsDiskSource {
      * set up unlock options later, during onboarding.
      */
     fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?)
+
+    /**
+     * Emits updates that track [getShowUnlockSettingBadge] for the given [userId].
+     */
+    fun getShowUnlockSettingBadgeFlow(userId: String): Flow<Boolean?>
 }

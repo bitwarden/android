@@ -161,6 +161,24 @@ interface SettingsRepository {
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
     /**
+     * Returns an observable count of the number of settings items that have a badge to display
+     * for the current active user.
+     */
+    val allSettingsBadgeCountFlow: StateFlow<Int>
+
+    /**
+     * Returns an observable count of the number of security settings items that have a badge to
+     * display for the current active user.
+     */
+    val allSecuritySettingsBadgeCountFlow: StateFlow<Int>
+
+    /**
+     * Returns an observable count of the number of autofill settings items that have a badge to
+     * display for the current active user.
+     */
+    val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
+
+    /**
      * Disables autofill if it is currently enabled.
      */
     fun disableAutofill()
@@ -278,4 +296,14 @@ interface SettingsRepository {
      * set up unlock options later, during onboarding.
      */
     fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean)
+
+    /**
+     * Gets whether or not the given [userId] has signalled they want to enable autofill
+     */
+    fun getShowAutofillBadgeFlow(userId: String): Flow<Boolean>
+
+    /**
+     * Gets whether or not the given [userId] has signalled they want to enable unlock options
+     */
+    fun getShowUnlockBadgeFlow(userId: String): Flow<Boolean>
 }
