@@ -1,5 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +49,7 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
+import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -267,7 +273,7 @@ private fun VaultBottomAppBar(
             ),
             VaultUnlockedNavBarTab.Send,
             VaultUnlockedNavBarTab.Generator,
-            VaultUnlockedNavBarTab.Settings,
+            VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
         )
         // Collecting the back stack entry here as state is crucial to ensuring that the items
         // below recompose when the navigation state changes to update the selected tab.
@@ -277,18 +283,33 @@ private fun VaultBottomAppBar(
 
             NavigationBarItem(
                 icon = {
-                    Icon(
-                        painter = rememberVectorPainter(
-                            id = if (isSelected) {
-                                destination.iconResSelected
-                            } else {
-                                destination.iconRes
-                            },
-                        ),
-                        contentDescription = stringResource(
-                            id = destination.contentDescriptionRes,
-                        ),
-                    )
+                    BadgedBox(
+                        badge = {
+                            // Avoid using the RowScope.AnimatedVisibility inside BoxScope.
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = destination.notificationCount > 0,
+                                enter = slideInVertically() + fadeIn(),
+                                exit = slideOutVertically() + fadeOut(),
+                            ) {
+                                NotificationBadge(
+                                    notificationCount = destination.notificationCount,
+                                )
+                            }
+                        },
+                    ) {
+                        Icon(
+                            painter = rememberVectorPainter(
+                                id = if (isSelected) {
+                                    destination.iconResSelected
+                                } else {
+                                    destination.iconRes
+                                },
+                            ),
+                            contentDescription = stringResource(
+                                id = destination.contentDescriptionRes,
+                            ),
+                        )
+                    }
                 },
                 label = {
                     Text(
@@ -303,7 +324,7 @@ private fun VaultBottomAppBar(
                         is VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
                         VaultUnlockedNavBarTab.Send -> sendTabClickedAction()
                         VaultUnlockedNavBarTab.Generator -> generatorTabClickedAction()
-                        VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction()
+                        is VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction()
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(

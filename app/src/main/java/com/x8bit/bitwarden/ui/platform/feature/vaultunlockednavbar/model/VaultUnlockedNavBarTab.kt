@@ -50,6 +50,11 @@ sealed class VaultUnlockedNavBarTab : Parcelable {
     abstract val testTag: String
 
     /**
+     * The amount of notifications for items that fall under this tab.
+     */
+    abstract val notificationCount: Int
+
+    /**
      * Show the Generator screen.
      */
     @Parcelize
@@ -60,6 +65,7 @@ sealed class VaultUnlockedNavBarTab : Parcelable {
         override val contentDescriptionRes get() = R.string.generator
         override val route get() = GENERATOR_GRAPH_ROUTE
         override val testTag get() = "GeneratorTab"
+        override val notificationCount get() = 0
     }
 
     /**
@@ -73,6 +79,7 @@ sealed class VaultUnlockedNavBarTab : Parcelable {
         override val contentDescriptionRes get() = R.string.send
         override val route get() = SEND_GRAPH_ROUTE
         override val testTag get() = "SendTab"
+        override val notificationCount get() = 0
     }
 
     /**
@@ -87,13 +94,16 @@ sealed class VaultUnlockedNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_vault
         override val route get() = VAULT_GRAPH_ROUTE
         override val testTag get() = "VaultTab"
+        override val notificationCount get() = 0
     }
 
     /**
      * Show the Settings screen.
      */
     @Parcelize
-    data object Settings : VaultUnlockedNavBarTab() {
+    data class Settings(
+        override val notificationCount: Int = 0,
+    ) : VaultUnlockedNavBarTab() {
         override val iconResSelected get() = R.drawable.ic_settings_filled
         override val iconRes get() = R.drawable.ic_settings
         override val labelRes get() = R.string.settings

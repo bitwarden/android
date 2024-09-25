@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
@@ -182,15 +183,47 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             VaultUnlockedNavBarState(
                 vaultNavBarLabelRes = R.string.vaults,
                 vaultNavBarContentDescriptionRes = R.string.vaults,
+                notificationState = VaultUnlockedNavBarNotificationState(
+                    settingsTabNotificationCount = 0,
+                ),
             ),
         )
 
         composeTestRule.onNodeWithText("My vault").assertDoesNotExist()
         composeTestRule.onNodeWithText("Vaults").assertExists()
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `settings tab notification count should update according to state and show correct count`() {
+        mutableStateFlow.update {
+            it.copy(
+                notificationState = VaultUnlockedNavBarNotificationState(
+                    settingsTabNotificationCount = 1,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("1", useUnmergedTree = true)
+            .assertExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                notificationState = VaultUnlockedNavBarNotificationState(
+                    settingsTabNotificationCount = 0,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("1", useUnmergedTree = true)
+            .assertDoesNotExist()
+    }
 }
 
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = R.string.my_vault,
     vaultNavBarContentDescriptionRes = R.string.my_vault,
+    notificationState = VaultUnlockedNavBarNotificationState(
+        settingsTabNotificationCount = 0,
+    ),
 )

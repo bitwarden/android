@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
@@ -25,6 +26,11 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     private val specialCircumstancesManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance = null } just runs
         every { specialCircumstance } returns null
+    }
+
+    private val mutableSettingsBadgeCountFlow = MutableStateFlow(0)
+    private val settingsRepository: SettingsRepository = mockk {
+        every { allSettingsBadgeCountFlow } returns mutableSettingsBadgeCountFlow
     }
 
     @Suppress("MaxLineLength")
@@ -98,6 +104,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.vaults,
             vaultNavBarContentDescriptionRes = R.string.vaults,
+            notificationState = DEFAULT_NOTIFICATION_STATE,
         )
         val accountWithoutOrganizations: UserState.Account = mockk {
             every { userId } returns activeUserId
@@ -106,6 +113,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithoutOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.my_vault,
             vaultNavBarContentDescriptionRes = R.string.my_vault,
+            notificationState = DEFAULT_NOTIFICATION_STATE,
         )
 
         val viewModel = createViewModel()
@@ -182,9 +190,55 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `Internal action for SettingsNotificationCountUpdate should update notification state`() {
+        val expectedCount = 3
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        viewModel.trySendAction(
+            VaultUnlockedNavBarAction.Internal.SettingsNotificationCountUpdate(
+                expectedCount,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                notificationState = DEFAULT_NOTIFICATION_STATE.copy(
+                    settingsTabNotificationCount = expectedCount,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `On initialization settings count should be updated from settings repository`() {
+        val expectedCount = 5
+        mutableSettingsBadgeCountFlow.value = expectedCount
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(
+                notificationState = DEFAULT_NOTIFICATION_STATE.copy(
+                    settingsTabNotificationCount = expectedCount,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel() =
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,
             specialCircumstancesManager = specialCircumstancesManager,
+            settingsRepository = settingsRepository,
         )
 }
+
+private val DEFAULT_NOTIFICATION_STATE = VaultUnlockedNavBarNotificationState(
+    settingsTabNotificationCount = 0,
+)
+
+private val DEFAULT_STATE = VaultUnlockedNavBarState(
+    vaultNavBarLabelRes = R.string.my_vault,
+    vaultNavBarContentDescriptionRes = R.string.my_vault,
+    notificationState = DEFAULT_NOTIFICATION_STATE,
+)
