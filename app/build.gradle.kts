@@ -43,7 +43,22 @@ android {
         generateLocaleConfig = true
     }
 
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file("../keystores/debug.keystore")
+            storePassword = "android"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+            isMinifyEnabled = false
+        }
+
         release {
             isMinifyEnabled = true
             proguardFiles(
