@@ -11,13 +11,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDisplayMatchType
@@ -41,13 +39,11 @@ fun VaultAddEditUriItem(
         value = uriItem.uri.orEmpty(),
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
         actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_settings),
-                    contentDescription = stringResource(id = R.string.options),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_settings,
+                contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowOptionsDialog = true },
-                modifier = Modifier.testTag("LoginUriOptionsButton"),
+                modifier = Modifier.testTag(tag = "LoginUriOptionsButton"),
             )
         },
         modifier = Modifier

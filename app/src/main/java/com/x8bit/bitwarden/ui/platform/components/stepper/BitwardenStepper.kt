@@ -8,10 +8,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Displays a stepper that allows the user to increment and decrement an int value.
@@ -56,11 +54,9 @@ fun BitwardenStepper(
             ?: ZERO_WIDTH_CHARACTER,
         actionsTestTag = stepperActionsTestTag,
         actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),
-                    contentDescription = "\u2212",
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_minus,
+                contentDescription = "\u2212",
                 onClick = {
                     val decrementedValue = ((value ?: 0) - 1).coerceIn(range)
                     if (decrementedValue != value) {
@@ -74,11 +70,9 @@ fun BitwardenStepper(
                     }
                 },
             )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_plus),
-                    contentDescription = "+",
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_plus,
+                contentDescription = "+",
                 onClick = {
                     val incrementedValue = ((value ?: 0) + 1).coerceIn(range)
                     if (incrementedValue != value) {

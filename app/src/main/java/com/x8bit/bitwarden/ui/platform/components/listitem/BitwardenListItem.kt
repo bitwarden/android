@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
@@ -31,12 +30,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -151,17 +150,13 @@ fun BitwardenListItem(
         }
 
         if (selectionDataList.isNotEmpty()) {
-            IconButton(
+            BitwardenStandardIconButton(
+                vectorIconRes = R.drawable.ic_more_horizontal,
+                contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowDialog = true },
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
-            ) {
-                Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_more_horizontal),
-                    contentDescription = stringResource(id = R.string.options),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
+            )
         }
     }
 

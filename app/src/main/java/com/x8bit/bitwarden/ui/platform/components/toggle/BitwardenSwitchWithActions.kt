@@ -5,8 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.ripple
@@ -20,8 +18,8 @@ import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -77,15 +75,13 @@ private fun BitwardenSwitchWithActions_preview() {
             isChecked = true,
             onCheckedChange = {},
             actions = {
-                IconButton(onClick = {}) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = stringResource(
-                            id = R.string.master_password_re_prompt_help,
-                        ),
-                    )
-                }
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_tooltip,
+                    contentDescription = stringResource(
+                        id = R.string.master_password_re_prompt_help,
+                    ),
+                    onClick = {},
+                )
             },
         )
     }

@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.appbar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
@@ -15,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 
 /**
  * A custom Bitwarden-themed medium top app bar with support for actions.
@@ -73,13 +71,12 @@ private fun BitwardenMediumTopAppBar_preview() {
                     rememberTopAppBarState(),
                 ),
             actions = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        painter = rememberVectorPainter(id = R.drawable.ic_more),
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_more,
+                    contentDescription = "",
+                    onClick = { },
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                )
             },
         )
     }

@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -32,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
@@ -109,19 +108,14 @@ fun BitwardenMultiSelectButton(
                 )
                 tooltip?.let {
                     Spacer(modifier = Modifier.width(3.dp))
-                    IconButton(
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_tooltip_small,
+                        contentDescription = it.contentDescription,
                         onClick = it.onClick,
-                        enabled = isEnabled,
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary,
-                        ),
+                        isEnabled = isEnabled,
+                        contentColor = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(16.dp),
-                    ) {
-                        Icon(
-                            painter = rememberVectorPainter(id = R.drawable.ic_tooltip_small),
-                            contentDescription = it.contentDescription,
-                        )
-                    }
+                    )
                 }
             }
         },

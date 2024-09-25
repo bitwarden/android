@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -53,15 +52,12 @@ fun BitwardenOverflowActionItem(
         contentAlignment = Alignment.Center,
         modifier = modifier,
     ) {
-        IconButton(
+        BitwardenStandardIconButton(
+            vectorIconRes = R.drawable.ic_more,
+            contentDescription = stringResource(id = R.string.more),
             onClick = { isOverflowMenuVisible = !isOverflowMenuVisible },
-            modifier = Modifier.testTag("HeaderBarOptionsButton"),
-        ) {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_more),
-                contentDescription = stringResource(id = R.string.more),
-            )
-        }
+            modifier = Modifier.testTag(tag = "HeaderBarOptionsButton"),
+        )
         DropdownMenu(
             expanded = isOverflowMenuVisible,
             onDismissRequest = { isOverflowMenuVisible = false },

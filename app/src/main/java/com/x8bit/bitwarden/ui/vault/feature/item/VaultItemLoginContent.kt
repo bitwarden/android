@@ -18,15 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -306,23 +304,19 @@ private fun PasswordField(
             readOnly = true,
             singleLine = false,
             actions = {
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = rememberVectorPainter(id = R.drawable.ic_check_mark),
-                        contentDescription = stringResource(
-                            id = R.string.check_known_data_breaches_for_this_password,
-                        ),
+                BitwardenFilledIconButton(
+                    vectorIconRes = R.drawable.ic_check_mark,
+                    contentDescription = stringResource(
+                        id = R.string.check_known_data_breaches_for_this_password,
                     ),
                     onClick = onCheckForBreachClick,
-                    modifier = Modifier.testTag("LoginCheckPasswordButton"),
+                    modifier = Modifier.testTag(tag = "LoginCheckPasswordButton"),
                 )
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                        contentDescription = stringResource(id = R.string.copy_password),
-                    ),
+                BitwardenFilledIconButton(
+                    vectorIconRes = R.drawable.ic_copy,
+                    contentDescription = stringResource(id = R.string.copy_password),
                     onClick = onCopyPasswordClick,
-                    modifier = Modifier.testTag("LoginCopyPasswordButton"),
+                    modifier = Modifier.testTag(tag = "LoginCopyPasswordButton"),
                 )
             },
             modifier = modifier,
@@ -384,13 +378,11 @@ private fun TotpField(
                         timeLeftSeconds = totpCodeItemData.timeLeftSeconds,
                         periodSeconds = totpCodeItemData.periodSeconds,
                     )
-                    BitwardenIconButtonWithResource(
-                        iconRes = IconResource(
-                            iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                            contentDescription = stringResource(id = R.string.copy_totp),
-                        ),
+                    BitwardenFilledIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_totp),
                         onClick = onCopyTotpClick,
-                        modifier = Modifier.testTag("LoginCopyTotpButton"),
+                        modifier = Modifier.testTag(tag = "LoginCopyTotpButton"),
                     )
                 },
                 modifier = modifier,
@@ -425,23 +417,19 @@ private fun UriField(
         singleLine = false,
         actions = {
             if (uriData.isLaunchable) {
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = rememberVectorPainter(id = R.drawable.ic_launch),
-                        contentDescription = stringResource(id = R.string.launch),
-                    ),
+                BitwardenFilledIconButton(
+                    vectorIconRes = R.drawable.ic_launch,
+                    contentDescription = stringResource(id = R.string.launch),
                     onClick = { onLaunchUriClick(uriData.uri) },
-                    modifier = Modifier.testTag("LoginLaunchUriButton"),
+                    modifier = Modifier.testTag(tag = "LoginLaunchUriButton"),
                 )
             }
             if (uriData.isCopyable) {
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                        contentDescription = stringResource(id = R.string.copy),
-                    ),
+                BitwardenFilledIconButton(
+                    vectorIconRes = R.drawable.ic_copy,
+                    contentDescription = stringResource(id = R.string.copy),
                     onClick = { onCopyUriClick(uriData.uri) },
-                    modifier = Modifier.testTag("LoginCopyUriButton"),
+                    modifier = Modifier.testTag(tag = "LoginCopyUriButton"),
                 )
             }
         },
@@ -463,13 +451,11 @@ private fun UsernameField(
         readOnly = true,
         singleLine = false,
         actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                    contentDescription = stringResource(id = R.string.copy_username),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_copy,
+                contentDescription = stringResource(id = R.string.copy_username),
                 onClick = onCopyUsernameClick,
-                modifier = Modifier.testTag("LoginCopyUsernameButton"),
+                modifier = Modifier.testTag(tag = "LoginCopyUsernameButton"),
             )
         },
         modifier = modifier,

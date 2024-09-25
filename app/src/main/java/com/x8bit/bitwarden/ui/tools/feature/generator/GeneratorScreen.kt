@@ -64,14 +64,13 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBa
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
@@ -412,19 +411,15 @@ private fun GeneratedStringItem(
         value = generatedText,
         singleLine = false,
         actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                    contentDescription = stringResource(id = R.string.copy),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_copy,
+                contentDescription = stringResource(id = R.string.copy),
                 onClick = onCopyClick,
                 modifier = Modifier.testTag("CopyValueButton"),
             )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_generator),
-                    contentDescription = stringResource(id = R.string.generate_password),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_generator,
+                contentDescription = stringResource(id = R.string.generate_password),
                 onClick = onRegenerateClick,
                 modifier = Modifier.testTag("RegenerateValueButton"),
             )
