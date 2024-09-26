@@ -11,8 +11,10 @@ import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
@@ -1239,9 +1241,18 @@ class VaultSdkSourceTest {
 }
 
 private const val DEFAULT_SIGNATURE = "0987654321ABCDEF"
+
+private val DEFAULT_ORIGIN = Origin.Android(
+    UnverifiedAssetLink(
+        packageName = "com.x8bit.bitwarden",
+        sha256CertFingerprint = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46",
+        host = "bitwarden.com",
+        assetLinkUrl = "www.bitwarden.com",
+    ),
+)
 private val DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST = RegisterFido2CredentialRequest(
     userId = "mockUserId",
-    origin = "www.bitwarden.com",
+    origin = DEFAULT_ORIGIN,
     requestJson = "requestJson",
     clientData = ClientData.DefaultWithCustomHash(
         DEFAULT_SIGNATURE.toByteArray(),
@@ -1251,7 +1262,7 @@ private val DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST = RegisterFido2Credential
 )
 private val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
     userId = "mockUserId",
-    origin = "www.bitwarden.com",
+    origin = DEFAULT_ORIGIN,
     requestJson = "requestJson",
     clientData = ClientData.DefaultWithCustomHash(
         DEFAULT_SIGNATURE.toByteArray(),

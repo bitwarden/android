@@ -5,7 +5,9 @@ import android.content.pm.SigningInfo
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
+import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
@@ -709,7 +711,14 @@ class Fido2CredentialManagerTest {
             assertEquals(
                 AuthenticateFido2CredentialRequest(
                     userId = "activeUserId",
-                    origin = mockRequest.origin!!,
+                    origin = Origin.Android(
+                        UnverifiedAssetLink(
+                            packageName = DEFAULT_PACKAGE_NAME,
+                            sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
+                            host = DEFAULT_HOST,
+                            assetLinkUrl = mockRequest.origin!!,
+                        ),
+                    ),
                     requestJson = """{"publicKey": ${mockRequest.requestJson}}""",
                     clientData = ClientData.DefaultWithExtraData(
                         androidPackageName = "android:apk-key-hash:$DEFAULT_APP_SIGNATURE",
@@ -756,7 +765,14 @@ class Fido2CredentialManagerTest {
             }
 
             assertEquals(
-                "https://${mockAssertionOptions.relyingPartyId}",
+                Origin.Android(
+                    UnverifiedAssetLink(
+                        DEFAULT_PACKAGE_NAME,
+                        DEFAULT_CERT_FINGERPRINT,
+                        mockAssertionOptions.relyingPartyId!!,
+                        "https://${mockAssertionOptions.relyingPartyId}",
+                    ),
+                ),
                 requestCaptureSlot.captured.origin,
             )
         }
@@ -942,9 +958,17 @@ class Fido2CredentialManagerTest {
 }
 
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
-private const val DEFAULT_ORIGIN = "bitwarden.com"
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
 private const val DEFAULT_CERT_FINGERPRINT = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
+private const val DEFAULT_HOST = "bitwarden.com"
+private val DEFAULT_ORIGIN = Origin.Android(
+    UnverifiedAssetLink(
+        packageName = DEFAULT_PACKAGE_NAME,
+        sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
+        host = DEFAULT_HOST,
+        assetLinkUrl = "bitwarden.com",
+    ),
+)
 private val DEFAULT_STATEMENT = DigitalAssetLinkResponseJson(
     relation = listOf(
         "delegate_permission/common.get_login_creds",
@@ -1029,7 +1053,7 @@ private const val DEFAULT_FIDO2_AUTH_REQUEST_JSON = """
 """
 
 private fun createMockFido2AssertionRequest(
-    mockOrigin: String? = DEFAULT_ORIGIN,
+    mockOrigin: String? = "bitwarden.com",
     mockClientDataHash: ByteArray? = null,
     mockSigningInfo: SigningInfo,
 ) = mockk<Fido2CredentialAssertionRequest> {
