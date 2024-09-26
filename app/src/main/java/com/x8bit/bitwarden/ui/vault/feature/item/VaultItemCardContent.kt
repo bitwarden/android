@@ -13,12 +13,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -87,13 +85,11 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     actions = {
-                        BitwardenIconButtonWithResource(
-                            iconRes = IconResource(
-                                iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                                contentDescription = stringResource(id = R.string.copy_number),
-                            ),
+                        BitwardenFilledIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_number),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
-                            modifier = Modifier.testTag("CardCopyNumberButton"),
+                            modifier = Modifier.testTag(tag = "CardCopyNumberButton"),
                         )
                     },
                     passwordFieldTestTag = "CardNumberEntry",
@@ -151,16 +147,11 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     actions = {
-                        BitwardenIconButtonWithResource(
-                            iconRes = IconResource(
-                                iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                                contentDescription = stringResource(
-                                    id = R.string.copy_security_code,
-                                ),
-                            ),
+                        BitwardenFilledIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_security_code),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,
-                            modifier = Modifier
-                                .testTag("CardCopySecurityCodeButton"),
+                            modifier = Modifier.testTag(tag = "CardCopySecurityCodeButton"),
                         )
                     },
                     modifier = Modifier

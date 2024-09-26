@@ -10,7 +10,7 @@ interface AuthenticatorBridgeRepository {
 
     /**
      * The currently persisted authenticator sync symmetric key. This key is used for
-     * encrypting IPC traffic.
+     * encrypting IPC traffic. This will return null if no users have enabled authenticator sync.
      */
     val authenticatorSyncSymmetricKey: ByteArray?
 

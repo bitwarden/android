@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,8 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -30,8 +30,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWi
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -117,33 +115,26 @@ fun LazyListScope.vaultAddEditLoginItems(
                 label = stringResource(id = R.string.totp),
                 value = loginState.totp,
                 trailingIconContent = {
-                    IconButton(
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_close,
+                        contentDescription = stringResource(id = R.string.delete),
                         onClick = loginItemTypeHandlers.onClearTotpKeyClick,
-                    ) {
-                        Icon(
-                            painter = rememberVectorPainter(id = R.drawable.ic_close),
-                            contentDescription = stringResource(id = R.string.delete),
-                        )
-                    }
+                    )
                 },
                 onValueChange = {},
                 readOnly = true,
                 singleLine = true,
                 actions = {
-                    BitwardenIconButtonWithResource(
-                        iconRes = IconResource(
-                            iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
-                            contentDescription = stringResource(id = R.string.copy_totp),
-                        ),
+                    BitwardenFilledIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_totp),
                         onClick = {
                             loginItemTypeHandlers.onCopyTotpKeyClick(loginState.totp)
                         },
                     )
-                    BitwardenIconButtonWithResource(
-                        iconRes = IconResource(
-                            iconPainter = rememberVectorPainter(id = R.drawable.ic_camera),
-                            contentDescription = stringResource(id = R.string.camera),
-                        ),
+                    BitwardenFilledIconButton(
+                        vectorIconRes = R.drawable.ic_camera,
+                        contentDescription = stringResource(id = R.string.camera),
                         onClick = onTotpSetupClick,
                     )
                 },
@@ -254,15 +245,14 @@ fun LazyListScope.vaultAddEditLoginItems(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 actions = {
-                    IconButton(onClick = commonActionHandler.onTooltipClick) {
-                        Icon(
-                            painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            contentDescription = stringResource(
-                                id = R.string.master_password_re_prompt_help,
-                            ),
-                        )
-                    }
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_tooltip,
+                        contentDescription = stringResource(
+                            id = R.string.master_password_re_prompt_help,
+                        ),
+                        onClick = commonActionHandler.onTooltipClick,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                    )
                 },
             )
         }
@@ -388,11 +378,9 @@ private fun UsernameRow(
         value = username,
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_generator),
-                    contentDescription = stringResource(id = R.string.generate_username),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_generator,
+                contentDescription = stringResource(id = R.string.generate_username),
                 onClick = {
                     if (username.isEmpty()) {
                         loginItemTypeHandlers.onOpenUsernameGeneratorClick()
@@ -400,7 +388,7 @@ private fun UsernameRow(
                         shouldShowDialog = true
                     }
                 },
-                modifier = Modifier.testTag("GenerateUsernameButton"),
+                modifier = Modifier.testTag(tag = "GenerateUsernameButton"),
             )
         },
         modifier = Modifier
@@ -457,20 +445,15 @@ private fun PasswordRow(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_check_mark),
-                    contentDescription = stringResource(id = R.string.check_password),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_check_mark,
+                contentDescription = stringResource(id = R.string.check_password),
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
-                modifier = Modifier
-                    .testTag("CheckPasswordButton"),
+                modifier = Modifier.testTag(tag = "CheckPasswordButton"),
             )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_generator),
-                    contentDescription = stringResource(id = R.string.generate_password),
-                ),
+            BitwardenFilledIconButton(
+                vectorIconRes = R.drawable.ic_generator,
+                contentDescription = stringResource(id = R.string.generate_password),
                 onClick = {
                     if (password.isEmpty()) {
                         loginItemTypeHandlers.onOpenPasswordGeneratorClick()
@@ -478,8 +461,7 @@ private fun PasswordRow(
                         shouldShowDialog = true
                     }
                 },
-                modifier = Modifier
-                    .testTag("RegeneratePasswordButton"),
+                modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
             )
 
             if (shouldShowDialog) {
@@ -532,14 +514,11 @@ private fun PasskeyField(
         modifier = modifier,
         actions = {
             if (canRemovePasskey) {
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),
-                        contentDescription = stringResource(id = R.string.remove_passkey),
-                    ),
+                BitwardenFilledIconButton(
+                    vectorIconRes = R.drawable.ic_minus,
+                    contentDescription = stringResource(id = R.string.remove_passkey),
                     onClick = loginItemTypeHandlers.onClearFido2CredentialClick,
-                    modifier = Modifier
-                        .testTag("RemovePasskeyButton"),
+                    modifier = Modifier.testTag(tag = "RemovePasskeyButton"),
                 )
             }
         },

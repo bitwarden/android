@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
@@ -22,10 +20,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -112,16 +110,12 @@ fun VaultVerificationCodeItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
-            IconButton(
+            BitwardenStandardIconButton(
+                vectorIconRes = R.drawable.ic_copy,
+                contentDescription = stringResource(id = R.string.copy),
                 onClick = onCopyClick,
-            ) {
-                Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_copy),
-                    contentDescription = stringResource(id = R.string.copy),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
+                contentColor = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }

@@ -1,29 +1,31 @@
-package com.x8bit.bitwarden.ui.platform.components.icon
+package com.x8bit.bitwarden.ui.platform.components.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * An icon button that displays an icon from the provided [IconResource].
+ * A filled icon button that displays an icon.
  *
- * @param iconRes Icon to display on the button.
+ * @param vectorIconRes Icon to display on the button.
+ * @param contentDescription The content description for this icon button.
  * @param onClick Callback for when the icon button is clicked.
- * @param isEnabled Whether or not the button should be enabled.
  * @param modifier A [Modifier] for the composable.
+ * @param isEnabled Whether or not the button should be enabled.
  */
 @Composable
-fun BitwardenIconButtonWithResource(
-    iconRes: IconResource,
+fun BitwardenFilledIconButton(
+    @DrawableRes vectorIconRes: Int,
+    contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
@@ -31,7 +33,7 @@ fun BitwardenIconButtonWithResource(
     FilledIconButton(
         modifier = modifier.semantics(mergeDescendants = true) {},
         onClick = onClick,
-        colors = IconButtonColors(
+        colors = IconButtonDefaults.filledIconButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .12f),
@@ -40,21 +42,19 @@ fun BitwardenIconButtonWithResource(
         enabled = isEnabled,
     ) {
         Icon(
-            painter = iconRes.iconPainter,
-            contentDescription = iconRes.contentDescription,
+            painter = rememberVectorPainter(id = vectorIconRes),
+            contentDescription = contentDescription,
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun BitwardenIconButtonWithResource_preview() {
+private fun BitwardenFilledIconButton_preview() {
     BitwardenTheme {
-        BitwardenIconButtonWithResource(
-            iconRes = IconResource(
-                iconPainter = rememberVectorPainter(id = R.drawable.ic_tooltip),
-                contentDescription = "Sample Icon",
-            ),
+        BitwardenFilledIconButton(
+            vectorIconRes = R.drawable.ic_tooltip,
+            contentDescription = "Sample Icon",
             onClick = {},
         )
     }

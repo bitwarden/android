@@ -4,9 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.base.util.withVisualTransformation
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
@@ -77,18 +74,13 @@ fun PasswordHistoryListItem(
             )
         }
 
-        IconButton(
+        BitwardenStandardIconButton(
+            vectorIconRes = R.drawable.ic_copy,
+            contentDescription = stringResource(id = R.string.copy),
             onClick = onCopyClick,
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-            ),
-            modifier = Modifier.testTag("CopyPasswordValueButton"),
-        ) {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_copy),
-                contentDescription = stringResource(id = R.string.copy),
-            )
-        }
+            contentColor = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.testTag(tag = "CopyPasswordValueButton"),
+        )
     }
 }
 

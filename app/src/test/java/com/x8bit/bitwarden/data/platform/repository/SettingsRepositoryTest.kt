@@ -1202,6 +1202,101 @@ class SettingsRepositoryTest {
         fakeSettingsDiskSource.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
         assertTrue(settingsRepository.getShowUnlockSettingBadge(userId = userId))
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getShowAutoFillBadgeFlow should emit the values saved to disk and update when they change`() =
+        runTest {
+            val userId = "userId"
+            settingsRepository.getShowAutofillBadgeFlow(userId).test {
+                assertFalse(awaitItem())
+                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                    userId = userId,
+                    showBadge = true,
+                )
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getShowUnlockBadgeFlow should emit the values saved to disk and update when they change`() =
+        runTest {
+            val userId = "userId"
+            settingsRepository.getShowUnlockBadgeFlow(userId).test {
+                assertFalse(awaitItem())
+                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                    userId = userId,
+                    showBadge = true,
+                )
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `allAutoFillSettingsBadgeCountFlow should emit the value of flags set to true and update when changed`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository.allAutofillSettingsBadgeCountFlow.test {
+                assertEquals(0, awaitItem())
+                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                    userId = USER_ID,
+                    showBadge = true,
+                )
+                assertEquals(1, awaitItem())
+                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                    userId = USER_ID,
+                    showBadge = false,
+                )
+                assertEquals(0, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `allSecuritySettingsBadgeCountFlow should emit the value of flags set to true and update when changed`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository.allSecuritySettingsBadgeCountFlow.test {
+                assertEquals(0, awaitItem())
+                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                    userId = USER_ID,
+                    showBadge = true,
+                )
+                assertEquals(1, awaitItem())
+                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                    userId = USER_ID,
+                    showBadge = false,
+                )
+                assertEquals(0, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `allSettingsBadgeCountFlow should emit the value of all flags set to true and update when changed`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository.allSettingsBadgeCountFlow.test {
+                assertEquals(0, awaitItem())
+                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                    userId = USER_ID,
+                    showBadge = true,
+                )
+                assertEquals(1, awaitItem())
+                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                    userId = USER_ID,
+                    showBadge = true,
+                )
+                assertEquals(2, awaitItem())
+                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                    userId = USER_ID,
+                    showBadge = false,
+                )
+                assertEquals(1, awaitItem())
+            }
+        }
 }
 
 private const val USER_ID: String = "userId"

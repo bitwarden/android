@@ -4,11 +4,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +20,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Attachment UI common for all item types.
@@ -68,29 +65,24 @@ fun AttachmentItemContent(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        IconButton(
+        BitwardenStandardIconButton(
+            vectorIconRes = R.drawable.ic_download,
+            contentDescription = stringResource(id = R.string.download),
             onClick = {
                 if (!attachmentItem.isDownloadAllowed) {
                     shouldShowPremiumWarningDialog = true
-                    return@IconButton
+                    return@BitwardenStandardIconButton
                 }
 
                 if (attachmentItem.isLargeFile) {
                     shouldShowSizeWarningDialog = true
-                    return@IconButton
+                    return@BitwardenStandardIconButton
                 }
 
                 onAttachmentDownloadClick(attachmentItem)
             },
-            modifier = Modifier,
-        ) {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_download),
-                contentDescription = stringResource(id = R.string.download),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp),
-            )
-        }
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 
     if (shouldShowPremiumWarningDialog) {

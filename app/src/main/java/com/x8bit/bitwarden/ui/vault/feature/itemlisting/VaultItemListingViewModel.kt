@@ -1122,8 +1122,19 @@ class VaultItemListingViewModel @Inject constructor(
         when (data) {
             is MasterPasswordRepromptData.Autofill -> {
                 // Complete the autofill selection flow
+                val autofillSelectionData = state.autofillSelectionData ?: return
                 val cipherView = getCipherViewOrNull(cipherId = data.cipherId) ?: return
-                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+                when (autofillSelectionData.framework) {
+                    AutofillSelectionData.Framework.ACCESSIBILITY -> {
+                        accessibilitySelectionManager.emitAccessibilitySelection(
+                            cipherView = cipherView,
+                        )
+                    }
+
+                    AutofillSelectionData.Framework.AUTOFILL -> {
+                        autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+                    }
+                }
             }
 
             is MasterPasswordRepromptData.OverflowItem -> {

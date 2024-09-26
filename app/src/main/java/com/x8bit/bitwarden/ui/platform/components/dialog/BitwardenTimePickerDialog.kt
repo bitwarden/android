@@ -9,11 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 
 /**
  * A custom composable representing a dialog that displays the time picker dialog.
@@ -91,21 +88,15 @@ fun BitwardenTimePickerDialog(
             }
         },
         inputToggleButton = {
-            IconButton(
-                modifier = Modifier.size(48.dp),
+            BitwardenStandardIconButton(
+                vectorIconRes = R.drawable.ic_keyboard,
+                contentDescription = stringResource(
+                    // TODO: Get our own string for this (BIT-1405)
+                    id = androidx.compose.material3.R.string.m3c_date_picker_switch_to_input_mode,
+                ),
                 onClick = { showTimeInput = !showTimeInput },
-            ) {
-                @Suppress("MaxLineLength")
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = rememberVectorPainter(id = R.drawable.ic_keyboard),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    contentDescription = stringResource(
-                        // TODO: Get our own string for this (BIT-1405)
-                        id = androidx.compose.material3.R.string.m3c_date_picker_switch_to_input_mode,
-                    ),
-                )
-            }
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         },
     ) {
         val modifier = Modifier.weight(1f)
