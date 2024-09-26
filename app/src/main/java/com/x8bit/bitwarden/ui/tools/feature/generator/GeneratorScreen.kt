@@ -2,28 +2,19 @@
 
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -31,26 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,7 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
-import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -73,6 +50,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithAc
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
@@ -526,11 +504,12 @@ private fun ColumnScope.PasswordTypeContent(
 ) {
     Spacer(modifier = Modifier.height(8.dp))
 
-    PasswordLengthSliderItem(
-        length = passwordTypeState.length,
-        onPasswordSliderLengthChange = passwordHandlers.onPasswordSliderLengthChange,
-        minValue = passwordTypeState.minLength,
-        maxValue = passwordTypeState.maxLength,
+    BitwardenSlider(
+        value = passwordTypeState.length,
+        onValueChange = passwordHandlers.onPasswordSliderLengthChange,
+        range = passwordTypeState.minLength..passwordTypeState.maxLength,
+        sliderTag = "PasswordLengthSlider",
+        valueTag = "PasswordLengthLabel",
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -593,112 +572,6 @@ private fun ColumnScope.PasswordTypeContent(
         passwordHandlers.onPasswordToggleAvoidAmbiguousCharsChange,
         enabled = passwordTypeState.ambiguousCharsEnabled,
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
-@Composable
-private fun PasswordLengthSliderItem(
-    length: Int,
-    onPasswordSliderLengthChange: (value: Int, isUserInteracting: Boolean) -> Unit,
-    minValue: Int,
-    maxValue: Int,
-) {
-    val sliderValue by rememberUpdatedState(newValue = length.coerceIn(minValue, maxValue))
-    var labelTextWidth by remember { mutableStateOf(Dp.Unspecified) }
-
-    val density = LocalDensity.current
-    val sliderRange = minValue.toFloat()..maxValue.toFloat()
-
-    val lengthLabel: @Composable () -> Unit = remember {
-        {
-            Text(
-                text = stringResource(id = R.string.length),
-                modifier = Modifier
-                    .onGloballyPositioned { layoutCoordinates ->
-                        if (labelTextWidth == Dp.Unspecified) {
-                            labelTextWidth = layoutCoordinates.size.width.toDp(density)
-                        }
-                    },
-            )
-        }
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .semantics(mergeDescendants = true) {},
-    ) {
-        OutlinedTextField(
-            value = sliderValue.toString(),
-            readOnly = true,
-            onValueChange = { },
-            label = lengthLabel,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier
-                .onPreviewKeyEvent { keyEvent ->
-                    when (keyEvent.key) {
-                        Key.DirectionUp -> {
-                            onPasswordSliderLengthChange(sliderValue + 1, true)
-                            true
-                        }
-
-                        Key.DirectionDown -> {
-                            onPasswordSliderLengthChange(sliderValue - 1, true)
-                            true
-                        }
-
-                        else -> false
-                    }
-                }
-                .testTag("PasswordLengthLabel")
-                .wrapContentWidth()
-                // We want the width to be no wider than the label + 16dp on either side
-                .width(16.dp + labelTextWidth + 16.dp),
-        )
-
-        val colors = SliderDefaults.colors(
-            activeTickColor = Color.Transparent,
-            inactiveTickColor = Color.Transparent,
-            disabledActiveTickColor = Color.Transparent,
-            disabledInactiveTickColor = Color.Transparent,
-        )
-        Slider(
-            value = sliderValue.toFloat(),
-            onValueChange = { newValue ->
-                onPasswordSliderLengthChange(newValue.toInt(), true)
-            },
-            onValueChangeFinished = {
-                onPasswordSliderLengthChange(sliderValue, false)
-            },
-            valueRange = sliderRange,
-            steps = maxValue - 1,
-            colors = colors,
-            thumb = {
-                SliderDefaults.Thumb(
-                    interactionSource = remember { MutableInteractionSource() },
-                    colors = colors,
-                    thumbSize = DpSize(width = 20.dp, height = 20.dp),
-                )
-            },
-            track = { sliderState ->
-                SliderDefaults.Track(
-                    modifier = Modifier.height(height = 4.dp),
-                    drawStopIndicator = null,
-                    colors = colors,
-                    sliderState = sliderState,
-                    thumbTrackGapSize = 0.dp,
-                )
-            },
-            modifier = Modifier
-                .focusProperties { canFocus = false }
-                .testTag(tag = "PasswordLengthSlider")
-                .weight(weight = 1f),
-        )
-    }
 }
 
 @Composable
