@@ -1,12 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.components.segment
 
-import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import kotlinx.collections.immutable.ImmutableList
 
 /**
@@ -17,24 +18,22 @@ import kotlinx.collections.immutable.ImmutableList
  */
 @Composable
 fun BitwardenSegmentedButton(
-    modifier: Modifier = Modifier,
     options: ImmutableList<SegmentedButtonState>,
+    modifier: Modifier = Modifier,
 ) {
-    MultiChoiceSegmentedButtonRow(
+    SingleChoiceSegmentedButtonRow(
         modifier = modifier,
     ) {
         options.forEachIndexed { index, option ->
             SegmentedButton(
-                checked = option.isChecked,
-                onCheckedChange = { option.onClick() },
+                selected = option.isChecked,
+                onClick = option.onClick,
                 shape = SegmentedButtonDefaults.itemShape(
                     index = index,
                     count = options.size,
                 ),
                 label = { Text(text = option.text) },
-                modifier = Modifier.run {
-                    option.testTag?.let { testTag(it) } ?: this
-                },
+                modifier = Modifier.semantics { option.testTag?.let { testTag = it } },
             )
         }
     }
