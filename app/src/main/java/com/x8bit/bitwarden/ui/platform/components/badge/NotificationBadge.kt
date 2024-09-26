@@ -1,5 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.components.badge
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,25 +26,30 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
  */
 @Composable
 fun NotificationBadge(
-    modifier: Modifier = Modifier,
     notificationCount: Int,
+    modifier: Modifier = Modifier,
+    isVisible: Boolean = true,
     backgroundColor: Color = LocalNonMaterialColors.current.fingerprint,
     contentColor: Color = MaterialTheme.colorScheme.onSecondary,
 ) {
-    Badge(
-        content = {
-            if (notificationCount > 0) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically() + fadeIn(),
+        exit = slideOutVertically() + fadeOut(),
+    ) {
+        Badge(
+            content = {
                 Text(
                     text = notificationCount.toString(),
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
                 )
-            }
-        },
-        modifier = modifier,
-        containerColor = backgroundColor,
-        contentColor = contentColor,
-    )
+            },
+            modifier = modifier,
+            containerColor = backgroundColor,
+            contentColor = contentColor,
+        )
+    }
 }
 
 @Preview

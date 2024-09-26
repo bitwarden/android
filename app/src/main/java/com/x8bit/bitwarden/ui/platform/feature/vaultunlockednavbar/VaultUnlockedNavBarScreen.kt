@@ -285,16 +285,10 @@ private fun VaultBottomAppBar(
                 icon = {
                     BadgedBox(
                         badge = {
-                            // Avoid using the RowScope.AnimatedVisibility inside BoxScope.
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = destination.notificationCount > 0,
-                                enter = slideInVertically() + fadeIn(),
-                                exit = slideOutVertically() + fadeOut(),
-                            ) {
-                                NotificationBadge(
-                                    notificationCount = destination.notificationCount,
-                                )
-                            }
+                            NotificationBadge(
+                                notificationCount = destination.notificationCount,
+                                isVisible = destination.notificationCount > 0,
+                            )
                         },
                     ) {
                         Icon(
