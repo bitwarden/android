@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,6 +13,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 
 /**
  * A clickable item that displays a radio button and text.
@@ -38,9 +38,9 @@ fun BitwardenSelectionRow(
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        RadioButton(
+        BitwardenRadioButton(
             modifier = Modifier.padding(16.dp),
-            selected = isSelected,
+            isSelected = isSelected,
             onClick = null,
         )
         Text(
