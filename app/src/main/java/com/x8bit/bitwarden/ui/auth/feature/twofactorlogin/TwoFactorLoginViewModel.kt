@@ -207,15 +207,16 @@ class TwoFactorLoginViewModel @Inject constructor(
                 // The url should not be empty unless the environment is somehow not supported.
                 authUrl
                     ?.let {
-                    TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it))
-                } ?: mutableStateFlow.update {
-                    it.copy(
-                        dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
-                        ),
-                    )
-                }
+                        sendEvent(event = TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)))
+                    }
+                    ?: mutableStateFlow.update {
+                        it.copy(
+                            dialogState = TwoFactorLoginState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
+                            ),
+                        )
+                    }
             }
 
             TwoFactorAuthMethod.WEB_AUTH -> {
