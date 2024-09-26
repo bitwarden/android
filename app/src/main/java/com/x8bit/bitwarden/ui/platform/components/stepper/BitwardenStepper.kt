@@ -26,7 +26,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithAc
  * @param textFieldReadOnly whether or not the text field should be read only. The stepper
  * increment and decrement buttons function regardless of this value.
  */
-@Suppress("LongMethod")
+@Suppress("CyclomaticComplexMethod")
 @Composable
 fun BitwardenStepper(
     label: String,
@@ -45,45 +45,41 @@ fun BitwardenStepper(
     if (clampedValue != value && clampedValue != null) {
         onValueChange(clampedValue)
     }
+    val isAtRangeMinimum = clampedValue?.let { (it - 1) !in range } ?: true
+    val isAtRangeMaximum = clampedValue?.let { (it + 1) !in range } ?: false
     BitwardenTextFieldWithActions(
         label = label,
         // We use the zero width character instead of an empty string to make sure label is shown
         // small and above the input
-        value = clampedValue
-            ?.toString()
-            ?: ZERO_WIDTH_CHARACTER,
+        value = clampedValue?.toString() ?: ZERO_WIDTH_CHARACTER,
         actionsTestTag = stepperActionsTestTag,
         actions = {
             BitwardenFilledIconButton(
                 vectorIconRes = R.drawable.ic_minus,
                 contentDescription = "\u2212",
                 onClick = {
-                    val decrementedValue = ((value ?: 0) - 1).coerceIn(range)
-                    if (decrementedValue != value) {
+                    val decrementedValue = ((clampedValue ?: 0) - 1).coerceIn(range)
+                    if (decrementedValue != clampedValue) {
                         onValueChange(decrementedValue)
                     }
                 },
-                isEnabled = isDecrementEnabled,
+                isEnabled = isDecrementEnabled && !isAtRangeMinimum,
                 modifier = Modifier.semantics {
-                    if (decreaseButtonTestTag != null) {
-                        testTag = decreaseButtonTestTag
-                    }
+                    decreaseButtonTestTag?.let { testTag = it }
                 },
             )
             BitwardenFilledIconButton(
                 vectorIconRes = R.drawable.ic_plus,
                 contentDescription = "+",
                 onClick = {
-                    val incrementedValue = ((value ?: 0) + 1).coerceIn(range)
-                    if (incrementedValue != value) {
+                    val incrementedValue = ((clampedValue ?: 0) + 1).coerceIn(range)
+                    if (incrementedValue != clampedValue) {
                         onValueChange(incrementedValue)
                     }
                 },
-                isEnabled = isIncrementEnabled,
+                isEnabled = isIncrementEnabled && !isAtRangeMaximum,
                 modifier = Modifier.semantics {
-                    if (increaseButtonTestTag != null) {
-                        testTag = increaseButtonTestTag
-                    }
+                    increaseButtonTestTag?.let { testTag = it }
                 },
             )
         },
@@ -95,7 +91,7 @@ fun BitwardenStepper(
                     // Make sure the placeholder is gone, since it will mess up the int conversion
                     .replace(ZERO_WIDTH_CHARACTER, "")
                     .orNullIfBlank()
-                    ?.let { it.toIntOrNull()?.coerceIn(range) ?: value }
+                    ?.let { it.toIntOrNull()?.coerceIn(range) ?: clampedValue }
                     ?: range.start,
             )
         },
