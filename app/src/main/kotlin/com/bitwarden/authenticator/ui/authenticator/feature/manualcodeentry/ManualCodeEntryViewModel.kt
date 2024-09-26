@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
+import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
@@ -67,36 +68,22 @@ class ManualCodeEntryViewModel @Inject constructor(
     }
 
     private fun handleCodeSubmit() {
-        if (state.code.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = ManualCodeEntryState.DialogState.Error(
-                        message = R.string.key_is_required.asText(),
-                    ),
-                )
-            }
+        val isSteamCode = state.code.startsWith(TotpCodeManager.STEAM_CODE_PREFIX)
+        val sanitizedCode = state.code
+            .replace(" ", "")
+            .replace(TotpCodeManager.STEAM_CODE_PREFIX, "")
+        if (sanitizedCode.isBlank()) {
+            showErrorDialog(R.string.key_is_required.asText())
             return
         }
 
-        if (!state.code.isBase32()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = ManualCodeEntryState.DialogState.Error(
-                        message = R.string.key_is_invalid.asText(),
-                    ),
-                )
-            }
+        if (!sanitizedCode.isBase32()) {
+            showErrorDialog(R.string.key_is_invalid.asText())
             return
         }
 
         if (state.issuer.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = ManualCodeEntryState.DialogState.Error(
-                        message = R.string.name_is_required.asText(),
-                    ),
-                )
-            }
+            showErrorDialog(R.string.name_is_required.asText())
             return
         }
 
@@ -104,11 +91,11 @@ class ManualCodeEntryViewModel @Inject constructor(
             authenticatorRepository.createItem(
                 AuthenticatorItemEntity(
                     id = UUID.randomUUID().toString(),
-                    key = state.code,
+                    key = sanitizedCode,
                     issuer = state.issuer,
                     accountName = "",
                     userId = null,
-                    type = if (state.code.startsWith("steam://")) {
+                    type = if (isSteamCode) {
                         AuthenticatorItemType.STEAM
                     } else {
                         AuthenticatorItemType.TOTP
@@ -133,6 +120,16 @@ class ManualCodeEntryViewModel @Inject constructor(
 
     private fun handleSettingsClick() {
         sendEvent(ManualCodeEntryEvent.NavigateToAppSettings)
+    }
+
+    private fun showErrorDialog(message: Text) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ManualCodeEntryState.DialogState.Error(
+                    message = message,
+                ),
+            )
+        }
     }
 }
 
