@@ -148,7 +148,7 @@ private fun TrailingContent(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.mirrorIfRtl(),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val notificationBadgeVisible = notificationCount > 0
@@ -171,6 +171,7 @@ private fun TrailingContent(
 }
 
 @Preview
+@Preview(name = "Right-To-Left", locale = "ar")
 @Composable
 private fun SettingsRows_preview() {
     BitwardenTheme {
