@@ -36,7 +36,10 @@ fun createAutofillSelectionIntent(
 ): Intent =
     Intent(context, MainActivity::class.java)
         .apply {
-            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            // This helps prevent a crash when using the accessibility framework
+            if (framework == AutofillSelectionData.Framework.ACCESSIBILITY) {
+                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             putExtra(
                 AUTOFILL_BUNDLE_KEY,
                 bundleOf(
