@@ -68,27 +68,27 @@ class Fido2CredentialManagerImpl(
                     .packageName,
             )
         }
-        val origin = fido2CredentialRequest
+        val assetLinkUrl = fido2CredentialRequest
             .origin
             ?: getOriginUrlFromAttestationOptionsOrNull(fido2CredentialRequest.requestJson)
             ?: return Fido2RegisterCredentialResult.Error
 
-        val originAndroid = Origin.Android(
+        val origin = Origin.Android(
             UnverifiedAssetLink(
-                fido2CredentialRequest.packageName,
-                fido2CredentialRequest.callingAppInfo
+                packageName = fido2CredentialRequest.packageName,
+                sha256CertFingerprint = fido2CredentialRequest.callingAppInfo
                     .getSignatureFingerprintAsHexString()
                     ?: return Fido2RegisterCredentialResult.Error,
-                origin.toHostOrPathOrNull()
+                host = assetLinkUrl.toHostOrPathOrNull()
                     ?: return Fido2RegisterCredentialResult.Error,
-                origin,
+                assetLinkUrl = assetLinkUrl,
             ),
         )
         return vaultSdkSource
             .registerFido2Credential(
                 request = RegisterFido2CredentialRequest(
                     userId = userId,
-                    origin = originAndroid,
+                    origin = origin,
                     requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
                     clientData = clientData,
                     selectedCipherView = selectedCipherView,
