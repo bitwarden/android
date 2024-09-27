@@ -255,7 +255,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     fun `when unsubscribe custom action invoked should send UnsubscribeMarketingEmailsClick`() {
         @Suppress("MaxLineLength")
         composeTestRule
-            .onNodeWithText("Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.")
+            .onNodeWithText("Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.")
             .performCustomAccessibilityAction("Unsubscribe")
 
         verify { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
