@@ -50,7 +50,7 @@
   <string name="account_already_added">Konto bereits hinzugefügt</string>
   <string name="switch_to_already_added_account_confirmation">Möchtest du jetzt dazu wechseln?</string>
   <string name="master_password">Master-Passwort</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Master-Passwort (erforderlich)</string>
   <string name="more">Mehr</string>
   <string name="my_vault">Mein Tresor</string>
   <string name="authenticator">Authenticator</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Wir würden uns freuen, wenn du uns mit einer positiven Bewertung helfen könntest!</string>
   <string name="regenerate_password">Passwort neu generieren</string>
   <string name="retype_master_password">Master-Passwort wiederholen</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Master-Passwort erneut eingeben (erforderlich)</string>
   <string name="search_vault">Tresor durchsuchen</string>
   <string name="security">Sicherheit</string>
   <string name="select">Auswählen</string>
@@ -1005,6 +1005,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Du kannst diesen Schritt in den Einstellungen jederzeit fortsetzen und abschließen.</string>
   <string name="what_bitwarden_has_to_offer">Du kannst nun Auto-Ausfüllen verwenden, um dich mit deinen gespeicherten Passwörtern bei Apps und Websites anzumelden. Du kannst jetzt alles erkunden, was Bitwarden sonst noch zu bieten hat.</string>
   <string name="youre_all_set">Du bist bereit!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fehler beim Verbinden mit dem Duo-Dienst. Verwende eine andere Zwei-Faktor-Authentifizierungsmethode oder kontaktiere Duo für Hilfe.</string>
+  <string name="master_password_hint_not_specified">Master-Passwort-Hinweis</string>
+  <string name="master_password_important_hint">Wichtig: Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens 12 Zeichen lang.</string>
 </resources>

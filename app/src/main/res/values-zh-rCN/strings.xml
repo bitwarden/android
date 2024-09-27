@@ -50,7 +50,7 @@
   <string name="account_already_added">账户已添加</string>
   <string name="switch_to_already_added_account_confirmation">您想现在就切换过去吗？</string>
   <string name="master_password">主密码</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">主密码（必填）</string>
   <string name="more">更多</string>
   <string name="my_vault">我的密码库</string>
   <string name="authenticator">身份验证器</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">我们期待您的好评！</string>
   <string name="regenerate_password">重新生成密码</string>
   <string name="retype_master_password">再次输入主密码</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">再次输入主密码（必填）</string>
   <string name="search_vault">搜索密码库</string>
   <string name="security">安全</string>
   <string name="select">选择</string>
@@ -1006,6 +1006,7 @@
   <string name="return_to_complete_this_step_anytime_in_settings">您可以随时在「设置」中完成此步骤。</string>
   <string name="what_bitwarden_has_to_offer">您现在可以使用自动填充功能，使用保存的密码来登录 App 和网站。也可以探索 Bitwarden 为您提供的其他便捷功能。</string>
   <string name="youre_all_set">一切就绪！</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用其他的两步登录方式，或请联系 Duo 寻求帮助。</string>
+  <string name="master_password_hint_not_specified">主密码提示</string>
+  <string name="master_password_important_hint">重要：主密码忘记后，将无法恢复！至少 12 个字符。</string>
 </resources>

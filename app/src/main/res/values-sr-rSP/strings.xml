@@ -50,7 +50,7 @@
   <string name="account_already_added">Налог је већ додат</string>
   <string name="switch_to_already_added_account_confirmation">Да ли желите да га отворите сада?</string>
   <string name="master_password">Главна Лозинка</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Главна лозинка (неопходно)</string>
   <string name="more">Више</string>
   <string name="my_vault">Мој Сеф</string>
   <string name="authenticator">Аутентификатор</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Молимо вас да размотрите да нам помогнете уз добру оцену!</string>
   <string name="regenerate_password">Поново генериши лозинку</string>
   <string name="retype_master_password">Поновити Главну Лозинку</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Поново унети главну лозинку (неопходно)</string>
   <string name="search_vault">Претражи сеф</string>
   <string name="security">Сигурност</string>
   <string name="select">Изабери</string>
@@ -1007,6 +1007,7 @@
   <string name="return_to_complete_this_step_anytime_in_settings">Можете се вратити да бисте завршили овај корак у било ком тренутку у подешавањима.</string>
   <string name="what_bitwarden_has_to_offer">Сада можете да користите аутоматско попуњавање за пријављивање у апликације и веб локације помоћу сачуваних лозинки. Сада можете истражити све остало што Bitwarden може да понуди.</string>
   <string name="youre_all_set">Спремни сте!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при повезивању са услугом Duo. Користите други метод пријаве у два корака или контактирајте Duo за помоћ.</string>
+  <string name="master_password_hint_not_specified">Савет главне лозинке</string>
+  <string name="master_password_important_hint">Важно: Ваша главна лозинка се не може повратити ако је заборавите! Минимално 12 слова.</string>
 </resources>

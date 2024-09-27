@@ -50,7 +50,7 @@
   <string name="account_already_added">Обліковий запис вже додано</string>
   <string name="switch_to_already_added_account_confirmation">Бажаєте перемкнутися на нього зараз?</string>
   <string name="master_password">Головний пароль</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Головний пароль (обов\'язково)</string>
   <string name="more">Більше</string>
   <string name="my_vault">Моє сховище</string>
   <string name="authenticator">Автентифікатор</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Розкажіть іншим про свої враження, залишивши хороший відгук!</string>
   <string name="regenerate_password">Генерувати новий</string>
   <string name="retype_master_password">Введіть головний пароль ще раз</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Введіть головний пароль ще раз (обов\'язково)</string>
   <string name="search_vault">Шукати у сховищі</string>
   <string name="security">Безпека</string>
   <string name="select">Обрати</string>
@@ -1006,6 +1006,7 @@
   <string name="return_to_complete_this_step_anytime_in_settings">Ви можете виконати цей крок будь-коли в налаштуваннях.</string>
   <string name="what_bitwarden_has_to_offer">Тепер ви можете автоматично заповнювати облікові дані для входу в програмах і на вебсайтах, використовуючи свої збережені паролі. Дослідіть інші можливості, які пропонує Bitwarden.</string>
   <string name="youre_all_set">Усе налаштовано!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Помилка під\'єднання до служби Duo. Скористайтеся іншим способом двоетапної перевірки або зверніться до служби підтримки Duo по допомогу.</string>
+  <string name="master_password_hint_not_specified">Підказка для головного пароля</string>
+  <string name="master_password_important_hint">Важливо: головний пароль неможливо відновити, якщо ви його втратите! Мінімум 12 символів.</string>
 </resources>

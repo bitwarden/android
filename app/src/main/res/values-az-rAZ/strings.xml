@@ -50,7 +50,7 @@
   <string name="account_already_added">Hesab artıq əlavə edildi</string>
   <string name="switch_to_already_added_account_confirmation">Buna indi keçmək istəyirsiniz?</string>
   <string name="master_password">Ana parol</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Ana parol (tələb olunur)</string>
   <string name="more">Daha çox</string>
   <string name="my_vault">Anbarım</string>
   <string name="authenticator">Kimlik doğrulayıcı</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Gözəl bir rəy ilə bizə dəstək ola bilərsiniz!</string>
   <string name="regenerate_password">Parolu yenidən yarat</string>
   <string name="retype_master_password">Ana parolu yenidən yaz</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Ana parolu təkrar yaz (tələb olunur)</string>
   <string name="search_vault">Anbarda axtar</string>
   <string name="security">Güvənlik</string>
   <string name="select">Seçin</string>
@@ -1005,6 +1005,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Bu addımı tamamlamaq üçün istənilən vaxt Ayarlara gedə bilərsiniz.</string>
   <string name="what_bitwarden_has_to_offer">Artıq saxlanılmış parollarınızı istifadə edərək tətbiq və veb saytlara giriş etmək üçün avto-doldurmanı istifadə edə bilərsiniz. Artıq, Bitwarden-nin təklif etdiyi hər şeyi kəşf edə bilərsiniz.</string>
   <string name="youre_all_set">Artıq hazırsınız!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo xidmətinə bağlanarkən xəta baş verdi. Fərqli iki addımlı giriş üsulu istifadə edin və ya kömək üçün Duo ilə əlaqə saxlayın.</string>
+  <string name="master_password_hint_not_specified">Ana parol ipucusu</string>
+  <string name="master_password_important_hint">Vacib: Ana parolunuzu unutsanız bərpa edə bilməzsiniz! Ən az %12 simvol.</string>
 </resources>

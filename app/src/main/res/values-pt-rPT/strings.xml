@@ -50,7 +50,7 @@
   <string name="account_already_added">Conta já adicionada</string>
   <string name="switch_to_already_added_account_confirmation">Gostaria de alterar para a adicionada agora?</string>
   <string name="master_password">Palavra-passe mestra</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Palavra-passe mestra (obrigatório)</string>
   <string name="more">Mais</string>
   <string name="my_vault">O meu cofre</string>
   <string name="authenticator">Autenticador</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Por favor, considere ajudar-nos com uma boa avaliação!</string>
   <string name="regenerate_password">Regenerar palavra-passe</string>
   <string name="retype_master_password">Reintroduza a palavra-passe mestra</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Reintroduzir palavra-passe mestra (obrigatório)</string>
   <string name="search_vault">Procurar no cofre</string>
   <string name="security">Segurança</string>
   <string name="select">Selecionar</string>
@@ -1006,6 +1006,7 @@ Anule a subscrição em qualquer altura.</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Pode voltar a concluir este passo em qualquer altura nas Definições.</string>
   <string name="what_bitwarden_has_to_offer">Pode agora utilizar o preenchimento automático para iniciar sessão em aplicações e sites utilizando as suas palavras-passe guardadas. Agora, pode explorar tudo o que o Bitwarden tem para oferecer.</string>
   <string name="youre_all_set">Tudo a postos!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro ao ligar ao serviço Duo. Utilize um método de verificação de dois passos diferente ou contacte o Duo para obter assistência.</string>
+  <string name="master_password_hint_not_specified">Dica da palavra-passe mestra</string>
+  <string name="master_password_important_hint">Importante: A sua palavra-passe mestra não pode ser recuperada se a esquecer! 12 caracteres no mínimo.</string>
 </resources>

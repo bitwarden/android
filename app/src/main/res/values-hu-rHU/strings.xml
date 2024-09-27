@@ -1005,6 +1005,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
   <string name="what_bitwarden_has_to_offer">Mostantól az automatikus kitöltéssel bejelentkezhetünk az alkalmazásokba és webhelyekre a mentett jelszavakkal. Most mindent felfedezhetünk, amit a Bitwarden kínál.</string>
   <string name="youre_all_set">Készen is vagyunk!</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Hiba történt a Duo szolgáltatáshoz csatlakozáskor. Használjunk másik kétlépcsős bejelentkezési módot vagy kérjünk segítséget a Duotól.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>
