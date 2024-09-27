@@ -21,7 +21,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param isEnabled Whether or not the button is enabled.
  */
 @Composable
-fun BitwardenErrorButton(
+fun BitwardenFilledErrorButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -51,7 +51,7 @@ fun BitwardenErrorButton(
 @Composable
 private fun BitwardenErrorButton_preview_isEnabled() {
     BitwardenTheme {
-        BitwardenErrorButton(
+        BitwardenFilledErrorButton(
             label = "Label",
             onClick = {},
             isEnabled = true,
@@ -63,7 +63,7 @@ private fun BitwardenErrorButton_preview_isEnabled() {
 @Composable
 private fun BitwardenErrorButton_preview_isNotEnabled() {
     BitwardenTheme {
-        BitwardenErrorButton(
+        BitwardenFilledErrorButton(
             label = "Label",
             onClick = {},
             isEnabled = false,
