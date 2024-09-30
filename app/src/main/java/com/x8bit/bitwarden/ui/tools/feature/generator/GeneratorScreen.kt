@@ -68,6 +68,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlin.math.max
 
 /**
  * Top level composable for the generator screen.
@@ -550,7 +551,7 @@ private fun ColumnScope.PasswordTypeContent(
         minNumbers = passwordTypeState.minNumbers,
         onPasswordMinNumbersCounterChange =
         passwordHandlers.onPasswordMinNumbersCounterChange,
-        maxValue = passwordTypeState.maxNumbersAllowed,
+        maxValue = max(passwordTypeState.maxNumbersAllowed, passwordTypeState.minNumbersAllowed),
         minValue = passwordTypeState.minNumbersAllowed,
     )
 
@@ -560,7 +561,7 @@ private fun ColumnScope.PasswordTypeContent(
         minSpecial = passwordTypeState.minSpecial,
         onPasswordMinSpecialCharactersChange =
         passwordHandlers.onPasswordMinSpecialCharactersChange,
-        maxValue = passwordTypeState.maxSpecialAllowed,
+        maxValue = max(passwordTypeState.maxSpecialAllowed, passwordTypeState.minSpecialAllowed),
         minValue = passwordTypeState.minSpecialAllowed,
     )
 

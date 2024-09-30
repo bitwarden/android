@@ -551,8 +551,8 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, incrementing the minimum numbers counter above 5 should do nothing`() {
-        val initialMinNumbers = 5
+    fun `in Passcode_Password state, incrementing the minimum numbers counter above 9 should do nothing`() {
+        val initialMinNumbers = 9
         updateState(
             DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Passcode(
@@ -650,8 +650,8 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum special characters above 5 should do nothing`() {
-        val initialSpecialChars = 5
+    fun `in Passcode_Password state, decrementing the minimum special characters above 9 should do nothing`() {
+        val initialSpecialChars = 9
         updateState(
             DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Passcode(
@@ -821,6 +821,35 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `in Passcode_Password state, maximum numbers should match minimum if lower`() {
+        val initialMinNumbers = 7
+        val initialMaxNumbers = 5
+
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minNumbersAllowed = initialMinNumbers,
+                            maxNumbersAllowed = initialMaxNumbers,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "7")
+            .onSiblings()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, minimum special characters cannot go below minimum threshold`() {
@@ -854,6 +883,34 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             )
         }
+    }
+
+    @Test
+    fun `in Passcode_Password state, maximum special should match minimum if lower `() {
+        val initialMinSpecials = 7
+        val initialMaxSpecials = 5
+
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minSpecialAllowed = initialMinSpecials,
+                            maxSpecialAllowed = initialMaxSpecials,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule.onNodeWithText("Minimum special")
+            .assertTextEquals("Minimum special", "7")
+            .onSiblings()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
     }
 
     @Test
