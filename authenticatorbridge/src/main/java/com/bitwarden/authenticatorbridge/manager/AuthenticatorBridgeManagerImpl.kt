@@ -73,43 +73,11 @@ class AuthenticatorBridgeManagerImpl(
      */
     private val bridgeServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            bridgeService = IAuthenticatorBridgeService.Stub.asInterface(service)
-
-            // TODO: Add check for version mismatch between client and server SDKs:
-            // TODO: https://livefront.atlassian.net/browse/BITAU-72
-
-            // Ensure we are using the correct symmetric key:
-            val localKeyFingerprint =
-                symmetricKeyStorageProvider.symmetricKey?.toFingerprint()?.getOrNull()
-
-            // Query bridge service to see if we have a matching symmetric key:
-            val haveCorrectKey = bridgeService
-                .safeCall { checkSymmetricEncryptionKeyFingerprint(localKeyFingerprint) }
-                ?: false
-
-            if (!haveCorrectKey) {
-                // If we don't have the correct key, query for key:
-                symmetricKeyStorageProvider.symmetricKey =
-                    bridgeService.safeCall { symmetricEncryptionKeyData }
-            }
-
-            if (symmetricKeyStorageProvider.symmetricKey == null) {
-                // This means bridgeService returned a null key, which means we can make
-                // no valid operations. We should disconnect form the service and expose to the
-                // calling application that authenticator sync is not enabled.
-                mutableSharedAccountsStateFlow.value = AccountSyncState.SyncNotEnabled
-                unBindService()
-            }
-
-            // Register callback:
-            bridgeService.safeCall { registerBridgeServiceCallback(authenticatorBridgeCallback) }
-
-            // Sync data:
-            bridgeService.safeCall { syncAccounts() }
+            onServiceConnected(service)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            bridgeService = null
+            onServiceDisconnected()
         }
     }
 
@@ -161,6 +129,46 @@ class AuthenticatorBridgeManagerImpl(
             ?.getOrNull()
             ?.let { AccountSyncState.Success(it.accounts) }
             ?: AccountSyncState.Error
+    }
+
+    private fun onServiceConnected(service: IBinder) {
+        bridgeService = IAuthenticatorBridgeService.Stub.asInterface(service)
+
+        // TODO: Add check for version mismatch between client and server SDKs:
+        // TODO: https://livefront.atlassian.net/browse/BITAU-72
+
+        // Ensure we are using the correct symmetric key:
+        val localKeyFingerprint =
+            symmetricKeyStorageProvider.symmetricKey?.toFingerprint()?.getOrNull()
+
+        // Query bridge service to see if we have a matching symmetric key:
+        val haveCorrectKey = bridgeService
+            .safeCall { checkSymmetricEncryptionKeyFingerprint(localKeyFingerprint) }
+            ?: false
+
+        if (!haveCorrectKey) {
+            // If we don't have the correct key, query for key:
+            symmetricKeyStorageProvider.symmetricKey =
+                bridgeService.safeCall { symmetricEncryptionKeyData }
+        }
+
+        if (symmetricKeyStorageProvider.symmetricKey == null) {
+            // This means bridgeService returned a null key, which means we can make
+            // no valid operations. We should disconnect form the service and expose to the
+            // calling application that authenticator sync is not enabled.
+            mutableSharedAccountsStateFlow.value = AccountSyncState.SyncNotEnabled
+            unBindService()
+        }
+
+        // Register callback:
+        bridgeService.safeCall { registerBridgeServiceCallback(authenticatorBridgeCallback) }
+
+        // Sync data:
+        bridgeService.safeCall { syncAccounts() }
+    }
+
+    private fun onServiceDisconnected() {
+        bridgeService = null
     }
 
     private fun unBindService() {
