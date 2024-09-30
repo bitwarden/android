@@ -173,6 +173,7 @@ internal class AuthenticatorBridgeManagerImpl(
     private fun unbindService() {
         bridgeService.safeCall { unregisterBridgeServiceCallback(authenticatorBridgeCallback) }
         bridgeService = null
+        @Suppress("TooGenericExceptionCaught")
         try {
             applicationContext.unbindService(bridgeServiceConnection)
         } catch (_: Exception) {
