@@ -38,7 +38,7 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
  * @param processLifecycleOwner Lifecycle owner that is used to listen for start/stop
  * lifecycle events.
  */
-class AuthenticatorBridgeManagerImpl(
+internal class AuthenticatorBridgeManagerImpl(
     private val applicationContext: Context,
     private val connectionType: AuthenticatorBridgeConnectionType,
     private val symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
