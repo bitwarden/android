@@ -44,7 +44,7 @@ class AuthenticatorBridgeManagerImpl(
     private val symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
     callbackProvider: AuthenticatorBridgeCallbackProvider = StubAuthenticatorBridgeCallbackProvider(),
     processLifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get(),
-) : AuthenticatorBridgeManager, DefaultLifecycleObserver {
+) : AuthenticatorBridgeManager {
 
     /**
      * Keep track of whether the service is bound. Useful for making sure we don't call
