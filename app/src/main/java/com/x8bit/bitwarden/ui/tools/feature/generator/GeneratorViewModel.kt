@@ -1862,7 +1862,7 @@ data class GeneratorState(
                         const val PASSWORD_LENGTH_SLIDER_MIN: Int = 5
                         const val PASSWORD_LENGTH_SLIDER_MAX: Int = 128
                         const val PASSWORD_COUNTER_MIN: Int = 0
-                        const val PASSWORD_COUNTER_MAX: Int = 5
+                        const val PASSWORD_COUNTER_MAX: Int = 9
                     }
                 }
 
