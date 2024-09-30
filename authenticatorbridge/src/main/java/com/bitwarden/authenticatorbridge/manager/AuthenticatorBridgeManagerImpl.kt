@@ -157,6 +157,7 @@ class AuthenticatorBridgeManagerImpl(
             // calling application that authenticator sync is not enabled.
             mutableSharedAccountsStateFlow.value = AccountSyncState.SyncNotEnabled
             unBindService()
+            return
         }
 
         // Register callback:
