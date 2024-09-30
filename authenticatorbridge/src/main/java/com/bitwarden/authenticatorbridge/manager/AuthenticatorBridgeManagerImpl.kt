@@ -143,12 +143,16 @@ class AuthenticatorBridgeManagerImpl(
         // Query bridge service to see if we have a matching symmetric key:
         val haveCorrectKey = bridgeService
             .safeCall { checkSymmetricEncryptionKeyFingerprint(localKeyFingerprint) }
+            .fold(
+                onSuccess = { it },
+                onFailure = { false },
+            )
             ?: false
 
         if (!haveCorrectKey) {
             // If we don't have the correct key, query for key:
             symmetricKeyStorageProvider.symmetricKey =
-                bridgeService.safeCall { symmetricEncryptionKeyData }
+                bridgeService.safeCall { symmetricEncryptionKeyData }.getOrNull()
         }
 
         if (symmetricKeyStorageProvider.symmetricKey == null) {
@@ -186,9 +190,7 @@ class AuthenticatorBridgeManagerImpl(
  * This is important because all calls to [IAuthenticatorBridgeService] can throw
  * DeadObjectExceptions as well as RemoteExceptions.
  */
-fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): T? =
-    try {
+fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): Result<T?> =
+    runCatching {
         this?.let { action.invoke(it) }
-    } catch (e: Exception) {
-        null
     }
