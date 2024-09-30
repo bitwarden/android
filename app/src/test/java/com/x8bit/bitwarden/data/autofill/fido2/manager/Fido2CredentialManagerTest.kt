@@ -533,8 +533,9 @@ class Fido2CredentialManagerTest {
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
-            assertTrue(
-                result is Fido2RegisterCredentialResult.Error,
+            assertEquals(
+                Fido2RegisterCredentialResult.Error,
+                result,
             )
         }
 
@@ -556,8 +557,9 @@ class Fido2CredentialManagerTest {
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
-            assertTrue(
-                result is Fido2RegisterCredentialResult.Error,
+            assertEquals(
+                Fido2RegisterCredentialResult.Error,
+                result,
             )
         }
 
@@ -580,8 +582,9 @@ class Fido2CredentialManagerTest {
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
-            assertTrue(
-                result is Fido2RegisterCredentialResult.Error,
+            assertEquals(
+                Fido2RegisterCredentialResult.Error,
+                result,
             )
         }
 
@@ -622,8 +625,9 @@ class Fido2CredentialManagerTest {
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
-            assertTrue(
-                result is Fido2RegisterCredentialResult.Error,
+            assertEquals(
+                Fido2RegisterCredentialResult.Error,
+                result,
             )
         }
 
