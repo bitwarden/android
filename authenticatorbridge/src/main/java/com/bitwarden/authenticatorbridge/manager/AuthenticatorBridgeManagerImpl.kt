@@ -157,11 +157,9 @@ class AuthenticatorBridgeManagerImpl(
 
     private fun onAccountsSync(data: EncryptedSharedAccountData) {
         // Received account sync update. Decrypt with local symmetric key and update StateFlow:
-        val decryptedAccounts = symmetricKeyStorageProvider.symmetricKey?.let {
-            val decryptedAccounts = data.decrypt(it).getOrNull()?.accounts ?: return@let null
-            AccountSyncState.Success(decryptedAccounts)
-        }
-        mutableSharedAccountsStateFlow.value = decryptedAccounts
+        mutableSharedAccountsStateFlow.value = symmetricKeyStorageProvider.symmetricKey
+            ?.let { data.decrypt(it) }
+            ?.getOrNull()
             ?.let { AccountSyncState.Success(it.accounts) }
             ?: AccountSyncState.Error
     }
