@@ -538,6 +538,53 @@ class Fido2CredentialManagerTest {
             )
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `registerFido2Credential should return Error when getSignatureFingerprintAsHexString is null`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { hasMultipleSigners() } returns true
+            }
+            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                signingInfo = mockSigningInfo,
+            )
+
+            val result = fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CredentialRequest,
+                selectedCipherView = createMockCipherView(number = 1),
+            )
+
+            assertTrue(
+                result is Fido2RegisterCredentialResult.Error,
+            )
+        }
+
+    @Test
+    fun `registerFido2Credential should return Error when toHostOrPathOrNull is null`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
+            }
+            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "illegal empty spaces",
+                signingInfo = mockSigningInfo,
+            )
+
+            val result = fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CredentialRequest,
+                selectedCipherView = createMockCipherView(number = 1),
+            )
+
+            assertTrue(
+                result is Fido2RegisterCredentialResult.Error,
+            )
+        }
+
     @Test
     fun `registerFido2Credential should return Error when deserialization fails`() =
         runTest {

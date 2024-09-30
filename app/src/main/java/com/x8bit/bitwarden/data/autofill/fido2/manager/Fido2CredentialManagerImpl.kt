@@ -76,7 +76,8 @@ class Fido2CredentialManagerImpl(
         val origin = Origin.Android(
             UnverifiedAssetLink(
                 packageName = fido2CredentialRequest.packageName,
-                sha256CertFingerprint = fido2CredentialRequest.callingAppInfo
+                sha256CertFingerprint = fido2CredentialRequest
+                    .callingAppInfo
                     .getSignatureFingerprintAsHexString()
                     ?: return Fido2RegisterCredentialResult.Error,
                 host = assetLinkUrl.toHostOrPathOrNull()
