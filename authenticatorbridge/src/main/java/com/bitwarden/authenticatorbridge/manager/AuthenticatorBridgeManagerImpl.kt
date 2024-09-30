@@ -55,13 +55,13 @@ class AuthenticatorBridgeManagerImpl(
     /**
      * Main AuthenticatorBridgeService access point.
      */
-    private var bridgeService: AuthenticatorBridgeServiceSafetyWrapper =
-        AuthenticatorBridgeServiceSafetyWrapper(service = null)
+    private var bridgeService: IAuthenticatorBridgeService? = null
 
     /**
      * Internal state of [accountSyncStateFlow].
      */
-    private val mutableSharedAccountsStateFlow =
+    private
+    val mutableSharedAccountsStateFlow =
         MutableStateFlow<AccountSyncState>(AccountSyncState.Loading)
 
     /**
@@ -74,9 +74,7 @@ class AuthenticatorBridgeManagerImpl(
      */
     private val bridgeServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            bridgeService = AuthenticatorBridgeServiceSafetyWrapper(
-                IAuthenticatorBridgeService.Stub.asInterface(service)
-            )
+            bridgeService = IAuthenticatorBridgeService.Stub.asInterface(service)
 
             // TODO: Add check for version mismatch between client and server SDKs:
             // TODO: https://livefront.atlassian.net/browse/BITAU-72
@@ -112,7 +110,7 @@ class AuthenticatorBridgeManagerImpl(
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            bridgeService = AuthenticatorBridgeServiceSafetyWrapper(service = null)
+            bridgeService = null
         }
     }
 
@@ -172,24 +170,20 @@ class AuthenticatorBridgeManagerImpl(
         if (!isBound) return
         isBound = false
         bridgeService.safeCall { unregisterBridgeServiceCallback(authenticatorBridgeCallback) }
-        bridgeService = AuthenticatorBridgeServiceSafetyWrapper(service = null)
+        bridgeService = null
         applicationContext.unbindService(bridgeServiceConnection)
     }
 }
 
 /**
- * Helper class for wrapping all calls to [IAuthenticatorBridgeService] around try catch.
+ * Helper function for wrapping all calls to [IAuthenticatorBridgeService] around try catch.
  *
  * This is important because all calls to [IAuthenticatorBridgeService] can throw
  * DeadObjectExceptions as well as RemoteExceptions.
  */
-private class AuthenticatorBridgeServiceSafetyWrapper(
-    private val service: IAuthenticatorBridgeService?,
-) {
-    fun <T> safeCall(action: IAuthenticatorBridgeService.() -> T): T? =
-        try {
-            service?.let { action.invoke(it) }
-        } catch (e: Exception) {
-            null
-        }
-}
+fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): T? =
+    try {
+        this?.let { action.invoke(it) }
+    } catch (e: Exception) {
+        null
+    }
