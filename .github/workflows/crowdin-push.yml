@@ -9,7 +9,7 @@ on:
 jobs:
   crowdin-push:
     name: Crowdin Push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       _CROWDIN_PROJECT_ID: "269690"
     steps:
