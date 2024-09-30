@@ -15,6 +15,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -23,10 +24,28 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.x8bit.bitwarden.ui.platform.theme.color.BitwardenColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.color.dynamicBitwardenColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
+
+/**
+ * Static wrapper to make accessing the theme components easier.
+ */
+object BitwardenTheme {
+    /**
+     * Retrieves the current [BitwardenColorScheme].
+     */
+    val colorScheme: BitwardenColorScheme
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalBitwardenColorScheme.current
+}
 
 /**
  * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
  */
+@Suppress("CyclomaticComplexMethod")
 @Composable
 fun BitwardenTheme(
     theme: AppTheme = AppTheme.DEFAULT,
@@ -49,6 +68,21 @@ fun BitwardenTheme(
         darkTheme -> darkColorScheme(context)
         else -> lightColorScheme(context)
     }
+    val bitwardenColorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            dynamicBitwardenColorScheme(
+                materialColorScheme = if (darkTheme) {
+                    dynamicDarkColorScheme(context = context)
+                } else {
+                    dynamicLightColorScheme(context = context)
+                },
+                isDarkTheme = darkTheme,
+            )
+        }
+
+        darkTheme -> darkBitwardenColorScheme
+        else -> lightBitwardenColorScheme
+    }
 
     // Update status bar according to scheme
     val view = LocalView.current
@@ -70,6 +104,7 @@ fun BitwardenTheme(
     }
 
     CompositionLocalProvider(
+        LocalBitwardenColorScheme provides bitwardenColorScheme,
         LocalNonMaterialColors provides nonMaterialColors,
         LocalNonMaterialTypography provides nonMaterialTypography,
     ) {
@@ -205,3 +240,9 @@ private fun darkNonMaterialColors(context: Context): NonMaterialColors =
         passwordStrong = R.color.dark_password_strength_strong.toColor(context),
         qrCodeClickableText = R.color.qr_code_clickable_text.toColor(context),
     )
+
+/**
+ * Provides access to the Bitwarden colors throughout the app.
+ */
+val LocalBitwardenColorScheme: ProvidableCompositionLocal<BitwardenColorScheme> =
+    compositionLocalOf { lightBitwardenColorScheme }
