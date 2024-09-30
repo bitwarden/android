@@ -54,7 +54,7 @@ roboelectric = "4.13"
 sonarqube = "5.1.0.4882" 
 turbine = "1.1.0"
 zxing = "3.5.3"
-testng = "6.14.3"
+testng = "7.10.2"
 
 [libraries]
 # Format: <maintainer>-<artifact-name>
