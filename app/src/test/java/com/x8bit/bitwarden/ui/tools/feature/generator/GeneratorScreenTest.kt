@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
 import io.mockk.just
@@ -552,8 +551,8 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, incrementing the minimum numbers counter above PASSWORD_COUNTER_MAX should do nothing`() {
-        val initialMinNumbers = PASSWORD_COUNTER_MAX
+    fun `in Passcode_Password state, incrementing the minimum numbers counter above 9 should do nothing`() {
+        val initialMinNumbers = 9
         updateState(
             DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Passcode(
@@ -651,8 +650,8 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum special characters above PASSWORD_COUNTER_MAX should do nothing`() {
-        val initialSpecialChars = PASSWORD_COUNTER_MAX
+    fun `in Passcode_Password state, decrementing the minimum special characters above 9 should do nothing`() {
+        val initialSpecialChars = 9
         updateState(
             DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Passcode(

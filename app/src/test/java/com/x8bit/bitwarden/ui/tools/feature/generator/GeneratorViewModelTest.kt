@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -229,10 +228,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                             specialCharsEnabled = false,
                             minNumbers = 3,
                             minNumbersAllowed = 3,
-                            maxNumbersAllowed = PASSWORD_COUNTER_MAX,
+                            maxNumbersAllowed = 9,
                             minSpecial = 3,
                             minSpecialAllowed = 3,
-                            maxSpecialAllowed = PASSWORD_COUNTER_MAX,
+                            maxSpecialAllowed = 9,
                             avoidAmbiguousChars = false,
                             ambiguousCharsEnabled = true,
                             isUserInteracting = false,
@@ -263,10 +262,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                             specialCharsEnabled = true,
                             minNumbers = 3,
                             minNumbersAllowed = 0,
-                            maxNumbersAllowed = PASSWORD_COUNTER_MAX,
+                            maxNumbersAllowed = 9,
                             minSpecial = 3,
                             minSpecialAllowed = 0,
-                            maxSpecialAllowed = PASSWORD_COUNTER_MAX,
+                            maxSpecialAllowed = 9,
                             avoidAmbiguousChars = false,
                             ambiguousCharsEnabled = true,
                             isUserInteracting = false,
@@ -986,7 +985,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     capitalizeEnabled = true,
                     includeNumber = false,
                     includeNumberEnabled = true,
-
                 ),
             ),
             generatedText = "updatedPassphrase",
