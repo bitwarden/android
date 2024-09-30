@@ -9,7 +9,7 @@ on:
 jobs:
   crowdin-sync:
     name: Autosync
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       _CROWDIN_PROJECT_ID: "673718"
     steps:
