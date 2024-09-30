@@ -50,7 +50,7 @@
   <string name="account_already_added">Account is al toegevoegd</string>
   <string name="switch_to_already_added_account_confirmation">Wil je er nu naar overschakelen?</string>
   <string name="master_password">Hoofdwachtwoord</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Hoofdwachtwoord (vereist)</string>
   <string name="more">Meer</string>
   <string name="my_vault">Mijn kluis</string>
   <string name="authenticator">Authenticator</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Help ons met een goede recensie!</string>
   <string name="regenerate_password">Opnieuw genereren</string>
   <string name="retype_master_password">Hoofdwachtwoord opnieuw invoeren</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Hoofdwachtwoord opnieuw invoeren (verplicht)</string>
   <string name="search_vault">Kluis doorzoeken</string>
   <string name="security">Beveiliging</string>
   <string name="select">Selecteren</string>
@@ -1006,6 +1006,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Je kunt deze stap op ieder moment afronden via Instellingen.</string>
   <string name="what_bitwarden_has_to_offer">Je kunt nu automatisch invullen om in te loggen op apps en websites met je opgeslagen wachtwoorden. Nu kun je alles ontdekken wat Bitwarden te bieden heeft.</string>
   <string name="youre_all_set">Je bent helemaal klaar!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fout bij het verbinden met de Duo-service. Gebruik een andere tweestapsaanmeldingsmethode of neem contact op met Duo voor hulp.</string>
+  <string name="master_password_hint_not_specified">Hoofdwachtwoordhint</string>
+  <string name="master_password_important_hint">Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal 12 tekens.</string>
 </resources>

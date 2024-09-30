@@ -50,7 +50,7 @@
   <string name="account_already_added">Účet byl již přidán</string>
   <string name="switch_to_already_added_account_confirmation">Chcete se na něj nyní přepnout?</string>
   <string name="master_password">Hlavní heslo</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Hlavní heslo (vyžadováno)</string>
   <string name="more">Více</string>
   <string name="my_vault">Můj trezor</string>
   <string name="authenticator">Ověřovací aplikace</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Pomozte nám napsáním dobré recenze!</string>
   <string name="regenerate_password">Vygenerovat jiné heslo</string>
   <string name="retype_master_password">Znovu zadejte hlavní heslo</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Zadejte znovu hlavní heslo (vyžadováno)</string>
   <string name="search_vault">Prohledat trezor</string>
   <string name="security">Zabezpečení</string>
   <string name="select">Vybrat</string>
@@ -1005,6 +1005,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">K dokončení tohoto kroku se můžete kdykoliv vrátit v Nastavení.</string>
   <string name="what_bitwarden_has_to_offer">K přihlašování do aplikací a na webové stránky pomocí uložených hesel můžete nyní používat automatické vyplňování. Nyní můžete prozkoumat vše ostatní, co Bitwarden nabízí.</string>
   <string name="youre_all_set">Vše je nastaveno!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba při připojování ke službě Duo. Použijte jinou dvoufázovou metodu přihlášení nebo kontaktujte Duo o pomoc.</string>
+  <string name="master_password_hint_not_specified">Nápověda k hlavnímu heslu</string>
+  <string name="master_password_important_hint">Důležité: Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit! Heslo musí mít alespoň 12 znaků.</string>
 </resources>

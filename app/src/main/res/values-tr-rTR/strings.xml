@@ -50,7 +50,7 @@
   <string name="account_already_added">Hesap zaten eklenmiş</string>
   <string name="switch_to_already_added_account_confirmation">Şimdi geçmek ister misiniz?</string>
   <string name="master_password">Ana parola</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Ana parola (gerekli)</string>
   <string name="more">Daha fazla</string>
   <string name="my_vault">Kasam</string>
   <string name="authenticator">Doğrulayıcı</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">İyi bir yorum yazarak bizi destekleyebilirsiniz.</string>
   <string name="regenerate_password">Yeni parola oluştur</string>
   <string name="retype_master_password">Ana parolayı tekrar yazın</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Ana parolayı yeniden yazın (gerekli)</string>
   <string name="search_vault">Kasada ara</string>
   <string name="security">Güvenlik</string>
   <string name="select">Seç</string>
@@ -1005,6 +1005,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">İstediğiniz zaman Ayarlar\'a girerek bu adımı tamamlayabilirsiniz.</string>
   <string name="what_bitwarden_has_to_offer">Artık kayıtlı parolalarınızı kullanarak uygulamalara ve web sitelerine giriş yapmak için otomatik doldurmayı kullanabilirsiniz. Bitwarden\'ın sunduğu tüm imkânları keşfetmeye hazırsınız.</string>
   <string name="youre_all_set">Artık hazırsınız!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo hizmetine bağlanırken hata oluştu. Başka bir iki aşamalı giriş yöntemi kullanın veya destek almak Duo ile iletişime geçin.</string>
+  <string name="master_password_hint_not_specified">Ana parola ipucu</string>
+  <string name="master_password_important_hint">Dikkat: Ana parolanızı unutursanız kurtaramazsınız! En az 12 karakter.</string>
 </resources>

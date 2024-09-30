@@ -50,7 +50,7 @@
   <string name="account_already_added">Tài khoản này đã có rồi</string>
   <string name="switch_to_already_added_account_confirmation">Bạn muốn chuyển sang tài khoản này?</string>
   <string name="master_password">Mật khẩu chính</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Mật khẩu chính (bắt buộc)</string>
   <string name="more">Thêm</string>
   <string name="my_vault">Kho của tôi</string>
   <string name="authenticator">Xác thực</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</string>
   <string name="regenerate_password">Tạo lại mật khẩu</string>
   <string name="retype_master_password">Nhập lại mật khẩu chính</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Nhập lại mật khẩu chính (bắt buộc)</string>
   <string name="search_vault">Tìm kiếm trong kho</string>
   <string name="security">Bảo mật</string>
   <string name="select">Chọn</string>
@@ -1006,6 +1006,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Bạn có thể hoàn tất bước này sau trong mục Cài đặt.</string>
   <string name="what_bitwarden_has_to_offer">Bây giờ bạn có thể sử dụng tính năng tự động điền để đăng nhập vào các ứng dụng và trang web bằng mật khẩu đã lưu. Bây giờ, bạn có thể khám phá mọi thứ khác mà Bitwarden cung cấp.</string>
   <string name="youre_all_set">Bạn đã hoàn tất!</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Lỗi kết nối với dịch vụ Duo. Sử dụng phương thức đăng nhập hai bước khác hoặc liên hệ với Duo để được hỗ trợ.</string>
+  <string name="master_password_hint_not_specified">Gợi ý mật khẩu chính</string>
+  <string name="master_password_important_hint">Không thể lấy lại mật khẩu chính nếu bạn quên nó! Tối thiểu 12 ký tự.</string>
 </resources>

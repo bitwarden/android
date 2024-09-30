@@ -1004,6 +1004,7 @@
   <string name="return_to_complete_this_step_anytime_in_settings">Kasnije se možeš vratiti u Postavke i dovršiti ovaj korak.</string>
   <string name="what_bitwarden_has_to_offer">Sada možeš koristiti auto-ispunu za prijavu u aplikacije i web stranice koristeći svoje spremljene lozinke. Istraži sve ostalo što Bitwarden nudi.</string>
   <string name="youre_all_set">Sve je spremno!</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
 </resources>
