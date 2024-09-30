@@ -31,7 +31,7 @@ firebaseBom = "33.3.0"
 glide = "1.0.0-beta01"
 googleServices = "4.4.2"
 hilt = "2.52"
-junit5 = "5.11.0"
+junit5 = "5.11.1"
 jvmTarget = "17"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.0.20"
