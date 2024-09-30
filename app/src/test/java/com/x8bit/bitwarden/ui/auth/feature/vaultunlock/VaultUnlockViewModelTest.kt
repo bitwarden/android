@@ -505,7 +505,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.validation_field_required.asText(
                         initialState.vaultUnlockType.unlockScreenInputLabel,
                     ),
@@ -530,7 +530,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.invalid_master_password.asText(),
                 ),
             ),
@@ -556,7 +556,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),
@@ -582,7 +582,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),
@@ -664,7 +664,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.validation_field_required.asText(
                         initialState.vaultUnlockType.unlockScreenInputLabel,
                     ),
@@ -689,7 +689,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.invalid_pin.asText(),
                 ),
             ),
@@ -715,7 +715,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),
@@ -741,7 +741,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),
@@ -839,7 +839,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),
@@ -866,7 +866,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),
@@ -893,7 +893,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                     R.string.generic_error_message.asText(),
                 ),
             ),

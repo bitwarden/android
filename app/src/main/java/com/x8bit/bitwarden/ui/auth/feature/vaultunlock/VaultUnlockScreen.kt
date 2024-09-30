@@ -118,7 +118,7 @@ fun VaultUnlockScreen(
 
     // Dynamic dialogs
     when (val dialog = state.dialog) {
-        is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
+        is VaultUnlockState.VaultUnlockDialog.UnlockError -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = dialog.message,

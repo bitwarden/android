@@ -205,7 +205,7 @@ class VaultUnlockViewModel @Inject constructor(
         if (state.input.isEmpty()) {
             mutableStateFlow.update {
                 it.copy(
-                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                         it.vaultUnlockType.emptyInputDialogMessage,
                     ),
                 )
@@ -268,7 +268,7 @@ class VaultUnlockViewModel @Inject constructor(
             is VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                             if (action.isBiometricLogin) {
                                 R.string.generic_error_message.asText()
                             } else {
@@ -284,7 +284,7 @@ class VaultUnlockViewModel @Inject constructor(
             -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        dialog = VaultUnlockState.VaultUnlockDialog.UnlockError(
                             R.string.generic_error_message.asText(),
                         ),
                     )
@@ -385,10 +385,10 @@ data class VaultUnlockState(
      */
     sealed class VaultUnlockDialog : Parcelable {
         /**
-         * Represents an error dialog.
+         * Represents a generic unlock error dialog.
          */
         @Parcelize
-        data class Error(
+        data class UnlockError(
             val message: Text,
         ) : VaultUnlockDialog()
 
