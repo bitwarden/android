@@ -60,8 +60,7 @@ class AuthenticatorBridgeManagerImpl(
     /**
      * Internal state of [accountSyncStateFlow].
      */
-    private
-    val mutableSharedAccountsStateFlow =
+    private val mutableSharedAccountsStateFlow =
         MutableStateFlow<AccountSyncState>(AccountSyncState.Loading)
 
     /**
