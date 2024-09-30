@@ -47,12 +47,6 @@ class AuthenticatorBridgeManagerImpl(
 ) : AuthenticatorBridgeManager {
 
     /**
-     * Keep track of whether the service is bound. Useful for making sure we don't call
-     * [Context.unbindService] on a service that isn't bound.
-     */
-    private var isBound = false
-
-    /**
      * Main AuthenticatorBridgeService access point.
      */
     private var bridgeService: IAuthenticatorBridgeService? = null
@@ -93,7 +87,7 @@ class AuthenticatorBridgeManagerImpl(
                 }
 
                 override fun onStop(owner: LifecycleOwner) {
-                    unBindService()
+                    unbindService()
                 }
             },
         )
@@ -107,13 +101,14 @@ class AuthenticatorBridgeManagerImpl(
             )
         }
 
-        isBound = try {
+        val isBound = try {
             applicationContext.bindService(
                 intent,
                 bridgeServiceConnection,
                 Context.BIND_AUTO_CREATE,
             )
         } catch (e: SecurityException) {
+            unbindService()
             false
         }
 
@@ -160,7 +155,7 @@ class AuthenticatorBridgeManagerImpl(
             // no valid operations. We should disconnect form the service and expose to the
             // calling application that authenticator sync is not enabled.
             mutableSharedAccountsStateFlow.value = AccountSyncState.SyncNotEnabled
-            unBindService()
+            unbindService()
             return
         }
 
@@ -175,12 +170,14 @@ class AuthenticatorBridgeManagerImpl(
         bridgeService = null
     }
 
-    private fun unBindService() {
-        if (!isBound) return
-        isBound = false
+    private fun unbindService() {
         bridgeService.safeCall { unregisterBridgeServiceCallback(authenticatorBridgeCallback) }
         bridgeService = null
-        applicationContext.unbindService(bridgeServiceConnection)
+        try {
+            applicationContext.unbindService(bridgeServiceConnection)
+        } catch (_: Exception) {
+            // We want to be super safe when unbinding to assure no crashes.
+        }
     }
 }
 
