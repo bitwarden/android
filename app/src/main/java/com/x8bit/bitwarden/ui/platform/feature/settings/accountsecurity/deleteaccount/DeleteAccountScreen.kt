@@ -34,7 +34,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenErrorButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -203,7 +203,7 @@ private fun DeleteAccountButton(
         )
     }
 
-    BitwardenErrorButton(
+    BitwardenFilledErrorButton(
         label = stringResource(id = R.string.delete_account),
         onClick = {
             if (isUnlockWithPasswordEnabled) {

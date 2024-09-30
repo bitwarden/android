@@ -205,11 +205,18 @@ class TwoFactorLoginViewModel @Inject constructor(
             -> {
                 val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
                 // The url should not be empty unless the environment is somehow not supported.
-                sendEvent(
-                    event = authUrl
-                        ?.let { TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)) }
-                        ?: TwoFactorLoginEvent.ShowToast(R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText()),
-                )
+                authUrl
+                    ?.let {
+                        sendEvent(event = TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)))
+                    }
+                    ?: mutableStateFlow.update {
+                        it.copy(
+                            dialogState = TwoFactorLoginState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
+                            ),
+                        )
+                    }
             }
 
             TwoFactorAuthMethod.WEB_AUTH -> {
