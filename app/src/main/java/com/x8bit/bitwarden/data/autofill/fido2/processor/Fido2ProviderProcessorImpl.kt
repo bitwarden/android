@@ -161,6 +161,7 @@ class Fido2ProviderProcessorImpl(
                 title = context.getString(R.string.unlock),
                 pendingIntent = intentManager.createFido2UnlockPendingIntent(
                     action = UNLOCK_ACCOUNT_INTENT,
+                    userId = userState.activeUserId,
                     requestCode = requestCode.getAndIncrement(),
                 ),
             )
@@ -209,13 +210,14 @@ class Fido2ProviderProcessorImpl(
                         .getPasskeyAssertionOptionsOrNull(requestJson = option.requestJson)
                         ?.relyingPartyId
                         ?: throw GetCredentialUnknownException("Invalid data.")
-                    buildCredentialEntries(relyingPartyId, option)
+                    buildCredentialEntries(userId, relyingPartyId, option)
                 } else {
                     throw GetCredentialUnsupportedException("Unsupported option.")
                 }
             }
 
     private suspend fun buildCredentialEntries(
+        userId: String,
         relyingPartyId: String,
         option: BeginGetPublicKeyCredentialOption,
     ): List<CredentialEntry> {
@@ -236,12 +238,16 @@ class Fido2ProviderProcessorImpl(
                 result
                     .fido2CredentialAutofillViews
                     .filter { it.rpId == relyingPartyId }
-                    .toCredentialEntries(option)
+                    .toCredentialEntries(
+                        userId = userId,
+                        option = option,
+                    )
             }
         }
     }
 
     private fun List<Fido2CredentialAutofillView>.toCredentialEntries(
+        userId: String,
         option: BeginGetPublicKeyCredentialOption,
     ): List<CredentialEntry> =
         this
@@ -253,6 +259,7 @@ class Fido2ProviderProcessorImpl(
                         pendingIntent = intentManager
                             .createFido2GetCredentialPendingIntent(
                                 action = GET_PASSKEY_INTENT,
+                                userId = userId,
                                 credentialId = it.credentialId.toString(),
                                 cipherId = it.cipherId,
                                 requestCode = requestCode.getAndIncrement(),

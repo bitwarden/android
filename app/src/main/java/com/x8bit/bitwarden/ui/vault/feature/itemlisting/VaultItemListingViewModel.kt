@@ -1288,6 +1288,7 @@ class VaultItemListingViewModel @Inject constructor(
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
                         Fido2GetCredentialsResult.Success(
+                            userId = fido2GetCredentialsRequest.userId,
                             options = fido2GetCredentialsRequest.option,
                             credentials = vaultData
                                 .data

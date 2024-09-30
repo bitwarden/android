@@ -64,7 +64,11 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
     val cipherId = getStringExtra(EXTRA_KEY_CIPHER_ID)
         ?: return null
 
+    val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
+        ?: return null
+
     return Fido2CredentialAssertionRequest(
+        userId = userId,
         cipherId = cipherId,
         credentialId = credentialId,
         requestJson = option.requestJson,
@@ -95,9 +99,13 @@ fun Intent.getFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? {
         .callingAppInfo
         ?: return null
 
+    val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
+        ?: return null
+
     return Fido2GetCredentialsRequest(
         candidateQueryData = option.candidateQueryData,
         id = option.id,
+        userId = userId,
         requestJson = option.requestJson,
         clientDataHash = option.clientDataHash,
         packageName = callingAppInfo.packageName,

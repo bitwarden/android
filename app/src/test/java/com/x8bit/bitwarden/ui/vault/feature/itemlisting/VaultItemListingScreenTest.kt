@@ -1794,7 +1794,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `CompleteFido2GetCredentials event should call Fido2CompletionManager with result`() {
-        val result = Fido2GetCredentialsResult.Success(mockk(), mockk())
+        val result = Fido2GetCredentialsResult.Success(
+            userId = "mockUserId",
+            options = mockk(),
+            credentials = mockk(),
+        )
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2GetCredentialsRequest(result))
         verify {
             fido2CompletionManager.completeFido2GetCredentialRequest(result)

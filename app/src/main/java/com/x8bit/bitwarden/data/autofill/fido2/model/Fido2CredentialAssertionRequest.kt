@@ -10,6 +10,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Fido2CredentialAssertionRequest(
+    val userId: String,
     val cipherId: String?,
     val credentialId: String?,
     val requestJson: String,
