@@ -11,7 +11,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
-import com.bitwarden.authenticatorbridge.manager.model.toPackageName
+import com.bitwarden.authenticatorbridge.manager.util.toPackageName
 import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.provider.AuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.provider.StubAuthenticatorBridgeCallbackProvider

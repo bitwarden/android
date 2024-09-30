@@ -1,9 +1,10 @@
-package com.bitwarden.authenticatorbridge.manager.model
+package com.bitwarden.authenticatorbridge.manager.util
 
+import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class AuthenticatorBridgeConnectionTypeTest {
+class AuthenticatorBridgeConnectionTypeExtensionsTest {
 
     @Test
     fun `toPackageName RELEASE should map to correct release package`() {
