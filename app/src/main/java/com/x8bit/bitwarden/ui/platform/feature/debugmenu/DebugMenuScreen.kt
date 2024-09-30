@@ -95,11 +95,21 @@ fun DebugMenuScreen(
                 },
             )
             Spacer(Modifier.height(12.dp))
+            // Pulled these into variable to avoid over-nested formatting in the composable call.
+            val isRestartOnboardingEnabled = state.featureFlags[FlagKey.OnboardingFlow] as? Boolean
+            val isRestartOnboardingCarouselEnabled = state
+                .featureFlags[FlagKey.OnboardingCarousel] as? Boolean
             OnboardingOverrideContent(
-                enabled = (state.featureFlags[FlagKey.OnboardingFlow] as? Boolean) == true,
+                isRestartOnboardingEnabled = isRestartOnboardingEnabled == true,
                 onStartOnboarding = remember(viewModel) {
                     {
-                        viewModel.trySendAction(DebugMenuAction.ReStartOnboarding)
+                        viewModel.trySendAction(DebugMenuAction.RestartOnboarding)
+                    }
+                },
+                isCarouselOverrideEnabled = isRestartOnboardingCarouselEnabled == true,
+                onStartOnboardingCarousel = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel)
                     }
                 },
             )
@@ -144,10 +154,15 @@ private fun FeatureFlagContent(
     }
 }
 
+/**
+ * The content for the onboarding override feature flag.
+ */
 @Composable
-private fun OnboardingOverrideContent(
-    enabled: Boolean,
+fun OnboardingOverrideContent(
+    isRestartOnboardingEnabled: Boolean,
     onStartOnboarding: () -> Unit,
+    isCarouselOverrideEnabled: Boolean,
+    onStartOnboardingCarousel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -161,7 +176,7 @@ private fun OnboardingOverrideContent(
         BitwardenFilledButton(
             label = stringResource(R.string.restart_onboarding_cta),
             onClick = onStartOnboarding,
-            isEnabled = enabled,
+            isEnabled = isRestartOnboardingEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -173,6 +188,25 @@ private fun OnboardingOverrideContent(
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),
             style = BitwardenTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(16.dp))
+        BitwardenFilledButton(
+            label = stringResource(R.string.restart_onboarding_carousel),
+            onClick = onStartOnboardingCarousel,
+            isEnabled = isCarouselOverrideEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.restart_onboarding_carousel_details),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .standardHorizontalMargin(),
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
@@ -199,6 +233,11 @@ private fun FeatureFlagContent_preview() {
 @Composable
 private fun OnboardingOverrideContent_preview() {
     BitwardenTheme {
-        OnboardingOverrideContent(onStartOnboarding = {}, enabled = true)
+        OnboardingOverrideContent(
+            onStartOnboarding = {},
+            isRestartOnboardingEnabled = true,
+            onStartOnboardingCarousel = {},
+            isCarouselOverrideEnabled = true,
+        )
     }
 }

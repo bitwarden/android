@@ -37,4 +37,11 @@ interface DebugMenuRepository {
      * Resets the onboarding status to NOT_STARTED for the current active user, if applicable.
      */
     fun resetOnboardingStatusForCurrentUser()
+
+    /**
+     * Manipulates the state to force showing the onboarding carousel.
+     *
+     * @param userStateUpdateTrigger A passable lambda to trigger a user state update.
+     */
+    fun modifyStateToShowOnboardingCarousel(userStateUpdateTrigger: () -> Unit)
 }

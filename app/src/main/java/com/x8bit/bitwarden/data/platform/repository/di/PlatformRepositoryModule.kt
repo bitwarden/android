@@ -117,9 +117,11 @@ object PlatformRepositoryModule {
         featureFlagOverrideDiskSource: FeatureFlagOverrideDiskSource,
         serverConfigRepository: ServerConfigRepository,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
     ): DebugMenuRepository = DebugMenuRepositoryImpl(
         featureFlagOverrideDiskSource = featureFlagOverrideDiskSource,
         serverConfigRepository = serverConfigRepository,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
     )
 }
