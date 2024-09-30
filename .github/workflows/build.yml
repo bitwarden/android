@@ -347,11 +347,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ matrix.variant == 'prod' && github.ref_name == 'main' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release artifacts to Firebase
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && github.ref_name == 'main' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -360,7 +360,7 @@ jobs:
           service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
 
       - name: Publish beta artifacts to Firebase
-        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && github.ref_name == 'main' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -519,11 +519,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ github.ref_name == 'main' && inputs.distribute_to_firebase }}
+        if: ${{ inputs.distribute_to_firebase || github.event_name == 'push' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release F-Droid artifacts to Firebase
-        if: ${{ github.ref_name == 'main' && inputs.distribute_to_firebase }}
+        if: ${{ inputs.distribute_to_firebase || github.event_name == 'push' }}
         env:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
