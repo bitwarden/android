@@ -522,7 +522,9 @@ fun EmptyItemListingContent(
 
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenFilledTonalButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "AddCodeButton" }
+                    .fillMaxWidth(),
                 label = stringResource(R.string.add_code),
                 onClick = onAddCodeClick,
             )

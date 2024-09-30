@@ -251,7 +251,8 @@ private fun VaultSettings(
     BitwardenTextRow(
         text = stringResource(id = R.string.import_vault),
         onClick = onImportClick,
-        modifier = modifier,
+        modifier = modifier
+            .semantics { testTag = "Import" },
         withDivider = true,
         content = {
             Icon(
@@ -268,7 +269,8 @@ private fun VaultSettings(
     BitwardenTextRow(
         text = stringResource(id = R.string.export),
         onClick = onExportClick,
-        modifier = modifier,
+        modifier = modifier
+            .semantics { testTag = "Export" },
         withDivider = true,
         content = {
             Icon(
@@ -285,6 +287,8 @@ private fun VaultSettings(
     BitwardenExternalLinkRow(
         text = stringResource(R.string.backup),
         onConfirmClick = onBackupClick,
+        modifier = modifier
+            .semantics { testTag = "Backup" },
         dialogTitle = stringResource(R.string.data_backup_title),
         dialogMessage = stringResource(R.string.data_backup_message),
         dialogConfirmButtonText = stringResource(R.string.learn_more),
@@ -413,13 +417,16 @@ private fun HelpSettings(
     BitwardenTextRow(
         text = stringResource(id = R.string.launch_tutorial),
         onClick = onTutorialClick,
-        modifier = modifier,
+        modifier = modifier
+            .semantics { testTag = "LaunchTutorial" },
         withDivider = true,
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenExternalLinkRow(
         text = stringResource(id = R.string.bitwarden_help_center),
         onConfirmClick = onHelpCenterClick,
+        modifier = modifier
+            .semantics { testTag = "BitwardenHelpCenter" },
         dialogTitle = stringResource(id = R.string.continue_to_help_center),
         dialogMessage = stringResource(
             id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
@@ -443,13 +450,16 @@ private fun AboutSettings(
         label = stringResource(id = R.string.about),
     )
     BitwardenWideSwitch(
-        modifier = modifier,
+        modifier = modifier
+            .semantics { testTag = "SubmitCrashLogs" },
         label = stringResource(id = R.string.submit_crash_logs),
         isChecked = state.isSubmitCrashLogsEnabled,
         onCheckedChange = onSubmitCrashLogsCheckedChange,
     )
     BitwardenExternalLinkRow(
         text = stringResource(id = R.string.privacy_policy),
+        modifier = modifier
+            .semantics { testTag = "PrivacyPolicy" },
         onConfirmClick = onPrivacyPolicyClick,
         dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
         dialogMessage = stringResource(
