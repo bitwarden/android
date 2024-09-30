@@ -134,8 +134,7 @@ class AuthenticatorBridgeManagerImpl(
     private fun onServiceConnected(service: IBinder) {
         bridgeService = IAuthenticatorBridgeService.Stub.asInterface(service)
 
-        // TODO: Add check for version mismatch between client and server SDKs:
-        // TODO: https://livefront.atlassian.net/browse/BITAU-72
+        // TODO: Add check for version mismatch between client and server SDKs: BITAU-72
 
         // Ensure we are using the correct symmetric key:
         val localKeyFingerprint =
