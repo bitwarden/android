@@ -209,6 +209,43 @@ class AuthenticatorBridgeManagerTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `onServiceConnected when symmetric key does not match and query for key fails state should be error`() {
+        fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
+        every {
+            mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
+                SYMMETRIC_KEY.toFingerprint().getOrNull()
+            )
+        } returns false
+        every {
+            mockBridgeService.symmetricEncryptionKeyData
+        } throws RuntimeException()
+        val serviceConnection = slot<ServiceConnection>()
+        val mockIntent: Intent = mockk()
+        every { IAuthenticatorBridgeService.Stub.asInterface(any()) } returns mockBridgeService
+        every {
+            anyConstructed<Intent>().setComponent(any())
+        } returns mockIntent
+        every { context.unbindService(any()) } just runs
+        every {
+            context.bindService(
+                any(),
+                capture(serviceConnection),
+                Context.BIND_AUTO_CREATE
+            )
+        } returns true
+
+        fakeLifecycleOwner.lifecycle.dispatchOnStart()
+        serviceConnection.captured.onServiceConnected(mockk(), mockk())
+
+        assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
+        assertEquals(fakeSymmetricKeyStorageProvider.symmetricKey, SYMMETRIC_KEY)
+        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify { context.unbindService(any()) }
+        verify { mockBridgeService.symmetricEncryptionKeyData }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `onAccountsSync should set AccountSyncState to decrypted response`() {
         val expectedAccounts = listOf<SharedAccountData.Account>(
             mockk()

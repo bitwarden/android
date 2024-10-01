@@ -11,6 +11,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
+import com.bitwarden.authenticatorbridge.manager.util.safeCall
 import com.bitwarden.authenticatorbridge.manager.util.toPackageName
 import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.provider.AuthenticatorBridgeCallbackProvider
@@ -147,8 +148,18 @@ internal class AuthenticatorBridgeManagerImpl(
 
         if (!haveCorrectKey) {
             // If we don't have the correct key, query for key:
-            symmetricKeyStorageProvider.symmetricKey =
-                bridgeService.safeCall { symmetricEncryptionKeyData }.getOrNull()
+            bridgeService.safeCall { symmetricEncryptionKeyData }
+                .fold(
+                    onSuccess = {
+                        symmetricKeyStorageProvider.symmetricKey = it
+                    },
+                    onFailure = {
+                        mutableSharedAccountsStateFlow.value = AccountSyncState.Error
+                        unbindService()
+                        return
+                    },
+                )
+
         }
 
         if (symmetricKeyStorageProvider.symmetricKey == null) {
@@ -182,14 +193,3 @@ internal class AuthenticatorBridgeManagerImpl(
         }
     }
 }
-
-/**
- * Helper function for wrapping all calls to [IAuthenticatorBridgeService] around try catch.
- *
- * This is important because all calls to [IAuthenticatorBridgeService] can throw
- * DeadObjectExceptions as well as RemoteExceptions.
- */
-internal fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): Result<T?> =
-    runCatching {
-        this?.let { action.invoke(it) }
-    }
