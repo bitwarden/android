@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * Top level screen for the debug menu.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun DebugMenuScreen(
     onNavigateBack: () -> Unit,
