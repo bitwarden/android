@@ -189,7 +189,7 @@ internal class AuthenticatorBridgeManagerImpl(
  * This is important because all calls to [IAuthenticatorBridgeService] can throw
  * DeadObjectExceptions as well as RemoteExceptions.
  */
-fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): Result<T?> =
+internal fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): Result<T?> =
     runCatching {
         this?.let { action.invoke(it) }
     }

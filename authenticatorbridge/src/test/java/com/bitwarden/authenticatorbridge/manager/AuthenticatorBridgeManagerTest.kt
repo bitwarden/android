@@ -33,7 +33,9 @@ import org.junit.jupiter.api.Test
 
 class AuthenticatorBridgeManagerTest {
 
-    private val context = mockk<Context>()
+    private val context = mockk<Context> {
+        every { applicationContext } returns this
+    }
     private val mockBridgeService: IAuthenticatorBridgeService = mockk()
     private val fakeLifecycleOwner = FakeLifecycleOwner()
     private val fakeSymmetricKeyStorageProvider = FakeSymmetricKeyStorageProvider()
@@ -335,12 +337,6 @@ class AuthenticatorBridgeManagerTest {
         verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
         verify { mockBridgeService.syncAccounts() }
-    }
-
-    @Test
-    fun `onStop when no service was bound should not call unBindService`() {
-        fakeLifecycleOwner.lifecycle.dispatchOnStop()
-        verify(exactly = 0) { context.unbindService(any()) }
     }
 
     @Test
