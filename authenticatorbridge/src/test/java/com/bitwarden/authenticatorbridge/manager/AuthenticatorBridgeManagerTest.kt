@@ -68,7 +68,7 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `initial state should be Loading`() {
+    fun `initial state should be Loading when Bitwarden app is present`() {
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
     }
 
