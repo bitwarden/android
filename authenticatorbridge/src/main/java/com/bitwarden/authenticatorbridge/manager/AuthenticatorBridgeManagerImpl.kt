@@ -138,8 +138,10 @@ internal class AuthenticatorBridgeManagerImpl(
             ?: AccountSyncState.Error
     }
 
-    private fun onServiceConnected(service: IBinder) {
-        bridgeService = IAuthenticatorBridgeService.Stub.asInterface(service)
+    private fun onServiceConnected(binder: IBinder) {
+        val service = IAuthenticatorBridgeService.Stub
+            .asInterface(binder)
+            .also { bridgeService = it }
 
         // TODO: Add check for version mismatch between client and server SDKs: BITAU-72
 
@@ -148,7 +150,7 @@ internal class AuthenticatorBridgeManagerImpl(
             symmetricKeyStorageProvider.symmetricKey?.toFingerprint()?.getOrNull()
 
         // Query bridge service to see if we have a matching symmetric key:
-        val haveCorrectKey = bridgeService
+        val haveCorrectKey = service
             .safeCall { checkSymmetricEncryptionKeyFingerprint(localKeyFingerprint) }
             .fold(
                 onSuccess = { it },
@@ -158,7 +160,7 @@ internal class AuthenticatorBridgeManagerImpl(
 
         if (!haveCorrectKey) {
             // If we don't have the correct key, query for key:
-            bridgeService
+            service
                 .safeCall { symmetricEncryptionKeyData }
                 .fold(
                     onSuccess = {
@@ -183,10 +185,10 @@ internal class AuthenticatorBridgeManagerImpl(
         }
 
         // Register callback:
-        bridgeService.safeCall { registerBridgeServiceCallback(authenticatorBridgeCallback) }
+        service.safeCall { registerBridgeServiceCallback(authenticatorBridgeCallback) }
 
         // Sync data:
-        bridgeService.safeCall { syncAccounts() }
+        service.safeCall { syncAccounts() } ?: unbindService()
     }
 
     private fun onServiceDisconnected() {
@@ -194,7 +196,7 @@ internal class AuthenticatorBridgeManagerImpl(
     }
 
     private fun unbindService() {
-        bridgeService.safeCall { unregisterBridgeServiceCallback(authenticatorBridgeCallback) }
+        bridgeService?.safeCall { unregisterBridgeServiceCallback(authenticatorBridgeCallback) }
         bridgeService = null
         @Suppress("TooGenericExceptionCaught")
         try {
@@ -220,7 +222,9 @@ internal class AuthenticatorBridgeManagerImpl(
  * This is important because all calls to [IAuthenticatorBridgeService] can throw
  * DeadObjectExceptions as well as RemoteExceptions.
  */
-private fun <T> IAuthenticatorBridgeService?.safeCall(action: IAuthenticatorBridgeService.() -> T): Result<T?> =
+private fun <T> IAuthenticatorBridgeService.safeCall(
+    action: IAuthenticatorBridgeService.() -> T,
+): Result<T> =
     runCatching {
-        this?.let { action.invoke(it) }
+        this.let { action.invoke(it) }
     }
