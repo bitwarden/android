@@ -21,7 +21,7 @@
   <string name="email_address">Email address</string>
   <string name="email_us">Email us</string>
   <string name="email_us_description">Email us directly to get help or leave feedback.</string>
-  <string name="enter_pin">Enter your PIN code.</string>
+  <string name="enter_pin">Enter your PIN code</string>
   <string name="favorites">Favorites</string>
   <string name="file_bug_report">File a bug report</string>
   <string name="file_bug_report_description">Open an issue at our GitHub repository.</string>
