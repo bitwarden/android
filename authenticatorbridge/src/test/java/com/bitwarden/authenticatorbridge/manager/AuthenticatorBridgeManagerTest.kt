@@ -103,7 +103,7 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `onStart when package manager doesn't find bitwarden app should set state to AppNotInstalled`() {
+    fun `onStart when Bitwarden app is not present should set state to AppNotInstalled`() {
         val mockIntent: Intent = mockk()
         every {
             context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
