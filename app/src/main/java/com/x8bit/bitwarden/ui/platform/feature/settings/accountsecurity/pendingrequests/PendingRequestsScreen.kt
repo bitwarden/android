@@ -51,8 +51,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * Displays the pending login requests screen.
@@ -249,7 +249,7 @@ private fun PendingRequestItem(
 
         Text(
             text = stringResource(id = R.string.fingerprint_phrase),
-            style = MaterialTheme.typography.labelMedium,
+            style = BitwardenTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Start,
             modifier = Modifier
@@ -262,7 +262,7 @@ private fun PendingRequestItem(
         Text(
             text = fingerprintPhrase,
             color = LocalNonMaterialColors.current.fingerprint,
-            style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+            style = BitwardenTheme.typography.sensitiveInfoSmall,
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .testTag("FingerprintValueLabel")
@@ -279,14 +279,14 @@ private fun PendingRequestItem(
         ) {
             Text(
                 text = platform,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Text(
                 text = timestamp,
-                style = MaterialTheme.typography.labelSmall,
+                style = BitwardenTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.End,
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -322,7 +322,7 @@ private fun PendingRequestsEmpty(
 
         Text(
             text = stringResource(id = R.string.no_pending_requests),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier

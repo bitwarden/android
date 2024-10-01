@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.collections.immutable.ImmutableList
 
@@ -81,7 +82,7 @@ fun VaultFilter(
                 id = R.string.vault_filter_description,
                 selectedVaultFilterType.name(),
             ),
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .testTag("ActiveFilterLabel")

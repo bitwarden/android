@@ -97,7 +97,7 @@ private fun RemovePasswordScreenContent(
 
         Text(
             text = state.description(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .standardHorizontalMargin()

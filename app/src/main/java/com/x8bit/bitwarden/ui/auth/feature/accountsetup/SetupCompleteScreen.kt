@@ -91,7 +91,7 @@ private fun SetupCompleteContent(
         Spacer(Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.youre_all_set),
-            style = MaterialTheme.typography.titleMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -101,7 +101,7 @@ private fun SetupCompleteContent(
         Spacer(Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.what_bitwarden_has_to_offer),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier

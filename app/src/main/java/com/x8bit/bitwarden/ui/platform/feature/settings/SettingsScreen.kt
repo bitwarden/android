@@ -135,7 +135,7 @@ private fun SettingsRow(
                 .padding(end = 16.dp)
                 .weight(1f),
             text = text(),
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
         TrailingContent(notificationCount = notificationCount)

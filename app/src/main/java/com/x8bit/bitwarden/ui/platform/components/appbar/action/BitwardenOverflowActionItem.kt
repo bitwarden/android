@@ -80,7 +80,7 @@ fun BitwardenOverflowActionItem(
                         text = {
                             Text(
                                 text = dropdownMenuItemData.text,
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = BitwardenTheme.typography.bodyLarge,
                             )
                         },
                         onClick = {

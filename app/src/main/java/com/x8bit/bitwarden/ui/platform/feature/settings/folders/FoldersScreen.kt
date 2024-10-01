@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionBut
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -147,7 +148,7 @@ private fun FoldersContent(
             Text(
                 text = stringResource(id = R.string.no_folders_to_list),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.testTag("NoFoldersLabel"),
             )
@@ -177,7 +178,7 @@ private fun FoldersContent(
                             .padding(start = 16.dp)
                             .weight(1f),
                         text = it.name,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = BitwardenTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }

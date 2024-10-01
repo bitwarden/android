@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled [Switch].
@@ -77,14 +78,14 @@ fun BitwardenSwitch(
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
 
             description?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }

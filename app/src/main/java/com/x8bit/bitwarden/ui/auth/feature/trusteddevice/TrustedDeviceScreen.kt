@@ -185,7 +185,7 @@ private fun TrustedDeviceScaffold(
                     state.emailAddress,
                     state.environmentLabel,
                 ),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .testTag("LoggingInAsLabel")
@@ -196,7 +196,7 @@ private fun TrustedDeviceScaffold(
             BitwardenClickableText(
                 label = stringResource(id = R.string.not_you),
                 onClick = handlers.onNotYouButtonClick,
-                style = MaterialTheme.typography.labelLarge,
+                style = BitwardenTheme.typography.labelLarge,
                 innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                 modifier = Modifier.testTag("NotYouLabel"),
             )

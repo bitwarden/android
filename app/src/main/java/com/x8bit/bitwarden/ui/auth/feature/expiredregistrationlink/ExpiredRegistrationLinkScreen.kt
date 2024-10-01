@@ -107,7 +107,7 @@ private fun ExpiredRegistrationLinkContent(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.expired_link),
-            style = MaterialTheme.typography.titleMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -117,7 +117,7 @@ private fun ExpiredRegistrationLinkContent(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.please_restart_registration_or_try_logging_in),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier

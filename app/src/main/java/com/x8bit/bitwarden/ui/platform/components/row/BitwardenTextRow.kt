@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a clickable row of text and can contains an optional [content] that appears to the
@@ -70,7 +71,7 @@ fun BitwardenTextRow(
             ) {
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = BitwardenTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(
                         alpha = if (isEnabled) 1.0f else 0.38f,
                     ),
@@ -78,7 +79,7 @@ fun BitwardenTextRow(
                 description?.let {
                     Text(
                         text = it,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = BitwardenTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
                             alpha = if (isEnabled) 1.0f else 0.38f,
                         ),

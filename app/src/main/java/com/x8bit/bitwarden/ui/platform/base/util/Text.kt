@@ -12,6 +12,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -135,7 +136,7 @@ fun createAnnotatedString(
     highlights: List<String>,
     highlightStyle: SpanStyle = SpanStyle(
         color = MaterialTheme.colorScheme.primary,
-        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
         fontWeight = FontWeight.Bold,
     ),
     tag: String,
@@ -145,7 +146,7 @@ fun createAnnotatedString(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
             ),
             start = 0,
             end = mainString.length,

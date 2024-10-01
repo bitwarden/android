@@ -24,7 +24,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * A composable function for displaying a password history list item.
@@ -49,7 +48,7 @@ fun PasswordHistoryListItem(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             var widthPx by remember(label) { mutableIntStateOf(0) }
-            val textStyle = LocalNonMaterialTypography.current.sensitiveInfoMedium
+            val textStyle = BitwardenTheme.typography.sensitiveInfoMedium
             val formattedText = label.withLineBreaksAtWidth(
                 widthPx = widthPx.toFloat(),
                 monospacedTextStyle = textStyle,
@@ -68,7 +67,7 @@ fun PasswordHistoryListItem(
 
             Text(
                 text = supportingLabel,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.testTag("GeneratedPasswordDateLabel"),
             )

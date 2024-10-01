@@ -42,7 +42,6 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * Top level composable for the master password generator.
@@ -151,7 +150,7 @@ private fun MasterPasswordGeneratorContent(
             onValueChange = {},
             readOnly = true,
             shouldAddCustomLineBreaks = true,
-            textStyle = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+            textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             visualTransformation = nonLetterColorVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
         )
@@ -166,12 +165,12 @@ private fun MasterPasswordGeneratorContent(
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = stringResource(R.string.write_this_password_down_and_keep_it_somewhere_safe),
-            style = MaterialTheme.typography.bodySmall,
+            style = BitwardenTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         BitwardenClickableText(
             label = stringResource(R.string.learn_about_other_ways_to_prevent_account_lockout),
-            style = MaterialTheme.typography.labelMedium,
+            style = BitwardenTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
             onClick = onLearnToPreventLockout,
             innerPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp),

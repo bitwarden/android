@@ -80,6 +80,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Top level composable for the create account screen.
@@ -324,7 +325,7 @@ private fun TermsAndPrivacySwitch(
         Column(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
             Text(
                 text = stringResource(id = R.string.accept_policies),
-                style = MaterialTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             FlowRow(
@@ -337,13 +338,13 @@ private fun TermsAndPrivacySwitch(
                 BitwardenClickableText(
                     label = stringResource(id = R.string.terms_of_service),
                     onClick = onTermsClick,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     text = ",",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
@@ -351,7 +352,7 @@ private fun TermsAndPrivacySwitch(
                 BitwardenClickableText(
                     label = stringResource(id = R.string.privacy_policy),
                     onClick = onPrivacyPolicyClick,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
                     color = MaterialTheme.colorScheme.primary,
                 )

@@ -48,7 +48,7 @@ fun BitwardenBasicDialog(
                 {
                     Text(
                         text = it(),
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = BitwardenTheme.typography.headlineSmall,
                         modifier = Modifier.testTag("AlertTitleText"),
                     )
                 }
@@ -56,7 +56,7 @@ fun BitwardenBasicDialog(
             text = {
                 Text(
                     text = visibilityState.message(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.testTag("AlertContentText"),
                 )
             },

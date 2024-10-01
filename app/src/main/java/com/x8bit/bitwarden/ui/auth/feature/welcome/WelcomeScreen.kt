@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
@@ -189,7 +190,7 @@ private fun WelcomeCardLandscape(
             Text(
                 text = stringResource(id = state.titleRes),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
+                style = BitwardenTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 16.dp),
             )
@@ -197,7 +198,7 @@ private fun WelcomeCardLandscape(
             Text(
                 text = stringResource(id = state.messageRes),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
         }
@@ -222,7 +223,7 @@ private fun WelcomeCardPortrait(
         Text(
             text = stringResource(id = state.titleRes),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium,
+            style = BitwardenTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(
@@ -234,7 +235,7 @@ private fun WelcomeCardPortrait(
         Text(
             text = stringResource(id = state.messageRes),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
     }

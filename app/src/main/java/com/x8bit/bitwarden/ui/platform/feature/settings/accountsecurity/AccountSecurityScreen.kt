@@ -60,8 +60,8 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
@@ -453,7 +453,7 @@ private fun SessionTimeoutRow(
     ) {
         Text(
             text = selectedVaultTimeoutType.displayLabel(),
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.testTag("SessionTimeoutStatusLabel"),
         )
@@ -529,7 +529,7 @@ private fun SessionCustomTimeoutRow(
             .toFormattedPattern("HH:mm")
         Text(
             text = formattedTime,
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
@@ -606,7 +606,7 @@ private fun SessionTimeoutActionRow(
     ) {
         Text(
             text = selectedVaultTimeoutAction.displayLabel(),
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
                 alpha = if (isEnabled) 1.0f else 0.38f,
             ),
@@ -704,7 +704,7 @@ private fun FingerPrintPhraseDialog(
             Text(
                 text = stringResource(id = R.string.fingerprint_phrase),
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineSmall,
+                style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth(),
             )
         },
@@ -713,14 +713,14 @@ private fun FingerPrintPhraseDialog(
                 Text(
                     text = "${stringResource(id = R.string.your_accounts_fingerprint)}:",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = fingerprintPhrase(),
                     color = LocalNonMaterialColors.current.fingerprint,
-                    style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+                    style = BitwardenTheme.typography.sensitiveInfoSmall,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }

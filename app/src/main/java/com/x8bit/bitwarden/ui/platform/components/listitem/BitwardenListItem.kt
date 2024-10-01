@@ -106,7 +106,7 @@ fun BitwardenListItem(
             ) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = BitwardenTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -131,7 +131,7 @@ fun BitwardenListItem(
             secondSupportingLabel?.let { secondSupportLabel ->
                 Text(
                     text = secondSupportLabel,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.semantics {
                         secondSupportingLabelTestTag?.let { testTag = it }
@@ -142,7 +142,7 @@ fun BitwardenListItem(
             supportingLabel?.let { supportLabel ->
                 Text(
                     text = supportLabel,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.semantics { supportingLabelTestTag?.let { testTag = it } },
                 )

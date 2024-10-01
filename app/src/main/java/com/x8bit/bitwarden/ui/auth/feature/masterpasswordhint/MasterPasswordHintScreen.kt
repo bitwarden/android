@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -32,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The top level composable for the Login screen.
@@ -131,7 +131,7 @@ fun MasterPasswordHintScreen(
 
             Text(
                 text = stringResource(id = R.string.enter_email_for_hint),
-                style = MaterialTheme.typography.bodySmall,
+                style = BitwardenTheme.typography.bodySmall,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

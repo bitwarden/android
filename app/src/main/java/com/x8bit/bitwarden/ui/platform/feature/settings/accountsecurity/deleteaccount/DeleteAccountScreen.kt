@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the delete account screen.
@@ -136,7 +137,7 @@ fun DeleteAccountScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.deleting_your_account_is_permanent),
-                style = MaterialTheme.typography.headlineSmall,
+                style = BitwardenTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,7 +146,7 @@ fun DeleteAccountScreen(
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(id = R.string.delete_account_explanation),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .fillMaxWidth()

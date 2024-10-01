@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalBut
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the block auto-fill screen.
@@ -162,7 +163,7 @@ fun BlockAutoFillScreen(
                                     id = R.string.auto_fill_will_not_be_offered_for_these_ur_is,
                                 ),
                                 color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = BitwardenTheme.typography.bodyMedium,
                                 modifier = Modifier.align(Alignment.CenterVertically),
                             )
                         }
@@ -241,7 +242,7 @@ private fun BlockAutoFillNoItems(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             text = stringResource(id = R.string.auto_fill_will_not_be_offered_for_these_ur_is),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -281,7 +282,7 @@ private fun BlockAutoFillListItem(
                 .padding(end = 16.dp)
                 .weight(1f),
             text = label,
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
         Icon(

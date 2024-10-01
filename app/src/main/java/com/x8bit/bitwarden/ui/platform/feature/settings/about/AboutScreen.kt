@@ -230,7 +230,7 @@ private fun ContentColumn(
             Text(
                 modifier = Modifier.padding(end = 16.dp),
                 text = state.copyrightInfo.invoke(),
-                style = MaterialTheme.typography.bodySmall,
+                style = BitwardenTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
         }
@@ -269,7 +269,7 @@ private fun CopyRow(
                     .padding(end = 16.dp)
                     .weight(1f),
                 text = text(),
-                style = MaterialTheme.typography.bodySmall,
+                style = BitwardenTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Icon(

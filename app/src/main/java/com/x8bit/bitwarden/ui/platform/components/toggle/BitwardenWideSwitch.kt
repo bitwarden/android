@@ -74,7 +74,7 @@ fun BitwardenWideSwitch(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.bodyLarge,
                 color = if (enabled) {
                     MaterialTheme.colorScheme.onSurface
                 } else {
@@ -84,7 +84,7 @@ fun BitwardenWideSwitch(
             description?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = if (enabled) {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     } else {

@@ -44,8 +44,8 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * Displays the login approval screen.
@@ -159,7 +159,7 @@ private fun LoginApprovalContent(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(id = R.string.are_you_trying_to_log_in),
-            style = MaterialTheme.typography.headlineMedium,
+            style = BitwardenTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
@@ -172,7 +172,7 @@ private fun LoginApprovalContent(
                 state.email,
                 state.domainUrl,
             ),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
@@ -183,7 +183,7 @@ private fun LoginApprovalContent(
 
         Text(
             text = stringResource(id = R.string.fingerprint_phrase),
-            style = MaterialTheme.typography.titleLarge,
+            style = BitwardenTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
@@ -195,7 +195,7 @@ private fun LoginApprovalContent(
             text = state.fingerprint,
             textAlign = TextAlign.Start,
             color = LocalNonMaterialColors.current.fingerprint,
-            style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+            style = BitwardenTheme.typography.sensitiveInfoSmall,
             modifier = Modifier
                 .testTag("FingerprintValueLabel")
                 .fillMaxWidth()
@@ -259,7 +259,7 @@ private fun LoginApprovalInfoColumn(
 
     Text(
         text = label,
-        style = MaterialTheme.typography.titleSmall,
+        style = BitwardenTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
@@ -270,7 +270,7 @@ private fun LoginApprovalInfoColumn(
 
     Text(
         text = value,
-        style = MaterialTheme.typography.bodyMedium,
+        style = BitwardenTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
             .fillMaxWidth()

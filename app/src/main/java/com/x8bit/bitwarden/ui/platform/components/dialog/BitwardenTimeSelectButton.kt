@@ -20,6 +20,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.ZonedDateTime
@@ -69,7 +70,7 @@ fun BitwardenTimeSelectButton(
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { shouldShowDialog = !shouldShowDialog },
             ),
-        textStyle = MaterialTheme.typography.bodyLarge,
+        textStyle = BitwardenTheme.typography.bodyLarge,
         readOnly = true,
         label = { Text(text = label) },
         value = formattedTime,

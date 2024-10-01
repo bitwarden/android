@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Attachment UI common for all item types.
@@ -48,7 +49,7 @@ fun AttachmentItemContent(
         Text(
             text = attachmentItem.title,
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
@@ -59,7 +60,7 @@ fun AttachmentItemContent(
         Text(
             text = attachmentItem.displaySize,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             modifier = Modifier,
         )
 
@@ -97,7 +98,7 @@ fun AttachmentItemContent(
             text = {
                 Text(
                     text = stringResource(R.string.premium_required),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                 )
             },
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,

@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.Instant
@@ -82,7 +83,7 @@ fun BitwardenDateSelectButton(
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { shouldShowDialog = !shouldShowDialog },
             ),
-        textStyle = MaterialTheme.typography.bodyLarge,
+        textStyle = BitwardenTheme.typography.bodyLarge,
         readOnly = true,
         label = { Text(text = label) },
         value = formattedDate,
@@ -131,7 +132,7 @@ fun BitwardenDateSelectButton(
                 ) {
                     Text(
                         text = stringResource(id = R.string.ok),
-                        style = MaterialTheme.typography.labelLarge,
+                        style = BitwardenTheme.typography.labelLarge,
                     )
                 }
             },
@@ -142,7 +143,7 @@ fun BitwardenDateSelectButton(
                 ) {
                     Text(
                         text = stringResource(id = R.string.cancel),
-                        style = MaterialTheme.typography.labelLarge,
+                        style = BitwardenTheme.typography.labelLarge,
                     )
                 }
             },
