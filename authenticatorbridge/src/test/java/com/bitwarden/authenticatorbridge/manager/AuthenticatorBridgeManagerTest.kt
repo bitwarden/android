@@ -213,7 +213,7 @@ class AuthenticatorBridgeManagerTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `onServiceConnected when symmetric key does match not query for symmetric key`() {
+    fun `onServiceConnected when symmetric key does match should not query for symmetric key`() {
         fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
