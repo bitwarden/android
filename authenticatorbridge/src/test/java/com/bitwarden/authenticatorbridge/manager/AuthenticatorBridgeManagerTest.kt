@@ -73,7 +73,7 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `initial state should be AppNotInstalled when package manager can't find app`() {
+    fun `initial state should be AppNotInstalled when Bitwarden app is not present`() {
         every {
             context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
         } throws NameNotFoundException()
