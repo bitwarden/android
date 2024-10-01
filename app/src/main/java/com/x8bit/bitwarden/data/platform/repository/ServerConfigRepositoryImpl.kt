@@ -59,6 +59,10 @@ class ServerConfigRepositoryImpl(
         return localConfig
     }
 
+    override fun getLocalServerConfig(): ServerConfig? {
+        return configDiskSource.serverConfig
+    }
+
     private companion object {
         private const val MINIMUM_CONFIG_SYNC_INTERVAL_SEC: Long = 60 * 60
     }

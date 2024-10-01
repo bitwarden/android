@@ -27,6 +27,10 @@ class FakeServerConfigRepository : ServerConfigRepository {
         return serverConfigValue
     }
 
+    override fun getLocalServerConfig(): ServerConfig? {
+        return SERVER_CONFIG
+    }
+
     override val serverConfigStateFlow: StateFlow<ServerConfig?>
         get() = mutableServerConfigFlow
 }

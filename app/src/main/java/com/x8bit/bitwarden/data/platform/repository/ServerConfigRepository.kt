@@ -18,4 +18,9 @@ interface ServerConfigRepository {
      * updates the values using server side data.
      */
     suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig?
+
+    /**
+     * Gets the state [ServerConfig] synchronously from local storage only.
+     */
+    fun getLocalServerConfig(): ServerConfig?
 }
