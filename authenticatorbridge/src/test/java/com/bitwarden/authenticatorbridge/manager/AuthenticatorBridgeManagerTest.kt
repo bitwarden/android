@@ -206,7 +206,7 @@ class AuthenticatorBridgeManagerTest {
         serviceConnection.captured.onServiceConnected(mockk(), mockk())
 
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
-        assertEquals(fakeSymmetricKeyStorageProvider.symmetricKey, SYMMETRIC_KEY)
+        assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify { mockBridgeService.symmetricEncryptionKeyData }
         verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
     }
