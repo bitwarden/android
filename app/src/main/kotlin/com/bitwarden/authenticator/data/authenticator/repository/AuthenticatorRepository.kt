@@ -49,12 +49,6 @@ interface AuthenticatorRepository {
     fun getItemStateFlow(itemId: String): StateFlow<DataState<AuthenticatorItemEntity?>>
 
     /**
-     * Flow that represents the data for a single verification code item.
-     * This may emit null if any issues arise during code generation.
-     */
-    fun getAuthCodeFlow(cipherId: String): StateFlow<DataState<VerificationCodeItem?>>
-
-    /**
      * Flow that represents the data for the TOTP verification codes for ciphers items.
      * This may emit an empty list if any issues arise during code generation.
      */

@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -133,32 +132,6 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
                 initialValue = DataState.Loading,
             )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getAuthCodeFlow(cipherId: String): StateFlow<DataState<VerificationCodeItem?>> {
-        return getItemStateFlow(cipherId)
-            .flatMapLatest { cipherDataState ->
-                val cipher = cipherDataState.data
-                    ?: return@flatMapLatest flowOf(DataState.Loaded(null))
-
-                totpCodeManager.getTotpCodeStateFlow(item = cipher)
-                    .map { totpCodeDataState ->
-                        combineDataStates(
-                            totpCodeDataState,
-                            cipherDataState,
-                        ) { totpCodeData, _ ->
-                            // Just return the verification items; we are only combining the
-                            // DataStates to know the overall state.
-                            totpCodeData
-                        }
-                    }
-            }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
-                initialValue = DataState.Loading,
-            )
-    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>> {
