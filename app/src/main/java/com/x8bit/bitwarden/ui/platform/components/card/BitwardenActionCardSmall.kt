@@ -43,7 +43,7 @@ fun BitwardenActionCardSmall(
         shape = RoundedCornerShape(size = 16.dp),
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            containerColor = BitwardenTheme.colorScheme.background.tertiary,
         ),
         elevation = CardDefaults.elevatedCardElevation(),
     ) {
@@ -55,7 +55,7 @@ fun BitwardenActionCardSmall(
             Icon(
                 painter = actionIcon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = BitwardenTheme.colorScheme.icon.secondary,
                 modifier = Modifier.size(24.dp),
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -64,14 +64,14 @@ fun BitwardenActionCardSmall(
             ) {
                 Text(
                     text = actionText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    color = BitwardenTheme.colorScheme.text.primary,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = callToActionText,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
+                    style = BitwardenTheme.typography.labelLarge,
+                    color = BitwardenTheme.colorScheme.text.primary,
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))

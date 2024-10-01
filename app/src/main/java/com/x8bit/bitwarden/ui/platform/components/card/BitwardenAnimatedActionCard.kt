@@ -20,7 +20,7 @@ fun BitwardenAnimatedActionCard(
     onDismissClick: () -> Unit,
     modifier: Modifier = Modifier,
     leadingContent: @Composable (() -> Unit)? = null,
-    ) {
+) {
     Box(
         modifier = Modifier
             .animateContentSize()
