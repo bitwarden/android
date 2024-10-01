@@ -29,8 +29,8 @@ fun BitwardenAnimatedActionCard(
                     modifier
                 } else {
                     Modifier.height(0.dp)
-                }
-            )
+                },
+            ),
     ) {
         BitwardenActionCard(
             cardTitle = cardTitle,
