@@ -139,7 +139,7 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `onStart when bindService succeeds state should be Loading before service calls back`() {
+    fun `onStart when Bitwarden app is present and bindService succeeds should set state to Loading before service calls back`() {
         val mockIntent: Intent = mockk()
         every {
             anyConstructed<Intent>().setComponent(any())
