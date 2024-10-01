@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Origin
+import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
@@ -24,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2Cred
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
+import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -65,11 +68,23 @@ class Fido2CredentialManagerImpl(
                     .packageName,
             )
         }
-        val origin = fido2CredentialRequest
+        val assetLinkUrl = fido2CredentialRequest
             .origin
             ?: getOriginUrlFromAttestationOptionsOrNull(fido2CredentialRequest.requestJson)
             ?: return Fido2RegisterCredentialResult.Error
 
+        val origin = Origin.Android(
+            UnverifiedAssetLink(
+                packageName = fido2CredentialRequest.packageName,
+                sha256CertFingerprint = fido2CredentialRequest
+                    .callingAppInfo
+                    .getSignatureFingerprintAsHexString()
+                    ?: return Fido2RegisterCredentialResult.Error,
+                host = assetLinkUrl.toHostOrPathOrNull()
+                    ?: return Fido2RegisterCredentialResult.Error,
+                assetLinkUrl = assetLinkUrl,
+            ),
+        )
         return vaultSdkSource
             .registerFido2Credential(
                 request = RegisterFido2CredentialRequest(
@@ -157,7 +172,16 @@ class Fido2CredentialManagerImpl(
                     .authenticateFido2Credential(
                         request = AuthenticateFido2CredentialRequest(
                             userId = userId,
-                            origin = origin,
+                            origin = Origin.Android(
+                                UnverifiedAssetLink(
+                                    callingAppInfo.packageName,
+                                    callingAppInfo.getSignatureFingerprintAsHexString()
+                                        ?: return Fido2CredentialAssertionResult.Error,
+                                    origin.toHostOrPathOrNull()
+                                        ?: return Fido2CredentialAssertionResult.Error,
+                                    origin,
+                                ),
+                            ),
                             requestJson = """{"publicKey": ${request.requestJson}}""",
                             clientData = clientData,
                             selectedCipherView = selectedCipherView,

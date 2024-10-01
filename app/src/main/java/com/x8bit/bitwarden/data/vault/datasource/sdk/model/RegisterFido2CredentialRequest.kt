@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Origin
 import com.bitwarden.vault.CipherView
 
 /**
@@ -18,7 +19,7 @@ import com.bitwarden.vault.CipherView
  */
 data class RegisterFido2CredentialRequest(
     val userId: String,
-    val origin: String,
+    val origin: Origin,
     val requestJson: String,
     val clientData: ClientData,
     val selectedCipherView: CipherView,

@@ -1,14 +1,14 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Origin
 import com.bitwarden.vault.CipherView
 
 /**
  * Models a FIDO 2 authentication request to the Bitwarden SDK.
  *
  * @param userId User whom the credential is being authenticated for.
- * @param origin Origin of the Relying Party. This can either be a Relying Party's URL or their
- * application fingerprint.
+ * @param origin Origin of the Relying Party WebAuthn Request.
  * @param requestJson Authentication request JSON received from the OS.
  * @param clientData Metadata containing either privileged application certificate hash or Android
  * package name of the Relying Party.
@@ -18,7 +18,7 @@ import com.bitwarden.vault.CipherView
  */
 data class AuthenticateFido2CredentialRequest(
     val userId: String,
-    val origin: String,
+    val origin: Origin,
     val requestJson: String,
     val clientData: ClientData,
     val selectedCipherView: CipherView,
