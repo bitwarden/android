@@ -68,12 +68,12 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `initial state should be Loading when Bitwarden app is present`() {
+    fun `initial AccountSyncState should be Loading when Bitwarden app is present`() {
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
     }
 
     @Test
-    fun `initial state should be AppNotInstalled when Bitwarden app is not present`() {
+    fun `initial AccountSyncState should be AppNotInstalled when Bitwarden app is not present`() {
         every {
             context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
         } throws NameNotFoundException()
