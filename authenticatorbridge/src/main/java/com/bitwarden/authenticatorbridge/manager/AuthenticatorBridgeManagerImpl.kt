@@ -28,7 +28,7 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
 /**
  * Default implementation of [AuthenticatorBridgeManager].
  *
- * @param applicationContext The Context that will be used to bind to AuthenticatorBridgeService.
+ * @param context The Context that will be used to bind to AuthenticatorBridgeService.
  * @param connectionType Specifies which build variant to connect to.
  * @param symmetricKeyStorageProvider Provides access to local storage of the symmetric encryption
  * key.

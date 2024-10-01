@@ -10,7 +10,7 @@ import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
  * Factory for supplying implementation instances of Authenticator Bridge SDK interfaces.
  */
 class AuthenticatorBridgeFactory(
-    private val applicationContext: Context,
+    private val context: Context,
 ) {
 
     /**
@@ -24,7 +24,7 @@ class AuthenticatorBridgeFactory(
         connectionType: AuthenticatorBridgeConnectionType,
         symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
     ): AuthenticatorBridgeManager = AuthenticatorBridgeManagerImpl(
-        context = applicationContext,
+        context = context,
         connectionType = connectionType,
         symmetricKeyStorageProvider = symmetricKeyStorageProvider,
     )
