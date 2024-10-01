@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager.NameNotFoundException
 import android.os.IBinder
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -55,8 +56,14 @@ internal class AuthenticatorBridgeManagerImpl(
     /**
      * Internal state of [accountSyncStateFlow].
      */
-    private val mutableSharedAccountsStateFlow =
-        MutableStateFlow<AccountSyncState>(AccountSyncState.Loading)
+    private val mutableSharedAccountsStateFlow: MutableStateFlow<AccountSyncState> =
+        MutableStateFlow(
+            if (isBitwardenAppInstalled()) {
+                AccountSyncState.Loading
+            } else {
+                AccountSyncState.AppNotInstalled
+            }
+        )
 
     /**
      * Callback registered with AuthenticatorBridgeService.
@@ -95,6 +102,10 @@ internal class AuthenticatorBridgeManagerImpl(
     }
 
     private fun bindService() {
+        if (!isBitwardenAppInstalled()) {
+            mutableSharedAccountsStateFlow.value = AccountSyncState.AppNotInstalled
+            return
+        }
         val intent = Intent().apply {
             component = ComponentName(
                 connectionType.toPackageName(),
@@ -191,7 +202,17 @@ internal class AuthenticatorBridgeManagerImpl(
             // We want to be super safe when unbinding to assure no crashes.
         }
     }
+
+    private fun isBitwardenAppInstalled(): Boolean =
+        // Check to see if correct Bitwarden app is installed:
+        try {
+            applicationContext.packageManager.getPackageInfo(connectionType.toPackageName(), 0)
+            true
+        } catch (e: NameNotFoundException) {
+            false
+        }
 }
+
 /**
  * Helper function for wrapping all calls to [IAuthenticatorBridgeService] around try catch.
  *

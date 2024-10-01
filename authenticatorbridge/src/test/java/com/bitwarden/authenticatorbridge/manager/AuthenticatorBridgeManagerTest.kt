@@ -3,6 +3,7 @@ package com.bitwarden.authenticatorbridge.manager
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager.NameNotFoundException
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
@@ -35,6 +36,9 @@ class AuthenticatorBridgeManagerTest {
 
     private val context = mockk<Context> {
         every { applicationContext } returns this
+        every {
+            packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
+        } returns mockk()
     }
     private val mockBridgeService: IAuthenticatorBridgeService = mockk()
     private val fakeLifecycleOwner = FakeLifecycleOwner()
@@ -69,6 +73,21 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
+    fun `initial state should be AppNotInstalled when package manager can't find app`() {
+        every {
+            context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
+        } throws NameNotFoundException()
+        val manager = AuthenticatorBridgeManagerImpl(
+            context = context,
+            connectionType = AuthenticatorBridgeConnectionType.DEV,
+            symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+            callbackProvider = testAuthenticatorBridgeCallbackProvider,
+            processLifecycleOwner = fakeLifecycleOwner,
+        )
+        assertEquals(AccountSyncState.AppNotInstalled, manager.accountSyncStateFlow.value)
+    }
+
+    @Test
     fun `onStart when bindService fails should set state to error`() {
         val mockIntent: Intent = mockk()
         every {
@@ -81,6 +100,25 @@ class AuthenticatorBridgeManagerTest {
 
         assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
         verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+    }
+
+    @Test
+    fun `onStart when package manager doesn't find bitwarden app should set state to AppNotInstalled`() {
+        val mockIntent: Intent = mockk()
+        every {
+            context.packageManager.getPackageInfo("com.x8bit.bitwarden.dev", 0)
+        } throws NameNotFoundException()
+        every {
+            anyConstructed<Intent>().setComponent(any())
+        } returns mockIntent
+
+        every {
+            context.bindService(any(), any(), Context.BIND_AUTO_CREATE)
+        } throws SecurityException()
+
+        fakeLifecycleOwner.lifecycle.dispatchOnStart()
+
+        assertEquals(AccountSyncState.AppNotInstalled, manager.accountSyncStateFlow.value)
     }
 
     @Test
@@ -121,6 +159,7 @@ class AuthenticatorBridgeManagerTest {
         val serviceConnection = slot<ServiceConnection>()
         val mockIntent: Intent = mockk()
         fakeSymmetricKeyStorageProvider.symmetricKey = null
+        every { mockBridgeService.symmetricEncryptionKeyData } returns null
         every { IAuthenticatorBridgeService.Stub.asInterface(any()) } returns mockBridgeService
         every {
             anyConstructed<Intent>().setComponent(any())

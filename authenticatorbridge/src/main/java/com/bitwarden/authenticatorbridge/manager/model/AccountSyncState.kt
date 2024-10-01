@@ -8,6 +8,11 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountData
 sealed class AccountSyncState {
 
     /**
+     * The Bitwarden app is not installed and therefore accounts cannot be synced.
+     */
+    data object AppNotInstalled : AccountSyncState()
+
+    /**
      * Something went wrong syncing accounts.
      */
     data object Error : AccountSyncState()
