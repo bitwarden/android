@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled dialog for the user to enter their PIN.
@@ -54,7 +55,7 @@ fun BitwardenPinDialog(
         title = {
             Text(
                 text = stringResource(id = R.string.verify_pin),
-                style = MaterialTheme.typography.headlineSmall,
+                style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.testTag("AlertTitleText"),
             )
         },

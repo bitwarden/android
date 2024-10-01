@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A dialog for adding a blocked URI.
@@ -66,7 +67,7 @@ fun AddEditBlockedUriDialog(
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.new_uri),
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineSmall,
+                style = BitwardenTheme.typography.headlineSmall,
             )
             if (scrollState.canScrollBackward) {
                 Box(

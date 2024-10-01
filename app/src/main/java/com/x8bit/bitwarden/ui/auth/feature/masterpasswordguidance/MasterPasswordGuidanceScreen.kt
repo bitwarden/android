@@ -103,12 +103,12 @@ fun MasterPasswordGuidanceScreen(
 
                     Text(
                         text = stringResource(R.string.what_makes_a_password_strong),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = BitwardenTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = BitwardenTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         text = stringResource(
                             R.string.the_longer_your_password_the_more_difficult_to_hack,
@@ -123,7 +123,7 @@ fun MasterPasswordGuidanceScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.the_strongest_passwords_are_usually),
-                        style = MaterialTheme.typography.titleSmall,
+                        style = BitwardenTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -193,13 +193,13 @@ private fun BulletTextRow(
         Text(
             text = BULLET_TWO_TAB,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.clearAndSetSemantics { },
         )
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

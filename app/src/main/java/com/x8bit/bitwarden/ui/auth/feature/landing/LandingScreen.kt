@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -236,7 +237,7 @@ private fun LandingScreenContent(
         Text(
             text = stringResource(id = R.string.login_or_create_new_account),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
+            style = BitwardenTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
@@ -304,7 +305,7 @@ private fun LandingScreenContent(
         ) {
             Text(
                 text = stringResource(id = R.string.new_around_here),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
 

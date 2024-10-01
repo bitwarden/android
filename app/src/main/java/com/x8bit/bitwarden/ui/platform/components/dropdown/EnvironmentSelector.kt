@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 
 /**
@@ -72,13 +73,13 @@ fun EnvironmentSelector(
         ) {
             Text(
                 text = labelText,
-                style = MaterialTheme.typography.bodySmall,
+                style = BitwardenTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(end = 12.dp),
             )
             Text(
                 text = selectedOption.displayLabel(),
-                style = MaterialTheme.typography.labelLarge,
+                style = BitwardenTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(end = 8.dp),
             )

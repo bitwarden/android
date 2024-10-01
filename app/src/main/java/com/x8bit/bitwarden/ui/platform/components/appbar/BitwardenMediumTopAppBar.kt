@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A custom Bitwarden-themed medium top app bar with support for actions.
@@ -50,7 +51,7 @@ fun BitwardenMediumTopAppBar(
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge,
+                style = BitwardenTheme.typography.titleLarge,
                 modifier = Modifier.testTag("PageTitleLabel"),
             )
         },

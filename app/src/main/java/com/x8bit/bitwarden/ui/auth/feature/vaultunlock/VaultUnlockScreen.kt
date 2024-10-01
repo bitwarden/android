@@ -62,6 +62,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import javax.crypto.Cipher
@@ -222,7 +223,7 @@ fun VaultUnlockScreen(
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
                         text = state.vaultUnlockType.unlockScreenMessage(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = BitwardenTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
@@ -236,7 +237,7 @@ fun VaultUnlockScreen(
                         state.email,
                         state.environmentUrl,
                     ),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .testTag("UserAndEnvironmentDataLabel")
@@ -259,7 +260,7 @@ fun VaultUnlockScreen(
                     Text(
                         text = stringResource(R.string.account_biometric_invalidated),
                         textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = BitwardenTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )

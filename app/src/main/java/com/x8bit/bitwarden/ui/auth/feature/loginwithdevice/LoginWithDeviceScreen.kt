@@ -47,8 +47,8 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * The top level composable for the Login with Device screen.
@@ -145,7 +145,7 @@ private fun LoginWithDeviceScreenContent(
         Text(
             text = state.title(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.headlineMedium,
+            style = BitwardenTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -157,7 +157,7 @@ private fun LoginWithDeviceScreenContent(
         Text(
             text = state.subtitle(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -169,7 +169,7 @@ private fun LoginWithDeviceScreenContent(
         Text(
             text = state.description(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -181,7 +181,7 @@ private fun LoginWithDeviceScreenContent(
         Text(
             text = stringResource(id = R.string.fingerprint_phrase),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.titleLarge,
+            style = BitwardenTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -194,7 +194,7 @@ private fun LoginWithDeviceScreenContent(
             text = state.fingerprintPhrase,
             textAlign = TextAlign.Start,
             color = LocalNonMaterialColors.current.fingerprint,
-            style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+            style = BitwardenTheme.typography.sensitiveInfoSmall,
             minLines = 2,
             modifier = Modifier
                 .testTag("FingerprintPhraseValue")
@@ -219,7 +219,7 @@ private fun LoginWithDeviceScreenContent(
                     BitwardenClickableText(
                         modifier = Modifier.testTag("ResendNotificationButton"),
                         label = stringResource(id = R.string.resend_notification),
-                        style = MaterialTheme.typography.labelLarge,
+                        style = BitwardenTheme.typography.labelLarge,
                         innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                         onClick = onResendNotificationClick,
                     )
@@ -232,7 +232,7 @@ private fun LoginWithDeviceScreenContent(
         Text(
             text = state.otherOptions(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -243,7 +243,7 @@ private fun LoginWithDeviceScreenContent(
             modifier = Modifier.testTag("ViewAllLoginOptionsButton"),
             label = stringResource(id = R.string.view_all_login_options),
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            style = MaterialTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelLarge,
             onClick = onViewAllLogInOptionsClick,
         )
 

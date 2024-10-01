@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -38,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDiv
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -192,7 +192,7 @@ private fun PasswordHistoryError(
     ) {
         Text(
             text = state.message.invoke(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -207,7 +207,7 @@ private fun PasswordHistoryEmpty(modifier: Modifier = Modifier) {
         Text(
             modifier = Modifier.testTag("NoPasswordsDisplayedLabel"),
             text = stringResource(id = R.string.no_passwords_to_list),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }

@@ -55,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDiv
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -292,7 +293,7 @@ private fun AccountSummaryItem(
 
             Text(
                 text = accountSummary.initials,
-                style = MaterialTheme.typography.titleMedium
+                style = BitwardenTheme.typography.titleMedium
                     // Do not allow scaling
                     .copy(fontSize = 16.dp.toUnscaledTextUnit()),
                 color = accountSummary.avatarColor.toSafeOverlayColor(),
@@ -307,7 +308,7 @@ private fun AccountSummaryItem(
         ) {
             Text(
                 text = accountSummary.email,
-                style = MaterialTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.testTag("AccountEmailLabel"),
@@ -315,7 +316,7 @@ private fun AccountSummaryItem(
 
             Text(
                 text = accountSummary.environmentLabel,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.testTag("AccountEnvironmentLabel"),
             )
@@ -323,7 +324,7 @@ private fun AccountSummaryItem(
             accountSummary.supportingTextResOrNull?.let { supportingTextResId ->
                 Text(
                     text = stringResource(id = supportingTextResId).lowercaseWithCurrentLocal(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("AccountStatusLabel"),
                 )
@@ -414,7 +415,7 @@ private fun AddAccountItem(
 
         Text(
             text = stringResource(id = R.string.add_account),
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
         )
     }
 }

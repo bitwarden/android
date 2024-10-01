@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultNoItems
 
 /**
@@ -58,7 +58,7 @@ private fun GenericNoItems(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             text = text,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.navigationBarsPadding())

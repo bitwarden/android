@@ -147,7 +147,7 @@ private fun DeleteAccountConfirmationContent(
         Text(
             text = stringResource(id = R.string.a_verification_code_was_sent_to_your_email),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -169,7 +169,7 @@ private fun DeleteAccountConfirmationContent(
         Text(
             text = stringResource(id = R.string.confirm_your_identity),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)

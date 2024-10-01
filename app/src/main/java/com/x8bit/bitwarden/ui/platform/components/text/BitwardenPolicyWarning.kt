@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled policy warning label.
@@ -25,7 +26,7 @@ fun BitwardenPolicyWarningText(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
-    style: TextStyle = MaterialTheme.typography.bodySmall,
+    style: TextStyle = BitwardenTheme.typography.bodySmall,
 ) {
     Text(
         text = text,

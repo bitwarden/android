@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * No items view for the [VaultScreen].
@@ -66,7 +67,7 @@ fun VaultNoItems(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             text = message,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
         )
 
         Spacer(modifier = Modifier.height(24.dp))

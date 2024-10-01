@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A dialog for setting a user's PIN.
@@ -80,7 +81,7 @@ fun PinInputDialog(
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.enter_pin),
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineSmall,
+                style = BitwardenTheme.typography.headlineSmall,
             )
             if (scrollState.canScrollBackward) {
                 Box(
@@ -102,7 +103,7 @@ fun PinInputDialog(
                         .fillMaxWidth(),
                     text = stringResource(id = R.string.set_pin_description),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = BitwardenTheme.typography.bodyMedium,
                 )
 
                 BitwardenTextField(

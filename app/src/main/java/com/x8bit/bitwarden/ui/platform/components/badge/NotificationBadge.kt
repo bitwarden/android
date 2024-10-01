@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 
 /**
@@ -41,7 +42,7 @@ fun NotificationBadge(
             content = {
                 Text(
                     text = notificationCount.toString(),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = BitwardenTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
                 )
             },

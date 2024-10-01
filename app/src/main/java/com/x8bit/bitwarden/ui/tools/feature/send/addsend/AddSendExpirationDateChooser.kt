@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.toImmutableList
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -81,7 +82,7 @@ fun SendExpirationDateChooser(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(id = R.string.expiration_date_info),
-            style = MaterialTheme.typography.bodySmall,
+            style = BitwardenTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()

@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the other screen.
@@ -138,12 +139,12 @@ fun OtherScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.last_sync),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = BitwardenTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, end = 2.dp),
                 )
                 Text(
                     text = state.lastSyncTime,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = BitwardenTheme.typography.bodySmall,
                 )
             }
 
@@ -226,7 +227,7 @@ private fun ClearClipboardFrequencyRow(
     ) {
         Text(
             text = currentSelection.displayLabel.invoke(),
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.testTag("ClearClipboardAfterLabel"),
         )

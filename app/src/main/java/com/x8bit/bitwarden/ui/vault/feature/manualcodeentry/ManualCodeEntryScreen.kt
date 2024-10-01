@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -41,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The screen to manually add a totp code.
@@ -125,7 +125,7 @@ fun ManualCodeEntryScreen(
 
             Text(
                 text = stringResource(id = R.string.enter_key_manually),
-                style = MaterialTheme.typography.titleMedium,
+                style = BitwardenTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
 
@@ -159,7 +159,7 @@ fun ManualCodeEntryScreen(
 
             Text(
                 text = stringResource(id = R.string.once_the_key_is_successfully_entered),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -170,7 +170,7 @@ fun ManualCodeEntryScreen(
 
             Text(
                 text = stringResource(id = R.string.cannot_add_authenticator_key),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -190,7 +190,7 @@ fun ManualCodeEntryScreen(
                         }
                     }
                 },
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
             )
         }
     }

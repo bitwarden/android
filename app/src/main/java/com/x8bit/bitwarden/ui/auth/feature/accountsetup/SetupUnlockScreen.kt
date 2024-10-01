@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinS
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
@@ -227,7 +228,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
     Spacer(modifier = Modifier.height(height = 24.dp))
     Text(
         text = stringResource(id = R.string.set_up_unlock),
-        style = MaterialTheme.typography.titleMedium,
+        style = BitwardenTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.Center,
         modifier = Modifier
@@ -241,7 +242,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
         text = stringResource(
             id = R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
         ),
-        style = MaterialTheme.typography.bodyMedium,
+        style = BitwardenTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.Center,
         modifier = Modifier
@@ -273,7 +274,7 @@ private fun SetupUnlockHeaderLandscape(
         ) {
             Text(
                 text = stringResource(id = R.string.set_up_unlock),
-                style = MaterialTheme.typography.titleMedium,
+                style = BitwardenTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
@@ -285,7 +286,7 @@ private fun SetupUnlockHeaderLandscape(
                 text = stringResource(
                     id = R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
                 ),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),

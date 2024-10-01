@@ -22,7 +22,7 @@ fun BitwardenListHeaderText(
 ) {
     Text(
         text = label,
-        style = MaterialTheme.typography.labelMedium,
+        style = BitwardenTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier.padding(
             top = 12.dp,

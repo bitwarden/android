@@ -33,6 +33,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogWidth
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled dialog with two buttons.
@@ -96,7 +97,7 @@ fun BitwardenTwoButtonDialog(
                         .fillMaxWidth(),
                     text = title,
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = BitwardenTheme.typography.headlineSmall,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -117,7 +118,7 @@ fun BitwardenTwoButtonDialog(
                     .fillMaxWidth(),
                 text = message,
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
             )
             if (scrollState.canScrollForward) {
                 Box(

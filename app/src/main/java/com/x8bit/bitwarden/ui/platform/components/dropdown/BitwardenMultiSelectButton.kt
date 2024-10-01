@@ -97,7 +97,7 @@ fun BitwardenMultiSelectButton(
             ) {
                 shouldShowDialog = !shouldShowDialog
             },
-        textStyle = MaterialTheme.typography.bodyLarge,
+        textStyle = BitwardenTheme.typography.bodyLarge,
         readOnly = true,
         label = {
             Row {
@@ -142,7 +142,7 @@ fun BitwardenMultiSelectButton(
             {
                 Text(
                     text = supportingText,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = BitwardenTheme.typography.bodySmall,
                 )
             }
         },

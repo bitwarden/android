@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled filled [OutlinedButton] with an icon.
@@ -53,7 +53,7 @@ fun BitwardenOutlinedButtonWithIcon(
 
         Text(
             text = label,
-            style = MaterialTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelLarge,
         )
     }
 }

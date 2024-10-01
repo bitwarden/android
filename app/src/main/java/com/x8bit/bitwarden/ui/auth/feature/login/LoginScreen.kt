@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -252,7 +253,7 @@ private fun LoginScreenContent(
         BitwardenClickableText(
             label = stringResource(id = R.string.get_master_passwordword_hint),
             onClick = onMasterPasswordClick,
-            style = MaterialTheme.typography.bodySmall,
+            style = BitwardenTheme.typography.bodySmall,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .testTag("GetMasterPasswordHintLabel"),
@@ -305,7 +306,7 @@ private fun LoginScreenContent(
                 state.environmentLabel,
             ),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .testTag("LoggingInAsLabel")
@@ -316,7 +317,7 @@ private fun LoginScreenContent(
         BitwardenClickableText(
             label = stringResource(id = R.string.not_you),
             onClick = onNotYouButtonClick,
-            style = MaterialTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelLarge,
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
             modifier = Modifier.testTag("NotYouLabel"),
         )

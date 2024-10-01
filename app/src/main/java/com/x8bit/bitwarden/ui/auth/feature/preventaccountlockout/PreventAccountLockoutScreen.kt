@@ -102,7 +102,7 @@ private fun NeverLoseAccessContent(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.never_lose_access_to_your_vault),
-            style = MaterialTheme.typography.titleMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
 
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -112,7 +112,7 @@ private fun NeverLoseAccessContent(
             text = stringResource(
                 R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
             ),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 24.dp),
         )
@@ -163,13 +163,13 @@ private fun AccountRecoveryTipRow(
         Column {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleSmall,
+                style = BitwardenTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

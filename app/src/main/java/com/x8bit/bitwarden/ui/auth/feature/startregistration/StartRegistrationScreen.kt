@@ -325,7 +325,7 @@ private fun TermsAndPrivacyText(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
             ),
             start = 0,
             end = strTermsAndPrivacy.length,
@@ -333,7 +333,7 @@ private fun TermsAndPrivacyText(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Bold,
             ),
             start = startIndexTerms,
@@ -342,7 +342,7 @@ private fun TermsAndPrivacyText(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Bold,
             ),
             start = startIndexPrivacy,
@@ -390,7 +390,7 @@ private fun TermsAndPrivacyText(
         val termsUrl = stringResource(id = R.string.terms_of_service)
         ClickableText(
             text = annotatedLinkString,
-            style = MaterialTheme.typography.bodyMedium.copy(
+            style = BitwardenTheme.typography.bodyMedium.copy(
                 textAlign = TextAlign.Center,
             ),
             onClick = {
@@ -458,7 +458,7 @@ private fun ReceiveMarketingEmailsSwitch(
         Spacer(modifier = Modifier.width(16.dp))
         ClickableText(
             text = annotatedLinkString,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             onClick = {
                 annotatedLinkString
                     .getStringAnnotations(TAG_URL, it, it)

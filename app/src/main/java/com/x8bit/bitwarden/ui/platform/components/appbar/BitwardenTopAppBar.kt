@@ -119,7 +119,7 @@ fun BitwardenTopAppBar(
                 // making adding any arguments for softWrap and minLines superfluous.
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = BitwardenTheme.typography.titleLarge,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.testTag("PageTitleLabel"),
                 )
@@ -135,7 +135,7 @@ fun BitwardenTopAppBar(
             title = {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = BitwardenTheme.typography.titleLarge,
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,

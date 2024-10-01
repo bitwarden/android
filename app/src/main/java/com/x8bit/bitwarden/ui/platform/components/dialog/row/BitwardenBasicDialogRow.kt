@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A simple clickable row for use within a [BitwardenSelectionDialog] as an alternative to a
@@ -29,7 +30,7 @@ fun BitwardenBasicDialogRow(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.bodyLarge,
+        style = BitwardenTheme.typography.bodyLarge,
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },

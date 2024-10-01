@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import kotlinx.collections.immutable.toImmutableList
@@ -64,7 +65,7 @@ fun VaultMoveToOrganizationContent(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = stringResource(id = R.string.move_to_org_desc),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = BitwardenTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp,
                         modifier = Modifier

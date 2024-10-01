@@ -322,7 +322,7 @@ fun ExampleScreen(
         Text(
             text = state.exampleData,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
+            style = BitwardenTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(horizontal = 24.dp)

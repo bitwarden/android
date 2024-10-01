@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled filled [OutlinedButton] for error states.
@@ -47,7 +48,7 @@ fun BitwardenOutlinedErrorButton(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelLarge,
         )
     }
 }

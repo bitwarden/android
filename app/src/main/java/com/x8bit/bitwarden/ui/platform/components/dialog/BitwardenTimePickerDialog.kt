@@ -36,6 +36,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A custom composable representing a dialog that displays the time picker dialog.
@@ -71,7 +72,7 @@ fun BitwardenTimePickerDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.ok),
-                    style = MaterialTheme.typography.labelLarge,
+                    style = BitwardenTheme.typography.labelLarge,
                     modifier = Modifier.testTag("AcceptAlertButton"),
                 )
             }
@@ -83,7 +84,7 @@ fun BitwardenTimePickerDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.cancel),
-                    style = MaterialTheme.typography.labelLarge,
+                    style = BitwardenTheme.typography.labelLarge,
                 )
             }
         },
@@ -153,7 +154,7 @@ private fun TimePickerDialog(
                         .padding(bottom = 20.dp),
                     // TODO: This should be "Select time" but we don't have that string (BIT-1405)
                     text = stringResource(id = R.string.time),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = BitwardenTheme.typography.labelMedium,
                 )
 
                 content()

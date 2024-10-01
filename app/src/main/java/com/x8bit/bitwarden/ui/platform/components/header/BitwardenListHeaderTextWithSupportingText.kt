@@ -37,13 +37,13 @@ fun BitwardenListHeaderTextWithSupportLabel(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelMedium,
+            style = BitwardenTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Text(
             text = supportingLabel,
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

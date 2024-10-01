@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A countdown timer displayed to the user.
@@ -52,7 +53,7 @@ fun BitwardenCircularCountdownIndicator(
 
         Text(
             text = timeLeftSeconds.toString(),
-            style = MaterialTheme.typography.bodySmall,
+            style = BitwardenTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

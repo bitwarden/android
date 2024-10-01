@@ -172,7 +172,7 @@ private fun OnboardingOverrideContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),
-            style = MaterialTheme.typography.bodySmall,
+            style = BitwardenTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )

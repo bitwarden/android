@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The empty state for the search screen.
@@ -52,7 +53,7 @@ fun SearchEmptyContent(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 text = it(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
             )
         }
 

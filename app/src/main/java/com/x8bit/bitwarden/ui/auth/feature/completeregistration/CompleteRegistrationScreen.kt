@@ -301,7 +301,7 @@ private fun CompleteRegistrationContent(
                     id = R.string.learn_about_other_ways_to_prevent_account_lockout,
                 ),
                 onClick = handler.onLearnToPreventLockout,
-                style = MaterialTheme.typography.labelMedium,
+                style = BitwardenTheme.typography.labelMedium,
                 modifier = Modifier.standardHorizontalMargin(),
             )
         }
@@ -361,7 +361,7 @@ private fun LegacyHeaderContent(
             id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
             userEmail,
         ),
-        style = MaterialTheme.typography.bodyMedium,
+        style = BitwardenTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
             .fillMaxWidth(),
@@ -385,7 +385,7 @@ private fun OrderedHeaderContent() {
     ) {
         Text(
             text = stringResource(R.string.choose_your_master_password),
-            style = MaterialTheme.typography.titleMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
         )
@@ -394,7 +394,7 @@ private fun OrderedHeaderContent() {
             text = stringResource(
                 R.string.choose_a_unique_and_strong_password_to_keep_your_information_safe,
             ),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
         )

@@ -224,7 +224,7 @@ private fun TwoFactorLoginScreenContent(
         Text(
             text = state.authMethod.description(state.displayEmail)(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)

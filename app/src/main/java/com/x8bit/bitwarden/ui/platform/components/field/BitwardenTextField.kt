@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.toPx
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Component that allows the user to input text. This composable will manage the state of
@@ -106,7 +107,7 @@ fun BitwardenTextField(
             {
                 Text(
                     text = hint,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = BitwardenTheme.typography.bodySmall,
                 )
             }
         },

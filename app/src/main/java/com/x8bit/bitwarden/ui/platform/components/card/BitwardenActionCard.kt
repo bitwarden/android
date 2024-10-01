@@ -64,13 +64,13 @@ fun BitwardenActionCard(
             ) {
                 Text(
                     text = actionText,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = BitwardenTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = callToActionText,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = BitwardenTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }

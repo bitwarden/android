@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The top level composable for the Set Master Password screen.
@@ -120,7 +121,7 @@ private fun SetPasswordScreenContent(
             text = stringResource(
                 id = R.string.your_organization_requires_you_to_set_a_master_password,
             ),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -131,7 +132,7 @@ private fun SetPasswordScreenContent(
 
         BitwardenPolicyWarningText(
             text = stringResource(id = R.string.reset_password_auto_enroll_invite_warning),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

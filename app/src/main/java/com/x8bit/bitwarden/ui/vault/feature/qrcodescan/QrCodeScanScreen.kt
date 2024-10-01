@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzer
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzerImpl
@@ -169,7 +170,7 @@ private fun PortraitQRCodeContent(
                 text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
 
@@ -210,7 +211,7 @@ private fun LandscapeQRCodeContent(
                 text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
+                style = BitwardenTheme.typography.bodySmall,
             )
 
             BottomClickableText(
@@ -412,11 +413,11 @@ private fun BottomClickableText(
             modifier = Modifier.padding(vertical = 4.dp),
             text = stringResource(id = R.string.cannot_scan_qr_code),
             color = Color.White,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
         )
         BitwardenClickableText(
             label = stringResource(id = R.string.enter_key_manually),
-            style = MaterialTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelLarge,
             innerPadding = PaddingValues(vertical = 4.dp, horizontal = 12.dp),
             onClick = onEnterCodeManuallyClick,
         )

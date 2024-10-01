@@ -150,7 +150,7 @@ private fun CheckEmailContent(
         Text(
             text = stringResource(id = R.string.check_your_email),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(horizontal = 8.dp)
@@ -167,7 +167,7 @@ private fun CheckEmailContent(
             highlights = listOf(email),
             highlightStyle = SpanStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Bold,
             ),
             tag = "EMAIL",
@@ -175,7 +175,7 @@ private fun CheckEmailContent(
         Text(
             text = descriptionAnnotatedString,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .fillMaxWidth()
@@ -185,7 +185,7 @@ private fun CheckEmailContent(
         @Suppress("MaxLineLength")
         Text(
             text = stringResource(R.string.select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account),
-            style = MaterialTheme.typography.bodyMedium,
+            style = BitwardenTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -238,7 +238,7 @@ private fun CheckEmailLegacyContent(
         Text(
             text = stringResource(id = R.string.check_your_email),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
+            style = BitwardenTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
@@ -256,7 +256,7 @@ private fun CheckEmailLegacyContent(
             highlights = listOf(email),
             highlightStyle = SpanStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Bold,
             ),
             tag = "EMAIL",

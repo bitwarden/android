@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the auto-fill screen.
@@ -293,7 +294,7 @@ private fun DefaultUriMatchTypeRow(
     ) {
         Text(
             text = selectedUriMatchType.displayLabel(),
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

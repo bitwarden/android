@@ -111,7 +111,7 @@ fun PasswordStrengthIndicator(
             }
             Text(
                 text = label(),
-                style = MaterialTheme.typography.labelSmall,
+                style = BitwardenTheme.typography.labelSmall,
                 color = indicatorColor,
             )
         }
@@ -156,7 +156,7 @@ private fun MinimumCharacterCount(
         Text(
             text = stringResource(R.string.minimum_characters, minimumCharacterCount),
             color = characterCountColor,
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
         )
     }
 }

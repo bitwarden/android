@@ -43,7 +43,7 @@ fun BitwardenFilledTonalButton(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelLarge,
         )
     }
 }

@@ -59,7 +59,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
@@ -405,7 +404,7 @@ private fun GeneratedStringItem(
         },
         onValueChange = {},
         readOnly = true,
-        textStyle = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+        textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
         modifier = Modifier.padding(horizontal = 16.dp),

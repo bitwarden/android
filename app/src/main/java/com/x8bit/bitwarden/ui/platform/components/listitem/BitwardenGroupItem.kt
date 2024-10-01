@@ -78,14 +78,14 @@ fun BitwardenGroupItem(
 
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f),
         )
 
         Text(
             text = supportingLabel,
-            style = MaterialTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
