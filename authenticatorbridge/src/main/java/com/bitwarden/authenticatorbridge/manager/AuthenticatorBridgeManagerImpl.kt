@@ -158,7 +158,8 @@ internal class AuthenticatorBridgeManagerImpl(
 
         if (!haveCorrectKey) {
             // If we don't have the correct key, query for key:
-            bridgeService.safeCall { symmetricEncryptionKeyData }
+            bridgeService
+                .safeCall { symmetricEncryptionKeyData }
                 .fold(
                     onSuccess = {
                         symmetricKeyStorageProvider.symmetricKey = it
