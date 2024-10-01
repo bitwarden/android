@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +44,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenAnimatedActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -178,27 +182,32 @@ fun AccountSecurityScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            BitwardenAnimatedActionCard(
-                isVisible = state.shouldShowUnlockActionCard,
-                cardTitle = stringResource(id = R.string.set_up_unlock),
-                actionText = stringResource(R.string.get_started),
-                onActionClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
-                    }
-                },
-                onDismissClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
-                    }
-                },
-                leadingContent = {
-                    NotificationBadge(notificationCount = 1)
-                },
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .padding(top = 12.dp, bottom = 16.dp),
-            )
+            AnimatedVisibility(
+                visible = state.shouldShowUnlockActionCard,
+                label = "UnlockActionCard",
+                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+            ) {
+                BitwardenActionCard(
+                    cardTitle = stringResource(id = R.string.set_up_unlock),
+                    actionText = stringResource(R.string.get_started),
+                    onActionClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
+                        }
+                    },
+                    onDismissClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
+                        }
+                    },
+                    leadingContent = {
+                        NotificationBadge(notificationCount = 1)
+                    },
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .padding(top = 12.dp, bottom = 16.dp),
+                )
+            }
 
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.approve_login_requests),
