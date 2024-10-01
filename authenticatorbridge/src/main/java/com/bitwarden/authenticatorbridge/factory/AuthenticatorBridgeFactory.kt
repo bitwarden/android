@@ -24,7 +24,7 @@ class AuthenticatorBridgeFactory(
         connectionType: AuthenticatorBridgeConnectionType,
         symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
     ): AuthenticatorBridgeManager = AuthenticatorBridgeManagerImpl(
-        applicationContext = applicationContext,
+        context = applicationContext,
         connectionType = connectionType,
         symmetricKeyStorageProvider = symmetricKeyStorageProvider,
     )

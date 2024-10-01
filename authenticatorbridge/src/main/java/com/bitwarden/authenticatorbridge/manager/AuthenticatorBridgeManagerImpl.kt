@@ -28,8 +28,7 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
 /**
  * Default implementation of [AuthenticatorBridgeManager].
  *
- * @param applicationContext The Context that will be used to bind to AuthenticatorBridgeService. Should be an
- * application context.
+ * @param applicationContext The Context that will be used to bind to AuthenticatorBridgeService.
  * @param connectionType Specifies which build variant to connect to.
  * @param symmetricKeyStorageProvider Provides access to local storage of the symmetric encryption
  * key.
@@ -39,12 +38,14 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
  * lifecycle events.
  */
 internal class AuthenticatorBridgeManagerImpl(
-    private val applicationContext: Context,
     private val connectionType: AuthenticatorBridgeConnectionType,
     private val symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
     callbackProvider: AuthenticatorBridgeCallbackProvider = StubAuthenticatorBridgeCallbackProvider(),
+    context: Context,
     processLifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get(),
 ) : AuthenticatorBridgeManager {
+
+    private val applicationContext = context.applicationContext
 
     /**
      * Main AuthenticatorBridgeService access point.

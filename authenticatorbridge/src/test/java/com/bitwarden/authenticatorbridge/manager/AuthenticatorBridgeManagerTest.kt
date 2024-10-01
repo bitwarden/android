@@ -40,7 +40,7 @@ class AuthenticatorBridgeManagerTest {
     private val testAuthenticatorBridgeCallbackProvider = TestAuthenticatorBridgeCallbackProvider()
 
     private val manager: AuthenticatorBridgeManagerImpl = AuthenticatorBridgeManagerImpl(
-        applicationContext = context,
+        context = context,
         connectionType = AuthenticatorBridgeConnectionType.DEV,
         symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
         callbackProvider = testAuthenticatorBridgeCallbackProvider,
