@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -74,6 +75,7 @@ fun BitwardenSearchTopAppBar(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
+                textStyle = BitwardenTheme.typography.bodyLarge,
                 placeholder = { Text(text = placeholder) },
                 value = searchTerm,
                 singleLine = true,
