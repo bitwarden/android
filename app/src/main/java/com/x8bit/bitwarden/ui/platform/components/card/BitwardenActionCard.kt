@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.card
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,19 +62,17 @@ fun BitwardenActionCard(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Row {
-                    leadingContent?.let {
-                        it()
-                        Spacer(Modifier.width(12.dp))
-                    }
-                    Text(
-                        text = cardTitle,
-                        style = BitwardenTheme.typography.titleMedium,
-                        color = BitwardenTheme.colorScheme.text.primary,
-                    )
+                leadingContent?.let {
+                    it()
+                    Spacer(Modifier.width(12.dp))
                 }
+                Text(
+                    text = cardTitle,
+                    style = BitwardenTheme.typography.titleMedium,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                )
+                Spacer(Modifier.weight(1f))
                 BitwardenStandardIconButton(
                     painter = rememberVectorPainter(id = R.drawable.ic_close),
                     contentDescription = stringResource(id = R.string.close),
