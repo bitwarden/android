@@ -239,7 +239,7 @@ class AuthenticatorBridgeManagerTest {
         serviceConnection.captured.onServiceConnected(mockk(), mockk())
 
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
-        assertEquals(fakeSymmetricKeyStorageProvider.symmetricKey, SYMMETRIC_KEY)
+        assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
         verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
@@ -325,7 +325,7 @@ class AuthenticatorBridgeManagerTest {
         callback.captured.onAccountsSync(encryptedAccounts)
         assertEquals(AccountSyncState.Success(expectedAccounts), manager.accountSyncStateFlow.value)
 
-        assertEquals(fakeSymmetricKeyStorageProvider.symmetricKey, SYMMETRIC_KEY)
+        assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
         verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
@@ -408,7 +408,7 @@ class AuthenticatorBridgeManagerTest {
         callback.captured.onAccountsSync(encryptedAccounts)
         assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
 
-        assertEquals(fakeSymmetricKeyStorageProvider.symmetricKey, SYMMETRIC_KEY)
+        assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
         verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
