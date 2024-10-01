@@ -19,7 +19,10 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -71,6 +74,10 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             )
         } just runs
     }
+    private val fido2CompletionManager: Fido2CompletionManager = mockk {
+        every { completeFido2Assertion(any()) } just runs
+        every { completeFido2GetCredentialRequest(any()) } just runs
+    }
 
     @Before
     fun setUp() {
@@ -78,6 +85,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             VaultUnlockScreen(
                 viewModel = viewModel,
                 biometricsManager = biometricsManager,
+                fido2CompletionManager = fido2CompletionManager,
             )
         }
     }
@@ -111,6 +119,28 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         captureBiometricsLockOut.captured()
         verify(exactly = 1) {
             viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2GetCredentialsError should call completeFido2GetCredentialRequest on fido2CompletionManager`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2GetCredentialsError)
+        verify(exactly = 1) {
+            fido2CompletionManager.completeFido2GetCredentialRequest(
+                result = Fido2GetCredentialsResult.Error,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2AssertCredentialError should call completeFido2AssertCredential on fido2CompletionManager`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError)
+        verify(exactly = 1) {
+            fido2CompletionManager.completeFido2Assertion(
+                result = Fido2CredentialAssertionResult.Error,
+            )
         }
     }
 
