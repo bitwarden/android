@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.ui.platform.theme.color.BitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.dynamicBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.type.BitwardenTypography
+import com.x8bit.bitwarden.ui.platform.theme.type.bitwardenTypography
 
 /**
  * Static wrapper to make accessing the theme components easier.
@@ -40,6 +42,14 @@ object BitwardenTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalBitwardenColorScheme.current
+
+    /**
+     * Retrieves the current [BitwardenTypography].
+     */
+    val typography: BitwardenTypography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalBitwardenTypography.current
 }
 
 /**
@@ -106,6 +116,7 @@ fun BitwardenTheme(
     CompositionLocalProvider(
         LocalBitwardenColorScheme provides bitwardenColorScheme,
         LocalNonMaterialColors provides nonMaterialColors,
+        LocalBitwardenTypography provides bitwardenTypography,
         LocalNonMaterialTypography provides nonMaterialTypography,
     ) {
         // Set overall theme based on color scheme and typography settings
@@ -193,6 +204,12 @@ private fun lightColorScheme(context: Context): ColorScheme =
 
 @ColorRes
 private fun Int.toColor(context: Context): Color = Color(context.getColor(this))
+
+/**
+ * Provides access to the Bitwarden typography throughout the app.
+ */
+val LocalBitwardenTypography: ProvidableCompositionLocal<BitwardenTypography> =
+    compositionLocalOf { bitwardenTypography }
 
 /**
  * Provides access to non material theme typography throughout the app.
