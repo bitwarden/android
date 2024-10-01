@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
@@ -83,9 +84,11 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -312,7 +315,6 @@ class VaultRepositoryImpl(
         }
     }
 
-    @Suppress("LongMethod")
     override fun sync() {
         val userId = activeUserId ?: return
         if (!syncJob.isCompleted) return
@@ -321,74 +323,7 @@ class VaultRepositoryImpl(
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
         mutableSendDataStateFlow.updateToPendingOrLoading()
-        syncJob = ioScope.launch {
-            val lastSyncInstant = settingsDiskSource
-                .getLastSyncTime(userId = userId)
-                ?.toEpochMilli()
-                ?: 0
-
-            syncService
-                .getAccountRevisionDateMillis()
-                .fold(
-                    onSuccess = { serverRevisionDate ->
-                        if (serverRevisionDate < lastSyncInstant) {
-                            // We can skip the actual sync call if there is no new data
-                            vaultDiskSource.resyncVaultData(userId)
-                            settingsDiskSource.storeLastSyncTime(
-                                userId = userId,
-                                lastSyncTime = clock.instant(),
-                            )
-                            return@launch
-                        }
-                    },
-                    onFailure = {
-                        updateVaultStateFlowsToError(it)
-                        return@launch
-                    },
-                )
-
-            syncService
-                .sync()
-                .fold(
-                    onSuccess = { syncResponse ->
-                        val localSecurityStamp =
-                            authDiskSource.userState?.activeAccount?.profile?.stamp
-                        val serverSecurityStamp = syncResponse.profile.securityStamp
-
-                        // Log the user out if the stamps do not match
-                        localSecurityStamp?.let {
-                            if (serverSecurityStamp != localSecurityStamp) {
-                                userLogoutManager.softLogout(userId = userId, isExpired = true)
-                                return@launch
-                            }
-                        }
-
-                        // Update user information with additional information from sync response
-                        authDiskSource.userState = authDiskSource
-                            .userState
-                            ?.toUpdatedUserStateJson(
-                                syncResponse = syncResponse,
-                            )
-
-                        unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
-                        storeProfileData(syncResponse = syncResponse)
-                        // Treat absent network policies as known empty data to
-                        // distinguish between unknown null data.
-                        authDiskSource.storePolicies(
-                            userId = userId,
-                            policies = syncResponse.policies.orEmpty(),
-                        )
-                        settingsDiskSource.storeLastSyncTime(
-                            userId = userId,
-                            lastSyncTime = clock.instant(),
-                        )
-                        vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-                    },
-                    onFailure = { throwable ->
-                        updateVaultStateFlowsToError(throwable)
-                    },
-                )
-        }
+        syncJob = ioScope.launch { syncInternal(userId) }
     }
 
     @Suppress("MagicNumber")
@@ -403,6 +338,20 @@ class VaultRepositoryImpl(
         ) {
             sync()
         }
+    }
+
+    override suspend fun syncFido2Credentials(): SyncVaultDataResult {
+        val userId = activeUserId
+            ?: return SyncVaultDataResult.Error(throwable = null)
+        syncJob = ioScope
+            .async { syncInternal(userId) }
+            .also {
+                return try {
+                    it.await()
+                } catch (e: CancellationException) {
+                    SyncVaultDataResult.Error(throwable = e)
+                }
+            }
     }
 
     override fun getVaultItemStateFlow(itemId: String): StateFlow<DataState<CipherView?>> =
@@ -1355,6 +1304,78 @@ class VaultRepositoryImpl(
             .onSuccess { vaultDiskSource.saveFolder(userId, it) }
     }
     //endregion Push Notification helpers
+
+    @Suppress("LongMethod")
+    private suspend fun syncInternal(userId: String): SyncVaultDataResult {
+        val lastSyncInstant = settingsDiskSource
+            .getLastSyncTime(userId = userId)
+            ?.toEpochMilli()
+            ?: 0
+
+        syncService
+            .getAccountRevisionDateMillis()
+            .fold(
+                onSuccess = { serverRevisionDate ->
+                    if (serverRevisionDate < lastSyncInstant) {
+                        // We can skip the actual sync call if there is no new data
+                        vaultDiskSource.resyncVaultData(userId)
+                        settingsDiskSource.storeLastSyncTime(
+                            userId = userId,
+                            lastSyncTime = clock.instant(),
+                        )
+                        return SyncVaultDataResult.Success
+                    }
+                },
+                onFailure = {
+                    updateVaultStateFlowsToError(it)
+                    return SyncVaultDataResult.Error(it)
+                },
+            )
+
+        syncService
+            .sync()
+            .fold(
+                onSuccess = { syncResponse ->
+                    val localSecurityStamp =
+                        authDiskSource.userState?.activeAccount?.profile?.stamp
+                    val serverSecurityStamp = syncResponse.profile.securityStamp
+
+                    // Log the user out if the stamps do not match
+                    localSecurityStamp?.let {
+                        if (serverSecurityStamp != localSecurityStamp) {
+                            userLogoutManager.softLogout(userId = userId, isExpired = true)
+                            return SyncVaultDataResult.Error(throwable = null)
+                        }
+                    }
+
+                    // Update user information with additional information from sync response
+                    authDiskSource.userState = authDiskSource
+                        .userState
+                        ?.toUpdatedUserStateJson(
+                            syncResponse = syncResponse,
+                        )
+
+                    unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
+                    storeProfileData(syncResponse = syncResponse)
+                    // Treat absent network policies as known empty data to
+                    // distinguish between unknown null data.
+                    authDiskSource.storePolicies(
+                        userId = userId,
+                        policies = syncResponse.policies.orEmpty(),
+                    )
+                    settingsDiskSource.storeLastSyncTime(
+                        userId = userId,
+                        lastSyncTime = clock.instant(),
+                    )
+                    vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
+                    return SyncVaultDataResult.Success
+                },
+                onFailure = { throwable ->
+                    updateVaultStateFlowsToError(throwable)
+                    return SyncVaultDataResult.Error(throwable)
+                },
+            )
+    }
 }
 
 private fun <T> Throwable.toNetworkOrErrorState(data: T?): DataState<T> =
