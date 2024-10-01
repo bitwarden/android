@@ -156,7 +156,6 @@ internal class AuthenticatorBridgeManagerImpl(
                 onSuccess = { it },
                 onFailure = { false },
             )
-            ?: false
 
         if (!haveCorrectKey) {
             // If we don't have the correct key, query for key:
