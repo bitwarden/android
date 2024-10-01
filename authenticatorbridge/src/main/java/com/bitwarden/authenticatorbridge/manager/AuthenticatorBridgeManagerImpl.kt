@@ -187,7 +187,7 @@ internal class AuthenticatorBridgeManagerImpl(
         service.safeCall { registerBridgeServiceCallback(authenticatorBridgeCallback) }
 
         // Sync data:
-        service.safeCall { syncAccounts() } ?: unbindService()
+        service.safeCall { syncAccounts() }
     }
 
     private fun onServiceDisconnected() {
