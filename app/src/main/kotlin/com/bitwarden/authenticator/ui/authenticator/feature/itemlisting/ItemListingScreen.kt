@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -87,7 +86,6 @@ fun ItemListingScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val pullToRefreshState = rememberPullToRefreshState()
     val context = LocalContext.current
     var shouldShowPermissionDialog by rememberSaveable { mutableStateOf(false) }
     val launcher = permissionsManager.getLauncher { isGranted ->
@@ -102,7 +100,6 @@ fun ItemListingScreen(
         when (event) {
             is ItemListingEvent.NavigateBack -> onNavigateBack()
             is ItemListingEvent.NavigateToSearch -> onNavigateToSearch()
-            is ItemListingEvent.DismissPullToRefresh -> pullToRefreshState.endRefresh()
             is ItemListingEvent.NavigateToQrCodeScanner -> onNavigateToQrCodeScanner()
             is ItemListingEvent.NavigateToManualAddItem -> onNavigateToManualKeyEntry()
             is ItemListingEvent.ShowToast -> {

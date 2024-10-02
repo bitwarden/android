@@ -634,10 +634,6 @@ data class ItemListingState(
  * Represents a set of events related to viewing the item listing.
  */
 sealed class ItemListingEvent {
-    /**
-     * Dismisses the pull-to-refresh indicator.
-     */
-    data object DismissPullToRefresh : ItemListingEvent()
 
     /**
      * Navigates to the Create Account screen.

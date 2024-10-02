@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +69,7 @@ fun VaultVerificationCodeItem(
             modifier = Modifier
                 .combinedClickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                    indication = ripple(color = MaterialTheme.colorScheme.primary),
                     onClick = onItemClick,
                     onLongClick = {
                         shouldShowDropdownMenu = true

@@ -20,13 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -334,7 +334,7 @@ private fun AdvancedOptions(
                 .padding(vertical = 4.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .clickable(
-                    indication = rememberRipple(
+                    indication = ripple(
                         bounded = true,
                         color = MaterialTheme.colorScheme.primary,
                     ),

@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,7 +49,7 @@ fun BitwardenSwitch(
                 if (onCheckedChange != null) {
                     this.clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                        indication = ripple(color = MaterialTheme.colorScheme.primary),
                         onClick = { onCheckedChange.invoke(!isChecked) },
                     )
                 } else {
