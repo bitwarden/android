@@ -370,7 +370,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Unlock with PIN code")
+            .onAllNodesWithText("Require master password on app restart?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
