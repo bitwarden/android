@@ -8,13 +8,9 @@ import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
 import androidx.core.os.persistableBundleOf
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.toAnnotatedString
-import com.bitwarden.data.platform.manager.clipboard.ClearClipboardWorker
 
 /**
  * Default implementation of the [BitwardenClipboardManager] interface.
@@ -48,17 +44,6 @@ class BitwardenClipboardManagerImpl(
                 )
                 .show()
         }
-
-        val clearClipboardRequest: OneTimeWorkRequest =
-            OneTimeWorkRequest
-                .Builder(ClearClipboardWorker::class.java)
-                .build()
-
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "ClearClipboard",
-            ExistingWorkPolicy.REPLACE,
-            clearClipboardRequest,
-        )
     }
 
     override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: String?) {
