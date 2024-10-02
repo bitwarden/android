@@ -159,7 +159,7 @@ private fun FeatureFlagContent(
  * The content for the onboarding override feature flag.
  */
 @Composable
-fun OnboardingOverrideContent(
+private fun OnboardingOverrideContent(
     isRestartOnboardingEnabled: Boolean,
     onStartOnboarding: () -> Unit,
     isCarouselOverrideEnabled: Boolean,
@@ -207,7 +207,7 @@ fun OnboardingOverrideContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),
-            style = MaterialTheme.typography.bodySmall,
+            style = BitwardenTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
