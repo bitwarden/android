@@ -3,12 +3,9 @@ package com.x8bit.bitwarden.ui.platform.components.appbar
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +20,9 @@ import androidx.compose.ui.text.input.ImeAction
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
+import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -47,13 +46,7 @@ fun BitwardenSearchTopAppBar(
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
         modifier = modifier.testTag("HeaderBarComponent"),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface,
-            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
+        colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             navigationIcon?.let {
@@ -69,11 +62,9 @@ fun BitwardenSearchTopAppBar(
         },
         title = {
             TextField(
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
+                colors = bitwardenTextFieldColors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
                 ),
                 textStyle = BitwardenTheme.typography.bodyLarge,
                 placeholder = { Text(text = placeholder) },

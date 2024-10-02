@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -141,12 +140,12 @@ fun VaultItemSecureNoteContent(
                 Text(
                     text = "${stringResource(id = R.string.date_updated)}: ",
                     style = BitwardenTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                 )
                 Text(
                     text = commonState.lastUpdated,
                     style = BitwardenTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                 )
             }
         }

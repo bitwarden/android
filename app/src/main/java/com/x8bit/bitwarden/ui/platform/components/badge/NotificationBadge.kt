@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 
 /**
  * Reusable component for displaying a notification badge.
@@ -30,8 +28,8 @@ fun NotificationBadge(
     notificationCount: Int,
     modifier: Modifier = Modifier,
     isVisible: Boolean = true,
-    backgroundColor: Color = LocalNonMaterialColors.current.fingerprint,
-    contentColor: Color = MaterialTheme.colorScheme.onSecondary,
+    backgroundColor: Color = BitwardenTheme.colorScheme.icon.badgeBackground,
+    contentColor: Color = BitwardenTheme.colorScheme.icon.badgeForeground,
 ) {
     AnimatedVisibility(
         visible = isVisible,

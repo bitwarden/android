@@ -22,14 +22,6 @@ import org.junit.jupiter.api.Test
 
 class BitwardenRemoteViewsTest {
     private val testContext: Context = mockk {
-        every { this@mockk.getColor(R.color.dark_on_surface) } returns DARK_ON_SURFACE_COLOR
-        every {
-            this@mockk.getColor(R.color.dark_on_surface_variant)
-        } returns DARK_ON_SURFACE_VARIANT_COLOR
-        every { this@mockk.getColor(R.color.dark_surface) } returns DARK_SURFACE_COLOR
-        every { this@mockk.getColor(R.color.on_surface) } returns ON_SURFACE_COLOR
-        every { this@mockk.getColor(R.color.on_surface_variant) } returns ON_SURFACE_VARIANT_COLOR
-        every { this@mockk.getColor(R.color.surface) } returns SURFACE_COLOR
         every { this@mockk.getString(R.string.app_name) } returns APP_NAME
         every { this@mockk.getString(R.string.go_to_my_vault) } returns GO_TO_MY_VAULT
         every { this@mockk.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
@@ -108,25 +100,25 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.container,
                     "setBackgroundColor",
-                    SURFACE_COLOR,
+                    COLOR_LIGHT_BACKGROUND,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.icon,
                     "setColorFilter",
-                    ON_SURFACE_COLOR,
+                    COLOR_LIGHT_ICON_TINT,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.title,
                     "setTextColor",
-                    ON_SURFACE_COLOR,
+                    COLOR_LIGHT_TEXT_PRIMARY,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.subtitle,
                     "setTextColor",
-                    ON_SURFACE_VARIANT_COLOR,
+                    COLOR_LIGHT_TEXT_SECONDARY,
                 )
         }
     }
@@ -181,25 +173,25 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.container,
                     "setBackgroundColor",
-                    DARK_SURFACE_COLOR,
+                    COLOR_DARK_BACKGROUND,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.icon,
                     "setColorFilter",
-                    DARK_ON_SURFACE_COLOR,
+                    COLOR_DARK_ICON_TINT,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.title,
                     "setTextColor",
-                    DARK_ON_SURFACE_COLOR,
+                    COLOR_DARK_TEXT_PRIMARY,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.subtitle,
                     "setTextColor",
-                    DARK_ON_SURFACE_VARIANT_COLOR,
+                    COLOR_DARK_TEXT_SECONDARY,
                 )
         }
     }
@@ -245,19 +237,19 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.container,
                     "setBackgroundColor",
-                    SURFACE_COLOR,
+                    COLOR_LIGHT_BACKGROUND,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.title,
                     "setTextColor",
-                    ON_SURFACE_COLOR,
+                    COLOR_LIGHT_TEXT_PRIMARY,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.subtitle,
                     "setTextColor",
-                    ON_SURFACE_VARIANT_COLOR,
+                    COLOR_LIGHT_TEXT_SECONDARY,
                 )
         }
     }
@@ -303,19 +295,19 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.container,
                     "setBackgroundColor",
-                    DARK_SURFACE_COLOR,
+                    COLOR_DARK_BACKGROUND,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.title,
                     "setTextColor",
-                    DARK_ON_SURFACE_COLOR,
+                    COLOR_DARK_TEXT_PRIMARY,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
                     R.id.subtitle,
                     "setTextColor",
-                    DARK_ON_SURFACE_VARIANT_COLOR,
+                    COLOR_DARK_TEXT_SECONDARY,
                 )
         }
     }
@@ -351,7 +343,7 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.container,
                     "setBackgroundColor",
-                    DARK_SURFACE_COLOR,
+                    COLOR_LIGHT_BACKGROUND,
                 )
         } just runs
         every {
@@ -359,7 +351,7 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.icon,
                     "setColorFilter",
-                    DARK_ON_SURFACE_COLOR,
+                    COLOR_LIGHT_ICON_TINT,
                 )
         } just runs
         every {
@@ -367,7 +359,7 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.icon,
                     "setColorFilter",
-                    ON_SURFACE_COLOR,
+                    COLOR_LIGHT_ICON_TINT,
                 )
         } just runs
         every {
@@ -375,7 +367,7 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.title,
                     "setTextColor",
-                    DARK_ON_SURFACE_COLOR,
+                    COLOR_LIGHT_TEXT_PRIMARY,
                 )
         } just runs
         every {
@@ -383,22 +375,24 @@ class BitwardenRemoteViewsTest {
                 .setInt(
                     R.id.subtitle,
                     "setTextColor",
-                    DARK_ON_SURFACE_VARIANT_COLOR,
+                    COLOR_LIGHT_TEXT_SECONDARY,
                 )
         } just runs
     }
 }
 
 private const val APP_NAME = "Bitwarden"
-private const val DARK_ON_SURFACE_COLOR: Int = 321
-private const val DARK_ON_SURFACE_VARIANT_COLOR: Int = 654
-private const val DARK_SURFACE_COLOR: Int = 987
+private const val COLOR_DARK_BACKGROUND: Int = -15590873
+private const val COLOR_DARK_ICON_TINT: Int = -6904901
+private const val COLOR_DARK_TEXT_PRIMARY: Int = -788743
+private const val COLOR_DARK_TEXT_SECONDARY: Int = -7825227
+private const val COLOR_LIGHT_BACKGROUND: Int = -788743
+private const val COLOR_LIGHT_ICON_TINT: Int = -10850927
+private const val COLOR_LIGHT_TEXT_PRIMARY: Int = -14999511
+private const val COLOR_LIGHT_TEXT_SECONDARY: Int = -10850927
 private const val GO_TO_MY_VAULT = "Go to my vault"
 private const val ICON_RES: Int = 41421421
 private const val NAME: String = "NAME"
-private const val ON_SURFACE_COLOR: Int = 123
-private const val ON_SURFACE_VARIANT_COLOR: Int = 456
 private const val PACKAGE_NAME: String = "com.x8bit.bitwarden"
 private const val SUBTITLE: String = "SUBTITLE"
-private const val SURFACE_COLOR: Int = 789
 private const val VAULT_IS_LOCKED = "Vault is locked"

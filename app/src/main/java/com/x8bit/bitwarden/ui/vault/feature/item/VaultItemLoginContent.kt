@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -346,12 +345,12 @@ private fun PasswordHistoryCount(
         Text(
             text = "${stringResource(id = R.string.password_history)}: ",
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.secondary,
         )
         Text(
             text = passwordHistoryCount.toString(),
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.primary,
+            color = BitwardenTheme.colorScheme.text.interaction,
             modifier = Modifier.clickable(onClick = onPasswordHistoryClick),
         )
     }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,7 +69,7 @@ fun PinInputDialog(
                 )
                 // This background is necessary for the dialog to not be transparent.
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = BitwardenTheme.colorScheme.background.primary,
                     shape = RoundedCornerShape(28.dp),
                 ),
             horizontalAlignment = Alignment.End,
@@ -82,7 +81,7 @@ fun PinInputDialog(
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.enter_pin),
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
             )
             Spacer(modifier = Modifier.height(height = 16.dp))
@@ -100,7 +99,7 @@ fun PinInputDialog(
                         .testTag(tag = "AlertContentText")
                         .fillMaxWidth(),
                     text = stringResource(id = R.string.set_pin_description),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))

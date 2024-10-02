@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -51,7 +50,9 @@ fun BitwardenTextRow(
             .clickable(
                 enabled = isEnabled,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = onClick,
             )
             .semantics(mergeDescendants = true) { },
@@ -72,17 +73,21 @@ fun BitwardenTextRow(
                 Text(
                     text = text,
                     style = BitwardenTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = if (isEnabled) 1.0f else 0.38f,
-                    ),
+                    color = if (isEnabled) {
+                        BitwardenTheme.colorScheme.text.primary
+                    } else {
+                        BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                    },
                 )
                 description?.let {
                     Text(
                         text = it,
                         style = BitwardenTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                            alpha = if (isEnabled) 1.0f else 0.38f,
-                        ),
+                        color = if (isEnabled) {
+                            BitwardenTheme.colorScheme.text.secondary
+                        } else {
+                            BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                        },
                     )
                 }
             }

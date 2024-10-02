@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,16 +38,14 @@ fun AttachmentItemContent(
     var shouldShowSizeWarningDialog by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = modifier
-            .bottomDivider(
-                color = MaterialTheme.colorScheme.outlineVariant,
-            )
+            .bottomDivider()
             .defaultMinSize(minHeight = 56.dp)
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = attachmentItem.title,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -59,7 +56,7 @@ fun AttachmentItemContent(
 
         Text(
             text = attachmentItem.displaySize,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.labelSmall,
             modifier = Modifier,
         )
@@ -82,7 +79,6 @@ fun AttachmentItemContent(
 
                 onAttachmentDownloadClick(attachmentItem)
             },
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 
@@ -101,7 +97,10 @@ fun AttachmentItemContent(
                     style = BitwardenTheme.typography.bodyMedium,
                 )
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            containerColor = BitwardenTheme.colorScheme.background.primary,
+            iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
+            titleContentColor = BitwardenTheme.colorScheme.text.primary,
+            textContentColor = BitwardenTheme.colorScheme.text.primary,
         )
     }
 

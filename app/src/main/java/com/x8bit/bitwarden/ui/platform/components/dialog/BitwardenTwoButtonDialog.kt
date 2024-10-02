@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogWidth
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -60,8 +59,8 @@ fun BitwardenTwoButtonDialog(
     onConfirmClick: () -> Unit,
     onDismissClick: () -> Unit,
     onDismissRequest: () -> Unit,
-    confirmTextColor: Color? = null,
-    dismissTextColor: Color? = null,
+    confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -83,7 +82,7 @@ fun BitwardenTwoButtonDialog(
                 )
                 // This background is necessary for the dialog to not be transparent.
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = BitwardenTheme.colorScheme.background.primary,
                     shape = RoundedCornerShape(28.dp),
                 ),
             horizontalAlignment = Alignment.End,
@@ -96,18 +95,13 @@ fun BitwardenTwoButtonDialog(
                         .padding(horizontal = 24.dp)
                         .fillMaxWidth(),
                     text = title,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.headlineSmall,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
             if (scrollState.canScrollBackward) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant),
-                )
+                BitwardenHorizontalDivider()
             }
             Text(
                 modifier = Modifier
@@ -117,16 +111,11 @@ fun BitwardenTwoButtonDialog(
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
                 text = message,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.bodyMedium,
             )
             if (scrollState.canScrollForward) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant),
-                )
+                BitwardenHorizontalDivider()
             }
             Spacer(modifier = Modifier.height(12.dp))
             FlowRow(

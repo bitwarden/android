@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -60,7 +59,7 @@ fun EnvironmentSelector(
                 .clickable(
                     indication = ripple(
                         bounded = true,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = BitwardenTheme.colorScheme.background.pressed,
                     ),
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = { shouldShowDialog = !shouldShowDialog },
@@ -74,19 +73,19 @@ fun EnvironmentSelector(
             Text(
                 text = labelText,
                 style = BitwardenTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.primary,
                 modifier = Modifier.padding(end = 12.dp),
             )
             Text(
                 text = selectedOption.displayLabel(),
                 style = BitwardenTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
+                color = BitwardenTheme.colorScheme.text.interaction,
                 modifier = Modifier.padding(end = 8.dp),
             )
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
                 contentDescription = stringResource(id = R.string.region),
-                tint = MaterialTheme.colorScheme.primary,
+                tint = BitwardenTheme.colorScheme.icon.secondary,
             )
         }
 

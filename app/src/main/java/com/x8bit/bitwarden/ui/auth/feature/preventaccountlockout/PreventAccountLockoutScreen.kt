@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -97,14 +96,13 @@ private fun NeverLoseAccessContent(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(size = 4.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest),
+            .background(BitwardenTheme.colorScheme.background.tertiary),
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.never_lose_access_to_your_vault),
             style = BitwardenTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier.padding(horizontal = 24.dp),
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -113,11 +111,11 @@ private fun NeverLoseAccessContent(
                 R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
             ),
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier.padding(horizontal = 24.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
-        BitwardenHorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        BitwardenHorizontalDivider()
         Spacer(modifier = Modifier.height(16.dp))
         AccountRecoveryTipRow(
             title = stringResource(R.string.create_a_hint),
@@ -128,7 +126,7 @@ private fun NeverLoseAccessContent(
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        BitwardenHorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        BitwardenHorizontalDivider()
         Spacer(modifier = Modifier.height(16.dp))
         AccountRecoveryTipRow(
             title = stringResource(R.string.write_your_password_down),
@@ -154,7 +152,7 @@ private fun AccountRecoveryTipRow(
         Icon(
             painter = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
                 .size(32.dp)
                 .clearAndSetSemantics { },
@@ -164,13 +162,13 @@ private fun AccountRecoveryTipRow(
             Text(
                 text = title,
                 style = BitwardenTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
         }
     }

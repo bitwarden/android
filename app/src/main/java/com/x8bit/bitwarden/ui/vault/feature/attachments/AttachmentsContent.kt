@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,7 +49,7 @@ fun AttachmentsContent(
                 Text(
                     text = stringResource(id = R.string.no_attachments),
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .testTag("NoAttachmentsLabel")
@@ -88,7 +87,7 @@ fun AttachmentsContent(
                     .newAttachment
                     ?.displayName
                     ?: stringResource(id = R.string.no_file_chosen),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 style = BitwardenTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -109,7 +108,7 @@ fun AttachmentsContent(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(id = R.string.max_file_size),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 style = BitwardenTheme.typography.bodySmall,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -147,10 +146,7 @@ private fun AttachmentListEntry(
 
     Row(
         modifier = Modifier
-            .bottomDivider(
-                paddingStart = 16.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
-            )
+            .bottomDivider(paddingStart = 16.dp)
             .defaultMinSize(minHeight = 56.dp)
             .testTag("AttachmentRow")
             .padding(vertical = 8.dp)
@@ -159,7 +155,7 @@ private fun AttachmentListEntry(
     ) {
         Text(
             text = attachmentItem.title,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -170,7 +166,7 @@ private fun AttachmentListEntry(
 
         Text(
             text = attachmentItem.displaySize,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.labelSmall,
             modifier = Modifier,
         )
@@ -181,7 +177,6 @@ private fun AttachmentListEntry(
             vectorIconRes = R.drawable.ic_trash,
             contentDescription = stringResource(id = R.string.delete),
             onClick = { shouldShowDeleteDialog = true },
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

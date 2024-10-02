@@ -3,8 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components.button
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,6 +10,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -31,7 +30,7 @@ fun BitwardenStandardIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    contentColor: Color = LocalContentColor.current,
+    contentColor: Color = BitwardenTheme.colorScheme.icon.primary,
 ) {
     BitwardenStandardIconButton(
         painter = rememberVectorPainter(id = vectorIconRes),
@@ -59,14 +58,12 @@ fun BitwardenStandardIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    contentColor: Color = LocalContentColor.current,
+    contentColor: Color = BitwardenTheme.colorScheme.icon.primary,
 ) {
     IconButton(
         modifier = modifier.semantics(mergeDescendants = true) {},
         onClick = onClick,
-        colors = IconButtonDefaults.iconButtonColors(
-            contentColor = contentColor,
-        ),
+        colors = bitwardenStandardIconButtonColors(contentColor = contentColor),
         enabled = isEnabled,
     ) {
         Icon(

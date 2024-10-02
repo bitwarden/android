@@ -12,9 +12,11 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
+import androidx.compose.ui.graphics.toArgb
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.ui.autofill.iconTint
 
 /**
  * Try creating an [InlinePresentation] for [autofillCipher] with this [InlinePresentationSpec]. If
@@ -91,7 +93,7 @@ private fun InlinePresentationSpec.createInlinePresentationOrNull(
         )
         .run {
             if (shouldTintIcon) {
-                setTint(autofillAppInfo.contentColor)
+                setTint(autofillAppInfo.context.iconTint.toArgb())
             } else {
                 // Remove tinting
                 setTintBlendMode(BlendMode.DST)
@@ -121,17 +123,3 @@ private fun InlinePresentationSpec.createInlinePresentationOrNull(
         false,
     )
 }
-
-/**
- * Get the content color for the inline presentation.
- */
-private val AutofillAppInfo.contentColor: Int
-    get() {
-        val colorRes = if (context.isSystemDarkMode) {
-            R.color.dark_on_surface
-        } else {
-            R.color.on_surface
-        }
-
-        return context.getColor(colorRes)
-    }

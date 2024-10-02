@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -35,7 +34,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -131,14 +130,14 @@ fun DeleteAccountScreen(
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_warning),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.error,
+                tint = BitwardenTheme.colorScheme.status.error,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.deleting_your_account_is_permanent),
                 style = BitwardenTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.error,
+                color = BitwardenTheme.colorScheme.status.error,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -147,7 +146,7 @@ fun DeleteAccountScreen(
             Text(
                 text = stringResource(id = R.string.delete_account_explanation),
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.primary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -171,7 +170,7 @@ fun DeleteAccountScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(12.dp))
-            BitwardenOutlinedButton(
+            BitwardenOutlinedErrorButton(
                 label = stringResource(id = R.string.cancel),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(DeleteAccountAction.CancelClick) }

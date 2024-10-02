@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -77,6 +76,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -309,7 +309,9 @@ private fun TermsAndPrivacySwitch(
             }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = { onCheckedChange.invoke(!isChecked) },
             )
             .padding(start = 16.dp)
@@ -321,12 +323,13 @@ private fun TermsAndPrivacySwitch(
                 .width(52.dp),
             checked = isChecked,
             onCheckedChange = null,
+            colors = bitwardenSwitchColors(),
         )
         Column(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
             Text(
                 text = stringResource(id = R.string.accept_policies),
                 style = BitwardenTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
             FlowRow(
                 horizontalArrangement = Arrangement.Start,
@@ -340,12 +343,11 @@ private fun TermsAndPrivacySwitch(
                     onClick = onTermsClick,
                     style = BitwardenTheme.typography.bodyMedium,
                     innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
-                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     text = ",",
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -354,7 +356,6 @@ private fun TermsAndPrivacySwitch(
                     onClick = onPrivacyPolicyClick,
                     style = BitwardenTheme.typography.bodyMedium,
                     innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
-                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }

@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -38,6 +37,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.slider.color.bitwardenSliderColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -89,6 +90,7 @@ fun BitwardenSlider(
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            colors = bitwardenTextFieldColors(),
             modifier = Modifier
                 .onPreviewKeyEvent { keyEvent ->
                     when (keyEvent.key) {
@@ -111,23 +113,17 @@ fun BitwardenSlider(
                 .width(width = 16.dp + labelTextWidth + 16.dp),
         )
 
-        val colors = SliderDefaults.colors(
-            activeTickColor = Color.Transparent,
-            inactiveTickColor = Color.Transparent,
-            disabledActiveTickColor = Color.Transparent,
-            disabledInactiveTickColor = Color.Transparent,
-        )
         Slider(
             value = sliderValue.toFloat(),
             onValueChange = { newValue -> onValueChange(newValue.toInt(), true) },
             onValueChangeFinished = { onValueChange(sliderValue, false) },
             valueRange = range.start.toFloat()..range.endInclusive.toFloat(),
             steps = range.endInclusive - 1,
-            colors = colors,
+            colors = bitwardenSliderColors(),
             thumb = {
                 SliderDefaults.Thumb(
                     interactionSource = remember { MutableInteractionSource() },
-                    colors = colors,
+                    colors = bitwardenSliderColors(),
                     thumbSize = DpSize(width = 20.dp, height = 20.dp),
                 )
             },
@@ -135,7 +131,7 @@ fun BitwardenSlider(
                 SliderDefaults.Track(
                     modifier = Modifier.height(height = 4.dp),
                     drawStopIndicator = null,
-                    colors = colors,
+                    colors = bitwardenSliderColors(),
                     sliderState = sliderState,
                     thumbTrackGapSize = 0.dp,
                 )

@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -24,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
@@ -39,8 +38,8 @@ fun BitwardenScaffold(
     floatingActionButton: @Composable () -> Unit = { },
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     pullToRefreshState: BitwardenPullToRefreshState = rememberBitwardenPullToRefreshState(),
-    containerColor: Color = MaterialTheme.colorScheme.surface,
-    contentColor: Color = contentColorFor(containerColor),
+    containerColor: Color = BitwardenTheme.colorScheme.background.primary,
+    contentColor: Color = BitwardenTheme.colorScheme.text.primary,
     contentWindowInsets: WindowInsets = ScaffoldDefaults
         .contentWindowInsets
         .exclude(WindowInsets.navigationBars),
@@ -80,6 +79,8 @@ fun BitwardenScaffold(
                         .align(Alignment.TopCenter),
                     isRefreshing = pullToRefreshState.isRefreshing,
                     state = internalPullToRefreshState,
+                    containerColor = BitwardenTheme.colorScheme.background.secondary,
+                    color = BitwardenTheme.colorScheme.icon.secondary,
                 )
             }
         },

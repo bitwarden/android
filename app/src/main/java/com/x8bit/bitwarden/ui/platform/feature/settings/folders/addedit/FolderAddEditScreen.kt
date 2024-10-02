@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -40,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -85,7 +85,7 @@ fun FolderAddEditScreen(
                 viewModel.trySendAction(FolderAddEditAction.DeleteClick)
             },
             onDismissRequest = { shouldShowConfirmationDialog = false },
-            confirmTextColor = MaterialTheme.colorScheme.error,
+            confirmTextColor = BitwardenTheme.colorScheme.status.error,
         )
     }
 

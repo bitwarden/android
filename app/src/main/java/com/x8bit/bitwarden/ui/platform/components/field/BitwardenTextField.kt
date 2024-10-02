@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.toPx
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -80,6 +80,7 @@ fun BitwardenTextField(
     }
 
     OutlinedTextField(
+        colors = bitwardenTextFieldColors(),
         modifier = modifier
             .onGloballyPositioned { widthPx = it.size.width }
             .focusRequester(focusRequester),
@@ -91,15 +92,18 @@ fun BitwardenTextField(
                 Icon(
                     painter = iconResource.iconPainter,
                     contentDescription = iconResource.contentDescription,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = BitwardenTheme.colorScheme.icon.primary,
                 )
             }
         },
-        trailingIcon = trailingIconContent?.let {
-            trailingIconContent
-        },
+        trailingIcon = trailingIconContent,
         placeholder = placeholder?.let {
-            { Text(text = it) }
+            {
+                Text(
+                    text = it,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                )
+            }
         },
         supportingText = hint?.let {
             {

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -92,7 +91,7 @@ private fun SetupCompleteContent(
         Text(
             text = stringResource(R.string.youre_all_set),
             style = BitwardenTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .align(CenterHorizontally)
@@ -102,7 +101,7 @@ private fun SetupCompleteContent(
         Text(
             text = stringResource(R.string.what_bitwarden_has_to_offer),
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .align(CenterHorizontally)

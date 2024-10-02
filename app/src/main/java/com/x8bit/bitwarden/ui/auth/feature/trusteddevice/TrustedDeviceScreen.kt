@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -186,7 +185,7 @@ private fun TrustedDeviceScaffold(
                     state.environmentLabel,
                 ),
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .testTag("LoggingInAsLabel")
                     .padding(horizontal = 16.dp)

@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -68,7 +67,6 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
@@ -488,7 +486,7 @@ private fun SessionTimeoutRow(
         Text(
             text = selectedVaultTimeoutType.displayLabel(),
             style = BitwardenTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier.testTag("SessionTimeoutStatusLabel"),
         )
     }
@@ -564,7 +562,7 @@ private fun SessionCustomTimeoutRow(
         Text(
             text = formattedTime,
             style = BitwardenTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
         )
     }
 
@@ -641,9 +639,11 @@ private fun SessionTimeoutActionRow(
         Text(
             text = selectedVaultTimeoutAction.displayLabel(),
             style = BitwardenTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                alpha = if (isEnabled) 1.0f else 0.38f,
-            ),
+            color = if (isEnabled) {
+                BitwardenTheme.colorScheme.text.primary
+            } else {
+                BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+            },
             modifier = Modifier.testTag("SessionTimeoutActionStatusLabel"),
         )
     }
@@ -737,7 +737,7 @@ private fun FingerPrintPhraseDialog(
         title = {
             Text(
                 text = stringResource(id = R.string.fingerprint_phrase),
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -746,19 +746,22 @@ private fun FingerPrintPhraseDialog(
             Column {
                 Text(
                     text = "${stringResource(id = R.string.your_accounts_fingerprint)}:",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = fingerprintPhrase(),
-                    color = LocalNonMaterialColors.current.fingerprint,
+                    color = BitwardenTheme.colorScheme.text.codePink,
                     style = BitwardenTheme.typography.sensitiveInfoSmall,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
-        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        containerColor = BitwardenTheme.colorScheme.background.primary,
+        iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
+        titleContentColor = BitwardenTheme.colorScheme.text.primary,
+        textContentColor = BitwardenTheme.colorScheme.text.primary,
     )
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,7 +57,7 @@ fun PasswordHistoryListItem(
                     visualTransformation = nonLetterColorVisualTransformation(),
                 ),
                 style = textStyle,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 modifier = Modifier
                     .testTag("GeneratedPasswordValue")
                     .fillMaxWidth()
@@ -68,7 +67,7 @@ fun PasswordHistoryListItem(
             Text(
                 text = supportingLabel,
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier.testTag("GeneratedPasswordDateLabel"),
             )
         }
@@ -77,7 +76,7 @@ fun PasswordHistoryListItem(
             vectorIconRes = R.drawable.ic_copy,
             contentDescription = stringResource(id = R.string.copy),
             onClick = onCopyClick,
-            contentColor = MaterialTheme.colorScheme.primary,
+            contentColor = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.testTag(tag = "CopyPasswordValueButton"),
         )
     }

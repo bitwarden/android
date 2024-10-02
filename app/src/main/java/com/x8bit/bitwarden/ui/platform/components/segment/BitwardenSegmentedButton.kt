@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import com.x8bit.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import kotlinx.collections.immutable.ImmutableList
 
 /**
@@ -28,6 +29,7 @@ fun BitwardenSegmentedButton(
             SegmentedButton(
                 selected = option.isChecked,
                 onClick = option.onClick,
+                colors = bitwardenSegmentedButtonColors(),
                 shape = SegmentedButtonDefaults.itemShape(
                     index = index,
                     count = options.size,

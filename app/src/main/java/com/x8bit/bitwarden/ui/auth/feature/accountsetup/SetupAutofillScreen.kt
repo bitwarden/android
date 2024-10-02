@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -221,14 +220,14 @@ private fun OrderedHeaderContent() {
         Text(
             text = stringResource(R.string.turn_on_autofill),
             style = BitwardenTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.use_autofill_to_log_into_your_accounts),
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             // Apply similar line breaks to design
             modifier = Modifier.sizeIn(maxWidth = 300.dp),

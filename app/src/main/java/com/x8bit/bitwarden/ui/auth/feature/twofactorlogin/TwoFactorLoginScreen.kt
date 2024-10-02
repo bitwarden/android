@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -225,7 +224,7 @@ private fun TwoFactorLoginScreenContent(
             text = state.authMethod.description(state.displayEmail)(),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

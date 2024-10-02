@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.account
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -10,6 +9,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -25,18 +25,19 @@ fun BitwardenPlaceholderAccountActionItem(
 ) {
     IconButton(
         onClick = onClick,
+        colors = bitwardenStandardIconButtonColors(),
         modifier = Modifier
             .semantics(mergeDescendants = true) { testTag = "CurrentActiveAccount" },
     ) {
         Icon(
             painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.secondaryContainer,
+            tint = BitwardenTheme.colorScheme.background.tertiary,
         )
         Icon(
             painter = rememberVectorPainter(id = R.drawable.ic_dots),
             contentDescription = stringResource(id = R.string.account),
-            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            tint = BitwardenTheme.colorScheme.text.interaction,
         )
     }
 }

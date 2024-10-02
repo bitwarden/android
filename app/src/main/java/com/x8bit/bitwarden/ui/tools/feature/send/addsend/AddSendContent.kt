@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -151,7 +150,7 @@ fun AddSendContent(
                 if (isShared) {
                     Text(
                         text = type.name.orEmpty(),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.primary,
                         style = BitwardenTheme.typography.bodyMedium,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -160,7 +159,7 @@ fun AddSendContent(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(id = R.string.max_file_size),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.secondary,
                         style = BitwardenTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -172,7 +171,7 @@ fun AddSendContent(
                             .testTag("SendCurrentFileNameLabel")
                             .align(Alignment.CenterHorizontally),
                         text = type.name ?: stringResource(id = R.string.no_file_chosen),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.secondary,
                         style = BitwardenTheme.typography.bodySmall,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -195,7 +194,7 @@ fun AddSendContent(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = stringResource(id = R.string.max_file_size),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.secondary,
                         style = BitwardenTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -204,7 +203,7 @@ fun AddSendContent(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = stringResource(id = R.string.type_file_info),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.secondary,
                         style = BitwardenTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -218,14 +217,14 @@ fun AddSendContent(
                     ) {
                         Text(
                             text = type.name.orEmpty(),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = BitwardenTheme.colorScheme.text.primary,
                             style = BitwardenTheme.typography.bodyLarge,
                             modifier = Modifier.weight(1f),
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = type.displaySize.orEmpty(),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = BitwardenTheme.colorScheme.text.primary,
                             style = BitwardenTheme.typography.bodyMedium,
                         )
                     }
@@ -309,7 +308,7 @@ private fun AddSendOptions(
     ) {
         Text(
             text = stringResource(id = R.string.options),
-            color = MaterialTheme.colorScheme.primary,
+            color = BitwardenTheme.colorScheme.text.interaction,
             style = BitwardenTheme.typography.labelLarge,
             modifier = Modifier.padding(end = 8.dp),
         )
@@ -322,7 +321,7 @@ private fun AddSendOptions(
                 },
             ),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = BitwardenTheme.colorScheme.icon.secondary,
         )
     }
     // Hide all content if not expanded:
@@ -382,7 +381,7 @@ private fun AddSendOptions(
                 Text(
                     text = stringResource(id = R.string.deletion_date_info),
                     style = BitwardenTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -419,7 +418,7 @@ private fun AddSendOptions(
                     Text(
                         text = stringResource(id = R.string.expiration_date_info),
                         style = BitwardenTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.primary,
                         modifier = Modifier.weight(1f),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -451,7 +450,7 @@ private fun AddSendOptions(
             Text(
                 text = stringResource(id = R.string.maximum_access_count_info),
                 style = BitwardenTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
@@ -467,13 +466,13 @@ private fun AddSendOptions(
                         Text(
                             text = stringResource(id = R.string.current_access_count) + ":",
                             style = BitwardenTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = BitwardenTheme.colorScheme.text.primary,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = it.toString(),
                             style = BitwardenTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = BitwardenTheme.colorScheme.text.primary,
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))

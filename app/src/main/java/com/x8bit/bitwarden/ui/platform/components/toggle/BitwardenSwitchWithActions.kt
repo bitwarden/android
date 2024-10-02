@@ -5,7 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -47,7 +46,9 @@ fun BitwardenSwitchWithActions(
         modifier = Modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = { onCheckedChange?.invoke(!isChecked) },
             )
             .semantics(mergeDescendants = true) {

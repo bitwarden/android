@@ -8,12 +8,12 @@
   - [Note on Dependency Injection](#note-on-dependency-injection)
 - [UI Layer](#ui-layer)
   - [ViewModels / MVVM](#viewmodels--mvvm)
-    - [Example](#example) 
+    - [Example](#example)
   - [Screens / Compose](#screens--compose)
     - [State Hoisting](#state-hoisting)
     - [Example](#example-1)
   - [Navigation](#navigation)
-    - [State-based Navigation](#state-based-navigation) 
+    - [State-based Navigation](#state-based-navigation)
     - [Event-based Navigation](#event-based-navigation)
     - [Navigation Implementation](#navigation-implementation)
     - [Example](#example-2)
@@ -34,7 +34,7 @@ The responsibilities of the data layer are to manage the storage and retrieval o
 
 ## Data Layer
 
-The data layer is where all the UI-independent data is stored and retrieved. It consists of both raw data sources as well as higher-level "repository" and "manager" classes. 
+The data layer is where all the UI-independent data is stored and retrieved. It consists of both raw data sources as well as higher-level "repository" and "manager" classes.
 
 Note that any functions exposed by a data layer class that must perform asynchronous work do so by exposing **suspending functions** that may run inside [coroutines](https://kotlinlang.org/docs/coroutines-guide.html) while any streaming sources of data are handled by exposing [Flows](https://kotlinlang.org/docs/flow.html).
 
@@ -79,7 +79,7 @@ The app's approach to MVVM is based around the handling of "state", "actions", a
   There should be no additional `StateFlow` exposed from a VM that would represent some other kind of state; all state should be represented by `S`. Additionally, any internal state not directly needed by the UI but which influences the behavior of the VM should be included as well in order to keep all state managed by the VM in a single place.
 
 - **Actions:** The "actions" represent interactions with the VM in some way that could potentially cause an update to that total state. These can be external actions coming from the user's interaction with the UI, like click events, or internal actions coming from some asynchronous process internal to the VM itself, like the result of some suspending functions. Actions are sent by interacting directly with `BaseViewModel.actionChannel` or by using the `BaseViewModel.sendAction` and `BaseViewModel.trySendAction` helpers. All actions are then processed synchronously in a queue in the `handleAction` function.
-  
+
   It is worth emphasizing that state should never be updated inside a coroutine in a VM; all asynchronous work that results in a state update should do so by posting an internal action. This ensures that the only place that state changes can occur is synchronously inside the `handleAction` function. This makes the process of finding and reasoning about state changes easier and simplifies debugging.
 
 - **Events:** The "events" represent discrete, one-shot side-effects and are typically associated with navigation events triggered by some user action. They are sent internally using `BaseViewModel.sendEvent` and may be consumed by the UI layer via the `BaseViewModel.eventFlow` property. An [EventsEffect](../app/src/main/java/com/x8bit/bitwarden/ui/platform/base/util/EventsEffect.kt) should typically be used to simplify the consumption of these events.
@@ -323,7 +323,7 @@ fun ExampleScreen(
             text = state.exampleData,
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.textColors.primary,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .wrapContentHeight(),

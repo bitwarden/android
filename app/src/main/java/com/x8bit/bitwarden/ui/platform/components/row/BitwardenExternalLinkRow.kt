@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.row
 
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +56,7 @@ fun BitwardenExternalLinkRow(
             modifier = Modifier.mirrorIfRtl(),
             painter = rememberVectorPainter(id = R.drawable.ic_external_link),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = BitwardenTheme.colorScheme.icon.primary,
         )
     }
 

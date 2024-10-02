@@ -132,6 +132,7 @@ fun MasterPasswordHintScreen(
             Text(
                 text = stringResource(id = R.string.enter_email_for_hint),
                 style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
