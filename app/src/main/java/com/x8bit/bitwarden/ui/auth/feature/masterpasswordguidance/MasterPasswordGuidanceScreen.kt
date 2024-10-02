@@ -35,7 +35,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -158,7 +158,7 @@ private fun TryGeneratorCard(
     onCardClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenActionCard(
+    BitwardenActionCardSmall(
         actionIcon = rememberVectorPainter(id = R.drawable.ic_generator),
         actionText = stringResource(
             R.string.use_the_generator_to_create_a_strong_unique_password,

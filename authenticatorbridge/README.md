@@ -54,6 +54,21 @@ The following is a list of all third-party dependencies required by the SDK.
 > [!IMPORTANT]
 > The SDK does not come packaged with these dependencies, so consumers of the SDK must provide them.
 
+- **AndroidX Appcompat**
+  - https://developer.android.com/jetpack/androidx/releases/appcompat
+  - Purpose: Allows access to new APIs on older API versions.
+  - License: Apache 2.0
+
+- **AndroidX Lifecycle**
+  - https://developer.android.com/jetpack/androidx/releases/lifecycle
+  - Purpose: Lifecycle aware components and tooling.
+  - License: Apache 2.0
+
+- **kotlinx.coroutines**
+  - https://github.com/Kotlin/kotlinx.coroutines
+  - Purpose: Kotlin coroutines library for asynchronous and reactive code.
+  - License: Apache 2.0
+
 - **kotlinx.serialization**
     - https://github.com/Kotlin/kotlinx.serialization/
     - Purpose: JSON serialization library for Kotlin.

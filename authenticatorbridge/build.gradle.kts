@@ -60,7 +60,10 @@ kotlin {
 
 dependencies {
     // SDK dependencies:
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.coroutines.core)
 
     // Test environment dependencies:
     testImplementation(libs.junit.junit5)

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -61,7 +60,7 @@ fun BitwardenTextField(
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     enabled: Boolean = true,
-    textStyle: TextStyle? = null,
+    textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     isError: Boolean = false,
@@ -70,12 +69,11 @@ fun BitwardenTextField(
 ) {
     var widthPx by remember { mutableIntStateOf(0) }
     val focusRequester = remember { FocusRequester() }
-    val currentTextStyle = textStyle ?: LocalTextStyle.current
     val formattedText = if (shouldAddCustomLineBreaks) {
         value.withLineBreaksAtWidth(
             // Adjust for built in padding
             widthPx = widthPx - 16.dp.toPx(),
-            monospacedTextStyle = currentTextStyle,
+            monospacedTextStyle = textStyle,
         )
     } else {
         value
@@ -114,7 +112,7 @@ fun BitwardenTextField(
         onValueChange = onValueChange,
         singleLine = singleLine,
         readOnly = readOnly,
-        textStyle = currentTextStyle,
+        textStyle = textStyle,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
         isError = isError,
         visualTransformation = visualTransformation,

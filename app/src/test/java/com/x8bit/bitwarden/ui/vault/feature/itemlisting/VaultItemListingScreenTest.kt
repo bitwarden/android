@@ -1678,7 +1678,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `fido2 pin set up dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
-        val dialogMessage = "Enter your PIN code."
+        val dialogMessage = "Enter your PIN code"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 

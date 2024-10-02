@@ -244,7 +244,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Enter your PIN code.")
+            .onAllNodesWithText(text = "Enter your PIN code")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -343,7 +343,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Unlock with PIN code")
+            .onAllNodesWithText(text = "Require master password on app restart?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule

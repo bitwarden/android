@@ -49,7 +49,7 @@ fun BitwardenTextFieldWithActions(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle? = null,
+    textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
     shouldAddCustomLineBreaks: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     readOnly: Boolean = false,

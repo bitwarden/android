@@ -360,7 +360,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `fido2 pin set up prompt dialog should display based on state`() {
-        val dialogMessage = "Enter your PIN code."
+        val dialogMessage = "Enter your PIN code"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 

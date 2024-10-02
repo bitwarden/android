@@ -86,6 +86,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -1072,20 +1073,24 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `sync when the last sync time is more recent than the revision date should not sync `() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId = userId)
-        } returns clock.instant().plus(2, ChronoUnit.MINUTES)
+    fun `sync when the last sync time is more recent than the revision date should not sync `() =
+        runTest {
+            val userId = "mockId-1"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            every {
+                settingsDiskSource.getLastSyncTime(userId = userId)
+            } returns clock.instant().plus(2, ChronoUnit.MINUTES)
 
-        vaultRepository.sync()
+            vaultRepository.sync()
 
-        verify(exactly = 1) {
-            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = clock.instant())
+            verify(exactly = 1) {
+                settingsDiskSource.storeLastSyncTime(
+                    userId = userId,
+                    lastSyncTime = clock.instant(),
+                )
+            }
+            coVerify(exactly = 0) { syncService.sync() }
         }
-        coVerify(exactly = 0) { syncService.sync() }
-    }
 
     @Test
     fun `lockVaultForCurrentUser should delegate to the VaultLockManager`() {
@@ -4327,6 +4332,69 @@ class VaultRepositoryTest {
                 relyingPartyId = relyingPartyId,
             )
         }
+    }
+
+    @Test
+    fun `syncFido2Credentials should return result`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+        val mockSyncResponse = createMockSyncResponse(number = 1)
+        coEvery {
+            syncService.sync()
+        } returns mockSyncResponse.asSuccess()
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                userId = userId,
+                request = InitOrgCryptoRequest(
+                    organizationKeys = createMockOrganizationKeys(1),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(
+                userId = MOCK_USER_STATE.activeUserId,
+                vault = mockSyncResponse,
+            )
+        } just runs
+
+        every {
+            settingsDiskSource.storeLastSyncTime(
+                MOCK_USER_STATE.activeUserId,
+                clock.instant(),
+            )
+        } just runs
+
+        val syncResult = vaultRepository.syncFido2Credentials()
+        assertEquals(SyncVaultDataResult.Success, syncResult)
+    }
+
+    @Test
+    fun `syncFido2Credentials should return error when getAccountRevisionDateMillis fails`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val throwable = Throwable()
+            coEvery {
+                syncService.getAccountRevisionDateMillis()
+            } returns throwable.asFailure()
+            val syncResult = vaultRepository.syncFido2Credentials()
+            assertEquals(
+                SyncVaultDataResult.Error(throwable = throwable),
+                syncResult,
+            )
+        }
+
+    @Test
+    fun `syncFido2Credentials should return error when sync fails`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val throwable = Throwable()
+        coEvery {
+            syncService.sync()
+        } returns throwable.asFailure()
+        val syncResult = vaultRepository.syncFido2Credentials()
+        assertEquals(
+            SyncVaultDataResult.Error(throwable = throwable),
+            syncResult,
+        )
     }
 
     //region Helper functions
