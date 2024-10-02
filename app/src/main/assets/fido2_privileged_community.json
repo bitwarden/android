@@ -23,6 +23,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.fennec_fdroid",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "06:66:53:58:EF:D8:BA:05:BE:23:6A:47:A1:2C:B0:95:8D:7D:75:DD:93:9D:77:C2:B3:1F:53:98:53:7E:BD:C5"
+          }
+        ]
+      }
     }
   ]
 }
