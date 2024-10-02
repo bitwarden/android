@@ -270,7 +270,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Enter your PIN code.")
+            .onAllNodesWithText("Enter your PIN code")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
