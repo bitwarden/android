@@ -96,8 +96,8 @@ data class SettingsState(
     private val securityCount: Int,
 ) {
     val notificationBadgeCountMap: Map<Settings, Int> = mapOf(
-        Settings.ACCOUNT_SECURITY to autoFillCount,
-        Settings.AUTO_FILL to securityCount,
+        Settings.ACCOUNT_SECURITY to securityCount,
+        Settings.AUTO_FILL to autoFillCount,
     )
 }
 

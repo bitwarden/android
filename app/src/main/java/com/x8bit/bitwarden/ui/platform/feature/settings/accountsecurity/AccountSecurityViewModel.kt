@@ -77,6 +77,7 @@ class AccountSecurityViewModel @Inject constructor(
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
             vaultTimeoutPolicyMinutes = null,
             vaultTimeoutPolicyAction = null,
+            shouldShowUnlockActionCard = false,
         )
     },
 ) {
@@ -113,6 +114,14 @@ class AccountSecurityViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
+        settingsRepository
+            .getShowUnlockBadgeFlow(state.userId)
+            .map {
+                AccountSecurityAction.Internal.ShowUnlockBadgeUpdated(it)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
             trySendAction(
                 AccountSecurityAction.Internal.FingerprintResultReceive(
@@ -146,6 +155,17 @@ class AccountSecurityViewModel @Inject constructor(
         is AccountSecurityAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
         is AccountSecurityAction.PushNotificationConfirm -> handlePushNotificationConfirm()
         is AccountSecurityAction.Internal -> handleInternalAction(action)
+        AccountSecurityAction.UnlockActionCardCtaClick -> handleUnlockCardCtaClick()
+        AccountSecurityAction.UnlockActionCardDismiss -> handleUnlockCardDismiss()
+    }
+
+    private fun handleUnlockCardDismiss() {
+        dismissUnlockNotificationBadge()
+    }
+
+    private fun handleUnlockCardCtaClick() {
+        dismissUnlockNotificationBadge()
+        // TODO: Navigate to unlock set up screen PM-13067
     }
 
     private fun handleAccountFingerprintPhraseClick() {
@@ -199,6 +219,7 @@ class AccountSecurityViewModel @Inject constructor(
                     )
                 }
             }
+        dismissUnlockNotificationBadge()
     }
 
     private fun handleFingerPrintLearnMoreClick() {
@@ -310,6 +331,7 @@ class AccountSecurityViewModel @Inject constructor(
                 )
             }
         }
+        dismissUnlockNotificationBadge()
     }
 
     private fun handleInternalAction(action: AccountSecurityAction.Internal) {
@@ -329,6 +351,20 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.PolicyUpdateReceive -> {
                 handlePolicyUpdateReceive(action)
             }
+
+            is AccountSecurityAction.Internal.ShowUnlockBadgeUpdated -> {
+                handleShowUnlockBadgeUpdated(action)
+            }
+        }
+    }
+
+    private fun handleShowUnlockBadgeUpdated(
+        action: AccountSecurityAction.Internal.ShowUnlockBadgeUpdated,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                shouldShowUnlockActionCard = action.showUnlockBadge,
+            )
         }
     }
 
@@ -404,6 +440,14 @@ class AccountSecurityViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(vaultTimeoutAction = vaultTimeoutAction) }
         settingsRepository.vaultTimeoutAction = vaultTimeoutAction
     }
+
+    private fun dismissUnlockNotificationBadge() {
+        if (!state.shouldShowUnlockActionCard) return
+        settingsRepository.storeShowUnlockSettingBadge(
+            userId = state.userId,
+            showBadge = false,
+        )
+    }
 }
 
 /**
@@ -423,6 +467,7 @@ data class AccountSecurityState(
     val vaultTimeoutAction: VaultTimeoutAction,
     val vaultTimeoutPolicyMinutes: Int?,
     val vaultTimeoutPolicyAction: String?,
+    val shouldShowUnlockActionCard: Boolean,
 ) : Parcelable {
     /**
      * Indicates that there is a mechanism for unlocking your vault in place.
@@ -634,6 +679,16 @@ sealed class AccountSecurityAction {
     ) : AccountSecurityAction()
 
     /**
+     * User has dismissed the unlock action card.
+     */
+    data object UnlockActionCardDismiss : AccountSecurityAction()
+
+    /**
+     * User has clicked the CTA on the unlock action card.
+     */
+    data object UnlockActionCardCtaClick : AccountSecurityAction()
+
+    /**
      * Models actions that can be sent by the view model itself.
      */
     sealed class Internal : AccountSecurityAction() {
@@ -665,5 +720,10 @@ sealed class AccountSecurityAction {
         data class PolicyUpdateReceive(
             val vaultTimeoutPolicies: List<PolicyInformation.VaultTimeout>?,
         ) : Internal()
+
+        /**
+         * The show unlock badge update has been received.
+         */
+        data class ShowUnlockBadgeUpdated(val showUnlockBadge: Boolean) : Internal()
     }
 }
