@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
@@ -115,6 +116,12 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * data for the current user.
      */
     fun syncIfNecessary()
+
+    /**
+     * Syncs the user's FIDO 2 credentials. This is an explicit request to sync and is not dependent
+     * on whether the last sync time was sufficiently in the past.
+     */
+    suspend fun syncFido2Credentials(): SyncVaultDataResult
 
     /**
      * Flow that represents the data for a specific vault item as found by ID. This may emit `null`
