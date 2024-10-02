@@ -2304,6 +2304,53 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
     }
+
+    @Test
+    fun `Password minimumLength should be at least as long as the sum of the minimums`() {
+        val password =
+            GeneratorState.MainType.Passcode.PasscodeType.Password(
+                length = 14,
+                minLength = 10,
+                useCapitals = true,
+                capitalsEnabled = false,
+                useLowercase = true,
+                lowercaseEnabled = false,
+                useNumbers = true,
+                numbersEnabled = false,
+                useSpecialChars = true,
+                specialCharsEnabled = false,
+                minNumbers = 9,
+                minNumbersAllowed = 3,
+                minSpecial = 9,
+                minSpecialAllowed = 3,
+                avoidAmbiguousChars = false,
+            )
+        // 9 numbers + 9 special + 1 lowercase + 1 uppercase
+        assertEquals(20, password.computedMinimumLength)
+    }
+
+    @Test
+    fun `Password minimumLength should use minLength if higher than sum of the minimums`() {
+        val password =
+            GeneratorState.MainType.Passcode.PasscodeType.Password(
+                length = 14,
+                minLength = 10,
+                useCapitals = true,
+                capitalsEnabled = false,
+                useLowercase = true,
+                lowercaseEnabled = false,
+                useNumbers = true,
+                numbersEnabled = false,
+                useSpecialChars = true,
+                specialCharsEnabled = false,
+                minNumbers = 1,
+                minNumbersAllowed = 3,
+                minSpecial = 1,
+                minSpecialAllowed = 3,
+                avoidAmbiguousChars = false,
+            )
+        assertEquals(10, password.computedMinimumLength)
+    }
     //region Helper Functions
 
     @Suppress("LongParameterList")
