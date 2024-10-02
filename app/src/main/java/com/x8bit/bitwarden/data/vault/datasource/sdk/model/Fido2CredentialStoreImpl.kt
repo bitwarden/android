@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 
 /**
  * Primary implementation of [Fido2CredentialStore].
@@ -24,7 +25,12 @@ class Fido2CredentialStoreImpl(
      * Return all active ciphers that contain FIDO 2 credentials.
      */
     override suspend fun allCredentials(): List<CipherView> {
-        vaultRepository.sync()
+        val syncResult = vaultRepository.syncFido2Credentials()
+        if (syncResult is SyncVaultDataResult.Error) {
+            syncResult.throwable
+                ?.let { throw it }
+                ?: throw IllegalStateException("Sync failed.")
+        }
         return vaultRepository.ciphersStateFlow.value.data
             ?.filter { it.isActiveWithFido2Credentials }
             ?: emptyList()
@@ -40,7 +46,12 @@ class Fido2CredentialStoreImpl(
     override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
         val userId = getActiveUserIdOrThrow()
 
-        vaultRepository.sync()
+        val syncResult = vaultRepository.syncFido2Credentials()
+        if (syncResult is SyncVaultDataResult.Error) {
+            syncResult.throwable
+                ?.let { throw it }
+                ?: throw IllegalStateException("Sync failed.")
+        }
 
         val ciphersWithFido2Credentials = vaultRepository.ciphersStateFlow.value.data
             ?.filter { it.isActiveWithFido2Credentials }

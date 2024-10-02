@@ -27,7 +27,7 @@ fun BitwardenHiddenPasswordField(
 ) {
     OutlinedTextField(
         modifier = modifier,
-        textStyle = BitwardenTheme.typography.bodyLarge,
+        textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
         label = { Text(text = label) },
         value = value,
         onValueChange = { },

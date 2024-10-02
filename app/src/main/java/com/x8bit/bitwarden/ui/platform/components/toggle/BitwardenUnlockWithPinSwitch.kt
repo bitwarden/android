@@ -84,7 +84,7 @@ fun BitwardenUnlockWithPinSwitch(
 
         shouldShowPinConfirmationDialog -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.unlock_with_pin),
+                title = stringResource(id = R.string.require_master_password_on_app_restart),
                 message = stringResource(id = R.string.pin_require_master_password_restart),
                 confirmButtonText = stringResource(id = R.string.yes),
                 dismissButtonText = stringResource(id = R.string.no),

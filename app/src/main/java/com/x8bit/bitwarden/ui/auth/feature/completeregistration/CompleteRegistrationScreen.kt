@@ -48,7 +48,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -213,7 +213,7 @@ private fun CompleteRegistrationContent(
                     .standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.height(24.dp))
-            BitwardenActionCard(
+            BitwardenActionCardSmall(
                 actionIcon = rememberVectorPainter(id = R.drawable.ic_tooltip),
                 actionText = stringResource(id = R.string.what_makes_a_password_strong),
                 callToActionText = stringResource(id = R.string.learn_more),

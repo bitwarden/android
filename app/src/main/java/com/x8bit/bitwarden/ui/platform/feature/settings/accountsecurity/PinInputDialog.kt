@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -52,7 +53,7 @@ fun PinInputDialog(
     onSubmitClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var pin by remember { mutableStateOf("") }
+    var pin by remember { mutableStateOf(value = "") }
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -74,38 +75,35 @@ fun PinInputDialog(
                 ),
             horizontalAlignment = Alignment.End,
         ) {
+            Spacer(modifier = Modifier.height(height = 24.dp))
             Text(
                 modifier = Modifier
-                    .testTag("AlertTitleText")
-                    .padding(24.dp)
+                    .testTag(tag = "AlertTitleText")
+                    .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.enter_pin),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = BitwardenTheme.typography.headlineSmall,
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             if (scrollState.canScrollBackward) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant),
-                )
+                BitwardenHorizontalDivider()
             }
             Column(
                 modifier = Modifier
                     .weight(1f, fill = false)
-                    .verticalScroll(scrollState),
+                    .padding(horizontal = 24.dp)
+                    .verticalScroll(state = scrollState),
             ) {
                 Text(
                     modifier = Modifier
-                        .testTag("AlertContentText")
-                        .padding(24.dp)
+                        .testTag(tag = "AlertContentText")
                         .fillMaxWidth(),
                     text = stringResource(id = R.string.set_pin_description),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = BitwardenTheme.typography.bodyMedium,
                 )
-
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.pin),
                     value = pin,
@@ -113,35 +111,32 @@ fun PinInputDialog(
                     onValueChange = { pin = it },
                     keyboardType = KeyboardType.Number,
                     modifier = Modifier
-                        .testTag("AlertInputField")
-                        .padding(16.dp)
+                        .testTag(tag = "AlertInputField")
                         .fillMaxWidth(),
                 )
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
             if (scrollState.canScrollForward) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant),
-                )
+                BitwardenHorizontalDivider()
             }
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Row(
+                modifier = Modifier.padding(horizontal = 24.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(24.dp),
             ) {
                 BitwardenTextButton(
                     label = stringResource(id = R.string.cancel),
                     onClick = onCancelClick,
-                    modifier = Modifier.testTag("DismissAlertButton"),
+                    modifier = Modifier.testTag(tag = "DismissAlertButton"),
                 )
 
                 BitwardenFilledButton(
                     label = stringResource(id = R.string.submit),
                     onClick = { onSubmitClick(pin) },
-                    modifier = Modifier.testTag("AcceptAlertButton"),
+                    modifier = Modifier.testTag(tag = "AcceptAlertButton"),
                 )
             }
+            Spacer(modifier = Modifier.height(height = 24.dp))
         }
     }
 }

@@ -74,6 +74,7 @@ fun BitwardenSlider(
     ) {
         OutlinedTextField(
             value = sliderValue.toString(),
+            textStyle = BitwardenTheme.typography.bodyLarge,
             readOnly = true,
             onValueChange = { },
             label = {
