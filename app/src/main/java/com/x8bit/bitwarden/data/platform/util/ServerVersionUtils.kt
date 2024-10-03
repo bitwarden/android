@@ -26,6 +26,7 @@ fun isServerVersionAtLeast(serverConfig: ServerConfig?, version: String?): Boole
         return false
     }
 
+    // Must iterate through all indices to establish if versions are equal
     for (i in serverVersionParts.indices) {
         val serverPart = serverVersionParts.getOrNull(i)?.toIntOrNull() ?: 0
         val otherPart = otherVersionParts.getOrNull(i)?.toIntOrNull() ?: 0
@@ -36,7 +37,6 @@ fun isServerVersionAtLeast(serverConfig: ServerConfig?, version: String?): Boole
             return false
         }
     }
-
 
     // Versions are equal
     return true
