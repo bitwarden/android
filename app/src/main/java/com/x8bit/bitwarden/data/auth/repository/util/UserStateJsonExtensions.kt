@@ -149,9 +149,10 @@ fun UserStateJson.toUserState(
                 // method for unlocking the vault. In the case of a TDE user we check if they
                 // have the reset password permission via their organization(S). If the user does
                 // not belong to a TDE or we check to see if they user key connector.
-                val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
+                val tdeUserNeedsMasterPassword =
                     hasManageResetPasswordPermission.takeIf { trustedDevice != null }
-                        ?: (keyConnectorOptions == null)
+                val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
+                    (tdeUserNeedsMasterPassword ?: (keyConnectorOptions == null))
                 UserState.Account(
                     userId = userId,
                     name = profile.name,
