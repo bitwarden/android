@@ -137,7 +137,7 @@ fun VaultUnlockScreen(
     when (val dialog = state.dialog) {
         is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
+                title = dialog.title,
                 message = dialog.message,
             ),
             onDismissRequest = remember(viewModel) {
