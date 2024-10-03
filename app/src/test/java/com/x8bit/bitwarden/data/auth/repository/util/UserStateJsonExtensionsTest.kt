@@ -865,4 +865,387 @@ class UserStateJsonExtensionsTest {
                 ),
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState should set true for needsMasterPassword for TDE user with permission through organization`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "#ffecbc49",
+                        environment = Environment.Eu,
+                        isPremium = true,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                                // Key part of the result #1, this is true or the role is owner or
+                                // admin
+                                shouldManageResetPassword = true,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.USER,
+                            ),
+                        ),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = true,
+                        // Key part of the result #2, TDE options should exist
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = true,
+                            hasAdminApproval = false,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = false,
+                        ),
+                        // Key part of the result #3, options should have false for
+                        // hasMasterPassword
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = true,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                    ),
+                ),
+                hasPendingAccountAddition = true,
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns null
+                            every { hasPremium } returns true
+                            every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
+                                    encryptedPrivateKey = null,
+                                    encryptedUserKey = null,
+                                    hasAdminApproval = false,
+                                    hasLoginApprovingDevice = true,
+                                    hasManageResetPasswordPermission = false,
+                                ),
+                                keyConnectorUserDecryptionOptions = null,
+                            )
+                        },
+                        tokens = null,
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                    shouldManageResetPassword = true,
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.USER,
+                                ),
+                            ),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = true,
+                        ),
+                    ),
+                    hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isDeviceTrustedProvider = { true },
+                    onboardingStatus = null,
+                ),
+        )
+    }
+
+    @Test
+    fun `toUserState should set true for needsMasterPassword for SSO user with no key connector`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "#ffecbc49",
+                        environment = Environment.Eu,
+                        isPremium = false,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        organizations = emptyList(),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                    ),
+                ),
+                hasPendingAccountAddition = true,
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns null
+                            every { hasPremium } returns false
+                            every { forcePasswordResetReason } returns null
+                            // The decryption options are what are determining the result
+                            @Suppress("MaxLineLength")
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                                    keyConnectorUrl = "keyConnectorUrl",
+                                ),
+                            )
+                        },
+                        tokens = null,
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    userOrganizationsList = emptyList(),
+                    userIsUsingKeyConnectorList = emptyList(),
+                    hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isDeviceTrustedProvider = { true },
+                    onboardingStatus = null,
+                ),
+        )
+    }
+
+    @Test
+    fun `toUserState should set false for needsMasterPassword for SSO user with key connector`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "#ffecbc49",
+                        environment = Environment.Eu,
+                        isPremium = false,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        organizations = emptyList(),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = true,
+                        trustedDevice = null,
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = true,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                    ),
+                ),
+                hasPendingAccountAddition = true,
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns null
+                            every { hasPremium } returns false
+                            every { forcePasswordResetReason } returns null
+                            // The decryption options are what are determining the result
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                            )
+                        },
+                        tokens = null,
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    userOrganizationsList = emptyList(),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = true,
+                        ),
+                    ),
+                    hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isDeviceTrustedProvider = { true },
+                    onboardingStatus = null,
+                ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState should set false for needsMasterPassword for SSO user with TDE but no permission via organization`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "#ffecbc49",
+                        environment = Environment.Eu,
+                        isPremium = false,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                                // Key part of the result #1, this is true or the role is owner or
+                                // admin
+                                shouldManageResetPassword = false,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.USER,
+                            ),
+                        ),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = false,
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = true,
+                            hasAdminApproval = false,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = false,
+                        ),
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = true,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                    ),
+                ),
+                hasPendingAccountAddition = true,
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns null
+                            every { hasPremium } returns false
+                            every { forcePasswordResetReason } returns null
+                            // The decryption options are what are determining the result
+                            @Suppress("MaxLineLength")
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
+                                    encryptedPrivateKey = null,
+                                    encryptedUserKey = null,
+                                    hasAdminApproval = false,
+                                    hasLoginApprovingDevice = true,
+                                    hasManageResetPasswordPermission = false,
+                                ),
+                                keyConnectorUserDecryptionOptions = null,
+                            )
+                        },
+                        tokens = null,
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                    shouldManageResetPassword = false,
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.USER,
+                                ),
+                            ),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = true,
+                        ),
+                    ),
+                    hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isDeviceTrustedProvider = { true },
+                    onboardingStatus = null,
+                ),
+        )
+    }
 }
