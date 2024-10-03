@@ -38,7 +38,7 @@ class FeatureFlagManagerTest {
     fun `server version is at least supplied version`() {
         val result =
             isServerVersionAtLeast(
-                fakeServerConfigRepository.getLocalServerConfig(),
+                fakeServerConfigRepository.serverConfigStateFlow.value,
                 "2024.2.0",
             )
 
@@ -50,11 +50,34 @@ class FeatureFlagManagerTest {
     fun `server version is not at least supplied version`() {
         val result =
             isServerVersionAtLeast(
-                fakeServerConfigRepository.getLocalServerConfig(),
+                fakeServerConfigRepository.serverConfigStateFlow.value,
                 "2024.12.0-suffix",
             )
 
         // This relies on the fake server version being "2024.7.0"
+        assertFalse(result)
+    }
+
+    @Test
+    fun `server version is the same as supplied version`() {
+        val result =
+            isServerVersionAtLeast(
+                fakeServerConfigRepository.serverConfigStateFlow.value,
+                "2024.7.0",
+            )
+
+        // This relies on the fake server version being "2024.7.0"
+        assertTrue(result)
+    }
+
+    @Test
+    fun `server version is not the same as blank supplied version`() {
+        val result =
+            isServerVersionAtLeast(
+                fakeServerConfigRepository.serverConfigStateFlow.value,
+                "",
+            )
+
         assertFalse(result)
     }
 
