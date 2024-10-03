@@ -30,7 +30,7 @@ sealed class AccountSyncState {
     /**
      * OS version can't support account syncing.
      */
-    data object OSVersionNotSupported: AccountSyncState()
+    data object OsVersionNotSupported: AccountSyncState()
 
     /**
      * Accounts successfully synced.

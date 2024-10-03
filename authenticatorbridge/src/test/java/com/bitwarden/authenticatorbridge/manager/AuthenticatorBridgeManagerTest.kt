@@ -94,7 +94,7 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `initial AccountSyncState should be OSVersionNotSupported when OS level is below S`() {
+    fun `initial AccountSyncState should be OsVersionNotSupported when OS level is below S`() {
         every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
         val manager = AuthenticatorBridgeManagerImpl(
             context = context,
@@ -103,14 +103,14 @@ class AuthenticatorBridgeManagerTest {
             callbackProvider = testAuthenticatorBridgeCallbackProvider,
             processLifecycleOwner = fakeLifecycleOwner,
         )
-        assertEquals(AccountSyncState.OSVersionNotSupported, manager.accountSyncStateFlow.value)
+        assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
     }
 
     @Test
-    fun `onStart when OS level is below S should set state to OS`() {
+    fun `onStart when OS level is below S should set state to OsNotSupported`() {
         every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
-        assertEquals(AccountSyncState.OSVersionNotSupported, manager.accountSyncStateFlow.value)
+        assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
     }
 
     @Test

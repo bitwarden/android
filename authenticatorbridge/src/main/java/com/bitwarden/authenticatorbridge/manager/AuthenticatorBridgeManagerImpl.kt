@@ -61,7 +61,7 @@ internal class AuthenticatorBridgeManagerImpl(
     private val mutableSharedAccountsStateFlow: MutableStateFlow<AccountSyncState> =
         MutableStateFlow(
             when {
-                isBuildVersionBelow(Build.VERSION_CODES.S) -> AccountSyncState.OSVersionNotSupported
+                isBuildVersionBelow(Build.VERSION_CODES.S) -> AccountSyncState.OsVersionNotSupported
                 !isBitwardenAppInstalled() -> AccountSyncState.AppNotInstalled
                 else -> AccountSyncState.Loading
             }
@@ -105,7 +105,7 @@ internal class AuthenticatorBridgeManagerImpl(
 
     private fun bindService() {
         if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
-            mutableSharedAccountsStateFlow.value = AccountSyncState.OSVersionNotSupported
+            mutableSharedAccountsStateFlow.value = AccountSyncState.OsVersionNotSupported
             return
         }
         if (!isBitwardenAppInstalled()) {
