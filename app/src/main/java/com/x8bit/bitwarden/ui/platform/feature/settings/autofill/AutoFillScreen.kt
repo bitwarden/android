@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +33,11 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -126,6 +131,32 @@ fun AutoFillScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            AnimatedVisibility(
+                visible = state.showAutofillActionCard,
+                label = "AutofillActionCard",
+                exit = actionCardExitAnimation(),
+            ) {
+                BitwardenActionCard(
+                    cardTitle = stringResource(R.string.turn_on_autofill),
+                    actionText = stringResource(R.string.get_started),
+                    onActionClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick)
+                        }
+                    },
+                    onDismissClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(AutoFillAction.DismissShowAutofillActionCard)
+                        }
+                    },
+                    leadingContent = {
+                        NotificationBadge(notificationCount = 1)
+                    },
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .padding(top = 12.dp, bottom = 16.dp),
+                )
+            }
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.autofill),
                 modifier = Modifier

@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
@@ -25,22 +26,30 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
+    authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<AutoFillState, AutoFillEvent, AutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: AutoFillState(
-            isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
-            isAccessibilityAutofillEnabled = settingsRepository
-                .isAccessibilityEnabledStateFlow
-                .value,
-            isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
-            isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
-            isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
-            showInlineAutofillOption = !isBuildVersionBelow(Build.VERSION_CODES.R),
-            showPasskeyManagementRow = !isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE),
-            defaultUriMatchType = settingsRepository.defaultUriMatchType,
-        ),
+        ?: run {
+            val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
+            AutoFillState(
+                isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
+                isAccessibilityAutofillEnabled = settingsRepository
+                    .isAccessibilityEnabledStateFlow
+                    .value,
+                isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
+                isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
+                isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
+                showInlineAutofillOption = !isBuildVersionBelow(Build.VERSION_CODES.R),
+                showPasskeyManagementRow = !isBuildVersionBelow(
+                    Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
+                ),
+                defaultUriMatchType = settingsRepository.defaultUriMatchType,
+                showAutofillActionCard = false,
+                activeUserId = userId,
+            )
+        },
 ) {
 
     init {
@@ -64,6 +73,12 @@ class AutoFillViewModel @Inject constructor(
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        settingsRepository
+            .getShowAutofillBadgeFlow(userId = state.activeUserId)
+            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AutoFillAction) = when (action) {
@@ -77,6 +92,8 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
         AutoFillAction.PasskeyManagementClick -> handlePasskeyManagementClick()
         is AutoFillAction.Internal -> handleInternalAction(action)
+        AutoFillAction.AutoFillActionCardCtaClick -> handleAutoFillActionCardCtClick()
+        AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -88,7 +105,26 @@ class AutoFillViewModel @Inject constructor(
             is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
                 handleAutofillEnabledUpdateReceive(action)
             }
+
+            is AutoFillAction.Internal.UpdateShowAutofillActionCard -> {
+                handleUpdateShowAutofillActionCard(action)
+            }
         }
+    }
+
+    private fun handleDismissShowAutofillActionCard() {
+        dismissShowAutofillActionCard()
+    }
+
+    private fun handleAutoFillActionCardCtClick() {
+        dismissShowAutofillActionCard()
+        // TODO PM-13068 navigate to auto fill setup screen
+    }
+
+    private fun handleUpdateShowAutofillActionCard(
+        action: AutoFillAction.Internal.UpdateShowAutofillActionCard,
+    ) {
+        mutableStateFlow.update { it.copy(showAutofillActionCard = action.showAutofillActionCard) }
     }
 
     private fun handleAskToAddLoginClick(action: AutoFillAction.AskToAddLoginClick) {
@@ -102,6 +138,7 @@ class AutoFillViewModel @Inject constructor(
         } else {
             settingsRepository.disableAutofill()
         }
+        dismissShowAutofillActionCard()
     }
 
     private fun handleBackClick() {
@@ -154,6 +191,14 @@ class AutoFillViewModel @Inject constructor(
     private fun handleBlockAutoFillClick() {
         sendEvent(AutoFillEvent.NavigateToBlockAutoFill)
     }
+
+    private fun dismissShowAutofillActionCard() {
+        if (!state.showAutofillActionCard) return
+        settingsRepository.storeShowAutoFillSettingBadge(
+            userId = state.activeUserId,
+            showBadge = false,
+        )
+    }
 }
 
 /**
@@ -169,6 +214,8 @@ data class AutoFillState(
     val showInlineAutofillOption: Boolean,
     val showPasskeyManagementRow: Boolean,
     val defaultUriMatchType: UriMatchType,
+    val showAutofillActionCard: Boolean,
+    val activeUserId: String,
 ) : Parcelable {
 
     /**
@@ -276,6 +323,16 @@ sealed class AutoFillAction {
     data object PasskeyManagementClick : AutoFillAction()
 
     /**
+     * User has clicked the "X" to dismiss the autofill action card.
+     */
+    data object DismissShowAutofillActionCard : AutoFillAction()
+
+    /**
+     * User has clicked the CTA on the autofill action card.
+     */
+    data object AutoFillActionCardCtaClick : AutoFillAction()
+
+    /**
      * Internal actions.
      */
     sealed class Internal : AutoFillAction() {
@@ -292,5 +349,10 @@ sealed class AutoFillAction {
         data class AutofillEnabledUpdateReceive(
             val isAutofillEnabled: Boolean,
         ) : Internal()
+
+        /**
+         * An update for changes in the [showAutofillActionCard] value from the settings repository.
+         */
+        data class UpdateShowAutofillActionCard(val showAutofillActionCard: Boolean) : Internal()
     }
 }
