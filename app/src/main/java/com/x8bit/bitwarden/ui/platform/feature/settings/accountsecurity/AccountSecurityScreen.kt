@@ -84,6 +84,7 @@ fun AccountSecurityScreen(
     onNavigateBack: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
+    onNavigateToSetupUnlockScreen: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -142,6 +143,8 @@ fun AccountSecurityScreen(
             is AccountSecurityEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
+
+            AccountSecurityEvent.NavigateToSetupUnlockScreen -> onNavigateToSetupUnlockScreen()
         }
     }
 

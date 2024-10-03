@@ -727,11 +727,19 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `when UnlockActionCardCtaClick action received, should dismiss unlock action card`() {
+    fun `when UnlockActionCardCtaClick action received, should dismiss unlock action card and send NavigateToSetupUnlockScreen event`() =
+        runTest {
         mutableShowUnlockBadgeFlow.update { true }
         val viewModel = createViewModel()
-        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
+                assertEquals(
+                    AccountSecurityEvent.NavigateToSetupUnlockScreen,
+                    awaitItem(),
+                )
+            }
         verify {
             settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
         }

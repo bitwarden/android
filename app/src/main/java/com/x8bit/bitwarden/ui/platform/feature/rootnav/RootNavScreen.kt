@@ -99,7 +99,7 @@ fun RootNavScreen(
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
         setupDebugMenuDestination(onNavigateBack = { navController.popBackStack() })
-        setupUnlockDestination()
+        setupUnlockDestination(onNavigateBack = { navController.popBackStack() })
         setupAutoFillDestination()
         setupCompleteDestination()
     }

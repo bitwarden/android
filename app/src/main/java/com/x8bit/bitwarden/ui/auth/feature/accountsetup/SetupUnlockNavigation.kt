@@ -20,10 +20,14 @@ fun NavController.navigateToSetupUnlockScreen(navOptions: NavOptions? = null) {
 /**
  * Add the setup unlock screen to the nav graph.
  */
-fun NavGraphBuilder.setupUnlockDestination() {
+fun NavGraphBuilder.setupUnlockDestination(
+    onNavigateBack: () -> Unit,
+) {
     composableWithPushTransitions(
         route = SETUP_UNLOCK_ROUTE,
     ) {
-        SetupUnlockScreen()
+        SetupUnlockScreen(
+            onNavigateBack = onNavigateBack,
+        )
     }
 }

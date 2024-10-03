@@ -75,6 +75,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToFolders: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
+    onNavigateToSetupUnlockScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -120,6 +121,7 @@ fun VaultUnlockedNavBarScreen(
         navigateToFolders = onNavigateToFolders,
         navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
+        onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         generatorTabClickedAction = remember(viewModel) {
             { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) }
         },
@@ -159,6 +161,7 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToFolders: () -> Unit,
     navigateToPendingRequests: () -> Unit,
     navigateToPasswordHistory: () -> Unit,
+    onNavigateToSetupUnlockScreen: () -> Unit,
 ) {
     var shouldDimNavBar by remember { mutableStateOf(false) }
 
@@ -234,6 +237,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToExportVault = navigateToExportVault,
                 onNavigateToFolders = navigateToFolders,
                 onNavigateToPendingRequests = navigateToPendingRequests,
+                onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
             )
         }
     }
