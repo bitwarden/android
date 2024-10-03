@@ -198,7 +198,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `on auto fill services toggle should send AutoFillServicesClick`() {
         composeTestRule
-            .onNodeWithText("Auto-fill services")
+            .onNodeWithText("Autofill services")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AutoFillAction.AutoFillServicesClick(true)) }
@@ -207,12 +207,12 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `auto fill services should be toggled on or off according to state`() {
         composeTestRule
-            .onNodeWithText("Auto-fill services")
+            .onNodeWithText("Autofill services")
             .performScrollTo()
             .assertIsOff()
         mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = true) }
         composeTestRule
-            .onNodeWithText("Auto-fill services")
+            .onNodeWithText("Autofill services")
             .performScrollTo()
             .assertIsOn()
     }
