@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponse
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeServerConfigRepository
+import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Test
@@ -31,6 +32,53 @@ class FeatureFlagManagerTest {
         val actual = manager.sdkFeatureFlags
 
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `server version is at least supplied version`() {
+        val result =
+            isServerVersionAtLeast(
+                fakeServerConfigRepository.serverConfigStateFlow.value,
+                "2024.2.0",
+            )
+
+        // This relies on the fake server version being "2024.7.0"
+        assertTrue(result)
+    }
+
+    @Test
+    fun `server version is not at least supplied version`() {
+        val result =
+            isServerVersionAtLeast(
+                fakeServerConfigRepository.serverConfigStateFlow.value,
+                "2024.12.0-suffix",
+            )
+
+        // This relies on the fake server version being "2024.7.0"
+        assertFalse(result)
+    }
+
+    @Test
+    fun `server version is the same as supplied version`() {
+        val result =
+            isServerVersionAtLeast(
+                fakeServerConfigRepository.serverConfigStateFlow.value,
+                "2024.7.0",
+            )
+
+        // This relies on the fake server version being "2024.7.0"
+        assertTrue(result)
+    }
+
+    @Test
+    fun `server version is not the same as blank supplied version`() {
+        val result =
+            isServerVersionAtLeast(
+                fakeServerConfigRepository.serverConfigStateFlow.value,
+                "",
+            )
+
+        assertFalse(result)
     }
 
     @Test

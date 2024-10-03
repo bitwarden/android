@@ -3,10 +3,12 @@ package com.x8bit.bitwarden.data.platform.manager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
+import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 private const val CIPHER_KEY_ENCRYPTION_KEY = "enableCipherKeyEncryption"
+private const val CIPHER_KEY_ENC_MIN_SERVER_VERSION = "2024.2.0"
 
 /**
  * Primary implementation of [FeatureFlagManager].
@@ -16,7 +18,13 @@ class FeatureFlagManagerImpl(
 ) : FeatureFlagManager {
 
     override val sdkFeatureFlags: Map<String, Boolean>
-        get() = mapOf(CIPHER_KEY_ENCRYPTION_KEY to true)
+        get() = mapOf(
+            CIPHER_KEY_ENCRYPTION_KEY to
+                isServerVersionAtLeast(
+                    serverConfigRepository.serverConfigStateFlow.value,
+                    CIPHER_KEY_ENC_MIN_SERVER_VERSION,
+                ),
+        )
 
     override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> =
         serverConfigRepository
