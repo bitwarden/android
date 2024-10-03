@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager.NameNotFoundException
+import android.os.Build
 import android.os.IBinder
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -18,6 +19,7 @@ import com.bitwarden.authenticatorbridge.provider.AuthenticatorBridgeCallbackPro
 import com.bitwarden.authenticatorbridge.provider.StubAuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
 import com.bitwarden.authenticatorbridge.util.decrypt
+import com.bitwarden.authenticatorbridge.util.isBuildVersionBelow
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,7 +60,9 @@ internal class AuthenticatorBridgeManagerImpl(
      */
     private val mutableSharedAccountsStateFlow: MutableStateFlow<AccountSyncState> =
         MutableStateFlow(
-            if (isBitwardenAppInstalled()) {
+            if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
+                AccountSyncState.OSVersionNotSupported
+            } else if (isBitwardenAppInstalled()) {
                 AccountSyncState.Loading
             } else {
                 AccountSyncState.AppNotInstalled
@@ -102,6 +106,10 @@ internal class AuthenticatorBridgeManagerImpl(
     }
 
     private fun bindService() {
+        if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
+            mutableSharedAccountsStateFlow.value = AccountSyncState.OSVersionNotSupported
+            return
+        }
         if (!isBitwardenAppInstalled()) {
             mutableSharedAccountsStateFlow.value = AccountSyncState.AppNotInstalled
             return
