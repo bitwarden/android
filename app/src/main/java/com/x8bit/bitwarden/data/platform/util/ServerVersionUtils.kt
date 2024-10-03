@@ -10,12 +10,12 @@ private const val SUFFIX_SEPARATOR = "-"
 /**
  * Checks if the server version is greater than another provided version, returns true if it is.
  */
-fun isServerVersionAtLeast(serverConfig: ServerConfig?, version: String?): Boolean {
+fun isServerVersionAtLeast(serverConfig: ServerConfig?, version: String): Boolean {
     val serverVersion = serverConfig
         ?.serverData
         ?.version
 
-    if (serverVersion.isNullOrEmpty() || version.isNullOrEmpty()) {
+    if (serverVersion.isNullOrEmpty() || version.isEmpty()) {
         return false
     }
 
