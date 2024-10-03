@@ -16,6 +16,20 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Protect access to AuthenticatorBridgeService using this custom permission.
+
+    Note that each build type uses a different value for knownCerts.
+
+    This in effect means that the only application that can connect to the debug/release/etc
+    variant AuthenticatorBridgeService is the debug/release/etc variant Bitwarden Authenticator
+    app. -->
+    <permission
+        android:name="${applicationId}.permission.AUTHENTICATOR_BRIDGE_SERVICE"
+        android:knownCerts="@string/known_authenticator_app_cert"
+        android:label="Bitwarden Bridge"
+        android:protectionLevel="signature|knownSigner"
+        tools:targetApi="s" />
+
     <application
         android:name=".BitwardenApplication"
         android:allowBackup="false"
@@ -276,6 +290,11 @@
         <meta-data
             android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/app_restrictions" />
+
+        <service
+            android:name="com.x8bit.bitwarden.data.platform.service.AuthenticatorBridgeService"
+            android:exported="true"
+            android:permission="${applicationId}.permission.AUTHENTICATOR_BRIDGE_SERVICE" />
 
     </application>
 

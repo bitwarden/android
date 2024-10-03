@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- This is the SHA-256 digest for the Authenticator App debug variant:-->
+    <string name="known_authenticator_app_cert">13144ab52af797a88c2fe292674461ef1715e0e1e4f5f538f63f1c174696f476</string>
+</resources>
