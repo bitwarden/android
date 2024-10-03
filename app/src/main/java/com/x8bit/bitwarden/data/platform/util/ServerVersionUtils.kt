@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.util
 
-import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import kotlin.text.split
 import kotlin.text.toIntOrNull
 
@@ -10,9 +10,8 @@ private const val SUFFIX_SEPARATOR = "-"
 /**
  * Checks if the server version is greater than another provided version, returns true if it is.
  */
- fun isServerVersionAtLeast(serverConfig: ServerConfigRepository, version: String): Boolean {
+ fun isServerVersionAtLeast(serverConfig: ServerConfig?, version: String): Boolean {
     val serverVersion = serverConfig
-        .getLocalServerConfig()
         ?.serverData
         ?.version
 
