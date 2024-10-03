@@ -17,5 +17,7 @@
     <string name="onboarding_override">Onboarding Status Override</string>
     <string name="restart_onboarding_cta">Restart Onboarding</string>
     <string name="restart_onboarding_details">This will reset the onboarding status for the current user, if available. After clicking the button you will immediately be redirected to the onboarding flow. Onboarding flag must be enabled.</string>
+    <string name="restart_onboarding_carousel">Show Onboarding Carousel</string>
+    <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
     <!-- /Debug Menu -->
 </resources>

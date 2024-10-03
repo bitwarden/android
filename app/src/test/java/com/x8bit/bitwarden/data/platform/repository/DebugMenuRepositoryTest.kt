@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -39,9 +40,15 @@ class DebugMenuRepositoryTest {
         every { storeOnboardingStatus(any(), any()) } just runs
     }
 
+    private val mockSettingsDiskSource = mockk<SettingsDiskSource>(relaxed = true) {
+        every { hasUserLoggedInOrCreatedAccount } returns true
+        every { hasUserLoggedInOrCreatedAccount = any() } just runs
+    }
+
     private val debugMenuRepository = DebugMenuRepositoryImpl(
         featureFlagOverrideDiskSource = mockFeatureFlagOverrideDiskSource,
         serverConfigRepository = mockServerConfigRepository,
+        settingsDiskSource = mockSettingsDiskSource,
         authDiskSource = mockAuthDiskSource,
     )
 
@@ -181,6 +188,20 @@ class DebugMenuRepositoryTest {
                 onboardingStatus = OnboardingStatus.NOT_STARTED,
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `modifyStateToShowOnboardingCarousel should set hasUserLoggedInOrCreatedAccount to false and trigger user state update`() {
+        var lambdaHasBeenCalled = false
+        val triggerUserStateUpdate = {
+            lambdaHasBeenCalled = true
+        }
+        debugMenuRepository.modifyStateToShowOnboardingCarousel(triggerUserStateUpdate)
+        verify {
+            mockSettingsDiskSource.hasUserLoggedInOrCreatedAccount = false
+        }
+        assertTrue(lambdaHasBeenCalled)
     }
 }
 

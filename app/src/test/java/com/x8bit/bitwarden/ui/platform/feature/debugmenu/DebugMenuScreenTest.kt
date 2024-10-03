@@ -110,7 +110,7 @@ class DebugMenuScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `restart onboarding should send action when clicked`() {
+    fun `restart onboarding should send action when enabled and clicked`() {
         mutableStateFlow.tryEmit(
             DebugMenuState(
                 featureFlags = mapOf(
@@ -124,11 +124,11 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .assertIsEnabled()
             .performClick()
 
-        verify { viewModel.trySendAction(DebugMenuAction.ReStartOnboarding) }
+        verify { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) }
     }
 
     @Test
-    fun `no restart onboarding should not send action when not enabled`() {
+    fun `restart onboarding should not send action when not enabled`() {
         mutableStateFlow.tryEmit(
             DebugMenuState(
                 featureFlags = mapOf(
@@ -143,6 +143,43 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .assertIsNotEnabled()
             .performClick()
 
-        verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.ReStartOnboarding) }
+        verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) }
+    }
+
+    @Test
+    fun `Show onboarding carousel should send action when enabled and clicked`() {
+        mutableStateFlow.tryEmit(
+            DebugMenuState(
+                featureFlags = mapOf(
+                    FlagKey.OnboardingCarousel to true,
+                ),
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Show Onboarding Carousel", ignoreCase = true)
+            .performScrollTo()
+            .assertIsEnabled()
+            .performClick()
+
+        verify { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
+    }
+
+    @Test
+    fun `show onboarding carousel should not send action when not enabled`() {
+        mutableStateFlow.tryEmit(
+            DebugMenuState(
+                featureFlags = mapOf(
+                    FlagKey.OnboardingCarousel to false,
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Show Onboarding Carousel", ignoreCase = true)
+            .performScrollTo()
+            .assertIsNotEnabled()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
     }
 }
