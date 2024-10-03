@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager.NameNotFoundException
+import android.os.Build
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
@@ -15,6 +16,7 @@ import com.bitwarden.authenticatorbridge.util.FakeSymmetricKeyStorageProvider
 import com.bitwarden.authenticatorbridge.util.TestAuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
+import com.bitwarden.authenticatorbridge.util.isBuildVersionBelow
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
 import io.mockk.every
@@ -45,23 +47,27 @@ class AuthenticatorBridgeManagerTest {
     private val fakeSymmetricKeyStorageProvider = FakeSymmetricKeyStorageProvider()
     private val testAuthenticatorBridgeCallbackProvider = TestAuthenticatorBridgeCallbackProvider()
 
-    private val manager: AuthenticatorBridgeManagerImpl = AuthenticatorBridgeManagerImpl(
-        context = context,
-        connectionType = AuthenticatorBridgeConnectionType.DEV,
-        symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
-        callbackProvider = testAuthenticatorBridgeCallbackProvider,
-        processLifecycleOwner = fakeLifecycleOwner,
-    )
+    private lateinit var manager: AuthenticatorBridgeManagerImpl
 
     @BeforeEach
     fun setup() {
+        mockkStatic(::isBuildVersionBelow)
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns false
         mockkConstructor(Intent::class)
         mockkStatic(IAuthenticatorBridgeService.Stub::class)
         mockkStatic(EncryptedSharedAccountData::decrypt)
+        manager = AuthenticatorBridgeManagerImpl(
+            context = context,
+            connectionType = AuthenticatorBridgeConnectionType.DEV,
+            symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+            callbackProvider = testAuthenticatorBridgeCallbackProvider,
+            processLifecycleOwner = fakeLifecycleOwner,
+        )
     }
 
     @AfterEach
     fun teardown() {
+        mockkStatic(::isBuildVersionBelow)
         unmockkConstructor(Intent::class)
         unmockkStatic(IAuthenticatorBridgeService.Stub::class)
         unmockkStatic(EncryptedSharedAccountData::decrypt)
@@ -85,6 +91,26 @@ class AuthenticatorBridgeManagerTest {
             processLifecycleOwner = fakeLifecycleOwner,
         )
         assertEquals(AccountSyncState.AppNotInstalled, manager.accountSyncStateFlow.value)
+    }
+
+    @Test
+    fun `initial AccountSyncState should be OsVersionNotSupported when OS level is below S`() {
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+        val manager = AuthenticatorBridgeManagerImpl(
+            context = context,
+            connectionType = AuthenticatorBridgeConnectionType.DEV,
+            symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+            callbackProvider = testAuthenticatorBridgeCallbackProvider,
+            processLifecycleOwner = fakeLifecycleOwner,
+        )
+        assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
+    }
+
+    @Test
+    fun `onStart when OS level is below S should set state to OsVersionNotSupported`() {
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+        fakeLifecycleOwner.lifecycle.dispatchOnStart()
+        assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
     }
 
     @Test

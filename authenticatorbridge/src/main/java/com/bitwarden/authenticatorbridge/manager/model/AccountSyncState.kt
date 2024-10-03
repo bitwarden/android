@@ -28,6 +28,11 @@ sealed class AccountSyncState {
     data object Loading : AccountSyncState()
 
     /**
+     * OS version can't support account syncing.
+     */
+    data object OsVersionNotSupported: AccountSyncState()
+
+    /**
      * Accounts successfully synced.
      */
     data class Success(val accounts: List<SharedAccountData.Account>) : AccountSyncState()
