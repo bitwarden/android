@@ -107,7 +107,7 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `onStart when OS level is below S should set state to OsNotSupported`() {
+    fun `onStart when OS level is below S should set state to OsVersionNotSupported`() {
         every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
         assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
