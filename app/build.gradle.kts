@@ -54,12 +54,14 @@ android {
 
     buildTypes {
         debug {
+            manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden.dev"
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
             isMinifyEnabled = false
         }
 
         release {
+            manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden"
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
