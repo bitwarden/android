@@ -31,7 +31,8 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-private const val ALLOW_LIST_FILE_NAME = "fido2_privileged_allow_list.json"
+private const val GOOGLE_ALLOW_LIST_FILE_NAME = "fido2_privileged_google.json"
+private const val COMMUNITY_ALLOW_LIST_FILE_NAME = "fido2_privileged_community.json"
 
 /**
  * Primary implementation of [Fido2CredentialManager].
@@ -203,7 +204,8 @@ class Fido2CredentialManagerImpl(
         callingAppInfo: CallingAppInfo,
         relyingPartyId: String,
     ): Fido2ValidateOriginResult {
-        return digitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = relyingPartyId)
+        return digitalAssetLinkService
+            .getDigitalAssetLinkForRp(relyingParty = relyingPartyId)
             .onFailure {
                 return Fido2ValidateOriginResult.Error.AssetLinkNotFound
             }
@@ -215,7 +217,8 @@ class Fido2CredentialManagerImpl(
                     ?: return Fido2ValidateOriginResult.Error.ApplicationNotFound
             }
             .map { matchingStatements ->
-                callingAppInfo.getSignatureFingerprintAsHexString()
+                callingAppInfo
+                    .getSignatureFingerprintAsHexString()
                     ?.let { certificateFingerprint ->
                         matchingStatements
                             .filterMatchingAppSignaturesOrNull(
@@ -236,9 +239,43 @@ class Fido2CredentialManagerImpl(
 
     private suspend fun validatePrivilegedAppOrigin(
         callingAppInfo: CallingAppInfo,
+    ): Fido2ValidateOriginResult {
+
+        val googleAllowListResult =
+            validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
+        if (googleAllowListResult is Fido2ValidateOriginResult.Success) {
+            // Application was found and successfully validated against the Google allow list so we
+            // can return the result as the final validation result.
+            return googleAllowListResult
+        }
+
+        // Check the community allow list if the Google allow list failed, and return the result as
+        // the final validation result.
+        return validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
+    }
+
+    private suspend fun validatePrivilegedAppSignatureWithGoogleList(
+        callingAppInfo: CallingAppInfo,
+    ): Fido2ValidateOriginResult =
+        validatePrivilegedAppSignatureWithAllowList(
+            callingAppInfo = callingAppInfo,
+            fileName = GOOGLE_ALLOW_LIST_FILE_NAME,
+        )
+
+    private suspend fun validatePrivilegedAppSignatureWithCommunityList(
+        callingAppInfo: CallingAppInfo,
+    ): Fido2ValidateOriginResult =
+        validatePrivilegedAppSignatureWithAllowList(
+            callingAppInfo = callingAppInfo,
+            fileName = COMMUNITY_ALLOW_LIST_FILE_NAME,
+        )
+
+    private suspend fun validatePrivilegedAppSignatureWithAllowList(
+        callingAppInfo: CallingAppInfo,
+        fileName: String,
     ): Fido2ValidateOriginResult =
         assetManager
-            .readAsset(ALLOW_LIST_FILE_NAME)
+            .readAsset(fileName)
             .map { allowList ->
                 callingAppInfo.validatePrivilegedApp(
                     allowList = allowList,
