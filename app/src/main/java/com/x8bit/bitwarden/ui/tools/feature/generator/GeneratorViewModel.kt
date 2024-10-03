@@ -578,7 +578,7 @@ class GeneratorViewModel @Inject constructor(
             uppercase = password.useCapitals,
             numbers = password.useNumbers,
             special = password.useSpecialChars,
-            length = password.length.toUByte(),
+            length = max(password.computedMinimumLength, password.length).toUByte(),
             avoidAmbiguous = password.avoidAmbiguousChars,
             minLowercase = null,
             minUppercase = null,
@@ -829,7 +829,7 @@ class GeneratorViewModel @Inject constructor(
 
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
-                length = max(adjustedLength, currentPasswordType.minimumLength),
+                length = max(adjustedLength, currentPasswordType.computedMinimumLength),
                 isUserInteracting = action.isUserInteracting,
             )
         }
@@ -1477,7 +1477,10 @@ class GeneratorViewModel @Inject constructor(
     private fun updatePasswordLength() {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
-                length = max(currentPasswordType.length, currentPasswordType.minimumLength),
+                length = max(
+                    currentPasswordType.length,
+                    currentPasswordType.computedMinimumLength,
+                ),
             )
         }
     }
@@ -1852,6 +1855,22 @@ data class GeneratorState(
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSWORD.labelRes
+
+                    /**
+                     * The computed minimum length for the generated Password
+                     * based on what characters must be included.
+                     */
+                    val computedMinimumLength: Int
+                        get() {
+                            val minLowercase = if (useLowercase) 1 else 0
+                            val minUppercase = if (useCapitals) 1 else 0
+                            val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
+                            val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
+                            return max(
+                                minLength,
+                                minLowercase + minUppercase + minimumNumbers + minimumSpecial,
+                            )
+                        }
 
                     @Suppress("UndocumentedPublicClass")
                     companion object {
@@ -2623,18 +2642,6 @@ private fun Password.enforceAtLeastOneToggleOn(): Password =
         this.copy(useLowercase = true)
     } else {
         this
-    }
-
-/**
- * The computed minimum length for the generated Password based on what characters must be included.
- */
-private val Password.minimumLength: Int
-    get() {
-        val minLowercase = if (useLowercase) 1 else 0
-        val minUppercase = if (useCapitals) 1 else 0
-        val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
-        val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
-        return minLowercase + minUppercase + minimumNumbers + minimumSpecial
     }
 
 private val PasscodeGenerationOptions?.passcodeType: Passcode.PasscodeType

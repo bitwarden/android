@@ -507,7 +507,7 @@ private fun ColumnScope.PasswordTypeContent(
     BitwardenSlider(
         value = passwordTypeState.length,
         onValueChange = passwordHandlers.onPasswordSliderLengthChange,
-        range = passwordTypeState.minLength..passwordTypeState.maxLength,
+        range = passwordTypeState.computedMinimumLength..passwordTypeState.maxLength,
         sliderTag = "PasswordLengthSlider",
         valueTag = "PasswordLengthLabel",
     )
