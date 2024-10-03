@@ -119,6 +119,7 @@ interface IntentManager {
      */
     fun createFido2GetCredentialPendingIntent(
         action: String,
+        userId: String,
         credentialId: String,
         cipherId: String,
         requestCode: Int,
@@ -130,6 +131,7 @@ interface IntentManager {
      */
     fun createFido2UnlockPendingIntent(
         action: String,
+        userId: String,
         requestCode: Int,
     ): PendingIntent
 

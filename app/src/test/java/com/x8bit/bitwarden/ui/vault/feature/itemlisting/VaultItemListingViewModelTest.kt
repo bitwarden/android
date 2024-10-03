@@ -1517,6 +1517,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 candidateQueryData = mockk(),
                 clientDataHash = byteArrayOf(0),
                 id = "mockId",
+                userId = "mockUserId",
             )
 
             specialCircumstanceManager.specialCircumstance =

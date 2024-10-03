@@ -10,11 +10,13 @@ sealed class Fido2GetCredentialsResult {
     /**
      * Indicates credentials were successfully queried.
      *
+     * @param userId ID of the user whose credentials were queried.
      * @param options Original request options provided by the relying party.
      * @param credentials Collection of [Fido2CredentialAutofillView]s matching the original request
      * parameters. This may be an empty list if no matching values were found.
      */
     data class Success(
+        val userId: String,
         val options: BeginGetPublicKeyCredentialOption,
         val credentials: List<Fido2CredentialAutofillView>,
     ) : Fido2GetCredentialsResult()

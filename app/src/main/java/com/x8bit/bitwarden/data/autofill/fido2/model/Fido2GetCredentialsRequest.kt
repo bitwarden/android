@@ -14,6 +14,7 @@ import kotlinx.parcelize.Parcelize
 data class Fido2GetCredentialsRequest(
     val candidateQueryData: Bundle,
     val id: String,
+    val userId: String,
     val requestJson: String,
     val clientDataHash: ByteArray? = null,
     val packageName: String,

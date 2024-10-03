@@ -6,15 +6,12 @@ import android.content.Intent
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
-import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
@@ -175,6 +172,7 @@ class Fido2CompletionManagerTest {
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
                     Fido2GetCredentialsResult.Success(
+                        userId = "mockUserId",
                         options = mockk(),
                         credentials = emptyList(),
                     ),
@@ -201,6 +199,7 @@ class Fido2CompletionManagerTest {
             every {
                 mockIntentManager.createFido2GetCredentialPendingIntent(
                     action = GET_PASSKEY_INTENT,
+                    userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
                     requestCode = any(),
@@ -211,6 +210,7 @@ class Fido2CompletionManagerTest {
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
                     Fido2GetCredentialsResult.Success(
+                        userId = "mockUserId",
                         options = mockk(),
                         credentials = mockFido2AutofillViewList,
                     ),
@@ -249,6 +249,7 @@ class Fido2CompletionManagerTest {
             every {
                 mockIntentManager.createFido2GetCredentialPendingIntent(
                     action = GET_PASSKEY_INTENT,
+                    userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
                     requestCode = any(),
@@ -259,6 +260,7 @@ class Fido2CompletionManagerTest {
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
                     Fido2GetCredentialsResult.Success(
+                        userId = "mockUserId",
                         options = mockk(),
                         credentials = mockFido2AutofillViewList,
                     ),
@@ -303,36 +305,6 @@ class Fido2CompletionManagerTest {
                 mockActivity.setResult(Activity.RESULT_OK, any())
                 mockActivity.finish()
             }
-        }
-
-        private fun setupMockCompletionIntent(
-            mockFido2AutofillView1: Fido2CredentialAutofillView,
-            mockCredentialEntry1: PublicKeyCredentialEntry,
-        ): Intent {
-            val mockIntent1 = mockk<Intent> {
-                every {
-                    putExtra(
-                        EXTRA_KEY_CIPHER_ID,
-                        mockFido2AutofillView1.cipherId,
-                    )
-                } returns this
-                every {
-                    putExtra(
-                        EXTRA_KEY_CREDENTIAL_ID,
-                        mockFido2AutofillView1.credentialId.toString(),
-                    )
-                } returns this
-            }
-
-            every {
-                anyConstructed<PublicKeyCredentialEntry.Builder>()
-                    .build()
-            } returns mockCredentialEntry1
-            every { anyConstructed<Intent>().setPackage(any()) } returns mockIntent1
-            every {
-                PendingIntent.getActivity(mockActivity, any(), mockIntent1, any())
-            } returns mockk()
-            return mockIntent1
         }
     }
 }

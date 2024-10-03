@@ -301,6 +301,7 @@ class Fido2ProviderProcessorTest {
         every {
             intentManager.createFido2UnlockPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT",
+                userId = "mockUserId-1",
                 requestCode = any(),
             )
         } returns mockIntent
@@ -317,6 +318,7 @@ class Fido2ProviderProcessorTest {
             callback.onResult(any())
             intentManager.createFido2UnlockPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT",
+                userId = "mockUserId-1",
                 requestCode = any(),
             )
         }
@@ -463,6 +465,7 @@ class Fido2ProviderProcessorTest {
         every {
             intentManager.createFido2GetCredentialPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
+                userId = DEFAULT_USER_STATE.activeUserId,
                 credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
                 cipherId = mockFido2CredentialAutofillViews.first().cipherId,
                 requestCode = any(),
