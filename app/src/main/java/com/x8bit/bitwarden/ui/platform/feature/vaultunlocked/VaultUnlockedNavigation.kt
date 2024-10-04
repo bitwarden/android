@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
@@ -98,9 +97,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToPasswordHistory(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Default,
                 )
-            },
-            onNavigateToSetupUnlockScreen = {
-                navController.navigateToSetupUnlockScreen()
             },
         )
         deleteAccountDestination(

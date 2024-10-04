@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
@@ -75,7 +76,6 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToFolders: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
-    onNavigateToSetupUnlockScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -121,7 +121,6 @@ fun VaultUnlockedNavBarScreen(
         navigateToFolders = onNavigateToFolders,
         navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
-        onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         generatorTabClickedAction = remember(viewModel) {
             { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) }
         },
@@ -161,7 +160,6 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToFolders: () -> Unit,
     navigateToPendingRequests: () -> Unit,
     navigateToPasswordHistory: () -> Unit,
-    onNavigateToSetupUnlockScreen: () -> Unit,
 ) {
     var shouldDimNavBar by remember { mutableStateOf(false) }
 
@@ -237,7 +235,11 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToExportVault = navigateToExportVault,
                 onNavigateToFolders = navigateToFolders,
                 onNavigateToPendingRequests = navigateToPendingRequests,
-                onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
+            )
+            setupUnlockDestination(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
             )
         }
     }

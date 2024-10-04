@@ -34,14 +34,13 @@ class SetupUnlockViewModel @Inject constructor(
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val userState = requireNotNull(authRepository.userStateFlow.value)
-        val userId = userState.activeUserId
+        val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
         val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
             userId = userId,
             cipher = biometricsEncryptionManager.getOrCreateCipher(userId = userId),
         )
         // whether or not the user has completed the initial setup prior to this.
-        val isInitialSetup = userState.activeAccount.onboardingStatus != OnboardingStatus.COMPLETE
+        val isInitialSetup = savedStateHandle[SETUP_UNLOCK_INITIAL_SETUP_ARG] ?: false
         SetupUnlockState(
             userId = userId,
             isUnlockWithPasswordEnabled = authRepository
