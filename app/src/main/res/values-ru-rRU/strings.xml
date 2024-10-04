@@ -456,6 +456,7 @@
   <string name="copy_notes">Скопировать заметку</string>
   <string name="exit">Выйти</string>
   <string name="exit_confirmation">Вы действительно хотите выйти из Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Требовать мастер-пароль при перезапуске приложения?</string>
   <string name="pin_require_master_password_restart">Хотите, чтобы при перезапуске приложения требовалась разблокировка с помощью мастер-пароля?</string>
   <string name="black">Черная</string>
   <string name="nord">Nord</string>
@@ -1011,4 +1012,5 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo.</string>
   <string name="master_password_hint_not_specified">Подсказка к мастер-паролю</string>
   <string name="master_password_important_hint">Важно: если вы забудете мастер-пароль, восстановить его будет невозможно! Не менее 12 символов.</string>
+  <string name="get_started">Начать</string>
 </resources>

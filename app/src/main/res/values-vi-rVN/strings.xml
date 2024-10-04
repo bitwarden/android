@@ -456,6 +456,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="copy_notes">Sao chép ghi chú</string>
   <string name="exit">Thoát</string>
   <string name="exit_confirmation">Bạn có chắc muốn thoát Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Yêu cầu mật khẩu chính khi khởi động lại app?</string>
   <string name="pin_require_master_password_restart">Bạn có muốn yêu cầu mở khóa bằng mật khẩu chính khi khởi động lại ứng dụng?</string>
   <string name="black">Đen</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Lỗi kết nối với dịch vụ Duo. Sử dụng phương thức đăng nhập hai bước khác hoặc liên hệ với Duo để được hỗ trợ.</string>
   <string name="master_password_hint_not_specified">Gợi ý mật khẩu chính</string>
   <string name="master_password_important_hint">Không thể lấy lại mật khẩu chính nếu bạn quên nó! Tối thiểu 12 ký tự.</string>
+  <string name="get_started">Bắt đầu</string>
 </resources>

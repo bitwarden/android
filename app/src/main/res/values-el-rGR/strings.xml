@@ -3,7 +3,7 @@
   <string name="about">Σχετικά</string>
   <string name="add">Προσθήκη</string>
   <string name="add_folder">Προσθήκη Φακέλου</string>
-  <string name="add_item">Προσθήκη Στοιχείου</string>
+  <string name="add_item">Προσθήκη στοιχείου</string>
   <string name="an_error_has_occurred">Παρουσιάστηκε σφάλμα.</string>
   <string name="back">Πίσω</string>
   <string name="bitwarden">Bitwarden</string>
@@ -52,7 +52,7 @@
   <string name="master_password">Κύριος κωδικός</string>
   <string name="master_password_required">Κύριος κωδικός πρόσβασης (απαιτείται)</string>
   <string name="more">Περισσότερα</string>
-  <string name="my_vault">Το θυσαυ/κιό μου</string>
+  <string name="my_vault">Η κρύπτη μου</string>
   <string name="authenticator">Αυθεντικοποιητής</string>
   <string name="name">Όνομα</string>
   <string name="no">Όχι</string>
@@ -162,7 +162,7 @@
   <string name="password_hint">Υπόδειξη κωδικού</string>
   <string name="password_hint_alert">Σας στείλαμε ένα μήνυμα ηλ. ταχυδρομείου με την υπόδειξη του κύριου κωδικού προσβασής σας.</string>
   <string name="password_override_alert">Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε τον τρέχον κωδικό;</string>
-  <string name="push_notification_alert">Το Bitwarden κρατάει συγχρονισμένο το vault σας αυτόματα, με τη χρήση ειδοποιήσεων push. Για την καλύτερη δυνατή εμπειρία, επιλέξτε \"Να επιτρέπεται\" στην παρακάτω προτροπή όταν σας ζητηθεί να ενεργοποιήσετε τις ειδοποιήσεις push.</string>
+  <string name="push_notification_alert">Το Bitwarden διατηρεί αυτόματα συγχρονισμένη την κρύπτη σας με τη χρήση ειδοποιήσεων push. Για την καλύτερη δυνατή εμπειρία, επιλέξτε «Αποδοχή» στο ακόλουθο μήνυμα ερώτησης όταν σας ζητηθεί να ενεργοποιήσετε τις ειδοποιήσεις push.</string>
   <string name="rate_the_app">Αξιολογήστε την εφαρμογή</string>
   <string name="rate_the_app_description">Παρακαλούμε σκεφτείτε να μας βοηθήσετε με μια καλή κριτική!</string>
   <string name="regenerate_password">Επαναδημιουργία κωδικού</string>
@@ -325,7 +325,7 @@
   <string name="icons_url">URL διακομιστή εικονιδίων</string>
   <string name="autofill_with_bitwarden">Αυτόματη συμπλήρωση με Bitwarden</string>
   <string name="vault_is_locked">Το θυσαυ/κιο είναι κλειδωμένο</string>
-  <string name="go_to_my_vault">Μετάβαση στο θυσαυ/κιό μου</string>
+  <string name="go_to_my_vault">Μετάβαση στην κρύπτη μου</string>
   <string name="collections">Συλλογές</string>
   <string name="no_items_collection">Δεν υπάρχουν στοιχεία σε αυτή τη συλλογή.</string>
   <string name="no_items_folder">Δεν υπάρχουν στοιχεία σε αυτόν τον φάκελο.</string>
@@ -456,6 +456,7 @@
   <string name="copy_notes">Αντιγραφή σημείωσης</string>
   <string name="exit">Έξοδος</string>
   <string name="exit_confirmation">Είστε βέβαιοι ότι θέλετε να βγείτε από το Bitwarden;</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Θέλετε να απαιτείται ξεκλείδωμα με τον κύριο κωδικό κατά την επανεκκίνηση της εφαρμογής;</string>
   <string name="black">Μαύρο</string>
   <string name="nord">Nord</string>
@@ -610,7 +611,7 @@
   <string name="send_options_policy_in_effect">Μία ή περισσότερες οργανωτικές πολιτικές επηρεάζουν τις επιλογές send σας.</string>
   <string name="send_file_premium_required">Οι δωρεάν λογαριασμοί περιορίζονται μόνο στην κοινή χρήση κειμένου. Μια premium συνδρομή απαιτείται για τη χρήση αρχείων με Αποστολή.</string>
   <string name="send_file_email_verification_required">Πρέπει να επαληθεύσετε τη διεύθυνση ηλ. ταχυδρομείου σας για να χρησιμοποιήσετε αρχεία με το Send. Μπορείτε να επαληθεύσετε τη διεύθυνσή σας στο διαδικτυακό θησαυ/κιο.</string>
-  <string name="password_prompt">Προτροπή κύριου κωδικού πρόσβασης</string>
+  <string name="password_prompt">Απαίτηση κύριου κωδικού πρόσβασης</string>
   <string name="password_confirmation">Επιβεβαίωση κύριου κωδικού πρόσβασης</string>
   <string name="password_confirmation_desc">Αυτή η ενέργεια προστατεύεται, για να συνεχίσετε, πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης για να επαληθεύσετε την ταυτότητα σας.</string>
   <string name="captcha_required">Απαιτείται Captcha</string>
@@ -812,7 +813,7 @@
   <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Το κλειδί πρόσβασης δεν θα αντιγραφεί στο κλωνοποιημένο στοιχείο. Θέλετε να συνεχίσετε την κλωνοποίηση αυτού του στοιχείου;</string>
   <string name="copy_application">Αντιγραφή εφαρμογής</string>
   <string name="available_for_two_step_login">Διαθέσιμο για σύνδεση με δύο βήματα</string>
-  <string name="master_password_re_prompt_help">Βοήθεια προτροπής κύριου κωδικού πρόσβασης</string>
+  <string name="master_password_re_prompt_help">Βοήθεια για την απαίτηση κύριου κωδικού πρόσβασης</string>
   <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Το ξεκλείδωμα μπορεί να αποτύχει λόγω ανεπαρκούς μνήμης. Μειώστε τις ρυθμίσεις μνήμης KDF ή ρυθμίστε το βιομετρικό ξεκλείδωμα για επίλυση.</string>
   <string name="invalid_api_key">Μη έγκυρο κλειδί API</string>
   <string name="invalid_api_token">Μη έγκυρο API token</string>
@@ -1009,4 +1010,5 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Σφάλμα κατά τη σύνδεση με την υπηρεσία Duo. Χρησιμοποιήστε μια διαφορετική μέθοδο σύνδεσης δύο βημάτων ή επικοινωνήστε με την Duo για βοήθεια.</string>
   <string name="master_password_hint_not_specified">Υπόδειξη κύριου κωδικού πρόσβασης</string>
   <string name="master_password_important_hint">Σημαντικό: Δεν είναι δυνατή η ανάκτηση του κύριου κωδικού πρόσβασής σας αν τον ξεχάσετε! Πρέπει να αποτελείται από τουλάχιστον 12 χαρακτήρες.</string>
+  <string name="get_started">Get started</string>
 </resources>

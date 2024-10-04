@@ -456,6 +456,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="copy_notes">Kopírovať poznámku</string>
   <string name="exit">Ukončiť</string>
   <string name="exit_confirmation">Naozaj chcete ukončiť Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Vyžadovať hlavné heslo pri reštarte prehliadača?</string>
   <string name="pin_require_master_password_restart">Chcete po reštarte aplikácie požadovať odomykanie vaším hlavným heslom?</string>
   <string name="black">Čierna</string>
   <string name="nord">Nord</string>
@@ -999,14 +1000,15 @@ Chcete prepnúť na tento účet?</string>
   <string name="authenticator_sync">Synchronizácia overovacej aplikácie</string>
   <string name="allow_bitwarden_authenticator_syncing">Povoliť synchronizáciu Bitwarden Authenticator</string>
   <string name="there_was_an_issue_validating_the_registration_token">Vyskytol sa problém s overením registračného tokenu.</string>
-  <string name="turn_on_autofill">Zapnúť automatické dopĺňanie</string>
-  <string name="use_autofill_to_log_into_your_accounts">Použiť automatické dopĺňanie na prihlásenie jedným ťuknutím.</string>
+  <string name="turn_on_autofill">Zapnúť automatické vypĺňanie</string>
+  <string name="use_autofill_to_log_into_your_accounts">Použiť automatické vypĺňanie na prihlásenie jedným ťuknutím.</string>
   <string name="turn_on_later">Zapnúť neskôr</string>
-  <string name="turn_on_autofill_later">Zapnúť automatické dopĺňanie neskôr?</string>
+  <string name="turn_on_autofill_later">Zapnúť automatické vypĺňanie neskôr?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">K tomuto kroku sa môžete kedykoľvek vrátiť a dokončiť ho v Nastaveniach.</string>
   <string name="what_bitwarden_has_to_offer">Na prihlasovanie do aplikácií a webových lokalít pomocou uložených hesiel môžete teraz používať automatické vypĺňanie. Teraz môžete preskúmať všetko ostatné, čo Bitwarden ponúka.</string>
   <string name="youre_all_set">Všetko je pripravené!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc.</string>
   <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
   <string name="master_password_important_hint">Dôležité: Vaše hlavné heslo sa nedá obnoviť, ak ho zabudnete! Minimálne 12 znakov.</string>
+  <string name="get_started">Začnite</string>
 </resources>

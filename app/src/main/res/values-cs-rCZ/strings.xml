@@ -21,7 +21,7 @@
   <string name="email_address">E-mailová adresa</string>
   <string name="email_us">Napište nám</string>
   <string name="email_us_description">Napište nám e-mail pro získání pomoci nebo zanechání zpětné vazby.</string>
-  <string name="enter_pin">Zadejte PIN kód.</string>
+  <string name="enter_pin">Zadejte PIN kód</string>
   <string name="favorites">Oblíbené</string>
   <string name="file_bug_report">Nahlásit chybu</string>
   <string name="file_bug_report_description">Nahlaste chybu přímo v našem repozitáři na GitHubu.</string>
@@ -456,6 +456,7 @@ Načtení proběhne automaticky.</string>
   <string name="copy_notes">Kopírovat poznámku</string>
   <string name="exit">Ukončit</string>
   <string name="exit_confirmation">Opravdu chcete ukončit Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Vyžadovat hlavní heslo při restartu aplikace?</string>
   <string name="pin_require_master_password_restart">Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</string>
   <string name="black">Černý</string>
   <string name="nord">Nord</string>
@@ -1008,4 +1009,5 @@ Chcete se přepnout na tento účet?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba při připojování ke službě Duo. Použijte jinou dvoufázovou metodu přihlášení nebo kontaktujte Duo o pomoc.</string>
   <string name="master_password_hint_not_specified">Nápověda k hlavnímu heslu</string>
   <string name="master_password_important_hint">Důležité: Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit! Heslo musí mít alespoň 12 znaků.</string>
+  <string name="get_started">Začínáme</string>
 </resources>

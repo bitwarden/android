@@ -456,6 +456,7 @@
   <string name="copy_notes">Копирај белешке</string>
   <string name="exit">Изађи</string>
   <string name="exit_confirmation">Да ли сте сигурни да желите да изађете из Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Да ли желите да затражите откључавање главном лозинком када се апликација поново покрене?</string>
   <string name="black">Црно</string>
   <string name="nord">Nord</string>
@@ -1010,4 +1011,5 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при повезивању са услугом Duo. Користите други метод пријаве у два корака или контактирајте Duo за помоћ.</string>
   <string name="master_password_hint_not_specified">Савет главне лозинке</string>
   <string name="master_password_important_hint">Важно: Ваша главна лозинка се не може повратити ако је заборавите! Минимално 12 слова.</string>
+  <string name="get_started">Get started</string>
 </resources>

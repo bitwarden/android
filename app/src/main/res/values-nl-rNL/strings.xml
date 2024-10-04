@@ -456,6 +456,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="copy_notes">Notities kopiëren</string>
   <string name="exit">Afsluiten</string>
   <string name="exit_confirmation">Weet je zeker dat je Bitwarden wilt afsluiten?</string>
+  <string name="require_master_password_on_app_restart">Hoofdwachtwoord vereisen bij herstart van de app?</string>
   <string name="pin_require_master_password_restart">Wil je verplicht ontgrendelen met je hoofdwachtwoord zodra de applicatie opnieuw wordt gestart?</string>
   <string name="black">Zwart</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Wilt u naar dit account wisselen?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fout bij het verbinden met de Duo-service. Gebruik een andere tweestapsaanmeldingsmethode of neem contact op met Duo voor hulp.</string>
   <string name="master_password_hint_not_specified">Hoofdwachtwoordhint</string>
   <string name="master_password_important_hint">Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal 12 tekens.</string>
+  <string name="get_started">Aan de slag</string>
 </resources>

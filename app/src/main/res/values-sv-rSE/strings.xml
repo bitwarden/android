@@ -457,6 +457,7 @@ Skanningen sker automatiskt.</string>
   <string name="copy_notes">Kopiera anteckningar</string>
   <string name="exit">Avsluta</string>
   <string name="exit_confirmation">Är du säker på att du vill avsluta Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Vill du behöva låsa upp med ditt huvudlösenord när programmet startas om?</string>
   <string name="black">Svart</string>
   <string name="nord">Nord</string>
@@ -1005,9 +1006,10 @@ Vill du byta till detta konto?</string>
   <string name="turn_on_later">Slå på senare</string>
   <string name="turn_on_autofill_later">Slå på autofyll senare?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
-  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
   <string name="youre_all_set">You\'re all set!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
   <string name="master_password_hint_not_specified">Huvudlösenordsledtråd</string>
   <string name="master_password_important_hint">Viktigt: Ditt huvudlösenord kan inte återställas om du glömmer det! Minst 12 tecken.</string>
+  <string name="get_started">Kom igång</string>
 </resources>

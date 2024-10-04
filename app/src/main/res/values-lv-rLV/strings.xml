@@ -456,6 +456,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="copy_notes">Ievietot piezīmes starpliktuvē</string>
   <string name="exit">Iziet</string>
   <string name="exit_confirmation">Vai tiešām iziet no Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes pārsāknēšanas?</string>
   <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes pārsāknēšanas?</string>
   <string name="black">Melns</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Kļūda savienojuma izveidošanā ar Duo pakalpojumu. Jāizmanto cits divpakāpju pieteikšanās veids vai jāvēršas pie Duo pēc palīdzības.</string>
   <string name="master_password_hint_not_specified">Galvenās paroles norāde</string>
   <string name="master_password_important_hint">Svarīgi: galveno paroli nevarēs atgūt, ja tā tiks aizmirsta. Vismaz 12 rakstzīmes.</string>
+  <string name="get_started">Sākam</string>
 </resources>

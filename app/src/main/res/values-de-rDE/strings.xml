@@ -456,6 +456,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="copy_notes">Notiz kopieren</string>
   <string name="exit">Beenden</string>
   <string name="exit_confirmation">Bist du sicher, dass du Bitwarden verlassen möchtest?</string>
+  <string name="require_master_password_on_app_restart">Master-Passwort beim App-Neustart verlangen?</string>
   <string name="pin_require_master_password_restart">Möchtest du mit deinem Master-Passwort entsperren, wenn die Anwendung neu gestartet wird?</string>
   <string name="black">Schwarz</string>
   <string name="nord">Nord</string>
@@ -978,11 +979,11 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Dein Hinweis wird dir per E-Mail zugeschickt, wenn du ihn anfragst.</string>
   <string name="write_your_password_down">Notiere dir dein Passwort</string>
   <string name="keep_it_secret_keep_it_safe">Achte darauf, dein aufgeschriebenes Passwort an einem geheimen und sicheren Ort aufzubewahren.</string>
-  <string name="prevent_account_lockout">Kontosperrung verhindern</string>
+  <string name="prevent_account_lockout">Aussperren von deinem Konto verhindern</string>
   <string name="generate_master_password">Master-Passwort generieren</string>
   <string name="generate_button_label">Generieren</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Notiere dir dieses Passwort und bewahre es an einem sicheren Ort auf.</string>
-  <string name="learn_about_other_ways_to_prevent_account_lockout">Erfahre mehr über andere Möglichkeiten, eine Kontosperrung zu verhindern</string>
+  <string name="learn_about_other_ways_to_prevent_account_lockout">Erfahre mehr über andere Möglichkeiten, wie du ein Aussperren von deinem Konto verhindern kannst</string>
   <string name="help_with_server_geolocations">Hilfe bei Server Geo-Standorten.</string>
   <string name="email_address_required">E-Mail-Adresse (erforderlich)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Klick auf den Link in der E-Mail, um deine E-Mail-Adresse zu verifizieren und mit der Erstellung deines Kontos fortzufahren. "</string>
@@ -1008,4 +1009,5 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fehler beim Verbinden mit dem Duo-Dienst. Verwende eine andere Zwei-Faktor-Authentifizierungsmethode oder kontaktiere Duo für Hilfe.</string>
   <string name="master_password_hint_not_specified">Master-Passwort-Hinweis</string>
   <string name="master_password_important_hint">Wichtig: Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens 12 Zeichen lang.</string>
+  <string name="get_started">Loslegen</string>
 </resources>

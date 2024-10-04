@@ -21,7 +21,7 @@
   <string name="email_address">E-mailadresse</string>
   <string name="email_us">E-mail os</string>
   <string name="email_us_description">Email os direkte for at få hjælp eller give feedback.</string>
-  <string name="enter_pin">Angiv PIN-koden.</string>
+  <string name="enter_pin">Indtast din pinkode.</string>
   <string name="favorites">Favoritter</string>
   <string name="file_bug_report">Indsend en fejlrapport</string>
   <string name="file_bug_report_description">Opret en problematik i vores GitHub-repo.</string>
@@ -456,6 +456,7 @@ Skanning vil ske automatisk.</string>
   <string name="copy_notes">Kopiér notat</string>
   <string name="exit">Afslut</string>
   <string name="exit_confirmation">Sikker på, at Bitwarden skal afsluttes?</string>
+  <string name="require_master_password_on_app_restart">Kræv hovedadgangskode ved app-genstart?</string>
   <string name="pin_require_master_password_restart">Skal oplåsning med hovedadgangskoden kræves, når appen genstartes?</string>
   <string name="black">Sort</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Skift til denne konto?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fejl under oprettelse af forbindelse til Duo-tjenesten. Brug en anden totrins-indlogningsmetode eller kontakt Duo for hjælp.</string>
   <string name="master_password_hint_not_specified">Hovedadgangskodetip</string>
   <string name="master_password_important_hint">Vigtigt: Hovedadgangskoden kan ikke gendannes, hvis den glemmes! Minimum 12 tegn.</string>
+  <string name="get_started">Komme i gang</string>
 </resources>

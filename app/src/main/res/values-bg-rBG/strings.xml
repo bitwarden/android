@@ -456,6 +456,7 @@
   <string name="copy_notes">Копиране на бележките</string>
   <string name="exit">Изход</string>
   <string name="exit_confirmation">Сигурни ли сте, че искате да спрете Битуорден?</string>
+  <string name="require_master_password_on_app_restart">Изискване на главната парола при повторно пускане на приложението?</string>
   <string name="pin_require_master_password_restart">Искате ли да бъдете питани за главната парола при всяко пускане на Битуорден наново?</string>
   <string name="black">Запрет</string>
   <string name="nord">Норд</string>
@@ -1009,4 +1010,5 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при свързването с услугата на Duo. Използвайте друг метод за двустепенно удостоверяване или се свържете с Duo за съдействие.</string>
   <string name="master_password_hint_not_specified">Подсказка за главната парола</string>
   <string name="master_password_important_hint">Важно: главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне 12 знака.</string>
+  <string name="get_started">Първи стъпки</string>
 </resources>
