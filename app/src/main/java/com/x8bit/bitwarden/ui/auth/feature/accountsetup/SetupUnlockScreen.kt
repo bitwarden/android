@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.SetupUnlockHand
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -60,10 +61,12 @@ import com.x8bit.bitwarden.ui.platform.util.isPortrait
  * Top level composable for the setup unlock screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun SetupUnlockScreen(
     viewModel: SetupUnlockViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
+    onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = remember(viewModel) { SetupUnlockHandler.create(viewModel = viewModel) }
@@ -83,6 +86,8 @@ fun SetupUnlockScreen(
                     cipher = event.cipher,
                 )
             }
+
+            SetupUnlockEvent.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -100,9 +105,27 @@ fun SetupUnlockScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.account_setup),
+                title = stringResource(
+                    id = if (state.isInitialSetup) {
+                        R.string.account_setup
+                    } else {
+                        R.string.set_up_unlock
+                    },
+                ),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = null,
+                navigationIcon = if (state.isInitialSetup) {
+                    null
+                } else {
+                    NavigationIcon(
+                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        onNavigationIconClick = remember(viewModel) {
+                            {
+                                viewModel.trySendAction(SetupUnlockAction.CloseClick)
+                            }
+                        },
+                    )
+                },
             )
         },
     ) { innerPadding ->
@@ -169,14 +192,16 @@ private fun SetupUnlockScreenContent(
         )
 
         Spacer(modifier = Modifier.height(height = 12.dp))
-        SetUpLaterButton(
-            onConfirmClick = handler.onSetUpLaterClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
+        if (state.isInitialSetup) {
+            SetUpLaterButton(
+                onConfirmClick = handler.onSetUpLaterClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
 
-        Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
+        }
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

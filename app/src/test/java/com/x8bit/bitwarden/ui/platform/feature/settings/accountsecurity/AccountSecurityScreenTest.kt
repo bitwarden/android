@@ -48,6 +48,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToDeleteAccountCalled = false
     private var onNavigateToPendingRequestsCalled = false
+    private var onNavigateToUnlockSetupScreenCalled = false
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
@@ -85,6 +86,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 onNavigateToPendingRequests = { onNavigateToPendingRequestsCalled = true },
+                onNavigateToSetupUnlockScreen = { onNavigateToUnlockSetupScreenCalled = true },
                 viewModel = viewModel,
                 biometricsManager = biometricsManager,
                 intentManager = intentManager,
@@ -1523,6 +1525,12 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss) }
+    }
+
+    @Test
+    fun `on NavigateToSetupUnlockScreen event invokes the correct lambda`() {
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToSetupUnlockScreen)
+        assertTrue(onNavigateToUnlockSetupScreenCalled)
     }
 }
 

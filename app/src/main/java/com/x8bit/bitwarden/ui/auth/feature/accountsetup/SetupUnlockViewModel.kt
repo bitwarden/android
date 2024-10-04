@@ -25,6 +25,7 @@ private const val KEY_STATE = "state"
 /**
  * Models logic for the setup unlock screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class SetupUnlockViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -38,6 +39,8 @@ class SetupUnlockViewModel @Inject constructor(
             userId = userId,
             cipher = biometricsEncryptionManager.getOrCreateCipher(userId = userId),
         )
+        // whether or not the user has completed the initial setup prior to this.
+        val isInitialSetup = SetupUnlockArgs(savedStateHandle).isInitialSetup
         SetupUnlockState(
             userId = userId,
             isUnlockWithPasswordEnabled = authRepository
@@ -49,6 +52,7 @@ class SetupUnlockViewModel @Inject constructor(
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
                 isBiometricsValid,
             dialogState = null,
+            isInitialSetup = isInitialSetup,
         )
     },
 ) {
@@ -64,11 +68,20 @@ class SetupUnlockViewModel @Inject constructor(
 
             is SetupUnlockAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
             is SetupUnlockAction.Internal -> handleInternalActions(action)
+            SetupUnlockAction.CloseClick -> handleCloseClick()
         }
     }
 
+    private fun handleCloseClick() {
+        sendEvent(SetupUnlockEvent.NavigateBack)
+    }
+
     private fun handleContinueClick() {
-        updateOnboardingStatusToNextStep()
+        if (state.isInitialSetup) {
+            updateOnboardingStatusToNextStep()
+        } else {
+            sendEvent(SetupUnlockEvent.NavigateBack)
+        }
     }
 
     private fun handleEnableBiometricsClick() {
@@ -196,6 +209,7 @@ data class SetupUnlockState(
     val isUnlockWithPinEnabled: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
     val dialogState: DialogState?,
+    val isInitialSetup: Boolean,
 ) : Parcelable {
     /**
      * Indicates whether the continue button should be enabled or disabled.
@@ -237,6 +251,11 @@ sealed class SetupUnlockEvent {
     data class ShowBiometricsPrompt(
         val cipher: Cipher,
     ) : SetupUnlockEvent()
+
+    /**
+     * Navigates back to the previous screen.
+     */
+    data object NavigateBack : SetupUnlockEvent()
 }
 
 /**
@@ -276,6 +295,11 @@ sealed class SetupUnlockAction {
      * The user has dismissed the dialog.
      */
     data object DismissDialog : SetupUnlockAction()
+
+    /**
+     * The user has clicked the close button.
+     */
+    data object CloseClick : SetupUnlockAction()
 
     /**
      * Models actions that can be sent by the view model itself.

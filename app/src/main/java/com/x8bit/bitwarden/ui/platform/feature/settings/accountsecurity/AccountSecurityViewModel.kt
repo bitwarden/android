@@ -165,7 +165,7 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleUnlockCardCtaClick() {
         dismissUnlockNotificationBadge()
-        // TODO: Navigate to unlock set up screen PM-13067
+        sendEvent(AccountSecurityEvent.NavigateToSetupUnlockScreen)
     }
 
     private fun handleAccountFingerprintPhraseClick() {
@@ -564,6 +564,11 @@ sealed class AccountSecurityEvent {
     data class ShowToast(
         val text: Text,
     ) : AccountSecurityEvent()
+
+    /**
+     * Navigate to the setup unlock screen.
+     */
+    data object NavigateToSetupUnlockScreen : AccountSecurityEvent()
 }
 
 /**

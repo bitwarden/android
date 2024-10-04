@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
@@ -234,6 +235,11 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToExportVault = navigateToExportVault,
                 onNavigateToFolders = navigateToFolders,
                 onNavigateToPendingRequests = navigateToPendingRequests,
+            )
+            setupUnlockDestination(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
             )
         }
     }

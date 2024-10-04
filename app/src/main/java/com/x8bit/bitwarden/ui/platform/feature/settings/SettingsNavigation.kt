@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.aboutDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
@@ -26,6 +27,7 @@ private const val SETTINGS_ROUTE: String = "settings"
 /**
  * Add settings destinations to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToDeleteAccount: () -> Unit,
@@ -54,6 +56,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
             onNavigateToPendingRequests = onNavigateToPendingRequests,
+            onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
         )
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
         autoFillDestination(
