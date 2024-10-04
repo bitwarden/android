@@ -240,18 +240,21 @@ class Fido2CredentialManagerImpl(
     private suspend fun validatePrivilegedAppOrigin(
         callingAppInfo: CallingAppInfo,
     ): Fido2ValidateOriginResult {
-
         val googleAllowListResult =
             validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
-        if (googleAllowListResult is Fido2ValidateOriginResult.Success) {
-            // Application was found and successfully validated against the Google allow list so we
-            // can return the result as the final validation result.
-            return googleAllowListResult
-        }
+        return when (googleAllowListResult) {
+            is Fido2ValidateOriginResult.Success -> {
+                // Application was found and successfully validated against the Google allow list so
+                // we can return the result as the final validation result.
+                googleAllowListResult
+            }
 
-        // Check the community allow list if the Google allow list failed, and return the result as
-        // the final validation result.
-        return validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
+            is Fido2ValidateOriginResult.Error -> {
+                // Check the community allow list if the Google allow list failed, and return the
+                // result as the final validation result.
+                validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
+            }
+        }
     }
 
     private suspend fun validatePrivilegedAppSignatureWithGoogleList(
