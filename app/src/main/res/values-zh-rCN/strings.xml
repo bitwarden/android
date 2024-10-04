@@ -106,9 +106,9 @@
   <string name="edit_item">编辑项目</string>
   <string name="enable_automatic_syncing">开启自动同步</string>
   <string name="enter_email_for_hint">请输入您账户的电子邮件地址来接收主密码提示。</string>
-  <string name="exntesion_reenable">重新启用 App 扩展</string>
+  <string name="exntesion_reenable">重新激活 App 扩展</string>
   <string name="extension_almost_done">就差一步！</string>
-  <string name="extension_enable">启用 App 扩展</string>
+  <string name="extension_enable">激活 App 扩展</string>
   <string name="extension_in_safari">在 Safari 中，使用共享图标寻找 Bitwarden （提示：在菜单最下面一行的右边）。</string>
   <string name="extension_instant_access">立即访问您的密码！</string>
   <string name="extension_ready">您已经准备好登录了！</string>
@@ -456,6 +456,7 @@
   <string name="copy_notes">复制备注</string>
   <string name="exit">退出</string>
   <string name="exit_confirmation">确定要退出 Bitwarden 吗？</string>
+  <string name="require_master_password_on_app_restart">App 重启时必须输入主密码吗？</string>
   <string name="pin_require_master_password_restart">当 App 重启时，要求使用主密码解锁吗？</string>
   <string name="black">黑色</string>
   <string name="nord">Nord</string>
@@ -979,11 +980,11 @@
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">当您请求时，提示将通过电子邮件发送给您。</string>
   <string name="write_your_password_down">写下您的密码</string>
   <string name="keep_it_secret_keep_it_safe">请务必将您写下的密码保存在隐秘且安全的地方。</string>
-  <string name="prevent_account_lockout">防止账户被锁定</string>
+  <string name="prevent_account_lockout">防止账户被锁住</string>
   <string name="generate_master_password">生成主密码</string>
   <string name="generate_button_label">生成</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">写下此密码并将其保存在安全的地方。</string>
-  <string name="learn_about_other_ways_to_prevent_account_lockout">了解防止账户被锁定的其他方法</string>
+  <string name="learn_about_other_ways_to_prevent_account_lockout">了解其他防止账户被锁住的方法</string>
   <string name="help_with_server_geolocations">帮助确定服务器地理位置。</string>
   <string name="email_address_required">电子邮件地址（必填）</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"选择电子邮件中的链接来验证您的电子邮件地址并继续创建您的账户。 "</string>
@@ -1006,7 +1007,8 @@
   <string name="return_to_complete_this_step_anytime_in_settings">您可以随时在「设置」中完成此步骤。</string>
   <string name="what_bitwarden_has_to_offer">您现在可以使用自动填充功能，使用保存的密码来登录 App 和网站。也可以探索 Bitwarden 为您提供的其他便捷功能。</string>
   <string name="youre_all_set">一切就绪！</string>
-  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用其他的两步登录方式，或请联系 Duo 寻求帮助。</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用不同的两步登录方式或联系 Duo 寻求帮助。</string>
   <string name="master_password_hint_not_specified">主密码提示</string>
   <string name="master_password_important_hint">重要：主密码忘记后，将无法恢复！至少 12 个字符。</string>
+  <string name="get_started">开始使用</string>
 </resources>

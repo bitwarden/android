@@ -455,6 +455,7 @@
   <string name="copy_notes">Jegyzet másolása</string>
   <string name="exit">Kilépés</string>
   <string name="exit_confirmation">Biztosan kilépünk?</string>
+  <string name="require_master_password_on_app_restart">Lezárás mesterjelszóval az alkalmazás újraindításakor?</string>
   <string name="pin_require_master_password_restart">Szükséges a feloldás mesterjelszóval az alkalmazás újraindításakor?</string>
   <string name="black">Fekete</string>
   <string name="nord">Nord</string>
@@ -1008,4 +1009,5 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Hiba történt a Duo szolgáltatáshoz csatlakozáskor. Használjunk másik kétlépcsős bejelentkezési módot vagy kérjünk segítséget a Duotól.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="get_started">Kezdés</string>
 </resources>

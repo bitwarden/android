@@ -456,6 +456,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="copy_notes">Kopioi merkinnät</string>
   <string name="exit">Poistu</string>
   <string name="exit_confirmation">Haluatko varmasti poistua Bitwardenista?</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Vaaditaanko lukituksen avaus pääsalasanalla, kun sovellus käynnistetään uudelleen?</string>
   <string name="black">Musta</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua.</string>
   <string name="master_password_hint_not_specified">Pääsalasanan vihje</string>
   <string name="master_password_important_hint">Tärkeää: Pääsalasanaasi ei ole mahdollista palauttaa, jos unohdat sen! Vähintään 12 merkkiä.</string>
+  <string name="get_started">Get started</string>
 </resources>

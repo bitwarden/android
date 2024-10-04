@@ -456,6 +456,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="copy_notes">Copiar nota</string>
   <string name="exit">Sair</string>
   <string name="exit_confirmation">Tem a certeza de que pretende sair do Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Exigir a palavra-passe mestra ao reiniciar a app?</string>
   <string name="pin_require_master_password_restart">Pretende exigir o desbloqueio com a sua palavra-passe mestra quando a aplicação é reiniciada?</string>
   <string name="black">Preto</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Anule a subscrição em qualquer altura.</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro ao ligar ao serviço Duo. Utilize um método de verificação de dois passos diferente ou contacte o Duo para obter assistência.</string>
   <string name="master_password_hint_not_specified">Dica da palavra-passe mestra</string>
   <string name="master_password_important_hint">Importante: A sua palavra-passe mestra não pode ser recuperada se a esquecer! 12 caracteres no mínimo.</string>
+  <string name="get_started">Começar</string>
 </resources>

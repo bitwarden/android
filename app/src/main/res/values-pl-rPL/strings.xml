@@ -456,6 +456,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="copy_notes">Kopiuj notatkę</string>
   <string name="exit">Wyjdź</string>
   <string name="exit_confirmation">Czy na pewno chcesz zamknąć Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Czy chcesz wymagać odblokowywania hasłem głównym po ponownym uruchomieniu aplikacji?</string>
   <string name="black">Czarny</string>
   <string name="nord">Nord</string>
@@ -1009,4 +1010,5 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Wystąpił błąd podczas połączenia z usługą Duo. Aby uzyskać pomoc, użyj innej metody dwustopniowego logowania lub skontaktuj się z Duo.</string>
   <string name="master_password_hint_not_specified">Wskazówka do hasła głównego</string>
   <string name="master_password_important_hint">Ważne: Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz! Co najmniej 12 znaków.</string>
+  <string name="get_started">Get started</string>
 </resources>

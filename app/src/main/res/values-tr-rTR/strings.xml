@@ -456,6 +456,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="copy_notes">Notu kopyala</string>
   <string name="exit">Çıkış</string>
   <string name="exit_confirmation">Bitwarden\'dan çıkmak istediğinize emin misiniz?</string>
+  <string name="require_master_password_on_app_restart">Uygulama yeniden başlatıldığında ana parola sorulsun mu?</string>
   <string name="pin_require_master_password_restart">Uygulama yeniden başlatılınca ana parola girilmesine zorunlu tutmak ister misiniz?</string>
   <string name="black">Siyah</string>
   <string name="nord">Nord</string>
@@ -1008,4 +1009,5 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo hizmetine bağlanırken hata oluştu. Başka bir iki aşamalı giriş yöntemi kullanın veya destek almak Duo ile iletişime geçin.</string>
   <string name="master_password_hint_not_specified">Ana parola ipucu</string>
   <string name="master_password_important_hint">Dikkat: Ana parolanızı unutursanız kurtaramazsınız! En az 12 karakter.</string>
+  <string name="get_started">Başlayın</string>
 </resources>

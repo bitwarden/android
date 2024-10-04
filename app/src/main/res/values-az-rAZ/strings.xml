@@ -456,6 +456,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="copy_notes">Qeydləri kopyala</string>
   <string name="exit">Çıxış</string>
   <string name="exit_confirmation">Bitwarden-dən çıxış etmək istədiyinizə əminsiniz?</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</string>
   <string name="black">Qara</string>
   <string name="nord">Nord</string>
@@ -1008,4 +1009,5 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo xidmətinə bağlanarkən xəta baş verdi. Fərqli iki addımlı giriş üsulu istifadə edin və ya kömək üçün Duo ilə əlaqə saxlayın.</string>
   <string name="master_password_hint_not_specified">Ana parol ipucusu</string>
   <string name="master_password_important_hint">Vacib: Ana parolunuzu unutsanız bərpa edə bilməzsiniz! Ən az %12 simvol.</string>
+  <string name="get_started">Get started</string>
 </resources>

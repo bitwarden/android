@@ -456,6 +456,7 @@ Awtomatikong itong magsa-scan.</string>
   <string name="copy_notes">Kopyahin ang tala</string>
   <string name="exit">Umalis</string>
   <string name="exit_confirmation">Sigurado ka bang gusto mong umalis sa Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
   <string name="pin_require_master_password_restart">Gusto mo bang kailanganing gamitin ang master password pang-unlock kapag na-restart ang aplikasyon?</string>
   <string name="black">Itim</string>
   <string name="nord">Nord</string>
@@ -1004,9 +1005,10 @@ Gusto mo bang pumunta sa account na ito?</string>
   <string name="turn_on_later">Turn on later</string>
   <string name="turn_on_autofill_later">Turn on autofill later?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
-  <string name="what_bitwarden_has_to_offer">You can now use autofill to log into apps and websites using your saved passwords. Now, you can explore everything else Bitwarden has to offer.</string>
+  <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
   <string name="youre_all_set">You\'re all set!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="get_started">Get started</string>
 </resources>

@@ -21,7 +21,7 @@
   <string name="email_address">Адреса е-пошти</string>
   <string name="email_us">Напишіть нам</string>
   <string name="email_us_description">Напишіть нам, щоб отримати допомогу чи залишити відгук.</string>
-  <string name="enter_pin">Введіть PIN-код.</string>
+  <string name="enter_pin">Введіть PIN-код</string>
   <string name="favorites">Обране</string>
   <string name="file_bug_report">Повідомити про помилку</string>
   <string name="file_bug_report_description">Створіть звіт в нашому репозиторії на GitHub.</string>
@@ -456,6 +456,7 @@
   <string name="copy_notes">Копіювати нотатку</string>
   <string name="exit">Вийти</string>
   <string name="exit_confirmation">Ви впевнені, що хочете вийти з Bitwarden?</string>
+  <string name="require_master_password_on_app_restart">Вимагати головний пароль після перезапуску програми?</string>
   <string name="pin_require_master_password_restart">Ви хочете вимагати розблокування головним паролем при перезапуску програми?</string>
   <string name="black">Чорна</string>
   <string name="nord">Норд</string>
@@ -1009,4 +1010,5 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Помилка під\'єднання до служби Duo. Скористайтеся іншим способом двоетапної перевірки або зверніться до служби підтримки Duo по допомогу.</string>
   <string name="master_password_hint_not_specified">Підказка для головного пароля</string>
   <string name="master_password_important_hint">Важливо: головний пароль неможливо відновити, якщо ви його втратите! Мінімум 12 символів.</string>
+  <string name="get_started">Початок роботи</string>
 </resources>
