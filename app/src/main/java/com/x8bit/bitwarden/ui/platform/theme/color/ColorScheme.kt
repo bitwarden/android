@@ -162,59 +162,59 @@ fun dynamicBitwardenColorScheme(
     val defaultTheme = if (isDarkTheme) darkBitwardenColorScheme else lightBitwardenColorScheme
     return BitwardenColorScheme(
         text = BitwardenColorScheme.TextColors(
-            primary = materialColorScheme.onSurface,
-            secondary = materialColorScheme.onSecondaryContainer,
+            primary = materialColorScheme.onBackground,
+            secondary = materialColorScheme.onSurface,
             interaction = materialColorScheme.primary,
             reversed = materialColorScheme.onTertiary,
             codePink = defaultTheme.text.codePink,
             codeBlue = defaultTheme.text.codeBlue,
         ),
         background = BitwardenColorScheme.BackgroundColors(
-            primary = materialColorScheme.surface,
-            secondary = materialColorScheme.secondary,
-            tertiary = materialColorScheme.tertiary,
+            primary = materialColorScheme.background,
+            secondary = materialColorScheme.surfaceContainer,
+            tertiary = materialColorScheme.surfaceContainerHighest,
             alert = materialColorScheme.error,
             scrim = materialColorScheme.scrim,
             pressed = materialColorScheme.onSurfaceVariant,
         ),
         stroke = BitwardenColorScheme.StrokeColors(
-            divider = materialColorScheme.outline,
+            divider = materialColorScheme.outlineVariant,
             border = materialColorScheme.primary,
             segmentedNav = materialColorScheme.outline,
         ),
         icon = BitwardenColorScheme.IconColors(
-            primary = materialColorScheme.onPrimary,
-            secondary = materialColorScheme.onSecondary,
+            primary = materialColorScheme.onBackground,
+            secondary = materialColorScheme.primary,
             reversed = materialColorScheme.inversePrimary,
             badgeBackground = materialColorScheme.error,
             badgeForeground = materialColorScheme.onError,
         ),
         filledButton = BitwardenColorScheme.FilledButtonColors(
-            background = materialColorScheme.surface,
+            background = materialColorScheme.primary,
             backgroundDisabled = materialColorScheme.onSurface.copy(alpha = 0.12f),
-            backgroundReversed = materialColorScheme.inversePrimary,
-            foreground = materialColorScheme.onSurface,
+            backgroundReversed = materialColorScheme.surfaceContainerHighest,
+            foreground = materialColorScheme.onPrimary,
             foregroundDisabled = materialColorScheme.onSurface.copy(alpha = 0.38f),
-            foregroundReversed = materialColorScheme.inverseOnSurface,
+            foregroundReversed = materialColorScheme.onSurface,
         ),
         outlineButton = BitwardenColorScheme.OutlineButtonColors(
-            border = materialColorScheme.outline,
+            border = materialColorScheme.outlineVariant,
             borderDisabled = materialColorScheme.outlineVariant,
             borderReversed = materialColorScheme.outlineVariant,
-            foreground = materialColorScheme.outlineVariant,
-            foregroundDisabled = materialColorScheme.outlineVariant,
-            foregroundReversed = materialColorScheme.outlineVariant,
+            foreground = materialColorScheme.primary,
+            foregroundDisabled = materialColorScheme.onSurface,
+            foregroundReversed = materialColorScheme.inversePrimary,
         ),
         tonalButton = BitwardenColorScheme.TonalButtonColors(
-            background = materialColorScheme.secondaryContainer,
+            background = materialColorScheme.primary,
             backgroundDisabled = materialColorScheme.onSurface.copy(alpha = 0.12f),
-            foreground = materialColorScheme.onSecondaryContainer,
+            foreground = materialColorScheme.onPrimary,
             foregroundDisabled = materialColorScheme.onSurface.copy(alpha = 0.38f),
         ),
         toggleButton = BitwardenColorScheme.ToggleButtonColors(
             backgroundOn = materialColorScheme.primary,
             backgroundOff = materialColorScheme.surfaceContainerHighest,
-            switch = materialColorScheme.onPrimary,
+            switch = materialColorScheme.onPrimaryContainer,
         ),
         sliderButton = BitwardenColorScheme.SliderButtonColors(
             knobBackground = materialColorScheme.primary,
@@ -231,6 +231,17 @@ fun dynamicBitwardenColorScheme(
         ),
     )
 }
+
+/**
+ * Derives a Material [ColorScheme] from the [BitwardenColorScheme] using the [defaultColorScheme]
+ * as a baseline.
+ */
+fun BitwardenColorScheme.toMaterialColorScheme(
+    defaultColorScheme: ColorScheme,
+): ColorScheme = defaultColorScheme.copy(
+    primary = this.stroke.border,
+    onSurfaceVariant = this.text.secondary,
+)
 
 /**
  * The raw colors that support the [BitwardenColorScheme].

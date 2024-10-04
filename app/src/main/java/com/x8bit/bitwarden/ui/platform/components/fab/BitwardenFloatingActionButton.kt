@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.platform.components.fab
 
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled [FloatingActionButton].
@@ -23,14 +23,14 @@ fun BitwardenFloatingActionButton(
     modifier: Modifier = Modifier,
 ) {
     FloatingActionButton(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        containerColor = BitwardenTheme.colorScheme.filledButton.background,
+        contentColor = BitwardenTheme.colorScheme.filledButton.foreground,
         onClick = onClick,
         modifier = modifier,
     ) {
         Icon(
             painter = painter,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     }
 }

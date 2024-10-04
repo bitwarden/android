@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -189,7 +188,7 @@ private fun OnboardingOverrideContent(
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(16.dp))
@@ -208,7 +207,7 @@ private fun OnboardingOverrideContent(
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
     }

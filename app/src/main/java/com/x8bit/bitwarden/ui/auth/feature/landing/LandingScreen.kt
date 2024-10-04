@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -221,7 +220,7 @@ private fun LandingScreenContent(
 
         Image(
             painter = rememberVectorPainter(id = R.drawable.logo),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -238,7 +237,7 @@ private fun LandingScreenContent(
             text = stringResource(id = R.string.login_or_create_new_account),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .wrapContentHeight(),
@@ -306,7 +305,7 @@ private fun LandingScreenContent(
             Text(
                 text = stringResource(id = R.string.new_around_here),
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
 
             BitwardenTextButton(

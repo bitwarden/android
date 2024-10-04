@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A scrim that animates its visibility.
@@ -33,7 +33,7 @@ fun BitwardenAnimatedScrim(
     ) {
         Box(
             modifier = modifier
-                .background(Color.Black.copy(alpha = 0.40f))
+                .background(BitwardenTheme.colorScheme.background.scrim)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     // Clear the ripple

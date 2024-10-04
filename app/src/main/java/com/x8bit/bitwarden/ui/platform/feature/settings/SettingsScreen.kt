@@ -17,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -120,7 +119,9 @@ private fun SettingsRow(
         modifier = Modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = onClick,
             )
             .bottomDivider(paddingStart = 16.dp)
@@ -136,7 +137,7 @@ private fun SettingsRow(
                 .weight(1f),
             text = text(),
             style = BitwardenTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
         )
         TrailingContent(notificationCount = notificationCount)
     }
@@ -162,7 +163,7 @@ private fun TrailingContent(
         Icon(
             painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
                 .mirrorIfRtl()
                 .size(24.dp),
@@ -177,7 +178,7 @@ private fun SettingsRows_preview() {
     BitwardenTheme {
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
+                .background(BitwardenTheme.colorScheme.background.primary)
                 .padding(16.dp)
                 .fillMaxSize(),
         ) {

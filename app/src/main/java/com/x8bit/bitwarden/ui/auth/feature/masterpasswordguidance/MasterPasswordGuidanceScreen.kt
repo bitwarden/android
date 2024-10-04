@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -93,7 +92,7 @@ fun MasterPasswordGuidanceScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(size = 4.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest),
+                    .background(BitwardenTheme.colorScheme.background.tertiary),
             ) {
                 Column(
                     modifier = Modifier
@@ -104,18 +103,18 @@ fun MasterPasswordGuidanceScreen(
                     Text(
                         text = stringResource(R.string.what_makes_a_password_strong),
                         style = BitwardenTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = BitwardenTheme.colorScheme.text.primary,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         style = BitwardenTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.primary,
                         text = stringResource(
                             R.string.the_longer_your_password_the_more_difficult_to_hack,
                         ),
                     )
                 }
-                BitwardenHorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                BitwardenHorizontalDivider()
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -124,7 +123,7 @@ fun MasterPasswordGuidanceScreen(
                     Text(
                         text = stringResource(R.string.the_strongest_passwords_are_usually),
                         style = BitwardenTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = BitwardenTheme.colorScheme.text.primary,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     BulletTextRow(text = stringResource(R.string.twelve_or_more_characters))
@@ -171,7 +170,7 @@ private fun TryGeneratorCard(
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = BitwardenTheme.colorScheme.icon.primary,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(16.dp),
@@ -194,13 +193,13 @@ private fun BulletTextRow(
             text = BULLET_TWO_TAB,
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier.clearAndSetSemantics { },
         )
         Text(
             text = text,
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
         )
     }
 }

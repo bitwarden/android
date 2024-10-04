@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -48,7 +47,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 
 /**
  * The top level composable for the Login with Device screen.
@@ -146,7 +144,7 @@ private fun LoginWithDeviceScreenContent(
             text = state.title(),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -158,7 +156,7 @@ private fun LoginWithDeviceScreenContent(
             text = state.subtitle(),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -170,7 +168,7 @@ private fun LoginWithDeviceScreenContent(
             text = state.description(),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -182,7 +180,7 @@ private fun LoginWithDeviceScreenContent(
             text = stringResource(id = R.string.fingerprint_phrase),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -193,7 +191,7 @@ private fun LoginWithDeviceScreenContent(
         Text(
             text = state.fingerprintPhrase,
             textAlign = TextAlign.Start,
-            color = LocalNonMaterialColors.current.fingerprint,
+            color = BitwardenTheme.colorScheme.text.codePink,
             style = BitwardenTheme.typography.sensitiveInfoSmall,
             minLines = 2,
             modifier = Modifier
@@ -233,7 +231,7 @@ private fun LoginWithDeviceScreenContent(
             text = state.otherOptions(),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import android.os.Parcelable
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -60,7 +59,10 @@ fun BitwardenBasicDialog(
                     modifier = Modifier.testTag("AlertContentText"),
                 )
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            containerColor = BitwardenTheme.colorScheme.background.primary,
+            iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
+            titleContentColor = BitwardenTheme.colorScheme.text.primary,
+            textContentColor = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier.semantics {
                 testTagsAsResourceId = true
                 testTag = "AlertPopup"

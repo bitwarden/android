@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -142,8 +141,8 @@ fun CompleteRegistrationScreen(
             BitwardenTopAppBar(
                 title = stringResource(
                     id = R.string.create_account
-                    .takeIf { state.onboardingEnabled }
-                    ?: R.string.set_password),
+                        .takeIf { state.onboardingEnabled }
+                        ?: R.string.set_password),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
@@ -362,7 +361,7 @@ private fun LegacyHeaderContent(
             userEmail,
         ),
         style = BitwardenTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        color = BitwardenTheme.colorScheme.text.primary,
         modifier = modifier
             .fillMaxWidth(),
     )
@@ -386,7 +385,7 @@ private fun OrderedHeaderContent() {
         Text(
             text = stringResource(R.string.choose_your_master_password),
             style = BitwardenTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -395,7 +394,7 @@ private fun OrderedHeaderContent() {
                 R.string.choose_a_unique_and_strong_password_to_keep_your_information_safe,
             ),
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
     }

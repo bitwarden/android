@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -40,13 +41,7 @@ fun BitwardenMediumTopAppBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     MediumTopAppBar(
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface,
-            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
+        colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         title = {
             Text(
@@ -76,7 +71,6 @@ private fun BitwardenMediumTopAppBar_preview() {
                     vectorIconRes = R.drawable.ic_more,
                     contentDescription = "",
                     onClick = { },
-                    contentColor = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )

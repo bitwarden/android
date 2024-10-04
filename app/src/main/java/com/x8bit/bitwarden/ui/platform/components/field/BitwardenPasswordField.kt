@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -74,6 +74,7 @@ fun BitwardenPasswordField(
         modifier = modifier
             .tabNavigation()
             .focusRequester(focusRequester),
+        colors = bitwardenTextFieldColors(),
         textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
         label = { Text(text = label) },
         value = value,
@@ -110,7 +111,6 @@ fun BitwardenPasswordField(
                     id = if (showPassword) R.string.hide else R.string.show,
                 ),
                 onClick = { showPasswordChange.invoke(!showPassword) },
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         },
     )

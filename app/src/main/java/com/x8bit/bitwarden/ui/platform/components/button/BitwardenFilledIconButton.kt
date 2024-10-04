@@ -3,13 +3,12 @@ package com.x8bit.bitwarden.ui.platform.components.button
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenFilledIconButtonColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -33,12 +32,7 @@ fun BitwardenFilledIconButton(
     FilledIconButton(
         modifier = modifier.semantics(mergeDescendants = true) {},
         onClick = onClick,
-        colors = IconButtonDefaults.filledIconButtonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .12f),
-            disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        ),
+        colors = bitwardenFilledIconButtonColors(),
         enabled = isEnabled,
     ) {
         Icon(

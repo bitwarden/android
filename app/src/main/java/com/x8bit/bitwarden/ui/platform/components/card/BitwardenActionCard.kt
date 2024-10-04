@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -50,9 +51,7 @@ fun BitwardenActionCard(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = BitwardenTheme.colorScheme.background.tertiary,
-        ),
+        colors = bitwardenCardColors(),
         elevation = CardDefaults.elevatedCardElevation(),
         border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),
     ) {
@@ -77,13 +76,12 @@ fun BitwardenActionCard(
                     painter = rememberVectorPainter(id = R.drawable.ic_close),
                     contentDescription = stringResource(id = R.string.close),
                     onClick = onDismissClick,
-                    contentColor = BitwardenTheme.colorScheme.icon.primary,
                     modifier = Modifier.offset(x = 8.dp),
                 )
             }
             Spacer(Modifier.height(16.dp))
             BitwardenFilledButton(
-                actionText,
+                label = actionText,
                 onClick = onActionClick,
                 modifier = Modifier.fillMaxWidth(),
             )

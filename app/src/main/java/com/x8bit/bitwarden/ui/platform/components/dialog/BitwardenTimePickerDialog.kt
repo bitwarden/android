@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -14,9 +13,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerColors
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -67,26 +67,18 @@ fun BitwardenTimePickerDialog(
     TimePickerDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
-            TextButton(
+            BitwardenTextButton(
+                modifier = Modifier.testTag(tag = "AcceptAlertButton"),
+                label = stringResource(id = R.string.ok),
                 onClick = { onTimeSelect(timePickerState.hour, timePickerState.minute) },
-            ) {
-                Text(
-                    text = stringResource(id = R.string.ok),
-                    style = BitwardenTheme.typography.labelLarge,
-                    modifier = Modifier.testTag("AcceptAlertButton"),
-                )
-            }
+            )
         },
         dismissButton = {
-            TextButton(
+            BitwardenTextButton(
+                modifier = Modifier.testTag(tag = "DismissAlertButton"),
+                label = stringResource(id = R.string.cancel),
                 onClick = onDismissRequest,
-                modifier = Modifier.testTag("DismissAlertButton"),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.cancel),
-                    style = BitwardenTheme.typography.labelLarge,
-                )
-            }
+            )
         },
         inputToggleButton = {
             BitwardenStandardIconButton(
@@ -96,7 +88,6 @@ fun BitwardenTimePickerDialog(
                     id = androidx.compose.material3.R.string.m3c_date_picker_switch_to_input_mode,
                 ),
                 onClick = { showTimeInput = !showTimeInput },
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         },
     ) {
@@ -104,16 +95,40 @@ fun BitwardenTimePickerDialog(
         if (showTimeInput) {
             TimeInput(
                 state = timePickerState,
+                colors = bitwardenTimePickerColors(),
                 modifier = modifier,
             )
         } else {
             TimePicker(
                 state = timePickerState,
+                colors = bitwardenTimePickerColors(),
                 modifier = modifier,
             )
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun bitwardenTimePickerColors(): TimePickerColors = TimePickerColors(
+    clockDialColor = BitwardenTheme.colorScheme.filledButton.backgroundReversed,
+    selectorColor = BitwardenTheme.colorScheme.filledButton.background,
+    containerColor = BitwardenTheme.colorScheme.filledButton.foreground,
+    clockDialSelectedContentColor = BitwardenTheme.colorScheme.background.secondary,
+    clockDialUnselectedContentColor = BitwardenTheme.colorScheme.text.primary,
+    periodSelectorBorderColor = BitwardenTheme.colorScheme.stroke.divider,
+    periodSelectorSelectedContainerColor = BitwardenTheme
+        .colorScheme
+        .filledButton
+        .backgroundReversed,
+    periodSelectorUnselectedContainerColor = BitwardenTheme.colorScheme.background.primary,
+    periodSelectorSelectedContentColor = BitwardenTheme.colorScheme.filledButton.foregroundReversed,
+    periodSelectorUnselectedContentColor = BitwardenTheme.colorScheme.text.secondary,
+    timeSelectorSelectedContainerColor = BitwardenTheme.colorScheme.background.tertiary,
+    timeSelectorUnselectedContainerColor = BitwardenTheme.colorScheme.background.secondary,
+    timeSelectorSelectedContentColor = BitwardenTheme.colorScheme.text.primary,
+    timeSelectorUnselectedContentColor = BitwardenTheme.colorScheme.text.primary,
+)
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -130,18 +145,15 @@ private fun TimePickerDialog(
     ) {
         Surface(
             shape = MaterialTheme.shapes.extraLarge,
-            tonalElevation = 6.dp,
+            color = BitwardenTheme.colorScheme.background.primary,
+            contentColor = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .semantics {
                     testTagsAsResourceId = true
                     testTag = "AlertPopup"
                 }
                 .width(IntrinsicSize.Min)
-                .height(IntrinsicSize.Min)
-                .background(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    color = MaterialTheme.colorScheme.surface,
-                ),
+                .height(IntrinsicSize.Min),
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
@@ -154,6 +166,7 @@ private fun TimePickerDialog(
                         .padding(bottom = 20.dp),
                     // TODO: This should be "Select time" but we don't have that string (BIT-1405)
                     text = stringResource(id = R.string.time),
+                    color = BitwardenTheme.colorScheme.text.secondary,
                     style = BitwardenTheme.typography.labelMedium,
                 )
 

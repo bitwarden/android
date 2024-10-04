@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +36,7 @@ fun SearchEmptyContent(
         Icon(
             painter = rememberVectorPainter(id = R.drawable.ic_search),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
                 .size(74.dp)
                 .padding(horizontal = 16.dp),

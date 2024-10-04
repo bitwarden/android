@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +23,7 @@ import androidx.compose.ui.window.Dialog
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -56,7 +55,7 @@ fun AddEditBlockedUriDialog(
                 )
                 // This background is necessary for the dialog to not be transparent.
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = BitwardenTheme.colorScheme.background.primary,
                     shape = RoundedCornerShape(28.dp),
                 ),
             horizontalAlignment = Alignment.End,
@@ -66,16 +65,11 @@ fun AddEditBlockedUriDialog(
                     .padding(top = 24.dp, start = 24.dp, end = 24.dp)
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.new_uri),
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
             )
             if (scrollState.canScrollBackward) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant),
-                )
+                BitwardenHorizontalDivider()
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -101,12 +95,7 @@ fun AddEditBlockedUriDialog(
                 )
             }
             if (scrollState.canScrollForward) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant),
-                )
+                BitwardenHorizontalDivider()
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,

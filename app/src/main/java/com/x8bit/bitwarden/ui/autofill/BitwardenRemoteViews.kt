@@ -3,11 +3,16 @@ package com.x8bit.bitwarden.ui.autofill
 import android.content.Context
 import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.ui.autofill.util.getAutofillSuggestionContentDescription
 import com.x8bit.bitwarden.ui.autofill.util.isSystemDarkMode
+import com.x8bit.bitwarden.ui.platform.theme.color.BitwardenColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 
 /**
  * Build [RemoteViews] for representing an autofill suggestion.
@@ -85,37 +90,31 @@ private fun buildAutofillRemoteViews(
             setInt(
                 R.id.container,
                 "setBackgroundColor",
-                autofillAppInfo.context.surface,
+                autofillAppInfo.context.background.toArgb(),
             )
             setInt(
                 R.id.title,
                 "setTextColor",
-                autofillAppInfo.context.onSurface,
+                autofillAppInfo.context.primaryText.toArgb(),
             )
             setInt(
                 R.id.subtitle,
                 "setTextColor",
-                autofillAppInfo.context.onSurfaceVariant,
+                autofillAppInfo.context.secondaryText.toArgb(),
             )
             if (shouldTintIcon) {
                 setInt(
                     R.id.icon,
                     "setColorFilter",
-                    autofillAppInfo.context.onSurface,
+                    autofillAppInfo.context.iconTint.toArgb(),
                 )
             }
         }
 
-private val Context.onSurface: Int
-    get() = getColor(
-        if (isSystemDarkMode) R.color.dark_on_surface else R.color.on_surface,
-    )
-private val Context.onSurfaceVariant: Int
-    get() = getColor(
-        if (isSystemDarkMode) R.color.dark_on_surface_variant else R.color.on_surface_variant,
-    )
+private val Context.bitwardenColorScheme: BitwardenColorScheme
+    get() = if (isSystemDarkMode) darkBitwardenColorScheme else lightBitwardenColorScheme
 
-private val Context.surface: Int
-    get() = getColor(
-        if (isSystemDarkMode) R.color.dark_surface else R.color.surface,
-    )
+val Context.iconTint: Color get() = bitwardenColorScheme.icon.primary
+private val Context.primaryText: Color get() = bitwardenColorScheme.text.primary
+private val Context.secondaryText: Color get() = bitwardenColorScheme.text.secondary
+private val Context.background: Color get() = bitwardenColorScheme.background.primary

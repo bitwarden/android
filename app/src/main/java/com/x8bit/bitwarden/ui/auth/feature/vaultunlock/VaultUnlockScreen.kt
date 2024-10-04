@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -240,7 +239,7 @@ fun VaultUnlockScreen(
                     Text(
                         text = state.vaultUnlockType.unlockScreenMessage(),
                         style = BitwardenTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = BitwardenTheme.colorScheme.text.primary,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
@@ -254,7 +253,7 @@ fun VaultUnlockScreen(
                         state.environmentUrl,
                     ),
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     modifier = Modifier
                         .testTag("UserAndEnvironmentDataLabel")
                         .padding(horizontal = 16.dp)
@@ -277,7 +276,7 @@ fun VaultUnlockScreen(
                         text = stringResource(R.string.account_biometric_invalidated),
                         textAlign = TextAlign.Start,
                         style = BitwardenTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.error,
+                        color = BitwardenTheme.colorScheme.status.error,
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
                     Spacer(modifier = Modifier.height(12.dp))

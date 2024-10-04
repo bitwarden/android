@@ -5,7 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Represents a Bitwarden-styled clickable text.
@@ -35,7 +35,7 @@ fun BitwardenClickableText(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
     cornerSize: Dp = 28.dp,
-    color: Color = MaterialTheme.colorScheme.primary,
+    color: Color = BitwardenTheme.colorScheme.text.interaction,
 ) {
     Text(
         modifier = modifier
@@ -43,7 +43,7 @@ fun BitwardenClickableText(
             .clickable(
                 indication = ripple(
                     bounded = true,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = BitwardenTheme.colorScheme.background.pressed,
                 ),
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick,

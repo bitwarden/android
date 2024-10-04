@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.card
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -40,12 +41,11 @@ fun BitwardenActionCardSmall(
 ) {
     Card(
         onClick = onCardClicked,
-        shape = RoundedCornerShape(size = 16.dp),
+        shape = RoundedCornerShape(size = 12.dp),
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = BitwardenTheme.colorScheme.background.tertiary,
-        ),
+        colors = bitwardenCardColors(),
         elevation = CardDefaults.elevatedCardElevation(),
+        border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),
     ) {
         Row(
             modifier = Modifier
@@ -111,7 +111,7 @@ private fun ActionCardSmallWithTrailingIcon_preview() {
                 Icon(
                     painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = BitwardenTheme.colorScheme.icon.primary,
                 )
             },
         )
