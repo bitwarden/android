@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 
 /**
  * Draws a password indicator that displays password strength based on the given [state].
@@ -56,12 +54,12 @@ fun PasswordStrengthIndicator(
         label = "Width Percent State",
     )
     val indicatorColor = when (state) {
-        PasswordStrengthState.NONE -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_3 -> LocalNonMaterialColors.current.passwordWeak
-        PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.primary
-        PasswordStrengthState.STRONG -> LocalNonMaterialColors.current.passwordStrong
+        PasswordStrengthState.NONE -> BitwardenTheme.colorScheme.status.error
+        PasswordStrengthState.WEAK_1 -> BitwardenTheme.colorScheme.status.error
+        PasswordStrengthState.WEAK_2 -> BitwardenTheme.colorScheme.status.weak2
+        PasswordStrengthState.WEAK_3 -> BitwardenTheme.colorScheme.status.weak2
+        PasswordStrengthState.GOOD -> BitwardenTheme.colorScheme.status.good
+        PasswordStrengthState.STRONG -> BitwardenTheme.colorScheme.status.strong
     }
     val animatedIndicatorColor by animateColorAsState(
         targetValue = indicatorColor,
@@ -82,7 +80,7 @@ fun PasswordStrengthIndicator(
             Modifier
                 .fillMaxWidth()
                 .height(4.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                .background(BitwardenTheme.colorScheme.sliderButton.unfilled),
         ) {
             Box(
                 modifier = Modifier
@@ -124,12 +122,11 @@ private fun MinimumCharacterCount(
     minimumRequirementMet: Boolean,
     minimumCharacterCount: Int,
 ) {
-    val nonMaterialColors = LocalNonMaterialColors.current
     val characterCountColor by animateColorAsState(
         targetValue = if (minimumRequirementMet) {
-            nonMaterialColors.passwordStrong
+            BitwardenTheme.colorScheme.status.strong
         } else {
-            MaterialTheme.colorScheme.surfaceDim
+            BitwardenTheme.colorScheme.text.secondary
         },
         label = "minmumCharacterCountColor",
     )

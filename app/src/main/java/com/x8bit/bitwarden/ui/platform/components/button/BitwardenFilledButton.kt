@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.ui.platform.components.button
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenFilledButtonColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -34,7 +34,7 @@ fun BitwardenFilledButton(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
-        colors = ButtonDefaults.buttonColors(),
+        colors = bitwardenFilledButtonColors(),
     ) {
         Text(
             text = label,

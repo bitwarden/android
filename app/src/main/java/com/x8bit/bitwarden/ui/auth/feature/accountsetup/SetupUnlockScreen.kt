@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -229,7 +228,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
     Text(
         text = stringResource(id = R.string.set_up_unlock),
         style = BitwardenTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = BitwardenTheme.colorScheme.text.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -243,7 +242,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
             id = R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
         ),
         style = BitwardenTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = BitwardenTheme.colorScheme.text.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -275,7 +274,7 @@ private fun SetupUnlockHeaderLandscape(
             Text(
                 text = stringResource(id = R.string.set_up_unlock),
                 style = BitwardenTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -287,7 +286,7 @@ private fun SetupUnlockHeaderLandscape(
                     id = R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
                 ),
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )

@@ -8,10 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -91,7 +91,9 @@ fun BitwardenMultiSelectButton(
             }
             .fillMaxWidth()
             .clickable(
-                indication = null,
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 enabled = isEnabled,
                 interactionSource = remember { MutableInteractionSource() },
             ) {
@@ -113,7 +115,7 @@ fun BitwardenMultiSelectButton(
                         contentDescription = it.contentDescription,
                         onClick = it.onClick,
                         isEnabled = isEnabled,
-                        contentColor = MaterialTheme.colorScheme.primary,
+                        contentColor = BitwardenTheme.colorScheme.icon.secondary,
                         modifier = Modifier.size(16.dp),
                     )
                 }
@@ -126,18 +128,10 @@ fun BitwardenMultiSelectButton(
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = BitwardenTheme.colorScheme.icon.primary,
             )
         },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.outline,
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
+        colors = bitwardenTextFieldButtonColors(),
         supportingText = supportingText?.let {
             {
                 Text(

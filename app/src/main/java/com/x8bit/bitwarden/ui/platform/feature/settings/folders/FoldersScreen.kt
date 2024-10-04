@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -149,7 +148,7 @@ private fun FoldersContent(
                 text = stringResource(id = R.string.no_folders_to_list),
                 textAlign = TextAlign.Center,
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 modifier = Modifier.testTag("NoFoldersLabel"),
             )
         }
@@ -163,7 +162,9 @@ private fun FoldersContent(
                         .testTag("FolderCell")
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(color = MaterialTheme.colorScheme.primary),
+                            indication = ripple(
+                                color = BitwardenTheme.colorScheme.background.pressed,
+                            ),
                             onClick = { onItemClick(it.id) },
                         )
                         .bottomDivider(paddingStart = 16.dp)
@@ -179,7 +180,7 @@ private fun FoldersContent(
                             .weight(1f),
                         text = it.name,
                         style = BitwardenTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = BitwardenTheme.colorScheme.text.primary,
                     )
                 }
             }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -166,12 +165,11 @@ private fun MasterPasswordGeneratorContent(
         Text(
             text = stringResource(R.string.write_this_password_down_and_keep_it_somewhere_safe),
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
         )
         BitwardenClickableText(
             label = stringResource(R.string.learn_about_other_ways_to_prevent_account_lockout),
             style = BitwardenTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
             onClick = onLearnToPreventLockout,
             innerPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp),
         )
@@ -194,7 +192,6 @@ private fun MasterPasswordGeneratorTopBar(
         actions = {
             BitwardenTextButton(
                 label = stringResource(id = R.string.save),
-                labelTextColor = MaterialTheme.colorScheme.primary,
                 onClick = onSaveClick,
             )
         },

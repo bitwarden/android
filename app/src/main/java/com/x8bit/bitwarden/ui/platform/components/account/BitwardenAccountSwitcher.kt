@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -274,7 +273,9 @@ private fun AccountSummaryItem(
             .testTag("AccountCell")
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = { onSwitchAccountClick(accountSummary) },
                 onLongClick = { onSwitchAccountLongClick(accountSummary) },
             )
@@ -317,7 +318,7 @@ private fun AccountSummaryItem(
             Text(
                 text = accountSummary.environmentLabel,
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier.testTag("AccountEnvironmentLabel"),
             )
 
@@ -325,7 +326,7 @@ private fun AccountSummaryItem(
                 Text(
                     text = stringResource(id = supportingTextResId).lowercaseWithCurrentLocal(),
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.secondary,
                     modifier = Modifier.testTag("AccountStatusLabel"),
                 )
             }
@@ -336,7 +337,10 @@ private fun AccountSummaryItem(
         Icon(
             painter = rememberVectorPainter(id = accountSummary.iconRes),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = when (accountSummary.status) {
+                AccountSummary.Status.ACTIVE -> BitwardenTheme.colorScheme.icon.secondary
+                else -> BitwardenTheme.colorScheme.icon.primary
+            },
             modifier = Modifier
                 .testTag(accountSummary.iconTestTag)
                 .size(24.dp),
@@ -396,7 +400,9 @@ private fun AddAccountItem(
         modifier = Modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = onClick,
             )
             .padding(vertical = 8.dp)
@@ -405,7 +411,7 @@ private fun AddAccountItem(
         Icon(
             painter = rememberVectorPainter(id = R.drawable.ic_plus),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = BitwardenTheme.colorScheme.icon.secondary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .size(24.dp),
@@ -416,6 +422,7 @@ private fun AddAccountItem(
         Text(
             text = stringResource(id = R.string.add_account),
             style = BitwardenTheme.typography.bodyLarge,
+            color = BitwardenTheme.colorScheme.text.interaction,
         )
     }
 }

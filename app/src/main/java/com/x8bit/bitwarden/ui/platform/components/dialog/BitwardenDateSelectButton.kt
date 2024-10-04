@@ -3,14 +3,12 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +28,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
+import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
@@ -93,18 +94,10 @@ fun BitwardenDateSelectButton(
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = BitwardenTheme.colorScheme.icon.primary,
             )
         },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.outline,
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
+        colors = bitwardenTextFieldButtonColors(),
     )
 
     if (shouldShowDialog) {
@@ -112,9 +105,11 @@ fun BitwardenDateSelectButton(
             initialSelectedDateMillis = currentZonedDateTime.orNow().toInstant().toEpochMilli(),
         )
         DatePickerDialog(
+            colors = bitwardenDatePickerColors(),
             onDismissRequest = { shouldShowDialog = false },
             confirmButton = {
-                TextButton(
+                BitwardenTextButton(
+                    label = stringResource(id = R.string.ok),
                     onClick = {
                         onDateSelect(
                             ZonedDateTime
@@ -128,31 +123,55 @@ fun BitwardenDateSelectButton(
                         )
                         shouldShowDialog = false
                     },
-                    modifier = Modifier.testTag("AcceptAlertButton"),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.ok),
-                        style = BitwardenTheme.typography.labelLarge,
-                    )
-                }
+                    modifier = Modifier.testTag(tag = "AcceptAlertButton"),
+                )
             },
             dismissButton = {
-                TextButton(
+                BitwardenTextButton(
+                    label = stringResource(id = R.string.cancel),
                     onClick = { shouldShowDialog = false },
-                    modifier = Modifier.testTag("DismissAlertButton"),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.cancel),
-                        style = BitwardenTheme.typography.labelLarge,
-                    )
-                }
+                    modifier = Modifier.testTag(tag = "DismissAlertButton"),
+                )
             },
             modifier = Modifier.semantics {
                 testTagsAsResourceId = true
                 testTag = "AlertPopup"
             },
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                colors = bitwardenDatePickerColors(),
+            )
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun bitwardenDatePickerColors(): DatePickerColors = DatePickerColors(
+    containerColor = BitwardenTheme.colorScheme.background.primary,
+    titleContentColor = BitwardenTheme.colorScheme.text.secondary,
+    headlineContentColor = BitwardenTheme.colorScheme.text.primary,
+    weekdayContentColor = BitwardenTheme.colorScheme.text.primary,
+    subheadContentColor = BitwardenTheme.colorScheme.text.secondary,
+    navigationContentColor = BitwardenTheme.colorScheme.icon.primary,
+    yearContentColor = BitwardenTheme.colorScheme.text.primary,
+    disabledYearContentColor = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    currentYearContentColor = BitwardenTheme.colorScheme.filledButton.foreground,
+    selectedYearContentColor = BitwardenTheme.colorScheme.filledButton.foreground,
+    disabledSelectedYearContentColor = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    selectedYearContainerColor = BitwardenTheme.colorScheme.filledButton.background,
+    disabledSelectedYearContainerColor = BitwardenTheme.colorScheme.filledButton.backgroundDisabled,
+    dayContentColor = BitwardenTheme.colorScheme.text.primary,
+    disabledDayContentColor = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    selectedDayContentColor = BitwardenTheme.colorScheme.text.reversed,
+    disabledSelectedDayContentColor = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    selectedDayContainerColor = BitwardenTheme.colorScheme.filledButton.background,
+    disabledSelectedDayContainerColor = BitwardenTheme.colorScheme.filledButton.backgroundDisabled,
+    todayContentColor = BitwardenTheme.colorScheme.outlineButton.foreground,
+    todayDateBorderColor = BitwardenTheme.colorScheme.outlineButton.border,
+    dayInSelectionRangeContainerColor = BitwardenTheme.colorScheme.filledButton.background,
+    dividerColor = BitwardenTheme.colorScheme.stroke.divider,
+    dayInSelectionRangeContentColor = BitwardenTheme.colorScheme.text.primary,
+    dateTextFieldColors = bitwardenTextFieldColors(),
+)

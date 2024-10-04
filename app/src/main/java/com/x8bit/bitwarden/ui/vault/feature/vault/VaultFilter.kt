@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -71,7 +70,7 @@ fun VaultFilter(
     Row(
         modifier = Modifier
             .scrolledContainerBackground(topAppBarScrollBehavior)
-            .bottomDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            .bottomDivider()
             .padding(vertical = 8.dp)
             .testTag("ActiveFilterRow")
             .then(modifier),
@@ -83,7 +82,7 @@ fun VaultFilter(
                 selectedVaultFilterType.name(),
             ),
             style = BitwardenTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .testTag("ActiveFilterLabel")
                 .weight(1f),
@@ -95,7 +94,6 @@ fun VaultFilter(
             vectorIconRes = R.drawable.ic_more_horizontal,
             contentDescription = stringResource(id = R.string.filter_by_vault),
             onClick = { shouldShowSelectionDialog = true },
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.testTag(tag = "OpenOrgFilter"),
         )
     }

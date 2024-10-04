@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -58,7 +57,9 @@ fun VaultVerificationCodeItem(
         modifier = Modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = onItemClick,
             )
             .defaultMinSize(minHeight = 72.dp)
@@ -70,7 +71,7 @@ fun VaultVerificationCodeItem(
         BitwardenIcon(
             iconData = startIcon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),
         )
 
@@ -82,7 +83,7 @@ fun VaultVerificationCodeItem(
             Text(
                 text = label,
                 style = BitwardenTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -91,7 +92,7 @@ fun VaultVerificationCodeItem(
                 Text(
                     text = it,
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -107,14 +108,14 @@ fun VaultVerificationCodeItem(
             Text(
                 text = authCode.chunked(3).joinToString(" "),
                 style = BitwardenTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
 
             BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy),
                 onClick = onCopyClick,
-                contentColor = MaterialTheme.colorScheme.primary,
+                contentColor = BitwardenTheme.colorScheme.icon.secondary,
             )
         }
     }

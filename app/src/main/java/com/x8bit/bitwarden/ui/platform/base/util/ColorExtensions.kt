@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A fractional luminance value beyond which we will consider the associated color to be light
@@ -37,8 +37,8 @@ private val Color.luminanceWcag1: Float
  */
 @Composable
 fun Color.toSafeOverlayColor(): Color {
-    val surfaceColor = MaterialTheme.colorScheme.surface
-    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
+    val surfaceColor = BitwardenTheme.colorScheme.background.primary
+    val onSurfaceColor = BitwardenTheme.colorScheme.text.primary
     val lightColor: Color
     val darkColor: Color
     if (surfaceColor.luminance() > onSurfaceColor.luminance()) {

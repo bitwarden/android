@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -82,7 +81,9 @@ fun BitwardenListItem(
         modifier = Modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = onClick,
             )
             .defaultMinSize(minHeight = 72.dp)
@@ -94,7 +95,7 @@ fun BitwardenListItem(
         BitwardenIcon(
             iconData = startIcon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
                 .semantics { startIconTestTag?.let { testTag = it } }
                 .size(24.dp),
@@ -107,7 +108,7 @@ fun BitwardenListItem(
                 Text(
                     text = label,
                     style = BitwardenTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
@@ -120,7 +121,7 @@ fun BitwardenListItem(
                     Icon(
                         painter = iconResource.iconPainter,
                         contentDescription = iconResource.contentDescription,
-                        tint = MaterialTheme.colorScheme.secondary,
+                        tint = BitwardenTheme.colorScheme.icon.primary,
                         modifier = Modifier
                             .semantics { iconResource.testTag?.let { testTag = it } }
                             .size(16.dp),
@@ -132,7 +133,7 @@ fun BitwardenListItem(
                 Text(
                     text = secondSupportLabel,
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.secondary,
                     modifier = Modifier.semantics {
                         secondSupportingLabelTestTag?.let { testTag = it }
                     },
@@ -143,7 +144,7 @@ fun BitwardenListItem(
                 Text(
                     text = supportLabel,
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = BitwardenTheme.colorScheme.text.secondary,
                     modifier = Modifier.semantics { supportingLabelTestTag?.let { testTag = it } },
                 )
             }
@@ -154,7 +155,6 @@ fun BitwardenListItem(
                 vectorIconRes = R.drawable.ic_more_horizontal,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowDialog = true },
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
             )
         }

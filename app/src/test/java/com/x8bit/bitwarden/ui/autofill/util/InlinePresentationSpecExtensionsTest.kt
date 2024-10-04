@@ -126,12 +126,11 @@ class InlinePresentationSpecExtensionsTest {
                 PENDING_INTENT_FLAGS,
             )
             testContext.isSystemDarkMode
-            testContext.getColor(R.color.dark_on_surface)
             Icon.createWithResource(
                 testContext,
                 iconRes,
             )
-                .setTint(ICON_TINT)
+                .setTint(COLOR_DARK_ICON_TINT)
             InlineSuggestionUi.newContentBuilder(pendingIntent)
                 .setTitle(AUTOFILL_CIPHER_NAME)
                 .setSubtitle(AUTOFILL_CIPHER_SUBTITLE)
@@ -186,12 +185,12 @@ class InlinePresentationSpecExtensionsTest {
                 PENDING_INTENT_FLAGS,
             )
             testContext.isSystemDarkMode
-            testContext.getColor(R.color.on_surface)
-            Icon.createWithResource(
-                testContext,
-                iconRes,
-            )
-                .setTint(ICON_TINT)
+            Icon
+                .createWithResource(
+                    testContext,
+                    iconRes,
+                )
+                .setTint(COLOR_LIGHT_ICON_TINT)
             InlineSuggestionUi.newContentBuilder(pendingIntent)
                 .setTitle(AUTOFILL_CIPHER_NAME)
                 .setSubtitle(AUTOFILL_CIPHER_SUBTITLE)
@@ -334,14 +333,21 @@ class InlinePresentationSpecExtensionsTest {
             )
         } returns pendingIntent
         every { testContext.isSystemDarkMode } returns isSystemDarkMode
-        every { testContext.getColor(R.color.on_surface) } returns ICON_TINT
-        every { testContext.getColor(R.color.dark_on_surface) } returns ICON_TINT
         every {
-            Icon.createWithResource(
-                testContext,
-                iconRes,
-            )
-                .setTint(ICON_TINT)
+            Icon
+                .createWithResource(
+                    testContext,
+                    iconRes,
+                )
+                .setTint(COLOR_DARK_ICON_TINT)
+        } returns icon
+        every {
+            Icon
+                .createWithResource(
+                    testContext,
+                    iconRes,
+                )
+                .setTint(COLOR_LIGHT_ICON_TINT)
         } returns icon
         every {
             InlineSuggestionUi
@@ -416,7 +422,8 @@ private const val LOGIN = "Login"
 private const val APP_NAME = "Bitwarden"
 private const val AUTOFILL_CIPHER_NAME = "Cipher1"
 private const val AUTOFILL_CIPHER_SUBTITLE = "Subtitle"
-private const val ICON_TINT: Int = 6123751
+private const val COLOR_DARK_ICON_TINT: Int = -6904901
+private const val COLOR_LIGHT_ICON_TINT: Int = -10850927
 private const val MY_VAULT = "My vault"
 private const val PENDING_INTENT_CODE: Int = 0
 private const val PENDING_INTENT_FLAGS: Int =

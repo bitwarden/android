@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components.header
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,13 +37,13 @@ fun BitwardenListHeaderTextWithSupportLabel(
         Text(
             text = label,
             style = BitwardenTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.secondary,
         )
 
         Text(
             text = supportingLabel,
             style = BitwardenTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.secondary,
         )
     }
 }

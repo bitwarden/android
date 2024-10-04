@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -231,7 +230,7 @@ private fun ContentColumn(
                 modifier = Modifier.padding(end = 16.dp),
                 text = state.copyrightInfo.invoke(),
                 style = BitwardenTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
         }
     }
@@ -249,7 +248,9 @@ private fun CopyRow(
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = onClick,
             )
             .semantics(mergeDescendants = true) {
@@ -270,12 +271,12 @@ private fun CopyRow(
                     .weight(1f),
                 text = text(),
                 style = BitwardenTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BitwardenTheme.colorScheme.text.primary,
             )
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_copy),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = BitwardenTheme.colorScheme.icon.primary,
             )
         }
         BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))

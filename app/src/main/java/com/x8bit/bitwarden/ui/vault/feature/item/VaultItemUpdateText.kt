@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,12 +23,12 @@ fun VaultItemUpdateText(
         Text(
             text = header,
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.secondary,
         )
         Text(
             text = text,
             style = BitwardenTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.secondary,
         )
     }
 }

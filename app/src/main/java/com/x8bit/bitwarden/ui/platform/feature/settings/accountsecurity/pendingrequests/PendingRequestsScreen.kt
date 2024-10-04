@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -52,7 +51,6 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 
 /**
  * Displays the pending login requests screen.
@@ -240,7 +238,9 @@ private fun PendingRequestItem(
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+                indication = ripple(
+                    color = BitwardenTheme.colorScheme.background.pressed,
+                ),
                 onClick = { onNavigateToLoginApproval(fingerprintPhrase) },
             ),
         horizontalAlignment = Alignment.Start,
@@ -250,7 +250,7 @@ private fun PendingRequestItem(
         Text(
             text = stringResource(id = R.string.fingerprint_phrase),
             style = BitwardenTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .fillMaxWidth()
@@ -261,7 +261,7 @@ private fun PendingRequestItem(
 
         Text(
             text = fingerprintPhrase,
-            color = LocalNonMaterialColors.current.fingerprint,
+            color = BitwardenTheme.colorScheme.text.codePink,
             style = BitwardenTheme.typography.sensitiveInfoSmall,
             textAlign = TextAlign.Start,
             modifier = Modifier
@@ -280,14 +280,14 @@ private fun PendingRequestItem(
             Text(
                 text = platform,
                 style = BitwardenTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Text(
                 text = timestamp,
                 style = BitwardenTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 textAlign = TextAlign.End,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -323,7 +323,7 @@ private fun PendingRequestsEmpty(
         Text(
             text = stringResource(id = R.string.no_pending_requests),
             style = BitwardenTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
