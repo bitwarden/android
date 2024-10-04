@@ -241,7 +241,7 @@ class RootNavScreenTest : BaseComposeTest() {
             RootNavState.OnboardingAutoFillSetup
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
-                route = "setup_auto_fill",
+                route = "setup_auto_fill_as_root/true",
                 navOptions = expectedNavOptions,
             )
         }

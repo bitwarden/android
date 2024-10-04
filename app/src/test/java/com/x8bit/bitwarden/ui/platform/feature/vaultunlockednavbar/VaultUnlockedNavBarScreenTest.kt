@@ -53,6 +53,8 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToPendingRequests = {},
                     onNavigateToSearchVault = {},
                     onNavigateToSearchSend = {},
+                    onNavigateToSetupAutoFillScreen = {},
+                    onNavigateToSetupUnlockScreen = {},
                 )
             }
         }
