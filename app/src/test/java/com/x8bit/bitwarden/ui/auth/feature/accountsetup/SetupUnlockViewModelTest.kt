@@ -58,14 +58,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when not initial setup`() {
-        mutableUserStateFlow.update {
-            it?.copy(
-                accounts = listOf(
-                    DEFAULT_USER_ACCOUNT.copy(onboardingStatus = OnboardingStatus.COMPLETE),
-                ),
-            )
-        }
-        val viewModel = createViewModel()
+        val viewModel = createViewModel(DEFAULT_STATE.copy(isInitialSetup = false))
         assertEquals(
             DEFAULT_STATE.copy(isInitialSetup = false),
             viewModel.stateFlow.value,
@@ -89,14 +82,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueClick should send NavigateBack event if this is not the initial setup`() =
         runTest {
-            mutableUserStateFlow.update {
-                it?.copy(
-                    accounts = listOf(
-                        DEFAULT_USER_ACCOUNT.copy(onboardingStatus = OnboardingStatus.COMPLETE),
-                    ),
-                )
-            }
-            val viewModel = createViewModel()
+            val viewModel = createViewModel(DEFAULT_STATE.copy(isInitialSetup = false))
             viewModel.eventFlow.test {
                 viewModel.trySendAction(SetupUnlockAction.ContinueClick)
                 assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
@@ -363,7 +349,12 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         state: SetupUnlockState? = null,
     ): SetupUnlockViewModel =
         SetupUnlockViewModel(
-            savedStateHandle = SavedStateHandle(mapOf("state" to state)),
+            savedStateHandle = SavedStateHandle(
+                mapOf(
+                    "state" to state,
+                    SETUP_UNLOCK_INITIAL_SETUP_ARG to true,
+                ),
+            ),
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             biometricsEncryptionManager = biometricsEncryptionManager,

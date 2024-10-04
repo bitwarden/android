@@ -231,7 +231,7 @@ class RootNavScreenTest : BaseComposeTest() {
             RootNavState.OnboardingAccountLockSetup
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
-                route = "setup_unlock",
+                route = "setup_unlock_as_root/true",
                 navOptions = expectedNavOptions,
             )
         }
