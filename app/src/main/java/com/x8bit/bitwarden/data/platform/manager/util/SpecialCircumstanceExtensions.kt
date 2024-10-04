@@ -13,16 +13,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
     when (this) {
         is SpecialCircumstance.AutofillSave -> this.autofillSaveItem
-        is SpecialCircumstance.AutofillSelection -> null
-        is SpecialCircumstance.PasswordlessRequest -> null
-        is SpecialCircumstance.ShareNewSend -> null
-        SpecialCircumstance.GeneratorShortcut -> null
-        SpecialCircumstance.VaultShortcut -> null
-        is SpecialCircumstance.Fido2Save -> null
-        is SpecialCircumstance.Fido2Assertion -> null
-        is SpecialCircumstance.Fido2GetCredentials -> null
-        is SpecialCircumstance.RegistrationEvent.CompleteRegistration -> null
-        SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink -> null
+        else -> null
     }
 
 /**
@@ -30,17 +21,8 @@ fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
  */
 fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? =
     when (this) {
-        is SpecialCircumstance.AutofillSave -> null
         is SpecialCircumstance.AutofillSelection -> this.autofillSelectionData
-        is SpecialCircumstance.PasswordlessRequest -> null
-        is SpecialCircumstance.ShareNewSend -> null
-        SpecialCircumstance.GeneratorShortcut -> null
-        SpecialCircumstance.VaultShortcut -> null
-        is SpecialCircumstance.Fido2Save -> null
-        is SpecialCircumstance.Fido2Assertion -> null
-        is SpecialCircumstance.Fido2GetCredentials -> null
-        is SpecialCircumstance.RegistrationEvent.CompleteRegistration -> null
-        SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink -> null
+        else -> null
     }
 
 /**

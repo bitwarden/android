@@ -29,9 +29,9 @@ import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingMa
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
-import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -107,12 +107,7 @@ class VaultItemListingViewModel @Inject constructor(
         val activeAccountSummary = userState.toActiveAccountSummary()
         val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
-        val fido2CreationData = specialCircumstance as? SpecialCircumstance.Fido2Save
-        val fido2AssertionData = specialCircumstance as? SpecialCircumstance.Fido2Assertion
-        val fido2GetCredentialsData =
-            specialCircumstance as? SpecialCircumstance.Fido2GetCredentials
-        val dialogState = fido2CreationData
-            ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) }
+        val fido2CredentialRequest = specialCircumstance?.toFido2RequestOrNull()
         VaultItemListingState(
             itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
                 .vaultItemListingType
@@ -125,15 +120,16 @@ class VaultItemListingViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
-            dialogState = dialogState,
+            dialogState = fido2CredentialRequest
+                ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) },
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
-            fido2CredentialRequest = fido2CreationData?.fido2CredentialRequest,
-            fido2CredentialAssertionRequest = fido2AssertionData?.fido2AssertionRequest,
-            fido2GetCredentialsRequest = fido2GetCredentialsData?.fido2GetCredentialsRequest,
+            fido2CredentialRequest = fido2CredentialRequest,
+            fido2CredentialAssertionRequest = specialCircumstance?.toFido2AssertionRequestOrNull(),
+            fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
         )
