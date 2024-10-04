@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.components.card
 
 import android.content.res.Configuration
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -88,6 +90,12 @@ fun BitwardenActionCard(
         }
     }
 }
+
+/**
+ * A default exit animation for [BitwardenActionCard] when using an animation wrapper like
+ * [AnimatedVisibility].
+ */
+fun actionCardExitAnimation() = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
 
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

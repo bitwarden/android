@@ -462,6 +462,42 @@ class AutoFillScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToBlockAutoFill)
         assertTrue(onNavigateToBlockAutoFillScreenCalled)
     }
+
+    @Test
+    fun `autofill action card should show when state is true and hide when false`() {
+        composeTestRule
+            .onNodeWithText("Get started")
+            .assertDoesNotExist()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .assertIsDisplayed()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = false) }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `when autofill card is visible clicking the cta button should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick) }
+    }
+
+    @Test
+    fun `when autofill action card is visible clicking dismissing should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithContentDescription("Close")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(AutoFillAction.DismissShowAutofillActionCard) }
+    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
@@ -473,4 +509,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showInlineAutofillOption = true,
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
+    showAutofillActionCard = false,
+    activeUserId = "activeUserId",
 )
