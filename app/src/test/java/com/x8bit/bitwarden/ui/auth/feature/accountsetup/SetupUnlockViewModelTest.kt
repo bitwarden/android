@@ -352,7 +352,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(
                 mapOf(
                     "state" to state,
-                    SETUP_UNLOCK_INITIAL_SETUP_ARG to true,
+                    "isInitialSetup" to true,
                 ),
             ),
             authRepository = authRepository,
