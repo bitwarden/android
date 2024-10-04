@@ -121,6 +121,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForAutofillSave,
         is RootNavState.VaultUnlockedForAutofillSelection,
         is RootNavState.VaultUnlockedForNewSend,
+        is RootNavState.VaultUnlockedForNewTotp,
         is RootNavState.VaultUnlockedForAuthRequest,
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
@@ -193,6 +194,14 @@ fun RootNavScreen(
                 navController.navigateToVaultUnlock(rootNavOptions)
                 navController.navigateToAddSend(
                     sendAddType = AddSendType.AddItem,
+                    navOptions = rootNavOptions,
+                )
+            }
+
+            is RootNavState.VaultUnlockedForNewTotp -> {
+                navController.navigateToVaultUnlock(rootNavOptions)
+                navController.navigateToVaultItemListingAsRoot(
+                    vaultItemListingType = VaultItemListingType.Login,
                     navOptions = rootNavOptions,
                 )
             }

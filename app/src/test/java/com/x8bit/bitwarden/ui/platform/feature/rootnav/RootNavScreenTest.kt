@@ -151,6 +151,15 @@ class RootNavScreenTest : BaseComposeTest() {
             )
         }
 
+        // Make sure navigating to vault unlocked for new totp works as expected:
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForNewTotp(activeUserId = "userId")
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_item_listing_as_root/login",
+                navOptions = expectedNavOptions,
+            )
+        }
+
         // Make sure navigating to vault unlocked for new sends works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlockedForNewSend
         composeTestRule.runOnIdle {

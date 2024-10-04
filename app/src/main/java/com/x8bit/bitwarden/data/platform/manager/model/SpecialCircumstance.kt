@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -14,6 +15,14 @@ import kotlinx.parcelize.Parcelize
  * of navigation that is counter to what otherwise may happen based on the state of the app.
  */
 sealed class SpecialCircumstance : Parcelable {
+    /**
+     * The app was launched in order to add a new TOTP to a cipher.
+     */
+    @Parcelize
+    data class AddTotpLoginItem(
+        val data: TotpData,
+    ) : SpecialCircumstance()
+
     /**
      * The app was launched in order to create/share a new Send using the given [data].
      */

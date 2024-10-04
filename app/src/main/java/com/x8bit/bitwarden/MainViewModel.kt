@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
+import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -232,6 +233,7 @@ class MainViewModel @Inject constructor(
         val autofillSaveItem = intent.getAutofillSaveItemOrNull()
         val autofillSelectionData = intent.getAutofillSelectionDataOrNull()
         val shareData = intentManager.getShareDataFromIntent(intent)
+        val totpData = intent.getTotpDataOrNull()
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
@@ -268,6 +270,11 @@ class MainViewModel @Inject constructor(
                         // autofill task when this is not the first intent.
                         shouldFinishWhenComplete = isFirstIntent,
                     )
+            }
+
+            totpData != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.AddTotpLoginItem(data = totpData)
             }
 
             shareData != null -> {

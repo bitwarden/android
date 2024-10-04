@@ -117,7 +117,7 @@ class FakeNavHostController : NavHostController(context = mockk()) {
      * Asserts the [currentRoute] matches the given [route].
      */
     fun assertCurrentRoute(route: String) {
-        assertEquals(currentRoute, route)
+        assertEquals(route, currentRoute)
     }
 
     /**
@@ -128,16 +128,16 @@ class FakeNavHostController : NavHostController(context = mockk()) {
         navOptions: NavOptions? = null,
         navigatorExtras: Navigator.Extras? = null,
     ) {
-        assertEquals(currentRoute, route)
-        assertEquals(lastNavigation?.navOptions, navOptions)
-        assertEquals(lastNavigation?.navigatorExtras, navigatorExtras)
+        assertEquals(route, currentRoute)
+        assertEquals(navOptions, lastNavigation?.navOptions)
+        assertEquals(navigatorExtras, lastNavigation?.navigatorExtras)
     }
 
     /**
      * Asserts the [lastNavigation] includes the given [navOptions].
      */
     fun assertLastNavOptions(navOptions: NavOptions?) {
-        assertEquals(lastNavigation?.navOptions, navOptions)
+        assertEquals(navOptions, lastNavigation?.navOptions)
     }
 
     data class Navigation(
