@@ -9,6 +9,8 @@ on:
       - "hotfix-rc"
   pull_request_target:
     types: [opened, synchronize]
+  merge_group:
+    types: [checks_requested]
 
 jobs:
   check-run:

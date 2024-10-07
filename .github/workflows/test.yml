@@ -8,6 +8,8 @@ on:
       - "hotfix-rc"
   pull_request_target:
     types: [opened, synchronize]
+  merge_group:
+    type: [checks_requested]
   workflow_dispatch:
 
 env:
