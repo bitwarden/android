@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAt
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
+import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -139,8 +140,40 @@ class Fido2CredentialManagerTest {
 
             coVerify(exactly = 1) {
                 assetManager.readAsset(
-                    fileName = DEFAULT_ALLOW_LIST_FILENAME,
+                    fileName = GOOGLE_ALLOW_LIST_FILENAME,
                 )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateOrigin should validate with community allow list when google allow list validation fails`() =
+        runTest {
+            coEvery {
+                assetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+            } returns MISSING_PACKAGE_ALLOW_LIST.asSuccess()
+            every {
+                mockPrivilegedCallingAppInfo.getOrigin(
+                    privilegedAllowlist = MISSING_PACKAGE_ALLOW_LIST,
+                )
+            } throws IllegalStateException()
+            coEvery {
+                assetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+            } returns DEFAULT_ALLOW_LIST.asSuccess()
+            every {
+                mockPrivilegedCallingAppInfo.getOrigin(
+                    privilegedAllowlist = DEFAULT_ALLOW_LIST,
+                )
+            } returns DEFAULT_PACKAGE_NAME
+
+            fido2CredentialManager.validateOrigin(
+                mockPrivilegedAppRequest.callingAppInfo,
+                mockPrivilegedAppRequest.requestJson,
+            )
+
+            coVerify(ordering = Ordering.ORDERED) {
+                assetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+                assetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
             }
         }
 
@@ -934,7 +967,7 @@ class Fido2CredentialManagerTest {
             )
 
             coVerify {
-                assetManager.readAsset(DEFAULT_ALLOW_LIST_FILENAME)
+                assetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
                 mockVaultSdkSource.authenticateFido2Credential(
                     request = any(),
                     fido2CredentialStore = any(),
@@ -1033,7 +1066,8 @@ private val DEFAULT_STATEMENT = DigitalAssetLinkResponseJson(
         ),
     ),
 )
-private const val DEFAULT_ALLOW_LIST_FILENAME = "fido2_privileged_allow_list.json"
+private const val GOOGLE_ALLOW_LIST_FILENAME = "fido2_privileged_google.json"
+private const val COMMUNITY_ALLOW_LIST_FILENAME = "fido2_privileged_community.json"
 private val DEFAULT_STATEMENT_LIST = listOf(DEFAULT_STATEMENT)
 private const val DEFAULT_ALLOW_LIST = """
 {
