@@ -417,7 +417,7 @@ data class VerificationCodeDisplayItem(
     val periodSeconds: Int,
     val authCode: String,
     val hideAuthCode: Boolean,
-    val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+    val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
 ) : Parcelable
 
 /**

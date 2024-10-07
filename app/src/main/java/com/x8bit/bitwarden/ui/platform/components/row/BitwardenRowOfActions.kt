@@ -44,12 +44,12 @@ private fun BitwardenRowOfIconButtons_preview() {
     BitwardenTheme {
         BitwardenRowOfActions {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
+                painter = rememberVectorPainter(id = R.drawable.ic_question_circle),
                 contentDescription = "Icon 1",
                 modifier = Modifier.size(24.dp),
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
+                painter = rememberVectorPainter(id = R.drawable.ic_question_circle),
                 contentDescription = "Icon 2",
                 modifier = Modifier.size(24.dp),
             )

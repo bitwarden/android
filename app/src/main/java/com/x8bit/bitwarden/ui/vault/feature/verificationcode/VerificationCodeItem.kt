@@ -127,7 +127,7 @@ fun VaultVerificationCodeItem(
 private fun VerificationCodeItem_preview() {
     BitwardenTheme {
         VaultVerificationCodeItem(
-            startIcon = IconData.Local(R.drawable.ic_login_item),
+            startIcon = IconData.Local(R.drawable.ic_globe),
             label = "Sample Label",
             supportingLabel = "Supporting Label",
             authCode = "1234567890".chunked(3).joinToString(" "),

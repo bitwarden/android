@@ -151,9 +151,9 @@ fun List<LoginUriView>?.toLoginIconData(
     usePasskeyDefaultIcon: Boolean,
 ): IconData {
     val defaultIconRes = if (usePasskeyDefaultIcon) {
-        R.drawable.ic_login_item_passkey
+        R.drawable.ic_bw_passkey
     } else {
-        R.drawable.ic_login_item
+        R.drawable.ic_globe
     }
 
     var uri = this

@@ -315,9 +315,9 @@ private fun AddSendOptions(
         Icon(
             painter = rememberVectorPainter(
                 if (isExpanded) {
-                    R.drawable.ic_expand_up
+                    R.drawable.ic_chevron_up
                 } else {
-                    R.drawable.ic_expand_down
+                    R.drawable.ic_chevron_down
                 },
             ),
             contentDescription = null,

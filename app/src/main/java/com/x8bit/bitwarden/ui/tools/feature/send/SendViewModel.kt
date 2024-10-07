@@ -386,8 +386,8 @@ data class SendState(
                  * Indicates the type of send this, a text or file.
                  */
                 enum class Type(@DrawableRes val iconRes: Int) {
-                    FILE(iconRes = R.drawable.ic_send_file),
-                    TEXT(iconRes = R.drawable.ic_send_text),
+                    FILE(iconRes = R.drawable.ic_file),
+                    TEXT(iconRes = R.drawable.ic_file_text),
                 }
             }
         }

@@ -91,7 +91,7 @@ fun VaultFilter(
         Spacer(modifier = Modifier.width(16.dp))
 
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_more_horizontal,
+            vectorIconRes = R.drawable.ic_ellipsis_horizontal,
             contentDescription = stringResource(id = R.string.filter_by_vault),
             onClick = { shouldShowSelectionDialog = true },
             modifier = Modifier.testTag(tag = "OpenOrgFilter"),

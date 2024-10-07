@@ -78,7 +78,7 @@ fun BitwardenStandardIconButton(
 private fun BitwardenStandardIconButton_preview() {
     BitwardenTheme {
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_tooltip,
+            vectorIconRes = R.drawable.ic_question_circle,
             contentDescription = "Sample Icon",
             onClick = {},
         )

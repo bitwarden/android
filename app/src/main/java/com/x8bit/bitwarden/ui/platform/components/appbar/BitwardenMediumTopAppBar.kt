@@ -67,7 +67,7 @@ private fun BitwardenMediumTopAppBar_preview() {
                 ),
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_more,
+                    vectorIconRes = R.drawable.ic_ellipsis_vertical,
                     contentDescription = "",
                     onClick = { },
                 )

@@ -243,10 +243,10 @@ private fun CipherView.toIconData(
 @get:DrawableRes
 private val CipherType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> R.drawable.ic_login_item
-        CipherType.SECURE_NOTE -> R.drawable.ic_secure_note_item
-        CipherType.CARD -> R.drawable.ic_card_item
-        CipherType.IDENTITY -> R.drawable.ic_identity_item
+        CipherType.LOGIN -> R.drawable.ic_globe
+        CipherType.SECURE_NOTE -> R.drawable.ic_note
+        CipherType.CARD -> R.drawable.ic_payment_card
+        CipherType.IDENTITY -> R.drawable.ic_id_card
     }
 
 /**
@@ -351,8 +351,8 @@ private fun SendView.toDisplayItem(
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
-                SendType.TEXT -> R.drawable.ic_send_text
-                SendType.FILE -> R.drawable.ic_send_file
+                SendType.TEXT -> R.drawable.ic_file_text
+                SendType.FILE -> R.drawable.ic_file
             },
         ),
         extraIconList = toLabelIcons(clock = clock),
