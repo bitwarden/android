@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
@@ -22,6 +23,7 @@ const val SETUP_AUTO_FILL_AS_ROOT_ROUTE =
 /**
  * Arguments for the [SetupAutoFillScreen] using [SavedStateHandle].
  */
+@OmitFromCoverage
 data class SetupAutoFillScreenArgs(val isInitialSetup: Boolean) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         isInitialSetup = requireNotNull(savedStateHandle[SETUP_AUTO_FILL_NAV_ARG]),
