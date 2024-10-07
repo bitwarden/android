@@ -31,7 +31,7 @@ jobs:
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Scan with Checkmarx
-        uses: checkmarx/ast-github-action@9fda5a4a2c297608117a5a56af424502a9192e57 # 2.0.34
+        uses: checkmarx/ast-github-action@ed196cdaec9cd1bc5aacac4ca2010dd773b20893 # 2.0.35
         env:
           INCREMENTAL: "${{ contains(github.event_name, 'pull_request') && '--sast-incremental' || '' }}"
         with:
@@ -46,7 +46,7 @@ jobs:
             --output-path . ${{ env.INCREMENTAL }}
 
       - name: Upload Checkmarx results to GitHub
-        uses: github/codeql-action/upload-sarif@e2b3eafc8d227b0241d48be5f425d47c2d750a13 # v3.26.10
+        uses: github/codeql-action/upload-sarif@6db8d6351fd0be61f9ed8ebd12ccd35dcec51fea # v3.26.11
         with:
           sarif_file: cx_result.sarif
 
@@ -66,7 +66,7 @@ jobs:
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Scan with SonarCloud
-        uses: sonarsource/sonarcloud-github-action@eb211723266fe8e83102bac7361f0a05c3ac1d1b # v3.0.0
+        uses: sonarsource/sonarcloud-github-action@383f7e52eae3ab0510c3cb0e7d9d150bbaeab838 # v3.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
