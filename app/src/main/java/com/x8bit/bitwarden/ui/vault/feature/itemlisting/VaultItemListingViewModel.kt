@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -57,7 +58,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
@@ -69,6 +72,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -127,6 +131,7 @@ class VaultItemListingViewModel @Inject constructor(
                 .any(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
+            totpData = specialCircumstance?.toTotpDataOrNull(),
             fido2CredentialRequest = fido2CredentialRequest,
             fido2CredentialAssertionRequest = specialCircumstance?.toFido2AssertionRequestOrNull(),
             fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
@@ -184,7 +189,8 @@ class VaultItemListingViewModel @Inject constructor(
                     it
                         .filterForAutofillIfNecessary()
                         .filterForFido2CreationIfNecessary()
-                        .filterForFidoGetCredentialsIfNecessary(),
+                        .filterForFidoGetCredentialsIfNecessary()
+                        .filterForTotpIfNecessary(),
                 )
             }
             .onEach(::sendAction)
@@ -560,6 +566,10 @@ class VaultItemListingViewModel @Inject constructor(
             }
             return
         }
+        state.totpData?.let {
+            sendEvent(VaultItemListingEvent.NavigateToEditCipher(cipherId = action.id))
+            return
+        }
 
         if (state.isFido2Creation) {
             handleFido2RegistrationRequestReceive(action)
@@ -832,7 +842,11 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleBackClick() {
         sendEvent(
-            event = VaultItemListingEvent.NavigateBack,
+            event = if (state.isTotp) {
+                VaultItemListingEvent.ExitApp
+            } else {
+                VaultItemListingEvent.NavigateBack
+            },
         )
     }
 
@@ -1640,6 +1654,22 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     /**
+     * Takes the given vault data and filters it for totp data.
+     */
+    private fun DataState<VaultData>.filterForTotpIfNecessary(): DataState<VaultData> {
+        val totpData = state.totpData ?: return this
+        val query = totpData.issuer ?: totpData.accountName ?: return this
+        return this.map { vaultData ->
+            vaultData.copy(
+                cipherViewList = vaultData.cipherViewList.filterAndOrganize(
+                    searchTypeData = SearchTypeData.Vault.Logins,
+                    searchTerm = query,
+                ),
+            )
+        }
+    }
+
+    /**
      * Decrypt and filter the fido 2 autofill credentials.
      */
     @Suppress("MaxLineLength")
@@ -1687,6 +1717,7 @@ data class VaultItemListingState(
     val policyDisablesSend: Boolean,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
+    val totpData: TotpData? = null,
     val autofillSelectionData: AutofillSelectionData? = null,
     val fido2CredentialRequest: Fido2CredentialRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
@@ -1708,6 +1739,11 @@ data class VaultItemListingState(
         get() = fido2CredentialRequest != null
 
     /**
+     * Whether or not this represents a listing screen for totp.
+     */
+    val isTotp: Boolean get() = totpData != null
+
+    /**
      * A displayable title for the AppBar.
      */
     val appBarTitle: Text
@@ -1719,6 +1755,7 @@ data class VaultItemListingState(
                 ?.callingAppInfo
                 ?.getFido2RpIdOrNull()
                 ?.let { R.string.items_for_uri.asText(it) }
+            ?: totpData?.let { R.string.items_for_uri.asText(it.issuer ?: it.accountName ?: "--") }
             ?: itemListingType.titleText
 
     /**
@@ -1730,17 +1767,17 @@ data class VaultItemListingState(
     /**
      * Whether or not the account switcher should be shown.
      */
-    val shouldShowAccountSwitcher: Boolean get() = isAutofill || isFido2Creation
+    val shouldShowAccountSwitcher: Boolean get() = isAutofill || isFido2Creation || isTotp
 
     /**
      * Whether or not the navigation icon should be shown.
      */
-    val shouldShowNavigationIcon: Boolean get() = !isAutofill && !isFido2Creation
+    val shouldShowNavigationIcon: Boolean get() = !isAutofill && !isFido2Creation && !isTotp
 
     /**
      * Whether or not the overflow menu should be shown.
      */
-    val shouldShowOverflowMenu: Boolean get() = !isAutofill && !isFido2Creation
+    val shouldShowOverflowMenu: Boolean get() = !isAutofill && !isFido2Creation && !isTotp
 
     /**
      * Represents the current state of any dialogs on the screen.
@@ -2081,6 +2118,11 @@ data class VaultItemListingState(
  * Models events for the [VaultItemListingScreen].
  */
 sealed class VaultItemListingEvent {
+    /**
+     * Closes the app.
+     */
+    data object ExitApp : VaultItemListingEvent()
+
     /**
      * Navigates to the Create Account screen.
      */

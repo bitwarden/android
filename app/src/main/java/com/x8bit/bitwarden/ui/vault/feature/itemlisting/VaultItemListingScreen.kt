@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,11 +46,13 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
@@ -74,6 +77,7 @@ fun VaultItemListingScreen(
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
+    exitManager: ExitManager = LocalExitManager.current,
     fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
@@ -168,6 +172,8 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.CompleteFido2GetCredentialsRequest -> {
                 fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
             }
+
+            VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
         }
     }
 
@@ -252,12 +258,15 @@ fun VaultItemListingScreen(
         },
     )
 
+    val vaultItemListingHandlers = remember(viewModel) {
+        VaultItemListingHandlers.create(viewModel)
+    }
+
+    BackHandler(onBack = vaultItemListingHandlers.backClick)
     VaultItemListingScaffold(
         state = state,
         pullToRefreshState = pullToRefreshState,
-        vaultItemListingHandlers = remember(viewModel) {
-            VaultItemListingHandlers.create(viewModel)
-        },
+        vaultItemListingHandlers = vaultItemListingHandlers,
     )
 }
 
@@ -451,6 +460,7 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Content -> {
                 VaultItemListingContent(
                     state = state.viewState,
+                    showAddTotpBanner = state.isTotp,
                     policyDisablesSend = state.policyDisablesSend &&
                         state.itemListingType is VaultItemListingState.ItemListingType.Send,
                     vaultItemClick = vaultItemListingHandlers.itemClick,

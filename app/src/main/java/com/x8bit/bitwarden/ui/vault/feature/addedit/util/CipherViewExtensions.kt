@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -37,6 +38,7 @@ private const val PASSKEY_CREATION_TIME_PATTERN: String = "hh:mm a"
 fun CipherView.toViewState(
     isClone: Boolean,
     isIndividualVaultDisabled: Boolean,
+    totpData: TotpData?,
     resourceManager: ResourceManager,
     clock: Clock,
 ): VaultAddEditState.ViewState =
@@ -46,7 +48,7 @@ fun CipherView.toViewState(
                 VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = login?.username.orEmpty(),
                     password = login?.password.orEmpty(),
-                    totp = login?.totp,
+                    totp = totpData?.uri ?: login?.totp,
                     canViewPassword = this.viewPassword,
                     canEditItem = this.edit,
                     uriList = login?.uris.toUriItems(),

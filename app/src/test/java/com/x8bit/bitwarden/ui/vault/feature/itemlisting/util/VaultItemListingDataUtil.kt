@@ -16,6 +16,7 @@ fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
     subtitle: String? = "mockUsername-$number",
+    secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
@@ -25,11 +26,11 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = null,
-                secondSubtitleTestTag = null,
+                secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
-                    "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                    uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                     fallbackIconRes = R.drawable.ic_globe,
                 ),
                 extraIconList = listOf(
@@ -79,7 +80,7 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = null,
-                secondSubtitleTestTag = null,
+                secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_note),
@@ -119,7 +120,7 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = null,
-                secondSubtitleTestTag = null,
+                secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_payment_card),
@@ -165,7 +166,7 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = null,
-                secondSubtitleTestTag = null,
+                secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_id_card),
