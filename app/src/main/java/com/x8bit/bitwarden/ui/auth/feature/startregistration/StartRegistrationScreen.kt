@@ -264,7 +264,7 @@ private fun StartRegistrationContent(
             )
             if (isNewOnboardingUiEnabled) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_tooltip_small,
+                    vectorIconRes = R.drawable.ic_question_circle_small,
                     contentDescription = stringResource(R.string.help_with_server_geolocations),
                     onClick = handler.onServerGeologyHelpClick,
                     contentColor = BitwardenTheme.colorScheme.icon.secondary,

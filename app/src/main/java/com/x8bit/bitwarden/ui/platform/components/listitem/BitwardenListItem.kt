@@ -152,7 +152,7 @@ fun BitwardenListItem(
 
         if (selectionDataList.isNotEmpty()) {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_more_horizontal,
+                vectorIconRes = R.drawable.ic_ellipsis_horizontal,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowDialog = true },
                 modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
@@ -196,7 +196,7 @@ private fun BitwardenListItem_preview() {
         BitwardenListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = IconData.Local(R.drawable.ic_send_text),
+            startIcon = IconData.Local(R.drawable.ic_file_text),
             onClick = {},
             selectionDataList = persistentListOf(),
         )

@@ -819,7 +819,7 @@ data class VaultState(
             data class Login(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -839,7 +839,7 @@ data class VaultState(
             data class Card(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_card_item),
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_payment_card),
                 override val startIconTestTag: String = "CardCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -869,7 +869,7 @@ data class VaultState(
             data class Identity(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_identity_item),
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -887,7 +887,7 @@ data class VaultState(
             data class SecureNote(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_secure_note_item),
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,

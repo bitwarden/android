@@ -1382,7 +1382,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                 subtitleTestTag = "PasskeyName",
                                 iconData = IconData.Network(
                                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                    fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                    fallbackIconRes = R.drawable.ic_bw_passkey,
                                 ),
                                 isAutofill = true,
                             ),
@@ -1462,7 +1462,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                     subtitleTestTag = "PasskeyName",
                                     iconData = IconData.Network(
                                         uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                        fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                        fallbackIconRes = R.drawable.ic_bw_passkey,
                                     ),
                                     isFido2Creation = true,
                                 ),

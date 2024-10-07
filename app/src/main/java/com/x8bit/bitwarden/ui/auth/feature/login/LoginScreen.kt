@@ -275,7 +275,7 @@ private fun LoginScreenContent(
         if (state.shouldShowLoginWithDevice) {
             BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.log_in_with_device),
-                icon = rememberVectorPainter(id = R.drawable.ic_device),
+                icon = rememberVectorPainter(id = R.drawable.ic_mobile),
                 onClick = onLoginWithDeviceClick,
                 modifier = Modifier
                     .testTag("LogInWithAnotherDeviceButton")

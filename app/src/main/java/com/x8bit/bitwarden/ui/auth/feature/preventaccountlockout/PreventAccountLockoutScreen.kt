@@ -131,7 +131,7 @@ private fun NeverLoseAccessContent(
         AccountRecoveryTipRow(
             title = stringResource(R.string.write_your_password_down),
             description = stringResource(R.string.keep_it_secret_keep_it_safe),
-            icon = rememberVectorPainter(id = R.drawable.ic_edit),
+            icon = rememberVectorPainter(id = R.drawable.ic_pencil),
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(16.dp))

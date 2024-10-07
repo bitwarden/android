@@ -98,7 +98,7 @@ private fun BitwardenTextFieldWithActions_preview() {
             onValueChange = {},
             actions = {
                 Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
+                    painter = rememberVectorPainter(id = R.drawable.ic_question_circle),
                     contentDescription = "Action 1",
                 )
                 Icon(

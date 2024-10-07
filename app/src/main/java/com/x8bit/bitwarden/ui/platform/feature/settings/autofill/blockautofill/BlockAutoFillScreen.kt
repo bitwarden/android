@@ -287,7 +287,7 @@ private fun BlockAutoFillListItem(
             color = BitwardenTheme.colorScheme.text.primary,
         )
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_edit_alt),
+            painter = rememberVectorPainter(id = R.drawable.ic_pencil_square),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),

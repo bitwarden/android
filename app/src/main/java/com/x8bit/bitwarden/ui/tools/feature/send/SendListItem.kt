@@ -124,7 +124,7 @@ private fun SendListItem_preview() {
         SendListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = IconData.Local(R.drawable.ic_send_text),
+            startIcon = IconData.Local(R.drawable.ic_file_text),
             trailingLabelIcons = persistentListOf(),
             showMoreOptions = true,
             onClick = {},

@@ -2079,14 +2079,14 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "SendDateLabel",
-        iconData = IconData.Local(R.drawable.ic_card_item),
+        iconData = IconData.Local(R.drawable.ic_payment_card),
         extraIconList = listOf(
             IconRes(
                 iconRes = R.drawable.ic_send_disabled,
                 contentDescription = R.string.disabled.asText(),
             ),
             IconRes(
-                iconRes = R.drawable.ic_send_password,
+                iconRes = R.drawable.ic_key,
                 contentDescription = R.string.password.asText(),
             ),
             IconRes(

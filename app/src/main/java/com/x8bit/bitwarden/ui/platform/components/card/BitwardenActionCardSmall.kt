@@ -109,7 +109,7 @@ private fun ActionCardSmallWithTrailingIcon_preview() {
             onCardClicked = {},
             trailingContent = {
                 Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
+                    painter = rememberVectorPainter(id = R.drawable.ic_chevron_right),
                     contentDescription = null,
                     tint = BitwardenTheme.colorScheme.icon.primary,
                 )

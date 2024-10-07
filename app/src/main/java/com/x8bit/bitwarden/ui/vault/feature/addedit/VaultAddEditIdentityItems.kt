@@ -325,7 +325,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
                     .padding(horizontal = 16.dp),
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_tooltip,
+                        vectorIconRes = R.drawable.ic_question_circle,
                         contentDescription = stringResource(
                             id = R.string.master_password_re_prompt_help,
                         ),

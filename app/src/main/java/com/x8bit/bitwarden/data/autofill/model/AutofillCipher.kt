@@ -48,7 +48,7 @@ sealed class AutofillCipher {
         val number: String,
     ) : AutofillCipher() {
         override val iconRes: Int
-            @DrawableRes get() = R.drawable.ic_card_item
+            @DrawableRes get() = R.drawable.ic_payment_card
 
         override val isTotpEnabled: Boolean
             get() = false
@@ -67,6 +67,6 @@ sealed class AutofillCipher {
         val username: String,
     ) : AutofillCipher() {
         override val iconRes: Int
-            @DrawableRes get() = R.drawable.ic_login_item
+            @DrawableRes get() = R.drawable.ic_globe
     }
 }

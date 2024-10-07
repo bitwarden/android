@@ -128,7 +128,7 @@ fun VaultItemListingContent(
 
             items(state.displayCollectionList) { collection ->
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = R.drawable.ic_collection),
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { collectionClick(collection.id) },

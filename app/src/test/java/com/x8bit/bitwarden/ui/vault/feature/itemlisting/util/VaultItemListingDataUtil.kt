@@ -30,16 +30,16 @@ fun createMockDisplayItemForCipher(
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
                     "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                    fallbackIconRes = R.drawable.ic_login_item,
+                    fallbackIconRes = R.drawable.ic_globe,
                 ),
                 extraIconList = listOf(
                     IconRes(
-                        iconRes = R.drawable.ic_collection,
+                        iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
-                        iconRes = R.drawable.ic_attachment,
+                        iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -82,15 +82,15 @@ fun createMockDisplayItemForCipher(
                 secondSubtitleTestTag = null,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_secure_note_item),
+                iconData = IconData.Local(R.drawable.ic_note),
                 extraIconList = listOf(
                     IconRes(
-                        iconRes = R.drawable.ic_collection,
+                        iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
-                        iconRes = R.drawable.ic_attachment,
+                        iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -122,15 +122,15 @@ fun createMockDisplayItemForCipher(
                 secondSubtitleTestTag = null,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_card_item),
+                iconData = IconData.Local(R.drawable.ic_payment_card),
                 extraIconList = listOf(
                     IconRes(
-                        iconRes = R.drawable.ic_collection,
+                        iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
-                        iconRes = R.drawable.ic_attachment,
+                        iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -168,15 +168,15 @@ fun createMockDisplayItemForCipher(
                 secondSubtitleTestTag = null,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_identity_item),
+                iconData = IconData.Local(R.drawable.ic_id_card),
                 extraIconList = listOf(
                     IconRes(
-                        iconRes = R.drawable.ic_collection,
+                        iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
-                        iconRes = R.drawable.ic_attachment,
+                        iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -215,10 +215,10 @@ fun createMockDisplayItemForSend(
                 secondSubtitleTestTag = null,
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
-                iconData = IconData.Local(R.drawable.ic_send_file),
+                iconData = IconData.Local(R.drawable.ic_file),
                 extraIconList = listOf(
                     IconRes(
-                        iconRes = R.drawable.ic_send_password,
+                        iconRes = R.drawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
@@ -256,10 +256,10 @@ fun createMockDisplayItemForSend(
                 secondSubtitleTestTag = null,
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
-                iconData = IconData.Local(R.drawable.ic_send_text),
+                iconData = IconData.Local(R.drawable.ic_file_text),
                 extraIconList = listOf(
                     IconRes(
-                        iconRes = R.drawable.ic_send_password,
+                        iconRes = R.drawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),

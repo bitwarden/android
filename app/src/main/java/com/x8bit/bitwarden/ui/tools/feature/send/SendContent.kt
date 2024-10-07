@@ -59,7 +59,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = R.string.type_text),
                 supportingLabel = state.textTypeCount.toString(),
-                startIcon = rememberVectorPainter(id = R.drawable.ic_send_text),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_file_text),
                 onClick = sendHandlers.onTextTypeClick,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -72,7 +72,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = R.string.type_file),
                 supportingLabel = state.fileTypeCount.toString(),
-                startIcon = rememberVectorPainter(id = R.drawable.ic_send_file),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_file),
                 onClick = sendHandlers.onFileTypeClick,
                 modifier = Modifier
                     .fillMaxWidth()

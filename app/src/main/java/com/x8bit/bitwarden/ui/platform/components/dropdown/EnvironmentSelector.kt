@@ -83,7 +83,7 @@ fun EnvironmentSelector(
                 modifier = Modifier.padding(end = 8.dp),
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
+                painter = rememberVectorPainter(id = R.drawable.ic_down_triangle),
                 contentDescription = stringResource(id = R.string.region),
                 tint = BitwardenTheme.colorScheme.icon.secondary,
             )

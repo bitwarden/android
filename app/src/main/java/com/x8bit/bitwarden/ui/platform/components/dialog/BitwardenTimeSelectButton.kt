@@ -77,7 +77,7 @@ fun BitwardenTimeSelectButton(
         enabled = shouldShowDialog,
         trailingIcon = {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
+                painter = rememberVectorPainter(id = R.drawable.ic_down_triangle),
                 contentDescription = null,
                 tint = BitwardenTheme.colorScheme.icon.primary,
             )

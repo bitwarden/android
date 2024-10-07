@@ -47,7 +47,7 @@ fun BitwardenFilledIconButton(
 private fun BitwardenFilledIconButton_preview() {
     BitwardenTheme {
         BitwardenFilledIconButton(
-            vectorIconRes = R.drawable.ic_tooltip,
+            vectorIconRes = R.drawable.ic_question_circle,
             contentDescription = "Sample Icon",
             onClick = {},
         )
