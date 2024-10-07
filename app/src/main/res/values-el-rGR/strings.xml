@@ -87,7 +87,7 @@
     <string name="export_confirmation_title">Επιβεβαίωση εξαγωγής</string>
     <string name="export_vault_warning">Αυτή η εξαγωγή περιέχει τα δεδομένα σας σε αποκρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύσετε ή να στείλετε το εξαχθέν αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω ηλ. ταχυδρομείου). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του.</string>
     <string name="file_format">Μορφή αρχείου</string>
-    <string name="export_vault_failure">Παρουσιάστηκε πρόβλημα κατά την εξαγωγή του θησαυροφυλακίου σας. Εάν το πρόβλημα επιμένει, θα χρειαστεί να κάνετε εξαγωγή από το διαδικτυακό θησαυροφυλάκιο.</string>
+    <string name="export_vault_failure">Παρουσιάστηκε πρόβλημα κατά την εξαγωγή της κρύπτης σας. Εάν το πρόβλημα επιμένει, θα χρειαστεί να κάνετε εξαγωγή από τη διαδικτυακή κρύπτη.</string>
     <string name="export_success">Επιτυχής εξαγωγή δεδομένων</string>
     <string name="unlock_with">Ξεκλείδωμα με %1$s</string>
     <string name="biometrics">Βιομετρικά στοιχεία</string>
@@ -108,10 +108,10 @@
     <string name="key_is_required">Το κλειδί είναι υποχρεωτικό.</string>
     <string name="name_is_required">Το όνομα είναι υποχρεωτικό.</string>
     <string name="submit_crash_logs">Υποβολή αρχείου καταγραφής σφαλμάτων</string>
-    <string name="import_vault_failure">Παρουσιάστηκε πρόβλημα κατά την εισαγωγή του θησαυροφυλακίου σας.</string>
+    <string name="import_vault_failure">Παρουσιάστηκε πρόβλημα κατά την εισαγωγή της κρύπτης σας.</string>
     <string name="file_source">Προέλευση αρχείου</string>
     <string name="import_vault">Εισαγωγή</string>
-    <string name="import_success">Επιτυχής εισαγωγή θησαυροφυλακίου</string>
+    <string name="import_success">Επιτυχής εισαγωγή κρύπτης</string>
     <string name="key_is_invalid">Το κλειδί δεν είναι έγκυρο.</string>
     <string name="favorite_tooltip">Αποθήκευση ως αγαπημένο</string>
     <string name="favorite">Αγαπημένο</string>

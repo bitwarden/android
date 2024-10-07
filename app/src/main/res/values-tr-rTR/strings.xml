@@ -119,7 +119,7 @@
     <string name="backup">Yedekle</string>
     <string name="data_backup_title">Veri yedekleme</string>
     <string name="data_backup_message">Bitwarden Kimlik Doğrulayıcı verileri yedeklenir ve düzenli olarak planlanan cihaz yedeklemelerinizle geri yüklenebilir.</string>
-    <string name="learn_more">Daha fazla bilgi edinin</string>
+    <string name="learn_more">Daha fazla bilgi edin</string>
     <string name="import_2fas_password_protected_not_supported">Şifre korumalı 2FAS dosyalarından içe aktarma desteklenmiyor. Şifre korumasız bir dışa aktarılan dosya ile tekrar deneyin.</string>
     <string name="import_bitwarden_unsupported_format">Bitwarden CSV dosyalarını içe aktarma desteklenmiyor. Bunun yerine dışa aktarılan bir JSON dosyası ile tekrar deneyin.</string>
 </resources>
