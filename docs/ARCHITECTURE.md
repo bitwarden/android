@@ -277,7 +277,7 @@ The following shows off the basic structure of a composable `...Screen` implemen
 - The VM "state" is consumed using `viewModel.stateFlow.collectAsStateWithLifecycle()`. This will cause the composable to "recompose" and update whenever updates are pushed to the `viewModel.stateFlow`.
 - The VM "events" are consumed using an [EventsEffect](../app/src/main/java/com/x8bit/bitwarden/ui/platform/base/util/EventsEffect.kt) and demonstrate how the `onNavigateToNextScreen` may be triggered.
 - The current state of the text, switch, and button are hoisted to the VM and pulled out from the `state`. User interactions with the switch and button result in "actions" being sent to the VM using `viewModel.trySendAction`.
-- Reusable components (`BitwardenLoadingDialog`, `BitwardenSwitch`, and `BitwardenFilledButton`) are used where possibe in order to build the screen using the correct theming and reduce code duplication. When this is not possible (such as when rending the `Text` composable) all colors and styles are pulled from the [MaterialTheme](https://developer.android.com/reference/kotlin/androidx/compose/material/MaterialTheme) object.
+- Reusable components (`BitwardenLoadingDialog`, `BitwardenSwitch`, and `BitwardenFilledButton`) are used where possible in order to build the screen using the correct theming and reduce code duplication. When this is not possible (such as when rending the `Text` composable) all colors and styles are pulled from the BitwardenTheme object.
 
 <details>
 <summary>Show example</summary>
