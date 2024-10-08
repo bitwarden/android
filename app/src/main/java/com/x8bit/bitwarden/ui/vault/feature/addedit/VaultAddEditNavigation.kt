@@ -118,7 +118,7 @@ private fun VaultAddEditType.toVaultItemCipherTypeOrNull(): String? =
         is VaultAddEditType.AddItem -> vaultItemCipherType.toTypeString()
         is VaultAddEditType.CloneItem,
         is VaultAddEditType.EditItem,
-        -> null
+            -> null
     }
 
 private fun VaultItemCipherType.toTypeString(): String =

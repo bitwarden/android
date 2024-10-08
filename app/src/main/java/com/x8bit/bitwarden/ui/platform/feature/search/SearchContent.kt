@@ -73,7 +73,7 @@ fun SearchContent(
         is ListingItemOverflowAction.VaultAction.LaunchClick,
         is ListingItemOverflowAction.VaultAction.ViewClick,
         null,
-        -> Unit
+            -> Unit
     }
 
     var autofillSelectionOptionsItem by rememberSaveable {

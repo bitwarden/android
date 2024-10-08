@@ -352,6 +352,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
     private fun getMutableShowAutoFillSettingBadgeFlow(
         userId: String,
     ): MutableSharedFlow<Boolean?> = mutableShowAutoFillSettingBadgeFlowMap.getOrPut(userId) {

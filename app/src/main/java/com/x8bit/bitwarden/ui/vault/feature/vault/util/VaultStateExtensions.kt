@@ -13,7 +13,7 @@ fun VaultState.ViewState.vaultFilterDataIfRequired(
     when (this) {
         is VaultState.ViewState.Content,
         is VaultState.ViewState.NoItems,
-        -> vaultFilterData?.let {
+            -> vaultFilterData?.let {
             if (it.vaultFilterTypes.contains(VaultFilterType.MyVault) ||
                 it.vaultFilterTypes.size > 2
             ) {
@@ -25,5 +25,5 @@ fun VaultState.ViewState.vaultFilterDataIfRequired(
 
         is VaultState.ViewState.Error,
         is VaultState.ViewState.Loading,
-        -> null
+            -> null
     }

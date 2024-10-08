@@ -11,5 +11,5 @@ fun VaultUnlockError.toLoginErrorResult(): LoginResult.Error = when (this) {
     is VaultUnlockResult.AuthenticationError -> LoginResult.Error(this.message)
     VaultUnlockResult.GenericError,
     VaultUnlockResult.InvalidStateError,
-    -> LoginResult.Error(errorMessage = null)
+        -> LoginResult.Error(errorMessage = null)
 }

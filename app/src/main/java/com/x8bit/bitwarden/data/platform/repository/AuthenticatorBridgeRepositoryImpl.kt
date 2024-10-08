@@ -75,7 +75,7 @@ class AuthenticatorBridgeRepositoryImpl(
                         is VaultUnlockResult.AuthenticationError,
                         VaultUnlockResult.GenericError,
                         VaultUnlockResult.InvalidStateError,
-                        -> {
+                            -> {
                             // Not being able to unlock the user's vault with the
                             // decrypted unlock key is an unexpected case, but if it does
                             // happen we omit the account from list of shared accounts

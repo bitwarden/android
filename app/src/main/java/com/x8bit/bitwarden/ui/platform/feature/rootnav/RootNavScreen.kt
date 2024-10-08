@@ -109,7 +109,7 @@ fun RootNavScreen(
         is RootNavState.CompleteOngoingRegistration,
         RootNavState.AuthWithWelcome,
         RootNavState.ExpiredRegistrationLink,
-        -> AUTH_GRAPH_ROUTE
+            -> AUTH_GRAPH_ROUTE
 
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
         RootNavState.SetPassword -> SET_PASSWORD_ROUTE
@@ -126,7 +126,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForFido2GetCredentials,
-        -> VAULT_UNLOCKED_GRAPH_ROUTE
+            -> VAULT_UNLOCKED_GRAPH_ROUTE
 
         RootNavState.OnboardingAccountLockSetup -> SETUP_UNLOCK_AS_ROOT_ROUTE
         RootNavState.OnboardingAutoFillSetup -> SETUP_AUTO_FILL_AS_ROOT_ROUTE
@@ -235,7 +235,7 @@ fun RootNavScreen(
             is RootNavState.VaultUnlockedForFido2Save,
             is RootNavState.VaultUnlockedForFido2Assertion,
             is RootNavState.VaultUnlockedForFido2GetCredentials,
-            -> {
+                -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultItemListingAsRoot(
                     vaultItemListingType = VaultItemListingType.Login,

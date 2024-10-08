@@ -50,7 +50,7 @@ val AccountSummary.iconTestTag: String
         AccountSummary.Status.LOCKED,
         AccountSummary.Status.LOGGED_OUT,
         AccountSummary.Status.UNLOCKED,
-        -> "InactiveVaultIcon"
+            -> "InactiveVaultIcon"
     }
 
 /**

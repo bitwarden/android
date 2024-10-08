@@ -183,7 +183,7 @@ class LoginApprovalViewModel @Inject constructor(
             AuthRequestUpdatesResult.Approved,
             AuthRequestUpdatesResult.Declined,
             AuthRequestUpdatesResult.Expired,
-            -> {
+                -> {
                 sendClosingEvent()
             }
         }

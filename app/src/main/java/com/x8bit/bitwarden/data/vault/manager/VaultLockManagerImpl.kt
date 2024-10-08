@@ -489,7 +489,7 @@ class VaultLockManagerImpl(
                     // User no longer active or engaging with the app.
                     CheckTimeoutReason.APP_BACKGROUNDED,
                     CheckTimeoutReason.USER_CHANGED,
-                    -> {
+                        -> {
                         handleTimeoutActionWithDelay(
                             userId = userId,
                             vaultTimeoutAction = vaultTimeoutAction,

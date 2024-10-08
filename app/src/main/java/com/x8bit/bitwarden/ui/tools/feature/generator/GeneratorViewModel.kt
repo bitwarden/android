@@ -779,44 +779,44 @@ class GeneratorViewModel @Inject constructor(
     ) {
         when (action) {
             is GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange,
-            -> {
+                -> {
                 handlePasswordLengthSliderChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange,
-            -> {
+                -> {
                 handleToggleCapitalLetters(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleLowercaseLettersChange,
-            -> {
+                -> {
                 handleToggleLowercaseLetters(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange,
-            -> {
+                -> {
                 handleToggleNumbers(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password
             .ToggleSpecialCharactersChange,
-            -> {
+                -> {
                 handleToggleSpecialChars(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
-            -> {
+                -> {
                 handleMinNumbersChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
-            -> {
+                -> {
                 handleMinSpecialChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Password
             .ToggleAvoidAmbigousCharactersChange,
-            -> {
+                -> {
                 handleToggleAmbiguousChars(action)
             }
         }
@@ -923,22 +923,22 @@ class GeneratorViewModel @Inject constructor(
     ) {
         when (action) {
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange,
-            -> {
+                -> {
                 handleNumWordsCounterChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange,
-            -> {
+                -> {
                 handlePassphraseToggleCapitalizeChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange,
-            -> {
+                -> {
                 handlePassphraseToggleIncludeNumberChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.WordSeparatorTextChange,
-            -> {
+                -> {
                 handleWordSeparatorTextInputChange(action)
             }
         }
@@ -1096,7 +1096,7 @@ class GeneratorViewModel @Inject constructor(
             .ForwardedEmailAlias
             .AddyIo
             .AccessTokenTextChange,
-            -> {
+                -> {
                 handleAddyIoAccessTokenTextChange(action)
             }
 
@@ -1107,7 +1107,7 @@ class GeneratorViewModel @Inject constructor(
             .ForwardedEmailAlias
             .AddyIo
             .DomainTextChange,
-            -> {
+                -> {
                 handleAddyIoDomainNameTextChange(action)
             }
         }
@@ -1220,7 +1220,7 @@ class GeneratorViewModel @Inject constructor(
             .ForwardedEmailAlias
             .ForwardEmail
             .ApiKeyTextChange,
-            -> {
+                -> {
                 handleForwardEmailApiKeyTextChange(action)
             }
 
@@ -1231,7 +1231,7 @@ class GeneratorViewModel @Inject constructor(
             .ForwardedEmailAlias
             .ForwardEmail
             .DomainNameTextChange,
-            -> {
+                -> {
                 handleForwardEmailDomainNameTextChange(action)
             }
         }
@@ -1330,7 +1330,7 @@ class GeneratorViewModel @Inject constructor(
             .UsernameType
             .RandomWord
             .ToggleIncludeNumberChange,
-            -> {
+                -> {
                 handleRandomWordToggleIncludeNumberChange(action)
             }
         }

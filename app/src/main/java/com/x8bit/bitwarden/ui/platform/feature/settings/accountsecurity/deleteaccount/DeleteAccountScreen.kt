@@ -95,7 +95,7 @@ fun DeleteAccountScreen(
 
         DeleteAccountState.DeleteAccountDialog.Loading,
 
-        -> BitwardenLoadingDialog(
+            -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
         )
 

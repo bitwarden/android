@@ -55,9 +55,9 @@ class BiometricsEncryptionManagerImpl(
             }
         val cipher = try {
             Cipher.getInstance(CIPHER_TRANSFORMATION)
-        } catch (e: NoSuchAlgorithmException) {
+        } catch (_: NoSuchAlgorithmException) {
             return null
-        } catch (e: NoSuchPaddingException) {
+        } catch (_: NoSuchPaddingException) {
             return null
         }
         // This should never fail to initialize / return false because the cipher is newly generated
@@ -116,20 +116,20 @@ class BiometricsEncryptionManagerImpl(
                 KeyProperties.KEY_ALGORITHM_AES,
                 ENCRYPTION_KEYSTORE_NAME,
             )
-        } catch (e: NoSuchAlgorithmException) {
+        } catch (_: NoSuchAlgorithmException) {
             return null
-        } catch (e: NoSuchProviderException) {
+        } catch (_: NoSuchProviderException) {
             return null
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             return null
         }
 
         try {
             keyGen.init(keyGenParameterSpec)
             keyGen.generateKey()
-        } catch (e: InvalidAlgorithmParameterException) {
+        } catch (_: InvalidAlgorithmParameterException) {
             return null
-        } catch (e: ProviderException) {
+        } catch (_: ProviderException) {
             return null
         }
 
@@ -142,29 +142,29 @@ class BiometricsEncryptionManagerImpl(
     private fun getSecretKeyOrNull(): SecretKey? {
         try {
             keystore.load(null)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             // keystore could not be loaded because [param] is unrecognized.
             return null
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             // keystore data format is invalid or the password is incorrect.
             return null
-        } catch (e: NoSuchAlgorithmException) {
+        } catch (_: NoSuchAlgorithmException) {
             // keystore integrity could not be checked due to missing algorithm.
             return null
-        } catch (e: CertificateException) {
+        } catch (_: CertificateException) {
             // keystore certificates could not be loaded
             return null
         }
 
         return try {
             keystore.getKey(ENCRYPTION_KEY_NAME, null) as? SecretKey
-        } catch (e: KeyStoreException) {
+        } catch (_: KeyStoreException) {
             // keystore was not loaded
             null
-        } catch (e: NoSuchAlgorithmException) {
+        } catch (_: NoSuchAlgorithmException) {
             // keystore algorithm cannot be found
             null
-        } catch (e: UnrecoverableKeyException) {
+        } catch (_: UnrecoverableKeyException) {
             // key could not be recovered
             null
         }
@@ -181,15 +181,15 @@ class BiometricsEncryptionManagerImpl(
         try {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey)
             true
-        } catch (e: KeyPermanentlyInvalidatedException) {
+        } catch (_: KeyPermanentlyInvalidatedException) {
             // Biometric has changed
             settingsDiskSource.systemBiometricIntegritySource = null
             false
-        } catch (e: UnrecoverableKeyException) {
+        } catch (_: UnrecoverableKeyException) {
             // Biometric was disabled and re-enabled
             settingsDiskSource.systemBiometricIntegritySource = null
             false
-        } catch (e: InvalidKeyException) {
+        } catch (_: InvalidKeyException) {
             // Fallback for old Bitwarden users without a key
             createIntegrityValues(userId)
             true

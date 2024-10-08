@@ -40,5 +40,9 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Trash,
         is VaultItemListingState.ItemListingType.Vault.Folder,
-        -> throw IllegalStateException("Cannot create vault item from this VaultItemListingState!")
+            -> {
+            throw IllegalStateException(
+                "Cannot create vault item from this VaultItemListingState!",
+            )
+        }
     }

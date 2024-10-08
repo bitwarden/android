@@ -132,7 +132,7 @@ class Fido2CompletionManagerImpl(
             }
 
             Fido2GetCredentialsResult.Error,
-            -> {
+                -> {
                 PendingIntentHandler.setGetCredentialException(
                     resultIntent,
                     GetCredentialUnknownException(),

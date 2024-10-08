@@ -350,10 +350,10 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
                 .performScrollTo()
                 .performClick()
 
-        verify {
-            viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
+            verify {
+                viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
+            }
         }
-    }
 
     @Test
     fun `Header should be displayed in portrait mode`() = testWithFeatureFlagOn {

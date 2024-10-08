@@ -295,7 +295,7 @@ fun List<FolderView>.toFilteredList(
             when (vaultFilterType) {
                 VaultFilterType.AllVaults,
                 VaultFilterType.MyVault,
-                -> true
+                    -> true
 
                 // Only include folders containing an item associated with this organization.
                 is VaultFilterType.OrganizationVault -> {
