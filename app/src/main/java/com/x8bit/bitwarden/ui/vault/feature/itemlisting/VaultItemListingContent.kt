@@ -15,9 +15,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
@@ -26,9 +26,7 @@ import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
 
@@ -81,7 +79,7 @@ fun VaultItemListingContent(
         is ListingItemOverflowAction.VaultAction.ViewClick,
         is ListingItemOverflowAction.VaultAction.CopyTotpClick,
         null,
-        -> Unit
+            -> Unit
     }
 
     var masterPasswordRepromptData by remember { mutableStateOf<MasterPasswordRepromptData?>(null) }
@@ -106,10 +104,8 @@ fun VaultItemListingContent(
         item {
             if (showAddTotpBanner) {
                 Spacer(modifier = Modifier.height(height = 12.dp))
-                BitwardenPolicyWarningText(
+                BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.add_this_authenticator_key_to_a_login),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
@@ -120,7 +116,7 @@ fun VaultItemListingContent(
         item {
             if (policyDisablesSend) {
                 Spacer(modifier = Modifier.height(height = 12.dp))
-                BitwardenPolicyWarningText(
+                BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
