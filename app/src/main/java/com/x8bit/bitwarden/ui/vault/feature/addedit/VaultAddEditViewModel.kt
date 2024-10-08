@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
@@ -53,6 +54,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -108,33 +110,31 @@ class VaultAddEditViewModel @Inject constructor(
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any()
 
+            val specialCircumstance = specialCircumstanceManager.specialCircumstance
             // Check for autofill data to pre-populate
-            val autofillSaveItem = specialCircumstanceManager
-                .specialCircumstance
-                ?.toAutofillSaveItemOrNull()
-            val autofillSelectionData = specialCircumstanceManager
-                .specialCircumstance
-                ?.toAutofillSelectionDataOrNull()
+            val autofillSaveItem = specialCircumstance?.toAutofillSaveItemOrNull()
+            val autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull()
+            // Check for totp data to pre-populate
+            val totpData = specialCircumstance?.toTotpDataOrNull()
+            // Check for Fido2 data to pre-populate
+            val fido2CreationRequest = specialCircumstance?.toFido2RequestOrNull()
+            val fido2AttestationOptions = fido2CreationRequest?.let { request ->
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request.requestJson)
+            }
 
-            val fido2CreationRequest = specialCircumstanceManager
-                .specialCircumstance
-                ?.toFido2RequestOrNull()
+            // Exit on save if handling an autofill, Fido2 Attestation, or TOTP link
+            val shouldExitOnSave = autofillSaveItem != null ||
+                fido2AttestationOptions != null ||
+                totpData != null
 
-            val fido2AttestationOptions = fido2CreationRequest
-                ?.let { request ->
-                    fido2CredentialManager
-                        .getPasskeyAttestationOptionsOrNull(request.requestJson)
-                }
-
-            val dialogState =
-                if (!settingsRepository.initialAutofillDialogShown &&
-                    vaultAddEditType is VaultAddEditType.AddItem &&
-                    autofillSelectionData == null
-                ) {
-                    VaultAddEditState.DialogState.InitialAutofillPrompt
-                } else {
-                    null
-                }
+            val dialogState = if (!settingsRepository.initialAutofillDialogShown &&
+                vaultAddEditType is VaultAddEditType.AddItem &&
+                autofillSelectionData == null
+            ) {
+                VaultAddEditState.DialogState.InitialAutofillPrompt
+            } else {
+                null
+            }
 
             VaultAddEditState(
                 vaultAddEditType = vaultAddEditType,
@@ -142,13 +142,12 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.AddItem -> {
                         autofillSelectionData
                             ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
-                            ?: autofillSaveItem
-                                ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
-                            ?: fido2CreationRequest
-                                ?.toDefaultAddTypeContent(
-                                    attestationOptions = fido2AttestationOptions,
-                                    isIndividualVaultDisabled = isIndividualVaultDisabled,
-                                )
+                            ?: autofillSaveItem?.toDefaultAddTypeContent(isIndividualVaultDisabled)
+                            ?: fido2CreationRequest?.toDefaultAddTypeContent(
+                                attestationOptions = fido2AttestationOptions,
+                                isIndividualVaultDisabled = isIndividualVaultDisabled,
+                            )
+                            ?: totpData?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: VaultAddEditState.ViewState.Content(
                                 common = VaultAddEditState.ViewState.Content.Common(),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
@@ -160,9 +159,10 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = dialogState,
+                totpData = totpData,
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
-                shouldExitOnSave = autofillSaveItem != null || fido2AttestationOptions != null,
+                shouldExitOnSave = shouldExitOnSave,
             )
         },
 ) {
@@ -1412,18 +1412,14 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is CreateCipherResult.Success -> {
+                specialCircumstanceManager.specialCircumstance = null
                 if (state.shouldExitOnSave) {
-                    specialCircumstanceManager.specialCircumstance = null
-                    sendEvent(
-                        event = VaultAddEditEvent.ExitApp,
-                    )
+                    sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
                     sendEvent(
                         event = VaultAddEditEvent.ShowToast(R.string.new_item_created.asText()),
                     )
-                    sendEvent(
-                        event = VaultAddEditEvent.NavigateBack,
-                    )
+                    sendEvent(event = VaultAddEditEvent.NavigateBack)
                 }
             }
         }
@@ -1444,10 +1440,13 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is UpdateCipherResult.Success -> {
-                sendEvent(
-                    event = VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                )
-                sendEvent(VaultAddEditEvent.NavigateBack)
+                specialCircumstanceManager.specialCircumstance = null
+                if (state.shouldExitOnSave) {
+                    sendEvent(event = VaultAddEditEvent.ExitApp)
+                } else {
+                    sendEvent(event = VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+                    sendEvent(event = VaultAddEditEvent.NavigateBack)
+                }
             }
         }
     }
@@ -1544,15 +1543,19 @@ class VaultAddEditViewModel @Inject constructor(
                 ) { currentAccount, cipherView ->
                     // Derive the view state from the current Cipher for Edit mode
                     // or use the current state for Add
-                    (cipherView?.toViewState(
-                        isClone = isCloneMode,
-                        isIndividualVaultDisabled = isIndividualVaultDisabled,
-                        resourceManager = resourceManager,
-                        clock = clock,
-                    ) ?: viewState)
+                    (cipherView
+                        ?.toViewState(
+                            isClone = isCloneMode,
+                            isIndividualVaultDisabled = isIndividualVaultDisabled,
+                            totpData = totpData,
+                            resourceManager = resourceManager,
+                            clock = clock,
+                        )
+                        ?: viewState)
                         .appendFolderAndOwnerData(
                             folderViewList = vaultData.folderViewList,
-                            collectionViewList = vaultData.collectionViewList
+                            collectionViewList = vaultData
+                                .collectionViewList
                                 .filter { !it.readOnly },
                             activeAccount = currentAccount,
                             isIndividualVaultDisabled = isIndividualVaultDisabled,
@@ -1911,6 +1914,7 @@ data class VaultAddEditState(
     val shouldShowCloseButton: Boolean = true,
     // Internal
     val shouldExitOnSave: Boolean = false,
+    val totpData: TotpData? = null,
 ) : Parcelable {
 
     /**

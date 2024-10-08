@@ -62,6 +62,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -701,6 +702,60 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `in add mode during totp fill, SaveClick should show dialog, remove it once an item is saved, and emit ExitApp`() =
+        runTest {
+            val totpData = TotpData(
+                uri = "otpauth://totp/issuer:accountName?secret=secret",
+                issuer = "issuer",
+                accountName = "accountName",
+                secret = "secret",
+                digits = 6,
+                period = 30,
+                algorithm = TotpData.CryptoHashAlgorithm.SHA_1,
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AddTotpLoginItem(data = totpData)
+            val stateWithDialog = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                dialogState = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                commonContentViewState = createCommonContentViewState(name = "issuer"),
+                totpData = totpData,
+                shouldExitOnSave = true,
+            )
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(name = "issuer"),
+                totpData = totpData,
+                shouldExitOnSave = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success
+
+            viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+
+                assertEquals(VaultAddEditEvent.ExitApp, eventTurbine.awaitItem())
+            }
+            assertNull(specialCircumstanceManager.specialCircumstance)
+            coVerify(exactly = 1) {
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `in add mode during fido2 registration, SaveClick should show saving dialog, and request user verification when required`() =
         runTest {
             val fido2CredentialRequest = Fido2CredentialRequest(
@@ -1204,6 +1259,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 cipherView.toViewState(
                     isClone = false,
                     isIndividualVaultDisabled = false,
+                    totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
                 )
@@ -1234,6 +1290,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 cipherView.toViewState(
                     isClone = false,
                     isIndividualVaultDisabled = false,
+                    totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
                 )
@@ -1267,6 +1324,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 cipherView.toViewState(
                     isClone = false,
                     isIndividualVaultDisabled = false,
+                    totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
                 )
@@ -1328,6 +1386,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 cipherView.toViewState(
                     isClone = false,
                     isIndividualVaultDisabled = false,
+                    totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
                 )
@@ -1392,6 +1451,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 cipherView.toViewState(
                     isClone = false,
                     isIndividualVaultDisabled = false,
+                    totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
                 )
@@ -1447,6 +1507,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             cipherView.toViewState(
                 isClone = false,
                 isIndividualVaultDisabled = false,
+                totpData = null,
                 resourceManager = resourceManager,
                 clock = fixedClock,
             )
@@ -1507,6 +1568,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 cipherView.toViewState(
                     isClone = false,
                     isIndividualVaultDisabled = false,
+                    totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
                 )
@@ -3737,13 +3799,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     //region Helper functions
 
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongParameterList")
     private fun createVaultAddItemState(
         vaultAddEditType: VaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
         commonContentViewState: VaultAddEditState.ViewState.Content.Common = createCommonContentViewState(),
         isIndividualVaultDisabled: Boolean = false,
+        shouldExitOnSave: Boolean = false,
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
+        totpData: TotpData? = null,
     ): VaultAddEditState =
         VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
@@ -3753,6 +3817,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 type = typeContentViewState,
             ),
             dialog = dialogState,
+            shouldExitOnSave = shouldExitOnSave,
+            totpData = totpData,
         )
 
     @Suppress("LongParameterList")
