@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -52,7 +51,7 @@ fun BitwardenActionCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = BitwardenTheme.shapes.actionCard,
         colors = bitwardenCardColors(),
         elevation = CardDefaults.elevatedCardElevation(),
         border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),

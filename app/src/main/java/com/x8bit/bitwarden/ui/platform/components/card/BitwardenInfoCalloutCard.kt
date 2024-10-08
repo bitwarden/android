@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.card
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,7 +29,7 @@ fun BitwardenInfoCalloutCard(
         modifier = modifier
             .background(
                 color = BitwardenTheme.colorScheme.background.tertiary,
-                shape = RoundedCornerShape(size = 8.dp),
+                shape = BitwardenTheme.shapes.infoCallout,
             )
             .padding(all = 16.dp),
     )
