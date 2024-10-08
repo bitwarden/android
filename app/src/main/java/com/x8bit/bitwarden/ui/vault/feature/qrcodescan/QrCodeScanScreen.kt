@@ -325,8 +325,8 @@ private fun QrCodeSquare(
     ) {
         Canvas(
             modifier = Modifier
-                .size(squareOutlineSize)
-                .padding(8.dp),
+                .padding(8.dp)
+                .size(squareOutlineSize),
         ) {
             val strokeWidth = 3.dp.toPx()
 
