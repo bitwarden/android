@@ -30,4 +30,9 @@ interface AuthDiskSource {
      * Stores the biometrics key.
      */
     fun storeUserBiometricUnlockKey(biometricsKey: String?)
+
+    /**
+     * Stores the symmetric key data used for encrypting TOTP data.
+     */
+    var authenticatorBridgeSymmetricSyncKey: ByteArray?
 }

@@ -5,6 +5,8 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.BaseDiskSource.
 import com.bitwarden.authenticator.data.platform.datasource.disk.BaseEncryptedDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.BaseEncryptedDiskSource.Companion.ENCRYPTED_BASE_KEY
 
+private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY =
+    "$ENCRYPTED_BASE_KEY:authenticatorSyncSymmetricKey"
 private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
 private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
 
@@ -43,4 +45,12 @@ class AuthDiskSourceImpl(
             value = biometricsKey,
         )
     }
+
+    override var authenticatorBridgeSymmetricSyncKey: ByteArray?
+        set(value) {
+            val asString = value?.let { value.toString(Charsets.ISO_8859_1) }
+            putEncryptedString(AUTHENTICATOR_SYNC_SYMMETRIC_KEY, asString)
+        }
+        get() = getEncryptedString(AUTHENTICATOR_SYNC_SYMMETRIC_KEY)
+            ?.toByteArray(Charsets.ISO_8859_1)
 }
