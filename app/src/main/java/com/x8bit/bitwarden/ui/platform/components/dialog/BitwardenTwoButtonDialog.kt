@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,7 +82,7 @@ fun BitwardenTwoButtonDialog(
                 // This background is necessary for the dialog to not be transparent.
                 .background(
                     color = BitwardenTheme.colorScheme.background.primary,
-                    shape = RoundedCornerShape(28.dp),
+                    shape = BitwardenTheme.shapes.dialog,
                 ),
             horizontalAlignment = Alignment.End,
         ) {

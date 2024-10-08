@@ -105,6 +105,7 @@ fun BitwardenDateSelectButton(
             initialSelectedDateMillis = currentZonedDateTime.orNow().toInstant().toEpochMilli(),
         )
         DatePickerDialog(
+            shape = BitwardenTheme.shapes.dialog,
             colors = bitwardenDatePickerColors(),
             onDismissRequest = { shouldShowDialog = false },
             confirmButton = {

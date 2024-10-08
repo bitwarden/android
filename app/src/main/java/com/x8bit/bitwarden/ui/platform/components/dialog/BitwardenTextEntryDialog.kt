@@ -85,6 +85,7 @@ fun BitwardenTextEntryDialog(
                     },
             )
         },
+        shape = BitwardenTheme.shapes.dialog,
         containerColor = BitwardenTheme.colorScheme.background.primary,
         iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
         titleContentColor = BitwardenTheme.colorScheme.text.primary,

@@ -24,6 +24,8 @@ import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.dynamicBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.toMaterialColorScheme
+import com.x8bit.bitwarden.ui.platform.theme.shape.BitwardenShapes
+import com.x8bit.bitwarden.ui.platform.theme.shape.bitwardenShapes
 import com.x8bit.bitwarden.ui.platform.theme.type.BitwardenTypography
 import com.x8bit.bitwarden.ui.platform.theme.type.bitwardenTypography
 import com.x8bit.bitwarden.ui.platform.theme.type.toMaterialTypography
@@ -39,6 +41,14 @@ object BitwardenTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalBitwardenColorScheme.current
+
+    /**
+     * Retrieves the current [BitwardenShapes].
+     */
+    val shapes: BitwardenShapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalBitwardenShapes.current
 
     /**
      * Retrieves the current [BitwardenTypography].
@@ -107,6 +117,7 @@ fun BitwardenTheme(
 
     CompositionLocalProvider(
         LocalBitwardenColorScheme provides bitwardenColorScheme,
+        LocalBitwardenShapes provides bitwardenShapes,
         LocalBitwardenTypography provides bitwardenTypography,
     ) {
         MaterialTheme(
@@ -120,13 +131,19 @@ fun BitwardenTheme(
 }
 
 /**
- * Provides access to the Bitwarden typography throughout the app.
- */
-val LocalBitwardenTypography: ProvidableCompositionLocal<BitwardenTypography> =
-    compositionLocalOf { bitwardenTypography }
-
-/**
  * Provides access to the Bitwarden colors throughout the app.
  */
 val LocalBitwardenColorScheme: ProvidableCompositionLocal<BitwardenColorScheme> =
     compositionLocalOf { lightBitwardenColorScheme }
+
+/**
+ * Provides access to the Bitwarden shapes throughout the app.
+ */
+val LocalBitwardenShapes: ProvidableCompositionLocal<BitwardenShapes> =
+    compositionLocalOf { bitwardenShapes }
+
+/**
+ * Provides access to the Bitwarden typography throughout the app.
+ */
+val LocalBitwardenTypography: ProvidableCompositionLocal<BitwardenTypography> =
+    compositionLocalOf { bitwardenTypography }

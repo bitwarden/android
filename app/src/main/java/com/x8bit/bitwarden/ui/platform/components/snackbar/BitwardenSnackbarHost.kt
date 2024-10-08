@@ -24,6 +24,7 @@ fun BitwardenSnackbarHost(
     ) {
         Snackbar(
             snackbarData = it,
+            shape = BitwardenTheme.shapes.snackbar,
             containerColor = BitwardenTheme.colorScheme.background.alert,
             contentColor = BitwardenTheme.colorScheme.text.reversed,
             actionColor = BitwardenTheme.colorScheme.background.alert,

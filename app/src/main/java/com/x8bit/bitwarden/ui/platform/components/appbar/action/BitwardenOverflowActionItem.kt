@@ -58,6 +58,7 @@ fun BitwardenOverflowActionItem(
             modifier = Modifier.testTag(tag = "HeaderBarOptionsButton"),
         )
         DropdownMenu(
+            shape = BitwardenTheme.shapes.menu,
             expanded = isOverflowMenuVisible,
             onDismissRequest = { isOverflowMenuVisible = false },
             offset = DpOffset(x = (-12).dp, y = 0.dp),
