@@ -57,8 +57,8 @@ fun VaultNoItems(
             painter = rememberVectorPainter(id = R.drawable.img_vault_items),
             contentDescription = null,
             modifier = Modifier
-                .size(100.dp)
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .size(100.dp),
         )
 
         Spacer(modifier = Modifier.height(24.dp))

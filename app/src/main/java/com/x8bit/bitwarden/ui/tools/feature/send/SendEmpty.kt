@@ -20,11 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWithIcon
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -55,8 +53,8 @@ fun SendEmpty(
             painter = rememberVectorPainter(R.drawable.img_send),
             contentDescription = null,
             modifier = Modifier
-                .size(100.dp)
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .size(100.dp),
         )
         Spacer(Modifier.height(24.dp))
         Text(
