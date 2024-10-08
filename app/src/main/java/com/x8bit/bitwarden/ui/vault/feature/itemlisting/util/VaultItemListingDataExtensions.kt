@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import java.time.Clock
 
 private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
@@ -104,6 +105,7 @@ fun VaultData.toViewState(
     autofillSelectionData: AutofillSelectionData?,
     fido2CreationData: Fido2CredentialRequest?,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
+    totpData: TotpData?,
     isPremiumUser: Boolean,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
@@ -171,6 +173,7 @@ fun VaultData.toViewState(
                 ?.origin
                 ?.toHostOrPathOrNull()
                 ?.let { R.string.no_items_for_uri.asText(it) }
+            ?: totpData?.let { R.string.search_for_a_login_or_add_a_new_login.asText() }
             ?: run {
                 when (itemListingType) {
                     is VaultItemListingState.ItemListingType.Vault.Folder -> {
@@ -197,13 +200,17 @@ fun VaultData.toViewState(
             else -> true
         }
         VaultItemListingState.ViewState.NoItems(
+            header = totpData
+                ?.let { R.string.no_items_for_uri.asText(it.issuer ?: it.accountName ?: "--") }
+                ?: R.string.save_and_protect_your_data.asText(),
             message = message,
             shouldShowAddButton = shouldShowAddButton,
-            buttonText = if (fido2CreationData != null) {
-                R.string.save_passkey_as_new_login.asText()
-            } else {
-                R.string.add_an_item.asText()
-            },
+            buttonText = fido2CreationData
+                ?.let { R.string.save_passkey_as_new_login.asText() }
+                ?: R.string.add_an_item.asText(),
+            vectorRes = totpData
+                ?.let { R.drawable.img_folder_question }
+                ?: R.drawable.img_vault_items,
         )
     }
 }
@@ -226,6 +233,7 @@ fun List<SendView>.toViewState(
         )
     } else {
         VaultItemListingState.ViewState.NoItems(
+            header = R.string.save_and_protect_your_data.asText(),
             message = R.string.no_items.asText(),
             shouldShowAddButton = true,
             buttonText = R.string.add_an_item.asText(),

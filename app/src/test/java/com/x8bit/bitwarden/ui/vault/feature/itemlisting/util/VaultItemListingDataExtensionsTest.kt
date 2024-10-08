@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -401,6 +402,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             fido2CreationData = null,
             fido2CredentialAutofillViews = null,
+            totpData = null,
             isPremiumUser = true,
         )
 
@@ -493,6 +495,7 @@ class VaultItemListingDataExtensionsTest {
             ),
             fido2CreationData = null,
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+            totpData = null,
             isPremiumUser = true,
         )
 
@@ -578,6 +581,7 @@ class VaultItemListingDataExtensionsTest {
             ),
             fido2CreationData = null,
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+            totpData = null,
             isPremiumUser = true,
         )
 
@@ -622,6 +626,7 @@ class VaultItemListingDataExtensionsTest {
         // Trash
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
+                header = R.string.save_and_protect_your_data.asText(),
                 message = R.string.no_items_trash.asText(),
                 shouldShowAddButton = false,
                 buttonText = R.string.add_an_item.asText(),
@@ -635,6 +640,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = null,
                 fido2CredentialAutofillViews = null,
+                totpData = null,
                 isPremiumUser = true,
             ),
         )
@@ -642,6 +648,7 @@ class VaultItemListingDataExtensionsTest {
         // Folders
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
+                header = R.string.save_and_protect_your_data.asText(),
                 message = R.string.no_items_folder.asText(),
                 shouldShowAddButton = false,
                 buttonText = R.string.add_an_item.asText(),
@@ -657,6 +664,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = null,
                 fido2CredentialAutofillViews = null,
+                totpData = null,
                 isPremiumUser = true,
             ),
         )
@@ -664,6 +672,7 @@ class VaultItemListingDataExtensionsTest {
         // Other ciphers
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
+                header = R.string.save_and_protect_your_data.asText(),
                 message = R.string.no_items.asText(),
                 shouldShowAddButton = true,
                 buttonText = R.string.add_an_item.asText(),
@@ -677,6 +686,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = null,
                 fido2CredentialAutofillViews = null,
+                totpData = null,
                 isPremiumUser = true,
             ),
         )
@@ -684,6 +694,7 @@ class VaultItemListingDataExtensionsTest {
         // Autofill
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
+                header = R.string.save_and_protect_your_data.asText(),
                 message = R.string.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
                 buttonText = R.string.add_an_item.asText(),
@@ -701,6 +712,7 @@ class VaultItemListingDataExtensionsTest {
                 ),
                 fido2CreationData = null,
                 fido2CredentialAutofillViews = null,
+                totpData = null,
                 isPremiumUser = true,
             ),
         )
@@ -708,6 +720,7 @@ class VaultItemListingDataExtensionsTest {
         // Autofill passkey
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
+                header = R.string.save_and_protect_your_data.asText(),
                 message = R.string.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
                 buttonText = R.string.save_passkey_as_new_login.asText(),
@@ -727,6 +740,33 @@ class VaultItemListingDataExtensionsTest {
                     origin = "https://www.test.com",
                 ),
                 fido2CredentialAutofillViews = null,
+                totpData = null,
+                isPremiumUser = true,
+            ),
+        )
+
+        // Totp
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                header = R.string.no_items_for_uri.asText("issuer"),
+                message = R.string.search_for_a_login_or_add_a_new_login.asText(),
+                shouldShowAddButton = false,
+                buttonText = R.string.add_an_item.asText(),
+                vectorRes = R.drawable.img_folder_question,
+            ),
+            vaultData.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
+                vaultFilterType = VaultFilterType.AllVaults,
+                hasMasterPassword = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                autofillSelectionData = null,
+                fido2CreationData = null,
+                fido2CredentialAutofillViews = null,
+                totpData = mockk<TotpData> {
+                    every { accountName } returns "accountName"
+                    every { issuer } returns "issuer"
+                },
                 isPremiumUser = true,
             ),
         )
@@ -869,6 +909,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             fido2CreationData = null,
             fido2CredentialAutofillViews = null,
+            totpData = null,
             isPremiumUser = true,
         )
 
@@ -912,6 +953,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             fido2CreationData = null,
             fido2CredentialAutofillViews = null,
+            totpData = null,
             isPremiumUser = true,
         )
 

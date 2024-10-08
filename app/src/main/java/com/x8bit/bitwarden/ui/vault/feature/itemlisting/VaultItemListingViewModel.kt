@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -1559,6 +1560,7 @@ class VaultItemListingViewModel @Inject constructor(
                             fido2CreationData = state.fido2CredentialRequest,
                             fido2CredentialAutofillViews = vaultData
                                 .fido2CredentialAutofillViewList,
+                            totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                         )
                     }
@@ -1897,9 +1899,11 @@ data class VaultItemListingState(
          * Represents a state where the [VaultItemListingScreen] has no items to display.
          */
         data class NoItems(
+            val header: Text,
             val message: Text,
-            val shouldShowAddButton: Boolean,
             val buttonText: Text,
+            @DrawableRes val vectorRes: Int = R.drawable.img_vault_items,
+            val shouldShowAddButton: Boolean,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
         }
