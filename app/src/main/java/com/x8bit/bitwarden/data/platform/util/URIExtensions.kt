@@ -121,7 +121,7 @@ private fun parseDomainNameOrNullInternal(
     val tldRange: IntRange? = when (largestMatch) {
         is SuffixMatchType.Exception,
         is SuffixMatchType.Normal,
-        -> {
+            -> {
             host.findLastSubstringIndicesOrNull(largestMatch.partialDomain)
         }
 

@@ -202,7 +202,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         when (state.authMethod) {
             TwoFactorAuthMethod.DUO,
             TwoFactorAuthMethod.DUO_ORGANIZATION,
-            -> {
+                -> {
                 val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
                 // The url should not be empty unless the environment is somehow not supported.
                 authUrl
@@ -256,7 +256,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.U2F,
             TwoFactorAuthMethod.REMEMBER,
             TwoFactorAuthMethod.RECOVERY_CODE,
-            -> initiateLogin()
+                -> initiateLogin()
         }
     }
 
@@ -486,7 +486,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.REMEMBER,
             TwoFactorAuthMethod.DUO_ORGANIZATION,
             TwoFactorAuthMethod.WEB_AUTH,
-            -> {
+                -> {
                 updateAuthMethodRelatedState(action.authMethod)
             }
         }
@@ -517,7 +517,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         val code = when (state.authMethod) {
             TwoFactorAuthMethod.AUTHENTICATOR_APP,
             TwoFactorAuthMethod.EMAIL,
-            -> state.codeInput.replace(" ", "")
+                -> state.codeInput.replace(" ", "")
 
             TwoFactorAuthMethod.DUO,
             TwoFactorAuthMethod.DUO_ORGANIZATION,
@@ -526,7 +526,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.REMEMBER,
             TwoFactorAuthMethod.WEB_AUTH,
             TwoFactorAuthMethod.RECOVERY_CODE,
-            -> state.codeInput
+                -> state.codeInput
         }
 
         viewModelScope.launch {

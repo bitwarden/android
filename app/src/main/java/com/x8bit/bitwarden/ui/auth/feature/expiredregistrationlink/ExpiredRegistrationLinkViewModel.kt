@@ -12,8 +12,8 @@ import javax.inject.Inject
 class ExpiredRegistrationLinkViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : BaseViewModel<Unit, ExpiredRegistrationLinkEvent, ExpiredRegistrationLinkAction>(
-        initialState = Unit,
-    ) {
+    initialState = Unit,
+) {
     override fun handleAction(action: ExpiredRegistrationLinkAction) {
         when (action) {
             ExpiredRegistrationLinkAction.CloseClicked -> handleCloseClicked()

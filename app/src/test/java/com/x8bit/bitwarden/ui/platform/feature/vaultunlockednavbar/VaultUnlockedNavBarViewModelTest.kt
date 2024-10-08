@@ -44,7 +44,10 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                assertEquals(VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen, awaitItem())
+                assertEquals(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
+                    awaitItem(),
+                )
             }
             verify(exactly = 1) {
                 specialCircumstancesManager.specialCircumstance

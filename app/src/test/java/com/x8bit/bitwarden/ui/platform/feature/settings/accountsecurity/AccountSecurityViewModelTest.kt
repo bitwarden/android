@@ -731,8 +731,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Test
     fun `when UnlockActionCardCtaClick action received, should dismiss unlock action card and send NavigateToSetupUnlockScreen event`() =
         runTest {
-        mutableShowUnlockBadgeFlow.update { true }
-        val viewModel = createViewModel()
+            mutableShowUnlockBadgeFlow.update { true }
+            val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
                 assertEquals(
@@ -740,10 +740,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-        verify {
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            verify {
+                settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            }
         }
-    }
 
     @Suppress("LongParameterList")
     private fun createViewModel(

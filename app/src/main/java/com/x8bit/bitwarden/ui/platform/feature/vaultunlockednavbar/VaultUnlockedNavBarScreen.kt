@@ -86,7 +86,7 @@ fun VaultUnlockedNavBarScreen(
             when (event) {
                 is VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen,
                 is VaultUnlockedNavBarEvent.NavigateToVaultScreen,
-                -> {
+                    -> {
                     navigateToVaultGraph(navOptions)
                 }
 
@@ -96,7 +96,7 @@ fun VaultUnlockedNavBarScreen(
 
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
-                -> {
+                    -> {
                     navigateToGeneratorGraph(navOptions)
                 }
 

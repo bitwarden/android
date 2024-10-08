@@ -415,11 +415,11 @@ data class CreateAccountState(
             PasswordStrengthState.WEAK_1,
             PasswordStrengthState.WEAK_2,
             PasswordStrengthState.WEAK_3,
-            -> false
+                -> false
 
             PasswordStrengthState.GOOD,
             PasswordStrengthState.STRONG,
-            -> true
+                -> true
         }
 }
 

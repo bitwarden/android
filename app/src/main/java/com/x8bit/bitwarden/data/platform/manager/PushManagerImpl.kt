@@ -129,7 +129,7 @@ class PushManagerImpl @Inject constructor(
         when (val type = notification.notificationType) {
             NotificationType.AUTH_REQUEST,
             NotificationType.AUTH_REQUEST_RESPONSE,
-            -> {
+                -> {
                 json
                     .decodeFromString<NotificationPayload.PasswordlessRequestNotification>(
                         string = notification.payload,
@@ -156,7 +156,7 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.SYNC_CIPHER_CREATE,
             NotificationType.SYNC_CIPHER_UPDATE,
-            -> {
+                -> {
                 json
                     .decodeFromString<NotificationPayload.SyncCipherNotification>(
                         string = notification.payload,
@@ -183,7 +183,7 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.SYNC_CIPHER_DELETE,
             NotificationType.SYNC_LOGIN_DELETE,
-            -> {
+                -> {
                 json
                     .decodeFromString<NotificationPayload.SyncCipherNotification>(
                         string = notification.payload,
@@ -196,13 +196,13 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_CIPHERS,
             NotificationType.SYNC_SETTINGS,
             NotificationType.SYNC_VAULT,
-            -> {
+                -> {
                 mutableFullSyncSharedFlow.tryEmit(Unit)
             }
 
             NotificationType.SYNC_FOLDER_CREATE,
             NotificationType.SYNC_FOLDER_UPDATE,
-            -> {
+                -> {
                 json
                     .decodeFromString<NotificationPayload.SyncFolderNotification>(
                         string = notification.payload,
@@ -238,7 +238,7 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.SYNC_SEND_CREATE,
             NotificationType.SYNC_SEND_UPDATE,
-            -> {
+                -> {
                 json
                     .decodeFromString<NotificationPayload.SyncSendNotification>(
                         string = notification.payload,

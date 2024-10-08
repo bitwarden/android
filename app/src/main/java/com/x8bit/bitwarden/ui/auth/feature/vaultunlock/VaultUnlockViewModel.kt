@@ -300,7 +300,7 @@ class VaultUnlockViewModel @Inject constructor(
 
             VaultUnlockResult.GenericError,
             VaultUnlockResult.InvalidStateError,
-            -> {
+                -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(

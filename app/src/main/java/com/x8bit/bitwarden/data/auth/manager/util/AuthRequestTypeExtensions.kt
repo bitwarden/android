@@ -11,7 +11,7 @@ val AuthRequestType.isSso: Boolean
         AuthRequestType.OTHER_DEVICE -> false
         AuthRequestType.SSO_OTHER_DEVICE,
         AuthRequestType.SSO_ADMIN_APPROVAL,
-        -> true
+            -> true
     }
 
 /**
@@ -21,7 +21,7 @@ fun AuthRequestType.toAuthRequestTypeJson(): AuthRequestTypeJson =
     when (this) {
         AuthRequestType.OTHER_DEVICE,
         AuthRequestType.SSO_OTHER_DEVICE,
-        -> AuthRequestTypeJson.LOGIN_WITH_DEVICE
+            -> AuthRequestTypeJson.LOGIN_WITH_DEVICE
 
         AuthRequestType.SSO_ADMIN_APPROVAL -> AuthRequestTypeJson.ADMIN_APPROVAL
     }

@@ -161,7 +161,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 when (state.loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                    -> {
+                        -> {
                         mutableStateFlow.update {
                             it.copy(
                                 viewState = LoginWithDeviceState.ViewState.Content(
@@ -292,7 +292,7 @@ class LoginWithDeviceViewModel @Inject constructor(
 
                 LoginWithDeviceType.SSO_ADMIN_APPROVAL,
                 LoginWithDeviceType.SSO_OTHER_DEVICE,
-                -> {
+                    -> {
                     authRepository.completeTdeLogin(
                         requestPrivateKey = loginData.privateKey,
                         asymmetricalKey = loginData.asymmetricalKey,
@@ -352,7 +352,7 @@ data class LoginWithDeviceState(
         get() = when (loginWithDeviceType) {
             LoginWithDeviceType.OTHER_DEVICE,
             LoginWithDeviceType.SSO_OTHER_DEVICE,
-            -> R.string.log_in_with_device.asText()
+                -> R.string.log_in_with_device.asText()
 
             LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.log_in_initiated.asText()
         }
@@ -389,10 +389,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                    -> R.string.log_in_initiated.asText()
+                        -> R.string.log_in_initiated.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                    -> R.string.admin_approval_requested.asText()
+                        -> R.string.admin_approval_requested.asText()
                 }
 
             /**
@@ -402,10 +402,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                    -> R.string.a_notification_has_been_sent_to_your_device.asText()
+                        -> R.string.a_notification_has_been_sent_to_your_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                    -> R.string.your_request_has_been_sent_to_your_admin.asText()
+                        -> R.string.your_request_has_been_sent_to_your_admin.asText()
                 }
 
             /**
@@ -416,10 +416,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                    -> R.string.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
+                        -> R.string.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                    -> R.string.you_will_be_notified_once_approved.asText()
+                        -> R.string.you_will_be_notified_once_approved.asText()
                 }
 
             /**
@@ -430,7 +430,7 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                    -> R.string.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
+                        -> R.string.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.trouble_logging_in.asText()
                 }

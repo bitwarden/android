@@ -181,7 +181,7 @@ class VaultLockManagerTest {
                 VaultTimeout.OneHour,
                 VaultTimeout.FourHours,
                 is VaultTimeout.Custom,
-                -> {
+                    -> {
                     assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
                 }
 
@@ -189,7 +189,7 @@ class VaultLockManagerTest {
                 VaultTimeout.Immediately,
                 VaultTimeout.OneMinute,
                 VaultTimeout.FiveMinutes,
-                -> {
+                    -> {
                     assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
                 }
             }
@@ -214,7 +214,7 @@ class VaultLockManagerTest {
                 VaultTimeout.OneHour,
                 VaultTimeout.FourHours,
                 is VaultTimeout.Custom,
-                -> {
+                    -> {
                     verify(exactly = 0) { userLogoutManager.softLogout(any()) }
                 }
 
@@ -222,7 +222,7 @@ class VaultLockManagerTest {
                 VaultTimeout.Immediately,
                 VaultTimeout.OneMinute,
                 VaultTimeout.FiveMinutes,
-                -> {
+                    -> {
                     verify(exactly = 1) { userLogoutManager.softLogout(USER_ID) }
                 }
             }
@@ -418,7 +418,7 @@ class VaultLockManagerTest {
                 VaultTimeout.OneHour,
                 VaultTimeout.FourHours,
                 is VaultTimeout.Custom,
-                -> {
+                    -> {
                     assertTrue(vaultLockManager.isVaultUnlocked(activeUserId))
                     assertTrue(vaultLockManager.isVaultUnlocked(inactiveUserId))
                 }
@@ -427,7 +427,7 @@ class VaultLockManagerTest {
                 VaultTimeout.Immediately,
                 VaultTimeout.OneMinute,
                 VaultTimeout.FiveMinutes,
-                -> {
+                    -> {
                     assertTrue(vaultLockManager.isVaultUnlocked(activeUserId))
                     assertFalse(vaultLockManager.isVaultUnlocked(inactiveUserId))
                 }
@@ -459,7 +459,7 @@ class VaultLockManagerTest {
                 VaultTimeout.OneHour,
                 VaultTimeout.FourHours,
                 is VaultTimeout.Custom,
-                -> {
+                    -> {
                     verify(exactly = 0) { userLogoutManager.softLogout(any()) }
                 }
 
@@ -467,7 +467,7 @@ class VaultLockManagerTest {
                 VaultTimeout.Immediately,
                 VaultTimeout.OneMinute,
                 VaultTimeout.FiveMinutes,
-                -> {
+                    -> {
                     verify(exactly = 0) { userLogoutManager.softLogout(activeUserId) }
                     verify(exactly = 1) { userLogoutManager.softLogout(inactiveUserId) }
                 }

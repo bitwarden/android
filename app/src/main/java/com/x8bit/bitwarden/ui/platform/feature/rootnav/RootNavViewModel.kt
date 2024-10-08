@@ -95,7 +95,8 @@ class RootNavViewModel @Inject constructor(
                 when (userState.activeAccount.onboardingStatus) {
                     OnboardingStatus.NOT_STARTED,
                     OnboardingStatus.ACCOUNT_LOCK_SETUP,
-                    -> RootNavState.OnboardingAccountLockSetup
+                        -> RootNavState.OnboardingAccountLockSetup
+
                     OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
                     OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
                     OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
@@ -153,7 +154,7 @@ class RootNavViewModel @Inject constructor(
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
                     null,
-                    -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
+                        -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
                     is SpecialCircumstance.RegistrationEvent -> {
                         throw IllegalStateException(

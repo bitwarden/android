@@ -19,6 +19,7 @@ class SpecialCircumstanceManagerImpl(
 ) : SpecialCircumstanceManager {
     private val mutableSpecialCircumstanceFlow = MutableStateFlow<SpecialCircumstance?>(null)
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
     init {
         authRepository
             .userStateFlow

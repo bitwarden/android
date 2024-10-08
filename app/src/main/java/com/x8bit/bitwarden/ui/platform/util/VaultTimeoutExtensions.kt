@@ -40,7 +40,7 @@ val VaultTimeout.Type.minutes: Int
 
         VaultTimeout.Type.ON_APP_RESTART,
         VaultTimeout.Type.NEVER,
-        -> Int.MAX_VALUE
+            -> Int.MAX_VALUE
 
         VaultTimeout.Type.CUSTOM -> 0
     }

@@ -998,7 +998,7 @@ class AuthRepositoryImpl(
             ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
             ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
             null,
-            -> {
+                -> {
                 authSdkSource
                     .makeRegisterKeys(
                         email = activeAccount.profile.email,
@@ -1048,7 +1048,7 @@ class AuthRepositoryImpl(
                     is VaultUnlockResult.AuthenticationError,
                     VaultUnlockResult.InvalidStateError,
                     VaultUnlockResult.GenericError,
-                    -> {
+                        -> {
                         IllegalStateException("Failed to unlock vault").asFailure()
                     }
                 }

@@ -1119,7 +1119,9 @@ class SettingsRepositoryTest {
 
             assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
             assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_ID))
-            assertTrue(fakeAuthDiskSource.authenticatorSyncSymmetricKey.contentEquals(syncSymmetricKey))
+            assertTrue(
+                fakeAuthDiskSource.authenticatorSyncSymmetricKey.contentEquals(syncSymmetricKey),
+            )
         }
 
     @Test

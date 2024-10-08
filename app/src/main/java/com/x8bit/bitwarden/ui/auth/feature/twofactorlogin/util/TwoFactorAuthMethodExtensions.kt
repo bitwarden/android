@@ -51,7 +51,7 @@ val TwoFactorAuthMethod.button: Text
     get() = when (this) {
         TwoFactorAuthMethod.DUO,
         TwoFactorAuthMethod.DUO_ORGANIZATION,
-        -> R.string.launch_duo.asText()
+            -> R.string.launch_duo.asText()
 
         TwoFactorAuthMethod.AUTHENTICATOR_APP,
         TwoFactorAuthMethod.EMAIL,
@@ -59,7 +59,7 @@ val TwoFactorAuthMethod.button: Text
         TwoFactorAuthMethod.U2F,
         TwoFactorAuthMethod.REMEMBER,
         TwoFactorAuthMethod.RECOVERY_CODE,
-        -> R.string.continue_text.asText()
+            -> R.string.continue_text.asText()
 
         TwoFactorAuthMethod.WEB_AUTH -> R.string.launch_web_authn.asText()
     }
@@ -72,7 +72,7 @@ val TwoFactorAuthMethod.isContinueButtonEnabled: Boolean
         TwoFactorAuthMethod.DUO,
         TwoFactorAuthMethod.DUO_ORGANIZATION,
         TwoFactorAuthMethod.WEB_AUTH,
-        -> true
+            -> true
 
         TwoFactorAuthMethod.AUTHENTICATOR_APP,
         TwoFactorAuthMethod.EMAIL,
@@ -80,7 +80,7 @@ val TwoFactorAuthMethod.isContinueButtonEnabled: Boolean
         TwoFactorAuthMethod.U2F,
         TwoFactorAuthMethod.REMEMBER,
         TwoFactorAuthMethod.RECOVERY_CODE,
-        -> false
+            -> false
     }
 
 /**
@@ -91,7 +91,7 @@ val TwoFactorAuthMethod.showPasswordInput: Boolean
         TwoFactorAuthMethod.DUO,
         TwoFactorAuthMethod.DUO_ORGANIZATION,
         TwoFactorAuthMethod.WEB_AUTH,
-        -> false
+            -> false
 
         TwoFactorAuthMethod.AUTHENTICATOR_APP,
         TwoFactorAuthMethod.EMAIL,
@@ -99,7 +99,7 @@ val TwoFactorAuthMethod.showPasswordInput: Boolean
         TwoFactorAuthMethod.U2F,
         TwoFactorAuthMethod.REMEMBER,
         TwoFactorAuthMethod.RECOVERY_CODE,
-        -> true
+            -> true
     }
 
 /**

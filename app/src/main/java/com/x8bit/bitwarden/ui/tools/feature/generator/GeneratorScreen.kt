@@ -192,7 +192,7 @@ fun GeneratorScreen(
             when (state.generatorMode) {
                 is GeneratorMode.Modal.Username,
                 GeneratorMode.Modal.Password,
-                -> {
+                    -> {
                     ModalAppBar(
                         scrollBehavior = scrollBehavior,
                         onCloseClick = remember(viewModel) {
