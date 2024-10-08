@@ -88,6 +88,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
+                    firstTimeState = UserState.defaultFirstTimeState,
                 ),
             ),
         )
@@ -225,6 +226,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = UserState.defaultFirstTimeState,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -281,6 +283,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
+                firstTimeState = UserState.defaultFirstTimeState,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -341,6 +344,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
+                firstTimeState = UserState.defaultFirstTimeState,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -517,6 +521,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = UserState.defaultFirstTimeState,
         )
 
         val userState = UserState(
@@ -552,6 +557,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = UserState.defaultFirstTimeState,
         )
 
         val userState = UserState(

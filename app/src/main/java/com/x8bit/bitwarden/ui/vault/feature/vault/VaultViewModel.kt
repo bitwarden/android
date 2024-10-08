@@ -92,6 +92,7 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             hideNotificationsDialog = isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) || isFdroid,
             isRefreshing = false,
+            showImportActionCard = false,
         )
     },
 ) {
@@ -163,7 +164,18 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal -> handleInternalAction(action)
+            VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
+            VaultAction.ImportActionCardClick -> handleImportActionCardClick()
         }
+    }
+
+    private fun handleImportActionCardClick() {
+        dismissImportLoginCard()
+        // TODO: PM-11179 - navigate to import logins screen
+    }
+
+    private fun handleDismissImportActionCard() {
+        dismissImportLoginCard()
     }
 
     private fun handleIconLoadingSettingReceive(
@@ -459,6 +471,7 @@ class VaultViewModel @Inject constructor(
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
         val userState = action.userState ?: return
+        val firstTimeState = userState.activeUserFirstTimeState
 
         // Avoid updating the UI if we are actively switching users to avoid changes while
         // navigating.
@@ -480,6 +493,7 @@ class VaultViewModel @Inject constructor(
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
+                showImportActionCard = firstTimeState.showImportLoginsCoachMarker,
             )
         }
     }
@@ -605,6 +619,11 @@ class VaultViewModel @Inject constructor(
     }
 
     //endregion VaultAction Handlers
+
+    private fun dismissImportLoginCard() {
+        if (!state.showImportActionCard) return
+        authRepository.setShowImportLogins(false)
+    }
 }
 
 /**
@@ -636,6 +655,7 @@ data class VaultState(
     val isIconLoadingDisabled: Boolean,
     val hideNotificationsDialog: Boolean,
     val isRefreshing: Boolean,
+    val showImportActionCard: Boolean,
 ) : Parcelable {
 
     /**
@@ -1109,6 +1129,16 @@ sealed class VaultAction {
      * User clicked the Try Again button when there is an error displayed.
      */
     data object TryAgainClick : VaultAction()
+
+    /**
+     * The user has dismissed the import action card.
+     */
+    data object DismissImportActionCard : VaultAction()
+
+    /**
+     * The user has clicked the import action card.
+     */
+    data object ImportActionCardClick : VaultAction()
 
     /**
      * User clicked an overflow action.

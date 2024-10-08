@@ -511,8 +511,8 @@ class CipherViewExtensionsTest {
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
+            isUsingKeyConnector = false, onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = UserState.defaultFirstTimeState,
         )
 }
 

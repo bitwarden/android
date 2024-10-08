@@ -70,6 +70,9 @@ interface SettingsDiskSource {
 
     /**
      * Clears all the settings data for the given user.
+     *
+     * Does not include data store via [storeShowUnlockSettingBadge] and
+     * [storeShowAutoFillSettingBadge], these values are considered a "per install" values.
      */
     fun clearData(userId: String)
 

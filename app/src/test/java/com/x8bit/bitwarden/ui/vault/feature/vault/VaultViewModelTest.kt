@@ -84,6 +84,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
+            every { setShowImportLogins(any()) } just runs
         }
 
     private val settingsRepository: SettingsRepository = mockk {
@@ -198,6 +199,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = DEFAULT_FIRST_TIME_STATE,
                     ),
                 ),
             )
@@ -283,6 +285,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = DEFAULT_FIRST_TIME_STATE,
                     ),
                 ),
             )
@@ -1484,6 +1487,89 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `when user first time state updates, vault state is updated`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE,
+                awaitItem(),
+            )
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = DEFAULT_USER_STATE.accounts.map {
+                    it.copy(
+                        firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
+                            showImportLoginsCoachMarker = false,
+                        ),
+                    )
+                },
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    showImportActionCard = false,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `when DismissImportActionCard is sent, repository called to set value to false`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.DismissImportActionCard)
+        verify(exactly = 1) {
+            authRepository.setShowImportLogins(false)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when DismissImportActionCard is sent, repository is not called if value is already false`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = DEFAULT_USER_STATE.accounts.map {
+                it.copy(
+                    firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
+                        showImportLoginsCoachMarker = false,
+                    ),
+                )
+            },
+        )
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.DismissImportActionCard)
+        verify(exactly = 0) {
+            authRepository.setShowImportLogins(false)
+        }
+    }
+
+    @Test
+    fun `when ImportActionCardClick is sent, repository called to set value to false`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.ImportActionCardClick)
+        verify(exactly = 1) {
+            authRepository.setShowImportLogins(false)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when ImportActionCardClick is sent, repository is not called if value is already false`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = DEFAULT_USER_STATE.accounts.map {
+                it.copy(
+                    firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
+                        showImportLoginsCoachMarker = false,
+                    ),
+                )
+            },
+        )
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.ImportActionCardClick)
+        verify(exactly = 0) {
+            authRepository.setShowImportLogins(false)
+        }
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1513,6 +1599,8 @@ private val VAULT_FILTER_DATA = VaultFilterData(
 private val DEFAULT_STATE: VaultState =
     createMockVaultState(viewState = VaultState.ViewState.Loading)
 
+private val DEFAULT_FIRST_TIME_STATE = UserState.defaultFirstTimeState
+
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(
@@ -1533,6 +1621,7 @@ private val DEFAULT_USER_STATE = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = DEFAULT_FIRST_TIME_STATE,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -1551,6 +1640,7 @@ private val DEFAULT_USER_STATE = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = DEFAULT_FIRST_TIME_STATE,
         ),
     ),
 )
@@ -1594,5 +1684,6 @@ private fun createMockVaultState(
         isIconLoadingDisabled = false,
         hasMasterPassword = true,
         hideNotificationsDialog = true,
+        showImportActionCard = true,
         isRefreshing = false,
     )

@@ -50,6 +50,8 @@ interface AuthDiskSource {
      * Clears all the settings data for the given user.
      *
      * Note that this does not include any data saved in the [userState].
+     * This also does not include values saved via [storeOnboardingStatus] this
+     * is considered a "per install" value and as such should not be removed on logout.
      */
     fun clearData(userId: String)
 
@@ -306,4 +308,19 @@ interface AuthDiskSource {
      *  if any exists.
      */
     fun getOnboardingStatusFlow(userId: String): Flow<OnboardingStatus?>
+
+    /**
+     * Gets the show import logins flag for the given [userId].
+     */
+    fun getShowImportLogins(userId: String): Boolean?
+
+    /**
+     * Stores the show import logins flag for the given [userId].
+     */
+    fun storeShowImportLogins(userId: String, showImportLogins: Boolean?)
+
+    /**
+     * Emits updates that track [getShowImportLogins]. This will replay the last known value,
+     */
+    fun getShowImportLoginsFlow(userId: String): Flow<Boolean?>
 }

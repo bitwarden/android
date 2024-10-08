@@ -45,6 +45,7 @@ private const val SHOULD_TRUST_DEVICE_KEY = "shouldTrustDevice"
 private const val TDE_LOGIN_COMPLETE = "tdeLoginComplete"
 private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
+private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -72,6 +73,7 @@ class AuthDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
     private val mutableOnboardingStatusFlowMap =
         mutableMapOf<String, MutableSharedFlow<OnboardingStatus?>>()
+    private val mutableShowImportLoginsFlowMap = mutableMapOf<String, MutableSharedFlow<Boolean?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     override var userState: UserStateJson?
@@ -143,9 +145,11 @@ class AuthDiskSourceImpl(
         storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = null)
         storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = null)
         storeAuthenticatorSyncUnlockKey(userId = userId, authenticatorSyncUnlockKey = null)
+        storeShowImportLogins(userId = userId, showImportLogins = null)
 
         // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
         // indefinitely unless the TDE flow explicitly removes them.
+        // Do not remove OnboardingStatus we want to keep track of this even after logout.
     }
 
     override fun getAuthenticatorSyncUnlockKey(userId: String): String? =
@@ -437,6 +441,22 @@ class AuthDiskSourceImpl(
             .onSubscription { emit(getOnboardingStatus(userId = userId)) }
     }
 
+    override fun getShowImportLogins(userId: String): Boolean? {
+        return getBoolean(SHOW_IMPORT_LOGINS_KEY.appendIdentifier(userId))
+    }
+
+    override fun storeShowImportLogins(userId: String, showImportLogins: Boolean?) {
+        putBoolean(
+            key = SHOW_IMPORT_LOGINS_KEY.appendIdentifier(userId),
+            value = showImportLogins,
+        )
+        getMutableShowImportLoginsFlow(userId = userId).tryEmit(showImportLogins)
+    }
+
+    override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
+        getMutableShowImportLoginsFlow(userId)
+            .onSubscription { emit(getShowImportLogins(userId)) }
+
     private fun generateAndStoreUniqueAppId(): String =
         UUID
             .randomUUID()
@@ -479,6 +499,12 @@ class AuthDiskSourceImpl(
         mutableAccountTokensFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
+    private fun getMutableShowImportLoginsFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> = mutableShowImportLoginsFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
 
     private fun migrateAccountTokens() {
         userState

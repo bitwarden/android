@@ -1079,6 +1079,8 @@ private val DEFAULT_STATE: MainState = MainState(
     isScreenCaptureAllowed = true,
 )
 
+private val DEFAULT_FIRST_TIME_STATE = UserState.defaultFirstTimeState
+
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private val DEFAULT_ACCOUNT = UserState.Account(
     userId = "activeUserId",
@@ -1097,6 +1099,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     hasMasterPassword = true,
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = DEFAULT_FIRST_TIME_STATE,
 )
 
 private val DEFAULT_USER_STATE = UserState(

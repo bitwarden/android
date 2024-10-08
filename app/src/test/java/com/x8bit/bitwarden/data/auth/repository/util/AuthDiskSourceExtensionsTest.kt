@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
@@ -506,6 +507,27 @@ class AuthDiskSourceExtensionsTest {
             authDiskSource.currentOnboardingStatus,
         )
     }
+
+    @Test
+    fun `firstTimeStateFlow should emit changes when items in the first time state change`() =
+        runTest {
+            authDiskSource.firstTimeStateFlow.test {
+                authDiskSource.userState = MOCK_USER_STATE
+                assertEquals(
+                    UserState.FirstTimeState(
+                        showImportLoginsCoachMarker = true,
+                    ),
+                    awaitItem(),
+                )
+                authDiskSource.storeShowImportLogins(MOCK_USER_ID, false)
+                assertEquals(
+                    UserState.FirstTimeState(
+                        showImportLoginsCoachMarker = false,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 }
 
 private const val MOCK_USER_ID: String = "mockId-1"

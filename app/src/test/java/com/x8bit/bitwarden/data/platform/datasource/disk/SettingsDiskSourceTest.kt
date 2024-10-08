@@ -143,10 +143,15 @@ class SettingsDiskSourceTest {
             value = true,
         )
 
+        settingsDiskSource.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
+        settingsDiskSource.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
+
         settingsDiskSource.clearData(userId = userId)
 
         // We do not clear these even when you call clear storage
         assertEquals(true, settingsDiskSource.getScreenCaptureAllowed(userId = userId))
+        assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = userId) ?: false)
 
         // These should be cleared
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))

@@ -3965,6 +3965,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
+                    firstTimeState = UserState.defaultFirstTimeState,
                 ),
             ),
             hasPendingAccountAddition = false,

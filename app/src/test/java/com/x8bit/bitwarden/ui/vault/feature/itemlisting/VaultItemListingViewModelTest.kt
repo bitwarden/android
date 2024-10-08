@@ -4032,6 +4032,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     hasMasterPassword = true,
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = UserState.defaultFirstTimeState,
 )
 
 private val DEFAULT_USER_STATE = UserState(

@@ -47,6 +47,7 @@ fun BitwardenActionCard(
     onActionClick: () -> Unit,
     onDismissClick: () -> Unit,
     modifier: Modifier = Modifier,
+    cardSubtitle: String? = null,
     leadingContent: @Composable (() -> Unit)? = null,
 ) {
     Card(
@@ -78,6 +79,14 @@ fun BitwardenActionCard(
                     contentDescription = stringResource(id = R.string.close),
                     onClick = onDismissClick,
                     modifier = Modifier.offset(x = 8.dp),
+                )
+            }
+            if (cardSubtitle != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = cardSubtitle,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.text.primary,
                 )
             }
             Spacer(Modifier.height(16.dp))
@@ -117,6 +126,26 @@ private fun BitwardenActionCardWithLeadingContent_preview() {
     BitwardenTheme {
         BitwardenActionCard(
             cardTitle = "Title",
+            actionText = "Action",
+            onActionClick = {},
+            onDismissClick = {},
+            leadingContent = {
+                NotificationBadge(
+                    notificationCount = 1,
+                )
+            },
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun BitwardenActionCardWithSubtitle_preview() {
+    BitwardenTheme {
+        BitwardenActionCard(
+            cardTitle = "Title",
+            cardSubtitle = "Subtitle",
             actionText = "Action",
             onActionClick = {},
             onDismissClick = {},
