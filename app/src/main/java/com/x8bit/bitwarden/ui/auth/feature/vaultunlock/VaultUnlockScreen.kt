@@ -132,6 +132,17 @@ fun VaultUnlockScreen(
         state = rememberTopAppBarState(),
         canScroll = { !accountMenuVisible },
     )
+    val onAccountMenuActionClick: () -> Unit = remember(viewModel) {
+        {
+            // Ignore clicks when unlocking for FIDO 2 requests to prevent
+            // switching accounts on-the-fly. Account switching should only
+            // be performed from the OS prompt.
+            if (!state.isUnlockingForFido2Request) {
+                focusManager.clearFocus()
+                accountMenuVisible = !accountMenuVisible
+            }
+        }
+    }
 
     // Dynamic dialogs
     when (val dialog = state.dialog) {
@@ -188,10 +199,7 @@ fun VaultUnlockScreen(
                         BitwardenAccountActionItem(
                             initials = state.initials,
                             color = state.avatarColor,
-                            onClick = {
-                                focusManager.clearFocus()
-                                accountMenuVisible = !accountMenuVisible
-                            },
+                            onClick = onAccountMenuActionClick,
                         )
                     }
                     BitwardenOverflowActionItem(

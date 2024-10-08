@@ -21,6 +21,8 @@ import androidx.compose.ui.test.requestFocus
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -153,6 +155,34 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         composeTestRule.performAccountIconClick()
 
         composeTestRule.assertSwitcherIsDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
+    }
+
+    @Test
+    fun `account icon click should be ignored when unlocking for FIDO 2 credential discovery`() {
+        mutableStateFlow.update {
+            it.copy(
+                fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1),
+            )
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
+    }
+
+    @Test
+    fun `account icon click should be ignored when unlock for FIDO 2 credential assertion`() {
+        mutableStateFlow.update {
+            it.copy(
+                fido2CredentialAssertionRequest = createMockFido2CredentialAssertionRequest(
+                    number = 1,
+                ),
+            )
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = ACCOUNT_SUMMARIES,
         )
     }

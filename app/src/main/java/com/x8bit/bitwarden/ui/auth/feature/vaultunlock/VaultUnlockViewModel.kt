@@ -328,6 +328,16 @@ class VaultUnlockViewModel @Inject constructor(
         // out.
         val userState = action.userState ?: return
 
+        // If the Vault is being unlocked for a FIDO 2 request, make sure we're unlocking the
+        // correct Vault
+        state.fido2RequestUserId
+            ?.let { fido2RequestUserId ->
+                // If the current Vault is not the selected Vault, switch accounts.
+                if (userState.activeUserId != fido2RequestUserId) {
+                    authRepository.switchAccount(fido2RequestUserId)
+                    return
+                }
+            }
         // If the Vault is already unlocked, do nothing.
         if (userState.activeAccount.isVaultUnlocked) return
         // If the user state has changed to add a new account, do nothing.
@@ -401,6 +411,20 @@ data class VaultUnlockState(
      * Indicates if we want force focus on Master Password \ PIN input field and show keyboard.
      */
     val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
+
+    /**
+     * Indicates if the vault is being unlocked as a result of receiving a FIDO 2 request.
+     */
+    val isUnlockingForFido2Request: Boolean
+        get() = fido2GetCredentialsRequest != null ||
+            fido2CredentialAssertionRequest != null
+
+    /**
+     * Returns the user ID present in the current FIDO 2 request, or null when no FIDO 2 request is
+     * present.
+     */
+    val fido2RequestUserId: String?
+        get() = fido2GetCredentialsRequest?.userId ?: fido2CredentialAssertionRequest?.userId
 
     /**
      * Represents the various dialogs the vault unlock screen can display.
