@@ -103,9 +103,9 @@ fun BitwardenPasswordField(
             BitwardenStandardIconButton(
                 modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
                 vectorIconRes = if (showPassword) {
-                    R.drawable.ic_visibility_off
+                    R.drawable.ic_eye_slash
                 } else {
-                    R.drawable.ic_visibility
+                    R.drawable.ic_eye
                 },
                 contentDescription = stringResource(
                     id = if (showPassword) R.string.hide else R.string.show,

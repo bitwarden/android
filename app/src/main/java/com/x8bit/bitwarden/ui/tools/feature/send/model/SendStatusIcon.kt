@@ -19,7 +19,7 @@ enum class SendStatusIcon(
         testTag = "DisabledSendIcon",
     ),
     PASSWORD(
-        iconRes = R.drawable.ic_send_password,
+        iconRes = R.drawable.ic_key,
         contentDescription = R.string.password.asText(),
         testTag = "PasswordProtectedSendIcon",
     ),

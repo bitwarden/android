@@ -405,7 +405,7 @@ class VaultDataExtensionsTest {
                     usePasskeyDefaultIcon = false,
                 )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_login_item)
+        val expected = IconData.Local(iconRes = R.drawable.ic_globe)
 
         assertEquals(expected, actual)
     }
@@ -426,7 +426,7 @@ class VaultDataExtensionsTest {
                     usePasskeyDefaultIcon = true,
                 )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_login_item_passkey)
+        val expected = IconData.Local(iconRes = R.drawable.ic_bw_passkey)
 
         assertEquals(expected, actual)
     }
@@ -446,7 +446,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_login_item)
+        val expected = IconData.Local(iconRes = R.drawable.ic_globe)
 
         assertEquals(expected, actual)
     }
@@ -467,7 +467,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = true,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_login_item_passkey)
+        val expected = IconData.Local(iconRes = R.drawable.ic_bw_passkey)
 
         assertEquals(expected, actual)
     }
@@ -534,7 +534,7 @@ class VaultDataExtensionsTest {
 
         val expected = IconData.Network(
             uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
-            fallbackIconRes = R.drawable.ic_login_item,
+            fallbackIconRes = R.drawable.ic_globe,
         )
 
         assertEquals(expected, actual)
@@ -565,7 +565,7 @@ class VaultDataExtensionsTest {
 
         val expected = IconData.Network(
             uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
-            fallbackIconRes = R.drawable.ic_login_item_passkey,
+            fallbackIconRes = R.drawable.ic_bw_passkey,
         )
 
         assertEquals(expected, actual)

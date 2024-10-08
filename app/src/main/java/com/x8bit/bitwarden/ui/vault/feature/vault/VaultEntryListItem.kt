@@ -63,7 +63,7 @@ fun VaultEntryListItem(
 private fun VaultEntryListItem_preview() {
     BitwardenTheme {
         VaultEntryListItem(
-            startIcon = IconData.Local(R.drawable.ic_login_item),
+            startIcon = IconData.Local(R.drawable.ic_globe),
             startIconTestTag = "Test Tag",
             label = "Example Login",
             supportingLabel = "Username",

@@ -70,6 +70,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayIt
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.Ordering
@@ -257,6 +258,26 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             ),
         )
         verify { authRepository.switchAccount(userId = updatedUserId) }
+    }
+
+    @Test
+    fun `BackClick with TotpData should emit ExitApp`() = runTest {
+        val totpData = TotpData(
+            uri = "otpauth://totp/issuer:accountName?secret=secret",
+            issuer = "issuer",
+            accountName = "accountName",
+            secret = "secret",
+            digits = 6,
+            period = 30,
+            algorithm = TotpData.CryptoHashAlgorithm.SHA_1,
+        )
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AddTotpLoginItem(data = totpData)
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultItemListingsAction.BackClick)
+            assertEquals(VaultItemListingEvent.ExitApp, awaitItem())
+        }
     }
 
     @Test
@@ -1382,7 +1403,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                 subtitleTestTag = "PasskeyName",
                                 iconData = IconData.Network(
                                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                    fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                    fallbackIconRes = R.drawable.ic_bw_passkey,
                                 ),
                                 isAutofill = true,
                             ),
@@ -1398,6 +1419,61 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with items and totp data filtering should update ViewState to Content with filtered data`() =
+        runTest {
+            setupMockUri()
+
+            val uri = "otpauth://totp/issuer:accountName?secret=secret"
+            val totpData = TotpData(
+                uri = uri,
+                issuer = null,
+                accountName = "Name-1",
+                secret = "secret",
+                digits = 6,
+                period = 30,
+                algorithm = TotpData.CryptoHashAlgorithm.SHA_1,
+            )
+            val cipherView1 = createMockCipherView(number = 1)
+            val cipherView2 = createMockCipherView(number = 2)
+
+            // Filtering comes later, so we return everything here
+            mockFilteredCiphers = listOf(cipherView1, cipherView2)
+
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AddTotpLoginItem(data = totpData)
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+
+            mutableVaultDataStateFlow.value = dataState
+
+            assertEquals(
+                createVaultItemListingState(
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(
+                                number = 1,
+                                secondSubtitleTestTag = "PasskeySite",
+                            ),
+                        ),
+                        displayFolderList = emptyList(),
+                    ),
+                )
+                    .copy(totpData = totpData),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1462,7 +1538,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                     subtitleTestTag = "PasskeyName",
                                     iconData = IconData.Network(
                                         uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                        fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                        fallbackIconRes = R.drawable.ic_bw_passkey,
                                     ),
                                     isFido2Creation = true,
                                 ),
@@ -3887,7 +3963,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     private fun createVaultItemListingViewModel(
         savedStateHandle: SavedStateHandle = initialSavedStateHandle,
-        vaultRepository: VaultRepository = this.vaultRepository,
     ): VaultItemListingViewModel =
         VaultItemListingViewModel(
             savedStateHandle = savedStateHandle,
@@ -3922,6 +3997,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = false,
             dialogState = null,
+            totpData = null,
             autofillSelectionData = null,
             policyDisablesSend = false,
             hasMasterPassword = true,

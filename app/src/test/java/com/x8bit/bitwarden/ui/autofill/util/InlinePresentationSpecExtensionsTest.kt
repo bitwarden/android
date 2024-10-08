@@ -61,7 +61,7 @@ class InlinePresentationSpecExtensionsTest {
         val autofillCipher: AutofillCipher.Card = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
-            every { this@mockk.iconRes } returns R.drawable.ic_card_item
+            every { this@mockk.iconRes } returns R.drawable.ic_payment_card
         }
         val pendingIntent: PendingIntent = mockk()
         every {
@@ -94,7 +94,7 @@ class InlinePresentationSpecExtensionsTest {
     fun `createCipherInlinePresentationOrNull should return presentation with card icon when card cipher and compatible`() {
         // Setup
         val icon: Icon = mockk()
-        val iconRes = R.drawable.ic_card_item
+        val iconRes = R.drawable.ic_payment_card
         val autofillCipher: AutofillCipher.Card = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
@@ -154,11 +154,11 @@ class InlinePresentationSpecExtensionsTest {
             ContextCompat.getString(testContext, R.string.type_login)
         } returns LOGIN
         val icon: Icon = mockk()
-        val iconRes = R.drawable.ic_login_item
+        val iconRes = R.drawable.ic_globe
         val autofillCipher: AutofillCipher.Login = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
-            every { this@mockk.iconRes } returns R.drawable.ic_login_item
+            every { this@mockk.iconRes } returns R.drawable.ic_globe
         }
         val pendingIntent: PendingIntent = mockk()
         prepareForCompatibleCipherInlinePresentation(

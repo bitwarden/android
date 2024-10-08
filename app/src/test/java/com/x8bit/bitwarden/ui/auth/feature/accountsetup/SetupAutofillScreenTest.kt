@@ -5,6 +5,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -15,12 +16,14 @@ import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
 class SetupAutofillScreenTest : BaseComposeTest() {
+    private var onNavigateBackCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupAutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -38,6 +41,7 @@ class SetupAutofillScreenTest : BaseComposeTest() {
             SetupAutoFillScreen(
                 intentManager = intentManager,
                 viewModel = viewModel,
+                onNavigateBack = { onNavigateBackCalled = true },
             )
         }
     }
@@ -88,6 +92,15 @@ class SetupAutofillScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterClick)
         }
+    }
+
+    @Test
+    fun `Turn on later component should not be displayed when not in initial setup`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(text = "Turn on later")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -207,10 +220,35 @@ class SetupAutofillScreenTest : BaseComposeTest() {
         }
         composeTestRule.assertNoDialogExists()
     }
+
+    @Test
+    fun `on NavigateBack event should invoke onNavigateBack`() {
+        mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `close icon should not show when in initial setup`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `close icon should show when not initial setup and send action when clicked`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify { viewModel.trySendAction(SetupAutoFillAction.CloseClick) }
+    }
 }
 
 private val DEFAULT_STATE = SetupAutoFillState(
     userId = "userId",
     dialogState = null,
     autofillEnabled = false,
+    isInitialSetup = true,
 )

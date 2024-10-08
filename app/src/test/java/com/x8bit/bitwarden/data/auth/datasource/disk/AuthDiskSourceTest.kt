@@ -1135,6 +1135,7 @@ class AuthDiskSourceTest {
         }
     }
 
+    @Test
     fun `authenticatorSyncSymmetricKey should store and update from EncryptedSharedPreferences`() {
         val sharedPrefsKey = "bwSecureStorage:authenticatorSyncSymmetric"
 

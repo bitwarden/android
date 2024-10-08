@@ -62,7 +62,7 @@ private fun BitwardenFilledTonalButtonWithIcon_preview() {
     BitwardenTheme {
         BitwardenFilledTonalButtonWithIcon(
             label = "Sample Text",
-            icon = rememberVectorPainter(id = R.drawable.ic_tooltip),
+            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
             onClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),
         )

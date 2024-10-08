@@ -77,7 +77,7 @@ private fun BitwardenSwitchWithActions_preview() {
             onCheckedChange = {},
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_tooltip,
+                    vectorIconRes = R.drawable.ic_question_circle,
                     contentDescription = stringResource(
                         id = R.string.master_password_re_prompt_help,
                     ),

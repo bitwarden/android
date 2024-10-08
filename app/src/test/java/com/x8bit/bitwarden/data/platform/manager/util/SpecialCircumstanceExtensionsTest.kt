@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentia
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -38,6 +39,7 @@ class SpecialCircumstanceExtensionsTest {
                 data = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
             SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
@@ -87,6 +89,7 @@ class SpecialCircumstanceExtensionsTest {
                 data = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
             SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
@@ -118,6 +121,7 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.AutofillSave(
                 autofillSaveItem = mockk(),
             ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
             SpecialCircumstance.ShareNewSend(
                 data = mockk(),
                 shouldFinishWhenComplete = true,
@@ -188,6 +192,7 @@ class SpecialCircumstanceExtensionsTest {
                 data = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
             SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
@@ -234,6 +239,7 @@ class SpecialCircumstanceExtensionsTest {
                 data = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
             SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
@@ -249,6 +255,33 @@ class SpecialCircumstanceExtensionsTest {
         )
             .forEach { specialCircumstance ->
                 assertNull(specialCircumstance.toFido2GetCredentialsRequestOrNull())
+            }
+    }
+
+    @Test
+    fun `toTotpDataOrNull should return a non-null value for AddTotpLoginItem`() {
+        val totpData = mockk<TotpData>()
+        assertEquals(
+            totpData,
+            SpecialCircumstance.AddTotpLoginItem(data = totpData).toTotpDataOrNull(),
+        )
+    }
+
+    @Test
+    fun `toTotpDataOrNull should return a null value for other types`() {
+        listOf(
+            mockk<SpecialCircumstance.AutofillSelection>(),
+            mockk<SpecialCircumstance.AutofillSave>(),
+            mockk<SpecialCircumstance.ShareNewSend>(),
+            mockk<SpecialCircumstance.PasswordlessRequest>(),
+            mockk<SpecialCircumstance.Fido2Save>(),
+            mockk<SpecialCircumstance.Fido2Assertion>(),
+            mockk<SpecialCircumstance.RegistrationEvent>(),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
+        )
+            .forEach { specialCircumstance ->
+                assertNull(specialCircumstance.toTotpDataOrNull())
             }
     }
 }

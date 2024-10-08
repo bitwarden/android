@@ -118,7 +118,7 @@ class AutoFillViewModel @Inject constructor(
 
     private fun handleAutoFillActionCardCtClick() {
         dismissShowAutofillActionCard()
-        // TODO PM-13068 navigate to auto fill setup screen
+        sendEvent(AutoFillEvent.NavigateToSetupAutofill)
     }
 
     private fun handleUpdateShowAutofillActionCard(
@@ -261,6 +261,11 @@ sealed class AutoFillEvent {
     data class ShowToast(
         val text: Text,
     ) : AutoFillEvent()
+
+    /**
+     * Navigates to the setup autofill screen.
+     */
+    data object NavigateToSetupAutofill : AutoFillEvent()
 }
 
 /**

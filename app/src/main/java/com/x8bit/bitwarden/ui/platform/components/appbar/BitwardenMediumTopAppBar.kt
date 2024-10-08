@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.appbar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -59,7 +58,7 @@ fun BitwardenMediumTopAppBar(
 @Preview(showBackground = true)
 @Composable
 private fun BitwardenMediumTopAppBar_preview() {
-    MaterialTheme {
+    BitwardenTheme {
         BitwardenMediumTopAppBar(
             title = "Preview Title",
             scrollBehavior = TopAppBarDefaults
@@ -68,7 +67,7 @@ private fun BitwardenMediumTopAppBar_preview() {
                 ),
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_more,
+                    vectorIconRes = R.drawable.ic_ellipsis_vertical,
                     contentDescription = "",
                     onClick = { },
                 )

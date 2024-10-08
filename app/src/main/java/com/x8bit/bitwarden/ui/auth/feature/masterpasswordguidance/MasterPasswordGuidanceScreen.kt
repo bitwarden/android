@@ -168,7 +168,7 @@ private fun TryGeneratorCard(
             .fillMaxWidth(),
         trailingContent = {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
+                painter = rememberVectorPainter(id = R.drawable.ic_chevron_right),
                 contentDescription = null,
                 tint = BitwardenTheme.colorScheme.icon.primary,
                 modifier = Modifier

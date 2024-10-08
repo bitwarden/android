@@ -117,6 +117,12 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
+                    is SpecialCircumstance.AddTotpLoginItem -> {
+                        RootNavState.VaultUnlockedForNewTotp(
+                            activeUserId = userState.activeAccount.userId,
+                        )
+                    }
+
                     is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
 
                     is SpecialCircumstance.PasswordlessRequest -> {
@@ -303,6 +309,14 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlockedForFido2GetCredentials(
         val activeUserId: String,
         val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
+    ) : RootNavState()
+
+    /**
+     * App should show the new verification codes listing screen for an unlocked user.
+     */
+    @Parcelize
+    data class VaultUnlockedForNewTotp(
+        val activeUserId: String,
     ) : RootNavState()
 
     /**

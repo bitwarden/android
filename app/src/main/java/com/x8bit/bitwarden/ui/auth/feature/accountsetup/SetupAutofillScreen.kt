@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -45,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.image.BitwardenGifImage
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -57,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.util.isPortrait
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupAutoFillScreen(
+    onNavigateBack: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SetupAutoFillViewModel = hiltViewModel(),
 ) {
@@ -70,6 +74,8 @@ fun SetupAutoFillScreen(
                     handler.sendAutoFillServiceFallback.invoke()
                 }
             }
+
+            SetupAutoFillEvent.NavigateBack -> onNavigateBack()
         }
     }
     when (state.dialogState) {
@@ -105,14 +111,32 @@ fun SetupAutoFillScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.account_setup),
+                title = stringResource(
+                    id = if (state.isInitialSetup) {
+                        R.string.account_setup
+                    } else {
+                        R.string.turn_on_autofill
+                    },
+                ),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = null,
+                navigationIcon = if (state.isInitialSetup) {
+                    null
+                } else {
+                    NavigationIcon(
+                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        onNavigationIconClick = remember(viewModel) {
+                            {
+                                viewModel.trySendAction(SetupAutoFillAction.CloseClick)
+                            }
+                        },
+                    )
+                },
             )
         },
     ) { innerPadding ->
         SetupAutoFillContent(
-            autofillEnabled = state.autofillEnabled,
+            state = state,
             onAutofillServiceChanged = { handler.onAutofillServiceChanged(it) },
             onContinueClick = handler.onContinueClick,
             onTurnOnLaterClick = handler.onTurnOnLaterClick,
@@ -127,7 +151,7 @@ fun SetupAutoFillScreen(
 @Suppress("LongMethod")
 @Composable
 private fun SetupAutoFillContent(
-    autofillEnabled: Boolean,
+    state: SetupAutoFillState,
     onAutofillServiceChanged: (Boolean) -> Unit,
     onContinueClick: () -> Unit,
     onTurnOnLaterClick: () -> Unit,
@@ -147,7 +171,7 @@ private fun SetupAutoFillContent(
             label = stringResource(
                 R.string.autofill_services,
             ),
-            isChecked = autofillEnabled,
+            isChecked = state.autofillEnabled,
             onCheckedChange = onAutofillServiceChanged,
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,13 +186,15 @@ private fun SetupAutoFillContent(
                 .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenTextButton(
-            label = stringResource(R.string.turn_on_later),
-            onClick = onTurnOnLaterClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
+        if (state.isInitialSetup) {
+            BitwardenTextButton(
+                label = stringResource(R.string.turn_on_later),
+                onClick = onTurnOnLaterClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -240,7 +266,12 @@ private fun OrderedHeaderContent() {
 private fun SetupAutoFillContentDisabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
-            autofillEnabled = false,
+            state = SetupAutoFillState(
+                userId = "disputationi",
+                dialogState = null,
+                autofillEnabled = false,
+                isInitialSetup = true,
+            ),
             onAutofillServiceChanged = {},
             onContinueClick = {},
             onTurnOnLaterClick = {},
@@ -253,7 +284,12 @@ private fun SetupAutoFillContentDisabled_preview() {
 private fun SetupAutoFillContentEnabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
-            autofillEnabled = true,
+            state = SetupAutoFillState(
+                userId = "disputationi",
+                dialogState = null,
+                autofillEnabled = true,
+                isInitialSetup = true,
+            ),
             onAutofillServiceChanged = {},
             onContinueClick = {},
             onTurnOnLaterClick = {},

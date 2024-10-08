@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -215,24 +215,13 @@ private fun BlockAutoFillNoItems(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Icon(
-                painter = rememberVectorPainter(
-                    id = R.drawable.ic_blocked_uri_background,
-                ),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.reversed,
-            )
-
-            Icon(
-                painter = rememberVectorPainter(
-                    id = R.drawable.ic_blocked_uri_foreground,
-                ),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        }
-
+        Image(
+            painter = rememberVectorPainter(
+                id = R.drawable.blocked_uri,
+            ),
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(
@@ -287,7 +276,7 @@ private fun BlockAutoFillListItem(
             color = BitwardenTheme.colorScheme.text.primary,
         )
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_edit_alt),
+            painter = rememberVectorPainter(id = R.drawable.ic_pencil_square),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),

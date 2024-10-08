@@ -213,7 +213,7 @@ private fun CompleteRegistrationContent(
             )
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenActionCardSmall(
-                actionIcon = rememberVectorPainter(id = R.drawable.ic_tooltip),
+                actionIcon = rememberVectorPainter(id = R.drawable.ic_question_circle),
                 actionText = stringResource(id = R.string.what_makes_a_password_strong),
                 callToActionText = stringResource(id = R.string.learn_more),
                 onCardClicked = handler.onMakeStrongPassword,

@@ -15,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
 
@@ -38,6 +40,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     policyDisablesSend: Boolean,
+    showAddTotpBanner: Boolean,
     collectionClick: (id: String) -> Unit,
     folderClick: (id: String) -> Unit,
     vaultItemClick: (id: String) -> Unit,
@@ -101,7 +104,22 @@ fun VaultItemListingContent(
         modifier = modifier,
     ) {
         item {
+            if (showAddTotpBanner) {
+                Spacer(modifier = Modifier.height(height = 12.dp))
+                BitwardenPolicyWarningText(
+                    text = stringResource(id = R.string.add_this_authenticator_key_to_a_login),
+                    style = BitwardenTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
+        }
+
+        item {
             if (policyDisablesSend) {
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenPolicyWarningText(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
@@ -128,7 +146,7 @@ fun VaultItemListingContent(
 
             items(state.displayCollectionList) { collection ->
                 BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = R.drawable.ic_collection),
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { collectionClick(collection.id) },

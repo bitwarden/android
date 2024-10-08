@@ -14,12 +14,12 @@ enum class VaultTrailingIcon(
     val testTag: String,
 ) {
     COLLECTION(
-        iconRes = R.drawable.ic_collection,
+        iconRes = R.drawable.ic_collections,
         contentDescription = R.string.collections.asText(),
         testTag = "CipherInCollectionIcon",
     ),
     ATTACHMENT(
-        iconRes = R.drawable.ic_attachment,
+        iconRes = R.drawable.ic_paperclip,
         contentDescription = R.string.attachments.asText(),
         testTag = "CipherWithAttachmentsIcon",
     ),

@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.aboutDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
@@ -34,6 +33,8 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
+    onNavigateToSetupUnlockScreen: () -> Unit,
+    onNavigateToSetupAutoFillScreen: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -56,12 +57,13 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
             onNavigateToPendingRequests = onNavigateToPendingRequests,
-            onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
+            onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         )
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
         autoFillDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
+            onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
         )
         otherDestination(onNavigateBack = { navController.popBackStack() })
         vaultSettingsDestination(

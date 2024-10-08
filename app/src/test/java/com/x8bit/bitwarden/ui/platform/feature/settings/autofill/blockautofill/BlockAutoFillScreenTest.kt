@@ -7,6 +7,7 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -60,6 +61,7 @@ class BlockAutoFillScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("New blocked URI")
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -85,6 +87,7 @@ class BlockAutoFillScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("New blocked URI")
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -92,6 +95,7 @@ class BlockAutoFillScreenTest : BaseComposeTest() {
     fun `on add URI button click should send AddUriClick`() {
         composeTestRule
             .onNodeWithText("New blocked URI")
+            .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
     }

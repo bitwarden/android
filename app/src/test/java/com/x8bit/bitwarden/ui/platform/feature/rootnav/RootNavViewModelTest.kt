@@ -416,6 +416,43 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `when the active user has an unlocked vault but there is an AddTotpLoginItem special circumstance the nav state should be VaultUnlockedForNewTotp`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AddTotpLoginItem(data = mockk())
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlockedForNewTotp(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `when the active user has an unlocked vault but the is a ShareNewSend special circumstance the nav state should be VaultUnlockedForNewSend`() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ShareNewSend(

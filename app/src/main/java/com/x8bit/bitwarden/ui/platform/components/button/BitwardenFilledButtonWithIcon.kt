@@ -64,7 +64,7 @@ private fun BitwardenFilledButtonWithIcon_preview() {
     BitwardenTheme {
         BitwardenFilledButtonWithIcon(
             label = "Test Button",
-            icon = rememberVectorPainter(id = R.drawable.ic_tooltip),
+            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
             onClick = {},
             isEnabled = true,
         )

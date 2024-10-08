@@ -52,7 +52,7 @@ fun BitwardenOverflowActionItem(
         modifier = modifier,
     ) {
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_more,
+            vectorIconRes = R.drawable.ic_ellipsis_vertical,
             contentDescription = stringResource(id = R.string.more),
             onClick = { isOverflowMenuVisible = !isOverflowMenuVisible },
             modifier = Modifier.testTag(tag = "HeaderBarOptionsButton"),

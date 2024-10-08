@@ -111,7 +111,7 @@ fun BitwardenMultiSelectButton(
                 tooltip?.let {
                     Spacer(modifier = Modifier.width(3.dp))
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_tooltip_small,
+                        vectorIconRes = R.drawable.ic_question_circle_small,
                         contentDescription = it.contentDescription,
                         onClick = it.onClick,
                         isEnabled = isEnabled,
@@ -126,7 +126,7 @@ fun BitwardenMultiSelectButton(
         enabled = shouldShowDialog,
         trailingIcon = {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
+                painter = rememberVectorPainter(id = R.drawable.ic_down_triangle),
                 contentDescription = null,
                 tint = BitwardenTheme.colorScheme.icon.primary,
             )

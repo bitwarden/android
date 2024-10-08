@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
@@ -84,6 +85,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToSearchType: SearchType? = null
     private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
 
+    private val exitManager: ExitManager = mockk {
+        every { exitApplication() } just runs
+    }
     private val intentManager: IntentManager = mockk {
         every { shareText(any()) } just runs
         every { launchUri(any()) } just runs
@@ -105,9 +109,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun setUp() {
         mockkStatic(String::toHostOrPathOrNull)
         every { AUTOFILL_SELECTION_DATA.uri?.toHostOrPathOrNull() } returns "www.test.com"
-        composeTestRule.setContent {
+        setContentWithBackDispatcher {
             VaultItemListingScreen(
                 viewModel = viewModel,
+                exitManager = exitManager,
                 intentManager = intentManager,
                 fido2CompletionManager = fido2CompletionManager,
                 biometricsManager = biometricsManager,
@@ -337,6 +342,23 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `NavigateBack event should invoke NavigateBack`() {
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `ExitApp event should invoke exitApplication`() {
+        mutableEventFlow.tryEmit(VaultItemListingEvent.ExitApp)
+        verify(exactly = 1) {
+            exitManager.exitApplication()
+        }
+    }
+
+    @Test
+    fun `back gesture should send BackClick action`() {
+        backDispatcher?.onBackPressed()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.BackClick)
+        }
     }
 
     @Test
@@ -2079,14 +2101,14 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "SendDateLabel",
-        iconData = IconData.Local(R.drawable.ic_card_item),
+        iconData = IconData.Local(R.drawable.ic_payment_card),
         extraIconList = listOf(
             IconRes(
                 iconRes = R.drawable.ic_send_disabled,
                 contentDescription = R.string.disabled.asText(),
             ),
             IconRes(
-                iconRes = R.drawable.ic_send_password,
+                iconRes = R.drawable.ic_key,
                 contentDescription = R.string.password.asText(),
             ),
             IconRes(

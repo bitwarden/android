@@ -311,7 +311,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.ic_pending_requests),
+            painter = rememberVectorPainter(id = R.drawable.pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .padding(vertical = 16.dp)

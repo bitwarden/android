@@ -91,7 +91,7 @@ fun BitwardenGroupItem(
         )
 
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
+            painter = rememberVectorPainter(id = R.drawable.ic_chevron_right),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
@@ -108,7 +108,7 @@ private fun BitwardenGroupItem_preview() {
         BitwardenGroupItem(
             label = "Sample Label",
             supportingLabel = "5",
-            startIcon = rememberVectorPainter(id = R.drawable.ic_send_text),
+            startIcon = rememberVectorPainter(id = R.drawable.ic_file_text),
             startIconTestTag = "Test Tag",
             onClick = {},
         )
