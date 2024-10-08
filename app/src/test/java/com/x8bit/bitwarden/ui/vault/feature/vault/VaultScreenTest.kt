@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
@@ -636,7 +637,10 @@ class VaultScreenTest : BaseComposeTest() {
     @Test
     fun `add an item button click should send AddItemClick action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithText("Add an Item").performClick()
+        composeTestRule
+            .onNodeWithText("New login")
+            .performScrollTo()
+            .performClick()
         verify { viewModel.trySendAction(VaultAction.AddItemClick) }
     }
 
