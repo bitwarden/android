@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -128,6 +129,25 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `handleContinueClick send NavigateBack event when not initial setup`() = runTest {
+        val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(isInitialSetup = false))
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+            assertEquals(
+                SetupAutoFillEvent.NavigateBack,
+                awaitItem(),
+            )
+        }
+        verify(exactly = 0) {
+            authRepository.setOnboardingStatus(
+                DEFAULT_USER_ID,
+                OnboardingStatus.FINAL_STEP,
+            )
+        }
+    }
+
     @Test
     fun `handleTurnOnLaterConfirmClick sets showAutoFillSettingBadge to true`() {
         val viewModel = createViewModel()
@@ -140,10 +160,34 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel() = SetupAutoFillViewModel(
+    @Test
+    fun `handleClose click sends NavigateBack event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SetupAutoFillAction.CloseClick)
+            assertEquals(SetupAutoFillEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    private fun createViewModel(
+        initialState: SetupAutoFillState? = null,
+    ) = SetupAutoFillViewModel(
+        savedStateHandle = SavedStateHandle(
+            mapOf(
+                "state" to initialState,
+                "isInitialSetup" to true,
+            ),
+        ),
         settingsRepository = settingsRepository,
         authRepository = authRepository,
     )
 }
 
 private const val DEFAULT_USER_ID = "userId"
+
+private val DEFAULT_STATE = SetupAutoFillState(
+    userId = DEFAULT_USER_ID,
+    dialogState = null,
+    autofillEnabled = false,
+    isInitialSetup = true,
+)

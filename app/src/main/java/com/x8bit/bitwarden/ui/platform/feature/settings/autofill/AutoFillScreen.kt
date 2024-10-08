@@ -64,6 +64,7 @@ fun AutoFillScreen(
     viewModel: AutoFillViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToBlockAutoFillScreen: () -> Unit,
+    onNavigateToSetupAutofill: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -94,6 +95,8 @@ fun AutoFillScreen(
             AutoFillEvent.NavigateToSettings -> {
                 intentManager.startCredentialManagerSettings(context)
             }
+
+            AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
         }
     }
 

@@ -4,6 +4,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
@@ -98,6 +102,8 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Default,
                 )
             },
+            onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
+            onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
         )
         deleteAccountDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -199,6 +205,16 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+        setupUnlockDestination(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+        )
+        setupAutoFillDestination(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
         )
     }
 }

@@ -321,10 +321,17 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when AutoFillActionCardCtaClick action is sent should update show autofill in repository`() {
+    fun `when AutoFillActionCardCtaClick action is sent should update show autofill in repository and send NavigateToSetupAutofill event`() =
+        runTest {
         mutableShowAutofillActionCardFlow.update { true }
         val viewModel = createViewModel()
-        viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToSetupAutofill,
+                    awaitItem(),
+                )
+            }
         verify {
             settingsRepository.storeShowAutoFillSettingBadge(
                 DEFAULT_STATE.activeUserId,

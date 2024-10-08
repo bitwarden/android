@@ -35,6 +35,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     private var isSystemSettingsRequestSuccess = false
     private var onNavigateBackCalled = false
     private var onNavigateToBlockAutoFillScreenCalled = false
+    private var onNavigateToSetupAutoFillScreenCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -56,6 +57,7 @@ class AutoFillScreenTest : BaseComposeTest() {
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
+                onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
             )
         }
     }
@@ -497,6 +499,12 @@ class AutoFillScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AutoFillAction.DismissShowAutofillActionCard) }
+    }
+
+    @Test
+    fun `when NavigateToSetupAutofill event is sent should call onNavigateToSetupAutofill`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
+        assertTrue(onNavigateToSetupAutoFillScreenCalled)
     }
 }
 
