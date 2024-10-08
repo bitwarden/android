@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -51,6 +50,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
@@ -215,7 +215,7 @@ fun GeneratorScreen(
             }
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+            BitwardenSnackbarHost(hostState = snackbarHostState)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
