@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -73,7 +73,7 @@ fun AddSendContent(
             .verticalScroll(rememberScrollState()),
     ) {
         if (policyDisablesSend) {
-            BitwardenPolicyWarningText(
+            BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.send_disabled_warning),
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -83,7 +83,7 @@ fun AddSendContent(
         }
 
         if (policySendOptionsInEffect) {
-            BitwardenPolicyWarningText(
+            BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.send_options_policy_in_effect),
                 modifier = Modifier
                     .testTag("SendOptionsPolicyInEffectLabel")

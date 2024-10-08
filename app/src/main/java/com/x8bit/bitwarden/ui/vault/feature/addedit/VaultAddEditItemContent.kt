@@ -13,9 +13,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -55,7 +55,7 @@ fun VaultAddEditContent(
     LazyColumn(modifier = modifier) {
         item {
             if (state.isIndividualVaultDisabled && isAddItemMode) {
-                BitwardenPolicyWarningText(
+                BitwardenInfoCalloutCard(
                     text = stringResource(R.string.personal_ownership_policy_in_effect),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
