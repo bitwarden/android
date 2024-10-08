@@ -383,6 +383,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             it.copy(
                 itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no Sends in your account.".asText(),
                     shouldShowAddButton = true,
                     buttonText = "Add an Item".asText(),
@@ -419,6 +420,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
                     buttonText = "Add an Item".asText(),
@@ -519,6 +521,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
                     buttonText = "Add an Item".asText(),
@@ -541,6 +544,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
                     buttonText = "Add an Item".asText(),
@@ -569,6 +573,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
                     buttonText = "Add an Item".asText(),
@@ -583,6 +588,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = false,
                     buttonText = "Add an Item".asText(),
@@ -599,12 +605,16 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = "Save and protect your data".asText(),
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
                     buttonText = "Save passkey as new login".asText(),
                 ),
             )
         }
+        composeTestRule
+            .onNodeWithText(text = "Save and protect your data")
+            .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(text = "There are no items in your vault.")
             .assertIsDisplayed()

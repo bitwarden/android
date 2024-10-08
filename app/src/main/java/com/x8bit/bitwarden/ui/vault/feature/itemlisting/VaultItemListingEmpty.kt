@@ -29,6 +29,8 @@ fun VaultItemListingEmpty(
     if (state.shouldShowAddButton) {
         VaultNoItems(
             policyDisablesSend = policyDisablesSend,
+            vectorRes = state.vectorRes,
+            headerText = state.header(),
             message = state.message(),
             buttonText = state.buttonText(),
             modifier = modifier,

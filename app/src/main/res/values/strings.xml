@@ -195,6 +195,7 @@
   <string name="translations">Translations</string>
   <string name="items_for_uri">Items for %1$s</string>
   <string name="no_items_for_uri">There are no items in your vault for %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</string>
   <string name="bitwarden_autofill_service_notification_content">Tap this notification to auto-fill an item from your vault.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Open Accessibility Settings</string>

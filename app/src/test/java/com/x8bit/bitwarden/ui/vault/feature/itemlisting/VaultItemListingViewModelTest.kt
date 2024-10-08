@@ -1654,6 +1654,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
+                        header = R.string.save_and_protect_your_data.asText(),
                         message = R.string.no_items.asText(),
                         shouldShowAddButton = true,
                         buttonText = R.string.add_an_item.asText(),
@@ -1681,6 +1682,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
+                        header = R.string.save_and_protect_your_data.asText(),
                         message = R.string.no_items.asText(),
                         shouldShowAddButton = true,
                         buttonText = R.string.add_an_item.asText(),
@@ -1752,6 +1754,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = R.string.save_and_protect_your_data.asText(),
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
                     buttonText = R.string.add_an_item.asText(),
@@ -1779,6 +1782,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = R.string.save_and_protect_your_data.asText(),
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
                     buttonText = R.string.add_an_item.asText(),
@@ -1862,6 +1866,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = R.string.save_and_protect_your_data.asText(),
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
                     buttonText = R.string.add_an_item.asText(),
@@ -1890,6 +1895,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = R.string.save_and_protect_your_data.asText(),
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
                     buttonText = R.string.add_an_item.asText(),
@@ -1974,6 +1980,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = R.string.save_and_protect_your_data.asText(),
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
                     buttonText = R.string.add_an_item.asText(),
@@ -2001,6 +2008,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
+                    header = R.string.save_and_protect_your_data.asText(),
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
                     buttonText = R.string.add_an_item.asText(),

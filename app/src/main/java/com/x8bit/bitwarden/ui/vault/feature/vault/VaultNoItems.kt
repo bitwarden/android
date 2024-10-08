@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.content.res.Configuration
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ fun VaultNoItems(
     addItemClickAction: () -> Unit,
     policyDisablesSend: Boolean,
     modifier: Modifier = Modifier,
+    @DrawableRes vectorRes: Int = R.drawable.img_vault_items,
     headerText: String = stringResource(id = R.string.save_and_protect_your_data),
     message: String = stringResource(R.string.the_vault_protects_more_than_just_passwords),
     buttonText: String = stringResource(R.string.new_login),
@@ -54,7 +56,7 @@ fun VaultNoItems(
         Spacer(modifier = Modifier.weight(1F))
 
         Image(
-            painter = rememberVectorPainter(id = R.drawable.img_vault_items),
+            painter = rememberVectorPainter(id = vectorRes),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
