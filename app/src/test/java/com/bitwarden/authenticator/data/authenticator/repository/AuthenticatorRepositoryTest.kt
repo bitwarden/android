@@ -43,7 +43,7 @@ class AuthenticatorRepositoryTest {
     private val mockImportManager = mockk<ImportManager>()
     private val mockDispatcherManager = FakeDispatcherManager()
     private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(LocalFeatureFlag.BitwardenAuthenticationEnabled) } returns true
+        every { getFeatureFlag(LocalFeatureFlag.PasswordManagerSync) } returns true
     }
 
     private val authenticatorRepository = AuthenticatorRepositoryImpl(
@@ -79,7 +79,7 @@ class AuthenticatorRepositoryTest {
     @Test
     fun `sharedCodesStateFlow value should be FeatureNotEnabled when feature flag is off`() {
         every {
-            mockFeatureFlagManager.getFeatureFlag(LocalFeatureFlag.BitwardenAuthenticationEnabled)
+            mockFeatureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)
         } returns false
         val repository = AuthenticatorRepositoryImpl(
             authenticatorDiskSource = fakeAuthenticatorDiskSource,
@@ -111,7 +111,7 @@ class AuthenticatorRepositoryTest {
     @Test
     fun `sharedCodesStateFlow should emit FeatureNotEnabled when feature flag is off`() = runTest {
         every {
-            mockFeatureFlagManager.getFeatureFlag(LocalFeatureFlag.BitwardenAuthenticationEnabled)
+            mockFeatureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)
         } returns false
         val repository = AuthenticatorRepositoryImpl(
             authenticatorDiskSource = fakeAuthenticatorDiskSource,

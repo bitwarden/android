@@ -146,7 +146,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState> by lazy {
-        if (!featureFlagManager.getFeatureFlag(LocalFeatureFlag.BitwardenAuthenticationEnabled)) {
+        if (!featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)) {
             MutableStateFlow(SharedVerificationCodesState.FeatureNotEnabled)
         } else {
             authenticatorBridgeManager
