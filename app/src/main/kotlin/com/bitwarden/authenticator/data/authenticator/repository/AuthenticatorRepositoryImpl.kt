@@ -8,21 +8,27 @@ import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorData
+import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
+import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.util.sortAlphabetically
+import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
+import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.authenticator.data.platform.repository.util.combineDataStates
 import com.bitwarden.authenticator.data.platform.repository.util.map
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +39,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -50,10 +57,14 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 
 /**
  * Default implementation of [AuthenticatorRepository].
+ *
+ * TODO: make sure none of these deps are unused
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 class AuthenticatorRepositoryImpl @Inject constructor(
+    private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val authenticatorDiskSource: AuthenticatorDiskSource,
+    private val featureFlagManager: FeatureFlagManager,
     private val totpCodeManager: TotpCodeManager,
     private val fileManager: FileManager,
     private val importManager: ImportManager,
@@ -71,7 +82,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     override val totpCodeFlow: Flow<TotpCodeResult>
         get() = mutableTotpCodeResultFlow.asSharedFlow()
 
-    override val authenticatorDataFlow: StateFlow<DataState<AuthenticatorData>> =
+    private val authenticatorDataFlow: StateFlow<DataState<AuthenticatorData>> =
         ciphersStateFlow.map { cipherDataState ->
             when (cipherDataState) {
                 is DataState.Error -> {
@@ -134,24 +145,79 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>> {
-        return authenticatorDataFlow
-            .map { dataState ->
-                dataState.map { authenticatorData -> authenticatorData.items }
-            }
-            .flatMapLatest { cipherDataState ->
-                val cipherList = cipherDataState.data ?: emptyList()
-                totpCodeManager.getTotpCodesStateFlow(itemList = cipherList)
-                    .map { verificationCodeDataStates ->
-                        combineDataStates(
-                            verificationCodeDataStates,
-                            cipherDataState,
-                        ) { verificationCodeItems, _ ->
-                            // Just return the verification items; we are only combining the
-                            // DataStates to know the overall state.
-                            verificationCodeItems
+    override val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState> by lazy {
+        if (!featureFlagManager.getFeatureFlag(LocalFeatureFlag.BitwardenAuthenticationEnabled)) {
+            MutableStateFlow(SharedVerificationCodesState.FeatureNotEnabled)
+        } else {
+            authenticatorBridgeManager
+                .accountSyncStateFlow
+                .flatMapLatest { accountSyncState ->
+                    when (accountSyncState) {
+                        AccountSyncState.AppNotInstalled ->
+                            MutableStateFlow(SharedVerificationCodesState.AppNotInstalled)
+
+                        AccountSyncState.SyncNotEnabled ->
+                            MutableStateFlow(SharedVerificationCodesState.SyncNotEnabled)
+
+                        AccountSyncState.Error ->
+                            MutableStateFlow(SharedVerificationCodesState.Error)
+
+                        AccountSyncState.Loading ->
+                            MutableStateFlow(SharedVerificationCodesState.Loading)
+
+                        AccountSyncState.OsVersionNotSupported -> MutableStateFlow(
+                            SharedVerificationCodesState.OsVersionNotSupported,
+                        )
+
+                        is AccountSyncState.Success -> {
+                            val verificationCodesList =
+                                accountSyncState.accounts.toAuthenticatorItems()
+                            totpCodeManager
+                                .getTotpCodesFlow(verificationCodesList)
+                                .map { SharedVerificationCodesState.Success(it) }
                         }
                     }
+                }
+                .stateIn(
+                    scope = unconfinedScope,
+                    started = SharingStarted.WhileSubscribed(),
+                    initialValue = SharedVerificationCodesState.Loading,
+                )
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getLocalVerificationCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>> {
+        return authenticatorDataFlow
+            .map { dataState ->
+                dataState
+                    .map { authenticatorData ->
+                        authenticatorData.items
+                            .map { entity ->
+                                AuthenticatorItem(
+                                    source = AuthenticatorItem.Source.Local(
+                                        cipherId = entity.id,
+                                        isFavorite = entity.favorite,
+                                    ),
+                                    otpUri = entity.toOtpAuthUriString(),
+                                    issuer = entity.issuer,
+                                    label = entity.accountName,
+                                )
+                            }
+                    }
+            }
+            .flatMapLatest { authenticatorItems ->
+                when (authenticatorItems) {
+                    is DataState.Error -> flowOf(DataState.Error(authenticatorItems.error))
+                    is DataState.NoNetwork -> flowOf(DataState.NoNetwork())
+                    DataState.Loading -> flowOf(DataState.Loading)
+                    is DataState.Loaded -> totpCodeManager.getTotpCodesFlow(authenticatorItems.data)
+                        .map { DataState.Loaded(it) }
+
+                    is DataState.Pending -> totpCodeManager
+                        .getTotpCodesFlow(authenticatorItems.data)
+                        .map { DataState.Loaded(it) }
+                }
             }
             .stateIn(
                 scope = unconfinedScope,

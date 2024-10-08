@@ -36,7 +36,7 @@ fun ItemSearchContent(
                 periodSeconds = it.periodSeconds,
                 timeLeftSeconds = it.timeLeftSeconds,
                 alertThresholdSeconds = it.alertThresholdSeconds,
-                supportingLabel = it.supportingLabel,
+                supportingLabel = it.label,
                 startIcon = it.startIcon,
                 onCopyClick = { searchHandlers.onItemClick(it.authCode) },
                 onItemClick = { searchHandlers.onItemClick(it.authCode) },

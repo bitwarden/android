@@ -102,6 +102,9 @@ kotlin {
 
 dependencies {
 
+    // TODO: this should use a versioned AAR instead of referencing a local AAR BITAU-94
+    implementation(files("libs/authenticatorbridge-0.1.0-SNAPSHOT-release.aar"))
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.autofill)

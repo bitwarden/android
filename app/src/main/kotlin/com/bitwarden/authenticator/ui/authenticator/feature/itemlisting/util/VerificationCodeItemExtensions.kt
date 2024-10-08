@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util
 
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
+import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 
@@ -15,11 +16,12 @@ fun List<VerificationCodeItem>.toViewState(
     } else {
         ItemListingState.ViewState.Content(
             favoriteItems = this
-                .filter { it.favorite }
+                .filter { it.source is AuthenticatorItem.Source.Local && it.source.isFavorite }
                 .map {
                     it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds)
                 },
-            itemList = filterNot { it.favorite }
+            itemList = this
+                .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
                 .map {
                     it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds)
                 },
@@ -30,10 +32,10 @@ private fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
     VerificationCodeDisplayItem(
         id = id,
         issuer = issuer,
-        username = username,
+        label = label,
         timeLeftSeconds = timeLeftSeconds,
         periodSeconds = periodSeconds,
         alertThresholdSeconds = alertThresholdSeconds,
         authCode = code,
-        favorite = favorite,
+        favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     )

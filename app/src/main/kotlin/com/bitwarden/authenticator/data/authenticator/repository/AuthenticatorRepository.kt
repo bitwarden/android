@@ -3,10 +3,10 @@ package com.bitwarden.authenticator.data.authenticator.repository
 import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
-import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorData
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
+import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -20,14 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
  * Provides and API for managing authenticator data.
  */
 interface AuthenticatorRepository {
-
-    /**
-     * Flow that represents the current authenticator data.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val authenticatorDataFlow: StateFlow<DataState<AuthenticatorData>>
 
     /**
      * Flow that represents the TOTP code result.
@@ -49,10 +41,16 @@ interface AuthenticatorRepository {
     fun getItemStateFlow(itemId: String): StateFlow<DataState<AuthenticatorItemEntity?>>
 
     /**
+     * State flow that represents the state of verification codes and accounts shared from the
+     * main Bitwarden app.
+     */
+    val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState>
+
+    /**
      * Flow that represents the data for the TOTP verification codes for ciphers items.
      * This may emit an empty list if any issues arise during code generation.
      */
-    fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>>
+    fun getLocalVerificationCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>>
 
     /**
      * Emits the totp code result flow to listeners.

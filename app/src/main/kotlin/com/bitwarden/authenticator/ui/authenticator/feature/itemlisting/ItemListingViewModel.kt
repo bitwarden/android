@@ -12,6 +12,7 @@ import com.bitwarden.authenticator.data.authenticator.manager.model.Verification
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
+import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -26,6 +27,7 @@ import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -68,9 +70,11 @@ class ItemListingViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        authenticatorRepository
-            .getAuthCodesFlow()
-            .map { ItemListingAction.Internal.AuthCodesUpdated(it) }
+        combine(
+            flow = authenticatorRepository.getLocalVerificationCodesFlow(),
+            flow2 = authenticatorRepository.sharedCodesStateFlow,
+            ItemListingAction.Internal::AuthCodesUpdated,
+        )
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -399,7 +403,8 @@ class ItemListingViewModel @Inject constructor(
     private fun handleAuthenticatorDataReceive(
         action: ItemListingAction.Internal.AuthCodesUpdated,
     ) {
-        updateViewState(action.itemListingDataState)
+        // TODO: Also handle shared codes:
+        updateViewState(action.localCodes)
     }
 
     private fun updateViewState(authenticatorData: DataState<List<VerificationCodeItem>>) {
@@ -542,11 +547,11 @@ class ItemListingViewModel @Inject constructor(
     }
 }
 
-private const val ALGORITHM = "algorithm"
-private const val DIGITS = "digits"
-private const val PERIOD = "period"
-private const val SECRET = "secret"
-private const val ISSUER = "issuer"
+const val ALGORITHM = "algorithm"
+const val DIGITS = "digits"
+const val PERIOD = "period"
+const val SECRET = "secret"
+const val ISSUER = "issuer"
 
 /**
  * Represents the state for displaying the item listing.
@@ -727,10 +732,11 @@ sealed class ItemListingAction {
     sealed class Internal : ItemListingAction() {
 
         /**
-         * Indicates authenticator item listing data has been received.
+         * Indicates verification items have been received.
          */
         data class AuthCodesUpdated(
-            val itemListingDataState: DataState<List<VerificationCodeItem>>,
+            val localCodes: DataState<List<VerificationCodeItem>>,
+            val sharedCodesState: SharedVerificationCodesState,
         ) : Internal()
 
         /**

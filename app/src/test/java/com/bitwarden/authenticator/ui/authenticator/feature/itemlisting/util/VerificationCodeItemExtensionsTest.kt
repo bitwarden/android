@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util
 
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
+import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,12 +28,12 @@ class VerificationCodeItemExtensionsTest {
             VerificationCodeDisplayItem(
                 id = favoriteItem.id,
                 issuer = favoriteItem.issuer,
-                username = favoriteItem.username,
+                label = favoriteItem.label,
                 timeLeftSeconds = favoriteItem.timeLeftSeconds,
                 periodSeconds = favoriteItem.periodSeconds,
                 alertThresholdSeconds = 7,
                 authCode = favoriteItem.code,
-                favorite = favoriteItem.favorite,
+                favorite = (favoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
             ),
         )
 
@@ -40,12 +41,12 @@ class VerificationCodeItemExtensionsTest {
             VerificationCodeDisplayItem(
                 id = nonFavoriteItem.id,
                 issuer = nonFavoriteItem.issuer,
-                username = nonFavoriteItem.username,
+                label = nonFavoriteItem.label,
                 timeLeftSeconds = nonFavoriteItem.timeLeftSeconds,
                 periodSeconds = nonFavoriteItem.periodSeconds,
                 alertThresholdSeconds = 7,
                 authCode = nonFavoriteItem.code,
-                favorite = nonFavoriteItem.favorite,
+                favorite = (nonFavoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
             ),
         )
 

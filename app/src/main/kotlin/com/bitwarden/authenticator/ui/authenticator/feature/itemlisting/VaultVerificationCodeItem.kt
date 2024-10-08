@@ -39,8 +39,8 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
  * The verification code item displayed to the user.
  *
  * @param authCode The code for the item.
- * @param name The label for the item. Represents the OTP issuer.
- * @param username The supporting label for the item. Represents the OTP account name.
+ * @param primaryLabel The label for the item. Represents the OTP issuer.
+ * @param secondaryLabel The supporting label for the item. Represents the OTP account name.
  * @param periodSeconds The times span where the code is valid.
  * @param timeLeftSeconds The seconds remaining until a new code is needed.
  * @param startIcon The leading icon for the item.
@@ -52,8 +52,8 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 @Composable
 fun VaultVerificationCodeItem(
     authCode: String,
-    name: String?,
-    username: String?,
+    primaryLabel: String?,
+    secondaryLabel: String?,
     periodSeconds: Int,
     timeLeftSeconds: Int,
     alertThresholdSeconds: Int,
@@ -96,9 +96,9 @@ fun VaultVerificationCodeItem(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.weight(1f),
             ) {
-                if (!name.isNullOrEmpty()) {
+                if (!primaryLabel.isNullOrEmpty()) {
                     Text(
-                        text = name,
+                        text = primaryLabel,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
@@ -106,9 +106,9 @@ fun VaultVerificationCodeItem(
                     )
                 }
 
-                if (!username.isNullOrEmpty()) {
+                if (!secondaryLabel.isNullOrEmpty()) {
                     Text(
-                        text = username,
+                        text = secondaryLabel,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -176,8 +176,8 @@ private fun VerificationCodeItem_preview() {
     AuthenticatorTheme {
         VaultVerificationCodeItem(
             authCode = "1234567890".chunked(3).joinToString(" "),
-            name = "Issuer, AKA Name",
-            username = "username@bitwarden.com",
+            primaryLabel = "Issuer, AKA Name",
+            secondaryLabel = "username@bitwarden.com",
             periodSeconds = 30,
             timeLeftSeconds = 15,
             alertThresholdSeconds = 7,

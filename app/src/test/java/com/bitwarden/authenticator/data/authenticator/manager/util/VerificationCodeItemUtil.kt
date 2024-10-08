@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.manager.util
 
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
+import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 
 /**
  * Creates a mock [VerificationCodeItem] for testing purposes.
@@ -15,12 +16,14 @@ fun createMockVerificationCodeItem(
 ): VerificationCodeItem =
     VerificationCodeItem(
         code = "mockCode-$number",
-        totpCode = "mockTotpCode-$number",
         periodSeconds = 30,
         timeLeftSeconds = 120,
         issueTime = 0,
         id = "mockId-$number",
-        username = "mockUsername-$number",
+        accountName = "mockLabel-$number",
         issuer = "mockIssuer-$number",
-        favorite = favorite,
+        source = AuthenticatorItem.Source.Local(
+            cipherId = "mockId-$number",
+            isFavorite = favorite,
+        ),
     )

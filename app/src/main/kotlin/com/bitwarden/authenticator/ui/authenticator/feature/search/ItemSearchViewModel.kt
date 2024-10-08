@@ -45,7 +45,7 @@ class ItemSearchViewModel @Inject constructor(
 
     init {
         authenticatorRepository
-            .getAuthCodesFlow()
+            .getLocalVerificationCodesFlow()
             .map { ItemSearchAction.Internal.AuthenticatorDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -164,12 +164,15 @@ class ItemSearchViewModel @Inject constructor(
 
     //region Utility Functions
     private fun recalculateViewState() {
-        authenticatorRepository.getAuthCodesFlow().value.data?.let { authenticatorData ->
-            updateStateWithAuthenticatorData(
-                authenticatorData = authenticatorData,
-                clearDialogState = false,
-            )
-        }
+        authenticatorRepository.getLocalVerificationCodesFlow()
+            .value
+            .data
+            ?.let { authenticatorData ->
+                updateStateWithAuthenticatorData(
+                    authenticatorData = authenticatorData,
+                    clearDialogState = false,
+                )
+            }
     }
 
     private fun updateStateWithAuthenticatorData(
@@ -205,11 +208,11 @@ class ItemSearchViewModel @Inject constructor(
     @Suppress("MagicNumber")
     private fun VerificationCodeItem.matchedSearch(searchTerm: String): SortPriority? {
         val term = searchTerm.removeDiacritics()
-        val itemName = label.removeDiacritics()
+        val itemName = label?.removeDiacritics()
         val itemId = id.takeIf { term.length > 8 }.orEmpty().removeDiacritics()
         val itemIssuer = issuer.orEmpty().removeDiacritics()
         return when {
-            itemName.contains(other = term, ignoreCase = true) -> SortPriority.HIGH
+            itemName?.contains(other = term, ignoreCase = true) ?: false -> SortPriority.HIGH
             itemId.contains(other = term, ignoreCase = true) -> SortPriority.LOW
             itemIssuer.contains(other = term, ignoreCase = true) -> SortPriority.LOW
             else -> null
@@ -247,13 +250,12 @@ class ItemSearchViewModel @Inject constructor(
         ItemSearchState.DisplayItem(
             id = id,
             authCode = code,
-            accountName = username ?: "",
             issuer = issuer,
             periodSeconds = periodSeconds,
             timeLeftSeconds = timeLeftSeconds,
             alertThresholdSeconds = 7,
             startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
-            supportingLabel = label,
+            label = label,
         )
 
     /**
@@ -342,13 +344,12 @@ data class ItemSearchState(
     data class DisplayItem(
         val id: String,
         val authCode: String,
-        val accountName: String,
         val issuer: String?,
         val periodSeconds: Int,
         val timeLeftSeconds: Int,
         val alertThresholdSeconds: Int,
         val startIcon: IconData,
-        val supportingLabel: String? = null,
+        val label: String? = null,
     ) : Parcelable
 }
 

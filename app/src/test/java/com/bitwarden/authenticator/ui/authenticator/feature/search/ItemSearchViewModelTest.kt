@@ -20,7 +20,7 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
     private val mutableAuthCodesStateFlow =
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
     private val mockAuthenticatorRepository = mockk<AuthenticatorRepository> {
-        every { getAuthCodesFlow() } returns mutableAuthCodesStateFlow
+        every { getLocalVerificationCodesFlow() } returns mutableAuthCodesStateFlow
     }
     private val mockClipboardManager = mockk<BitwardenClipboardManager>()
 
@@ -39,7 +39,7 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(
             ItemSearchAction.SearchTermChange(
-                mockVerificationCodeItem.username!!,
+                mockVerificationCodeItem.label!!,
             ),
         )
 
@@ -49,13 +49,12 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
                     ItemSearchState.DisplayItem(
                         id = mockVerificationCodeItem.id,
                         authCode = mockVerificationCodeItem.code,
-                        accountName = mockVerificationCodeItem.username,
                         issuer = mockVerificationCodeItem.issuer,
                         periodSeconds = mockVerificationCodeItem.periodSeconds,
                         timeLeftSeconds = mockVerificationCodeItem.timeLeftSeconds,
                         alertThresholdSeconds = 7,
                         startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
-                        supportingLabel = mockVerificationCodeItem.label,
+                        label = mockVerificationCodeItem.label,
                     ),
                 ),
             ),

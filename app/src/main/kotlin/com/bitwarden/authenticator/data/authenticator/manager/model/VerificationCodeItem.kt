@@ -1,10 +1,12 @@
 package com.bitwarden.authenticator.data.authenticator.manager.model
 
+import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
+
 /**
- * Models the items returned by the TotpCodeManager.
+ * Models the items returned by the TotpCodeManager which are then used to display rows
+ * of verification items.
  *
  * @property code The verification code for the item.
- * @property totpCode The totp code for the item.
  * @property periodSeconds The time span where the code is valid in seconds.
  * @property timeLeftSeconds The seconds remaining until a new code is required.
  * @property issueTime The time the verification code was issued.
@@ -13,14 +15,13 @@ package com.bitwarden.authenticator.data.authenticator.manager.model
  */
 data class VerificationCodeItem(
     val code: String,
-    val totpCode: String,
     val periodSeconds: Int,
     val timeLeftSeconds: Int,
     val issueTime: Long,
     val id: String,
-    val username: String?,
     val issuer: String?,
-    val favorite: Boolean,
+    val accountName: String?,
+    val source: AuthenticatorItem.Source,
 ) {
     /**
      * The composite label of the authenticator item. Used for constructing an OTPAuth URI.
@@ -29,8 +30,8 @@ data class VerificationCodeItem(
      *  ```
      */
     val label = if (issuer != null) {
-        issuer + username?.let { ":$it" }.orEmpty()
+        issuer + accountName?.let { ":$it" }.orEmpty()
     } else {
-        username.orEmpty()
+        accountName.orEmpty()
     }
 }

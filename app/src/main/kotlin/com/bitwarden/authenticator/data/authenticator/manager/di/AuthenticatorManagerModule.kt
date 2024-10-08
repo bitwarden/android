@@ -40,7 +40,6 @@ object AuthenticatorManagerModule {
         clock: Clock,
     ): TotpCodeManager = TotpCodeManagerImpl(
         authenticatorSdkSource = authenticatorSdkSource,
-        dispatcherManager = dispatcherManager,
         clock = clock,
     )
 }
