@@ -7,7 +7,13 @@ import android.content.Intent
  */
 val Intent.isSuspicious: Boolean
     get() {
-        val containsSuspiciousExtras = extras?.isEmpty?.not() ?: false
-        val containsSuspiciousData = data != null
-        return containsSuspiciousData || containsSuspiciousExtras
+        return try {
+            val containsSuspiciousExtras = extras?.isEmpty() == false
+            val containsSuspiciousData = data != null
+            containsSuspiciousData || containsSuspiciousExtras
+        } catch (_: Exception) {
+            // `unparcel()` throws an exception on Android 12 and below if the bundle contains
+            // suspicious data, so we catch the exception and return true.
+            true
+        }
     }
