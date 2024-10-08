@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWithIcon
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -43,7 +43,7 @@ fun VaultNoItems(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (policyDisablesSend) {
-            BitwardenPolicyWarningText(
+            BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.send_disabled_warning),
                 modifier = Modifier
                     .standardHorizontalMargin()
@@ -101,7 +101,6 @@ fun VaultNoItems(
 @Composable
 private fun VaultNoItems_preview() {
     BitwardenTheme {
-
         Column(
             modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
         ) {
@@ -118,7 +117,6 @@ private fun VaultNoItems_preview() {
 @Composable
 private fun VaultNoItemsPolicyDisabled_preview() {
     BitwardenTheme {
-
         Column(
             modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
         ) {

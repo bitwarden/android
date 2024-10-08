@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrength
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -45,7 +46,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
@@ -206,7 +206,7 @@ private fun ExportVaultScreenContent(
     ) {
 
         if (state.policyPreventsExport) {
-            BitwardenPolicyWarningText(
+            BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.disable_personal_vault_export_policy_in_effect),
                 modifier = Modifier
                     .testTag("DisablePrivateVaultPolicyLabel")

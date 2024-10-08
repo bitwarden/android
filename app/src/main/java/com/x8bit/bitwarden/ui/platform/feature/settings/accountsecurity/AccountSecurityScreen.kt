@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -55,7 +56,6 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
@@ -462,7 +462,7 @@ private fun SessionTimeoutPolicyRow(
             R.string.vault_timeout_policy_with_action_in_effect.asText(hours, minutes, action)
         }
 
-        BitwardenPolicyWarningText(
+        BitwardenInfoCalloutCard(
             text = policyText(),
             modifier = modifier,
         )

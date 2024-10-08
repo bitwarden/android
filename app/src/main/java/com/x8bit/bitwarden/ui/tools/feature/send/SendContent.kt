@@ -13,11 +13,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import kotlinx.collections.immutable.toImmutableList
@@ -36,7 +36,7 @@ fun SendContent(
     LazyColumn(modifier = modifier) {
         item {
             if (policyDisablesSend) {
-                BitwardenPolicyWarningText(
+                BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
                         .testTag("SendOptionsPolicyInEffectLabel")
