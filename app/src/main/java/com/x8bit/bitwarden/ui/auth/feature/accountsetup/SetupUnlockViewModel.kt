@@ -33,6 +33,7 @@ class SetupUnlockViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
+    // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
         val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
