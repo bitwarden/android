@@ -38,8 +38,8 @@ fun SearchEmptyContent(
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
-                .size(74.dp)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .size(74.dp),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
