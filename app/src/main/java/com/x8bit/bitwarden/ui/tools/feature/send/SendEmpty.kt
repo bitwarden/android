@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -45,7 +45,7 @@ fun SendEmpty(
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.send_disabled_warning),
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
         }
@@ -54,7 +54,9 @@ fun SendEmpty(
         Image(
             painter = rememberVectorPainter(R.drawable.img_send),
             contentDescription = null,
-            modifier = Modifier.standardHorizontalMargin(),
+            modifier = Modifier
+                .size(100.dp)
+                .standardHorizontalMargin(),
         )
         Spacer(Modifier.height(24.dp))
         Text(
