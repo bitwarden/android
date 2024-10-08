@@ -136,13 +136,12 @@ private fun VaultAddEditState.ViewState.Content.toPasswordHistory(): List<Passwo
         common.customFieldData,
     )
 
-    val passwordHistory = listOf(
+    return listOf(
         common.originalCipher?.passwordHistory.orEmpty(),
         newPasswordHistory,
         newHiddenFieldHistory,
-    ).flatten()
-
-    return passwordHistory
+    )
+        .flatten()
         .ifEmpty { null }
         ?.takeLast(5)
 }
