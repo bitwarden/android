@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
+import android.content.res.Configuration
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -43,26 +51,75 @@ fun SendEmpty(
         }
 
         Spacer(modifier = Modifier.weight(1F))
-
+        Image(
+            painter = rememberVectorPainter(R.drawable.img_send),
+            contentDescription = null,
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+        Spacer(Modifier.height(24.dp))
         Text(
             textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.no_sends),
-            style = BitwardenTheme.typography.bodyMedium,
+            text = stringResource(R.string.send_sensitive_information_safely),
+            style = BitwardenTheme.typography.titleMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            textAlign = TextAlign.Center,
+            text = stringResource(
+                R.string.share_files_and_data_securely_with_anyone_on_any_platform,
+            ),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        BitwardenFilledTonalButton(
+        BitwardenFilledButtonWithIcon(
             onClick = onAddItemClick,
             label = stringResource(id = R.string.add_a_send),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.standardHorizontalMargin(),
+            icon = rememberVectorPainter(R.drawable.ic_plus),
         )
         Spacer(modifier = Modifier.weight(1F))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Preview(name = "Light mode")
+@Preview(name = "Dark mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SendEmpty_preview() {
+    BitwardenTheme {
+        Column(
+            modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
+        ) {
+            SendEmpty(
+                policyDisablesSend = false,
+                onAddItemClick = {},
+            )
+        }
+    }
+}
+
+@Preview(name = "Light mode")
+@Preview(name = "Dark mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SendEmptyPolicyDisabled_preview() {
+    BitwardenTheme {
+        Column(
+            modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
+        ) {
+            SendEmpty(
+                policyDisablesSend = true,
+                onAddItemClick = {},
+            )
+        }
     }
 }

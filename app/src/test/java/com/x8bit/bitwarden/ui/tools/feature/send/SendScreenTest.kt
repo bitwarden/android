@@ -16,6 +16,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -246,7 +247,8 @@ class SendScreenTest : BaseComposeTest() {
             it.copy(viewState = SendState.ViewState.Empty)
         }
         composeTestRule
-            .onNodeWithText("Add a Send")
+            .onNodeWithText("New send")
+            .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(SendAction.AddSendClick) }
     }
