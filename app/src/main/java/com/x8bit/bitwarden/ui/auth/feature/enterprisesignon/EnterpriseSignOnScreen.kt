@@ -50,7 +50,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun EnterpriseSignOnScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSetPassword: () -> Unit,
-    onNavigateToTwoFactorLogin: (String) -> Unit,
+    onNavigateToTwoFactorLogin: (email: String, orgIdentifier: String) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: EnterpriseSignOnViewModel = hiltViewModel(),
 ) {
@@ -72,7 +72,7 @@ fun EnterpriseSignOnScreen(
             }
 
             is EnterpriseSignOnEvent.NavigateToTwoFactorLogin -> {
-                onNavigateToTwoFactorLogin(event.emailAddress)
+                onNavigateToTwoFactorLogin(event.emailAddress, event.orgIdentifier)
             }
         }
     }

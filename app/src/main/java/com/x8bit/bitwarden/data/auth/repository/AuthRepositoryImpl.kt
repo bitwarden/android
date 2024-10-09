@@ -628,6 +628,7 @@ class AuthRepositoryImpl(
         password: String?,
         twoFactorData: TwoFactorDataModel,
         captchaToken: String?,
+        orgIdentifier: String?,
     ): LoginResult = identityTokenAuthModel
         ?.let {
             loginCommon(
@@ -637,6 +638,7 @@ class AuthRepositoryImpl(
                 twoFactorData = twoFactorData,
                 captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
                 deviceData = twoFactorDeviceData,
+                orgIdentifier = orgIdentifier,
             )
         }
         ?: LoginResult.Error(errorMessage = null)

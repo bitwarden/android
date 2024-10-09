@@ -301,25 +301,24 @@ private fun TwoFactorLoginScreenContent(
 @Preview(showBackground = true)
 private fun TwoFactorLoginScreenContentPreview() {
     BitwardenTheme {
-        BitwardenScaffold {
-            TwoFactorLoginScreenContent(
-                state = TwoFactorLoginState(
-                    TwoFactorAuthMethod.EMAIL,
-                    availableAuthMethods = listOf(TwoFactorAuthMethod.EMAIL),
-                    codeInput = "",
-                    dialogState = null,
-                    displayEmail = "email@dot.com",
-                    isContinueButtonEnabled = true,
-                    isRememberMeEnabled = true,
-                    captchaToken = null,
-                    email = "",
-                    password = "",
-                ),
-                onCodeInputChange = {},
-                onContinueButtonClick = {},
-                onRememberMeToggle = {},
-                onResendEmailButtonClick = {},
-            )
-        }
+        TwoFactorLoginScreenContent(
+            state = TwoFactorLoginState(
+                TwoFactorAuthMethod.EMAIL,
+                availableAuthMethods = listOf(TwoFactorAuthMethod.EMAIL),
+                codeInput = "",
+                dialogState = null,
+                displayEmail = "email@dot.com",
+                isContinueButtonEnabled = true,
+                isRememberMeEnabled = true,
+                captchaToken = null,
+                email = "",
+                password = "",
+                orgIdentifier = null,
+            ),
+            onCodeInputChange = {},
+            onContinueButtonClick = {},
+            onRememberMeToggle = {},
+            onResendEmailButtonClick = {},
+        )
     }
 }

@@ -72,6 +72,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 captchaToken = null,
                 email = args.emailAddress,
                 password = args.password,
+                orgIdentifier = args.orgIdentifier,
             )
         },
 ) {
@@ -539,6 +540,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                     remember = state.isRememberMeEnabled,
                 ),
                 captchaToken = state.captchaToken,
+                orgIdentifier = state.orgIdentifier,
             )
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveLoginResult(
@@ -565,6 +567,7 @@ data class TwoFactorLoginState(
     val captchaToken: String?,
     val email: String,
     val password: String?,
+    val orgIdentifier: String?,
 ) : Parcelable {
 
     /**

@@ -212,6 +212,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         password: String?,
         twoFactorData: TwoFactorDataModel,
         captchaToken: String?,
+        orgIdentifier: String?,
     ): LoginResult
 
     /**
