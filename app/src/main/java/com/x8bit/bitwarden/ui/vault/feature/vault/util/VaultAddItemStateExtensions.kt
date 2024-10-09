@@ -146,7 +146,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
         LoginView(
             username = it.username.orNullIfBlank(),
             password = it.password.orNullIfBlank(),
-            passwordRevisionDate = getRevisionDate(common.originalCipher, it),
+            passwordRevisionDate = it.getRevisionDate(common.originalCipher),
             uris = it.uriList.toLoginUriView(),
             totp = it.totp,
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
@@ -215,13 +215,12 @@ private fun List<UriItem>?.toLoginUriView(): List<LoginUriView>? =
         ?.map { LoginUriView(uri = it.uri.orEmpty(), match = it.match, uriChecksum = null) }
         .takeUnless { it.isNullOrEmpty() }
 
-private fun getRevisionDate(
+private fun VaultAddEditState.ViewState.Content.ItemType.Login.getRevisionDate(
     originalCipher: CipherView?,
-    newLogin: VaultAddEditState.ViewState.Content.ItemType.Login,
 ): DateTime? {
     val isOriginalPasswordNull = originalCipher?.login?.password.isNullOrEmpty()
     val hasPasswordHistory = originalCipher?.passwordHistory?.any() ?: false
-    val isOriginalAndNewPasswordEqual = originalCipher?.login?.password == newLogin.password
+    val isOriginalAndNewPasswordEqual = originalCipher?.login?.password == this.password
     return if ((!isOriginalPasswordNull || hasPasswordHistory) && !isOriginalAndNewPasswordEqual) {
         Instant.now()
     } else {

@@ -732,7 +732,6 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toLoginView should update revision date when password differs`() {
         mockkStatic(Instant::class)
@@ -763,7 +762,6 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toLoginView should keep revision date when password is equal`() {
         mockkStatic(Instant::class)
@@ -794,7 +792,6 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toLoginView should not update revision date when password is null and has no history`() {
         mockkStatic(Instant::class)
