@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.core.DateTime
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -194,7 +195,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
         LoginView(
             username = it.username.orNullIfBlank(),
             password = it.password.orNullIfBlank(),
-            passwordRevisionDate = common.originalCipher?.login?.passwordRevisionDate,
+            passwordRevisionDate = it.getRevisionDate(common.originalCipher),
             uris = it.uriList.toLoginUriView(),
             totp = it.totp,
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
@@ -262,3 +263,16 @@ private fun List<UriItem>?.toLoginUriView(): List<LoginUriView>? =
         ?.filter { it.uri?.isNotBlank() == true }
         ?.map { LoginUriView(uri = it.uri.orEmpty(), match = it.match, uriChecksum = null) }
         .takeUnless { it.isNullOrEmpty() }
+
+private fun VaultAddEditState.ViewState.Content.ItemType.Login.getRevisionDate(
+    originalCipher: CipherView?,
+): DateTime? {
+    val isOriginalPasswordNull = originalCipher?.login?.password.isNullOrEmpty()
+    val hasPasswordHistory = originalCipher?.passwordHistory?.any() ?: false
+    val isOriginalAndNewPasswordEqual = originalCipher?.login?.password == this.password
+    return if ((!isOriginalPasswordNull || hasPasswordHistory) && !isOriginalAndNewPasswordEqual) {
+        Instant.now()
+    } else {
+        originalCipher?.login?.passwordRevisionDate
+    }
+}

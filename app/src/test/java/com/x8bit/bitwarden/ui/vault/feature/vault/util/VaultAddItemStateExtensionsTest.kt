@@ -25,6 +25,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -752,6 +753,99 @@ class VaultAddItemStateExtensionsTest {
                 ),
             ),
             result,
+        )
+    }
+
+    @Test
+    fun `toLoginView should update revision date when password differs`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MAX
+
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
+
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                favorite = true,
+                masterPasswordReprompt = false,
+                customFieldData = emptyList(),
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertNotEquals(
+            viewState.common.originalCipher?.login?.passwordRevisionDate,
+            result.login?.passwordRevisionDate,
+        )
+    }
+
+    @Test
+    fun `toLoginView should keep revision date when password is equal`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MAX
+
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
+
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                favorite = true,
+                masterPasswordReprompt = false,
+                customFieldData = emptyList(),
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = cipherView.login?.password ?: "",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            viewState.common.originalCipher?.login?.passwordRevisionDate,
+            result.login?.passwordRevisionDate,
+        )
+    }
+
+    @Test
+    fun `toLoginView should not update revision date when password is null and has no history`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MAX
+
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
+            passwordHistory = null,
+            login = DEFAULT_LOGIN_CIPHER_VIEW.login?.copy(password = null),
+        )
+
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                favorite = true,
+                masterPasswordReprompt = false,
+                customFieldData = emptyList(),
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "updated password",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            viewState.common.originalCipher?.login?.passwordRevisionDate,
+            result.login?.passwordRevisionDate,
         )
     }
 }
