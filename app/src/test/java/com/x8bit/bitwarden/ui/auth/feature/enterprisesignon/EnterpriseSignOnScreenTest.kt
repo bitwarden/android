@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 class EnterpriseSignOnScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToSetPasswordCalled = false
-    private var twoFactorLoginEmail: String? = null
+    private var onNavigateToTwoFactorLoginEmailAndOrgIdentifier: Pair<String, String>? = null
     private val mutableEventFlow = bufferedMutableSharedFlow<EnterpriseSignOnEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<EnterpriseSignOnViewModel>(relaxed = true) {
@@ -49,7 +49,9 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
             EnterpriseSignOnScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToSetPassword = { onNavigateToSetPasswordCalled = true },
-                onNavigateToTwoFactorLogin = { twoFactorLoginEmail = it },
+                onNavigateToTwoFactorLogin = { email, orgIdentifier ->
+                    onNavigateToTwoFactorLoginEmailAndOrgIdentifier = email to orgIdentifier
+                },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )
@@ -125,8 +127,11 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToTwoFactorLogin should call onNavigateToTwoFactorLogin`() {
         val email = "test@example.com"
-        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToTwoFactorLogin(email))
-        assertEquals(email, twoFactorLoginEmail)
+        val orgIdentifier = "org_identifier"
+        mutableEventFlow.tryEmit(
+            EnterpriseSignOnEvent.NavigateToTwoFactorLogin(email, orgIdentifier),
+        )
+        assertEquals(email to orgIdentifier, onNavigateToTwoFactorLoginEmailAndOrgIdentifier)
     }
 
     @Test

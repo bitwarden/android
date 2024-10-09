@@ -170,6 +170,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 sendEvent(
                     EnterpriseSignOnEvent.NavigateToTwoFactorLogin(
                         emailAddress = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                        orgIdentifier = state.orgIdentifierInput,
                     ),
                 )
             }
@@ -481,7 +482,10 @@ sealed class EnterpriseSignOnEvent {
     /**
      * Navigates to the two-factor login screen.
      */
-    data class NavigateToTwoFactorLogin(val emailAddress: String) : EnterpriseSignOnEvent()
+    data class NavigateToTwoFactorLogin(
+        val emailAddress: String,
+        val orgIdentifier: String,
+    ) : EnterpriseSignOnEvent()
 }
 
 /**

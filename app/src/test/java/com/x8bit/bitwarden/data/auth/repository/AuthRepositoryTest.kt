@@ -1998,6 +1998,7 @@ class AuthRepositoryTest {
             password = PASSWORD,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
         assertNull(repository.twoFactorResponse)
@@ -2092,6 +2093,7 @@ class AuthRepositoryTest {
                 password = PASSWORD,
                 twoFactorData = TWO_FACTOR_DATA,
                 captchaToken = null,
+                orgIdentifier = null,
             )
             assertEquals(LoginResult.Error(errorMessage = null), finalResult)
             assertEquals(twoFactorResponse, repository.twoFactorResponse)
@@ -2203,6 +2205,7 @@ class AuthRepositoryTest {
             password = PASSWORD,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Error(errorMessage = null), result)
     }
@@ -2667,6 +2670,7 @@ class AuthRepositoryTest {
             password = null,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
         assertNull(repository.twoFactorResponse)
@@ -3832,6 +3836,7 @@ class AuthRepositoryTest {
             password = null,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
         assertNull(repository.twoFactorResponse)
