@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.isActive
 import java.time.Clock
 import java.util.UUID
@@ -28,6 +29,9 @@ class TotpCodeManagerImpl @Inject constructor(
     override fun getTotpCodesFlow(
         itemList: List<AuthenticatorItem>,
     ): Flow<List<VerificationCodeItem>> {
+        if (itemList.isEmpty()) {
+            return flowOf(emptyList())
+        }
         val flows = itemList.map { it.toFlowOfVerificationCodes() }
         return combine(flows) { it.toList() }
     }
