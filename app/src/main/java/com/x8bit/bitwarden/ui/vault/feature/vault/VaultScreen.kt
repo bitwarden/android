@@ -219,6 +219,7 @@ private fun VaultScreenScaffold(
             BitwardenMediumTopAppBar(
                 title = state.appBarTitle(),
                 scrollBehavior = scrollBehavior,
+                isBottomDividerEnabled = state.vaultFilterDataWithFilter == null,
                 actions = {
                     BitwardenAccountActionItem(
                         initials = state.initials,

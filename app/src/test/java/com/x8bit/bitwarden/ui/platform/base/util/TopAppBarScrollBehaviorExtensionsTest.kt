@@ -89,4 +89,48 @@ class TopAppBarScrollBehaviorExtensionsTest {
             ),
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toScrolledContainerDividerAlpha for pinned states should interpolate based on the overlappedFraction`() {
+        var overlappedFraction = 0f
+        val topAppBarScrollBehavior = mockk<TopAppBarScrollBehavior> {
+            every { isPinned } returns true
+            every { state.overlappedFraction } answers { overlappedFraction }
+        }
+
+        overlappedFraction = 0f
+        assertEquals(
+            overlappedFraction,
+            topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
+        )
+
+        overlappedFraction = 1f
+        assertEquals(
+            overlappedFraction,
+            topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toScrolledContainerDividerAlpha for pinned states should interpolate based on the collapsedFraction`() {
+        var collapsedFraction = 0f
+        val topAppBarScrollBehavior = mockk<TopAppBarScrollBehavior> {
+            every { isPinned } returns false
+            every { state.collapsedFraction } answers { collapsedFraction }
+        }
+
+        collapsedFraction = 0f
+        assertEquals(
+            collapsedFraction,
+            topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
+        )
+
+        collapsedFraction = 1f
+        assertEquals(
+            collapsedFraction,
+            topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
+        )
+    }
 }
