@@ -1378,8 +1378,6 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                     firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-).copy(
                         showImportLoginsCard = false,
                     ),
                 ),
