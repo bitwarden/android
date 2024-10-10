@@ -13,3 +13,9 @@ val Intent.isMyVaultShortcut: Boolean
  */
 val Intent.isPasswordGeneratorShortcut: Boolean
     get() = dataString?.equals("bitwarden://password_generator") == true
+
+/**
+ * Returns `true` if the [Intent] is a deeplink to the account security screen, `false` otherwise.
+ */
+val Intent.isAccountSecurityShortcut: Boolean
+    get() = dataString?.equals("bitwarden://settings/account_security") == true

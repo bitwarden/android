@@ -3,8 +3,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings
 import androidx.compose.material3.Text
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
+    specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
         securityCount = settingsRepository.allSecuritySettingsBadgeCountFlow.value,
@@ -39,6 +43,15 @@ class SettingsViewModel @Inject constructor(
         }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        when (specialCircumstanceManager.specialCircumstance) {
+            SpecialCircumstance.AccountSecurityShortcut -> {
+                sendEvent(SettingsEvent.NavigateAccountSecurityShortcut)
+                specialCircumstanceManager.specialCircumstance = null
+            }
+
+            else -> Unit
+        }
     }
 
     override fun handleAction(action: SettingsAction): Unit = when (action) {
@@ -114,6 +127,11 @@ sealed class SettingsEvent {
      * Navigate to the account security screen.
      */
     data object NavigateAccountSecurity : SettingsEvent()
+
+    /**
+     * Navigate to the account security screen.
+     */
+    data object NavigateAccountSecurityShortcut : SettingsEvent(), BackgroundEvent
 
     /**
      * Navigate to the appearance screen.

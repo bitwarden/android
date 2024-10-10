@@ -67,6 +67,7 @@ fun SettingsScreen(
             SettingsEvent.NavigateAutoFill -> onNavigateToAutoFill()
             SettingsEvent.NavigateOther -> onNavigateToOther()
             SettingsEvent.NavigateVault -> onNavigateToVault()
+            SettingsEvent.NavigateAccountSecurityShortcut -> onNavigateToAccountSecurity()
         }
     }
 

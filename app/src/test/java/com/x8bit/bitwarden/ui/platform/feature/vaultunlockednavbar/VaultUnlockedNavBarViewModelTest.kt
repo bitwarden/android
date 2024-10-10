@@ -80,6 +80,27 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on init with AccountSecurityShortcut special circumstance should navigate to the settings screen with shortcut event`() =
+        runTest {
+            every {
+                specialCircumstancesManager.specialCircumstance
+            } returns SpecialCircumstance.AccountSecurityShortcut
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen,
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                specialCircumstancesManager.specialCircumstance
+            }
+        }
+
     @Test
     fun `on init with no shortcut special circumstance should do nothing`() = runTest {
         every { specialCircumstancesManager.specialCircumstance } returns null
