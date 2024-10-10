@@ -512,9 +512,7 @@ class CipherViewExtensionsTest {
             trustedDevice = null,
             hasMasterPassword = true,
             isUsingKeyConnector = false, onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+            firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
         )
 }
 

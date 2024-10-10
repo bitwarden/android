@@ -216,7 +216,14 @@ val AuthDiskSource.firstTimeStateFlow: Flow<UserState.FirstTimeState>
         }
         .distinctUntilChanged()
 
-val AuthDiskSource.defaultUserFirstTimeState
-    get() = UserState.FirstTimeState(
-        showImportLoginsCard = true,
-    )
+val AuthDiskSource.currentOrDefaultUserFirstTimeState
+    get() = userState
+        ?.activeUserId
+        ?.let {
+            UserState.FirstTimeState(
+                showImportLoginsCoachMarker = getShowImportLogins(it),
+            )
+        }
+        ?: UserState.FirstTimeState(
+            showImportLoginsCoachMarker = true,
+        )

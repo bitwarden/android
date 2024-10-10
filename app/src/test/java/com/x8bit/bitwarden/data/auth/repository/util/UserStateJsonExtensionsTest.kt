@@ -358,9 +358,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
             ),
@@ -430,9 +428,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -470,9 +466,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -538,9 +532,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -584,9 +576,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -655,9 +645,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -701,9 +689,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -772,9 +758,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -818,9 +802,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -889,9 +871,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -939,9 +919,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1010,9 +988,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -1041,9 +1017,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1092,9 +1066,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -1123,9 +1095,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1176,9 +1146,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }
@@ -1223,9 +1191,7 @@ class UserStateJsonExtensionsTest {
                         hasMasterPassword = false,
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1296,9 +1262,7 @@ class UserStateJsonExtensionsTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
-                    firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                 ),
         )
     }

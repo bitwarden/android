@@ -87,9 +87,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -116,9 +114,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -149,9 +145,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -182,9 +176,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
             )
@@ -230,9 +222,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
             )
                 .toAccountSummary(isActive = true),
         )
@@ -276,9 +266,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
             )
                 .toAccountSummary(isActive = false),
         )
@@ -326,9 +314,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
             )
@@ -356,9 +342,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -415,9 +399,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -475,9 +457,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-),
+                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,
