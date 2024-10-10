@@ -50,6 +50,11 @@ interface SettingsDiskSource {
     val isCrashLoggingEnabledFlow: Flow<Boolean?>
 
     /**
+     * Whether or not the user has previously dismissed the download Bitwarden action card.
+     */
+    var hasUserDismissedDownloadBitwardenCard: Boolean?
+
+    /**
      * Stores the threshold at which users are alerted that an items validity period is nearing
      * expiration.
      */

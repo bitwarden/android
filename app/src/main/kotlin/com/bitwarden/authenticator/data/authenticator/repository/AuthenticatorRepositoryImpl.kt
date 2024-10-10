@@ -57,8 +57,6 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 
 /**
  * Default implementation of [AuthenticatorRepository].
- *
- * TODO: make sure none of these deps are unused
  */
 @Suppress("TooManyFunctions", "LongParameterList")
 class AuthenticatorRepositoryImpl @Inject constructor(

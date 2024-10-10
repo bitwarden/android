@@ -10,6 +10,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
+import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
@@ -20,11 +21,10 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAut
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toViewState
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -46,7 +46,7 @@ class ItemListingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val encodingManager: BitwardenEncodingManager,
-    settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
         settingsRepository.appTheme,
@@ -129,6 +129,14 @@ class ItemListingViewModel @Inject constructor(
 
             is ItemListingAction.Internal -> {
                 handleInternalAction(action)
+            }
+
+            ItemListingAction.DownloadBitwardenClick -> {
+                handleDownloadBitwardenClick()
+            }
+
+            ItemListingAction.DownloadBitwardenDismiss -> {
+                handleDownloadBitwardenDismiss()
             }
         }
     }
@@ -403,101 +411,87 @@ class ItemListingViewModel @Inject constructor(
     private fun handleAuthenticatorDataReceive(
         action: ItemListingAction.Internal.AuthCodesUpdated,
     ) {
-        // TODO: Also handle shared codes:
-        updateViewState(action.localCodes)
-    }
-
-    private fun updateViewState(authenticatorData: DataState<List<VerificationCodeItem>>) {
-        when (authenticatorData) {
-            is DataState.Error -> authenticatorErrorReceive(authenticatorData)
-            is DataState.Loaded -> authenticatorDataLoadedReceive(authenticatorData)
-            is DataState.Loading -> authenticatorDataLoadingReceive()
-            is DataState.NoNetwork -> authenticatorNoNetworkReceive(authenticatorData)
-            is DataState.Pending -> authenticatorPendingReceive(authenticatorData)
-        }
-    }
-
-    private fun authenticatorErrorReceive(
-        authenticatorData: DataState.Error<List<VerificationCodeItem>>,
-    ) {
-        if (authenticatorData.data != null) {
-            updateStateWithVerificationCodeItems(
-                authenticatorData = authenticatorData.data,
-                clearDialogState = true,
-            )
-        } else {
+        val localItems = action.localCodes.data ?: run {
+            // If local items haven't loaded from DB, show Loading:
             mutableStateFlow.update {
                 it.copy(
-                    viewState = ItemListingState.ViewState.Error(
-                        R.string.generic_error_message.asText(),
-                    ),
-                    dialog = null,
+                    viewState = ItemListingState.ViewState.Loading,
                 )
             }
+            return
+        }
+        if (localItems.isEmpty()) {
+            // If there are no local items, show empty state:
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = ItemListingState.ViewState.NoItems(
+                        actionCard = action.sharedCodesState.toActionCard(),
+                    ),
+                )
+            }
+        } else {
+            val viewState = ItemListingState.ViewState.Content(
+                favoriteItems = localItems
+                    .filter { it.source is AuthenticatorItem.Source.Local && it.source.isFavorite }
+                    .map {
+                        it.toDisplayItem(alertThresholdSeconds = state.alertThresholdSeconds)
+                    },
+                itemList = localItems
+                    .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
+                    .map {
+                        it.toDisplayItem(alertThresholdSeconds = state.alertThresholdSeconds)
+                    },
+                actionCard = action.sharedCodesState.toActionCard(),
+            )
+            mutableStateFlow.update { it.copy(viewState = viewState) }
         }
     }
 
-    private fun authenticatorDataLoadedReceive(
-        authenticatorData: DataState.Loaded<List<VerificationCodeItem>>,
-    ) {
-        updateStateWithVerificationCodeItems(
-            authenticatorData = authenticatorData.data,
-            clearDialogState = false,
-        )
+    private fun handleDownloadBitwardenClick() {
+        sendEvent(ItemListingEvent.NavigateToBitwardenListing)
     }
 
-    private fun authenticatorDataLoadingReceive() {
+    private fun handleDownloadBitwardenDismiss() {
+        settingsRepository.hasUserDismissedDownloadBitwardenCard = true
         mutableStateFlow.update {
             it.copy(
-                viewState = ItemListingState.ViewState.Loading,
+                viewState = when (it.viewState) {
+                    ItemListingState.ViewState.Loading -> it.viewState
+                    is ItemListingState.ViewState.Content -> it.viewState.copy(
+                        actionCard = ItemListingState.ActionCardState.None,
+                    )
+
+                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(
+                        actionCard = ItemListingState.ActionCardState.None,
+                    )
+                },
             )
         }
     }
 
-    private fun authenticatorNoNetworkReceive(
-        state: DataState.NoNetwork<List<VerificationCodeItem>>,
-    ) {
-        if (state.data != null) {
-            updateStateWithVerificationCodeItems(
-                authenticatorData = state.data,
-                clearDialogState = true,
-            )
-        } else {
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = ItemListingState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
-                            .asText()
-                            .concat(R.string.internet_connection_required_message.asText()),
-                    ),
-                    dialog = null,
-                )
-            }
-        }
-    }
+    /**
+     * Converts a [SharedVerificationCodesState] into an action card for display.
+     */
+    private fun SharedVerificationCodesState.toActionCard(): ItemListingState.ActionCardState =
+        when (this) {
+            SharedVerificationCodesState.AppNotInstalled ->
+                if (!settingsRepository.hasUserDismissedDownloadBitwardenCard) {
+                    ItemListingState.ActionCardState.DownloadBitwardenApp
+                } else {
+                    ItemListingState.ActionCardState.None
+                }
 
-    private fun authenticatorPendingReceive(
-        action: DataState.Pending<List<VerificationCodeItem>>,
-    ) {
-        updateStateWithVerificationCodeItems(
-            authenticatorData = action.data,
-            clearDialogState = false,
-        )
-    }
+            SharedVerificationCodesState.SyncNotEnabled ->
+                // TODO: Implement sync not enabled action card
+                ItemListingState.ActionCardState.None
 
-    private fun updateStateWithVerificationCodeItems(
-        authenticatorData: List<VerificationCodeItem>,
-        clearDialogState: Boolean,
-    ) {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = authenticatorData.toViewState(
-                    alertThresholdSeconds = state.alertThresholdSeconds,
-                ),
-                dialog = currentState.dialog.takeUnless { clearDialogState },
-            )
+            SharedVerificationCodesState.Error,
+            SharedVerificationCodesState.FeatureNotEnabled,
+            SharedVerificationCodesState.Loading,
+            SharedVerificationCodesState.OsVersionNotSupported,
+            is SharedVerificationCodesState.Success,
+            -> ItemListingState.ActionCardState.None
         }
-    }
 
     private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
         val uri = Uri.parse(this)
@@ -584,24 +578,37 @@ data class ItemListingState(
          * Represents a state where the [ItemListingScreen] has no items to display.
          */
         @Parcelize
-        data object NoItems : ViewState()
+        data class NoItems(
+            val actionCard: ActionCardState,
+        ) : ViewState()
 
         /**
          * Represents a loaded content state for the [ItemListingScreen].
          */
         @Parcelize
         data class Content(
+            val actionCard: ActionCardState,
             val favoriteItems: List<VerificationCodeDisplayItem>,
             val itemList: List<VerificationCodeDisplayItem>,
         ) : ViewState()
+    }
+
+    /**
+     * Display an action card on the item [ItemListingScreen].
+     */
+    sealed class ActionCardState : Parcelable {
 
         /**
-         * Represents an error state for the [ItemListingScreen].
+         * Display no action card.
          */
         @Parcelize
-        data class Error(
-            val message: Text,
-        ) : ViewState()
+        data object None : ActionCardState()
+
+        /**
+         * Display the "Download the Bitwarden app" card.
+         */
+        @Parcelize
+        data object DownloadBitwardenApp : ActionCardState()
     }
 
     /**
@@ -673,6 +680,11 @@ sealed class ItemListingEvent {
     data object NavigateToAppSettings : ItemListingEvent()
 
     /**
+     * Navigate to Bitwarden play store listing.
+     */
+    data object NavigateToBitwardenListing : ItemListingEvent()
+
+    /**
      * Show a Toast with [message].
      */
     data class ShowToast(
@@ -725,6 +737,16 @@ sealed class ItemListingAction {
      * The user has clicked the settings button
      */
     data object SettingsClick : ItemListingAction()
+
+    /**
+     * The user tapped download Bitwarden action card.
+     */
+    data object DownloadBitwardenClick : ItemListingAction()
+
+    /**
+     * The user dismissed download Bitwarden action card.
+     */
+    data object DownloadBitwardenDismiss : ItemListingAction()
 
     /**
      * Models actions that [ItemListingScreen] itself may send.
