@@ -79,7 +79,6 @@ fun BitwardenTimeSelectButton(
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_down_triangle),
                 contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
             )
         },
         colors = bitwardenTextFieldButtonColors(),

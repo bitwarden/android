@@ -92,7 +92,6 @@ fun BitwardenTextField(
                 Icon(
                     painter = iconResource.iconPainter,
                     contentDescription = iconResource.contentDescription,
-                    tint = BitwardenTheme.colorScheme.icon.primary,
                 )
             }
         },
@@ -101,7 +100,7 @@ fun BitwardenTextField(
             {
                 Text(
                     text = it,
-                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = textStyle,
                 )
             }
         },
