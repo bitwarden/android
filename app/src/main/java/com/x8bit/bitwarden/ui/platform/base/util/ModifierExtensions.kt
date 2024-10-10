@@ -57,6 +57,24 @@ fun Modifier.scrolledContainerBackground(
 }
 
 /**
+ * Adds a bottom divider specified by the given [topAppBarScrollBehavior] and its current scroll
+ * state.
+ */
+@OmitFromCoverage
+@OptIn(ExperimentalMaterial3Api::class)
+@Stable
+@Composable
+fun Modifier.scrolledContainerBottomDivider(
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    enabled: Boolean = true,
+): Modifier =
+    this.bottomDivider(
+        alpha = topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
+        enabled = enabled,
+        thickness = (0.5).dp,
+    )
+
+/**
  * This is a [Modifier] extension for drawing a divider at the bottom of the composable.
  */
 @OmitFromCoverage
@@ -68,11 +86,13 @@ fun Modifier.bottomDivider(
     thickness: Dp = DividerDefaults.Thickness,
     color: Color = BitwardenTheme.colorScheme.stroke.divider,
     enabled: Boolean = true,
+    alpha: Float = 1f,
 ): Modifier = drawWithCache {
     onDrawWithContent {
         drawContent()
         if (enabled) {
             drawLine(
+                alpha = alpha,
                 color = color,
                 strokeWidth = thickness.toPx(),
                 start = Offset(

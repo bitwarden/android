@@ -11,7 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -27,6 +30,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param title The text to be displayed as the title of the app bar.
  * @param scrollBehavior Defines the scrolling behavior of the app bar. It controls how the app bar
  * behaves in conjunction with scrolling content.
+ * @param isBottomDividerEnabled Determines if the bottom divider should be displayed on scroll or
+ * not.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -37,6 +42,7 @@ fun BitwardenMediumTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
+    isBottomDividerEnabled: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     MediumTopAppBar(
@@ -46,10 +52,20 @@ fun BitwardenMediumTopAppBar(
             Text(
                 text = title,
                 style = BitwardenTheme.typography.titleLarge,
-                modifier = Modifier.testTag("PageTitleLabel"),
+                modifier = Modifier.testTag(tag = "PageTitleLabel"),
             )
         },
-        modifier = modifier.testTag("HeaderBarComponent"),
+        modifier = modifier
+            .testTag(tag = "HeaderBarComponent")
+            .scrolledContainerBottomDivider(
+                topAppBarScrollBehavior = scrollBehavior,
+                enabled = isBottomDividerEnabled,
+            )
+            // When the scrolling divider is disabled, we show the static divider
+            .bottomDivider(
+                enabled = !isBottomDividerEnabled,
+                thickness = (0.5).dp,
+            ),
         actions = actions,
     )
 }
