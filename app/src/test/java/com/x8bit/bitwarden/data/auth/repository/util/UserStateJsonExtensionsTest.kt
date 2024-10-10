@@ -1307,7 +1307,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                         firstTimeState = UserState.FirstTimeState(
-                            showImportLoginsCoachMarker = false,
+                            showImportLoginsCard = false,
                         ),
                     ),
                 ),
@@ -1378,7 +1378,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                     firstTimeState = UserState.defaultFirstTimeState.copy(
-                        showImportLoginsCoachMarker = false,
+                        showImportLoginsCard = false,
                     ),
                 ),
         )

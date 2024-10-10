@@ -8,9 +8,11 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -41,6 +43,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -105,6 +108,13 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
+    }
+
+    private val mutableImportLoginsFeatureFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
+        } returns mutableImportLoginsFeatureFlow
     }
 
     @Test
@@ -1499,7 +1509,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 accounts = DEFAULT_USER_STATE.accounts.map {
                     it.copy(
                         firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
-                            showImportLoginsCoachMarker = false,
+                            showImportLoginsCard = false,
                         ),
                     )
                 },
@@ -1513,6 +1523,30 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when feature flag ImportLoginsFlow is disabled, should show action card should always be false`() =
+        runTest {
+            mutableImportLoginsFeatureFlow.update { false }
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(showImportActionCard = false),
+                    awaitItem(),
+                )
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = DEFAULT_USER_STATE.accounts.map {
+                        it.copy(
+                            firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
+                                showImportLoginsCard = true,
+                            ),
+                        )
+                    },
+                )
+                expectNoEvents()
+            }
+        }
 
     @Test
     fun `when DismissImportActionCard is sent, repository called to set value to false`() {
@@ -1530,7 +1564,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             accounts = DEFAULT_USER_STATE.accounts.map {
                 it.copy(
                     firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
-                        showImportLoginsCoachMarker = false,
+                        showImportLoginsCard = false,
                     ),
                 )
             },
@@ -1558,7 +1592,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             accounts = DEFAULT_USER_STATE.accounts.map {
                 it.copy(
                     firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
-                        showImportLoginsCoachMarker = false,
+                        showImportLoginsCard = false,
                     ),
                 )
             },
@@ -1579,6 +1613,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
             organizationEventManager = organizationEventManager,
+            featureFlagManager = featureFlagManager,
         )
 }
 

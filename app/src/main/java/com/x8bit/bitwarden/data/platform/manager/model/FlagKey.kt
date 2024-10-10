@@ -30,6 +30,7 @@ sealed class FlagKey<out T : Any> {
                 EmailVerification,
                 OnboardingFlow,
                 OnboardingCarousel,
+                ImportLoginsFlow,
             )
         }
     }
@@ -66,6 +67,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object OnboardingFlow : FlagKey<Boolean>() {
         override val keyName: String = "native-create-account-flow"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the import logins feature.
+     */
+    data object ImportLoginsFlow : FlagKey<Boolean>() {
+        override val keyName: String = "import-logins-flow"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
     }

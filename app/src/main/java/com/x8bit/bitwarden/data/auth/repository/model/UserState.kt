@@ -100,7 +100,7 @@ data class UserState(
      * Model to encapsulate different states for a user's first time experience.
      */
     data class FirstTimeState(
-        val showImportLoginsCoachMarker: Boolean,
+        val showImportLoginsCard: Boolean,
     ) {
         /**
          * Constructs a [FirstTimeState] accepting nullable values. If a value is null, the default
@@ -109,14 +109,14 @@ data class UserState(
         constructor(
             showImportLoginsCoachMarker: Boolean?,
         ) : this(
-            showImportLoginsCoachMarker = showImportLoginsCoachMarker ?: true,
+            showImportLoginsCard = showImportLoginsCoachMarker ?: true,
         )
     }
 
     @Suppress("UndocumentedPublicClass")
     companion object {
         val defaultFirstTimeState = FirstTimeState(
-            showImportLoginsCoachMarker = true,
+            showImportLoginsCard = true,
         )
     }
 }

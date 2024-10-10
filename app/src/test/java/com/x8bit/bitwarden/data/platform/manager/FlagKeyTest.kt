@@ -10,4 +10,24 @@ class FlagKeyTest {
     fun `AuthenticatorSync default value should be false`() {
         assertFalse(FlagKey.AuthenticatorSync.defaultValue)
     }
+
+    @Test
+    fun `EmailVerification default value should be false`() {
+        assertFalse(FlagKey.EmailVerification.defaultValue)
+    }
+
+    @Test
+    fun `OnboardingCarousel default value should be false`() {
+        assertFalse(FlagKey.OnboardingCarousel.defaultValue)
+    }
+
+    @Test
+    fun `OnboardingFlow default value should be false`() {
+        assertFalse(FlagKey.OnboardingFlow.defaultValue)
+    }
+
+    @Test
+    fun `ImportLoginsFlow default value should be false`() {
+        assertFalse(FlagKey.ImportLoginsFlow.defaultValue)
+    }
 }

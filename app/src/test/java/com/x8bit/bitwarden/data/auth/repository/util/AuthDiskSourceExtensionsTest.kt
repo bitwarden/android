@@ -515,14 +515,14 @@ class AuthDiskSourceExtensionsTest {
                 authDiskSource.userState = MOCK_USER_STATE
                 assertEquals(
                     UserState.FirstTimeState(
-                        showImportLoginsCoachMarker = true,
+                        showImportLoginsCard = true,
                     ),
                     awaitItem(),
                 )
                 authDiskSource.storeShowImportLogins(MOCK_USER_ID, false)
                 assertEquals(
                     UserState.FirstTimeState(
-                        showImportLoginsCoachMarker = false,
+                        showImportLoginsCard = false,
                     ),
                     awaitItem(),
                 )
