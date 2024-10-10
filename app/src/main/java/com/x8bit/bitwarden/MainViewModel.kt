@@ -224,7 +224,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun handleIntent(
         intent: Intent,
         isFirstIntent: Boolean,
@@ -242,6 +242,9 @@ class MainViewModel @Inject constructor(
         val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
         when {
             passwordlessRequestData != null -> {
+                if (authRepository.activeUserId != passwordlessRequestData.userId) {
+                    authRepository.switchAccount(passwordlessRequestData.userId)
+                }
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.PasswordlessRequest(
                         passwordlessRequestData = passwordlessRequestData,

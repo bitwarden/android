@@ -608,7 +608,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with a passwordless request data should set the special circumstance to PasswordlessRequest`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
-        val passwordlessRequestData = mockk<PasswordlessRequestData>()
+        val passwordlessRequestData = DEFAULT_PASSWORDLESS_REQUEST_DATA
         every {
             mockIntent.getPasswordlessRequestDataIntentOrNull()
         } returns passwordlessRequestData
@@ -917,7 +917,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveNewIntent with a passwordless auth request data should set the special circumstance to PasswordlessRequest`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
-        val passwordlessRequestData = mockk<PasswordlessRequestData>()
+        val passwordlessRequestData = DEFAULT_PASSWORDLESS_REQUEST_DATA
         every {
             mockIntent.getPasswordlessRequestDataIntentOrNull()
         } returns passwordlessRequestData
@@ -1054,6 +1054,33 @@ class MainViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with a passwordless auth request data userId that doesn't match activeUserId should switchAccount`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val passwordlessRequestData = mockk<PasswordlessRequestData>()
+        every {
+            mockIntent.getPasswordlessRequestDataIntentOrNull()
+        } returns passwordlessRequestData
+        every { mockIntent.getTotpDataOrNull() } returns null
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns null
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
+        every { passwordlessRequestData.userId } returns "userId"
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        verify { authRepository.switchAccount("userId") }
+    }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
@@ -1102,6 +1129,11 @@ private val DEFAULT_ACCOUNT = UserState.Account(
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(DEFAULT_ACCOUNT),
+)
+
+private val DEFAULT_PASSWORDLESS_REQUEST_DATA = PasswordlessRequestData(
+    userId = "activeUserId",
+    loginRequestId = "",
 )
 
 private fun createMockFido2RegistrationIntent(
