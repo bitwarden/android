@@ -71,7 +71,6 @@ fun BitwardenActionCard(
                 Text(
                     text = cardTitle,
                     style = BitwardenTheme.typography.titleMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
                 )
                 Spacer(Modifier.weight(1f))
                 BitwardenStandardIconButton(
@@ -81,12 +80,11 @@ fun BitwardenActionCard(
                     modifier = Modifier.offset(x = 8.dp),
                 )
             }
-            if (cardSubtitle != null) {
+            cardSubtitle?.let {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = cardSubtitle,
+                    text = it,
                     style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
                 )
             }
             Spacer(Modifier.height(16.dp))

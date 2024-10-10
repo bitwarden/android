@@ -6512,6 +6512,8 @@ class AuthRepositoryTest {
             ),
         )
 
-        private val FIRST_TIME_STATE = UserState.defaultFirstTimeState
+        private val FIRST_TIME_STATE = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+)
     }
 }

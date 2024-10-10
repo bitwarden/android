@@ -537,7 +537,9 @@ private fun createMockAccounts(number: Int): List<UserState.Account> {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.defaultFirstTimeState,
+                firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
             ),
         )
     }

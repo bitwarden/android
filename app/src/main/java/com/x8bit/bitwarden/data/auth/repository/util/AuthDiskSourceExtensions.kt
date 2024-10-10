@@ -193,6 +193,9 @@ val AuthDiskSource.currentOnboardingStatus: OnboardingStatus?
         ?.activeUserId
         ?.let { this.getOnboardingStatus(userId = it) }
 
+/**
+ * Returns a [Flow] that emits every time the active user's first time state is changed.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 val AuthDiskSource.firstTimeStateFlow: Flow<UserState.FirstTimeState>
     get() = activeUserIdChangesFlow
@@ -212,3 +215,8 @@ val AuthDiskSource.firstTimeStateFlow: Flow<UserState.FirstTimeState>
             }
         }
         .distinctUntilChanged()
+
+val AuthDiskSource.defaultUserFirstTimeState
+    get() = UserState.FirstTimeState(
+        showImportLoginsCard = true,
+    )

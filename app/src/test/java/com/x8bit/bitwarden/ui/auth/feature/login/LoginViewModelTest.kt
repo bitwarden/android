@@ -131,7 +131,9 @@ class LoginViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
-                    firstTimeState = UserState.defaultFirstTimeState,
+                    firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
                 ),
             ),
         )

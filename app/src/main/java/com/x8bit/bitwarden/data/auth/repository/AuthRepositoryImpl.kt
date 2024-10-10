@@ -76,6 +76,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.currentOnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.util.defaultUserFirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.util.firstTimeStateFlow
 import com.x8bit.bitwarden.data.auth.repository.util.onboardingStatusChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
@@ -302,7 +303,7 @@ class AuthRepositoryImpl(
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                     isDeviceTrustedProvider = ::isDeviceTrusted,
-                    firstTimeState = UserState.defaultFirstTimeState,
+                    firstTimeState = authDiskSource.defaultUserFirstTimeState,
                 ),
         )
 

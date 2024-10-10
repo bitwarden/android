@@ -1079,7 +1079,9 @@ private val DEFAULT_STATE: MainState = MainState(
     isScreenCaptureAllowed = true,
 )
 
-private val DEFAULT_FIRST_TIME_STATE = UserState.defaultFirstTimeState
+private val DEFAULT_FIRST_TIME_STATE = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+)
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private val DEFAULT_ACCOUNT = UserState.Account(

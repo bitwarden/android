@@ -1634,7 +1634,9 @@ private val VAULT_FILTER_DATA = VaultFilterData(
 private val DEFAULT_STATE: VaultState =
     createMockVaultState(viewState = VaultState.ViewState.Loading)
 
-private val DEFAULT_FIRST_TIME_STATE = UserState.defaultFirstTimeState
+private val DEFAULT_FIRST_TIME_STATE = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+)
 
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",

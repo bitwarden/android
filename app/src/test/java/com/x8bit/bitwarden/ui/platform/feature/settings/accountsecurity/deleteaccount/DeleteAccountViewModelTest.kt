@@ -244,7 +244,9 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.defaultFirstTimeState,
+            firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
         ),
     ),
 )

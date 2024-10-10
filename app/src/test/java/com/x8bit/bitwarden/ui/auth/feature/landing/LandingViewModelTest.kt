@@ -88,7 +88,9 @@ class LandingViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
-                    firstTimeState = UserState.defaultFirstTimeState,
+                    firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
                 ),
             ),
         )
@@ -226,7 +228,9 @@ class LandingViewModelTest : BaseViewModelTest() {
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.defaultFirstTimeState,
+            firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -283,7 +287,9 @@ class LandingViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.defaultFirstTimeState,
+                firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -344,7 +350,9 @@ class LandingViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.defaultFirstTimeState,
+                firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -521,7 +529,9 @@ class LandingViewModelTest : BaseViewModelTest() {
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.defaultFirstTimeState,
+            firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
         )
 
         val userState = UserState(
@@ -557,7 +567,9 @@ class LandingViewModelTest : BaseViewModelTest() {
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.defaultFirstTimeState,
+            firstTimeState = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+),
         )
 
         val userState = UserState(

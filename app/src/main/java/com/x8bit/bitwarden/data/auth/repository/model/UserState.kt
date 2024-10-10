@@ -112,11 +112,4 @@ data class UserState(
             showImportLoginsCard = showImportLoginsCoachMarker ?: true,
         )
     }
-
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        val defaultFirstTimeState = FirstTimeState(
-            showImportLoginsCard = true,
-        )
-    }
 }
