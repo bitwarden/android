@@ -181,7 +181,7 @@ class VaultViewModel @Inject constructor(
 
     private fun handleImportActionCardClick() {
         dismissImportLoginCard()
-        // TODO: PM-11179 - navigate to import logins screen
+        sendEvent(VaultEvent.NavigateToImportLogins)
     }
 
     private fun handleDismissImportActionCard() {
@@ -1003,6 +1003,11 @@ sealed class VaultEvent {
      * Navigate out of the app.
      */
     data object NavigateOutOfApp : VaultEvent()
+
+    /**
+     * Navigate to the import logins screen.
+     */
+    data object NavigateToImportLogins : VaultEvent()
 
     /**
      * Show a toast with the given [message].

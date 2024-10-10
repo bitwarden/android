@@ -21,6 +21,7 @@ fun NavGraphBuilder.vaultDestination(
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
 ) {
     composableWithRootPushTransitions(
         route = VAULT_ROUTE,
@@ -33,6 +34,7 @@ fun NavGraphBuilder.vaultDestination(
             onNavigateToVerificationCodeScreen = onNavigateToVerificationCodeScreen,
             onNavigateToSearchVault = onNavigateToSearchVault,
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
+            onNavigateToImportLogins = onNavigateToImportLogins,
         )
     }
 }
