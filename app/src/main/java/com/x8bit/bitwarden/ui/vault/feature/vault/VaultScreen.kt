@@ -33,12 +33,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -304,11 +307,32 @@ private fun VaultScreenScaffold(
                         modifier = innerModifier,
                     )
 
-                    is VaultState.ViewState.NoItems -> VaultNoItems(
-                        modifier = innerModifier,
-                        policyDisablesSend = false,
-                        addItemClickAction = vaultHandlers.addItemClickAction,
-                    )
+                    is VaultState.ViewState.NoItems -> {
+                        AnimatedVisibility(
+                            visible = state.showImportActionCard,
+                            exit = actionCardExitAnimation(),
+                            label = "VaultNoItemsActionCard",
+                        ) {
+                            BitwardenActionCard(
+                                cardTitle = stringResource(R.string.import_saved_logins),
+                                cardSubtitle = stringResource(
+                                    R.string.use_a_computer_to_import_logins,
+                                ),
+                                actionText = stringResource(R.string.get_started),
+                                onActionClick = vaultHandlers.importActionCardClick,
+                                onDismissClick = vaultHandlers.dismissImportActionCard,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .standardHorizontalMargin()
+                                    .padding(top = 12.dp),
+                            )
+                        }
+                        VaultNoItems(
+                            modifier = innerModifier,
+                            policyDisablesSend = false,
+                            addItemClickAction = vaultHandlers.addItemClickAction,
+                        )
+                    }
 
                     is VaultState.ViewState.Error -> BitwardenErrorContent(
                         message = viewState.message(),

@@ -306,4 +306,19 @@ interface AuthDiskSource {
      *  if any exists.
      */
     fun getOnboardingStatusFlow(userId: String): Flow<OnboardingStatus?>
+
+    /**
+     * Gets the show import logins flag for the given [userId].
+     */
+    fun getShowImportLogins(userId: String): Boolean?
+
+    /**
+     * Stores the show import logins flag for the given [userId].
+     */
+    fun storeShowImportLogins(userId: String, showImportLogins: Boolean?)
+
+    /**
+     * Emits updates that track [getShowImportLogins]. This will replay the last known value,
+     */
+    fun getShowImportLoginsFlow(userId: String): Flow<Boolean?>
 }

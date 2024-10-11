@@ -29,6 +29,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
     private val mutableAccountTokensFlowMap =
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
+    private val mutableShowImportLoginsFlowMap = mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableOnboardingStatusFlowMap =
         mutableMapOf<String, MutableSharedFlow<OnboardingStatus?>>()
@@ -55,6 +56,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedAuthenticationSyncKeys = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
+    private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -269,6 +271,18 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableOnboardingStatusFlow(userId = userId)
             .onSubscription { emit(getOnboardingStatus(userId)) }
 
+    override fun getShowImportLogins(userId: String): Boolean? =
+        storedShowImportLogins[userId]
+
+    override fun storeShowImportLogins(userId: String, showImportLogins: Boolean?) {
+        storedShowImportLogins[userId] = showImportLogins
+        getMutableShowImportLoginsFlow(userId = userId).tryEmit(showImportLogins)
+    }
+
+    override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
+        getMutableShowImportLoginsFlow(userId)
+            .onSubscription { emit(getShowImportLogins(userId)) }
+
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
      */
@@ -448,6 +462,12 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableOnboardingStatusFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
+    private fun getMutableShowImportLoginsFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> = mutableShowImportLoginsFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
 
     //endregion Private helper functions
 }

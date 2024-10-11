@@ -1018,4 +1018,6 @@ Do you want to switch to this account?</string>
   <string name="new_login">New login</string>
   <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
   <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
+  <string name="import_saved_logins">Import saved logins</string>
+  <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
 </resources>

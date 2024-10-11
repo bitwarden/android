@@ -58,7 +58,7 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         foregroundDisabled = PrimitiveColors.gray500,
     ),
     toggleButton = BitwardenColorScheme.ToggleButtonColors(
-        backgroundOn = PrimitiveColors.blue300,
+        backgroundOn = PrimitiveColors.blue400,
         backgroundOff = PrimitiveColors.gray900,
         switch = PrimitiveColors.gray100,
     ),
