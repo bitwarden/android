@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -45,13 +46,14 @@ fun BitwardenMediumTopAppBar(
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    MediumTopAppBar(
+    TopAppBar(
         colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
+        expandedHeight = 56.dp,
         title = {
             Text(
                 text = title,
-                style = BitwardenTheme.typography.titleLarge,
+                style = BitwardenTheme.typography.headlineMedium,
                 modifier = Modifier.testTag(tag = "PageTitleLabel"),
             )
         },

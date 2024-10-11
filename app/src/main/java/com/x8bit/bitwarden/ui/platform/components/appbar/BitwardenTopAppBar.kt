@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
@@ -107,6 +108,8 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
+            collapsedHeight = 48.dp,
+            expandedHeight = 96.dp,
             title = {
                 // The height of the component is controlled and will only allow for 1 extra row,
                 // making adding any arguments for softWrap and minLines superfluous.
@@ -127,6 +130,7 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
+            expandedHeight = 48.dp,
             title = {
                 Text(
                     text = title,
