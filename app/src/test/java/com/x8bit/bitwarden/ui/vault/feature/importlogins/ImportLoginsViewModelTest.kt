@@ -105,7 +105,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             // Initial state
             assertEquals(DEFAULT_STATE, awaitItem())
 
-            // Set the dialog state to ImportLater
+            // Set the dialog state to GetStarted
             viewModel.trySendAction(ImportLoginsAction.GetStartedClick)
             assertEquals(
                 ImportLoginsState(

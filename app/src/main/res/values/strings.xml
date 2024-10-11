@@ -1020,11 +1020,11 @@ Do you want to switch to this account?</string>
   <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
   <string name="import_saved_logins">Import saved logins</string>
   <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
-  <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime Vault in Settings.</string>
+  <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
   <string name="import_logins_later">Import logins later</string>
   <string name="import_logins_later_dialog_title">Import logins later?</string>
   <string name="do_you_have_a_computer_available">Do you have a computer available?</string>
-  <string name="the_following_instructions_will_guide_you_through_importing_logins">The following instructions will guide you through importing logins from your desktop of laptop computer</string>
+  <string name="the_following_instructions_will_guide_you_through_importing_logins">The following instructions will guide you through importing logins from your desktop or laptop computer</string>
   <string name="import_logins">Import Logins</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
   <string name="give_your_vault_a_head_start">Give your vault a head start</string>
