@@ -216,6 +216,10 @@ val AuthDiskSource.firstTimeStateFlow: Flow<UserState.FirstTimeState>
         }
         .distinctUntilChanged()
 
+/**
+ * Get the current [UserState.FirstTimeState] of the active user if available, otherwise return
+ * a default configuration.
+ */
 val AuthDiskSource.currentOrDefaultUserFirstTimeState
     get() = userState
         ?.activeUserId

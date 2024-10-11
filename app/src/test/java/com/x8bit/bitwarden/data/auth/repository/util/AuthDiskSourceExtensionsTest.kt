@@ -528,6 +528,27 @@ class AuthDiskSourceExtensionsTest {
                 )
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `currentOrDefaultUserFirstTimeState should return the current first time state or a default state`() {
+        authDiskSource.userState = MOCK_USER_STATE
+        // Assert default state when no values set
+        assertEquals(
+            UserState.FirstTimeState(
+                showImportLoginsCard = true,
+            ),
+            authDiskSource.currentOrDefaultUserFirstTimeState,
+        )
+        authDiskSource.storeShowImportLogins(MOCK_USER_ID, false)
+
+        assertEquals(
+            UserState.FirstTimeState(
+                showImportLoginsCard = false,
+            ),
+            authDiskSource.currentOrDefaultUserFirstTimeState,
+        )
+    }
 }
 
 private const val MOCK_USER_ID: String = "mockId-1"
