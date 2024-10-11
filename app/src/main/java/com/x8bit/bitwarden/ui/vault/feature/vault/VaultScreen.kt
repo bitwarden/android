@@ -179,7 +179,7 @@ private fun VaultScreenScaffold(
         onDimBottomNavBarRequest(shouldShowMenu)
     }
     var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
         canScroll = { !accountMenuVisible },
     )

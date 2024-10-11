@@ -179,14 +179,7 @@ fun GeneratorScreen(
         RandomWordHandlers.create(viewModel = viewModel)
     }
 
-    val scrollBehavior = when (state.generatorMode) {
-        GeneratorMode.Default -> {
-            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-        }
-
-        else -> TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    }
-
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         topBar = {
             when (state.generatorMode) {

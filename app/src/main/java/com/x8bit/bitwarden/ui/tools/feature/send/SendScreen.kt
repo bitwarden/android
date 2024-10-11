@@ -103,7 +103,7 @@ fun SendScreen(
     )
 
     val sendHandlers = remember(viewModel) { SendHandlers.create(viewModel) }
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
     )
     BitwardenScaffold(
