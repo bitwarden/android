@@ -60,7 +60,7 @@ import org.junit.Test
 
 @Suppress("LargeClass")
 class VaultScreenTest : BaseComposeTest() {
-
+    private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemId: String? = null
     private var onNavigateToVaultEditItemId: String? = null
@@ -91,6 +91,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
+                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 exitManager = exitManager,
                 intentManager = intentManager,
                 permissionsManager = permissionsManager,
@@ -1193,6 +1194,12 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithContentDescription("Close")
             .performClick()
         verify { viewModel.trySendAction(VaultAction.DismissImportActionCard) }
+    }
+
+    @Test
+    fun `when NavigateToImportLogins is sent, it should call onNavigateToImportLogins`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToImportLogins)
+        assertTrue(onNavigateToImportLoginsCalled)
     }
 }
 

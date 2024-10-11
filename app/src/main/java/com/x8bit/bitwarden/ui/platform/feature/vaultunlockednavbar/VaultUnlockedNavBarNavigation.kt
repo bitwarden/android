@@ -38,6 +38,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToImportLogins: () -> Unit,
 ) {
     composableWithStayTransitions(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
@@ -57,6 +58,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
             onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
+            onNavigateToImportLogins = onNavigateToImportLogins,
         )
     }
 }

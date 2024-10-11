@@ -1576,14 +1576,19 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `when ImportActionCardClick is sent, repository called to set value to false`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VaultAction.ImportActionCardClick)
-        verify(exactly = 1) {
-            authRepository.setShowImportLogins(false)
+    fun `when ImportActionCardClick is sent, repository called to set value to false and NavigateToImportLogins event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.ImportActionCardClick)
+                assertEquals(VaultEvent.NavigateToImportLogins, awaitItem())
+            }
+            verify(exactly = 1) {
+                authRepository.setShowImportLogins(false)
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test

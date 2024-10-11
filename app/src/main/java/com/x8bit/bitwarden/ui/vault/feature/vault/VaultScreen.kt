@@ -83,6 +83,7 @@ fun VaultScreen(
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
@@ -122,6 +123,8 @@ fun VaultScreen(
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
                     .show()
             }
+
+            VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
