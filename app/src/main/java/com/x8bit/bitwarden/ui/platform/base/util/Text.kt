@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -151,19 +153,100 @@ fun createAnnotatedString(
             end = mainString.length,
         )
         for (highlightString in highlights) {
-            val startIndexUnsubscribe = mainString.indexOf(highlightString, ignoreCase = true)
-            val endIndexUnsubscribe = startIndexUnsubscribe + highlightString.length
+            val startIndex = mainString.indexOf(highlightString, ignoreCase = true)
+            val endIndex = startIndex + highlightString.length
             addStyle(
                 style = highlightStyle,
-                start = startIndexUnsubscribe,
-                end = endIndexUnsubscribe,
+                start = startIndex,
+                end = endIndex,
             )
             addStringAnnotation(
                 tag = tag,
                 annotation = highlightString,
-                start = startIndexUnsubscribe,
-                end = endIndexUnsubscribe,
+                start = startIndex,
+                end = endIndex,
             )
         }
+    }
+}
+
+/**
+ * Create an [AnnotatedString] with highlighted parts that can be clicked.
+ * @param mainString the full string to be processed.
+ * @param highlights list of [ClickableTextHighlight]s to be annotated within the [mainString].
+ * If a highlighted text is repeated in the [mainString], you must choose which instance to use
+ * by setting the [ClickableTextHighlight.instance] property. Only one instance of the text will
+ * be annotated.
+ */
+@Composable
+fun createClickableAnnotatedString(
+    mainString: String,
+    highlights: List<ClickableTextHighlight>,
+    style: SpanStyle = SpanStyle(
+        color = BitwardenTheme.colorScheme.text.primary,
+        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
+    ),
+    highlightStyle: SpanStyle = SpanStyle(
+        color = BitwardenTheme.colorScheme.text.interaction,
+        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
+        fontWeight = FontWeight.Bold,
+    ),
+): AnnotatedString {
+    return buildAnnotatedString {
+        append(mainString)
+        addStyle(
+            style = style,
+            start = 0,
+            end = mainString.length,
+        )
+        for (highlight in highlights) {
+            val text = highlight.textToHighlight
+            val startIndex = when (highlight.instance) {
+                ClickableTextHighlight.Instance.FIRST -> {
+                    mainString.indexOf(text, ignoreCase = true)
+                }
+
+                ClickableTextHighlight.Instance.LAST -> {
+                    mainString.lastIndexOf(text, ignoreCase = true)
+                }
+            }
+            val endIndex = startIndex + highlight.textToHighlight.length
+            val link = LinkAnnotation.Clickable(
+                tag = highlight.textToHighlight,
+                styles = TextLinkStyles(
+                    style = highlightStyle,
+                ),
+            ) {
+                highlight.onTextClick.invoke()
+            }
+            addLink(
+                link,
+                start = startIndex,
+                end = endIndex,
+            )
+        }
+    }
+}
+
+/**
+ * Models text that should be highlighted with and associated with a click action.
+ * @property textToHighlight the text to highlight and associate with click action.
+ * @property onTextClick the click action to perform when the text is clicked.
+ * @property instance to denote if there are multiple instances of the [textToHighlight] in the
+ * [AnnotatedString] which should be highlighted.
+ */
+data class ClickableTextHighlight(
+    val textToHighlight: String,
+    val onTextClick: () -> Unit,
+    val instance: Instance = Instance.FIRST,
+) {
+    /**
+     * To denote if a [ClickableTextHighlight.textToHighlight] should highlight the
+     * first instance of the text or the last instance.
+     * "If you ain't first, you're last" == true
+     */
+    enum class Instance {
+        FIRST,
+        LAST,
     }
 }
