@@ -195,6 +195,7 @@
   <string name="translations">Локализации</string>
   <string name="items_for_uri">Элементы для %1$s</string>
   <string name="no_items_for_uri">В вашем хранилище нет элементов для %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Поиск или добавление нового логина</string>
   <string name="bitwarden_autofill_service_overlay">Если при выборе поля ввода вы видите панель автозаполнения Bitwarden, вы можете нажать на нее, чтобы запустить службу автозаполнения.</string>
   <string name="bitwarden_autofill_service_notification_content">Коснитесь этого уведомления для автоматического заполнения.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Открыть настройки специальных возможностей</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">30 дней</string>
   <string name="custom">Пользовательский</string>
   <string name="share_on_save">Поделиться Send после сохранения.</string>
+  <string name="add_this_authenticator_key_to_a_login">Добавьте этот ключ аутентификатора к существующему логину или создайте новый.</string>
   <string name="send_disabled_warning">В соответствии с корпоративной политикой вы можете удалить только существующую Send.</string>
   <string name="about_send">О Send</string>
   <string name="hide_email">Скрыть мой адрес email от получателей</string>
@@ -1013,4 +1015,9 @@
   <string name="master_password_hint_not_specified">Подсказка к мастер-паролю</string>
   <string name="master_password_important_hint">Важно: если вы забудете мастер-пароль, восстановить его будет невозможно! Не менее 12 символов.</string>
   <string name="get_started">Начать</string>
+  <string name="save_and_protect_your_data">Сохраняйте и защищайте свои данные</string>
+  <string name="the_vault_protects_more_than_just_passwords">Хранилище защищает не только пароли. Логины, идентификаторы, карты и заметки в нем надежно защищены.</string>
+  <string name="new_login">Новый логин</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Безопасно обменивайтесь файлами и данными с кем угодно на любой платформе. Ваша информация надежно шифруется и доступ к ней ограничен.</string>
+  <string name="send_sensitive_information_safely">Безопасная отправка конфиденциальной информации</string>
 </resources>

@@ -195,6 +195,7 @@
   <string name="translations">Terjemahan</string>
   <string name="items_for_uri">Item untuk %1$s</string>
   <string name="no_items_for_uri">Tidak ada item di brankas Anda untuk %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Saat Anda memilih kolom input dan melihat overlay pengisian otomatis Bitwarden, Anda dapat mengetuknya untuk meluncurkan layanan pengisian otomatis.</string>
   <string name="bitwarden_autofill_service_notification_content">Ketuk notifikasi ini untuk mengisi info masuk secara otomatis dari brankas Anda.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Buka Setelan Aksesibilitas</string>
@@ -605,6 +606,7 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="thirty_days">30 hari</string>
   <string name="custom">Kustom</string>
   <string name="share_on_save">Bagikan Send ini setelah disimpan.</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Karena kebijakan perusahaan, Anda hanya dapat menghapus Send yang sudah ada.</string>
   <string name="about_send">Tentang Send</string>
   <string name="hide_email">Sembunyikan alamat surel saya dari penerima.</string>
@@ -1011,4 +1013,9 @@ Do you want to switch to this account?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

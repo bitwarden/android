@@ -195,6 +195,7 @@
   <string name="translations">Itzulpenak</string>
   <string name="items_for_uri">%1$s-entzako elementuak</string>
   <string name="no_items_for_uri">Kutxa gotorrean ez dago elementurik %1$s-entzako.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Sarrera-eremu bat hautatu eta Bitwardenen automatikoki betetzerako gainjartze bat ikusten duzunean, bere kasa betetzeko erabil dezakezu.</string>
   <string name="bitwarden_autofill_service_notification_content">Sakatu jakinarazpen hau kutxa gotorreko elementu bat automatikoki betetzeko.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Ireki erabilerraztasun ezarpenak</string>
@@ -604,6 +605,7 @@
   <string name="thirty_days">30 egun</string>
   <string name="custom">Pertsonalizatua</string>
   <string name="share_on_save">Send hau gordetzean partekatu</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Enpresa-politika baten ondorioz, lehendik dagoen Send-a bakarrik ezaba dezakezu.</string>
   <string name="about_send">Send-i buruz</string>
   <string name="hide_email">Ezkutatu nire emaila hartzaileei</string>
@@ -1009,4 +1011,9 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

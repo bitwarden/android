@@ -195,6 +195,7 @@
   <string name="translations">翻译</string>
   <string name="items_for_uri">%1$s 的项目</string>
   <string name="no_items_for_uri">您的密码库中没有可用于 %1$s 的项目。</string>
+  <string name="search_for_a_login_or_add_a_new_login">搜索登录或添加新的登录</string>
   <string name="bitwarden_autofill_service_overlay">当您选择一个输入字段并看到一个 Bitwarden 自动填充叠加层时，您可以点击它来启动自动填充服务。</string>
   <string name="bitwarden_autofill_service_notification_content">点击此通知以自动填充密码库中的项目。</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">打开无障碍设置</string>
@@ -456,7 +457,7 @@
   <string name="copy_notes">复制备注</string>
   <string name="exit">退出</string>
   <string name="exit_confirmation">确定要退出 Bitwarden 吗？</string>
-  <string name="require_master_password_on_app_restart">App 重启时必须输入主密码吗？</string>
+  <string name="require_master_password_on_app_restart">App 重启时要求主密码吗？</string>
   <string name="pin_require_master_password_restart">当 App 重启时，要求使用主密码解锁吗？</string>
   <string name="black">黑色</string>
   <string name="nord">Nord</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">30 天</string>
   <string name="custom">自定义</string>
   <string name="share_on_save">保存时分享此 Send</string>
+  <string name="add_this_authenticator_key_to_a_login">将此验证器密钥添加到现有登录，或创建一个新的登录。</string>
   <string name="send_disabled_warning">由于某个企业策略，您只能删除现有的 Send。</string>
   <string name="about_send">关于 Send</string>
   <string name="hide_email">对收件人隐藏我的电子邮件地址</string>
@@ -1005,10 +1007,15 @@
   <string name="turn_on_later">稍后打开</string>
   <string name="turn_on_autofill_later">稍后打开自动填充吗？</string>
   <string name="return_to_complete_this_step_anytime_in_settings">您可以随时在「设置」中完成此步骤。</string>
-  <string name="what_bitwarden_has_to_offer">您现在可以使用自动填充功能，使用保存的密码来登录 App 和网站。也可以探索 Bitwarden 为您提供的其他便捷功能。</string>
+  <string name="what_bitwarden_has_to_offer">您现在可以探索 Bitwarden 的所有功能了，并开始安全地管理您的密码。</string>
   <string name="youre_all_set">一切就绪！</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用不同的两步登录方式或联系 Duo 寻求帮助。</string>
   <string name="master_password_hint_not_specified">主密码提示</string>
   <string name="master_password_important_hint">重要：主密码忘记后，将无法恢复！至少 12 个字符。</string>
   <string name="get_started">开始使用</string>
+  <string name="save_and_protect_your_data">保存和保护您的数据</string>
+  <string name="the_vault_protects_more_than_just_passwords">密码库保护的不仅仅是密码。这里安全地存储登录、ID、支付卡和笔记。</string>
+  <string name="new_login">新增登录</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">安全地发送敏感信息</string>
 </resources>

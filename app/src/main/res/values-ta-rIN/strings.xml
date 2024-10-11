@@ -195,6 +195,7 @@
   <string name="translations">மொழிபெயர்ப்புகள்</string>
   <string name="items_for_uri">%1$s க்கான உருப்படிகள்</string>
   <string name="no_items_for_uri">உம் பெட்டகத்தில் %1$s க்கான உருப்படிகள் ஏதுமில்லை.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">நீங்கள் ஓர் உள்ளீடு புலத்தை தேர்ந்து Bitwarden தன்னிரப்பி மேலடுக்கை பார்க்கும்போது, தன்னிரப்பி சேவையை தொடங்க நீங்கள் அதை தட்டலாம்.</string>
   <string name="bitwarden_autofill_service_notification_content">உங்கள் பெட்டகத்திலிருந்து உருப்படியைத் தானாக-நிரப்ப இந்த அறிவிப்பைத் தட்டவும்.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">அணுகல்தன்மை அமைவுகளைத் திற</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">௩௦ நாட்கள்</string>
   <string name="custom">தனிபயன்</string>
   <string name="share_on_save">சேமிக்கையில் இந்த Send ஐப் பகிர்</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">முனைவக கொள்ளையால், உம்மால் இருக்கின்ற Sendஐ மட்டுமே அழிக்கவியலும்.</string>
   <string name="about_send">Send பற்றி</string>
   <string name="hide_email">பெறுநர்களிடமிருந்து என் மின்னஞ்சல் முகவரியை மறை</string>
@@ -1011,4 +1013,9 @@
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

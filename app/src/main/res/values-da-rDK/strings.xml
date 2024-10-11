@@ -195,6 +195,7 @@
   <string name="translations">Oversættelser</string>
   <string name="items_for_uri">Emner til %1$s</string>
   <string name="no_items_for_uri">Der er ingen emner i boksen til %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Søg efter eller tilføj et nyt login</string>
   <string name="bitwarden_autofill_service_overlay">Når et inputfelt vælges, og en Bitwarden-autoudfyldningoverlejring vises, kan der trykkes på den for at starte autoudfyldningstjenesten.</string>
   <string name="bitwarden_autofill_service_notification_content">Tryk på denne notifikation for at autoudfylde et emne fra boksen.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Åbn Tilgængelighedsindstillinger</string>
@@ -605,6 +606,7 @@ Skanning vil ske automatisk.</string>
   <string name="thirty_days">30 dage</string>
   <string name="custom">Tilpasset</string>
   <string name="share_on_save">Del denne Send, når den gemmes</string>
+  <string name="add_this_authenticator_key_to_a_login">Føj denne godkendelsesnøgle til et eksisterende login, eller opret et nyt login.</string>
   <string name="send_disabled_warning">Grundet en virksomhedspolitik kan kun en eksisterende Send slettes.</string>
   <string name="about_send">Om Send</string>
   <string name="hide_email">Skjul e-mailadressen for modtagere</string>
@@ -1011,4 +1013,9 @@ Skift til denne konto?</string>
   <string name="master_password_hint_not_specified">Hovedadgangskodetip</string>
   <string name="master_password_important_hint">Vigtigt: Hovedadgangskoden kan ikke gendannes, hvis den glemmes! Minimum 12 tegn.</string>
   <string name="get_started">Komme i gang</string>
+  <string name="save_and_protect_your_data">Gem og beskyt dine data</string>
+  <string name="the_vault_protects_more_than_just_passwords">Boksen beskytter mere end blot adgangskoder. Gem sikre logins, ID\'er, kort og notater sikkert her.</string>
+  <string name="new_login">Nyt login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Del filer og data sikkert med alle på enhver platform. Oplysningerne forbliver ende-til-ende krypterede samtidig med begrænset eksponering.</string>
+  <string name="send_sensitive_information_safely">Send sensitive oplysninger sikkert</string>
 </resources>

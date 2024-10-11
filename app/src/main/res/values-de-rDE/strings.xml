@@ -195,6 +195,7 @@
   <string name="translations">Übersetzungen</string>
   <string name="items_for_uri">Zugangsdaten für %1$s</string>
   <string name="no_items_for_uri">Es befinden sich keine Zugangsdaten für %1$s in deinem Tresor.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Nach Zugangsdaten suchen oder neue Zugangsdaten hinzufügen</string>
   <string name="bitwarden_autofill_service_overlay">Wenn Sie ein Eingabefeld auswählen und ein Auto-Fill-Overlay von Bitwarden sehen, können Sie darauf tippen, um den Dienst zum automatischen Ausfüllen zu starten.</string>
   <string name="bitwarden_autofill_service_notification_content">Tippe auf diese Benachrichtigung, um automatisch Zugangsdaten aus deinem Tresor einzufügen.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Einstellungen für Bedienungshilfen öffnen</string>
@@ -605,6 +606,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="thirty_days">30 Tage</string>
   <string name="custom">Benutzerdefiniert</string>
   <string name="share_on_save">Dieses Send beim Speichern teilen</string>
+  <string name="add_this_authenticator_key_to_a_login">Füge diesen Authenticator-Schlüssel zu bestehenden Zugangsdaten hinzu oder erstelle neue Zugangsdaten.</string>
   <string name="send_disabled_warning">Aufgrund einer Unternehmensrichtlinie kannst du nur ein bestehendes Send löschen.</string>
   <string name="about_send">Über Send</string>
   <string name="hide_email">Meine E-Mail-Adresse vor den Empfängern verstecken</string>
@@ -1010,4 +1012,9 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="master_password_hint_not_specified">Master-Passwort-Hinweis</string>
   <string name="master_password_important_hint">Wichtig: Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens 12 Zeichen lang.</string>
   <string name="get_started">Loslegen</string>
+  <string name="save_and_protect_your_data">Speicher und schütze deine Daten</string>
+  <string name="the_vault_protects_more_than_just_passwords">Der Tresor schützt mehr als nur Passwörter. Speicher hier sicher Zugangsdaten, Ausweise, Karten und Notizen.</string>
+  <string name="new_login">Neue Zugangsdaten</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Teile Dateien und Daten sicher mit jedem auf jeder Plattform. Deine Informationen bleiben End-zu-Ende-Verschlüsselt, während die Verbreitung begrenzt wird.</string>
+  <string name="send_sensitive_information_safely">Sensible Informationen sicher versenden</string>
 </resources>

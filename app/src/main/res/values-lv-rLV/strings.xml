@@ -195,6 +195,7 @@
   <string name="translations">Tulkojumi</string>
   <string name="items_for_uri">%1$s vienumi</string>
   <string name="no_items_for_uri">Glabātavā nav %1$s vienumu.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Meklēt pieteikšanās vienumu vai pievienot jaunu</string>
   <string name="bitwarden_autofill_service_overlay">Kad tiek atlasīts ievades lauks un parādās Bitwarden automātiskās aizpildes lodziņš, jāpiesit tam, lai palaistu automātiskās aizpildes pakalpojumu.</string>
   <string name="bitwarden_autofill_service_notification_content">Jāpiesit šim paziņojumam, lai automātiski aizpildītu ar vienumu no glabātavas.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Atvērt pieejamības iestatījumus</string>
@@ -605,6 +606,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="thirty_days">30 dienas</string>
   <string name="custom">Pielāgots</string>
   <string name="share_on_save">Kopīgot šo Send pēc saglabāšanas</string>
+  <string name="add_this_authenticator_key_to_a_login">Pievieno šo autentificēšanās atslēgu esošam pieteikšanās vienumam vai izveido jaunu!</string>
   <string name="send_disabled_warning">Uzņēmuma nosacījumu dēļ ir iespējams dzēst tikai esošu Send.</string>
   <string name="about_send">Par Send</string>
   <string name="hide_email">Slēpt e-pasta adresi no saņēmējiem.</string>
@@ -1011,4 +1013,9 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="master_password_hint_not_specified">Galvenās paroles norāde</string>
   <string name="master_password_important_hint">Svarīgi: galveno paroli nevarēs atgūt, ja tā tiks aizmirsta. Vismaz 12 rakstzīmes.</string>
   <string name="get_started">Sākam</string>
+  <string name="save_and_protect_your_data">Saglabā un aizsargā Tavus datus</string>
+  <string name="the_vault_protects_more_than_just_passwords">Glabātava aizsargā vairāk kā tikai paroles. Drošā veidā glabā šeit pieteikšanās vienumus, identitātes, kartes un piezīmes!</string>
+  <string name="new_login">Jauns pieteikšanās vienums</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Kopīgo datnes un datus drošā veidā ar ikvienu jebkurā platformā! Tava informācija paliks pilnībā šifrēta, vienlaikus ierobežojot riskantumu.</string>
+  <string name="send_sensitive_information_safely">Sūti jutīgu informāciju drošā veidā</string>
 </resources>

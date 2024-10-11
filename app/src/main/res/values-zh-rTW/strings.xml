@@ -195,6 +195,7 @@
   <string name="translations">譯者</string>
   <string name="items_for_uri">%1$s 的項目</string>
   <string name="no_items_for_uri">您的密碼庫中沒有用於 %1$s 的項目。</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">當您選擇輸入欄位，看到 Bitwarden 的自動填入疊加層時，可以點選該提示以啟動自動填入服務。</string>
   <string name="bitwarden_autofill_service_notification_content">按此通知以自動填入存在密碼庫的登入資料。</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">開啟無障礙設定</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">30 天</string>
   <string name="custom">自訂</string>
   <string name="share_on_save">儲存時共用此 Send</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">由於企業原則限制，您只能刪除現有的 Send。</string>
   <string name="about_send">關於 Send</string>
   <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
@@ -1011,4 +1013,9 @@
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

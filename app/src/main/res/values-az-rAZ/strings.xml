@@ -195,6 +195,7 @@
   <string name="translations">Tərcümələr</string>
   <string name="items_for_uri">%1$s üçün elementlər</string>
   <string name="no_items_for_uri">Anbarınızda %1$s üçün heç bir element yoxdur.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Bir giriş axtar və ya yenisini əlavə et</string>
   <string name="bitwarden_autofill_service_overlay">Bir giriş xanası seçdikdə və Bitwarden avto-doldurma örtüyünü gördükdə, avto-doldurma xidmətini başlatmaq üçün buna toxuna bilərsiniz.</string>
   <string name="bitwarden_autofill_service_notification_content">Anbarınızdakı bir elementi avto-doldurmaq üçün bu bildirişə toxunun.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Əlçatımlılıq Ayarlarını aç</string>
@@ -456,7 +457,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="copy_notes">Qeydləri kopyala</string>
   <string name="exit">Çıxış</string>
   <string name="exit_confirmation">Bitwarden-dən çıxış etmək istədiyinizə əminsiniz?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Tətbiq yenidən başladılanda ana parol tələb edilsin?</string>
   <string name="pin_require_master_password_restart">Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</string>
   <string name="black">Qara</string>
   <string name="nord">Nord</string>
@@ -605,6 +606,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="thirty_days">30 gün</string>
   <string name="custom">Özəl</string>
   <string name="share_on_save">Bu \"Send\"i saxladıqdan sonra paylaş.</string>
+  <string name="add_this_authenticator_key_to_a_login">Bu kimlik doğrulayıcı açarını mövcud bir girişə əlavə edin və ya yeni bir giriş yaradın.</string>
   <string name="send_disabled_warning">Müəssisə siyasətinə görə, yalnız mövcud \"Send\"i silə bilərsiniz.</string>
   <string name="about_send">\"Send\" haqqında</string>
   <string name="hide_email">E-poçt ünvanımı alıcılardan gizlət.</string>
@@ -1009,5 +1011,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo xidmətinə bağlanarkən xəta baş verdi. Fərqli iki addımlı giriş üsulu istifadə edin və ya kömək üçün Duo ilə əlaqə saxlayın.</string>
   <string name="master_password_hint_not_specified">Ana parol ipucusu</string>
   <string name="master_password_important_hint">Vacib: Ana parolunuzu unutsanız bərpa edə bilməzsiniz! Ən az %12 simvol.</string>
-  <string name="get_started">Get started</string>
+  <string name="get_started">Başlayaq</string>
+  <string name="save_and_protect_your_data">Datanızı saxlayın və qoruyun</string>
+  <string name="the_vault_protects_more_than_just_passwords">Anbar, yalnız parolları qorumur. Güvənli giriş məlumatlarınızı, kimliklərinizi, kartlarınızı və notlarını təhlükəsiz şəkildə burada saxlayın.</string>
+  <string name="new_login">Yeni giriş</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">İstənilən platformada faylları və dataları hər kəslə paylaşın. İfşa olunmağı məhdudlaşdıraraq məlumatlarınız ucdan-uca şifrələnmiş qalacaq.</string>
+  <string name="send_sensitive_information_safely">Həssas məlumatları göndər, təhlükəsiz</string>
 </resources>
