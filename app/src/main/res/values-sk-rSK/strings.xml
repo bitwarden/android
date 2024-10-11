@@ -195,6 +195,7 @@
   <string name="translations">Preklady</string>
   <string name="items_for_uri">Položky pre %1$s</string>
   <string name="no_items_for_uri">V trezore sa nenachádzajú žiadne položky pre %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Vyhľadať alebo pridať nové prihlasovacie údaje</string>
   <string name="bitwarden_autofill_service_overlay">Keď aktivujute vstupné pole a uvidíte tlačidlo pre automatické vyplnenie cez Bitwarden, môžete ho stlačiť a spustiť službu automatického vypĺňania.</string>
   <string name="bitwarden_autofill_service_notification_content">Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Otvoriť nastavenia zjednodušenia prístupu</string>
@@ -605,6 +606,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="thirty_days">30 dní</string>
   <string name="custom">Vlastné</string>
   <string name="share_on_save">Po uložení zdieľať tento Send</string>
+  <string name="add_this_authenticator_key_to_a_login">Pridajte tento overovací kľúč k existujúcemu prihláseniu, alebo vytvorte nové prihlásenie.</string>
   <string name="send_disabled_warning">Z dôvodu podnikovej politiky môžete odstrániť iba existujúci Send.</string>
   <string name="about_send">O Sende</string>
   <string name="hide_email">Skryť moju e-mailovú adresu pred príjemcami</string>
@@ -1011,4 +1013,9 @@ Chcete prepnúť na tento účet?</string>
   <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
   <string name="master_password_important_hint">Dôležité: Vaše hlavné heslo sa nedá obnoviť, ak ho zabudnete! Minimálne 12 znakov.</string>
   <string name="get_started">Začnite</string>
+  <string name="save_and_protect_your_data">Uložiť a ochrániť vaše údaje</string>
+  <string name="the_vault_protects_more_than_just_passwords">Trezor chráni viac ako len heslá. Tu môžete bezpečne ukladať prihlasovacie údaje, identifikačné údaje, karty a poznámky.</string>
+  <string name="new_login">Nové prihlasovacie údaje</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Bezpečne zdieľajte súbory a údaje s kýmkoľvek a na akejkoľvek platforme. Vaše informácie zostanú end-to-end zašifrované a zároveň sa obmedzí ich odhalenie.</string>
+  <string name="send_sensitive_information_safely">Posielajte citlivé informácie bezpečne</string>
 </resources>

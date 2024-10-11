@@ -195,6 +195,7 @@
   <string name="translations">翻訳</string>
   <string name="items_for_uri">%1$s用のアイテム</string>
   <string name="no_items_for_uri">保管庫に%1$s用のアイテムはありません。</string>
+  <string name="search_for_a_login_or_add_a_new_login">ログイン情報を検索するか、新しいログイン情報を追加します</string>
   <string name="bitwarden_autofill_service_overlay">入力欄を選んだときにBitwardenの自動入力のメッセージが見えたら、それをタップすれば自動入力が起動します。</string>
   <string name="bitwarden_autofill_service_notification_content">この通知をタップすると保管庫から自動入力します。</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">ユーザー補助設定を開く</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">30日</string>
   <string name="custom">カスタム</string>
   <string name="share_on_save">保存時にこの Send を共有する</string>
+  <string name="add_this_authenticator_key_to_a_login">この認証キーを既存のログインに追加するか、新しいログインを作成します。</string>
   <string name="send_disabled_warning">組織のポリシーにより、既存の Send のみを削除できます。</string>
   <string name="about_send">Send について</string>
   <string name="hide_email">メールアドレスを受信者に表示しない</string>
@@ -1011,4 +1013,9 @@
   <string name="master_password_hint_not_specified">マスターパスワードのヒント</string>
   <string name="master_password_important_hint">重要: マスターパスワードを忘れた場合は復元できません! 12文字以上で入れてください。</string>
   <string name="get_started">利用を開始</string>
+  <string name="save_and_protect_your_data">データの保存と保護</string>
+  <string name="the_vault_protects_more_than_just_passwords">保管庫はパスワードだけではなく、ログイン情報、ID、カード、メモを安全に保管できます。</string>
+  <string name="new_login">新しいログイン</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">どのプラットフォームでも、誰とでも安全にファイルとデータを共有できます。流出を防止しながら、あなたの情報はエンドツーエンドで暗号化されます。</string>
+  <string name="send_sensitive_information_safely">機密情報を安全に送信する</string>
 </resources>

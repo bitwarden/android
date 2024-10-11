@@ -195,6 +195,7 @@
   <string name="translations">Översättningar</string>
   <string name="items_for_uri">Objekt för %1$s</string>
   <string name="no_items_for_uri">Det finns inga objekt i ditt valv för %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">När du väljer ett inmatningsfält och ser en ruta för automatisk ifyllnad från Bitwarden, kan du trycka på den för att starta tjänsten för automatisk ifyllnad.</string>
   <string name="bitwarden_autofill_service_notification_content">Tryck på den här aviseringen för att automatiskt fylla i en inloggning från ditt valv.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Öppna tillgänglighetsinställningar</string>
@@ -606,6 +607,7 @@ Skanningen sker automatiskt.</string>
   <string name="thirty_days">30 dagar</string>
   <string name="custom">Anpassad</string>
   <string name="share_on_save">Dela denna Send när den har sparats</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">På grund av en företagspolicy kan du bara radera en befintlig Send.</string>
   <string name="about_send">Om Send</string>
   <string name="hide_email">Dölj min e-postadress för mottagare.</string>
@@ -1012,4 +1014,9 @@ Vill du byta till detta konto?</string>
   <string name="master_password_hint_not_specified">Huvudlösenordsledtråd</string>
   <string name="master_password_important_hint">Viktigt: Ditt huvudlösenord kan inte återställas om du glömmer det! Minst 12 tecken.</string>
   <string name="get_started">Kom igång</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

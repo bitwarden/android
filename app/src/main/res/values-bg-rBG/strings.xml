@@ -195,6 +195,7 @@
   <string name="translations">Преводи</string>
   <string name="items_for_uri">Елементи за %1$s</string>
   <string name="no_items_for_uri">В трезора липсват елементи за %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Търсене на елемент за вписване или добавяне на нов такъв</string>
   <string name="bitwarden_autofill_service_overlay">При избиране на поле за въвеждане на данни ще се появява изскачащо прозорче на Битуорден. Ако го натиснете, ще задействате услугата за автоматично дописване и имената и паролите ще бъдат попълнени.</string>
   <string name="bitwarden_autofill_service_notification_content">Натиснете известието, за да попълните със запис от трезора.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Отворете настройките за достъпност</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">30 дни</string>
   <string name="custom">По избор</string>
   <string name="share_on_save">Споделяне на изпратеното при запис.</string>
+  <string name="add_this_authenticator_key_to_a_login">Добавете този удостоверителен ключ към съществуващ елемент за вписване, или създайте нов такъв.</string>
   <string name="send_disabled_warning">Поради политика на организация, може само да изтривате съществуващи изпращания.</string>
   <string name="about_send">Относно изпращането</string>
   <string name="hide_email">Скриване на е-пощата ми от получателите.</string>
@@ -1011,4 +1013,9 @@
   <string name="master_password_hint_not_specified">Подсказка за главната парола</string>
   <string name="master_password_important_hint">Важно: главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне 12 знака.</string>
   <string name="get_started">Първи стъпки</string>
+  <string name="save_and_protect_your_data">Запазвайте и защитавайте своите данни</string>
+  <string name="the_vault_protects_more_than_just_passwords">Трезорът може да пази не само пароли. Съхранявайте защитени данни за вход, идентификационни данни, карти и бележки.</string>
+  <string name="new_login">Нов елемент за вписване</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Споделяйте сигурно файлове и данни с всекиго, през всяка система. Информацията Ви ще бъде защитена с шифроване от край до край, а видимостта ѝ ще бъде ограничена.</string>
+  <string name="send_sensitive_information_safely">Изпращайте чувствителна информация, сигурно</string>
 </resources>

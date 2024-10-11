@@ -195,11 +195,12 @@
   <string name="translations">Käännökset</string>
   <string name="items_for_uri">Kohteet palvelulle %1$s</string>
   <string name="no_items_for_uri">Holvissasi ei ole kohteita osoitteelle \"%1$s\".</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Kun valitset syöttökentän ja näet Bitwardenin ponnahdusvalinnan, voit sitä napauttamalla avata automaattitäytön palvelun.</string>
   <string name="bitwarden_autofill_service_notification_content">Täytä kohde holvistasi automaattisesti napauttamalla tätä ilmoitusta.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Avaa \"Esteettömyys\" -asetukset</string>
   <string name="bitwarden_autofill_service_step1">1. Valitse esteettömyysasetusten \"Palvelut\" -otsikon alta ”Bitwarden”.</string>
-  <string name="bitwarden_autofill_service_step2">2. Kytke asetus käyttöön ja hyväksy painanalla \"OK\".</string>
+  <string name="bitwarden_autofill_service_step2">2. Ota asetus käyttöön ja hyväksy painanalla \"OK\".</string>
   <string name="disabled">Ei käytössä</string>
   <string name="enabled">Käytössä</string>
   <string name="off" tools:override="true">Ei käytössä</string>
@@ -378,7 +379,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="autofill_turn_on1">1. Siirry iOS:n \"Asetukset\" -sovellukseen</string>
   <string name="autofill_turn_on2">2. Napauta \"Salasanat\"</string>
   <string name="autofill_turn_on3">3. Napauta \"Täytä salasanat automaattisesti\"</string>
-  <string name="autofill_turn_on4">4. Kytke automaattinen täyttö käyttöön</string>
+  <string name="autofill_turn_on4">4. Ota automaattinen täyttö käyttöön</string>
   <string name="autofill_turn_on5">5. Valitse \"Bitwarden\"</string>
   <string name="password_autofill">Salasanojen automaattitäyttö</string>
   <string name="bitwarden_autofill_alert2">Helpoin tapa lisätä uusia kirjautumistietoja holviisi on Bitwardenin automaattisen täytön laajennus. Asetuksista löydät lisätietoja laajennuksen käytöstä.</string>
@@ -456,7 +457,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="copy_notes">Kopioi merkinnät</string>
   <string name="exit">Poistu</string>
   <string name="exit_confirmation">Haluatko varmasti poistua Bitwardenista?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Vaadi pääsalasana sovellusta uudelleenkäynnistettäessä?</string>
   <string name="pin_require_master_password_restart">Vaaditaanko lukituksen avaus pääsalasanalla, kun sovellus käynnistetään uudelleen?</string>
   <string name="black">Musta</string>
   <string name="nord">Nord</string>
@@ -535,7 +536,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="accept_policies_error">Palveluehtoja ja tietosuojakäytäntöä ei ole vahvistettu.</string>
   <string name="terms_of_service">Palveluehdot</string>
   <string name="privacy_policy">Tietosuojakäytäntö</string>
-  <string name="accessibility_draw_over_permission_alert">Bitwarden edellyttää toimenpiteitä - Kytke \"Näkyminen muiden päällä\" -asetus käyttöön Bitwardenin asetusten kohdasta \"Automaattitäytön palvelut\"</string>
+  <string name="accessibility_draw_over_permission_alert">Bitwarden edellyttää toimenpiteitä - Ota \"Näkyminen muiden päällä\" -asetus käyttöön Bitwardenin asetusten kohdasta \"Automaattitäytön palvelut\"</string>
   <string name="passkey_management">Pääsyavainhallinta</string>
   <string name="autofill_services">Automaattitäytön palvelut</string>
   <string name="inline_autofill">Tekstinsisäinen täyttö</string>
@@ -605,6 +606,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="thirty_days">30 päivää</string>
   <string name="custom">Mukautettu</string>
   <string name="share_on_save">Jaa Send tallennettaessa</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Yrityskäytännön vuoksi voit poistaa vain olemassa olevan Sendin.</string>
   <string name="about_send">Tietoja Sendistä</string>
   <string name="hide_email">Piilota sähköpostiosoitteeni vastaanottajilta</string>
@@ -1000,15 +1002,20 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="authenticator_sync">Authenticator-synkronointi</string>
   <string name="allow_bitwarden_authenticator_syncing">Salli Bitwarden Authenticator -synkronointi</string>
   <string name="there_was_an_issue_validating_the_registration_token">Ongelma vahvistettaessa rekisteröintitunnistetta.</string>
-  <string name="turn_on_autofill">Kytke automaattitäyttö käyttöön</string>
+  <string name="turn_on_autofill">Ota automaattitäyttö käyttöön</string>
   <string name="use_autofill_to_log_into_your_accounts">Automaattitäytön avulla kirjaudut tileillesi yhdellä napautuksella.</string>
-  <string name="turn_on_later">Kytke käyttöön myöhemmin</string>
-  <string name="turn_on_autofill_later">Kytketäänkö automaattitäyttö käyttöön myöhemmin?</string>
-  <string name="return_to_complete_this_step_anytime_in_settings">Asetuksista voit palata viimeistelemään tämän vaiheen milloin tahansa.</string>
+  <string name="turn_on_later">Ota käyttöön myöhemmin</string>
+  <string name="turn_on_autofill_later">Otetaanko automaattitäyttö käyttöön myöhemmin?</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Voit palata viimeistelemään tämän vaiheen milloin tahansa asetuksista.</string>
   <string name="what_bitwarden_has_to_offer">Nyt voit kirjautua sovelluksiin ja verkkosivustoille tallennetuilla salasanoillasi, ja olet vapaa tutustumaan Bitwardenin muihin ominaisuuksiin.</string>
   <string name="youre_all_set">Kaikki on valmista!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua.</string>
   <string name="master_password_hint_not_specified">Pääsalasanan vihje</string>
   <string name="master_password_important_hint">Tärkeää: Pääsalasanaasi ei ole mahdollista palauttaa, jos unohdat sen! Vähintään 12 merkkiä.</string>
-  <string name="get_started">Get started</string>
+  <string name="get_started">Aloita</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

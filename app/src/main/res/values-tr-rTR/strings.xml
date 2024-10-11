@@ -195,6 +195,7 @@
   <string name="translations">Çeviriler</string>
   <string name="items_for_uri">%1$s kayıtları</string>
   <string name="no_items_for_uri">Kasanızda hiç %1$s kaydı bulunmuyor.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Hesap ara veya yeni hesap ekle</string>
   <string name="bitwarden_autofill_service_overlay">Bir giriş alanını seçip Bitwarden otomatik doldurma kutusunu gördüğünüzde otomatik doldurmayı başlatmak için kutuya dokunabilirsiniz.</string>
   <string name="bitwarden_autofill_service_notification_content">Formu kasanızdaki bilgilerle otomatik doldurmak için bu bildirime dokunun.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Erişebilirlik ayarlarını açın</string>
@@ -605,6 +606,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="thirty_days">30 gün</string>
   <string name="custom">Özel</string>
   <string name="share_on_save">Bu Send\'i kaydettikten sonra paylaş</string>
+  <string name="add_this_authenticator_key_to_a_login">Bu kimlik doğrulama anahtarını mevcut bir hesaba ekleyin veya yeni bir hesap oluşturun.</string>
   <string name="send_disabled_warning">Bir kuruluş ilkesi nedeniyle yalnızca mevcut Send\'leri silebilirsiniz.</string>
   <string name="about_send">Send hakkında</string>
   <string name="hide_email">E-posta adresimi alıcılardan gizle</string>
@@ -1010,4 +1012,9 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="master_password_hint_not_specified">Ana parola ipucu</string>
   <string name="master_password_important_hint">Dikkat: Ana parolanızı unutursanız kurtaramazsınız! En az 12 karakter.</string>
   <string name="get_started">Başlayın</string>
+  <string name="save_and_protect_your_data">Verilerinizi kaydedin ve koruyun</string>
+  <string name="the_vault_protects_more_than_just_passwords">Kasanız sadece parolalarınız için değil. Hesaplarınızı, kimliklerinizi, kredi kartlarınızı ve notlarınızı da güvenle burada depolayabilirsiniz.</string>
+  <string name="new_login">Yeni hesap</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Dosyaları ve verileri istediğiniz kişilerle, istediğiniz platformda paylaşın. Bilgileriniz başkalarının eline geçmemesi için uçtan şifrelenecektir.</string>
+  <string name="send_sensitive_information_safely">Hassas bilgileri güvenle paylaşın</string>
 </resources>
