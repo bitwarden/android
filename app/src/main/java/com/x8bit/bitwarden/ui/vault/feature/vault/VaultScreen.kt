@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
@@ -219,7 +220,10 @@ private fun VaultScreenScaffold(
             BitwardenMediumTopAppBar(
                 title = state.appBarTitle(),
                 scrollBehavior = scrollBehavior,
-                isBottomDividerEnabled = state.vaultFilterDataWithFilter == null,
+                dividerStyle = state
+                    .vaultFilterDataWithFilter
+                    ?.let { TopAppBarDividerStyle.STATIC }
+                    ?: TopAppBarDividerStyle.ON_SCROLL,
                 actions = {
                     BitwardenAccountActionItem(
                         initials = state.initials,
