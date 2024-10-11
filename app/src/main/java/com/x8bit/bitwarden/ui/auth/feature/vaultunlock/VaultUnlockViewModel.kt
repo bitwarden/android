@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -42,12 +44,13 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the initial vault unlock screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class VaultUnlockViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
@@ -68,6 +71,11 @@ class VaultUnlockViewModel @Inject constructor(
             // There is no valid way to unlock this app.
             authRepository.logout()
         }
+        val specialCircumstance = specialCircumstanceManager.specialCircumstance
+        val showAccountMenu =
+            VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
+                (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&
+                    specialCircumstance !is SpecialCircumstance.Fido2Assertion)
         VaultUnlockState(
             accountSummaries = accountSummaries,
             avatarColorString = activeAccountSummary.avatarColorHex,
@@ -79,7 +87,7 @@ class VaultUnlockViewModel @Inject constructor(
             input = "",
             isBiometricEnabled = activeAccount.isBiometricsEnabled,
             isBiometricsValid = isBiometricsValid,
-            showAccountMenu = VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD,
+            showAccountMenu = showAccountMenu,
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
             userId = userState.activeUserId,
