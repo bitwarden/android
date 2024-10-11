@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
@@ -49,7 +49,7 @@ fun BitwardenSearchTopAppBar(
     TopAppBar(
         modifier = modifier
             .testTag(tag = "HeaderBarComponent")
-            .bottomDivider(thickness = Dp.Hairline),
+            .bottomDivider(thickness = (0.5).dp),
         colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
