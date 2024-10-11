@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -30,8 +31,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param title The text to be displayed as the title of the app bar.
  * @param scrollBehavior Defines the scrolling behavior of the app bar. It controls how the app bar
  * behaves in conjunction with scrolling content.
- * @param isBottomDividerEnabled Determines if the bottom divider should be displayed on scroll or
- * not.
+ * @param dividerStyle Determines how the bottom divider should be displayed.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -42,7 +42,7 @@ fun BitwardenMediumTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
-    isBottomDividerEnabled: Boolean = true,
+    dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     MediumTopAppBar(
@@ -59,11 +59,18 @@ fun BitwardenMediumTopAppBar(
             .testTag(tag = "HeaderBarComponent")
             .scrolledContainerBottomDivider(
                 topAppBarScrollBehavior = scrollBehavior,
-                enabled = isBottomDividerEnabled,
+                enabled = when (dividerStyle) {
+                    TopAppBarDividerStyle.NONE -> false
+                    TopAppBarDividerStyle.STATIC -> false
+                    TopAppBarDividerStyle.ON_SCROLL -> true
+                },
             )
-            // When the scrolling divider is disabled, we show the static divider
             .bottomDivider(
-                enabled = !isBottomDividerEnabled,
+                enabled = when (dividerStyle) {
+                    TopAppBarDividerStyle.NONE -> false
+                    TopAppBarDividerStyle.STATIC -> true
+                    TopAppBarDividerStyle.ON_SCROLL -> false
+                },
                 thickness = (0.5).dp,
             ),
         actions = actions,
