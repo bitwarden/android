@@ -46,6 +46,7 @@ fun BitwardenSegmentedButton(
         ) {
             options.forEachIndexed { index, option ->
                 SegmentedButton(
+                    enabled = option.isEnabled,
                     selected = option.isChecked,
                     onClick = option.onClick,
                     colors = bitwardenSegmentedButtonColors(),
@@ -74,5 +75,6 @@ data class SegmentedButtonState(
     val text: String,
     val onClick: () -> Unit,
     val isChecked: Boolean,
+    val isEnabled: Boolean = true,
     val testTag: String? = null,
 )

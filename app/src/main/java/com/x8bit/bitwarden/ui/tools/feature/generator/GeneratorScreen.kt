@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
+import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -49,7 +50,10 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
+import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
+import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
@@ -59,8 +63,8 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -129,17 +133,6 @@ fun GeneratorScreen(
         { viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it)) }
     }
 
-    val onPasscodeOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit =
-        remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
-                        it,
-                    ),
-                )
-            }
-        }
-
     val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit =
         remember(viewModel) {
             {
@@ -183,9 +176,7 @@ fun GeneratorScreen(
     BitwardenScaffold(
         topBar = {
             when (state.generatorMode) {
-                is GeneratorMode.Modal.Username,
-                GeneratorMode.Modal.Password,
-                    -> {
+                is GeneratorMode.Modal -> {
                     ModalAppBar(
                         scrollBehavior = scrollBehavior,
                         onCloseClick = remember(viewModel) {
@@ -212,22 +203,31 @@ fun GeneratorScreen(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
-        ScrollContent(
-            state = state,
-            onRegenerateClick = onRegenerateClick,
-            onCopyClick = onCopyClick,
-            onMainStateOptionClicked = onMainStateOptionClicked,
-            onPasscodeSubStateOptionClicked = onPasscodeOptionClicked,
-            onUsernameSubStateOptionClicked = onUsernameOptionClicked,
-            passwordHandlers = passwordHandlers,
-            passphraseHandlers = passphraseHandlers,
-            usernameTypeHandlers = usernameTypeHandlers,
-            forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-            plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-            catchAllEmailHandlers = catchAllEmailHandlers,
-            randomWordHandlers = randomWordHandlers,
-            modifier = Modifier.padding(innerPadding),
-        )
+        Column(modifier = Modifier.padding(innerPadding)) {
+            if (state.generatorMode == GeneratorMode.Default) {
+                MainStateOptionsItem(
+                    selectedType = state.selectedType,
+                    passcodePolicyOverride = state.passcodePolicyOverride,
+                    possibleMainStates = state.typeOptions.toImmutableList(),
+                    onMainStateOptionClicked = onMainStateOptionClicked,
+                    modifier = Modifier
+                        .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+                )
+            }
+            ScrollContent(
+                state = state,
+                onRegenerateClick = onRegenerateClick,
+                onCopyClick = onCopyClick,
+                onUsernameSubStateOptionClicked = onUsernameOptionClicked,
+                passwordHandlers = passwordHandlers,
+                passphraseHandlers = passphraseHandlers,
+                usernameTypeHandlers = usernameTypeHandlers,
+                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                catchAllEmailHandlers = catchAllEmailHandlers,
+                randomWordHandlers = randomWordHandlers,
+            )
+        }
     }
 }
 
@@ -242,6 +242,7 @@ private fun DefaultAppBar(
     BitwardenMediumTopAppBar(
         title = stringResource(id = R.string.generator),
         scrollBehavior = scrollBehavior,
+        dividerStyle = TopAppBarDividerStyle.NONE,
         actions = {
             BitwardenOverflowActionItem(
                 menuItemDataList = persistentListOf(
@@ -288,8 +289,6 @@ private fun ScrollContent(
     state: GeneratorState,
     onRegenerateClick: () -> Unit,
     onCopyClick: () -> Unit,
-    onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
-    onPasscodeSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
     onUsernameSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
@@ -305,8 +304,8 @@ private fun ScrollContent(
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
     ) {
-
         if (state.isUnderPolicy) {
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.password_generator_policy_in_effect),
                 modifier = Modifier
@@ -324,15 +323,6 @@ private fun ScrollContent(
             onRegenerateClick = onRegenerateClick,
         )
 
-        if (state.generatorMode == GeneratorMode.Default) {
-            Spacer(modifier = Modifier.height(8.dp))
-            MainStateOptionsItem(
-                selectedType = state.selectedType,
-                possibleMainStates = state.typeOptions.toImmutableList(),
-                onMainStateOptionClicked = onMainStateOptionClicked,
-            )
-        }
-
         Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenListHeaderText(
@@ -345,13 +335,17 @@ private fun ScrollContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         when (val selectedType = state.selectedType) {
-            is GeneratorState.MainType.Passcode -> {
-                PasscodeTypeItems(
-                    passcodeState = selectedType,
-                    onSubStateOptionClicked = onPasscodeSubStateOptionClicked,
-                    passwordHandlers = passwordHandlers,
+            is GeneratorState.MainType.Passphrase -> {
+                PassphraseTypeContent(
+                    passphraseTypeState = selectedType,
                     passphraseHandlers = passphraseHandlers,
-                    overridePasswordPolicyRestriction = state.overridePassword,
+                )
+            }
+
+            is GeneratorState.MainType.Password -> {
+                PasswordTypeContent(
+                    passwordTypeState = selectedType,
+                    passwordHandlers = passwordHandlers,
                 )
             }
 
@@ -407,92 +401,55 @@ private fun GeneratedStringItem(
 @Composable
 private fun MainStateOptionsItem(
     selectedType: GeneratorState.MainType,
+    passcodePolicyOverride: GeneratorState.PasscodePolicyOverride?,
     possibleMainStates: ImmutableList<GeneratorState.MainTypeOption>,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }
+    BitwardenSegmentedButton(
+        options = possibleMainStates
+            .map { mainOptionType ->
+                SegmentedButtonState(
+                    text = stringResource(id = mainOptionType.labelRes),
+                    onClick = { onMainStateOptionClicked(mainOptionType) },
+                    isChecked = selectedType.mainTypeOption == mainOptionType,
+                    isEnabled = when (mainOptionType) {
+                        GeneratorState.MainTypeOption.PASSWORD -> {
+                            when (passcodePolicyOverride) {
+                                GeneratorState.PasscodePolicyOverride.PASSWORD -> true
+                                GeneratorState.PasscodePolicyOverride.PASSPHRASE -> false
+                                null -> true
+                            }
+                        }
 
-    BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.what_would_you_like_to_generate),
-        options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = selectedType.displayStringResId),
-        onOptionSelected = { selectedOption ->
-            val selectedOptionId =
-                optionsWithStrings.entries.first { it.value == selectedOption }.key
-            onMainStateOptionClicked(selectedOptionId)
-        },
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
+                        GeneratorState.MainTypeOption.PASSPHRASE -> {
+                            when (passcodePolicyOverride) {
+                                GeneratorState.PasscodePolicyOverride.PASSWORD -> false
+                                GeneratorState.PasscodePolicyOverride.PASSPHRASE -> true
+                                null -> true
+                            }
+                        }
+
+                        GeneratorState.MainTypeOption.USERNAME -> true
+                    },
+                    testTag = mainOptionType.testTag,
+                )
+            }
+            .toImmutableList(),
+        modifier = modifier
             .fillMaxWidth()
-            .testTag("GeneratorTypePicker"),
+            .testTag(tag = "GeneratorTypePicker"),
     )
 }
 
 //endregion ScrollContent and Static Items
-
-//region PasscodeType Composables
-
-@Composable
-private fun ColumnScope.PasscodeTypeItems(
-    passcodeState: GeneratorState.MainType.Passcode,
-    onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
-    passwordHandlers: PasswordHandlers,
-    passphraseHandlers: PassphraseHandlers,
-    overridePasswordPolicyRestriction: Boolean,
-) {
-    PasscodeOptionsItem(passcodeState, onSubStateOptionClicked, overridePasswordPolicyRestriction)
-
-    when (val selectedType = passcodeState.selectedType) {
-        is GeneratorState.MainType.Passcode.PasscodeType.Password -> {
-            PasswordTypeContent(
-                passwordTypeState = selectedType,
-                passwordHandlers = passwordHandlers,
-            )
-        }
-
-        is GeneratorState.MainType.Passcode.PasscodeType.Passphrase -> {
-            PassphraseTypeContent(
-                passphraseTypeState = selectedType,
-                passphraseHandlers = passphraseHandlers,
-            )
-        }
-    }
-}
-
-@Composable
-private fun PasscodeOptionsItem(
-    currentSubState: GeneratorState.MainType.Passcode,
-    onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
-    overridePasswordPolicyRestriction: Boolean,
-) {
-    val possibleSubStates = GeneratorState.MainType.Passcode.PasscodeTypeOption.entries
-    val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
-
-    BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.password_type),
-        options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = currentSubState.selectedType.displayStringResId),
-        onOptionSelected = { selectedOption ->
-            val selectedOptionId =
-                optionsWithStrings.entries.first { it.value == selectedOption }.key
-            onSubStateOptionClicked(selectedOptionId)
-        },
-        isEnabled = !overridePasswordPolicyRestriction,
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .testTag("PasswordTypePicker"),
-    )
-}
-
-//endregion PasscodeType Composables
 
 //region PasswordType Composables
 
 @Suppress("LongMethod")
 @Composable
 private fun ColumnScope.PasswordTypeContent(
-    passwordTypeState: GeneratorState.MainType.Passcode.PasscodeType.Password,
+    passwordTypeState: GeneratorState.MainType.Password,
     passwordHandlers: PasswordHandlers,
 ) {
     Spacer(modifier = Modifier.height(8.dp))
@@ -707,7 +664,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
 
 @Composable
 private fun ColumnScope.PassphraseTypeContent(
-    passphraseTypeState: GeneratorState.MainType.Passcode.PasscodeType.Passphrase,
+    passphraseTypeState: GeneratorState.MainType.Passphrase,
     passphraseHandlers: PassphraseHandlers,
 ) {
     Spacer(modifier = Modifier.height(8.dp))
@@ -1232,67 +1189,59 @@ private data class PasswordHandlers(
             return PasswordHandlers(
                 onPasswordSliderLengthChange = { newLength, isUserInteracting ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .SliderLengthChange(
-                                length = newLength,
-                                isUserInteracting = isUserInteracting,
-                            ),
+                        GeneratorAction.MainType.Password.SliderLengthChange(
+                            length = newLength,
+                            isUserInteracting = isUserInteracting,
+                        ),
                     )
                 },
                 onPasswordToggleCapitalLettersChange = { shouldUseCapitals ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .ToggleCapitalLettersChange(
-                                useCapitals = shouldUseCapitals,
-                            ),
+                        GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
+                            useCapitals = shouldUseCapitals,
+                        ),
                     )
                 },
                 onPasswordToggleLowercaseLettersChange = { shouldUseLowercase ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .ToggleLowercaseLettersChange(
-                                useLowercase = shouldUseLowercase,
-                            ),
+                        GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                            useLowercase = shouldUseLowercase,
+                        ),
                     )
                 },
                 onPasswordToggleNumbersChange = { shouldUseNumbers ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .ToggleNumbersChange(
-                                useNumbers = shouldUseNumbers,
-                            ),
+                        GeneratorAction.MainType.Password.ToggleNumbersChange(
+                            useNumbers = shouldUseNumbers,
+                        ),
                     )
                 },
                 onPasswordToggleSpecialCharactersChange = { shouldUseSpecialChars ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .ToggleSpecialCharactersChange(
-                                useSpecialChars = shouldUseSpecialChars,
-                            ),
+                        GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                            useSpecialChars = shouldUseSpecialChars,
+                        ),
                     )
                 },
                 onPasswordMinNumbersCounterChange = { newMinNumbers ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .MinNumbersCounterChange(
-                                minNumbers = newMinNumbers,
-                            ),
+                        GeneratorAction.MainType.Password.MinNumbersCounterChange(
+                            minNumbers = newMinNumbers,
+                        ),
                     )
                 },
                 onPasswordMinSpecialCharactersChange = { newMinSpecial ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .MinSpecialCharactersChange(
-                                minSpecial = newMinSpecial,
-                            ),
+                        GeneratorAction.MainType.Password.MinSpecialCharactersChange(
+                            minSpecial = newMinSpecial,
+                        ),
                     )
                 },
                 onPasswordToggleAvoidAmbiguousCharsChange = { shouldAvoidAmbiguousChars ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Password
-                            .ToggleAvoidAmbigousCharactersChange(
-                                avoidAmbiguousChars = shouldAvoidAmbiguousChars,
-                            ),
+                        GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                            avoidAmbiguousChars = shouldAvoidAmbiguousChars,
+                        ),
                     )
                 },
             )
@@ -1317,34 +1266,30 @@ private data class PassphraseHandlers(
             return PassphraseHandlers(
                 onPassphraseNumWordsCounterChange = { changeInCounter ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
-                            .NumWordsCounterChange(
-                                numWords = changeInCounter,
-                            ),
+                        GeneratorAction.MainType.Passphrase.NumWordsCounterChange(
+                            numWords = changeInCounter,
+                        ),
                     )
                 },
                 onPassphraseWordSeparatorChange = { newSeparator ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
-                            .WordSeparatorTextChange(
-                                wordSeparator = newSeparator,
-                            ),
+                        GeneratorAction.MainType.Passphrase.WordSeparatorTextChange(
+                            wordSeparator = newSeparator,
+                        ),
                     )
                 },
                 onPassphraseCapitalizeToggleChange = { shouldCapitalize ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
-                            .ToggleCapitalizeChange(
-                                capitalize = shouldCapitalize,
-                            ),
+                        GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange(
+                            capitalize = shouldCapitalize,
+                        ),
                     )
                 },
                 onPassphraseIncludeNumberToggleChange = { shouldIncludeNumber ->
                     viewModel.trySendAction(
-                        GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
-                            .ToggleIncludeNumberChange(
-                                includeNumber = shouldIncludeNumber,
-                            ),
+                        GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange(
+                            includeNumber = shouldIncludeNumber,
+                        ),
                     )
                 },
             )
