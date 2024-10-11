@@ -1141,6 +1141,59 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule.waitForIdle()
         assertTrue(permissionsManager.hasGetLauncherBeenCalled)
     }
+
+    @Test
+    fun `action card for importing logins should show based on state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.NoItems,
+            )
+        }
+        val importSavedLogins = "Import saved logins"
+        composeTestRule
+            .onNodeWithText(importSavedLogins)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.NoItems,
+                showImportActionCard = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText(importSavedLogins)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `when import action card is showing, clicking it should send ImportLoginsClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.NoItems,
+                showImportActionCard = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.ImportActionCardClick) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when import action card is showing, dismissing it should send DismissImportActionCard action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.NoItems,
+                showImportActionCard = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Close")
+            .performClick()
+        verify { viewModel.trySendAction(VaultAction.DismissImportActionCard) }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1195,6 +1248,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasMasterPassword = true,
     hideNotificationsDialog = true,
     isRefreshing = false,
+    showImportActionCard = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

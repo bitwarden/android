@@ -167,6 +167,8 @@ class SettingsDiskSourceImpl(
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
         // - screen capture allowed
+        // - show autofill setting badge
+        // - show unlock setting badge
     }
 
     override fun getAccountBiometricIntegrityValidity(

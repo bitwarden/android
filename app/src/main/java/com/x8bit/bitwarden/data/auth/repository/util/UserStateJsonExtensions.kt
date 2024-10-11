@@ -111,6 +111,7 @@ fun UserStateJson.toUserState(
     userIsUsingKeyConnectorList: List<UserKeyConnectorState>,
     hasPendingAccountAddition: Boolean,
     onboardingStatus: OnboardingStatus?,
+    firstTimeState: UserState.FirstTimeState,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
@@ -180,6 +181,7 @@ fun UserStateJson.toUserState(
                     // If the user exists with no onboarding status we can assume they have been
                     // using the app prior to the release of the onboarding flow.
                     onboardingStatus = onboardingStatus ?: OnboardingStatus.COMPLETE,
+                    firstTimeState = firstTimeState,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,

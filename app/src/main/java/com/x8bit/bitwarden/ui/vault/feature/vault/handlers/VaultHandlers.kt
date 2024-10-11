@@ -34,6 +34,8 @@ data class VaultHandlers(
     val dialogDismiss: () -> Unit,
     val overflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
     val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
+    val dismissImportActionCard: () -> Unit,
+    val importActionCardClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -88,6 +90,12 @@ data class VaultHandlers(
                             password = password,
                         ),
                     )
+                },
+                dismissImportActionCard = {
+                    viewModel.trySendAction(VaultAction.DismissImportActionCard)
+                },
+                importActionCardClick = {
+                    viewModel.trySendAction(VaultAction.ImportActionCardClick)
                 },
             )
     }
