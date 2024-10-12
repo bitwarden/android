@@ -44,10 +44,6 @@ internal data class SharedAccountDataJson(
 
         @SerialName("totpUris")
         val totpUris: List<String>,
-
-        @SerialName("lastSyncTime")
-        @Contextual
-        val lastSyncTime: Instant,
     )
 }
 

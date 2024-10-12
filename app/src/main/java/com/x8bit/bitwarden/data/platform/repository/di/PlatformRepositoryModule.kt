@@ -48,14 +48,12 @@ object PlatformRepositoryModule {
         vaultRepository: VaultRepository,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
-        settingsDiskSource: SettingsDiskSource,
     ): AuthenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
         authRepository = authRepository,
         authDiskSource = authDiskSource,
         vaultRepository = vaultRepository,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
-        settingsDiskSource = settingsDiskSource,
     )
 
     @Provides

@@ -172,7 +172,6 @@ private fun SharedAccountData.toJsonModel() = SharedAccountDataJson(
             environmentLabel = account.environmentLabel,
             email = account.email,
             totpUris = account.totpUris,
-            lastSyncTime = account.lastSyncTime
         )
     }
 )
@@ -188,7 +187,6 @@ private fun SharedAccountDataJson.toDomainModel() = SharedAccountData(
             environmentLabel = account.environmentLabel,
             email = account.email,
             totpUris = account.totpUris,
-            lastSyncTime = account.lastSyncTime
         )
     }
 )
