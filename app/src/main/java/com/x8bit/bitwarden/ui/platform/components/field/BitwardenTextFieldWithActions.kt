@@ -102,7 +102,7 @@ private fun BitwardenTextFieldWithActions_preview() {
                     contentDescription = "Action 1",
                 )
                 Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_generator),
+                    painter = rememberVectorPainter(id = R.drawable.ic_generate),
                     contentDescription = "Action 2",
                 )
             },

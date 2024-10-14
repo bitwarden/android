@@ -77,7 +77,7 @@ fun BitwardenSearchTopAppBar(
                 onValueChange = onSearchTermChange,
                 trailingIcon = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_close,
+                        vectorIconRes = R.drawable.ic_clear,
                         contentDescription = stringResource(id = R.string.clear),
                         onClick = { onSearchTermChange("") },
                     )

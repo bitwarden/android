@@ -89,7 +89,7 @@ fun BitwardenActionCardSmall(
 private fun ActionCardSmall_preview() {
     BitwardenTheme {
         BitwardenActionCardSmall(
-            actionIcon = rememberVectorPainter(id = R.drawable.ic_generator),
+            actionIcon = rememberVectorPainter(id = R.drawable.ic_generate),
             actionText = "This is an action.",
             callToActionText = "Take action",
             onCardClicked = { },
@@ -102,7 +102,7 @@ private fun ActionCardSmall_preview() {
 private fun ActionCardSmallWithTrailingIcon_preview() {
     BitwardenTheme {
         BitwardenActionCardSmall(
-            actionIcon = rememberVectorPainter(id = R.drawable.ic_generator),
+            actionIcon = rememberVectorPainter(id = R.drawable.ic_generate),
             actionText = "An action with trailing content",
             callToActionText = "Take action",
             onCardClicked = {},

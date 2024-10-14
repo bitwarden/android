@@ -156,7 +156,7 @@ private fun CustomFieldBoolean(
         BitwardenRowOfActions(
             actions = {
                 BitwardenFilledIconButton(
-                    vectorIconRes = R.drawable.ic_settings,
+                    vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
                 )
@@ -191,7 +191,7 @@ private fun CustomFieldHiddenField(
         modifier = modifier,
         actions = {
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_settings,
+                vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
             )
@@ -218,7 +218,7 @@ private fun CustomFieldTextField(
         modifier = modifier,
         actions = {
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_settings,
+                vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
             )
@@ -263,7 +263,7 @@ private fun CustomFieldLinkedField(
         BitwardenRowOfActions(
             actions = {
                 BitwardenFilledIconButton(
-                    vectorIconRes = R.drawable.ic_settings,
+                    vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
                 )

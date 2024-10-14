@@ -409,7 +409,7 @@ private fun AddAccountItem(
             .then(modifier),
     ) {
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_plus),
+            painter = rememberVectorPainter(id = R.drawable.ic_plus_small),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.secondary,
             modifier = Modifier

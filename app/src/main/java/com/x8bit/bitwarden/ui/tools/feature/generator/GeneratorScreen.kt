@@ -389,7 +389,7 @@ private fun GeneratedStringItem(
                 modifier = Modifier.testTag("CopyValueButton"),
             )
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_generator,
+                vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
                 onClick = onRegenerateClick,
                 modifier = Modifier.testTag("RegenerateValueButton"),

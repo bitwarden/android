@@ -116,7 +116,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 value = loginState.totp,
                 trailingIconContent = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_close,
+                        vectorIconRes = R.drawable.ic_clear,
                         contentDescription = stringResource(id = R.string.delete),
                         onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                     )
@@ -246,7 +246,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                     .padding(horizontal = 16.dp),
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_question_circle,
+                        vectorIconRes = R.drawable.ic_question_circle_small,
                         contentDescription = stringResource(
                             id = R.string.master_password_re_prompt_help,
                         ),
@@ -379,7 +379,7 @@ private fun UsernameRow(
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_generator,
+                vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_username),
                 onClick = {
                     if (username.isEmpty()) {
@@ -452,7 +452,7 @@ private fun PasswordRow(
                 modifier = Modifier.testTag(tag = "CheckPasswordButton"),
             )
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_generator,
+                vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
                 onClick = {
                     if (password.isEmpty()) {

@@ -40,7 +40,7 @@ fun VaultAddEditUriItem(
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
         actions = {
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_settings,
+                vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowOptionsDialog = true },
                 modifier = Modifier.testTag(tag = "LoginUriOptionsButton"),

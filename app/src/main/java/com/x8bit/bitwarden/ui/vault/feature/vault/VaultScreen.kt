@@ -269,7 +269,7 @@ private fun VaultScreenScaffold(
             ) {
                 BitwardenFloatingActionButton(
                     onClick = vaultHandlers.addItemClickAction,
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus),
+                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
