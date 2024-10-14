@@ -59,6 +59,21 @@ fun String.getDomainOrNull(resourceCacheManager: ResourceCacheManager): String? 
         ?.parseDomainOrNull(resourceCacheManager = resourceCacheManager)
 
 /**
+ * Returns `true` if the [String] uri has a port, `false` otherwise.
+ */
+@OmitFromCoverage
+fun String.hasPort(): Boolean {
+    val uri = this.toUriOrNull() ?: return false
+    return uri.port != -1
+}
+
+/**
+ * Extract the host from this [String] if possible, otherwise return null.
+ */
+@OmitFromCoverage
+fun String.getHostOrNull(): String? = this.toUriOrNull()?.host
+
+/**
  * Extract the host with optional port from this [String] if possible, otherwise return null.
  */
 @OmitFromCoverage
