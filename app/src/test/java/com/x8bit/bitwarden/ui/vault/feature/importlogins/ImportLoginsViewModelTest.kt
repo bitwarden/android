@@ -5,6 +5,7 @@ import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ImportLoginsViewModelTest : BaseViewModelTest() {
@@ -25,6 +26,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         assertEquals(
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.GetStarted,
+                viewState = ImportLoginsState.ViewState.InitialContent,
             ),
             viewModel.stateFlow.value,
         )
@@ -37,6 +39,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         assertEquals(
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
+                viewState = ImportLoginsState.ViewState.InitialContent,
             ),
             viewModel.stateFlow.value,
         )
@@ -54,6 +57,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportLoginsState(
                     dialogState = ImportLoginsState.DialogState.GetStarted,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
                 ),
                 awaitItem(),
             )
@@ -61,6 +65,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportLoginsState(
                     dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
                 ),
                 awaitItem(),
             )
@@ -81,6 +86,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportLoginsState(
                     dialogState = ImportLoginsState.DialogState.ImportLater,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -88,6 +94,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportLoginsState(
                     dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -99,7 +106,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ConfirmGetStarted sets dialog state to null`() = runTest {
+    fun `ConfirmGetStarted sets dialog state to null and view state to step one`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             // Initial state
@@ -110,6 +117,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportLoginsState(
                     dialogState = ImportLoginsState.DialogState.GetStarted,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
                 ),
                 awaitItem(),
             )
@@ -117,6 +125,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportLoginsState(
                     dialogState = null,
+                    viewState = ImportLoginsState.ViewState.ImportStepOne,
                 ),
                 awaitItem(),
             )
@@ -135,7 +144,78 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `HelpClick sends OpenHelpLink event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ImportLoginsAction.HelpClick)
+            assertEquals(
+                ImportLoginsEvent.OpenHelpLink,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `MoveToStepOne sets view state to ImportStepOne`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ImportLoginsAction.MoveToStepOne)
+        assertEquals(
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.ImportStepOne,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `MoveToStepTwo sets view state to ImportStepTwo`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ImportLoginsAction.MoveToStepTwo)
+        assertEquals(
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.ImportStepTwo,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `MoveToStepThree sets view state to ImportStepThree`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ImportLoginsAction.MoveToStepThree)
+        assertEquals(
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.ImportStepThree,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `MoveToInitialContent sets view state to InitialContent`() {
+        val viewModel = createViewModel()
+        // first set to step one
+        viewModel.trySendAction(ImportLoginsAction.MoveToStepOne)
+        assertTrue(viewModel.stateFlow.value.viewState is ImportLoginsState.ViewState.ImportStepOne)
+        // now move back to intial
+        viewModel.trySendAction(ImportLoginsAction.MoveToInitialContent)
+        assertEquals(
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.InitialContent,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): ImportLoginsViewModel = ImportLoginsViewModel()
 }
 
-private val DEFAULT_STATE = ImportLoginsState(dialogState = null)
+private val DEFAULT_STATE = ImportLoginsState(
+    dialogState = null,
+    viewState = ImportLoginsState.ViewState.InitialContent,
+)

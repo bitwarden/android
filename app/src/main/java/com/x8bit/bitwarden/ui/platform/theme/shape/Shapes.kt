@@ -18,4 +18,5 @@ val bitwardenShapes: BitwardenShapes = BitwardenShapes(
     menu = RoundedCornerShape(size = 4.dp),
     segmentedControl = CircleShape,
     snackbar = RoundedCornerShape(size = 8.dp),
+    infoCard = RoundedCornerShape(size = 8.dp),
 )
