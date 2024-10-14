@@ -163,9 +163,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         fakeGeneratorRepository.savePasscodeGenerationOptions(passcodeGenerationOptions)
         val expected = GeneratorState(
             generatedText = "updatedPassphrase",
-            selectedType = GeneratorState.MainType.Passcode(
-                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
-            ),
+            selectedType = GeneratorState.MainType.Passphrase(),
             generatorMode = GeneratorMode.Modal.Password,
             currentEmailAddress = "currentEmail",
             isUnderPolicy = false,
@@ -213,29 +211,27 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             mutablePolicyFlow.tryEmit(value = policies)
             assertEquals(
                 initialPasscodeState.copy(
-                    selectedType = GeneratorState.MainType.Passcode(
-                        selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 14,
-                            minLength = 10,
-                            maxLength = 128,
-                            useCapitals = true,
-                            capitalsEnabled = false,
-                            useLowercase = true,
-                            lowercaseEnabled = false,
-                            useNumbers = true,
-                            numbersEnabled = false,
-                            useSpecialChars = true,
-                            specialCharsEnabled = false,
-                            minNumbers = 3,
-                            minNumbersAllowed = 3,
-                            maxNumbersAllowed = 9,
-                            minSpecial = 3,
-                            minSpecialAllowed = 3,
-                            maxSpecialAllowed = 9,
-                            avoidAmbiguousChars = false,
-                            ambiguousCharsEnabled = true,
-                            isUserInteracting = false,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 14,
+                        minLength = 10,
+                        maxLength = 128,
+                        useCapitals = true,
+                        capitalsEnabled = false,
+                        useLowercase = true,
+                        lowercaseEnabled = false,
+                        useNumbers = true,
+                        numbersEnabled = false,
+                        useSpecialChars = true,
+                        specialCharsEnabled = false,
+                        minNumbers = 3,
+                        minNumbersAllowed = 3,
+                        maxNumbersAllowed = 9,
+                        minSpecial = 3,
+                        minSpecialAllowed = 3,
+                        maxSpecialAllowed = 9,
+                        avoidAmbiguousChars = false,
+                        ambiguousCharsEnabled = true,
+                        isUserInteracting = false,
                     ),
                     isUnderPolicy = true,
                 ),
@@ -247,29 +243,27 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             mutablePolicyFlow.tryEmit(value = emptyList())
             assertEquals(
                 initialPasscodeState.copy(
-                    selectedType = GeneratorState.MainType.Passcode(
-                        selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 14,
-                            minLength = 5,
-                            maxLength = 128,
-                            useCapitals = true,
-                            capitalsEnabled = true,
-                            useLowercase = true,
-                            lowercaseEnabled = true,
-                            useNumbers = true,
-                            numbersEnabled = true,
-                            useSpecialChars = true,
-                            specialCharsEnabled = true,
-                            minNumbers = 3,
-                            minNumbersAllowed = 0,
-                            maxNumbersAllowed = 9,
-                            minSpecial = 3,
-                            minSpecialAllowed = 0,
-                            maxSpecialAllowed = 9,
-                            avoidAmbiguousChars = false,
-                            ambiguousCharsEnabled = true,
-                            isUserInteracting = false,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 14,
+                        minLength = 5,
+                        maxLength = 128,
+                        useCapitals = true,
+                        capitalsEnabled = true,
+                        useLowercase = true,
+                        lowercaseEnabled = true,
+                        useNumbers = true,
+                        numbersEnabled = true,
+                        useSpecialChars = true,
+                        specialCharsEnabled = true,
+                        minNumbers = 3,
+                        minNumbersAllowed = 0,
+                        maxNumbersAllowed = 9,
+                        minSpecial = 3,
+                        minSpecialAllowed = 0,
+                        maxSpecialAllowed = 9,
+                        avoidAmbiguousChars = false,
+                        ambiguousCharsEnabled = true,
+                        isUserInteracting = false,
                     ),
                     isUnderPolicy = false,
                 ),
@@ -562,24 +556,22 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             initialPasscodeState.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState.MainType.Passcode.PasscodeType.Password(
-                        length = 14,
-                        minLength = 10,
-                        useCapitals = true,
-                        capitalsEnabled = false,
-                        useLowercase = true,
-                        lowercaseEnabled = false,
-                        useNumbers = true,
-                        numbersEnabled = false,
-                        useSpecialChars = true,
-                        specialCharsEnabled = false,
-                        minNumbers = 3,
-                        minNumbersAllowed = 3,
-                        minSpecial = 3,
-                        minSpecialAllowed = 3,
-                        avoidAmbiguousChars = false,
-                    ),
+                selectedType = GeneratorState.MainType.Password(
+                    length = 14,
+                    minLength = 10,
+                    useCapitals = true,
+                    capitalsEnabled = false,
+                    useLowercase = true,
+                    lowercaseEnabled = false,
+                    useNumbers = true,
+                    numbersEnabled = false,
+                    useSpecialChars = true,
+                    specialCharsEnabled = false,
+                    minNumbers = 3,
+                    minNumbersAllowed = 3,
+                    minSpecial = 3,
+                    minSpecialAllowed = 3,
+                    avoidAmbiguousChars = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -613,8 +605,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         } returns listOf(policy)
 
         val viewModel = createViewModel()
-        val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
-            passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
+        val action = GeneratorAction.MainTypeOptionSelect(
+            mainTypeOption = GeneratorState.MainTypeOption.PASSPHRASE,
         )
 
         viewModel.trySendAction(action)
@@ -622,16 +614,14 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialPasscodeState.copy(
                 generatedText = "updatedPassphrase",
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                        numWords = 5,
-                        minNumWords = 5,
-                        maxNumWords = 20,
-                        capitalize = true,
-                        capitalizeEnabled = false,
-                        includeNumber = true,
-                        includeNumberEnabled = false,
-                    ),
+                selectedType = GeneratorState.MainType.Passphrase(
+                    numWords = 5,
+                    minNumWords = 5,
+                    maxNumWords = 20,
+                    capitalize = true,
+                    capitalizeEnabled = false,
+                    includeNumber = true,
+                    includeNumberEnabled = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -659,10 +649,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialPasscodeState.copy(
                 generatedText = "updatedPassphrase",
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
-                ),
-                overridePassword = true,
+                selectedType = GeneratorState.MainType.Passphrase(),
+                passcodePolicyOverride = GeneratorState.PasscodePolicyOverride.PASSPHRASE,
             ),
             viewModel.stateFlow.value,
         )
@@ -701,10 +689,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialPasscodeState.copy(
                 generatedText = "defaultPassword",
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState.MainType.Passcode.PasscodeType.Password(),
-                ),
-                overridePassword = true,
+                selectedType = GeneratorState.MainType.Password(),
+                passcodePolicyOverride = GeneratorState.PasscodePolicyOverride.PASSWORD,
             ),
             viewModel.stateFlow.value,
         )
@@ -721,11 +707,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(action)
 
-        val expectedState =
-            initialPasscodeState.copy(
-                selectedType = GeneratorState.MainType.Passcode(),
-                generatedText = "updatedText",
-            )
+        val expectedState = initialPasscodeState.copy(
+            selectedType = GeneratorState.MainType.Password(),
+            generatedText = "updatedText",
+        )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -750,54 +735,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     ),
                 ),
             )
-
-        assertEquals(expectedState, viewModel.stateFlow.value)
-    }
-
-    @Test
-    fun `PasscodeTypeOptionSelect PASSWORD should switch to PasswordType`() = runTest {
-        val viewModel = createViewModel()
-        fakeGeneratorRepository.setMockGeneratePasswordResult(
-            GeneratedPasswordResult.Success("updatedText"),
-        )
-
-        val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
-            passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSWORD,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = initialPasscodeState.copy(
-            selectedType = GeneratorState.MainType.Passcode(
-                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(),
-            ),
-            generatedText = "updatedText",
-        )
-
-        assertEquals(expectedState, viewModel.stateFlow.value)
-    }
-
-    @Test
-    fun `PasscodeTypeOptionSelect PASSPHRASE should switch to PassphraseType`() = runTest {
-        val viewModel = createViewModel()
-        val updatedText = "updatedPassphrase"
-
-        fakeGeneratorRepository.setMockGeneratePasswordResult(
-            GeneratedPasswordResult.Success(updatedText),
-        )
-
-        val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
-            passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = initialPasscodeState.copy(
-            generatedText = updatedText,
-            selectedType = GeneratorState.MainType.Passcode(
-                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
-            ),
-        )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -975,17 +912,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
         )
         val expectedState = initialState.copy(
-            selectedType = GeneratorState.MainType.Passcode(
-                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                    numWords = 3,
-                    minNumWords = 3,
-                    maxNumWords = 20,
-                    wordSeparator = '-',
-                    capitalize = false,
-                    capitalizeEnabled = true,
-                    includeNumber = false,
-                    includeNumberEnabled = true,
-                ),
+            selectedType = GeneratorState.MainType.Passphrase(
+                numWords = 3,
+                minNumWords = 3,
+                maxNumWords = 20,
+                wordSeparator = '-',
+                capitalize = false,
+                capitalizeEnabled = true,
+                includeNumber = false,
+                includeNumberEnabled = true,
             ),
             generatedText = "updatedPassphrase",
         )
@@ -1055,7 +990,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 val newLength = 16
 
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    GeneratorAction.MainType.Password.SliderLengthChange(
                         length = newLength,
                         isUserInteracting = false,
                     ),
@@ -1063,11 +998,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val expectedState = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = newLength,
-                        ),
-                    ),
+                    selectedType = GeneratorState.MainType.Password(length = newLength),
                 )
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
@@ -1084,7 +1015,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 // Update the length to something small enough that it updates on capitals toggle.
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    GeneratorAction.MainType.Password.SliderLengthChange(
                         length = 5,
                         isUserInteracting = false,
                     ),
@@ -1092,31 +1023,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 // Set useCapitals to false initially to ensure length change is reflected.
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleCapitalLettersChange(
-                            useCapitals = false,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
+                        useCapitals = false,
+                    ),
                 )
 
                 // Verify useCapitals is reflected and initial length is correct.
                 val expectedState1 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5,
-                            useCapitals = false,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 5,
+                        useCapitals = false,
                     ),
                 )
                 assertEquals(expectedState1, viewModel.stateFlow.value)
 
                 // Update minNumbers so that length will exceed 5 when useCapitals is enabled.
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                    GeneratorAction.MainType.Password.MinNumbersCounterChange(
                         minNumbers = 4,
                     ),
                 )
@@ -1124,38 +1048,29 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 // Verify length is still 5, minNumbers is updated, and useCapital is still false.
                 val expectedState2 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5, // 0 uppercase + 1 lowercase + 4 numbers + 0 special chars
-                            minNumbers = 4,
-                            useCapitals = false,
-                            useNumbers = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 5, // 0 uppercase + 1 lowercase + 4 numbers + 0 special chars
+                        minNumbers = 4,
+                        useCapitals = false,
+                        useNumbers = true,
                     ),
                 )
                 assertEquals(expectedState2, viewModel.stateFlow.value)
 
                 // Enable useCapitals.
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleCapitalLettersChange(
-                            useCapitals = true,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
+                        useCapitals = true,
+                    ),
                 )
 
                 // Verify this has caused length to increase.
                 val expectedState3 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
-                            minNumbers = 4,
-                            useCapitals = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
+                        minNumbers = 4,
+                        useCapitals = true,
                     ),
                 )
                 assertEquals(expectedState3, viewModel.stateFlow.value)
@@ -1172,7 +1087,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 // Update the length to something small enough that it updates on lowercase toggle.
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    GeneratorAction.MainType.Password.SliderLengthChange(
                         length = 5,
                         isUserInteracting = false,
                     ),
@@ -1180,31 +1095,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 // Set useLowercase to false initially to ensure length change is reflected.
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleLowercaseLettersChange(
-                            useLowercase = false,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                        useLowercase = false,
+                    ),
                 )
 
                 // Verify useLowercase is reflected and initial length is correct.
                 val expectedState1 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5,
-                            useLowercase = false,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 5,
+                        useLowercase = false,
                     ),
                 )
                 assertEquals(expectedState1, viewModel.stateFlow.value)
 
                 // Update minNumbers so that length will exceed 5 when useLowercase is enabled.
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                    GeneratorAction.MainType.Password.MinNumbersCounterChange(
                         minNumbers = 4,
                     ),
                 )
@@ -1212,38 +1120,29 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 // Verify length is still 5, minNumbers is updated, and useLowercase is still false.
                 val expectedState2 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5, // 1 uppercase + 0 lowercase + 4 numbers + 0 special chars
-                            minNumbers = 4,
-                            useLowercase = false,
-                            useNumbers = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 5, // 1 uppercase + 0 lowercase + 4 numbers + 0 special chars
+                        minNumbers = 4,
+                        useLowercase = false,
+                        useNumbers = true,
                     ),
                 )
                 assertEquals(expectedState2, viewModel.stateFlow.value)
 
                 // Enable useLowercase.
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleLowercaseLettersChange(
-                            useLowercase = true,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                        useLowercase = true,
+                    ),
                 )
 
                 // Verify this has caused length to increase.
                 val expectedState3 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
-                            minNumbers = 4,
-                            useLowercase = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
+                        minNumbers = 4,
+                        useLowercase = true,
                     ),
                 )
                 assertEquals(expectedState3, viewModel.stateFlow.value)
@@ -1259,17 +1158,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val useNumbers = true
 
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                GeneratorAction.MainType.Password.ToggleNumbersChange(
                     useNumbers = useNumbers,
                 ),
             )
 
             val expectedState = defaultPasswordState.copy(
                 generatedText = updatedGeneratedPassword,
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState.MainType.Passcode.PasscodeType.Password(
-                        useNumbers = useNumbers,
-                    ),
+                selectedType = GeneratorState.MainType.Password(
+                    useNumbers = useNumbers,
                 ),
             )
 
@@ -1288,22 +1185,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 val useSpecialChars = true
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleSpecialCharactersChange(
-                            useSpecialChars = useSpecialChars,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                        useSpecialChars = useSpecialChars,
+                    ),
                 )
 
                 val expectedState = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            useSpecialChars = useSpecialChars,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        useSpecialChars = useSpecialChars,
                     ),
                 )
 
@@ -1320,19 +1210,14 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 // Toggle numbers to false initially so we can verify length changes appropriately.
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleNumbersChange(
-                            useNumbers = false,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleNumbersChange(
+                        useNumbers = false,
+                    ),
                 )
 
                 // Update the length to something small enough that it's updated on numbers toggle.
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    GeneratorAction.MainType.Password.SliderLengthChange(
                         length = 5,
                         isUserInteracting = false,
                     ),
@@ -1340,43 +1225,34 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val minNumbers = 5
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                    GeneratorAction.MainType.Password.MinNumbersCounterChange(
                         minNumbers = minNumbers,
                     ),
                 )
 
                 val expectedState1 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5, // the current slider value, which the min doesn't exceed
-                            minNumbers = minNumbers,
-                            useNumbers = false,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 5, // the current slider value, which the min doesn't exceed
+                        minNumbers = minNumbers,
+                        useNumbers = false,
                     ),
                 )
                 assertEquals(expectedState1, viewModel.stateFlow.value)
 
                 // Toggle numbers to true so we can verify length changes appropriately.
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleNumbersChange(
-                            useNumbers = true,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleNumbersChange(
+                        useNumbers = true,
+                    ),
                 )
 
                 val expectedState2 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 7, // 1 uppercase + 1 lowercase + 5 numbers + 0 special
-                            minNumbers = minNumbers,
-                            useNumbers = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 7, // 1 uppercase + 1 lowercase + 5 numbers + 0 special
+                        minNumbers = minNumbers,
+                        useNumbers = true,
                     ),
                 )
                 assertEquals(expectedState2, viewModel.stateFlow.value)
@@ -1393,7 +1269,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 // Update the length to something small enough that it's updated on toggle.
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    GeneratorAction.MainType.Password.SliderLengthChange(
                         length = 5,
                         isUserInteracting = false,
                     ),
@@ -1402,49 +1278,35 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 val minSpecial = 5
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .MinSpecialCharactersChange(
-                            minSpecial = minSpecial,
-                        ),
+                    GeneratorAction.MainType.Password.MinSpecialCharactersChange(
+                        minSpecial = minSpecial,
+                    ),
                 )
 
                 // Length should still be 5 because special characters are not enabled.
                 val expectedState1 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5,
-                            minSpecial = minSpecial,
-                            useSpecialChars = false,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 5,
+                        minSpecial = minSpecial,
+                        useSpecialChars = false,
                     ),
                 )
                 assertEquals(expectedState1, viewModel.stateFlow.value)
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleSpecialCharactersChange(
-                            useSpecialChars = true,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                        useSpecialChars = true,
+                    ),
                 )
 
                 // Length should update to 7 because special characters are now enabled.
                 val expectedState2 = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 8, // 1 uppercase + 1 lowercase + 1 number + 5 special chars
-                            minSpecial = minSpecial,
-                            useSpecialChars = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        length = 8, // 1 uppercase + 1 lowercase + 1 number + 5 special chars
+                        minSpecial = minSpecial,
+                        useSpecialChars = true,
                     ),
                 )
                 assertEquals(expectedState2, viewModel.stateFlow.value)
@@ -1462,22 +1324,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 val avoidAmbiguousChars = true
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password
-                        .ToggleAvoidAmbigousCharactersChange(
-                            avoidAmbiguousChars = avoidAmbiguousChars,
-                        ),
+                    GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                        avoidAmbiguousChars = avoidAmbiguousChars,
+                    ),
                 )
 
                 val expectedState = defaultPasswordState.copy(
                     generatedText = updatedGeneratedPassword,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            avoidAmbiguousChars = avoidAmbiguousChars,
-                        ),
+                    selectedType = GeneratorState.MainType.Password(
+                        avoidAmbiguousChars = avoidAmbiguousChars,
                     ),
                 )
 
@@ -1493,60 +1348,45 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             // Initially turn on all toggles
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
                     useCapitals = true,
                 ),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleLowercaseLettersChange(
-                        useLowercase = true,
-                    ),
+                GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                    useLowercase = true,
+                ),
             )
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                GeneratorAction.MainType.Password.ToggleNumbersChange(
                     useNumbers = true,
                 ),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleSpecialCharactersChange(
-                        useSpecialChars = true,
-                    ),
+                GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                    useSpecialChars = true,
+                ),
             )
 
             // Attempt to turn off all toggles
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
                     useCapitals = false,
                 ),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleLowercaseLettersChange(
-                        useLowercase = false,
-                    ),
+                GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                    useLowercase = false,
+                ),
             )
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                GeneratorAction.MainType.Password.ToggleNumbersChange(
                     useNumbers = false,
                 ),
             )
 
             // Check the state with only one toggle (useSpecialChars) left on
-            val intermediatePasswordState = GeneratorState.MainType.Passcode.PasscodeType.Password(
+            val intermediatePasswordState = GeneratorState.MainType.Password(
                 useCapitals = false,
                 useLowercase = false,
                 useNumbers = false,
@@ -1555,31 +1395,22 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             val intermediateState = defaultPasswordState.copy(
                 generatedText = updatedGeneratedPassword,
-                selectedType = GeneratorState.MainType.Passcode(
-                    selectedType = intermediatePasswordState,
-                ),
+                selectedType = intermediatePasswordState,
             )
 
             assertEquals(intermediateState, viewModel.stateFlow.value)
 
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleSpecialCharactersChange(
-                        useSpecialChars = false,
-                    ),
+                GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                    useSpecialChars = false,
+                ),
             )
 
             // Check if useLowercase is turned on automatically
             val expectedState = intermediateState.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    selectedType = intermediatePasswordState.copy(
-                        useLowercase = true,
-                        useSpecialChars = false,
-                    ),
+                selectedType = intermediatePasswordState.copy(
+                    useLowercase = true,
+                    useSpecialChars = false,
                 ),
             )
 
@@ -1611,22 +1442,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val newNumWords = 4
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase
-                        .NumWordsCounterChange(
-                            numWords = newNumWords,
-                        ),
+                    GeneratorAction.MainType.Passphrase.NumWordsCounterChange(
+                        numWords = newNumWords,
+                    ),
                 )
 
                 val expectedState = defaultPassphraseState.copy(
                     generatedText = updatedGeneratedPassphrase,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                            numWords = newNumWords,
-                        ),
+                    selectedType = GeneratorState.MainType.Passphrase(
+                        numWords = newNumWords,
                     ),
                 )
 
@@ -1644,21 +1468,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 val newWordSeparatorChar = '_'
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType.Passphrase
-                        .WordSeparatorTextChange(
-                            wordSeparator = newWordSeparatorChar,
-                        ),
+                    GeneratorAction.MainType.Passphrase.WordSeparatorTextChange(
+                        wordSeparator = newWordSeparatorChar,
+                    ),
                 )
 
                 val expectedState = defaultPassphraseState.copy(
                     generatedText = updatedGeneratedPassphrase,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                            wordSeparator = newWordSeparatorChar,
-                        ),
+                    selectedType = GeneratorState.MainType.Passphrase(
+                        wordSeparator = newWordSeparatorChar,
                     ),
                 )
 
@@ -1674,22 +1492,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase
-                        .ToggleIncludeNumberChange(
-                            includeNumber = true,
-                        ),
+                    GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange(
+                        includeNumber = true,
+                    ),
                 )
 
                 val expectedState = defaultPassphraseState.copy(
                     generatedText = updatedGeneratedPassphrase,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                            includeNumber = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Passphrase(
+                        includeNumber = true,
                     ),
                 )
 
@@ -1705,22 +1516,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 viewModel.trySendAction(
-                    GeneratorAction
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase
-                        .ToggleCapitalizeChange(
-                            capitalize = true,
-                        ),
+                    GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange(
+                        capitalize = true,
+                    ),
                 )
 
                 val expectedState = defaultPassphraseState.copy(
                     generatedText = updatedGeneratedPassphrase,
-                    selectedType = GeneratorState.MainType.Passcode(
-                        GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                            capitalize = true,
-                        ),
+                    selectedType = GeneratorState.MainType.Passphrase(
+                        capitalize = true,
                     ),
                 )
 
@@ -2307,48 +2111,46 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Password minimumLength should be at least as long as the sum of the minimums`() {
-        val password =
-            GeneratorState.MainType.Passcode.PasscodeType.Password(
-                length = 14,
-                minLength = 10,
-                useCapitals = true,
-                capitalsEnabled = false,
-                useLowercase = true,
-                lowercaseEnabled = false,
-                useNumbers = true,
-                numbersEnabled = false,
-                useSpecialChars = true,
-                specialCharsEnabled = false,
-                minNumbers = 9,
-                minNumbersAllowed = 3,
-                minSpecial = 9,
-                minSpecialAllowed = 3,
-                avoidAmbiguousChars = false,
-            )
+        val password = GeneratorState.MainType.Password(
+            length = 14,
+            minLength = 10,
+            useCapitals = true,
+            capitalsEnabled = false,
+            useLowercase = true,
+            lowercaseEnabled = false,
+            useNumbers = true,
+            numbersEnabled = false,
+            useSpecialChars = true,
+            specialCharsEnabled = false,
+            minNumbers = 9,
+            minNumbersAllowed = 3,
+            minSpecial = 9,
+            minSpecialAllowed = 3,
+            avoidAmbiguousChars = false,
+        )
         // 9 numbers + 9 special + 1 lowercase + 1 uppercase
         assertEquals(20, password.computedMinimumLength)
     }
 
     @Test
     fun `Password minimumLength should use minLength if higher than sum of the minimums`() {
-        val password =
-            GeneratorState.MainType.Passcode.PasscodeType.Password(
-                length = 14,
-                minLength = 10,
-                useCapitals = true,
-                capitalsEnabled = false,
-                useLowercase = true,
-                lowercaseEnabled = false,
-                useNumbers = true,
-                numbersEnabled = false,
-                useSpecialChars = true,
-                specialCharsEnabled = false,
-                minNumbers = 1,
-                minNumbersAllowed = 3,
-                minSpecial = 1,
-                minSpecialAllowed = 3,
-                avoidAmbiguousChars = false,
-            )
+        val password = GeneratorState.MainType.Password(
+            length = 14,
+            minLength = 10,
+            useCapitals = true,
+            capitalsEnabled = false,
+            useLowercase = true,
+            lowercaseEnabled = false,
+            useNumbers = true,
+            numbersEnabled = false,
+            useSpecialChars = true,
+            specialCharsEnabled = false,
+            minNumbers = 1,
+            minNumbersAllowed = 3,
+            minSpecial = 1,
+            minSpecialAllowed = 3,
+            avoidAmbiguousChars = false,
+        )
         assertEquals(10, password.computedMinimumLength)
     }
     //region Helper Functions
@@ -2367,17 +2169,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     ): GeneratorState =
         GeneratorState(
             generatedText = generatedText,
-            selectedType = GeneratorState.MainType.Passcode(
-                GeneratorState.MainType.Passcode.PasscodeType.Password(
-                    length = length,
-                    useCapitals = useCapitals,
-                    useLowercase = useLowercase,
-                    useNumbers = useNumbers,
-                    useSpecialChars = useSpecialChars,
-                    minNumbers = minNumbers,
-                    minSpecial = minSpecial,
-                    avoidAmbiguousChars = avoidAmbiguousChars,
-                ),
+            selectedType = GeneratorState.MainType.Password(
+                length = length,
+                useCapitals = useCapitals,
+                useLowercase = useLowercase,
+                useNumbers = useNumbers,
+                useSpecialChars = useSpecialChars,
+                minNumbers = minNumbers,
+                minSpecial = minSpecial,
+                avoidAmbiguousChars = avoidAmbiguousChars,
             ),
             currentEmailAddress = "currentEmail",
         )
@@ -2391,13 +2191,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     ): GeneratorState =
         GeneratorState(
             generatedText = generatedText,
-            selectedType = GeneratorState.MainType.Passcode(
-                GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
-                    numWords = numWords,
-                    wordSeparator = wordSeparator,
-                    capitalize = capitalize,
-                    includeNumber = includeNumber,
-                ),
+            selectedType = GeneratorState.MainType.Passphrase(
+                numWords = numWords,
+                wordSeparator = wordSeparator,
+                capitalize = capitalize,
+                includeNumber = includeNumber,
             ),
             currentEmailAddress = "currentEmail",
         )

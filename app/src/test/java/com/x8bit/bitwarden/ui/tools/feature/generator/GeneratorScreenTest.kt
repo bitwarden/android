@@ -205,48 +205,12 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `clicking a MainStateOption should send MainTypeOptionSelect action`() {
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Password. What would you like to generate?")
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "Password")
-            .onLast()
-            .performScrollTo()
-            .assert(hasAnyAncestor(isDialog()))
+            .onNodeWithText(text = "Password")
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD),
-            )
-        }
-
-        // Make sure dialog is hidden:
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-    }
-
-    @Test
-    fun `clicking a PasscodeOption should send PasscodeTypeOption action`() {
-        // Opens the menu
-        composeTestRule
-            .onNodeWithContentDescription(label = "Password. Password type")
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "Passphrase")
-            .onLast()
-            .assert(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
-                    GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
-                ),
             )
         }
 
@@ -262,11 +226,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         updateState(
             DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
-                    GeneratorState
-                        .MainType
-                        .Username
-                        .UsernameType
-                        .PlusAddressedEmail(),
+                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(),
                 ),
             ),
         )
@@ -302,15 +262,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     //region Passcode Password Tests
 
     @Test
-    fun `in Passcode_Password state, the ViewModel state should update the UI correctly`() {
-        composeTestRule
-            .onNodeWithContentDescription(label = "Password. What would you like to generate?")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithContentDescription(label = "Password. Password type")
-            .assertIsDisplayed()
-
+    fun `in Password state, the ViewModel state should update the UI correctly`() {
         composeTestRule
             .onNode(
                 expectValue(
@@ -363,7 +315,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, adjusting the slider should send SliderLengthChange action with length not equal to default`() {
+    fun `in Password state, adjusting the slider should send SliderLengthChange action with length not equal to default`() {
         composeTestRule
             .onNodeWithText("Length")
             .onSiblings()
@@ -383,7 +335,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                GeneratorAction.MainType.Password.SliderLengthChange(
                     length = 128,
                     isUserInteracting = true,
                 ),
@@ -396,7 +348,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         // actually get updated from its original value, and thus will be its original value of 14.
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                GeneratorAction.MainType.Password.SliderLengthChange(
                     length = 14,
                     isUserInteracting = false,
                 ),
@@ -406,14 +358,14 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
+    fun `in Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
         composeTestRule.onNodeWithText("A—Z")
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
                     useCapitals = false,
                 ),
             )
@@ -422,36 +374,15 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
+    fun `in Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
         composeTestRule.onNodeWithText("a—z")
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleLowercaseLettersChange(
-                        useLowercase = false,
-                    ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in Passcode_Password state, toggling the use numbers toggle should send ToggleNumbersChange action`() {
-        composeTestRule.onNodeWithText("0-9")
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
-                    useNumbers = false,
+                GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                    useLowercase = false,
                 ),
             )
         }
@@ -459,28 +390,37 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, toggling the use special characters toggle should send ToggleSpecialCharactersChange action`() {
-        composeTestRule.onNodeWithText("!@#$%^&*")
+    fun `in Password state, toggling the use numbers toggle should send ToggleNumbersChange action`() {
+        composeTestRule.onNodeWithText("0-9")
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleSpecialCharactersChange(
-                        useSpecialChars = true,
-                    ),
+                GeneratorAction.MainType.Password.ToggleNumbersChange(useNumbers = false),
             )
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
+    fun `in Password state, toggling the use special characters toggle should send ToggleSpecialCharactersChange action`() {
+        composeTestRule.onNodeWithText("!@#$%^&*")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                    useSpecialChars = true,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Password state, decrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
 
         composeTestRule.onNodeWithText("Minimum numbers")
@@ -492,7 +432,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                GeneratorAction.MainType.Password.MinNumbersCounterChange(
                     minNumbers = initialMinNumbers - 1,
                 ),
             )
@@ -501,7 +441,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, incrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
+    fun `in Password state, incrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
 
         composeTestRule.onNodeWithText("Minimum numbers")
@@ -513,28 +453,19 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                GeneratorAction.MainType.Password.MinNumbersCounterChange(
                     minNumbers = initialMinNumbers + 1,
                 ),
             )
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum numbers counter below 0 should do nothing`() {
+    fun `in Password state, decrementing the minimum numbers counter below 0 should do nothing`() {
         val initialMinNumbers = 0
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minNumbers = initialMinNumbers,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Password(minNumbers = initialMinNumbers),
             ),
         )
 
@@ -549,21 +480,12 @@ class GeneratorScreenTest : BaseComposeTest() {
         verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, incrementing the minimum numbers counter above 9 should do nothing`() {
+    fun `in Password state, incrementing the minimum numbers counter above 9 should do nothing`() {
         val initialMinNumbers = 9
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minNumbers = initialMinNumbers,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Password(minNumbers = initialMinNumbers),
             ),
         )
 
@@ -580,7 +502,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
+    fun `in Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
 
         composeTestRule.onNodeWithText("Minimum special")
@@ -592,7 +514,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                GeneratorAction.MainType.Password.MinSpecialCharactersChange(
                     minSpecial = initialSpecialChars - 1,
                 ),
             )
@@ -601,7 +523,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, incrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
+    fun `in Password state, incrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
 
         composeTestRule.onNodeWithText("Minimum special")
@@ -613,7 +535,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                GeneratorAction.MainType.Password.MinSpecialCharactersChange(
                     minSpecial = initialSpecialChars + 1,
                 ),
             )
@@ -622,19 +544,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum special characters below 0 should do nothing`() {
+    fun `in Password state, decrementing the minimum special characters below 0 should do nothing`() {
         val initialSpecialChars = 0
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minSpecial = initialSpecialChars,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Password(minSpecial = initialSpecialChars),
             ),
         )
 
@@ -650,19 +564,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, decrementing the minimum special characters above 9 should do nothing`() {
+    fun `in Password state, decrementing the minimum special characters above 9 should do nothing`() {
         val initialSpecialChars = 9
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minSpecial = initialSpecialChars,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Password(minSpecial = initialSpecialChars),
             ),
         )
 
@@ -678,41 +584,30 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, toggling the use avoid ambiguous characters toggle should send ToggleSpecialCharactersChange action`() {
+    fun `in Password state, toggling the use avoid ambiguous characters toggle should send ToggleSpecialCharactersChange action`() {
         composeTestRule.onNodeWithText("Avoid ambiguous characters")
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleAvoidAmbigousCharactersChange(
-                        avoidAmbiguousChars = true,
-                    ),
+                GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                    avoidAmbiguousChars = true,
+                ),
             )
         }
     }
 
     @Test
-    fun `in Passcode_Password state, disabled elements should not send events`() {
+    fun `in Password state, disabled elements should not send events`() {
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            capitalsEnabled = false,
-                            lowercaseEnabled = false,
-                            numbersEnabled = false,
-                            specialCharsEnabled = false,
-                            ambiguousCharsEnabled = false,
-                        ),
+                selectedType = GeneratorState.MainType.Password(
+                    capitalsEnabled = false,
+                    lowercaseEnabled = false,
+                    numbersEnabled = false,
+                    specialCharsEnabled = false,
+                    ambiguousCharsEnabled = false,
                 ),
             ),
         )
@@ -735,72 +630,37 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify(exactly = 0) {
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleCapitalLettersChange(
-                        useCapitals = false,
-                    ),
+                GeneratorAction.MainType.Password.ToggleCapitalLettersChange(useCapitals = false),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleLowercaseLettersChange(
-                        useLowercase = false,
-                    ),
+                GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
+                    useLowercase = false,
+                ),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleNumbersChange(
-                        useNumbers = false,
-                    ),
+                GeneratorAction.MainType.Password.ToggleNumbersChange(useNumbers = false),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleSpecialCharactersChange(
-                        useSpecialChars = true,
-                    ),
+                GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
+                    useSpecialChars = true,
+                ),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Password
-                    .ToggleAvoidAmbigousCharactersChange(
-                        avoidAmbiguousChars = true,
-                    ),
+                GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                    avoidAmbiguousChars = true,
+                ),
             )
         }
     }
 
     @Test
-    fun `in Passcode_Password state, minimum numbers cannot go below minimum threshold`() {
+    fun `in Password state, minimum numbers cannot go below minimum threshold`() {
         val initialMinNumbers = 5
 
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minNumbersAllowed = initialMinNumbers,
-                        ),
+                selectedType = GeneratorState.MainType.Password(
+                    minNumbersAllowed = initialMinNumbers,
                 ),
             ),
         )
@@ -814,7 +674,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify(exactly = 0) {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                GeneratorAction.MainType.Password.MinNumbersCounterChange(
                     minNumbers = 4,
                 ),
             )
@@ -822,21 +682,15 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in Passcode_Password state, maximum numbers should match minimum if lower`() {
+    fun `in Password state, maximum numbers should match minimum if lower`() {
         val initialMinNumbers = 7
         val initialMaxNumbers = 5
 
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minNumbersAllowed = initialMinNumbers,
-                            maxNumbersAllowed = initialMaxNumbers,
-                        ),
+                selectedType = GeneratorState.MainType.Password(
+                    minNumbersAllowed = initialMinNumbers,
+                    maxNumbersAllowed = initialMaxNumbers,
                 ),
             ),
         )
@@ -850,21 +704,14 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Password state, minimum special characters cannot go below minimum threshold`() {
+    fun `in Password state, minimum special characters cannot go below minimum threshold`() {
         val initialMinSpecials = 5
 
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minSpecialAllowed = initialMinSpecials,
-                        ),
+                selectedType = GeneratorState.MainType.Password(
+                    minSpecialAllowed = initialMinSpecials,
                 ),
             ),
         )
@@ -878,7 +725,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify(exactly = 0) {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                GeneratorAction.MainType.Password.MinSpecialCharactersChange(
                     minSpecial = 4,
                 ),
             )
@@ -886,21 +733,15 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in Passcode_Password state, maximum special should match minimum if lower `() {
+    fun `in Password state, maximum special should match minimum if lower `() {
         val initialMinSpecials = 7
         val initialMaxSpecials = 5
 
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(
-                            minSpecialAllowed = initialMinSpecials,
-                            maxSpecialAllowed = initialMaxSpecials,
-                        ),
+                selectedType = GeneratorState.MainType.Password(
+                    minSpecialAllowed = initialMinSpecials,
+                    maxSpecialAllowed = initialMaxSpecials,
                 ),
             ),
         )
@@ -914,18 +755,12 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in Passcode_Passphrase state, disabled elements should not send events`() {
+    fun `in Passphrase state, disabled elements should not send events`() {
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(
-                            capitalizeEnabled = false,
-                            includeNumberEnabled = false,
-                        ),
+                selectedType = GeneratorState.MainType.Passphrase(
+                    capitalizeEnabled = false,
+                    includeNumberEnabled = false,
                 ),
             ),
         )
@@ -939,44 +774,25 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify(exactly = 0) {
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Passphrase
-                    .ToggleCapitalizeChange(
-                        capitalize = true,
-                    ),
+                GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange(
+                    capitalize = true,
+                ),
             )
             viewModel.trySendAction(
-                GeneratorAction
-                    .MainType
-                    .Passcode
-                    .PasscodeType
-                    .Passphrase
-                    .ToggleIncludeNumberChange(
-                        includeNumber = true,
-                    ),
+                GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange(
+                    includeNumber = true,
+                ),
             )
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_passphrase state, minimum number of words cannot go below minimum threshold`() {
+    fun `in Passphrase state, minimum number of words cannot go below minimum threshold`() {
         val initialMinWords = 5
 
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(
-                            minNumWords = initialMinWords,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(minNumWords = initialMinWords),
             ),
         )
 
@@ -989,9 +805,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify(exactly = 0) {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange(
-                    numWords = 4,
-                ),
+                GeneratorAction.MainType.Passphrase.NumWordsCounterChange(numWords = 4),
             )
         }
     }
@@ -1002,19 +816,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Passphrase state, decrementing number of words should send NumWordsCounterChange action with decremented value`() {
+    fun `in Passphrase state, decrementing number of words should send NumWordsCounterChange action with decremented value`() {
         val initialNumWords = 4
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(
-                            numWords = initialNumWords,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(numWords = initialNumWords),
             ),
         )
 
@@ -1029,7 +835,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange(
+                GeneratorAction.MainType.Passphrase.NumWordsCounterChange(
                     numWords = initialNumWords - 1,
                 ),
             )
@@ -1037,19 +843,11 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in Passcode_Passphrase state, decrementing number of words under 3 should do nothing`() {
+    fun `in Passphrase state, decrementing number of words under 3 should do nothing`() {
         val initialNumWords = 3
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(
-                            numWords = initialNumWords,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(numWords = initialNumWords),
             ),
         )
 
@@ -1066,19 +864,11 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in Passcode_Passphrase state, incrementing number of words over 20 should do nothing`() {
+    fun `in Passphrase state, incrementing number of words over 20 should do nothing`() {
         val initialNumWords = 20
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(
-                            numWords = initialNumWords,
-                        ),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(numWords = initialNumWords),
             ),
         )
 
@@ -1096,17 +886,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Passphrase state, incrementing number of words should send NumWordsCounterChange action with incremented value`() {
+    fun `in Passphrase state, incrementing number of words should send NumWordsCounterChange action with incremented value`() {
         val initialNumWords = 3
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(),
             ),
         )
 
@@ -1120,25 +904,18 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange(
+                GeneratorAction.MainType.Passphrase.NumWordsCounterChange(
                     numWords = initialNumWords + 1,
                 ),
             )
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Passphrase state, toggling capitalize should send ToggleCapitalizeChange action`() {
+    fun `in Passphrase state, toggling capitalize should send ToggleCapitalizeChange action`() {
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(),
             ),
         )
 
@@ -1149,7 +926,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange(
+                GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange(
                     capitalize = true,
                 ),
             )
@@ -1158,16 +935,10 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Passphrase state, toggling the include number toggle should send ToggleIncludeNumberChange action`() {
+    fun `in Passphrase state, toggling the include number toggle should send ToggleIncludeNumberChange action`() {
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(),
             ),
         )
 
@@ -1177,7 +948,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange(
+                GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange(
                     includeNumber = true,
                 ),
             )
@@ -1186,16 +957,10 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Passcode_Passphrase state, updating text in word separator should send WordSeparatorTextChange action`() {
+    fun `in Passphrase state, updating text in word separator should send WordSeparatorTextChange action`() {
         updateState(
             DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Passphrase(),
-                ),
+                selectedType = GeneratorState.MainType.Passphrase(),
             ),
         )
 
@@ -1206,7 +971,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.WordSeparatorTextChange(
+                GeneratorAction.MainType.Passphrase.WordSeparatorTextChange(
                     wordSeparator = 'a',
                 ),
             )
@@ -1765,8 +1530,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
 private val DEFAULT_STATE = GeneratorState(
     generatedText = "",
-    selectedType = GeneratorState.MainType.Passcode(
-        GeneratorState.MainType.Passcode.PasscodeType.Password(),
-    ),
+    selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
 )

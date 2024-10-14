@@ -30,11 +30,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeTypeOption
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AddyIo
@@ -87,16 +82,18 @@ class GeneratorViewModel @Inject constructor(
             generatedText = NO_GENERATED_TEXT,
             selectedType = when (generatorMode) {
                 is GeneratorMode.Modal.Username -> {
-                    val type = generatorRepository.getUsernameGenerationOptions().usernameType
-                    Username(selectedType = type)
+                    GeneratorState.MainType.Username(
+                        selectedType = generatorRepository
+                            .getUsernameGenerationOptions()
+                            .usernameType,
+                    )
                 }
 
                 GeneratorMode.Modal.Password -> {
-                    val type = generatorRepository.getPasscodeGenerationOptions().passcodeType
-                    Passcode(selectedType = type)
+                    generatorRepository.getPasscodeGenerationOptions().passcodeType
                 }
 
-                GeneratorMode.Default -> Passcode(selectedType = Password())
+                GeneratorMode.Default -> GeneratorState.MainType.Password()
             },
             generatorMode = generatorMode,
             currentEmailAddress = requireNotNull(
@@ -147,15 +144,11 @@ class GeneratorViewModel @Inject constructor(
     @Suppress("MaxLineLength")
     private fun handleMainTypeAction(action: GeneratorAction.MainType) {
         when (action) {
-            is GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect -> {
-                handlePasscodeTypeOptionSelect(action)
-            }
-
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password -> {
+            is GeneratorAction.MainType.Password -> {
                 handlePasswordSpecificAction(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase -> {
+            is GeneratorAction.MainType.Passphrase -> {
                 handlePassphraseSpecificAction(action)
             }
 
@@ -255,13 +248,15 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handleSelectClick() {
         when (state.selectedType) {
-            is Passcode -> {
+            is GeneratorState.MainType.Passphrase,
+            is GeneratorState.MainType.Password,
+                -> {
                 generatorRepository.emitGeneratorResult(
                     GeneratorResult.Password(state.generatedText),
                 )
             }
 
-            is Username -> {
+            is GeneratorState.MainType.Username -> {
                 generatorRepository.emitGeneratorResult(
                     GeneratorResult.Username(state.generatedText),
                 )
@@ -276,12 +271,13 @@ class GeneratorViewModel @Inject constructor(
 
     private fun loadOptions(shouldUseStorageOptions: Boolean = false) {
         when (val selectedType = state.selectedType) {
-            is Passcode -> {
+            is GeneratorState.MainType.Passphrase,
+            is GeneratorState.MainType.Password,
+                -> {
                 val mainType = if (shouldUseStorageOptions) {
                     generatorRepository
                         .getPasscodeGenerationOptions()
                         ?.passcodeType
-                        ?.let { Passcode(it) }
                         ?: selectedType
                 } else {
                     selectedType
@@ -289,12 +285,12 @@ class GeneratorViewModel @Inject constructor(
                 loadPasscodeOptions(selectedType = mainType)
             }
 
-            is Username -> {
+            is GeneratorState.MainType.Username -> {
                 val mainType = if (shouldUseStorageOptions) {
                     generatorRepository
                         .getUsernameGenerationOptions()
                         ?.usernameType
-                        ?.let { Username(it) }
+                        ?.let { GeneratorState.MainType.Username(it) }
                         ?: selectedType
                 } else {
                     selectedType
@@ -308,72 +304,95 @@ class GeneratorViewModel @Inject constructor(
     }
 
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    private fun loadPasscodeOptions(selectedType: Passcode) {
-        val options = generatorRepository.getPasscodeGenerationOptions()
+    private fun loadPasscodeOptions(selectedType: GeneratorState.MainType) {
+        if (selectedType is GeneratorState.MainType.Username) {
+            // This can only handle passwords and passphrases
+            return
+        }
+        val options = generatorRepository
+            .getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
 
         val policy = policyManager
             .getActivePolicies<PolicyInformation.PasswordGenerator>()
             .toStrictestPolicy()
 
-        val passwordType = if (!policy.overridePasswordType.isNullOrBlank()) {
-            mutableStateFlow.update {
-                it.copy(overridePassword = true)
+        val passwordType = when (policy.overridePasswordType.toPasscodePolicyOverride()) {
+            GeneratorState.PasscodePolicyOverride.PASSWORD -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        passcodePolicyOverride = GeneratorState.PasscodePolicyOverride.PASSWORD,
+                    )
+                }
+                GeneratorState.MainType.Password()
             }
-            Passcode(
-                selectedType = policy.overridePasswordType.toSelectedType(),
-            )
-        } else {
-            mutableStateFlow.update {
-                it.copy(overridePassword = false)
+
+            GeneratorState.PasscodePolicyOverride.PASSPHRASE -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        passcodePolicyOverride = GeneratorState.PasscodePolicyOverride.PASSPHRASE,
+                    )
+                }
+                GeneratorState.MainType.Passphrase()
             }
-            selectedType
+
+            null -> {
+                mutableStateFlow.update { it.copy(passcodePolicyOverride = null) }
+                selectedType
+            }
         }
 
-        when (passwordType.selectedType) {
-            is Passphrase -> {
-                val minNumWords = policy.minNumberWords ?: Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
-                val passphrase = Passphrase(
-                    numWords = max(options.numWords, minNumWords),
-                    minNumWords = minNumWords,
-                    wordSeparator = options.wordSeparator.toCharArray().first(),
-                    capitalize = options.allowCapitalize || policy.capitalize == true,
-                    capitalizeEnabled = policy.capitalize != true,
-                    includeNumber = options.allowIncludeNumber || policy.includeNumber == true,
-                    includeNumberEnabled = policy.includeNumber != true,
-                )
+        when (passwordType) {
+            is GeneratorState.MainType.Passphrase -> {
+                val minNumWords = policy
+                    .minNumberWords
+                    ?: GeneratorState.MainType.Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
                 updateGeneratorMainType {
-                    Passcode(selectedType = passphrase)
+                    GeneratorState.MainType.Passphrase(
+                        numWords = max(options.numWords, minNumWords),
+                        minNumWords = minNumWords,
+                        wordSeparator = options.wordSeparator.toCharArray().first(),
+                        capitalize = options.allowCapitalize || policy.capitalize == true,
+                        capitalizeEnabled = policy.capitalize != true,
+                        includeNumber = options.allowIncludeNumber || policy.includeNumber == true,
+                        includeNumberEnabled = policy.includeNumber != true,
+                    )
                 }
             }
 
-            is Password -> {
-                val minLength = policy.minLength ?: Password.PASSWORD_LENGTH_SLIDER_MIN
-                val password = Password(
-                    length = max(options.length, minLength),
-                    minLength = minLength,
-                    useCapitals = options.hasUppercase || policy.useUpper == true,
-                    capitalsEnabled = policy.useUpper != true,
-                    useLowercase = options.hasLowercase || policy.useLower == true,
-                    lowercaseEnabled = policy.useLower != true,
-                    useNumbers = options.hasNumbers || policy.useNumbers == true,
-                    numbersEnabled = policy.useNumbers != true,
-                    useSpecialChars = options.allowSpecial || policy.useSpecial == true,
-                    specialCharsEnabled = policy.useSpecial != true,
-                    minNumbers = max(options.minNumber, policy.minNumbers ?: 0),
-                    minNumbersAllowed = policy.minNumbers ?: 0,
-                    minSpecial = max(options.minSpecial, policy.minSpecial ?: 0),
-                    minSpecialAllowed = policy.minSpecial ?: 0,
-                    avoidAmbiguousChars = options.allowAmbiguousChar,
-                )
+            is GeneratorState.MainType.Password -> {
+                val minLength = policy
+                    .minLength
+                    ?: GeneratorState.MainType.Password.PASSWORD_LENGTH_SLIDER_MIN
                 updateGeneratorMainType {
-                    Passcode(selectedType = password)
+                    GeneratorState.MainType.Password(
+                        length = max(options.length, minLength),
+                        minLength = minLength,
+                        useCapitals = options.hasUppercase || policy.useUpper == true,
+                        capitalsEnabled = policy.useUpper != true,
+                        useLowercase = options.hasLowercase || policy.useLower == true,
+                        lowercaseEnabled = policy.useLower != true,
+                        useNumbers = options.hasNumbers || policy.useNumbers == true,
+                        numbersEnabled = policy.useNumbers != true,
+                        useSpecialChars = options.allowSpecial || policy.useSpecial == true,
+                        specialCharsEnabled = policy.useSpecial != true,
+                        minNumbers = max(options.minNumber, policy.minNumbers ?: 0),
+                        minNumbersAllowed = policy.minNumbers ?: 0,
+                        minSpecial = max(options.minSpecial, policy.minSpecial ?: 0),
+                        minSpecialAllowed = policy.minSpecial ?: 0,
+                        avoidAmbiguousChars = options.allowAmbiguousChar,
+                    )
                 }
             }
+
+            is GeneratorState.MainType.Username -> Unit
         }
     }
 
-    private fun loadUsernameOptions(selectedType: Username, forceRegeneration: Boolean = false) {
+    private fun loadUsernameOptions(
+        selectedType: GeneratorState.MainType.Username,
+        forceRegeneration: Boolean = false,
+    ) {
         val options = generatorRepository.getUsernameGenerationOptions()
         val updatedSelectedType = when (val type = selectedType.selectedType) {
             is PlusAddressedEmail -> {
@@ -382,14 +401,16 @@ class GeneratorViewModel @Inject constructor(
                     ?.orNullIfBlank()
                     ?: state.currentEmailAddress
 
-                Username(selectedType = PlusAddressedEmail(email = emailToUse))
+                GeneratorState.MainType.Username(
+                    selectedType = PlusAddressedEmail(email = emailToUse),
+                )
             }
 
             is CatchAllEmail -> {
                 val catchAllEmail = CatchAllEmail(
                     domainName = options?.catchAllEmailDomain ?: type.domainName,
                 )
-                Username(selectedType = catchAllEmail)
+                GeneratorState.MainType.Username(selectedType = catchAllEmail)
             }
 
             is RandomWord -> {
@@ -397,7 +418,7 @@ class GeneratorViewModel @Inject constructor(
                     capitalize = options?.capitalizeRandomWordUsername ?: type.capitalize,
                     includeNumber = options?.includeNumberRandomWordUsername ?: type.includeNumber,
                 )
-                Username(selectedType = randomWord)
+                GeneratorState.MainType.Username(selectedType = randomWord)
             }
 
             is ForwardedEmailAlias -> {
@@ -406,7 +427,7 @@ class GeneratorViewModel @Inject constructor(
                     ?.toServiceType(options)
                     ?: type.selectedServiceType
 
-                Username(
+                GeneratorState.MainType.Username(
                     selectedType = ForwardedEmailAlias(
                         selectedServiceType = mappedServiceType,
                         obfuscatedText = "",
@@ -418,7 +439,7 @@ class GeneratorViewModel @Inject constructor(
         updateGeneratorMainType(forceRegeneration = forceRegeneration) { updatedSelectedType }
     }
 
-    private fun savePasswordOptionsToDisk(password: Password) {
+    private fun savePasswordOptionsToDisk(password: GeneratorState.MainType.Password) {
         val options = generatorRepository
             .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
         val newOptions = options.copy(
@@ -435,7 +456,7 @@ class GeneratorViewModel @Inject constructor(
         generatorRepository.savePasscodeGenerationOptions(newOptions)
     }
 
-    private fun savePassphraseOptionsToDisk(passphrase: Passphrase) {
+    private fun savePassphraseOptionsToDisk(passphrase: GeneratorState.MainType.Passphrase) {
         val options = generatorRepository
             .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
         val newOptions = options.copy(
@@ -532,8 +553,8 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun generatePasscodeDefaultOptions(): PasscodeGenerationOptions {
-        val defaultPassword = Password()
-        val defaultPassphrase = Passphrase()
+        val defaultPassword = GeneratorState.MainType.Password()
+        val defaultPassphrase = GeneratorState.MainType.Passphrase()
 
         return PasscodeGenerationOptions(
             type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
@@ -572,7 +593,7 @@ class GeneratorViewModel @Inject constructor(
         )
     }
 
-    private suspend fun generatePassword(password: Password) {
+    private suspend fun generatePassword(password: GeneratorState.MainType.Password) {
         val request = PasswordGeneratorRequest(
             lowercase = password.useLowercase,
             uppercase = password.useCapitals,
@@ -591,7 +612,7 @@ class GeneratorViewModel @Inject constructor(
         sendAction(GeneratorAction.Internal.UpdateGeneratedPasswordResult(result))
     }
 
-    private suspend fun generatePassphrase(passphrase: Passphrase) {
+    private suspend fun generatePassphrase(passphrase: GeneratorState.MainType.Passphrase) {
         val request = PassphraseGeneratorRequest(
             numWords = passphrase.numWords.toUByte(),
             wordSeparator = passphrase.wordSeparator?.toString() ?: " ",
@@ -736,16 +757,17 @@ class GeneratorViewModel @Inject constructor(
     private fun handleMainTypeOptionSelect(action: GeneratorAction.MainTypeOptionSelect) {
         when (action.mainTypeOption) {
             GeneratorState.MainTypeOption.PASSWORD -> {
-                val type = generatorRepository.getPasscodeGenerationOptions().passcodeType
-                loadPasscodeOptions(
-                    selectedType = Passcode(selectedType = type),
-                )
+                loadPasscodeOptions(selectedType = GeneratorState.MainType.Password())
+            }
+
+            GeneratorState.MainTypeOption.PASSPHRASE -> {
+                loadPasscodeOptions(selectedType = GeneratorState.MainType.Passphrase())
             }
 
             GeneratorState.MainTypeOption.USERNAME -> {
                 val type = generatorRepository.getUsernameGenerationOptions().usernameType
                 loadUsernameOptions(
-                    selectedType = Username(selectedType = type),
+                    selectedType = GeneratorState.MainType.Username(selectedType = type),
                     forceRegeneration = true,
                 )
             }
@@ -754,76 +776,46 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Main Type Option Handlers
 
-    //region Passcode Type Handlers
-
-    private fun handlePasscodeTypeOptionSelect(
-        action: GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect,
-    ) {
-        when (action.passcodeTypeOption) {
-            PasscodeTypeOption.PASSWORD -> loadPasscodeOptions(
-                selectedType = Passcode(selectedType = Password()),
-            )
-
-            PasscodeTypeOption.PASSPHRASE -> loadPasscodeOptions(
-                selectedType = Passcode(selectedType = Passphrase()),
-            )
-        }
-    }
-
-    //endregion Passcode Type Handlers
-
     //region Password Specific Handlers
 
-    private fun handlePasswordSpecificAction(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password,
-    ) {
+    private fun handlePasswordSpecificAction(action: GeneratorAction.MainType.Password) {
         when (action) {
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange,
-                -> {
+            is GeneratorAction.MainType.Password.SliderLengthChange -> {
                 handlePasswordLengthSliderChange(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange,
-                -> {
+            is GeneratorAction.MainType.Password.ToggleCapitalLettersChange -> {
                 handleToggleCapitalLetters(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleLowercaseLettersChange,
-                -> {
+            is GeneratorAction.MainType.Password.ToggleLowercaseLettersChange -> {
                 handleToggleLowercaseLetters(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange,
-                -> {
+            is GeneratorAction.MainType.Password.ToggleNumbersChange -> {
                 handleToggleNumbers(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password
-            .ToggleSpecialCharactersChange,
-                -> {
+            is GeneratorAction.MainType.Password.ToggleSpecialCharactersChange -> {
                 handleToggleSpecialChars(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
-                -> {
+            is GeneratorAction.MainType.Password.MinNumbersCounterChange -> {
                 handleMinNumbersChange(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
-                -> {
+            is GeneratorAction.MainType.Password.MinSpecialCharactersChange -> {
                 handleMinSpecialChange(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Password
-            .ToggleAvoidAmbigousCharactersChange,
-                -> {
+            is GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange -> {
                 handleToggleAmbiguousChars(action)
             }
         }
     }
 
     private fun handlePasswordLengthSliderChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange,
+        action: GeneratorAction.MainType.Password.SliderLengthChange,
     ) {
         val adjustedLength = action.length
 
@@ -836,7 +828,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleToggleCapitalLetters(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange,
+        action: GeneratorAction.MainType.Password.ToggleCapitalLettersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -847,8 +839,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleToggleLowercaseLetters(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password
-        .ToggleLowercaseLettersChange,
+        action: GeneratorAction.MainType.Password.ToggleLowercaseLettersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -859,7 +850,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleToggleNumbers(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange,
+        action: GeneratorAction.MainType.Password.ToggleNumbersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -870,8 +861,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleToggleSpecialChars(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password
-        .ToggleSpecialCharactersChange,
+        action: GeneratorAction.MainType.Password.ToggleSpecialCharactersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -882,7 +872,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleMinNumbersChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
+        action: GeneratorAction.MainType.Password.MinNumbersCounterChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -893,7 +883,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleMinSpecialChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
+        action: GeneratorAction.MainType.Password.MinSpecialCharactersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -904,8 +894,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleToggleAmbiguousChars(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Password
-        .ToggleAvoidAmbigousCharactersChange,
+        action: GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -919,33 +908,29 @@ class GeneratorViewModel @Inject constructor(
     //region Passphrase Specific Handlers
 
     private fun handlePassphraseSpecificAction(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase,
+        action: GeneratorAction.MainType.Passphrase,
     ) {
         when (action) {
-            is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange,
-                -> {
+            is GeneratorAction.MainType.Passphrase.NumWordsCounterChange -> {
                 handleNumWordsCounterChange(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange,
-                -> {
+            is GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange -> {
                 handlePassphraseToggleCapitalizeChange(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange,
-                -> {
+            is GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange -> {
                 handlePassphraseToggleIncludeNumberChange(action)
             }
 
-            is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.WordSeparatorTextChange,
-                -> {
+            is GeneratorAction.MainType.Passphrase.WordSeparatorTextChange -> {
                 handleWordSeparatorTextInputChange(action)
             }
         }
     }
 
     private fun handlePassphraseToggleCapitalizeChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange,
+        action: GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange,
     ) {
         updatePassphraseType { currentPassphraseType ->
             currentPassphraseType.copy(
@@ -955,7 +940,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handlePassphraseToggleIncludeNumberChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange,
+        action: GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange,
     ) {
         updatePassphraseType { currentPassphraseType ->
             currentPassphraseType.copy(
@@ -965,7 +950,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleNumWordsCounterChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange,
+        action: GeneratorAction.MainType.Passphrase.NumWordsCounterChange,
     ) {
         updatePassphraseType { passphraseType ->
             passphraseType.copy(numWords = action.numWords)
@@ -973,7 +958,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleWordSeparatorTextInputChange(
-        action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.WordSeparatorTextChange,
+        action: GeneratorAction.MainType.Passphrase.WordSeparatorTextChange,
     ) {
         updatePassphraseType { passphraseType ->
             val newWordSeparator =
@@ -990,25 +975,37 @@ class GeneratorViewModel @Inject constructor(
         action: GeneratorAction.MainType.Username.UsernameTypeOptionSelect,
     ) {
         when (action.usernameTypeOption) {
-            Username.UsernameTypeOption.PLUS_ADDRESSED_EMAIL -> loadUsernameOptions(
-                selectedType = Username(selectedType = PlusAddressedEmail()),
-                forceRegeneration = true,
-            )
+            GeneratorState.MainType.Username.UsernameTypeOption.PLUS_ADDRESSED_EMAIL -> {
+                loadUsernameOptions(
+                    selectedType = GeneratorState.MainType.Username(
+                        selectedType = PlusAddressedEmail(),
+                    ),
+                    forceRegeneration = true,
+                )
+            }
 
-            Username.UsernameTypeOption.CATCH_ALL_EMAIL -> loadUsernameOptions(
-                selectedType = Username(selectedType = CatchAllEmail()),
-                forceRegeneration = true,
-            )
+            GeneratorState.MainType.Username.UsernameTypeOption.CATCH_ALL_EMAIL -> {
+                loadUsernameOptions(
+                    selectedType = GeneratorState.MainType.Username(
+                        selectedType = CatchAllEmail(),
+                    ),
+                    forceRegeneration = true,
+                )
+            }
 
             // We do not force regeneration here since the API can fail if the data is entered
             // incorrectly. This will only be generated when the user clicks the regenerate button.
-            Username.UsernameTypeOption.FORWARDED_EMAIL_ALIAS -> loadUsernameOptions(
-                selectedType = Username(selectedType = ForwardedEmailAlias()),
-                forceRegeneration = false,
-            )
+            GeneratorState.MainType.Username.UsernameTypeOption.FORWARDED_EMAIL_ALIAS -> {
+                loadUsernameOptions(
+                    selectedType = GeneratorState.MainType.Username(
+                        selectedType = ForwardedEmailAlias(),
+                    ),
+                    forceRegeneration = false,
+                )
+            }
 
-            Username.UsernameTypeOption.RANDOM_WORD -> loadUsernameOptions(
-                selectedType = Username(selectedType = RandomWord()),
+            GeneratorState.MainType.Username.UsernameTypeOption.RANDOM_WORD -> loadUsernameOptions(
+                selectedType = GeneratorState.MainType.Username(selectedType = RandomWord()),
                 forceRegeneration = true,
             )
         }
@@ -1371,49 +1368,55 @@ class GeneratorViewModel @Inject constructor(
         generateTextJob.cancel()
         generateTextJob = viewModelScope.launch {
             when (updatedMainType) {
-                is Passcode -> when (val selectedType = updatedMainType.selectedType) {
-                    is Passphrase -> {
-                        savePassphraseOptionsToDisk(selectedType)
-                        generatePassphrase(selectedType)
-                    }
-
-                    is Password -> {
-                        savePasswordOptionsToDisk(selectedType)
-                        generatePassword(selectedType)
-                    }
+                is GeneratorState.MainType.Passphrase -> {
+                    savePassphraseOptionsToDisk(updatedMainType)
+                    generatePassphrase(updatedMainType)
                 }
 
-                is Username -> when (val selectedType = updatedMainType.selectedType) {
-                    is ForwardedEmailAlias -> {
-                        saveForwardedEmailAliasServiceTypeToDisk(selectedType)
-                        if (forceRegeneration) {
-                            generateForwardedEmailAlias(selectedType)
-                        } else {
-                            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
-                        }
-                    }
+                is GeneratorState.MainType.Password -> {
+                    savePasswordOptionsToDisk(updatedMainType)
+                    generatePassword(updatedMainType)
+                }
 
-                    is CatchAllEmail -> {
-                        saveCatchAllEmailOptionsToDisk(selectedType)
-                        if (forceRegeneration) {
-                            generateCatchAllEmail(selectedType)
-                        } else {
-                            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+                is GeneratorState.MainType.Username -> {
+                    when (val selectedType = updatedMainType.selectedType) {
+                        is ForwardedEmailAlias -> {
+                            saveForwardedEmailAliasServiceTypeToDisk(selectedType)
+                            if (forceRegeneration) {
+                                generateForwardedEmailAlias(selectedType)
+                            } else {
+                                mutableStateFlow.update {
+                                    it.copy(generatedText = NO_GENERATED_TEXT)
+                                }
+                            }
                         }
-                    }
 
-                    is PlusAddressedEmail -> {
-                        savePlusAddressedEmailOptionsToDisk(selectedType)
-                        if (forceRegeneration) {
-                            generatePlusAddressedEmail(selectedType)
-                        } else {
-                            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+                        is CatchAllEmail -> {
+                            saveCatchAllEmailOptionsToDisk(selectedType)
+                            if (forceRegeneration) {
+                                generateCatchAllEmail(selectedType)
+                            } else {
+                                mutableStateFlow.update {
+                                    it.copy(generatedText = NO_GENERATED_TEXT)
+                                }
+                            }
                         }
-                    }
 
-                    is RandomWord -> {
-                        saveRandomWordOptionsToDisk(selectedType)
-                        generateRandomWordUsername(selectedType)
+                        is PlusAddressedEmail -> {
+                            savePlusAddressedEmailOptionsToDisk(selectedType)
+                            if (forceRegeneration) {
+                                generatePlusAddressedEmail(selectedType)
+                            } else {
+                                mutableStateFlow.update {
+                                    it.copy(generatedText = NO_GENERATED_TEXT)
+                                }
+                            }
+                        }
+
+                        is RandomWord -> {
+                            saveRandomWordOptionsToDisk(selectedType)
+                            generateRandomWordUsername(selectedType)
+                        }
                     }
                 }
             }
@@ -1463,16 +1466,9 @@ class GeneratorViewModel @Inject constructor(
         sendAction(GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult(result))
     }
 
-    private inline fun updateGeneratorMainTypePasscode(
-        crossinline block: (Passcode) -> Passcode,
-    ) {
-        updateGeneratorMainType {
-            if (it !is Passcode) null else block(it)
-        }
-    }
-
     /**
-     * Updates the length property of the [Password] to reflect the new minimum.
+     * Updates the length property of the [GeneratorState.MainType.Password] to reflect the new
+     * minimum.
      */
     private fun updatePasswordLength() {
         updatePasswordType { currentPasswordType ->
@@ -1486,39 +1482,34 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private inline fun updatePasswordType(
-        crossinline block: (Password) -> Password,
+        crossinline block: (GeneratorState.MainType.Password) -> GeneratorState.MainType.Password,
     ) {
-        updateGeneratorMainTypePasscode { currentSelectedType ->
-            val currentPasswordType = currentSelectedType.selectedType
-            if (currentPasswordType !is Password) {
-                return@updateGeneratorMainTypePasscode currentSelectedType
+        updateGeneratorMainType { currentSelectedType ->
+            if (currentSelectedType !is GeneratorState.MainType.Password) {
+                return@updateGeneratorMainType currentSelectedType
             }
-
-            val updatedPasswordType = currentPasswordType
-                .let(block)
-                .enforceAtLeastOneToggleOn()
-
-            currentSelectedType.copy(selectedType = updatedPasswordType)
+            currentSelectedType.let(block).enforceAtLeastOneToggleOn()
         }
     }
 
     private inline fun updatePassphraseType(
-        crossinline block: (Passphrase) -> Passphrase,
+        crossinline block: (
+            GeneratorState.MainType.Passphrase,
+        ) -> GeneratorState.MainType.Passphrase,
     ) {
-        updateGeneratorMainTypePasscode { currentSelectedType ->
-            val currentPasswordType = currentSelectedType.selectedType
-            if (currentPasswordType !is Passphrase) {
-                return@updateGeneratorMainTypePasscode currentSelectedType
+        updateGeneratorMainType { currentSelectedType ->
+            if (currentSelectedType !is GeneratorState.MainType.Passphrase) {
+                return@updateGeneratorMainType currentSelectedType
             }
-            currentSelectedType.copy(selectedType = block(currentPasswordType))
+            block(currentSelectedType)
         }
     }
 
     private inline fun updateGeneratorMainTypeUsername(
-        crossinline block: (Username) -> Username,
+        crossinline block: (GeneratorState.MainType.Username) -> GeneratorState.MainType.Username,
     ) {
         updateGeneratorMainType {
-            if (it !is Username) null else block(it)
+            if (it !is GeneratorState.MainType.Username) null else block(it)
         }
     }
 
@@ -1731,7 +1722,7 @@ data class GeneratorState(
     val currentEmailAddress: String,
     val isUnderPolicy: Boolean = false,
     val website: String? = null,
-    var overridePassword: Boolean = false,
+    var passcodePolicyOverride: PasscodePolicyOverride? = null,
 ) : Parcelable {
 
     /**
@@ -1741,13 +1732,27 @@ data class GeneratorState(
         get() = MainTypeOption.entries.toList()
 
     /**
-     * Enum representing the main type options for the generator, such as PASSWORD and USERNAME.
+     * Enum representing the main type options for the generator, such as PASSWORD PASSPHRASE, and
+     * USERNAME.
      *
      * @property labelRes The resource ID of the string that represents the label of each type.
+     * @property testTag The string used as the test tag for the option.
      */
-    enum class MainTypeOption(val labelRes: Int) {
-        PASSWORD(R.string.password),
-        USERNAME(R.string.username),
+    enum class MainTypeOption(
+        val labelRes: Int,
+        val testTag: String,
+    ) {
+        PASSWORD(labelRes = R.string.password, testTag = "password_option"),
+        PASSPHRASE(labelRes = R.string.passphrase, testTag = "passphrase_option"),
+        USERNAME(labelRes = R.string.username, testTag = "username_option"),
+    }
+
+    /**
+     * Enum representing the passcode types for the generator, such as PASSWORD and PASSPHRASE.
+     */
+    enum class PasscodePolicyOverride {
+        PASSWORD,
+        PASSPHRASE,
     }
 
     /**
@@ -1758,165 +1763,120 @@ data class GeneratorState(
     sealed class MainType : Parcelable {
 
         /**
-         * Represents the resource ID for the display string. This is an abstract property
-         * that must be overridden by each subclass to provide the appropriate string resource ID
-         * for display purposes.
+         * Indicates the type this is.
          */
-        abstract val displayStringResId: Int
+        abstract val mainTypeOption: MainTypeOption
 
         /**
-         * Represents the Passcode main type, allowing the user to specify the kind of passcode,
-         * such as a Password or a Passphrase, and configure their respective properties.
+         * Represents a standard PASSWORD type, with configurable options for
+         * length, character types, and requirements.
          *
-         * @property selectedType The currently selected PasscodeType
+         * @property length The length of the generated password.
+         * @property minLength The number available on the low end of the slider.
+         * @property maxLength The number available on the high end of the slider.
+         * @property useCapitals Whether to include capital letters.
+         * @property capitalsEnabled Whether capitals are enabled for this password.
+         * @property useLowercase Whether to include lowercase letters.
+         * @property lowercaseEnabled Whether lowercase letters are enabled.
+         * @property useNumbers Whether to include numbers.
+         * @property numbersEnabled Whether numbers are enabled for this password.
+         * @property useSpecialChars Whether to include special characters.
+         * @property specialCharsEnabled Whether special characters are enabled.
+         * @property minNumbers The minimum number of numeric characters.
+         * @property minNumbersAllowed The minimum number of numbers permitted.
+         * @property maxNumbersAllowed The maximum number of numbers permitted.
+         * @property minSpecial The minimum number of special characters.
+         * @property minSpecialAllowed The minimum number of special characters permitted.
+         * @property maxSpecialAllowed The maximum number of special characters permitted.
+         * @property avoidAmbiguousChars Whether to avoid characters that look similar.
+         * @property ambiguousCharsEnabled Whether to allow ambiguous characters.
+         * @property isUserInteracting Indicates whether the user is currently interacting
+         * with a control. This flag can be used to prevent unnecessary updates or
+         * processing during continuous interaction.
          */
         @Parcelize
-        data class Passcode(
-            val selectedType: PasscodeType = Password(),
-        ) : MainType(), Parcelable {
-            override val displayStringResId: Int
-                get() = MainTypeOption.PASSWORD.labelRes
+        data class Password(
+            val length: Int = DEFAULT_PASSWORD_LENGTH,
+            val minLength: Int = PASSWORD_LENGTH_SLIDER_MIN,
+            val maxLength: Int = PASSWORD_LENGTH_SLIDER_MAX,
+            val useCapitals: Boolean = true,
+            val capitalsEnabled: Boolean = true,
+            val useLowercase: Boolean = true,
+            val lowercaseEnabled: Boolean = true,
+            val useNumbers: Boolean = true,
+            val numbersEnabled: Boolean = true,
+            val useSpecialChars: Boolean = false,
+            val specialCharsEnabled: Boolean = true,
+            val minNumbers: Int = MIN_NUMBERS,
+            val minNumbersAllowed: Int = PASSWORD_COUNTER_MIN,
+            val maxNumbersAllowed: Int = PASSWORD_COUNTER_MAX,
+            val minSpecial: Int = MIN_SPECIAL,
+            val minSpecialAllowed: Int = PASSWORD_COUNTER_MIN,
+            val maxSpecialAllowed: Int = PASSWORD_COUNTER_MAX,
+            val avoidAmbiguousChars: Boolean = false,
+            val ambiguousCharsEnabled: Boolean = true,
+            val isUserInteracting: Boolean = false,
+        ) : MainType() {
+            override val mainTypeOption: MainTypeOption get() = MainTypeOption.PASSWORD
 
             /**
-             * Enum representing the types of passcodes,
-             * allowing for different passcode configurations.
-             *
-             * @property labelRes The ID of the string that represents the label for each type.
+             * The computed minimum length for the generated Password
+             * based on what characters must be included.
              */
-            enum class PasscodeTypeOption(val labelRes: Int) {
-                PASSWORD(R.string.password),
-                PASSPHRASE(R.string.passphrase),
+            val computedMinimumLength: Int
+                get() {
+                    val minLowercase = if (useLowercase) 1 else 0
+                    val minUppercase = if (useCapitals) 1 else 0
+                    val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
+                    val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
+                    return max(
+                        minLength,
+                        minLowercase + minUppercase + minimumNumbers + minimumSpecial,
+                    )
+                }
+
+            @Suppress("UndocumentedPublicClass")
+            companion object {
+                private const val DEFAULT_PASSWORD_LENGTH: Int = 14
+                private const val MIN_NUMBERS: Int = 1
+                private const val MIN_SPECIAL: Int = 1
+
+                const val PASSWORD_LENGTH_SLIDER_MIN: Int = 5
+                const val PASSWORD_LENGTH_SLIDER_MAX: Int = 128
+                const val PASSWORD_COUNTER_MIN: Int = 0
+                const val PASSWORD_COUNTER_MAX: Int = 9
             }
+        }
 
-            /**
-             * A sealed class representing the different types of PASSWORD,
-             * such as standard Password and Passphrase, each with its own properties.
-             */
-            @Parcelize
-            sealed class PasscodeType : Parcelable {
+        /**
+         * Represents a Passphrase type, configured with number of words, word separator,
+         * capitalization, and inclusion of numbers.
+         *
+         * @property numWords The number of words in the passphrase.
+         * @property wordSeparator The character used to separate words in the passphrase.
+         * @property capitalize Whether to capitalize the first letter of each word.
+         * @property includeNumber Whether to include a numbers in the passphrase.
+         */
+        @Parcelize
+        data class Passphrase(
+            val numWords: Int = DEFAULT_NUM_WORDS,
+            val minNumWords: Int = PASSPHRASE_MIN_NUMBER_OF_WORDS,
+            val maxNumWords: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
+            val wordSeparator: Char? = DEFAULT_PASSPHRASE_SEPARATOR,
+            val capitalize: Boolean = false,
+            val capitalizeEnabled: Boolean = true,
+            val includeNumber: Boolean = false,
+            val includeNumberEnabled: Boolean = true,
+        ) : MainType() {
+            override val mainTypeOption: MainTypeOption get() = MainTypeOption.PASSPHRASE
 
-                /**
-                 * Represents the resource ID for the display string specific to each
-                 * PasscodeType subclass. Every subclass of PasscodeType must override
-                 * this property to provide the appropriate string resource ID for
-                 * its display string.
-                 */
-                abstract val displayStringResId: Int
+            @Suppress("UndocumentedPublicClass")
+            companion object {
+                private const val DEFAULT_PASSPHRASE_SEPARATOR: Char = '-'
+                private const val DEFAULT_NUM_WORDS: Int = 3
 
-                /**
-                 * Represents a standard PASSWORD type, with configurable options for
-                 * length, character types, and requirements.
-                 *
-                 * @property length The length of the generated password.
-                 * @property minLength The number available on the low end of the slider.
-                 * @property maxLength The number available on the high end of the slider.
-                 * @property useCapitals Whether to include capital letters.
-                 * @property capitalsEnabled Whether capitals are enabled for this password.
-                 * @property useLowercase Whether to include lowercase letters.
-                 * @property lowercaseEnabled Whether lowercase letters are enabled.
-                 * @property useNumbers Whether to include numbers.
-                 * @property numbersEnabled Whether numbers are enabled for this password.
-                 * @property useSpecialChars Whether to include special characters.
-                 * @property specialCharsEnabled Whether special characters are enabled.
-                 * @property minNumbers The minimum number of numeric characters.
-                 * @property minNumbersAllowed The minimum number of numbers permitted.
-                 * @property maxNumbersAllowed The maximum number of numbers permitted.
-                 * @property minSpecial The minimum number of special characters.
-                 * @property minSpecialAllowed The minimum number of special characters permitted.
-                 * @property maxSpecialAllowed The maximum number of special characters permitted.
-                 * @property avoidAmbiguousChars Whether to avoid characters that look similar.
-                 * @property ambiguousCharsEnabled Whether to allow ambiguous characters.
-                 * @property isUserInteracting Indicates whether the user is currently interacting
-                 * with a control. This flag can be used to prevent unnecessary updates or
-                 * processing during continuous interaction.
-                 */
-                @Parcelize
-                data class Password(
-                    val length: Int = DEFAULT_PASSWORD_LENGTH,
-                    val minLength: Int = PASSWORD_LENGTH_SLIDER_MIN,
-                    val maxLength: Int = PASSWORD_LENGTH_SLIDER_MAX,
-                    val useCapitals: Boolean = true,
-                    val capitalsEnabled: Boolean = true,
-                    val useLowercase: Boolean = true,
-                    val lowercaseEnabled: Boolean = true,
-                    val useNumbers: Boolean = true,
-                    val numbersEnabled: Boolean = true,
-                    val useSpecialChars: Boolean = false,
-                    val specialCharsEnabled: Boolean = true,
-                    val minNumbers: Int = MIN_NUMBERS,
-                    val minNumbersAllowed: Int = PASSWORD_COUNTER_MIN,
-                    val maxNumbersAllowed: Int = PASSWORD_COUNTER_MAX,
-                    val minSpecial: Int = MIN_SPECIAL,
-                    val minSpecialAllowed: Int = PASSWORD_COUNTER_MIN,
-                    val maxSpecialAllowed: Int = PASSWORD_COUNTER_MAX,
-                    val avoidAmbiguousChars: Boolean = false,
-                    val ambiguousCharsEnabled: Boolean = true,
-                    val isUserInteracting: Boolean = false,
-                ) : PasscodeType(), Parcelable {
-                    override val displayStringResId: Int
-                        get() = PasscodeTypeOption.PASSWORD.labelRes
-
-                    /**
-                     * The computed minimum length for the generated Password
-                     * based on what characters must be included.
-                     */
-                    val computedMinimumLength: Int
-                        get() {
-                            val minLowercase = if (useLowercase) 1 else 0
-                            val minUppercase = if (useCapitals) 1 else 0
-                            val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
-                            val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
-                            return max(
-                                minLength,
-                                minLowercase + minUppercase + minimumNumbers + minimumSpecial,
-                            )
-                        }
-
-                    @Suppress("UndocumentedPublicClass")
-                    companion object {
-                        private const val DEFAULT_PASSWORD_LENGTH: Int = 14
-                        private const val MIN_NUMBERS: Int = 1
-                        private const val MIN_SPECIAL: Int = 1
-
-                        const val PASSWORD_LENGTH_SLIDER_MIN: Int = 5
-                        const val PASSWORD_LENGTH_SLIDER_MAX: Int = 128
-                        const val PASSWORD_COUNTER_MIN: Int = 0
-                        const val PASSWORD_COUNTER_MAX: Int = 9
-                    }
-                }
-
-                /**
-                 * Represents a Passphrase type, configured with number of words, word separator,
-                 * capitalization, and inclusion of numbers.
-                 *
-                 * @property numWords The number of words in the passphrase.
-                 * @property wordSeparator The character used to separate words in the passphrase.
-                 * @property capitalize Whether to capitalize the first letter of each word.
-                 * @property includeNumber Whether to include a numbers in the passphrase.
-                 */
-                @Parcelize
-                data class Passphrase(
-                    val numWords: Int = DEFAULT_NUM_WORDS,
-                    val minNumWords: Int = PASSPHRASE_MIN_NUMBER_OF_WORDS,
-                    val maxNumWords: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
-                    val wordSeparator: Char? = DEFAULT_PASSPHRASE_SEPARATOR,
-                    val capitalize: Boolean = false,
-                    val capitalizeEnabled: Boolean = true,
-                    val includeNumber: Boolean = false,
-                    val includeNumberEnabled: Boolean = true,
-                ) : PasscodeType(), Parcelable {
-                    override val displayStringResId: Int
-                        get() = PasscodeTypeOption.PASSPHRASE.labelRes
-
-                    @Suppress("UndocumentedPublicClass")
-                    companion object {
-                        private const val DEFAULT_PASSPHRASE_SEPARATOR: Char = '-'
-                        private const val DEFAULT_NUM_WORDS: Int = 3
-
-                        const val PASSPHRASE_MIN_NUMBER_OF_WORDS: Int = 3
-                        const val PASSPHRASE_MAX_NUMBER_OF_WORDS: Int = 20
-                    }
-                }
+                const val PASSPHRASE_MIN_NUMBER_OF_WORDS: Int = 3
+                const val PASSPHRASE_MAX_NUMBER_OF_WORDS: Int = 20
             }
         }
 
@@ -1927,9 +1887,8 @@ data class GeneratorState(
         @Parcelize
         data class Username(
             val selectedType: UsernameType = PlusAddressedEmail(),
-        ) : MainType(), Parcelable {
-            override val displayStringResId: Int
-                get() = MainTypeOption.USERNAME.labelRes
+        ) : MainType() {
+            override val mainTypeOption: MainTypeOption get() = MainTypeOption.USERNAME
 
             /**
              * Enum representing the types of usernames,
@@ -2210,151 +2169,130 @@ sealed class GeneratorAction {
     sealed class MainType : GeneratorAction() {
 
         /**
-         * Represents actions specifically related to [GeneratorState.MainType.Passcode].
+         * Represents actions specifically related to passwords, a subtype of passcode.
          */
-        sealed class Passcode : MainType() {
-
+        sealed class Password : MainType() {
             /**
-             * Represents the action of selecting a passcode type option.
+             * Represents a change action for the length of the password,
+             * adjusted using a slider.
              *
-             * @property passcodeTypeOption The selected passcode type option.
+             * @property length The new desired length for the password.
              */
-            data class PasscodeTypeOptionSelect(
-                val passcodeTypeOption: PasscodeTypeOption,
-            ) : Passcode()
+            data class SliderLengthChange(
+                val length: Int,
+                val isUserInteracting: Boolean,
+            ) : Password()
 
             /**
-             * Represents actions related to the different types of passcodes.
+             * Represents a change action to toggle the usage of
+             * capital letters in the password.
+             *
+             * @property useCapitals Flag indicating whether capital letters
+             * should be used.
              */
-            sealed class PasscodeType : Passcode() {
+            data class ToggleCapitalLettersChange(
+                val useCapitals: Boolean,
+            ) : Password()
 
-                /**
-                 * Represents actions specifically related to passwords, a subtype of passcode.
-                 */
-                sealed class Password : PasscodeType() {
-                    /**
-                     * Represents a change action for the length of the password,
-                     * adjusted using a slider.
-                     *
-                     * @property length The new desired length for the password.
-                     */
-                    data class SliderLengthChange(
-                        val length: Int,
-                        val isUserInteracting: Boolean,
-                    ) : Password()
+            /**
+             * Represents a change action to toggle the usage of lowercase letters
+             * in the password.
+             *
+             * @property useLowercase Flag indicating whether lowercase letters
+             * should be used.
+             */
+            data class ToggleLowercaseLettersChange(
+                val useLowercase: Boolean,
+            ) : Password()
 
-                    /**
-                     * Represents a change action to toggle the usage of
-                     * capital letters in the password.
-                     *
-                     * @property useCapitals Flag indicating whether capital letters
-                     * should be used.
-                     */
-                    data class ToggleCapitalLettersChange(
-                        val useCapitals: Boolean,
-                    ) : Password()
+            /**
+             * Represents a change action to toggle the inclusion of numbers
+             * in the password.
+             *
+             * @property useNumbers Flag indicating whether numbers
+             * should be used.
+             */
+            data class ToggleNumbersChange(
+                val useNumbers: Boolean,
+            ) : Password()
 
-                    /**
-                     * Represents a change action to toggle the usage of lowercase letters
-                     * in the password.
-                     *
-                     * @property useLowercase Flag indicating whether lowercase letters
-                     * should be used.
-                     */
-                    data class ToggleLowercaseLettersChange(
-                        val useLowercase: Boolean,
-                    ) : Password()
+            /**
+             * Represents a change action to toggle the usage of special characters
+             * in the password.
+             *
+             * @property useSpecialChars Flag indicating whether special characters
+             * should be used.
+             */
+            data class ToggleSpecialCharactersChange(
+                val useSpecialChars: Boolean,
+            ) : Password()
 
-                    /**
-                     * Represents a change action to toggle the inclusion of numbers
-                     * in the password.
-                     *
-                     * @property useNumbers Flag indicating whether numbers
-                     * should be used.
-                     */
-                    data class ToggleNumbersChange(
-                        val useNumbers: Boolean,
-                    ) : Password()
+            /**
+             * Represents a change action for the minimum required number of numbers
+             * in the password.
+             *
+             * @property minNumbers The minimum required number of numbers
+             * for the password.
+             */
+            data class MinNumbersCounterChange(
+                val minNumbers: Int,
+            ) : Password()
 
-                    /**
-                     * Represents a change action to toggle the usage of special characters
-                     * in the password.
-                     *
-                     * @property useSpecialChars Flag indicating whether special characters
-                     * should be used.
-                     */
-                    data class ToggleSpecialCharactersChange(
-                        val useSpecialChars: Boolean,
-                    ) : Password()
+            /**
+             * Represents a change action for the minimum required number of special
+             * characters in the password.
+             *
+             * @property minSpecial The minimum required number of special characters
+             * for the password.
+             */
+            data class MinSpecialCharactersChange(
+                val minSpecial: Int,
+            ) : Password()
 
-                    /**
-                     * Represents a change action for the minimum required number of numbers
-                     * in the password.
-                     *
-                     * @property minNumbers The minimum required number of numbers
-                     * for the password.
-                     */
-                    data class MinNumbersCounterChange(
-                        val minNumbers: Int,
-                    ) : Password()
+            /**
+             * Represents a change action to toggle the avoidance of ambiguous
+             * characters in the password.
+             *
+             * @property avoidAmbiguousChars Flag indicating whether ambiguous characters
+             * should be avoided.
+             */
+            data class ToggleAvoidAmbigousCharactersChange(
+                val avoidAmbiguousChars: Boolean,
+            ) : Password()
+        }
 
-                    /**
-                     * Represents a change action for the minimum required number of special
-                     * characters in the password.
-                     *
-                     * @property minSpecial The minimum required number of special characters
-                     * for the password.
-                     */
-                    data class MinSpecialCharactersChange(
-                        val minSpecial: Int,
-                    ) : Password()
+        /**
+         * Represents actions specifically related to passphrases, a subtype of passcode.
+         */
+        sealed class Passphrase : MainType() {
 
-                    /**
-                     * Represents a change action to toggle the avoidance of ambiguous
-                     * characters in the password.
-                     *
-                     * @property avoidAmbiguousChars Flag indicating whether ambiguous characters
-                     * should be avoided.
-                     */
-                    data class ToggleAvoidAmbigousCharactersChange(
-                        val avoidAmbiguousChars: Boolean,
-                    ) : Password()
-                }
+            /**
+             * Fired when the number of words counter is changed.
+             *
+             * @property numWords The new value for the number of words.
+             */
+            data class NumWordsCounterChange(val numWords: Int) : Passphrase()
 
-                /**
-                 * Represents actions specifically related to passphrases, a subtype of passcode.
-                 */
-                sealed class Passphrase : PasscodeType() {
+            /**
+             * Fired when the word separator text input is changed.
+             *
+             * @property wordSeparator The new word separator text.
+             */
+            data class WordSeparatorTextChange(val wordSeparator: Char?) : Passphrase()
 
-                    /**
-                     * Fired when the number of words counter is changed.
-                     *
-                     * @property numWords The new value for the number of words.
-                     */
-                    data class NumWordsCounterChange(val numWords: Int) : Passphrase()
+            /**
+             * Fired when the "capitalize" toggle is changed.
+             *
+             * @property capitalize The new value of the "capitalize" toggle.
+             */
+            data class ToggleCapitalizeChange(val capitalize: Boolean) : Passphrase()
 
-                    /**
-                     * Fired when the word separator text input is changed.
-                     *
-                     * @property wordSeparator The new word separator text.
-                     */
-                    data class WordSeparatorTextChange(val wordSeparator: Char?) : Passphrase()
-
-                    /**
-                     * Fired when the "capitalize" toggle is changed.
-                     *
-                     * @property capitalize The new value of the "capitalize" toggle.
-                     */
-                    data class ToggleCapitalizeChange(val capitalize: Boolean) : Passphrase()
-
-                    /**
-                     * Fired when the "include number" toggle is changed.
-                     *
-                     * @property includeNumber The new value of the "include number" toggle.
-                     */
-                    data class ToggleIncludeNumberChange(val includeNumber: Boolean) : Passphrase()
-                }
-            }
+            /**
+             * Fired when the "include number" toggle is changed.
+             *
+             * @property includeNumber The new value of the "include number" toggle.
+             */
+            data class ToggleIncludeNumberChange(val includeNumber: Boolean) : Passphrase()
         }
 
         /**
@@ -2631,8 +2569,8 @@ sealed class GeneratorEvent {
     ) : GeneratorEvent()
 }
 
-@Suppress("ComplexCondition")
-private fun Password.enforceAtLeastOneToggleOn(): Password =
+@Suppress("ComplexCondition", "MaxLineLength")
+private fun GeneratorState.MainType.Password.enforceAtLeastOneToggleOn(): GeneratorState.MainType.Password =
     // If all toggles are off, turn on useLowercase
     if (!this.useCapitals &&
         !this.useLowercase &&
@@ -2644,14 +2582,14 @@ private fun Password.enforceAtLeastOneToggleOn(): Password =
         this
     }
 
-private val PasscodeGenerationOptions?.passcodeType: Passcode.PasscodeType
+private val PasscodeGenerationOptions?.passcodeType: GeneratorState.MainType
     get() = when (this?.type) {
-        PasscodeGenerationOptions.PasscodeType.PASSWORD -> Password()
-        PasscodeGenerationOptions.PasscodeType.PASSPHRASE -> Passphrase()
-        else -> Password()
+        PasscodeGenerationOptions.PasscodeType.PASSWORD -> GeneratorState.MainType.Password()
+        PasscodeGenerationOptions.PasscodeType.PASSPHRASE -> GeneratorState.MainType.Passphrase()
+        else -> GeneratorState.MainType.Password()
     }
 
-private val UsernameGenerationOptions?.usernameType: Username.UsernameType
+private val UsernameGenerationOptions?.usernameType: GeneratorState.MainType.Username.UsernameType
     get() = when (this?.type) {
         UsernameGenerationOptions.UsernameType.PLUS_ADDRESSED_EMAIL -> PlusAddressedEmail()
         UsernameGenerationOptions.UsernameType.CATCH_ALL_EMAIL -> CatchAllEmail()
@@ -2660,8 +2598,15 @@ private val UsernameGenerationOptions?.usernameType: Username.UsernameType
         else -> PlusAddressedEmail()
     }
 
-private fun String?.toSelectedType(): Passcode.PasscodeType =
-    when (this) {
-        PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE -> Passphrase()
-        else -> Password()
+private fun String?.toPasscodePolicyOverride(): GeneratorState.PasscodePolicyOverride? =
+    if (this.isNullOrBlank()) {
+        null
+    } else {
+        when (this) {
+            PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE -> {
+                GeneratorState.PasscodePolicyOverride.PASSPHRASE
+            }
+
+            else -> GeneratorState.PasscodePolicyOverride.PASSWORD
+        }
     }

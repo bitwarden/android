@@ -20,6 +20,6 @@ fun bitwardenSegmentedButtonColors(): SegmentedButtonColors = SegmentedButtonCol
     disabledActiveContentColor = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
     disabledActiveBorderColor = Color.Transparent,
     disabledInactiveContainerColor = BitwardenTheme.colorScheme.background.primary,
-    disabledInactiveContentColor = BitwardenTheme.colorScheme.filledButton.foregroundDisabled,
+    disabledInactiveContentColor = BitwardenTheme.colorScheme.stroke.divider,
     disabledInactiveBorderColor = Color.Transparent,
 )
