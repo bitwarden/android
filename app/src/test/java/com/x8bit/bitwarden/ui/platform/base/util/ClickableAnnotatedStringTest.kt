@@ -1,19 +1,16 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
 import androidx.compose.material3.Text
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.text.LinkAnnotation
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import com.x8bit.bitwarden.ui.util.assertLinkAnnotationIsAppliedAndInvokeClickAction
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ClickableAnnotatedStringTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `clickable annotated string should add Clickable LinkAnnotation to highlighted string`() {
+        var textClickCalled = false
         val mainString = "This is me testing the thing."
         val highLightText = "testing"
         composeTestRule.setContent {
@@ -22,7 +19,7 @@ class ClickableAnnotatedStringTest : BaseComposeTest() {
                 listOf(
                     ClickableTextHighlight(
                         textToHighlight = highLightText,
-                        onTextClick = {},
+                        onTextClick = { textClickCalled = true },
                     ),
                 ),
             )
@@ -30,12 +27,13 @@ class ClickableAnnotatedStringTest : BaseComposeTest() {
         }
         val expectedStart = mainString.indexOf(highLightText)
         val expectedEnd = expectedStart + highLightText.length
-        assertLinkAnnotationIsApplied(
+        composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString,
             highLightText,
             expectedStart,
             expectedEnd,
         )
+        assertTrue(textClickCalled)
     }
 
     @Suppress("MaxLineLength")
@@ -64,13 +62,13 @@ class ClickableAnnotatedStringTest : BaseComposeTest() {
         val expectedEnd1 = expectedStart1 + highLightText1.length
         val expectedStart2 = mainString.indexOf(highlightText2)
         val expectedEnd2 = expectedStart2 + highlightText2.length
-        assertLinkAnnotationIsApplied(
+        composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString,
             highLightText1,
             expectedStart1,
             expectedEnd1,
         )
-        assertLinkAnnotationIsApplied(
+        composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString,
             highlightText2,
             expectedStart2,
@@ -99,7 +97,7 @@ class ClickableAnnotatedStringTest : BaseComposeTest() {
         // indexOf returns the index of the first instance.
         val expectedStart = mainString.indexOf(highLightText)
         val expectedEnd = expectedStart + highLightText.length
-        assertLinkAnnotationIsApplied(
+        composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString,
             highLightText,
             expectedStart,
@@ -128,34 +126,11 @@ class ClickableAnnotatedStringTest : BaseComposeTest() {
         // indexOf returns the index of the first instance.
         val expectedStart = mainString.lastIndexOf(highLightText)
         val expectedEnd = expectedStart + highLightText.length
-        assertLinkAnnotationIsApplied(
+        composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString,
             highLightText,
             expectedStart,
             expectedEnd,
         )
-    }
-
-    private fun assertLinkAnnotationIsApplied(
-        mainString: String,
-        highLightText: String,
-        expectedStart: Int,
-        expectedEnd: Int,
-    ) {
-        composeTestRule
-            .onNodeWithText(mainString)
-            .fetchSemanticsNode()
-            .config
-            .getOrNull(SemanticsProperties.Text)
-            ?.let { text ->
-                text.forEach {
-                    it.getLinkAnnotations(expectedStart, expectedEnd)
-                        .forEach { annotationRange ->
-                            val annotation = annotationRange.item as? LinkAnnotation.Clickable
-                            assertNotNull(annotation != null)
-                            assertEquals(highLightText, annotation!!.tag)
-                        }
-                }
-            }
     }
 }
