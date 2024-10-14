@@ -325,7 +325,6 @@ private fun TermsAndPrivacyText(
                 textToHighlight = strPrivacy,
                 onTextClick = onPrivacyPolicyClick,
             ),
-
         ),
     )
     Row(
