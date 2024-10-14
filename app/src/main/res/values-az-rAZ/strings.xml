@@ -122,4 +122,7 @@
     <string name="learn_more">Daha ətraflı</string>
     <string name="import_2fas_password_protected_not_supported">2FAS parol qorumalı fayllardan daxilə köçürmə dəstəklənmir. Parol qorumalı olmayan xaricə köçürülən bir faylla yenidən sınayın.</string>
     <string name="import_bitwarden_unsupported_format">Bitwarden CSV fayllarını daxilə köçürmə dəstəklənmir. Xaricə köçürülən JSON faylı ilə yenidən sınayın.</string>
+    <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
+    <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
+    <string name="download">Download</string>
 </resources>
