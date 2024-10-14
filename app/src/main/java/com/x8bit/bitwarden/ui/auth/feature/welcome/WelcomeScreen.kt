@@ -59,6 +59,7 @@ private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 128.dp
 fun WelcomeScreen(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToStartRegistration: () -> Unit,
     viewModel: WelcomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -72,6 +73,7 @@ fun WelcomeScreen(
 
             WelcomeEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
             WelcomeEvent.NavigateToLogin -> onNavigateToLogin()
+            WelcomeEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
         }
     }
 

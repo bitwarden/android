@@ -20,6 +20,7 @@ fun NavController.navigateToWelcome(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.welcomeDestination(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToStartRegistration: () -> Unit,
 ) {
     composableWithStayTransitions(
         route = WELCOME_ROUTE,
@@ -27,6 +28,7 @@ fun NavGraphBuilder.welcomeDestination(
         WelcomeScreen(
             onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
+            onNavigateToStartRegistration = onNavigateToStartRegistration,
         )
     }
 }
