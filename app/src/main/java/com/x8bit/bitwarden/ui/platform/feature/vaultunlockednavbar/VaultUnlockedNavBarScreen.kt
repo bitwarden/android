@@ -246,6 +246,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToPendingRequests = navigateToPendingRequests,
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
+                onNavigateToImportLogins = onNavigateToImportLogins,
             )
         }
     }

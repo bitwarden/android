@@ -17,12 +17,15 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class VaultSettingsScreenTest : BaseComposeTest() {
 
+    private var onNavigateToImportLoginsCalled = false
     private var onNavigateBackCalled = false
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
@@ -30,6 +33,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(
         VaultSettingsState(
             importUrl = "testUrl/#/tools/import",
+            isNewImportLoginsFlowEnabled = false,
         ),
     )
     private val intentManager: IntentManager = mockk(relaxed = true) {
@@ -50,6 +54,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 intentManager = intentManager,
+                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
             )
         }
     }
@@ -124,11 +129,32 @@ class VaultSettingsScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToImportVault should invoke IntentManager`() {
+    fun `on NavigateToImportVault should invoke IntentManager not lambda`() {
         val testUrl = "testUrl"
         mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault(testUrl))
         verify {
             intentManager.launchUri(testUrl.toUri())
         }
+        assertFalse(onNavigateToImportLoginsCalled)
+    }
+
+    @Test
+    fun `when new logins feature flag is enabled send action right when import items is clicked`() {
+        mutableStateFlow.update {
+            it.copy(isNewImportLoginsFlowEnabled = true)
+        }
+        composeTestRule.onNodeWithText("Import items").performClick()
+        verify { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
+    }
+
+    @Test
+    fun `when new logins feature flag is enabled NavigateToImportVault should invoke lambda`() {
+        mutableStateFlow.update {
+            it.copy(isNewImportLoginsFlowEnabled = true)
+        }
+        val testUrl = "testUrl"
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault(testUrl))
+        assertTrue(onNavigateToImportLoginsCalled)
+        verify(exactly = 0) { intentManager.launchUri(testUrl.toUri()) }
     }
 }
