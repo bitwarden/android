@@ -41,7 +41,7 @@ sealed class FlagKey<out T : Any> {
      */
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-authenticator-sync-android"
-        override val defaultValue: Boolean = false
+        override val defaultValue: Boolean = true
         override val isRemotelyConfigured: Boolean = false
     }
 
