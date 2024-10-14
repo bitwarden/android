@@ -27,6 +27,5 @@ data class SharedAccountData(
         val email: String,
         val environmentLabel: String,
         val totpUris: List<String>,
-        val lastSyncTime: Instant,
     )
 }

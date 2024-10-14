@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -22,7 +21,6 @@ class AuthenticatorBridgeRepositoryImpl(
     private val vaultRepository: VaultRepository,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
-    private val settingsDiskSource: SettingsDiskSource,
 ) : AuthenticatorBridgeRepository {
 
     override val authenticatorSyncSymmetricKey: ByteArray?
@@ -111,9 +109,6 @@ class AuthenticatorBridgeRepositoryImpl(
                             ?.totp
                     }
 
-                val lastSyncTime =
-                    settingsDiskSource.getLastSyncTime(userId) ?: return@mapNotNull null
-
                 // Lock the user's vault if we unlocked it for this operation:
                 if (!isVaultAlreadyUnlocked) {
                     vaultRepository.lockVault(userId)
@@ -124,7 +119,6 @@ class AuthenticatorBridgeRepositoryImpl(
                     name = account.name,
                     email = account.email,
                     environmentLabel = account.environment.label,
-                    lastSyncTime = lastSyncTime,
                     totpUris = totpUris,
                 )
             }

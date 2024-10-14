@@ -8,7 +8,6 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -34,7 +33,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.Instant
 
 class AuthenticatorBridgeRepositoryTest {
 
@@ -43,7 +41,6 @@ class AuthenticatorBridgeRepositoryTest {
     private val vaultDiskSource = mockk<VaultDiskSource>()
     private val vaultRepository = mockk<VaultRepository>()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
-    private val fakeSettingsDiskSource = FakeSettingsDiskSource()
 
     private val authenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
         authRepository = authRepository,
@@ -51,7 +48,6 @@ class AuthenticatorBridgeRepositoryTest {
         vaultRepository = vaultRepository,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
-        settingsDiskSource = fakeSettingsDiskSource,
     )
 
     @BeforeEach
@@ -96,10 +92,6 @@ class AuthenticatorBridgeRepositoryTest {
                 decryptedUserKey = USER_2_UNLOCK_KEY,
             )
         } returns VaultUnlockResult.Success
-
-        // Setup settingDiskSource to have lastSyncTime set:
-        fakeSettingsDiskSource.storeLastSyncTime(USER_1_ID, LAST_SYNC_TIME)
-        fakeSettingsDiskSource.storeLastSyncTime(USER_2_ID, LAST_SYNC_TIME)
 
         // Add some ciphers to vaultDiskSource for each user,
         // and setup mock decryption for them:
@@ -228,29 +220,6 @@ class AuthenticatorBridgeRepositoryTest {
             verify { vaultDiskSource.getCiphers(USER_2_ID) }
             coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
         }
-
-    @Test
-    fun `syncAccounts when getLastSyncTime is null should omit account from list`() = runTest {
-        fakeSettingsDiskSource.storeLastSyncTime(USER_1_ID, null)
-        val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
-        assertEquals(SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)), sharedAccounts)
-        verify { vaultRepository.vaultUnlockDataStateFlow }
-        verify { vaultDiskSource.getCiphers(USER_1_ID) }
-        verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
-        coVerify { vaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER) }
-        verify { authRepository.userStateFlow }
-        verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
-        coVerify {
-            vaultRepository.unlockVaultWithDecryptedUserKey(
-                userId = USER_2_ID,
-                decryptedUserKey = USER_2_UNLOCK_KEY,
-            )
-        }
-        verify { vaultRepository.vaultUnlockDataStateFlow }
-        verify { vaultRepository.lockVault(USER_2_ID) }
-        verify { vaultDiskSource.getCiphers(USER_2_ID) }
-        coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
-    }
 
     @Test
     @Suppress("MaxLineLength")
@@ -432,15 +401,12 @@ private val USER_2_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
 private val USER_1_EXPECTED_TOTP_LIST = listOf("totp1")
 private val USER_2_EXPECTED_TOTP_LIST = listOf("totp2")
 
-private val LAST_SYNC_TIME = Instant.now()
-
 private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_1.userId,
     name = ACCOUNT_1.name,
     email = ACCOUNT_1.email,
     environmentLabel = ACCOUNT_1.environment.label,
     totpUris = USER_1_EXPECTED_TOTP_LIST,
-    lastSyncTime = LAST_SYNC_TIME,
 )
 
 private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
@@ -449,7 +415,6 @@ private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
     email = ACCOUNT_2.email,
     environmentLabel = ACCOUNT_2.environment.label,
     totpUris = USER_2_EXPECTED_TOTP_LIST,
-    lastSyncTime = LAST_SYNC_TIME,
 )
 
 private val USER_1_CIPHERS = listOf(
