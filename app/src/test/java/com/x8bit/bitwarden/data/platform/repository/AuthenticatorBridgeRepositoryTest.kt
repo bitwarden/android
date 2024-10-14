@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 class AuthenticatorBridgeRepositoryTest {
 
@@ -183,7 +184,7 @@ class AuthenticatorBridgeRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `syncAccounts when vault is locked for both users should unlock and re-lock vault for both users`() =
+    fun `syncAccounts when vault is locked for both users should unlock and re-lock vault for both users and filter out deleted ciphers`() =
         runTest {
             every { vaultRepository.isVaultUnlocked(USER_1_ID) } returns false
             coEvery {
@@ -382,10 +383,17 @@ private val USER_STATE = UserState(
 
 private val USER_1_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1"
+    every { deletedDate } returns null
+}
+
+private val USER_1_DELETED_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
+    every { login?.totp } returns "encryptedTotp1Deleted"
+    every { deletedDate } returns ZonedDateTime.now()
 }
 
 private val USER_2_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp2"
+    every { deletedDate } returns null
 }
 
 private val USER_1_ENCRYPTED_SDK_TOTP_CIPHER = mockk<Cipher>()
@@ -419,6 +427,7 @@ private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
 
 private val USER_1_CIPHERS = listOf(
     USER_1_TOTP_CIPHER,
+    USER_1_DELETED_TOTP_CIPHER,
 )
 
 private val USER_2_CIPHERS = listOf(
