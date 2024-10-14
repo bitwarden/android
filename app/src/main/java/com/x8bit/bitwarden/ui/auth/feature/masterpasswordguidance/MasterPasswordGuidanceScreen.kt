@@ -158,7 +158,7 @@ private fun TryGeneratorCard(
     modifier: Modifier = Modifier,
 ) {
     BitwardenActionCardSmall(
-        actionIcon = rememberVectorPainter(id = R.drawable.ic_generator),
+        actionIcon = rememberVectorPainter(id = R.drawable.ic_generate),
         actionText = stringResource(
             R.string.use_the_generator_to_create_a_strong_unique_password,
         ),

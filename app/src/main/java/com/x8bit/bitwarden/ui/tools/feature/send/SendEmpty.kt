@@ -85,7 +85,7 @@ fun SendEmpty(
             onClick = onAddItemClick,
             label = stringResource(id = R.string.add_a_send),
             modifier = Modifier.standardHorizontalMargin(),
-            icon = rememberVectorPainter(R.drawable.ic_plus),
+            icon = rememberVectorPainter(R.drawable.ic_plus_small),
         )
         Spacer(modifier = Modifier.weight(1F))
         Spacer(modifier = Modifier.navigationBarsPadding())

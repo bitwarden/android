@@ -87,7 +87,7 @@ fun VaultNoItems(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButtonWithIcon(
-            icon = rememberVectorPainter(R.drawable.ic_plus),
+            icon = rememberVectorPainter(R.drawable.ic_plus_small),
             modifier = Modifier.standardHorizontalMargin(),
             onClick = addItemClickAction,
             label = buttonText,

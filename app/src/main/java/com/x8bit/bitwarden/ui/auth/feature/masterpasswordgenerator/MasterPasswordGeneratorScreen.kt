@@ -158,7 +158,7 @@ private fun MasterPasswordGeneratorContent(
         BitwardenFilledButtonWithIcon(
             label = stringResource(R.string.generate_button_label),
             onClick = onGenerateNewPassword,
-            icon = rememberVectorPainter(id = R.drawable.ic_generator),
+            icon = rememberVectorPainter(id = R.drawable.ic_generate),
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(12.dp))

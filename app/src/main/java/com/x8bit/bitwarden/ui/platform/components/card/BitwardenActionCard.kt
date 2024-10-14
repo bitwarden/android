@@ -62,7 +62,6 @@ fun BitwardenActionCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
             ) {
                 leadingContent?.let {
                     it()
@@ -77,7 +76,7 @@ fun BitwardenActionCard(
                     painter = rememberVectorPainter(id = R.drawable.ic_close),
                     contentDescription = stringResource(id = R.string.close),
                     onClick = onDismissClick,
-                    modifier = Modifier.offset(x = 8.dp),
+                    modifier = Modifier.offset(x = 10.dp, y = (-10).dp),
                 )
             }
             cardSubtitle?.let {
@@ -99,7 +98,7 @@ fun BitwardenActionCard(
 
 /**
  * A default exit animation for [BitwardenActionCard] when using an animation wrapper like
- * [AnimatedVisibility].
+ * [androidx.compose.animation.AnimatedVisibility].
  */
 fun actionCardExitAnimation() = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
 

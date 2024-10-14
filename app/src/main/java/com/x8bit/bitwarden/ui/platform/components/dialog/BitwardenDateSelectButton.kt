@@ -92,7 +92,7 @@ fun BitwardenDateSelectButton(
         enabled = shouldShowDialog,
         trailingIcon = {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_down_triangle),
+                painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
                 contentDescription = null,
             )
         },
