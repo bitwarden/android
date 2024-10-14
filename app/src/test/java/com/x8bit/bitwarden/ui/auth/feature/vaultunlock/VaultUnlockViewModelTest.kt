@@ -219,6 +219,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
             )
@@ -258,6 +259,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+
                     ),
                 ),
             )
@@ -1131,6 +1134,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     hasMasterPassword = true,
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
 )
 
 private val DEFAULT_USER_STATE = UserState(

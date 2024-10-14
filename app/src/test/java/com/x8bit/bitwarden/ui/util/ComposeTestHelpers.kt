@@ -14,6 +14,7 @@ import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
@@ -21,6 +22,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToString
+import androidx.compose.ui.text.LinkAnnotation
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.assertThrows
 
 /**
@@ -171,5 +175,34 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
                     $tree
                 """.trimMargin(),
                 )
+        }
+}
+
+/**
+ * Helper function to assert link annotation is applied to the given text in
+ * the [mainString] and invoke click action if it is found.
+ */
+fun ComposeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
+    mainString: String,
+    highLightText: String,
+    expectedStart: Int,
+    expectedEnd: Int,
+) {
+    this
+        .onNodeWithText(mainString)
+        .fetchSemanticsNode()
+        .config
+        .getOrNull(SemanticsProperties.Text)
+        ?.let { text ->
+            text.forEach {
+                it.getLinkAnnotations(expectedStart, expectedEnd)
+                    .forEach { annotationRange ->
+                        val annotation = annotationRange.item as? LinkAnnotation.Clickable
+                        val tag = annotation?.tag
+                        assertNotNull(tag)
+                        assertTrue(highLightText.equals(tag, ignoreCase = true))
+                        annotation?.linkInteractionListener?.onClick(annotation)
+                    }
+            }
         }
 }

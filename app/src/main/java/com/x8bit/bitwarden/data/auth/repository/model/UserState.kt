@@ -29,6 +29,9 @@ data class UserState(
     val activeAccount: Account
         get() = accounts.first { it.userId == activeUserId }
 
+    val activeUserFirstTimeState: FirstTimeState
+        get() = activeAccount.firstTimeState
+
     /**
      * Basic account information about a given user.
      *
@@ -71,6 +74,7 @@ data class UserState(
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
         val isUsingKeyConnector: Boolean,
         val onboardingStatus: OnboardingStatus,
+        val firstTimeState: FirstTimeState,
     ) {
         /**
          * Indicates that the user does or does not have a means to manually unlock the vault.
@@ -91,4 +95,21 @@ data class UserState(
         val hasLoginApprovingDevice: Boolean,
         val hasResetPasswordPermission: Boolean,
     )
+
+    /**
+     * Model to encapsulate different states for a user's first time experience.
+     */
+    data class FirstTimeState(
+        val showImportLoginsCard: Boolean,
+    ) {
+        /**
+         * Constructs a [FirstTimeState] accepting nullable values. If a value is null, the default
+         * is used.
+         */
+        constructor(
+            showImportLoginsCoachMarker: Boolean?,
+        ) : this(
+            showImportLoginsCard = showImportLoginsCoachMarker ?: true,
+        )
+    }
 }

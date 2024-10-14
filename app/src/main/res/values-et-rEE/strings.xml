@@ -195,6 +195,7 @@
   <string name="translations">Tõlkijad</string>
   <string name="items_for_uri">%1$s kontoandmed</string>
   <string name="no_items_for_uri">Hoidlas puuduvad %1$s kontod.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Kui vajutad sisendväljale ning näed Bitwardeni akent, saad sellele vajutada ning kontoandmeid ja paroole sisestada.</string>
   <string name="bitwarden_autofill_service_notification_content">Vajuta andmete automaatseks sisestamiseks.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Ava Juurdepääsetavuse seaded</string>
@@ -605,6 +606,7 @@ Skaneerimine toimub automaatselt.</string>
   <string name="thirty_days">30 päeva</string>
   <string name="custom">Kohandatud</string>
   <string name="share_on_save">Jaga seda Sendi salvestamise ajal.</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Ettevõtte poliitika kohaselt saad ainult olemasolevat Sendi kustutada.</string>
   <string name="about_send">Rohkem infot</string>
   <string name="hide_email">Ära näita saajatele minu e-posti aadressi.</string>
@@ -1011,4 +1013,9 @@ Soovid selle konto peale lülituda?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

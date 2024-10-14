@@ -39,6 +39,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
+import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
+import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
@@ -104,6 +106,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
+            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
         )
         deleteAccountDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -215,6 +218,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = {
                 navController.popBackStack()
             },
+        )
+        importLoginsScreenDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
     }
 }

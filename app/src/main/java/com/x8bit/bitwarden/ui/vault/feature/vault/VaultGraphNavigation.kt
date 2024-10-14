@@ -24,6 +24,7 @@ fun NavGraphBuilder.vaultGraph(
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
 ) {
     navigation(
         route = VAULT_GRAPH_ROUTE,
@@ -41,6 +42,7 @@ fun NavGraphBuilder.vaultGraph(
             },
             onNavigateToSearchVault = onNavigateToSearchVault,
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
+            onNavigateToImportLogins = onNavigateToImportLogins,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },

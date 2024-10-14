@@ -195,6 +195,7 @@
   <string name="translations">පරිවර්තන</string>
   <string name="items_for_uri">Items for %1$s</string>
   <string name="no_items_for_uri">There are no items in your vault for %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</string>
   <string name="bitwarden_autofill_service_notification_content">Tap this notification to auto-fill an item from your vault.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Open Accessibility Settings</string>
@@ -587,7 +588,7 @@ Scanning will happen automatically.</string>
   <string name="notes_info">Private notes about this Send.</string>
   <string name="disable_send">Deactivate this Send so that no one can access it</string>
   <string name="no_sends">There are no Sends in your account.</string>
-  <string name="add_a_send">Add a Send</string>
+  <string name="add_a_send">New send</string>
   <string name="copy_link">Copy link</string>
   <string name="share_link">Share link</string>
   <string name="send_link">Send link</string>
@@ -605,6 +606,7 @@ Scanning will happen automatically.</string>
   <string name="thirty_days">30 days</string>
   <string name="custom">Custom</string>
   <string name="share_on_save">Share this Send upon save</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Due to an enterprise policy, you are only able to delete an existing Send.</string>
   <string name="about_send">About Send</string>
   <string name="hide_email">Hide my email address from recipients</string>
@@ -1011,4 +1013,9 @@ Do you want to switch to this account?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

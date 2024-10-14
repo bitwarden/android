@@ -19,8 +19,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -106,6 +108,8 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
+            collapsedHeight = 48.dp,
+            expandedHeight = 96.dp,
             title = {
                 // The height of the component is controlled and will only allow for 1 extra row,
                 // making adding any arguments for softWrap and minLines superfluous.
@@ -113,10 +117,12 @@ fun BitwardenTopAppBar(
                     text = title,
                     style = BitwardenTheme.typography.titleLarge,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag("PageTitleLabel"),
+                    modifier = Modifier.testTag(tag = "PageTitleLabel"),
                 )
             },
-            modifier = modifier.testTag("HeaderBarComponent"),
+            modifier = modifier
+                .testTag(tag = "HeaderBarComponent")
+                .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
             actions = actions,
         )
     } else {
@@ -124,6 +130,7 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
+            expandedHeight = 48.dp,
             title = {
                 Text(
                     text = title,
@@ -131,13 +138,15 @@ fun BitwardenTopAppBar(
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag("PageTitleLabel"),
+                    modifier = Modifier.testTag(tag = "PageTitleLabel"),
                     onTextLayout = {
                         titleTextHasOverflow = it.hasVisualOverflow
                     },
                 )
             },
-            modifier = modifier.testTag("HeaderBarComponent"),
+            modifier = modifier
+                .testTag(tag = "HeaderBarComponent")
+                .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
             actions = actions,
         )
     }

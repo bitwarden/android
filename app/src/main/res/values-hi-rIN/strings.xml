@@ -195,6 +195,7 @@
   <string name="translations">अनुवाद</string>
   <string name="items_for_uri">%1$s के लिए आइटम</string>
   <string name="no_items_for_uri">%1$s के लिए आपकी तिजोरी में कोई आइटम नहीं हैं।</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">इनपुट फील्ड को चुनने पर अगर एक बिटवार्डन ऑटो-फिल स्क्रीन दिखता हैं, तो उसपर टैप करके ऑटो-फिल सर्विस लॉन्च किया जा सकता है।</string>
   <string name="bitwarden_autofill_service_notification_content">अपने तिजोरी से आइटम ऑटो-फिल करने के लिए इस नोटिफिकेशन पर टैप करें।</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">एक्सेसिबिलिटी सेटिंग खोलें</string>
@@ -604,6 +605,7 @@
   <string name="thirty_days">30 दिन</string>
   <string name="custom">कस्टम</string>
   <string name="share_on_save">Share this Send upon save</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Due to an enterprise policy, you are only able to delete an existing Send.</string>
   <string name="about_send">सेंड के बारे में</string>
   <string name="hide_email">Hide my email address from recipients</string>
@@ -1010,4 +1012,9 @@ Do you want to switch to this account?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">New login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

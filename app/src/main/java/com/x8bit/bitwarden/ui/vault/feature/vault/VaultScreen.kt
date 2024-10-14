@@ -33,12 +33,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -48,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
@@ -79,6 +83,7 @@ fun VaultScreen(
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
@@ -118,6 +123,8 @@ fun VaultScreen(
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
                     .show()
             }
+
+            VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -175,7 +182,7 @@ private fun VaultScreenScaffold(
         onDimBottomNavBarRequest(shouldShowMenu)
     }
     var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
         canScroll = { !accountMenuVisible },
     )
@@ -219,6 +226,10 @@ private fun VaultScreenScaffold(
             BitwardenMediumTopAppBar(
                 title = state.appBarTitle(),
                 scrollBehavior = scrollBehavior,
+                dividerStyle = state
+                    .vaultFilterDataWithFilter
+                    ?.let { TopAppBarDividerStyle.STATIC }
+                    ?: TopAppBarDividerStyle.ON_SCROLL,
                 actions = {
                     BitwardenAccountActionItem(
                         initials = state.initials,
@@ -303,11 +314,32 @@ private fun VaultScreenScaffold(
                         modifier = innerModifier,
                     )
 
-                    is VaultState.ViewState.NoItems -> VaultNoItems(
-                        modifier = innerModifier,
-                        policyDisablesSend = false,
-                        addItemClickAction = vaultHandlers.addItemClickAction,
-                    )
+                    is VaultState.ViewState.NoItems -> {
+                        AnimatedVisibility(
+                            visible = state.showImportActionCard,
+                            exit = actionCardExitAnimation(),
+                            label = "VaultNoItemsActionCard",
+                        ) {
+                            BitwardenActionCard(
+                                cardTitle = stringResource(R.string.import_saved_logins),
+                                cardSubtitle = stringResource(
+                                    R.string.use_a_computer_to_import_logins,
+                                ),
+                                actionText = stringResource(R.string.get_started),
+                                onActionClick = vaultHandlers.importActionCardClick,
+                                onDismissClick = vaultHandlers.dismissImportActionCard,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .standardHorizontalMargin()
+                                    .padding(top = 12.dp),
+                            )
+                        }
+                        VaultNoItems(
+                            modifier = innerModifier,
+                            policyDisablesSend = false,
+                            addItemClickAction = vaultHandlers.addItemClickAction,
+                        )
+                    }
 
                     is VaultState.ViewState.Error -> BitwardenErrorContent(
                         message = viewState.message(),

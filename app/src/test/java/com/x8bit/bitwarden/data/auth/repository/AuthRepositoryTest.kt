@@ -82,6 +82,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -344,6 +345,7 @@ class AuthRepositoryTest {
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 isDeviceTrustedProvider = { false },
+                firstTimeState = FIRST_TIME_STATE,
             ),
             repository.userStateFlow.value,
         )
@@ -370,6 +372,7 @@ class AuthRepositoryTest {
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
+                firstTimeState = FIRST_TIME_STATE,
             ),
             repository.userStateFlow.value,
         )
@@ -387,6 +390,7 @@ class AuthRepositoryTest {
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
+                firstTimeState = FIRST_TIME_STATE,
             ),
             repository.userStateFlow.value,
         )
@@ -416,6 +420,7 @@ class AuthRepositoryTest {
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
+                firstTimeState = FIRST_TIME_STATE,
             ),
             repository.userStateFlow.value,
         )
@@ -645,6 +650,7 @@ class AuthRepositoryTest {
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
+            firstTimeState = FIRST_TIME_STATE,
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -656,6 +662,7 @@ class AuthRepositoryTest {
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
+            firstTimeState = FIRST_TIME_STATE,
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -1998,6 +2005,7 @@ class AuthRepositoryTest {
             password = PASSWORD,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
         assertNull(repository.twoFactorResponse)
@@ -2092,6 +2100,7 @@ class AuthRepositoryTest {
                 password = PASSWORD,
                 twoFactorData = TWO_FACTOR_DATA,
                 captchaToken = null,
+                orgIdentifier = null,
             )
             assertEquals(LoginResult.Error(errorMessage = null), finalResult)
             assertEquals(twoFactorResponse, repository.twoFactorResponse)
@@ -2203,6 +2212,7 @@ class AuthRepositoryTest {
             password = PASSWORD,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Error(errorMessage = null), result)
     }
@@ -2667,6 +2677,7 @@ class AuthRepositoryTest {
             password = null,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
         assertNull(repository.twoFactorResponse)
@@ -3832,6 +3843,7 @@ class AuthRepositoryTest {
             password = null,
             twoFactorData = TWO_FACTOR_DATA,
             captchaToken = null,
+            orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
         assertNull(repository.twoFactorResponse)
@@ -5358,6 +5370,7 @@ class AuthRepositoryTest {
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
+            firstTimeState = FIRST_TIME_STATE,
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -5392,6 +5405,7 @@ class AuthRepositoryTest {
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
+            firstTimeState = FIRST_TIME_STATE,
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -5424,6 +5438,7 @@ class AuthRepositoryTest {
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
+            firstTimeState = FIRST_TIME_STATE,
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         assertEquals(
@@ -6299,6 +6314,13 @@ class AuthRepositoryTest {
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
+    @Test
+    fun `setShowImportLogins should save the showImportLogins to disk`() {
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
+        repository.setShowImportLogins(showImportLogins = true)
+        assertEquals(true, fakeAuthDiskSource.getShowImportLogins(USER_ID_1))
+    }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
@@ -6489,5 +6511,9 @@ class AuthRepositoryTest {
                 status = VaultUnlockData.Status.UNLOCKED,
             ),
         )
+
+        private val FIRST_TIME_STATE = UserState.FirstTimeState(
+    showImportLoginsCard = true,
+)
     }
 }

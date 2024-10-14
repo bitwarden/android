@@ -195,6 +195,7 @@
   <string name="translations">Bản dịch</string>
   <string name="items_for_uri">Mục cho %1$s</string>
   <string name="no_items_for_uri">Không có mục nào trong kho của bạn thích hợp với %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Tìm mật khẩu đăng nhập hoặc thêm mới</string>
   <string name="bitwarden_autofill_service_overlay">Khi bạn chọn một ô nhập liệu và thấy thông báo điền tự động của Bitwarden, hãy nhấn vào nó để bắt đầu dịch vụ điền tự động.</string>
   <string name="bitwarden_autofill_service_notification_content">Chạm vào thông báo này để tự động điền thông tin đăng nhập từ kho của bạn.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Mở cài đặt trợ năng</string>
@@ -605,6 +606,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="thirty_days">30 ngày</string>
   <string name="custom">Tùy chỉnh</string>
   <string name="share_on_save">Chia sẻ mục Gửi này khi lưu</string>
+  <string name="add_this_authenticator_key_to_a_login">Thêm khóa xác thực này vào thông tin đăng nhập hiện có hoặc tạo thông tin đăng nhập mới.</string>
   <string name="send_disabled_warning">Do chính sách doanh nghiệp, bạn chỉ có thể xóa những mục Gửi hiện có.</string>
   <string name="about_send">Về Gửi</string>
   <string name="hide_email">Ẩn địa chỉ email của tôi</string>
@@ -1011,4 +1013,9 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="master_password_hint_not_specified">Gợi ý mật khẩu chính</string>
   <string name="master_password_important_hint">Không thể lấy lại mật khẩu chính nếu bạn quên nó! Tối thiểu 12 ký tự.</string>
   <string name="get_started">Bắt đầu</string>
+  <string name="save_and_protect_your_data">Lưu và bảo vệ dữ liệu của bạn</string>
+  <string name="the_vault_protects_more_than_just_passwords">Kho lưu trữ không chỉ bảo vệ mật khẩu. Lưu trữ thông tin đăng nhập, ID, thẻ và ghi chú an toàn tại đây.</string>
+  <string name="new_login">Đăng nhập mới</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Chia sẻ file và dữ liệu an toàn với bất kỳ ai, trên bất kỳ nền tảng nào. Thông tin của bạn sẽ được mã hóa đầu cuối để hạn chế khả năng bị lộ.</string>
+  <string name="send_sensitive_information_safely">Gửi thông tin nhạy cảm an toàn</string>
 </resources>

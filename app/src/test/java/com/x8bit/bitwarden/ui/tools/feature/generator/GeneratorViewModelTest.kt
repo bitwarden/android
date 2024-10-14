@@ -2610,6 +2610,7 @@ private val DEFAULT_USER_STATE = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
         ),
     ),
 )

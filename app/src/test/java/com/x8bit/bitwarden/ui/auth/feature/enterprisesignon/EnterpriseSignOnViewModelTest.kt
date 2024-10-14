@@ -523,7 +523,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    EnterpriseSignOnEvent.NavigateToTwoFactorLogin("test@gmail.com"),
+                    EnterpriseSignOnEvent.NavigateToTwoFactorLogin("test@gmail.com", "Bitwarden"),
                     eventFlow.awaitItem(),
                 )
             }

@@ -195,6 +195,7 @@
   <string name="translations">Vertalingen</string>
   <string name="items_for_uri">Items voor %1$s</string>
   <string name="no_items_for_uri">Er zijn geen items in je kluis voor %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Zoeken naar een login of een login toevoegen</string>
   <string name="bitwarden_autofill_service_overlay">Wanneer je een invoerveld selecteert, dan kun je de overlay van Bitwarden aantikken om automatisch aanvullen te starten.</string>
   <string name="bitwarden_autofill_service_notification_content">Tik deze melding voor het automatisch invullen van een item uit je kluis.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Toegankelijkheidsinstellingen openen</string>
@@ -605,6 +606,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="thirty_days">30 dagen</string>
   <string name="custom">Aangepast</string>
   <string name="share_on_save">Deze Send bij het opslaan delen</string>
+  <string name="add_this_authenticator_key_to_a_login">Deze authenticatiecode aan een bestaande login toevoegen, of een nieuwe login aanmaken.</string>
   <string name="send_disabled_warning">Als gevolg van een ondernemingsbeleid kun je alleen een bestaande Send verwijderen.</string>
   <string name="about_send">Over Send</string>
   <string name="hide_email">Verberg mijn e-mailadres voor ontvangers</string>
@@ -1011,4 +1013,9 @@ Wilt u naar dit account wisselen?</string>
   <string name="master_password_hint_not_specified">Hoofdwachtwoordhint</string>
   <string name="master_password_important_hint">Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal 12 tekens.</string>
   <string name="get_started">Aan de slag</string>
+  <string name="save_and_protect_your_data">Je gegevens opslaan en beschermen</string>
+  <string name="the_vault_protects_more_than_just_passwords">De kluis beschermt meer dan alleen wachtwoorden. Sla hier beveiligde inloggegevens, ID\'s, kaarten en notities op.</string>
+  <string name="new_login">Nieuwe login</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Deel bestanden en gegevens veilig met iedereen, op elk platform. Je informatie blijft end-to-end versleuteld terwijl en blootstelling beperkt.</string>
+  <string name="send_sensitive_information_safely">Gevoelige informatie veilig versturen</string>
 </resources>

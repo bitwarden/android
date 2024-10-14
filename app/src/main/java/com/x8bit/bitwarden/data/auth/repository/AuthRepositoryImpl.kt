@@ -76,6 +76,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.currentOnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.util.currentOrDefaultUserFirstTimeState
+import com.x8bit.bitwarden.data.auth.repository.util.firstTimeStateFlow
 import com.x8bit.bitwarden.data.auth.repository.util.onboardingStatusChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
@@ -254,6 +256,7 @@ class AuthRepositoryImpl(
         authDiskSource.userOrganizationsListFlow,
         authDiskSource.userKeyConnectorStateFlow,
         authDiskSource.onboardingStatusChangesFlow,
+        authDiskSource.firstTimeStateFlow,
         vaultRepository.vaultUnlockDataStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
         // Ignore the data in the merge, but trigger an update when they emit.
@@ -267,8 +270,9 @@ class AuthRepositoryImpl(
         val userOrganizationsList = array[2] as List<UserOrganizations>
         val userIsUsingKeyConnectorList = array[3] as List<UserKeyConnectorState>
         val onboardingStatus = array[4] as OnboardingStatus?
-        val vaultState = array[5] as List<VaultUnlockData>
-        val hasPendingAccountAddition = array[6] as Boolean
+        val firstTimeState = array[5] as UserState.FirstTimeState
+        val vaultState = array[6] as List<VaultUnlockData>
+        val hasPendingAccountAddition = array[7] as Boolean
         userStateJson?.toUserState(
             vaultState = vaultState,
             userAccountTokens = userAccountTokens,
@@ -279,6 +283,7 @@ class AuthRepositoryImpl(
             isBiometricsEnabledProvider = ::isBiometricsEnabled,
             vaultUnlockTypeProvider = ::getVaultUnlockType,
             isDeviceTrustedProvider = ::isDeviceTrusted,
+            firstTimeState = firstTimeState,
         )
     }
         .filterNot { mutableHasPendingAccountDeletionStateFlow.value }
@@ -298,6 +303,7 @@ class AuthRepositoryImpl(
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                     isDeviceTrustedProvider = ::isDeviceTrusted,
+                    firstTimeState = authDiskSource.currentOrDefaultUserFirstTimeState,
                 ),
         )
 
@@ -628,6 +634,7 @@ class AuthRepositoryImpl(
         password: String?,
         twoFactorData: TwoFactorDataModel,
         captchaToken: String?,
+        orgIdentifier: String?,
     ): LoginResult = identityTokenAuthModel
         ?.let {
             loginCommon(
@@ -637,6 +644,7 @@ class AuthRepositoryImpl(
                 twoFactorData = twoFactorData,
                 captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
                 deviceData = twoFactorDeviceData,
+                orgIdentifier = orgIdentifier,
             )
         }
         ?: LoginResult.Error(errorMessage = null)
@@ -1293,6 +1301,11 @@ class AuthRepositoryImpl(
 
     override fun setOnboardingStatus(userId: String, status: OnboardingStatus?) {
         authDiskSource.storeOnboardingStatus(userId = userId, onboardingStatus = status)
+    }
+
+    override fun setShowImportLogins(showImportLogins: Boolean) {
+        val userId: String = activeUserId ?: return
+        authDiskSource.storeShowImportLogins(userId = userId, showImportLogins = showImportLogins)
     }
 
     @Suppress("CyclomaticComplexMethod")

@@ -195,6 +195,7 @@
   <string name="translations">Преводи</string>
   <string name="items_for_uri">Ставке за %1$s</string>
   <string name="no_items_for_uri">У вашем сефу нема ставке за %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Потражите лозинку или додајте нову лозинку</string>
   <string name="bitwarden_autofill_service_overlay">Када одаберете поље за унос и видите Bitwarden прозор за аутоматско попуњавање, можете да га додирнете да бисте покренули услугу ауто-попуњавања.</string>
   <string name="bitwarden_autofill_service_notification_content">Додирните ово обавештење да бисте аутоматски попунили ставку из сефа.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Отворити подешавања приступачности</string>
@@ -456,7 +457,7 @@
   <string name="copy_notes">Копирај белешке</string>
   <string name="exit">Изађи</string>
   <string name="exit_confirmation">Да ли сте сигурни да желите да изађете из Bitwarden?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Потражити главну лозинку при поновном покретању апликације?</string>
   <string name="pin_require_master_password_restart">Да ли желите да затражите откључавање главном лозинком када се апликација поново покрене?</string>
   <string name="black">Црно</string>
   <string name="nord">Nord</string>
@@ -606,6 +607,7 @@
   <string name="custom">Друго</string>
   <string name="share_on_save">Share this upon save.
 Поделите овај „Send“ после сачувања.</string>
+  <string name="add_this_authenticator_key_to_a_login">Додајте овај кључ за аутентификацију постојећој пријави или направите нову пријаву.</string>
   <string name="send_disabled_warning">Због полисе компаније, можеш само да бришеш постојећа слања.</string>
   <string name="about_send">О слању</string>
   <string name="hide_email">Сакриј моју е-адресу од примаоца.</string>
@@ -1011,5 +1013,10 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при повезивању са услугом Duo. Користите други метод пријаве у два корака или контактирајте Duo за помоћ.</string>
   <string name="master_password_hint_not_specified">Савет главне лозинке</string>
   <string name="master_password_important_hint">Важно: Ваша главна лозинка се не може повратити ако је заборавите! Минимално 12 слова.</string>
-  <string name="get_started">Get started</string>
+  <string name="get_started">Почните</string>
+  <string name="save_and_protect_your_data">Сачувајте и заштитите своје податке</string>
+  <string name="the_vault_protects_more_than_just_passwords">Сеф штити више од само лозинки. Овде безбедно чувајте безбедне пријаве, личне карте, картице и белешке.</string>
+  <string name="new_login">Ново пријављивање</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Делите датотеке и податке безбедно са било ким, на било којој платформи. Ваше информације ће остати шифроване од почетка-до-краја уз ограничење изложености.</string>
+  <string name="send_sensitive_information_safely">Шаљите осетљиве информације, безбедно</string>
 </resources>

@@ -72,6 +72,26 @@ fun AddSendContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
+        if (isAddMode && !isShared) {
+            BitwardenSegmentedButton(
+                modifier = Modifier.fillMaxWidth(),
+                options = persistentListOf(
+                    SegmentedButtonState(
+                        text = stringResource(id = R.string.file),
+                        onClick = addSendHandlers.onFileTypeSelect,
+                        isChecked = state.isFileType,
+                        testTag = "SendFileButton",
+                    ),
+                    SegmentedButtonState(
+                        text = stringResource(id = R.string.text),
+                        onClick = addSendHandlers.onTextTypeSelect,
+                        isChecked = state.isTextType,
+                        testTag = "SendTextButton",
+                    ),
+                ),
+            )
+        }
+
         if (policyDisablesSend) {
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.send_disabled_warning),
@@ -105,37 +125,6 @@ fun AddSendContent(
             value = state.common.name,
             onValueChange = addSendHandlers.onNamChange,
         )
-
-        if (isAddMode && !isShared) {
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.type),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenSegmentedButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                options = persistentListOf(
-                    SegmentedButtonState(
-                        text = stringResource(id = R.string.file),
-                        onClick = addSendHandlers.onFileTypeSelect,
-                        isChecked = state.isFileType,
-                        testTag = "SendFileButton",
-                    ),
-                    SegmentedButtonState(
-                        text = stringResource(id = R.string.text),
-                        onClick = addSendHandlers.onTextTypeSelect,
-                        isChecked = state.isTextType,
-                        testTag = "SendTextButton",
-                    ),
-                ),
-            )
-        }
 
         Spacer(modifier = Modifier.height(8.dp))
         when (val type = state.selectedType) {

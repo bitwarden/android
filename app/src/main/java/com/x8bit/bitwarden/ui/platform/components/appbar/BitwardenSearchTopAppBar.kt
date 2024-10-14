@@ -17,7 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
@@ -45,7 +47,9 @@ fun BitwardenSearchTopAppBar(
 ) {
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
-        modifier = modifier.testTag("HeaderBarComponent"),
+        modifier = modifier
+            .testTag(tag = "HeaderBarComponent")
+            .bottomDivider(thickness = (0.5).dp),
         colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {

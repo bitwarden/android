@@ -50,7 +50,7 @@
   <string name="account_already_added">Račun već postoji</string>
   <string name="switch_to_already_added_account_confirmation">Želiš li se sada prebaciti na njega?</string>
   <string name="master_password">Glavna lozinka</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Glavna lozinka (obavezno)</string>
   <string name="more">Više</string>
   <string name="my_vault">Moj trezor</string>
   <string name="authenticator">Autentikator</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">Razmotri da nam pomogneš dobrom recenzijom!</string>
   <string name="regenerate_password">Ponovno generiraj lozinku</string>
   <string name="retype_master_password">Ponovno upiši glavnu lozinku</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Ponovno unesi glavnu lozinku (obavezno)</string>
   <string name="search_vault">Pretraživanje trezora</string>
   <string name="security">Sigurnost</string>
   <string name="select">Odaberi</string>
@@ -195,6 +195,7 @@
   <string name="translations">Prijevodi</string>
   <string name="items_for_uri">Stavke za %1$s</string>
   <string name="no_items_for_uri">U tvom trezoru nema stavki za %1$s</string>
+  <string name="search_for_a_login_or_add_a_new_login">Potraži ili dodaj novu prijavu</string>
   <string name="bitwarden_autofill_service_overlay">Kada odabereš polje za unos i vidiš Bitwarden sloj auto-ispune, možeš ga dodirnuti za pokretanje auto-ispune.</string>
   <string name="bitwarden_autofill_service_notification_content">Dodirni ovu obavijest za auto-ispunu iz tvog trezora.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Otvori postavke pristupačnosti</string>
@@ -455,7 +456,7 @@
   <string name="copy_notes">Kopiraj bilješku</string>
   <string name="exit">Izlaz</string>
   <string name="exit_confirmation">Sigurno želiš izaći iz Bitwarden-a?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Traži glavnu lozinku kod ponovnog pokretanja aplikacije?</string>
   <string name="pin_require_master_password_restart">Obavezno otključavanje glavnom lozinkom pri ponovnom pokretanju aplikacije?</string>
   <string name="black">Crna</string>
   <string name="nord">Nord</string>
@@ -604,6 +605,7 @@
   <string name="thirty_days">30 dana</string>
   <string name="custom">Prilagođeno</string>
   <string name="share_on_save">Dijeli Send nakon spremanja</string>
+  <string name="add_this_authenticator_key_to_a_login">Dodaj ovaj autentifikatorski ključ postojećoj prijavi, ili stvori novu prijavu.</string>
   <string name="send_disabled_warning">Pravila tvrtke omogućuju brisanje samo postojećeg Senda</string>
   <string name="about_send">O Sendu</string>
   <string name="hide_email">Sakrij moju adresu e-pošte od primatelja.</string>
@@ -1005,8 +1007,13 @@
   <string name="return_to_complete_this_step_anytime_in_settings">Kasnije se možeš vratiti u Postavke i dovršiti ovaj korak.</string>
   <string name="what_bitwarden_has_to_offer">Sada možeš koristiti auto-ispunu za prijavu u aplikacije i web stranice koristeći svoje spremljene lozinke. Istraži sve ostalo što Bitwarden nudi.</string>
   <string name="youre_all_set">Sve je spremno!</string>
-  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
-  <string name="get_started">Get started</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Greška pri povezivanju s uslugom Duo. Koristi drugu metodu prijave s dvostrukom autentifikacijom ili kontaktiraj Duo za pomoć.</string>
+  <string name="master_password_hint_not_specified">Podsjetnik glavne lozinke</string>
+  <string name="master_password_important_hint">Glavnu lozinku nije moguće vratiti ako ju zaboraviš! Najmanje 12 znakova.</string>
+  <string name="get_started">Počni</string>
+  <string name="save_and_protect_your_data">Spremi i zaštiti svoje podatke</string>
+  <string name="the_vault_protects_more_than_just_passwords">Trezor štiti više od lozinki. Sigurno spremi prijave, identitete, kartice i bilješke.</string>
+  <string name="new_login">Nova prijava</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Sigurno dijeli datoteke i podatke s bilo kime, na bilo kojoj platformi. Tvoji podaci ostaju kriptirani uz ograničenje izloženosti.</string>
+  <string name="send_sensitive_information_safely">Sigurno pošalji osjetljive podatke</string>
 </resources>

@@ -111,6 +111,7 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.EmailVerification to true,
     FlagKey.OnboardingCarousel to true,
     FlagKey.OnboardingFlow to true,
+    FlagKey.ImportLoginsFlow to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -118,6 +119,7 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.EmailVerification to false,
     FlagKey.OnboardingCarousel to true,
     FlagKey.OnboardingFlow to false,
+    FlagKey.ImportLoginsFlow to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

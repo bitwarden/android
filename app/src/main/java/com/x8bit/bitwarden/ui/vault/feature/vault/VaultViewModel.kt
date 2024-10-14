@@ -9,9 +9,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -45,6 +47,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -67,6 +70,7 @@ class VaultViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -92,6 +96,7 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             hideNotificationsDialog = isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) || isFdroid,
             isRefreshing = false,
+            showImportActionCard = false,
         )
     },
 ) {
@@ -126,9 +131,15 @@ class VaultViewModel @Inject constructor(
 
         authRepository
             .userStateFlow
-            .onEach {
-                sendAction(VaultAction.Internal.UserStateUpdateReceive(userState = it))
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.ImportLoginsFlow),
+            ) { userState, importLoginsEnabled ->
+                VaultAction.Internal.UserStateUpdateReceive(
+                    userState = userState,
+                    importLoginsFlowEnabled = importLoginsEnabled,
+                )
             }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -163,7 +174,18 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal -> handleInternalAction(action)
+            VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
+            VaultAction.ImportActionCardClick -> handleImportActionCardClick()
         }
+    }
+
+    private fun handleImportActionCardClick() {
+        dismissImportLoginCard()
+        sendEvent(VaultEvent.NavigateToImportLogins)
+    }
+
+    private fun handleDismissImportActionCard() {
+        dismissImportLoginCard()
     }
 
     private fun handleIconLoadingSettingReceive(
@@ -459,6 +481,7 @@ class VaultViewModel @Inject constructor(
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
         val userState = action.userState ?: return
+        val firstTimeState = userState.activeUserFirstTimeState
 
         // Avoid updating the UI if we are actively switching users to avoid changes while
         // navigating.
@@ -470,6 +493,8 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
+        val shouldShowImportActionCard = action.importLoginsFlowEnabled &&
+            firstTimeState.showImportLoginsCard
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
@@ -480,6 +505,7 @@ class VaultViewModel @Inject constructor(
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
+                showImportActionCard = shouldShowImportActionCard,
             )
         }
     }
@@ -605,6 +631,11 @@ class VaultViewModel @Inject constructor(
     }
 
     //endregion VaultAction Handlers
+
+    private fun dismissImportLoginCard() {
+        if (!state.showImportActionCard) return
+        authRepository.setShowImportLogins(false)
+    }
 }
 
 /**
@@ -636,6 +667,7 @@ data class VaultState(
     val isIconLoadingDisabled: Boolean,
     val hideNotificationsDialog: Boolean,
     val isRefreshing: Boolean,
+    val showImportActionCard: Boolean,
 ) : Parcelable {
 
     /**
@@ -973,6 +1005,11 @@ sealed class VaultEvent {
     data object NavigateOutOfApp : VaultEvent()
 
     /**
+     * Navigate to the import logins screen.
+     */
+    data object NavigateToImportLogins : VaultEvent()
+
+    /**
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultEvent()
@@ -1111,6 +1148,16 @@ sealed class VaultAction {
     data object TryAgainClick : VaultAction()
 
     /**
+     * The user has dismissed the import action card.
+     */
+    data object DismissImportActionCard : VaultAction()
+
+    /**
+     * The user has clicked the import action card.
+     */
+    data object ImportActionCardClick : VaultAction()
+
+    /**
      * User clicked an overflow action.
      */
     data class OverflowOptionClick(
@@ -1155,6 +1202,7 @@ sealed class VaultAction {
          */
         data class UserStateUpdateReceive(
             val userState: UserState?,
+            val importLoginsFlowEnabled: Boolean,
         ) : Internal()
 
         /**

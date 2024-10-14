@@ -16,5 +16,6 @@ data class BitwardenShapes(
     val dialog: CornerBasedShape,
     val infoCallout: CornerBasedShape,
     val menu: CornerBasedShape,
+    val segmentedControl: CornerBasedShape,
     val snackbar: CornerBasedShape,
 )

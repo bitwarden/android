@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
+import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
@@ -69,8 +69,8 @@ fun VaultFilter(
 
     Row(
         modifier = Modifier
-            .scrolledContainerBackground(topAppBarScrollBehavior)
-            .bottomDivider()
+            .scrolledContainerBackground(topAppBarScrollBehavior = topAppBarScrollBehavior)
+            .scrolledContainerBottomDivider(topAppBarScrollBehavior = topAppBarScrollBehavior)
             .padding(vertical = 8.dp)
             .testTag("ActiveFilterRow")
             .then(modifier),

@@ -212,6 +212,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         password: String?,
         twoFactorData: TwoFactorDataModel,
         captchaToken: String?,
+        orgIdentifier: String?,
     ): LoginResult
 
     /**
@@ -392,4 +393,9 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Update the value of the onboarding status for the user.
      */
     fun setOnboardingStatus(userId: String, status: OnboardingStatus?)
+
+    /**
+     * Update the value of the showImportLogins status for the user.
+     */
+    fun setShowImportLogins(showImportLogins: Boolean)
 }

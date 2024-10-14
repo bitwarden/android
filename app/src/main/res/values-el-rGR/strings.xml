@@ -195,6 +195,7 @@
   <string name="translations">Μεταφράσεις</string>
   <string name="items_for_uri">Στοιχεία για %1$s</string>
   <string name="no_items_for_uri">Δεν υπάρχουν στοιχεία στην λίστα σας για %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Όταν επιλέξετε ένα πεδίο εισαγωγής και δείτε μια επικάλυψη αυτόματης συμπλήρωσης Bitwarden, μπορείτε να πατήσετε για να ξεκινήσει η υπηρεσία αυτόματης συμπλήρωσης.</string>
   <string name="bitwarden_autofill_service_notification_content">Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από το vault σας.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Άνοιγμα των Ρυθμίσεων Προσβασιμότητας</string>
@@ -456,7 +457,7 @@
   <string name="copy_notes">Αντιγραφή σημείωσης</string>
   <string name="exit">Έξοδος</string>
   <string name="exit_confirmation">Είστε βέβαιοι ότι θέλετε να βγείτε από το Bitwarden;</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Να απαιτείται ο κύριος κωδικός πρόσβασης κατά την επανεκκίνηση της εφαρμογής;</string>
   <string name="pin_require_master_password_restart">Θέλετε να απαιτείται ξεκλείδωμα με τον κύριο κωδικό κατά την επανεκκίνηση της εφαρμογής;</string>
   <string name="black">Μαύρο</string>
   <string name="nord">Nord</string>
@@ -605,6 +606,7 @@
   <string name="thirty_days">30 ημέρες</string>
   <string name="custom">Προσαρμοσμένο</string>
   <string name="share_on_save">Κοινοποιήστε αυτό το send κατά την αποθήκευση.</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">Λόγω μιας επιχειρηματικής πολιτικής, είστε σε θέση να διαγράψετε μόνο ένα υπάρχον Send</string>
   <string name="about_send">Σχετικά με το Send</string>
   <string name="hide_email">Απόκρυψη της διεύθυνσης ηλ. ταχυδρομείου μου από τους παραλήπτες</string>
@@ -1010,5 +1012,10 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Σφάλμα κατά τη σύνδεση με την υπηρεσία Duo. Χρησιμοποιήστε μια διαφορετική μέθοδο σύνδεσης δύο βημάτων ή επικοινωνήστε με την Duo για βοήθεια.</string>
   <string name="master_password_hint_not_specified">Υπόδειξη κύριου κωδικού πρόσβασης</string>
   <string name="master_password_important_hint">Σημαντικό: Δεν είναι δυνατή η ανάκτηση του κύριου κωδικού πρόσβασής σας αν τον ξεχάσετε! Πρέπει να αποτελείται από τουλάχιστον 12 χαρακτήρες.</string>
-  <string name="get_started">Get started</string>
+  <string name="get_started">Έναρξη</string>
+  <string name="save_and_protect_your_data">Save and protect your data</string>
+  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
+  <string name="new_login">Νέα σύνδεση</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

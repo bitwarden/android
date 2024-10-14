@@ -195,6 +195,7 @@
   <string name="translations">Fordítások</string>
   <string name="items_for_uri">%1$s elemei</string>
   <string name="no_items_for_uri">Nincs elem a széfben: %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Keressünk egy bejelentkezést vagy adjunk hozzá új bejelentkezést.</string>
   <string name="bitwarden_autofill_service_overlay">Egy beviteli mezőt kiválasztva és megjelenik a Bitwarden automatikus kitöltési ablaka, arra rákoppintva elindítható az automatikus kitöltési szolgáltatás.</string>
   <string name="bitwarden_autofill_service_notification_content">Erre az értesítésre koppintva automatikusan kitölthető egy elem a széfből.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Akadálymentesítési szolgáltatások megnyitása</string>
@@ -604,6 +605,7 @@
   <string name="thirty_days">30 nap</string>
   <string name="custom">Egyedi</string>
   <string name="share_on_save">A Send elem megosztása mentéskor.</string>
+  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
   <string name="send_disabled_warning">A vállalati házirend miatt csak egy meglévő Send elem törölhető.</string>
   <string name="about_send">A Sendről</string>
   <string name="hide_email">Saját email cím elrejtése a címzettek elől.</string>
@@ -1010,4 +1012,9 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Kezdés</string>
+  <string name="save_and_protect_your_data">A saját adatok mentése és védelme</string>
+  <string name="the_vault_protects_more_than_just_passwords">A széf nemcsak a jelszavakat védi. Itt biztonságosan tárolhatjuk a bejelentkezési adatokat, egyéb azonosítókat, kártyákat és jegyzeteket.</string>
+  <string name="new_login">Új bejelentkezés</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
+  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
 </resources>

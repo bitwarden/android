@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -27,10 +26,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.onClick
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,8 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmailHandler
+import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
+import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -51,8 +49,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-
-private const val TAG_URL = "URL"
 
 /**
  * Top level composable for the check email screen.
@@ -282,54 +278,34 @@ private fun CheckEmailLegacyContent(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val goBackAnnotatedString = createAnnotatedString(
+            val goBackAnnotatedString = createClickableAnnotatedString(
                 mainString = stringResource(
                     id = R.string.no_email_go_back_to_edit_your_email_address,
                 ),
-                highlights = listOf(stringResource(id = R.string.go_back)),
-                tag = TAG_URL,
+                highlights = listOf(
+                    ClickableTextHighlight(
+                        textToHighlight = stringResource(id = R.string.go_back),
+                        onTextClick = onChangeEmailClick,
+                    ),
+                ),
             )
-            ClickableText(
+            Text(
                 text = goBackAnnotatedString,
-                onClick = {
-                    goBackAnnotatedString
-                        .getStringAnnotations(TAG_URL, it, it)
-                        .firstOrNull()?.let {
-                            onChangeEmailClick()
-                        }
-                },
-                modifier = Modifier.semantics {
-                    role = Role.Button
-                    onClick {
-                        onChangeEmailClick()
-                        true
-                    }
-                },
             )
             Spacer(modifier = Modifier.height(32.dp))
-            val logInAnnotatedString = createAnnotatedString(
+            val logInAnnotatedString = createClickableAnnotatedString(
                 mainString = stringResource(
                     id = R.string.or_log_in_you_may_already_have_an_account,
                 ),
-                highlights = listOf(stringResource(id = R.string.log_in)),
-                tag = TAG_URL,
+                highlights = listOf(
+                    ClickableTextHighlight(
+                        textToHighlight = stringResource(id = R.string.log_in),
+                        onTextClick = onLoginClick,
+                    ),
+                ),
             )
-            ClickableText(
+            Text(
                 text = logInAnnotatedString,
-                onClick = {
-                    logInAnnotatedString
-                        .getStringAnnotations(TAG_URL, it, it)
-                        .firstOrNull()?.let {
-                            onLoginClick()
-                        }
-                },
-                modifier = Modifier.semantics {
-                    role = Role.Button
-                    onClick {
-                        onLoginClick()
-                        true
-                    }
-                },
             )
         }
     }

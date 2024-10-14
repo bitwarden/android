@@ -195,6 +195,7 @@
   <string name="translations">Překlady</string>
   <string name="items_for_uri">Položky pro %1$s</string>
   <string name="no_items_for_uri">Žádné položky ve Vašem trezoru pro %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
   <string name="bitwarden_autofill_service_overlay">Když vyberete vstupní pole a uvidíte překrytí automatického vyplnění, můžete na něj klepnout a spustit službu automatického vyplnění.</string>
   <string name="bitwarden_autofill_service_notification_content">Klepnutím na toto oznámení automaticky vyplníte přihlašovací údaje z trezoru.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Otevřít nastavení přístupnosti</string>
@@ -587,7 +588,7 @@ Načtení proběhne automaticky.</string>
   <string name="notes_info">Soukromé poznámky k tomuto Send.</string>
   <string name="disable_send">Deaktivovat tento Send (nikdo k němu nebude mít přístup)</string>
   <string name="no_sends">Ve Vašem účtu nejsou žádné Sends.</string>
-  <string name="add_a_send">Přidat Send</string>
+  <string name="add_a_send">Nový Send</string>
   <string name="copy_link">Kopírovat odkaz</string>
   <string name="share_link">Sdílet odkaz</string>
   <string name="send_link">Odkaz tohoto Send</string>
@@ -605,6 +606,7 @@ Načtení proběhne automaticky.</string>
   <string name="thirty_days">30 dnů</string>
   <string name="custom">Vlastní</string>
   <string name="share_on_save">Sdílet tento Send po uložení</string>
+  <string name="add_this_authenticator_key_to_a_login">Přidejte tento ověřovací klíč k existujícímu přihlášení nebo vytvořte nové přihlášení.</string>
   <string name="send_disabled_warning">Z důvodu podnikových zásad můžete smazat pouze existující Send.</string>
   <string name="about_send">O Send</string>
   <string name="hide_email">Skrýt mou e-mailovou adresu před příjemci</string>
@@ -1004,10 +1006,15 @@ Chcete se přepnout na tento účet?</string>
   <string name="turn_on_later">Zapnout později</string>
   <string name="turn_on_autofill_later">Zapnout automatické vyplňování později?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">K dokončení tohoto kroku se můžete kdykoliv vrátit v Nastavení.</string>
-  <string name="what_bitwarden_has_to_offer">K přihlašování do aplikací a na webové stránky pomocí uložených hesel můžete nyní používat automatické vyplňování. Nyní můžete prozkoumat vše ostatní, co Bitwarden nabízí.</string>
+  <string name="what_bitwarden_has_to_offer">Nyní můžete prozkoumat vše, co Bitwarden může nabídnout a začít bezpečně spravovat svá hesla.</string>
   <string name="youre_all_set">Vše je nastaveno!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba při připojování ke službě Duo. Použijte jinou dvoufázovou metodu přihlášení nebo kontaktujte Duo o pomoc.</string>
   <string name="master_password_hint_not_specified">Nápověda k hlavnímu heslu</string>
   <string name="master_password_important_hint">Důležité: Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit! Heslo musí mít alespoň 12 znaků.</string>
   <string name="get_started">Začínáme</string>
+  <string name="save_and_protect_your_data">Uložit a chránit Vaše data</string>
+  <string name="the_vault_protects_more_than_just_passwords">Trezor chrání více než jen hesla. Bezpečně zde uložte zabezpečená přihlášení, ID, karty a poznámky.</string>
+  <string name="new_login">Nové přihlášení</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Sdílejte bezpečně soubory a data s kýmkoli na libovolné platformě. Vaše informace zůstanou šifrovány a zároveň omezují expozici.</string>
+  <string name="send_sensitive_information_safely">Posílejte citlivé informace bezpečně</string>
 </resources>

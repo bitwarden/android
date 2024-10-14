@@ -21,7 +21,7 @@
   <string name="email_address">Endereço de e-mail</string>
   <string name="email_us">Enviar-nos um e-mail</string>
   <string name="email_us_description">Envie-nos um e-mail diretamente para obter ajuda ou dar feedback.</string>
-  <string name="enter_pin">Introduza o seu código PIN.</string>
+  <string name="enter_pin">Introduza o seu código PIN</string>
   <string name="favorites">Favoritos</string>
   <string name="file_bug_report">Apresentar um relatório de erros</string>
   <string name="file_bug_report_description">Abra um problema no nosso repositório do GitHub.</string>
@@ -195,6 +195,7 @@
   <string name="translations">Traduções</string>
   <string name="items_for_uri">Itens para %1$s</string>
   <string name="no_items_for_uri">Não existem itens no seu cofre para %1$s.</string>
+  <string name="search_for_a_login_or_add_a_new_login">Procure uma credencial ou adicione uma nova</string>
   <string name="bitwarden_autofill_service_overlay">Quando seleciona um campo de entrada e vê uma sobreposição de preenchimento automático do Bitwarden, pode tocar nela para iniciar o serviço de preenchimento automático.</string>
   <string name="bitwarden_autofill_service_notification_content">Toque nesta notificação para preencher automaticamente um item do seu cofre.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Abrir definições de acessibilidade</string>
@@ -587,7 +588,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="notes_info">Notas privadas sobre este Send.</string>
   <string name="disable_send">Desative este Send para que ninguém possa aceder ao mesmo</string>
   <string name="no_sends">Não existem Sends na sua conta.</string>
-  <string name="add_a_send">Adicionar um Send</string>
+  <string name="add_a_send">Novo Send</string>
   <string name="copy_link">Copiar link</string>
   <string name="share_link">Partilhar link</string>
   <string name="send_link">Link do Send</string>
@@ -605,6 +606,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="thirty_days">30 dias</string>
   <string name="custom">Personalizado</string>
   <string name="share_on_save">Partilhar este Send após guardar</string>
+  <string name="add_this_authenticator_key_to_a_login">Adicione esta chave de autenticação a uma credencial existente ou crie uma nova credencial.</string>
   <string name="send_disabled_warning">Devido a uma política da empresa, só é possível eliminar um Send existente.</string>
   <string name="about_send">Sobre o Send</string>
   <string name="hide_email">Ocultar o meu endereço de e-mail dos destinatários</string>
@@ -789,7 +791,7 @@ Pretende mudar para esta conta?</string>
   <string name="organization_sso_identifier_required">É necessário o identificador de SSO da organização.</string>
   <string name="add_the_key_to_an_existing_or_new_item">Adicionar a chave a um item existente ou novo</string>
   <string name="there_are_no_items_in_your_vault_that_match_x">Não existem itens no seu cofre que correspondam a \"%1$s\"</string>
-  <string name="search_for_an_item_or_add_a_new_item">Procurar um item ou adicionar um novo</string>
+  <string name="search_for_an_item_or_add_a_new_item">Procure um item ou adicione um novo</string>
   <string name="there_are_no_items_that_match_the_search">Não existem itens que correspondam à pesquisa</string>
   <string name="us">EUA</string>
   <string name="eu">UE</string>
@@ -884,7 +886,7 @@ Pretende mudar para esta conta?</string>
   <string name="your_organization_requires_you_to_set_a_master_password">A sua organização exige a definição de uma palavra-passe mestra.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</string>
   <string name="choose_a_login_to_save_this_passkey_to">Escolha uma credencial para guardar esta chave de acesso</string>
-  <string name="save_passkey_as_new_login">Guardar a chave de acesso como uma nova credencial</string>
+  <string name="save_passkey_as_new_login">Guarde a chave de acesso como uma nova credencial</string>
   <string name="save_passkey">Guardar a chave de acesso</string>
   <string name="passkeys_for_x">Chaves de acesso para %1$s</string>
   <string name="passwords_for_x">Palavra-passe para %1$s</string>
@@ -971,7 +973,7 @@ Anule a subscrição em qualquer altura.</string>
   <string name="set_up_unlock">Configurar o desbloqueio</string>
   <string name="set_up_later">Configurar mais tarde</string>
   <string name="set_up_unlock_later">Configurar o desbloqueio mais tarde?</string>
-  <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Pode voltar a concluir este passo em qualquer altura a partir da Segurança da conta nas Definições.</string>
+  <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Pode voltar a concluir este passo a qualquer altura a partir da Segurança da conta nas Definições.</string>
   <string name="confirm">Confirmar</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Configure a biometria ou escolha um código PIN para aceder rapidamente ao seu cofre e preencher automaticamente as suas credenciais.</string>
   <string name="never_lose_access_to_your_vault">Nunca perca o acesso ao seu cofre</string>
@@ -1004,11 +1006,16 @@ Anule a subscrição em qualquer altura.</string>
   <string name="use_autofill_to_log_into_your_accounts">Utilize o preenchimento automático para iniciar sessão nas suas contas com um simples toque.</string>
   <string name="turn_on_later">Ativar mais tarde</string>
   <string name="turn_on_autofill_later">Ativar o preenchimento automático mais tarde?</string>
-  <string name="return_to_complete_this_step_anytime_in_settings">Pode voltar a concluir este passo em qualquer altura nas Definições.</string>
-  <string name="what_bitwarden_has_to_offer">Pode agora utilizar o preenchimento automático para iniciar sessão em aplicações e sites utilizando as suas palavras-passe guardadas. Agora, pode explorar tudo o que o Bitwarden tem para oferecer.</string>
+  <string name="return_to_complete_this_step_anytime_in_settings">Pode voltar a concluir este passo a qualquer altura nas Definições.</string>
+  <string name="what_bitwarden_has_to_offer">Pode agora explorar tudo o que o Bitwarden tem para oferecer e começar a gerir as suas palavras-passe de forma segura.</string>
   <string name="youre_all_set">Tudo a postos!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro ao ligar ao serviço Duo. Utilize um método de verificação de dois passos diferente ou contacte o Duo para obter assistência.</string>
   <string name="master_password_hint_not_specified">Dica da palavra-passe mestra</string>
   <string name="master_password_important_hint">Importante: A sua palavra-passe mestra não pode ser recuperada se a esquecer! 12 caracteres no mínimo.</string>
   <string name="get_started">Começar</string>
+  <string name="save_and_protect_your_data">Guarde e proteja os seus dados</string>
+  <string name="the_vault_protects_more_than_just_passwords">O cofre protege mais do que apenas palavras-passe. Guarde aqui credenciais, IDs, cartões e notas de forma segura.</string>
+  <string name="new_login">Nova credencial</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Partilhe ficheiros e dados de forma segura com qualquer pessoa, em qualquer plataforma. As suas informações permanecerão encriptadas ponto a ponto, limitando a exposição.</string>
+  <string name="send_sensitive_information_safely">Enviar informações sensíveis, com segurança</string>
 </resources>
