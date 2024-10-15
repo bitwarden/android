@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDisk
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
@@ -96,6 +97,8 @@ object PlatformRepositoryModule {
         accessibilityEnabledManager: AccessibilityEnabledManager,
         dispatcherManager: DispatcherManager,
         policyManager: PolicyManager,
+        featureFlagManager: FeatureFlagManager,
+        vaultDiskSource: VaultDiskSource,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             autofillManager = autofillManager,
@@ -107,6 +110,8 @@ object PlatformRepositoryModule {
             accessibilityEnabledManager = accessibilityEnabledManager,
             dispatcherManager = dispatcherManager,
             policyManager = policyManager,
+            featureFlagManager = featureFlagManager,
+            vaultDiskSource = vaultDiskSource,
         )
 
     @Provides
