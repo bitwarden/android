@@ -55,6 +55,11 @@ android {
     buildTypes {
         debug {
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden.dev"
+            buildConfigField(
+                type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
+                name = "AUTHENTICATOR_BRIDGE_CONNECTION_TYPE",
+                value = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType.DEV",
+            )
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
             isMinifyEnabled = false
@@ -62,6 +67,11 @@ android {
 
         release {
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden"
+            buildConfigField(
+                type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
+                name = "AUTHENTICATOR_BRIDGE_CONNECTION_TYPE",
+                value = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType.RELEASE",
+            )
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

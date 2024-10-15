@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.repository.di
 
 import android.content.Context
+import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.repository.util.SymmetricKeyStorageProviderImpl
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
@@ -8,7 +9,6 @@ import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
 import com.bitwarden.authenticatorbridge.factory.AuthenticatorBridgeFactory
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
-import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
 import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
 import dagger.Module
 import dagger.Provides
@@ -42,7 +42,7 @@ object AuthenticatorBridgeModule {
     ): AuthenticatorBridgeManager =
         if (featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)) {
             factory.getAuthenticatorBridgeManager(
-                connectionType = AuthenticatorBridgeConnectionType.DEV,
+                connectionType = BuildConfig.AUTHENTICATOR_BRIDGE_CONNECTION_TYPE,
                 symmetricKeyStorageProvider = symmetricKeyStorageProvider,
             )
         } else {
