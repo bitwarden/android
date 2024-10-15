@@ -23,4 +23,9 @@ sealed class LoginResult {
      * There was an error logging in.
      */
     data class Error(val errorMessage: String?) : LoginResult()
+
+    /**
+     * There was an error while logging into an unofficial Bitwarden server.
+     */
+    data object UnofficialServerError : LoginResult()
 }

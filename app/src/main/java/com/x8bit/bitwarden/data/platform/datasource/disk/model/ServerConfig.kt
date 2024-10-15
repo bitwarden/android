@@ -19,4 +19,10 @@ data class ServerConfig(
 
     @SerialName("serverData")
     val serverData: ConfigResponseJson,
-)
+) {
+    /**
+     * Whether the server is an official Bitwarden server or not.
+     */
+    val isOfficialBitwardenServer: Boolean
+        get() = serverData.server == null
+}

@@ -304,7 +304,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ssoCallbackResultFlow Success with same state with login Error should show loading dialog then show an error`() =
+    fun `ssoCallbackResultFlow Success with same state with login Error should show loading dialog then show an error when server is an official Bitwarden server`() =
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
@@ -349,6 +349,72 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             message = R.string.login_sso_error.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoCallbackResultFlow Success with same state with login UnofficialServerError should show loading dialog then show unofficial error when Bitwarden server is unofficial`() =
+        runTest {
+            val orgIdentifier = "Bitwarden"
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any(), any())
+            } returns LoginResult.UnofficialServerError
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),

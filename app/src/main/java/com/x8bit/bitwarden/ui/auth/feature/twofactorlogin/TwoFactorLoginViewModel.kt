@@ -278,6 +278,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     /**
      * Handle the login result.
      */
+    @Suppress("MaxLineLength")
     private fun handleReceiveLoginResult(action: TwoFactorLoginAction.Internal.ReceiveLoginResult) {
         // Dismiss the loading overlay.
         mutableStateFlow.update { it.copy(dialogState = null) }
@@ -303,6 +304,18 @@ class TwoFactorLoginViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.invalid_verification_code.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.UnofficialServerError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                                .asText(),
                         ),
                     )
                 }

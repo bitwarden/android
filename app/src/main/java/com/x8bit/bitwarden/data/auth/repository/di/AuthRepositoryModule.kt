@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -45,6 +46,7 @@ object AuthRepositoryModule {
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        configDiskSource: ConfigDiskSource,
         dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
@@ -64,6 +66,7 @@ object AuthRepositoryModule {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
+        configDiskSource = configDiskSource,
         haveIBeenPwnedService = haveIBeenPwnedService,
         dispatcherManager = dispatcherManager,
         environmentRepository = environmentRepository,

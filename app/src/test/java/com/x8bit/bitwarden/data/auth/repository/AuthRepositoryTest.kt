@@ -98,6 +98,9 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
+import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -208,6 +211,7 @@ class AuthRepositoryTest {
         )
             .asSuccess()
     }
+    private val configDiskSource = FakeConfigDiskSource()
     private val vaultSdkSource = mockk<VaultSdkSource> {
         coEvery {
             getAuthRequestKey(
@@ -249,6 +253,7 @@ class AuthRepositoryTest {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
+        configDiskSource = configDiskSource,
         environmentRepository = fakeEnvironmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
@@ -1430,38 +1435,65 @@ class AuthRepositoryTest {
         coVerify { identityService.preLogin(email = EMAIL) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `login get token fails should return Error with no message`() = runTest {
-        coEvery {
-            identityService.preLogin(email = EMAIL)
-        } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        } returns RuntimeException().asFailure()
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.Error(errorMessage = null), result)
-        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
-        coVerify { identityService.preLogin(email = EMAIL) }
-        coVerify {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
+    fun `login get token fails should return Error with no message when server is an official Bitwarden server`() =
+        runTest {
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns RuntimeException().asFailure()
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(LoginResult.Error(errorMessage = null), result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
         }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `login get token fails should return UnofficialServerError when server is an unofficial Bitwarden server`() =
+        runTest {
+            configDiskSource.serverConfig = SERVER_CONFIG_UNOFFICIAL
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns RuntimeException().asFailure()
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(LoginResult.UnofficialServerError, result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify { identityService.preLogin(email = EMAIL) }
+        }
 
     @Test
     fun `login get token returns Invalid should return Error with correct message`() = runTest {
@@ -6513,7 +6545,36 @@ class AuthRepositoryTest {
         )
 
         private val FIRST_TIME_STATE = UserState.FirstTimeState(
-    showImportLoginsCard = true,
-)
+            showImportLoginsCard = true,
+        )
+
+        private val SERVER_CONFIG_DEFAULT = ServerConfig(
+            lastSync = 0L,
+            serverData = ConfigResponseJson(
+                type = "mockType",
+                version = "mockVersion",
+                gitHash = "mockGitHash",
+                server = null,
+                environment = ConfigResponseJson.EnvironmentJson(
+                    cloudRegion = "mockCloudRegion",
+                    vaultUrl = "mockVaultUrl",
+                    apiUrl = "mockApiUrl",
+                    identityUrl = "mockIdentityUrl",
+                    notificationsUrl = "mockNotificationsUrl",
+                    ssoUrl = "mockSsoUrl",
+                ),
+                featureStates = emptyMap(),
+            ),
+        )
+
+        private val SERVER_CONFIG_UNOFFICIAL = SERVER_CONFIG_DEFAULT
+            .copy(
+                serverData = SERVER_CONFIG_DEFAULT.serverData.copy(
+                    server = ConfigResponseJson.ServerJson(
+                        name = "mockUnofficialServerName",
+                        url = "mockUnofficialServerUrl",
+                    ),
+                ),
+            )
     }
 }

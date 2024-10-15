@@ -646,6 +646,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick login returns UnofficialServerError should update dialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            } returns LoginResult.UnofficialServerError
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss)
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+            coVerify {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            }
+        }
+
     @Test
     fun `RememberMeToggle should update the state`() {
         val viewModel = createViewModel()
