@@ -31,6 +31,18 @@ fun BitwardenUnlockWithBiometricsSwitch(
     modifier: Modifier = Modifier,
 ) {
     if (biometricSupportStatus == BiometricSupportStatus.NOT_SUPPORTED) return
+    val biometricsDescription: String = when (biometricSupportStatus) {
+        BiometricSupportStatus.CLASS_3_SUPPORTED -> {
+            stringResource(R.string.class_3_biometrics_description)
+        }
+        BiometricSupportStatus.CLASS_2_SUPPORTED -> {
+            stringResource(R.string.class_2_biometrics_description)
+        }
+
+        BiometricSupportStatus.NOT_SUPPORTED -> error(
+            "Should not be called when BiometricSupportStatus is NOT_SUPPORTED",
+        )
+    }
     Column(modifier = modifier) {
         BitwardenWideSwitch(
             label = stringResource(
@@ -46,24 +58,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
                 }
             },
             enabled = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED,
+            description = biometricsDescription,
         )
-        val biometricsDescription: String = when (biometricSupportStatus) {
-            BiometricSupportStatus.CLASS_3_SUPPORTED -> {
-                stringResource(R.string.class_3_biometrics_description)
-            }
-            BiometricSupportStatus.CLASS_2_SUPPORTED -> {
-                stringResource(R.string.class_2_biometrics_description)
-            }
-
-            BiometricSupportStatus.NOT_SUPPORTED -> error(
-                "Should not be called when BiometricSupportStatus is NOT_SUPPORTED",
-            )
-        }
-        Text(
-            text = biometricsDescription,
-            style = BitwardenTheme.typography.labelSmall,
-            color = BitwardenTheme.colorScheme.text.secondary,
-        )
-        Spacer(modifier = Modifier.height(2.dp))
     }
 }
