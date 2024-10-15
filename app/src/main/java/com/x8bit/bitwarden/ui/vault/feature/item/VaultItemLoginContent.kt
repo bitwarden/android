@@ -418,7 +418,7 @@ private fun UriField(
         actions = {
             if (uriData.isLaunchable) {
                 BitwardenFilledIconButton(
-                    vectorIconRes = R.drawable.ic_launch,
+                    vectorIconRes = R.drawable.ic_external_link,
                     contentDescription = stringResource(id = R.string.launch),
                     onClick = { onLaunchUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginLaunchUriButton"),
