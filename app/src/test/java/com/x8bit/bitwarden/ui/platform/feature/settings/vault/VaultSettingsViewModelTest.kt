@@ -1,14 +1,27 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class VaultSettingsViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
+    private val mutableImportLoginsFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlagFlow
+        every { getFeatureFlag(FlagKey.ImportLoginsFlow) } returns false
+    }
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
@@ -44,7 +57,18 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `ImportLoginsFeatureFlagChanged should update state`() {
+        val viewModel = createViewModel()
+        assertFalse(
+            viewModel.stateFlow.value.isNewImportLoginsFlowEnabled,
+        )
+        mutableImportLoginsFlagFlow.update { true }
+        assertTrue(viewModel.stateFlow.value.isNewImportLoginsFlowEnabled)
+    }
+
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         environmentRepository = environmentRepository,
+        featureFlagManager = featureFlagManager,
     )
 }

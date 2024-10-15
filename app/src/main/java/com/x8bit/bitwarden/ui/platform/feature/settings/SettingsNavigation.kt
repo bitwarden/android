@@ -35,6 +35,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToImportLogins: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -70,6 +71,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToExportVault = onNavigateToExportVault,
             onNavigateToFolders = onNavigateToFolders,
+            onNavigateToImportLogins = onNavigateToImportLogins,
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
     }

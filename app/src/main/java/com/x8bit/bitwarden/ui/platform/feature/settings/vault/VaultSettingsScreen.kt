@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -40,10 +41,11 @@ fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
-    val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
@@ -56,7 +58,11 @@ fun VaultSettingsScreen(
             }
 
             is VaultSettingsEvent.NavigateToImportVault -> {
-                intentManager.launchUri(event.url.toUri())
+                if (state.isNewImportLoginsFlowEnabled) {
+                    onNavigateToImportLogins()
+                } else {
+                    intentManager.launchUri(event.url.toUri())
+                }
             }
         }
     }
@@ -106,22 +112,35 @@ fun VaultSettingsScreen(
                     .fillMaxWidth(),
             )
 
-            BitwardenExternalLinkRow(
-                text = stringResource(R.string.import_items),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
-                },
-                withDivider = true,
-                dialogTitle = stringResource(id = R.string.continue_to_web_app),
-                dialogMessage =
-                stringResource(
-                    id = R.string.you_can_import_data_to_your_vault_on_x,
-                    state.value.importUrl,
-                ),
-                modifier = Modifier
-                    .testTag("ImportItemsLinkItemView")
-                    .fillMaxWidth(),
-            )
+            if (state.isNewImportLoginsFlowEnabled) {
+                BitwardenTextRow(
+                    text = stringResource(R.string.import_items),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
+                    },
+                    withDivider = true,
+                    modifier = Modifier
+                        .testTag("ImportItemsLinkItemView")
+                        .fillMaxWidth(),
+                )
+            } else {
+                BitwardenExternalLinkRow(
+                    text = stringResource(R.string.import_items),
+                    onConfirmClick = remember(viewModel) {
+                        { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
+                    },
+                    withDivider = true,
+                    dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                    dialogMessage =
+                    stringResource(
+                        id = R.string.you_can_import_data_to_your_vault_on_x,
+                        state.importUrl,
+                    ),
+                    modifier = Modifier
+                        .testTag("ImportItemsLinkItemView")
+                        .fillMaxWidth(),
+                )
+            }
         }
     }
 }
