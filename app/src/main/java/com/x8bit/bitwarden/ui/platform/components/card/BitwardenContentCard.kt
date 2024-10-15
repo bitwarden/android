@@ -38,7 +38,7 @@ fun <T> BitwardenContentCard(
                 shape = BitwardenTheme.shapes.contentCard,
             ),
     ) {
-        contentItems.forEachIndexed { index, step ->
+        contentItems.forEachIndexed { index, item ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -53,7 +53,7 @@ fun <T> BitwardenContentCard(
                         },
                     ),
             ) {
-                content(step)
+                content(item)
             }
         }
     }
