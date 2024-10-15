@@ -2,13 +2,11 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins.components
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -23,44 +21,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 
 /**
- * Reusable component for the import logins instruction card.
+ * Row item for the content card of the import logins screen instructions.
  */
 @Composable
-fun InstructionCard(
-    instructionSteps: List<InstructionStep>,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = BitwardenTheme.colorScheme.background.secondary,
-                shape = BitwardenTheme.shapes.infoCard,
-            ),
-    ) {
-        instructionSteps.forEachIndexed { index, step ->
-            InstructionRow(
-                instructionStep = step,
-                modifier = modifier
-                    .padding(all = 12.dp),
-            )
-            if (index < instructionSteps.lastIndex) {
-                BitwardenHorizontalDivider(
-                    modifier = Modifier.padding(start = 48.dp),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun InstructionRow(
+fun InstructionRowItem(
     instructionStep: InstructionStep,
     modifier: Modifier = Modifier,
 ) {
@@ -72,6 +42,7 @@ private fun InstructionRow(
             painter = rememberVectorPainter(instructionStep.imageRes),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.secondary,
+            modifier = Modifier.size(24.dp),
         )
         Spacer(Modifier.width(8.dp))
         Column {
@@ -110,8 +81,8 @@ private val InstructionStep.imageRes: Int
 private fun InstructionCard_preview() {
     BitwardenTheme {
         Surface {
-            InstructionCard(
-                instructionSteps = listOf(
+            BitwardenContentCard(
+                contentItems = listOf(
                     InstructionStep(
                         stepNumber = 1,
                         instructionText = buildAnnotatedString {
@@ -141,7 +112,9 @@ private fun InstructionCard_preview() {
                         },
                     ),
                 ),
-            )
+            ) {
+                InstructionRowItem(it)
+            }
         }
     }
 }

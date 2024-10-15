@@ -1054,4 +1054,8 @@ Do you want to switch to this account?</string>
   <string name="then_done_highlight">then Done</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to delete your saved password file.</string>
   <string name="delete_your_saved_password_file">delete your saved password file.</string>
+    <string name="need_help_checkout_out_import_help">Need help? Checkout out import help.</string>
+  <string name="import_help_highlight">import help</string>
+  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
+  <string name="save_the_exported_file_highlight">Save the exported file</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -25,12 +26,14 @@ import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 
 /**
  * Reusable component for each step of the import logins flow.
  */
+@Suppress("LongMethod")
 @Composable
 fun ImportLoginsInstructionStep(
     stepText: String,
@@ -53,26 +56,33 @@ fun ImportLoginsInstructionStep(
         Spacer(Modifier.height(12.dp))
         Text(text = stepTitle, style = BitwardenTheme.typography.titleMedium)
         Spacer(Modifier.height(24.dp))
-        InstructionCard(
-            instructionSteps = instructions,
+        BitwardenContentCard(
+            contentItems = instructions,
+            bottomDividerPaddingStart = 48,
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(portrait = 12.dp),
-        )
+                .standardHorizontalMargin(),
+        ) { instructionStep ->
+            InstructionRowItem(
+                instructionStep = instructionStep,
+                modifier = modifier
+                    .padding(all = 12.dp),
+            )
+        }
         Spacer(Modifier.height(24.dp))
         Text(
             text = createClickableAnnotatedString(
-                mainString = "Need help? Checkout out import help.",
+                mainString = stringResource(R.string.need_help_checkout_out_import_help),
                 highlights = listOf(
                     ClickableTextHighlight(
-                        textToHighlight = "import help",
+                        textToHighlight = stringResource(R.string.import_help_highlight),
                         onTextClick = onHelpClick,
                     ),
                 ),
             ),
             style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.secondary,
-            modifier = Modifier.standardHorizontalMargin(portrait = 12.dp),
+            modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
@@ -80,7 +90,7 @@ fun ImportLoginsInstructionStep(
             onClick = onContinueClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(portrait = 12.dp),
+                .standardHorizontalMargin(),
         )
         Spacer(Modifier.height(12.dp))
         BitwardenOutlinedButton(
@@ -88,7 +98,7 @@ fun ImportLoginsInstructionStep(
             onClick = onBackClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(portrait = 12.dp),
+                .standardHorizontalMargin(),
         )
         Spacer(Modifier.navigationBarsPadding())
     }

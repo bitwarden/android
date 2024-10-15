@@ -206,7 +206,7 @@ private fun InitialImportLoginsContent(
             painter = rememberVectorPainter(R.drawable.img_import_logins),
             contentDescription = null,
             modifier = Modifier
-                .standardHorizontalMargin(portrait = 12.dp)
+                .standardHorizontalMargin()
                 .size(124.dp),
         )
         Spacer(Modifier.height(24.dp))
@@ -215,7 +215,7 @@ private fun InitialImportLoginsContent(
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.standardHorizontalMargin(portrait = 12.dp),
+            modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(Modifier.height(12.dp))
         Text(
@@ -225,14 +225,14 @@ private fun InitialImportLoginsContent(
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.standardHorizontalMargin(portrait = 12.dp),
+            modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.get_started),
             onClick = onGetStartedClick,
             modifier = Modifier
-                .standardHorizontalMargin(portrait = 12.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
         Spacer(Modifier.height(12.dp))
@@ -240,7 +240,7 @@ private fun InitialImportLoginsContent(
             label = stringResource(R.string.import_logins_later),
             onClick = onImportLaterClick,
             modifier = Modifier
-                .standardHorizontalMargin(portrait = 12.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
         Spacer(Modifier.navigationBarsPadding())
@@ -272,9 +272,9 @@ private fun ImportLoginsStepOneContent(
     )
     val instruction3 = createAnnotatedString(
         mainString = stringResource(
-            R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
+            R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
         ),
-        highlights = listOf(stringResource(R.string.select_import_data_highlight)),
+        highlights = listOf(stringResource(R.string.save_the_exported_file_highlight)),
         highlightStyle = bitwardenBoldSpanStyle,
     )
     ImportLoginsInstructionStep(
@@ -318,10 +318,10 @@ private fun ImportLoginsStepTwoContent(
         highlights = listOf(stringResource(R.string.go_to_vault_bitwarden_com_highlight)),
         highlightStyle = bitwardenBoldSpanStyle,
     )
-    val instruction2UnStyled = stringResource(R.string.log_in_to_the_bitwarden_web_app)
+    val instruction2Text = stringResource(R.string.log_in_to_the_bitwarden_web_app)
     val instruction2 = buildAnnotatedString {
         withStyle(bitwardenBoldSpanStyle) {
-            append(instruction2UnStyled)
+            append(instruction2Text)
         }
     }
     ImportLoginsInstructionStep(
