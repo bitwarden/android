@@ -4,12 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
@@ -28,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlin.let
 
 /**
  * A design component action card, which contains a title, action button, and a dismiss button
@@ -57,12 +56,9 @@ fun BitwardenActionCard(
         elevation = CardDefaults.elevatedCardElevation(),
         border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Spacer(Modifier.width(16.dp))
+            Row(modifier = Modifier.padding(top = 16.dp)) {
                 leadingContent?.let {
                     it()
                     Spacer(Modifier.width(12.dp))
@@ -71,28 +67,33 @@ fun BitwardenActionCard(
                     text = cardTitle,
                     style = BitwardenTheme.typography.titleMedium,
                 )
-                Spacer(Modifier.weight(1f))
-                BitwardenStandardIconButton(
-                    painter = rememberVectorPainter(id = R.drawable.ic_close),
-                    contentDescription = stringResource(id = R.string.close),
-                    onClick = onDismissClick,
-                    modifier = Modifier.offset(x = 10.dp, y = (-10).dp),
-                )
             }
-            cardSubtitle?.let {
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = it,
-                    style = BitwardenTheme.typography.bodyMedium,
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-            BitwardenFilledButton(
-                label = actionText,
-                onClick = onActionClick,
-                modifier = Modifier.fillMaxWidth(),
+            Spacer(Modifier.weight(1f))
+            BitwardenStandardIconButton(
+                painter = rememberVectorPainter(id = R.drawable.ic_close),
+                contentDescription = stringResource(id = R.string.close),
+                onClick = onDismissClick,
             )
         }
+        cardSubtitle?.let {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = it,
+                style = BitwardenTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+        BitwardenFilledButton(
+            label = actionText,
+            onClick = onActionClick,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        )
+        Spacer(Modifier.height(16.dp))
     }
 }
 
