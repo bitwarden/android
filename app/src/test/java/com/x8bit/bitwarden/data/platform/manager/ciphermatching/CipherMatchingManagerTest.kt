@@ -8,8 +8,10 @@ import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
+import com.x8bit.bitwarden.data.platform.util.getHostOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
+import com.x8bit.bitwarden.data.platform.util.hasPort
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
@@ -111,6 +113,23 @@ class CipherMatchingManagerTest {
     private val hostMatchCipher: CipherView = mockk {
         every { login } returns hostMatchLoginView
     }
+    private val hostNoPortMatchLoginUriViewMatching: LoginUriView = mockk {
+        every { match } returns UriMatchType.HOST
+        every { uri } returns HOST_NO_PORT_LOGIN_VIEW_URI_MATCHING
+    }
+    private val hostNoPortMatchLoginUriViewNotMatching: LoginUriView = mockk {
+        every { match } returns UriMatchType.HOST
+        every { uri } returns HOST_NO_PORT_LOGIN_VIEW_URI_NOT_MATCHING
+    }
+    private val hostNoPortMatchLoginView: LoginView = mockk {
+        every { uris } returns listOf(
+            hostNoPortMatchLoginUriViewMatching,
+            hostNoPortMatchLoginUriViewNotMatching,
+        )
+    }
+    private val hostNoPortMatchCipher: CipherView = mockk {
+        every { login } returns hostNoPortMatchLoginView
+    }
     private val neverMatchLoginUriView: LoginUriView = mockk {
         every { match } returns UriMatchType.NEVER
         every { uri } returns "google.com"
@@ -159,6 +178,7 @@ class CipherMatchingManagerTest {
         defaultMatchCipher,
         exactMatchCipher,
         hostMatchCipher,
+        hostNoPortMatchCipher,
         neverMatchCipher,
         regexMatchCipher,
         startsWithMatchCipher,
@@ -222,6 +242,7 @@ class CipherMatchingManagerTest {
                 defaultMatchCipher,
                 exactMatchCipher,
                 hostMatchCipher,
+                hostNoPortMatchCipher,
                 regexMatchCipher,
                 startsWithMatchCipher,
             )
@@ -250,6 +271,7 @@ class CipherMatchingManagerTest {
             // and therefore is at the end of the list.
             val expected = listOf(
                 hostMatchCipher,
+                hostNoPortMatchCipher,
                 regexMatchCipher,
                 defaultMatchCipher,
             )
@@ -278,6 +300,7 @@ class CipherMatchingManagerTest {
                 defaultMatchCipher,
                 exactMatchCipher,
                 hostMatchCipher,
+                hostNoPortMatchCipher,
                 regexMatchCipher,
                 startsWithMatchCipher,
             )
@@ -304,6 +327,7 @@ class CipherMatchingManagerTest {
             val uri = "difficultToMatch.com"
             val expected = listOf(
                 hostMatchCipher,
+                hostNoPortMatchCipher,
                 regexMatchCipher,
             )
             setupMocksForMatchingCiphers(
@@ -353,12 +377,15 @@ class CipherMatchingManagerTest {
     private fun setupMocksForMatchingCiphers(
         isAndroidApp: Boolean,
         uri: String,
+        hasPort: Boolean = true,
     ) {
         with(uri) {
             every { isAndroidApp() } returns isAndroidApp
             every {
                 getDomainOrNull(resourceCacheManager = resourceCacheManager)
             } returns this.takeIf { isAndroidApp }
+            every { hasPort() } returns hasPort
+            every { getHostOrNull() } returns HOST
             every { getHostWithPortOrNull() } returns HOST_WITH_PORT
             every {
                 getWebHostFromAndroidUriOrNull()
@@ -382,8 +409,15 @@ class CipherMatchingManagerTest {
             DEFAULT_LOGIN_VIEW_URI_FIVE.getDomainOrNull(resourceCacheManager = resourceCacheManager)
         } returns null
 
+        every { HOST_LOGIN_VIEW_URI_MATCHING.hasPort() } returns true
         every { HOST_LOGIN_VIEW_URI_MATCHING.getHostWithPortOrNull() } returns HOST_WITH_PORT
+        every { HOST_LOGIN_VIEW_URI_NOT_MATCHING.hasPort() } returns true
         every { HOST_LOGIN_VIEW_URI_NOT_MATCHING.getHostWithPortOrNull() } returns null
+
+        every { HOST_NO_PORT_LOGIN_VIEW_URI_MATCHING.hasPort() } returns false
+        every { HOST_NO_PORT_LOGIN_VIEW_URI_MATCHING.getHostOrNull() } returns HOST
+        every { HOST_NO_PORT_LOGIN_VIEW_URI_NOT_MATCHING.hasPort() } returns false
+        every { HOST_NO_PORT_LOGIN_VIEW_URI_NOT_MATCHING.getHostOrNull() } returns null
     }
 }
 
@@ -419,4 +453,9 @@ private const val DEFAULT_LOGIN_VIEW_URI_FIVE: String = "DEFAULT_LOGIN_VIEW_URI_
 // Setup state for host ciphers
 private const val HOST_LOGIN_VIEW_URI_MATCHING: String = "DEFAULT_LOGIN_VIEW_URI_MATCHING"
 private const val HOST_LOGIN_VIEW_URI_NOT_MATCHING: String = "DEFAULT_LOGIN_VIEW_URI_NOT_MATCHING"
+private const val HOST_NO_PORT_LOGIN_VIEW_URI_MATCHING: String =
+    "HOST_NO_PORT_LOGIN_VIEW_URI_MATCHING"
+private const val HOST_NO_PORT_LOGIN_VIEW_URI_NOT_MATCHING: String =
+    "HOST_NO_PORT_LOGIN_VIEW_URI_NOT_MATCHING"
 private const val HOST_WITH_PORT: String = "HOST_WITH_PORT"
+private const val HOST: String = "HOST"

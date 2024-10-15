@@ -7,8 +7,10 @@ import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
+import com.x8bit.bitwarden.data.platform.util.getHostOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
+import com.x8bit.bitwarden.data.platform.util.hasPort
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
 import com.x8bit.bitwarden.data.platform.util.regexOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -186,6 +188,7 @@ private fun checkForCipherMatch(
  * @param matchingDomains The set of domains that match the domain of [matchUri].
  * @param matchUri The uri that this [LoginUriView] is being matched to.
  */
+@Suppress("CyclomaticComplexMethod")
 private fun LoginUriView.checkForMatch(
     resourceCacheManager: ResourceCacheManager,
     defaultUriMatchType: UriMatchType,
@@ -210,9 +213,15 @@ private fun LoginUriView.checkForMatch(
             UriMatchType.EXACT -> exactIfTrue(loginViewUri == matchUri)
 
             UriMatchType.HOST -> {
-                val loginUriHost = loginViewUri.getHostWithPortOrNull()
-                val matchUriHost = matchUri.getHostWithPortOrNull()
-                exactIfTrue(matchUriHost != null && loginUriHost == matchUriHost)
+                if (loginViewUri.hasPort() && matchUri.hasPort()) {
+                    val loginUriHost = loginViewUri.getHostWithPortOrNull()
+                    val matchUriHost = matchUri.getHostWithPortOrNull()
+                    exactIfTrue(matchUriHost != null && loginUriHost == matchUriHost)
+                } else {
+                    val loginUriHost = loginViewUri.getHostOrNull()
+                    val matchUriHost = matchUri.getHostOrNull()
+                    exactIfTrue(matchUriHost != null && loginUriHost == matchUriHost)
+                }
             }
 
             UriMatchType.NEVER -> MatchResult.NONE
