@@ -29,6 +29,8 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Reusable component for each step of the import logins flow.
@@ -38,7 +40,7 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 fun ImportLoginsInstructionStep(
     stepText: String,
     stepTitle: String,
-    instructions: List<InstructionStep>,
+    instructions: ImmutableList<InstructionStep>,
     onBackClick: () -> Unit,
     onContinueClick: () -> Unit,
     onHelpClick: () -> Unit,
@@ -58,7 +60,7 @@ fun ImportLoginsInstructionStep(
         Spacer(Modifier.height(24.dp))
         BitwardenContentCard(
             contentItems = instructions,
-            bottomDividerPaddingStart = 48,
+            bottomDividerPaddingStart = 48.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -141,7 +143,7 @@ private fun ImportLoginsInstructionStep_preview() {
                             append("Step text 3")
                         },
                     ),
-                ),
+                ).toImmutableList(),
                 onBackClick = {},
                 onContinueClick = {},
                 onHelpClick = {},

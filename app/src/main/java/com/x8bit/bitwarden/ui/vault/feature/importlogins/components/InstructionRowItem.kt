@@ -2,27 +2,17 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins.components
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 
@@ -34,32 +24,13 @@ fun InstructionRowItem(
     instructionStep: InstructionStep,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    BitwardenContentBlock(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            painter = rememberVectorPainter(instructionStep.imageRes),
-            contentDescription = null,
-            tint = BitwardenTheme.colorScheme.icon.secondary,
-            modifier = Modifier.size(24.dp),
-        )
-        Spacer(Modifier.width(8.dp))
-        Column {
-            Text(
-                text = instructionStep.instructionText,
-                style = BitwardenTheme.typography.bodyMedium,
-            )
-            instructionStep.additionalText?.let {
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = it,
-                    style = BitwardenTheme.typography.labelSmall,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                )
-            }
-        }
-    }
+        headerText = instructionStep.instructionText,
+        headerTextStyle = BitwardenTheme.typography.bodyMedium,
+        subtitleText = instructionStep.additionalText,
+        subtitleTextStyle = BitwardenTheme.typography.labelSmall,
+    )
 }
 
 @Suppress("MagicNumber")

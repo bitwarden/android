@@ -55,6 +55,7 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLogins
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
+import kotlinx.collections.immutable.toImmutableList
 
 private const val IMPORT_HELP_URL = "https://bitwarden.com/help/import-data/"
 
@@ -296,7 +297,7 @@ private fun ImportLoginsStepOneContent(
                 instructionText = instruction3,
                 additionalText = stringResource(R.string.delete_this_file_after_import_is_complete),
             ),
-        ),
+        ).toImmutableList(),
         onBackClick = onBackClick,
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
@@ -338,7 +339,7 @@ private fun ImportLoginsStepTwoContent(
                 instructionText = instruction2,
                 additionalText = null,
             ),
-        ),
+        ).toImmutableList(),
         onBackClick = onBackClick,
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
@@ -414,7 +415,7 @@ private fun ImportLoginsStepThreeContent(
                 instructionText = instruction4,
                 additionalText = null,
             ),
-        ),
+        ).toImmutableList(),
         onBackClick = onBackClick,
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,

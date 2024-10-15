@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -26,8 +27,8 @@ fun <T> BitwardenContentCard(
     contentItems: List<T>,
     modifier: Modifier = Modifier,
     showBottomDivider: Boolean = true,
-    bottomDividerPaddingStart: Int = 0,
-    bottomDividerPaddingEnd: Int = 0,
+    bottomDividerPaddingStart: Dp = 0.dp,
+    bottomDividerPaddingEnd: Dp = 0.dp,
     content: @Composable (T) -> Unit,
 ) {
     Column(
@@ -35,7 +36,7 @@ fun <T> BitwardenContentCard(
             .fillMaxWidth()
             .background(
                 color = BitwardenTheme.colorScheme.background.secondary,
-                shape = BitwardenTheme.shapes.contentCard,
+                shape = BitwardenTheme.shapes.content,
             ),
     ) {
         contentItems.forEachIndexed { index, item ->
@@ -45,8 +46,8 @@ fun <T> BitwardenContentCard(
                     .then(
                         if (index != contentItems.lastIndex && showBottomDivider) {
                             Modifier.bottomDivider(
-                                paddingStart = bottomDividerPaddingStart.dp,
-                                paddingEnd = bottomDividerPaddingEnd.dp,
+                                paddingStart = bottomDividerPaddingStart,
+                                paddingEnd = bottomDividerPaddingEnd,
                             )
                         } else {
                             Modifier
