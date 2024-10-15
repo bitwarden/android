@@ -124,4 +124,5 @@
     <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
     <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
     <string name="download">Download</string>
+    <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
 </resources>

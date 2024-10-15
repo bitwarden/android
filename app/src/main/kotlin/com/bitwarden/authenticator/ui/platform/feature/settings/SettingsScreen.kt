@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -102,6 +103,24 @@ fun SettingsScreen(
             SettingsEvent.NavigateToPrivacyPolicy -> {
                 intentManager.launchUri("https://bitwarden.com/privacy".toUri())
             }
+
+            SettingsEvent.NavigateToBitwardenApp -> {
+
+                intentManager.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        "bitwarden://settings/account_security".toUri(),
+                    ).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    },
+                )
+            }
+
+            SettingsEvent.NavigateToBitwardenPlayStoreListing -> {
+                intentManager.launchUri(
+                    "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
+                )
+            }
         }
     }
 
@@ -150,6 +169,12 @@ fun SettingsScreen(
                         viewModel.trySendAction(SettingsAction.DataClick.BackupClick)
                     }
                 },
+                onSyncWithBitwardenClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
+                    }
+                },
+                shouldShowSyncWithBitwardenApp = state.showSyncWithBitwarden,
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
@@ -237,11 +262,14 @@ private fun SecuritySettings(
 //region Data settings
 
 @Composable
+@Suppress("LongMethod")
 private fun VaultSettings(
     modifier: Modifier = Modifier,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
+    onSyncWithBitwardenClick: () -> Unit,
+    shouldShowSyncWithBitwardenApp: Boolean,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -294,6 +322,25 @@ private fun VaultSettings(
         dialogConfirmButtonText = stringResource(R.string.learn_more),
         dialogDismissButtonText = stringResource(R.string.ok),
     )
+    if (shouldShowSyncWithBitwardenApp) {
+        Spacer(modifier = Modifier.height(8.dp))
+        BitwardenTextRow(
+            text = stringResource(id = R.string.sync_with_bitwarden_app),
+            onClick = onSyncWithBitwardenClick,
+            modifier = modifier,
+            withDivider = true,
+            content = {
+                Icon(
+                    modifier = Modifier
+                        .mirrorIfRtl()
+                        .size(24.dp),
+                    painter = painterResource(id = R.drawable.ic_external_link),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+        )
+    }
 }
 
 @Composable

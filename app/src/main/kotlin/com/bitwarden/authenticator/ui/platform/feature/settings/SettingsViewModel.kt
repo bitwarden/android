@@ -7,7 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
@@ -16,6 +18,8 @@ import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,16 +38,21 @@ private const val KEY_STATE = "state"
 class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     clock: Clock,
+    private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: createInitialState(
-            clock,
-            settingsRepository.appLanguage,
-            settingsRepository.appTheme,
-            settingsRepository.isUnlockWithBiometricsEnabled,
-            settingsRepository.isCrashLoggingEnabled,
+            clock = clock,
+            appLanguage = settingsRepository.appLanguage,
+            appTheme = settingsRepository.appTheme,
+            unlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled,
+            isSubmitCrashLogsEnabled = settingsRepository.isCrashLoggingEnabled,
+            isSyncWithBitwardenFeatureEnabled =
+            featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync),
+            accountSyncState = authenticatorBridgeManager.accountSyncStateFlow.value,
         ),
 ) {
     override fun handleAction(action: SettingsAction) {
@@ -131,6 +140,17 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DataClick.ExportClick -> handleExportClick()
             SettingsAction.DataClick.ImportClick -> handleImportClick()
             SettingsAction.DataClick.BackupClick -> handleBackupClick()
+            SettingsAction.DataClick.SyncWithBitwardenClick -> handleSyncWithBitwardenClick()
+        }
+    }
+
+    private fun handleSyncWithBitwardenClick() {
+        when (authenticatorBridgeManager.accountSyncStateFlow.value) {
+            AccountSyncState.AppNotInstalled -> {
+                sendEvent(SettingsEvent.NavigateToBitwardenPlayStoreListing)
+            }
+
+            else -> sendEvent(SettingsEvent.NavigateToBitwardenApp)
         }
     }
 
@@ -228,15 +248,21 @@ class SettingsViewModel @Inject constructor(
 
     @Suppress("UndocumentedPublicClass")
     companion object {
+        @Suppress("LongParameterList")
         private fun createInitialState(
             clock: Clock,
             appLanguage: AppLanguage,
             appTheme: AppTheme,
             unlockWithBiometricsEnabled: Boolean,
             isSubmitCrashLogsEnabled: Boolean,
+            accountSyncState: AccountSyncState,
+            isSyncWithBitwardenFeatureEnabled: Boolean,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
+            // Show sync with Bitwarden row if feature is enabled and the OS is supported:
+            val shouldShowSyncWithBitwarden = isSyncWithBitwardenFeatureEnabled &&
+                accountSyncState != AccountSyncState.OsVersionNotSupported
             return SettingsState(
                 appearance = SettingsState.Appearance(
                     language = appLanguage,
@@ -249,6 +275,7 @@ class SettingsViewModel @Inject constructor(
                     .asText()
                     .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
                 copyrightInfo = copyrightInfo,
+                showSyncWithBitwarden = shouldShowSyncWithBitwarden,
             )
         }
     }
@@ -262,6 +289,7 @@ data class SettingsState(
     val appearance: Appearance,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isSubmitCrashLogsEnabled: Boolean,
+    val showSyncWithBitwarden: Boolean,
     val dialog: Dialog?,
     val version: Text,
     val copyrightInfo: Text,
@@ -325,6 +353,16 @@ sealed class SettingsEvent {
      * Navigate to the privacy policy web page.
      */
     data object NavigateToPrivacyPolicy : SettingsEvent()
+
+    /**
+     * Navigate to the Bitwarden account settings.
+     */
+    data object NavigateToBitwardenApp : SettingsEvent()
+
+    /**
+     * Navigate to the Bitwarden Play Store listing.
+     */
+    data object NavigateToBitwardenPlayStoreListing : SettingsEvent()
 }
 
 /**
@@ -376,6 +414,11 @@ sealed class SettingsAction(
          * Indicates the user click backup.
          */
         data object BackupClick : DataClick()
+
+        /**
+         * Indicates the user clicked sync with Bitwarden.
+         */
+        data object SyncWithBitwardenClick : DataClick()
     }
 
     /**
