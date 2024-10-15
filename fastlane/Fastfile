@@ -19,7 +19,7 @@ platform :android do
 
   desc "Runs tests"
   lane :check do
-    gradle(tasks: ["check","koverXmlReportDebug"])
+    gradle(tasks: ["testDebug", "lintDebug", "detekt","koverXmlReportDebug"])
   end
 
   desc "Apply build version information"
