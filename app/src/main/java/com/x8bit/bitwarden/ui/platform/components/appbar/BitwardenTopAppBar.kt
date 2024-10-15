@@ -21,10 +21,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -47,6 +49,7 @@ fun BitwardenTopAppBar(
     navigationIconContentDescription: String,
     onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier,
+    dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = { },
 ) {
     BitwardenTopAppBar(
@@ -58,6 +61,7 @@ fun BitwardenTopAppBar(
             onNavigationIconClick = onNavigationIconClick,
         ),
         modifier = modifier,
+        dividerStyle = dividerStyle,
         actions = actions,
     )
 }
@@ -82,6 +86,7 @@ fun BitwardenTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: NavigationIcon?,
     modifier: Modifier = Modifier,
+    dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     var titleTextHasOverflow by remember {
@@ -102,6 +107,24 @@ fun BitwardenTopAppBar(
             }
         }
     }
+    val customModifier = modifier
+        .testTag(tag = "HeaderBarComponent")
+        .scrolledContainerBottomDivider(
+            topAppBarScrollBehavior = scrollBehavior,
+            enabled = when (dividerStyle) {
+                TopAppBarDividerStyle.NONE -> false
+                TopAppBarDividerStyle.STATIC -> false
+                TopAppBarDividerStyle.ON_SCROLL -> true
+            },
+        )
+        .bottomDivider(
+            enabled = when (dividerStyle) {
+                TopAppBarDividerStyle.NONE -> false
+                TopAppBarDividerStyle.STATIC -> true
+                TopAppBarDividerStyle.ON_SCROLL -> false
+            },
+            thickness = (0.5).dp,
+        )
 
     if (titleTextHasOverflow) {
         MediumTopAppBar(
@@ -120,9 +143,7 @@ fun BitwardenTopAppBar(
                     modifier = Modifier.testTag(tag = "PageTitleLabel"),
                 )
             },
-            modifier = modifier
-                .testTag(tag = "HeaderBarComponent")
-                .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+            modifier = customModifier,
             actions = actions,
         )
     } else {
@@ -144,9 +165,7 @@ fun BitwardenTopAppBar(
                     },
                 )
             },
-            modifier = modifier
-                .testTag(tag = "HeaderBarComponent")
-                .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+            modifier = customModifier,
             actions = actions,
         )
     }

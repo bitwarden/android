@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -137,6 +138,7 @@ fun AddSendScreen(
                     },
                 )
                     .takeUnless { state.isShared },
+                dividerStyle = TopAppBarDividerStyle.NONE,
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
@@ -194,6 +196,7 @@ fun AddSendScreen(
         when (val viewState = state.viewState) {
             is AddSendState.ViewState.Content -> AddSendContent(
                 state = viewState,
+                scrollBehavior = scrollBehavior,
                 policyDisablesSend = state.policyDisablesSend,
                 policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
                 isAddMode = state.isAddMode,
