@@ -122,7 +122,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     fun `ImportLoginsCardDismissClick action should set repository value to false `() = runTest {
         val viewModel = createViewModel()
         mutableImportLoginsFlagFlow.update { true }
-        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
+        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
         verify(exactly = 1) { authRepository.setShowImportLogins(false) }
     }
 
@@ -131,7 +131,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     fun `ImportLoginsCardDismissClick action should not set repository value to false if already false`() =
         runTest {
             val viewModel = createViewModel()
-            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
+            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
             verify(exactly = 0) { authRepository.setShowImportLogins(false) }
         }
 
