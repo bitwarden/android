@@ -65,6 +65,10 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
                 specialCircumstancesManager.specialCircumstance = null
             }
 
+            SpecialCircumstance.AccountSecurityShortcut -> {
+                sendEvent(VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen)
+            }
+
             else -> Unit
         }
     }
@@ -282,6 +286,13 @@ sealed class VaultUnlockedNavBarEvent {
                 labelRes = labelRes,
                 contentDescriptionRes = contentDescRes,
             )
+        }
+
+        /**
+         * Navigate to the Settings Screen.
+         */
+        data object NavigateToSettingsScreen : Shortcut() {
+            override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Settings()
         }
     }
 }

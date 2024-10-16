@@ -58,7 +58,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 /**
  * Top level composable for the Vault Unlocked Screen.
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
@@ -102,6 +102,10 @@ fun VaultUnlockedNavBarScreen(
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
+                    navigateToSettingsGraph(navOptions)
+                }
+
+                VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen -> {
                     navigateToSettingsGraph(navOptions)
                 }
             }

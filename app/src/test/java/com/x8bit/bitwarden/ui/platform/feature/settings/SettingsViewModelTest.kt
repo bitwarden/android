@@ -1,10 +1,15 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -19,10 +24,13 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { allSecuritySettingsBadgeCountFlow } returns mutableSecurityBadgeCountFlow
         every { allAutofillSettingsBadgeCountFlow } returns mutableAutofillBadgeCountFlow
     }
+    private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
+        every { specialCircumstance } returns null
+    }
 
     @Test
     fun `on SettingsClick with ABOUT should emit NavigateAbout`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.ABOUT))
             assertEquals(SettingsEvent.NavigateAbout, awaitItem())
@@ -31,7 +39,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SettingsClick with ACCOUNT_SECURITY should emit NavigateAccountSecurity`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.ACCOUNT_SECURITY))
             assertEquals(SettingsEvent.NavigateAccountSecurity, awaitItem())
@@ -40,7 +48,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SettingsClick with APPEARANCE should emit NavigateAppearance`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.APPEARANCE))
             assertEquals(SettingsEvent.NavigateAppearance, awaitItem())
@@ -49,7 +57,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SettingsClick with AUTO_FILL should emit NavigateAutoFill`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.AUTO_FILL))
             assertEquals(SettingsEvent.NavigateAutoFill, awaitItem())
@@ -58,7 +66,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SettingsClick with OTHER should emit NavigateOther`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.OTHER))
             assertEquals(SettingsEvent.NavigateOther, awaitItem())
@@ -67,7 +75,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SettingsClick with VAULT should emit NavigateVault`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SettingsAction.SettingsClick(Settings.VAULT))
             assertEquals(SettingsEvent.NavigateVault, awaitItem())
@@ -78,7 +86,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     fun `initial state reflects the current state of the repository`() {
         mutableAutofillBadgeCountFlow.update { 1 }
         mutableSecurityBadgeCountFlow.update { 2 }
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         assertEquals(
             SettingsState(
                 autoFillCount = 1,
@@ -90,7 +98,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `State updates when repository emits new values for badge counts`() = runTest {
-        val viewModel = SettingsViewModel(settingsRepository = settingsRepository)
+        val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(
                 SettingsState(
@@ -119,4 +127,25 @@ class SettingsViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init should send NavigateAccountSecurityShortcut when special circumstance is AccountSecurityShortcut`() =
+        runTest {
+            every {
+                specialCircumstanceManager.specialCircumstance
+            } returns SpecialCircumstance.AccountSecurityShortcut
+            every { specialCircumstanceManager.specialCircumstance = null } just runs
+            createViewModel().eventFlow.test {
+                assertEquals(
+                    SettingsEvent.NavigateAccountSecurityShortcut, awaitItem(),
+                )
+            }
+            verify { specialCircumstanceManager.specialCircumstance = null }
+        }
+
+    private fun createViewModel() = SettingsViewModel(
+        settingsRepository = settingsRepository,
+        specialCircumstanceManager = specialCircumstanceManager,
+    )
 }

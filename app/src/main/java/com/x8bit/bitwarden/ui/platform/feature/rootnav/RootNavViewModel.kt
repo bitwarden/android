@@ -151,6 +151,7 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
+                    SpecialCircumstance.AccountSecurityShortcut,
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
                     null,
