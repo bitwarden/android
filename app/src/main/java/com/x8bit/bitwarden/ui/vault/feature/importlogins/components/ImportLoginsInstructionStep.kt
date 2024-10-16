@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -114,7 +115,7 @@ private fun ImportLoginsInstructionStep_preview() {
             ImportLoginsInstructionStep(
                 stepText = "Step text",
                 stepTitle = "Step title",
-                instructions = listOf(
+                instructions = persistentListOf(
                     InstructionStep(
                         stepNumber = 1,
                         instructionText = buildAnnotatedString {
@@ -143,7 +144,7 @@ private fun ImportLoginsInstructionStep_preview() {
                             append("Step text 3")
                         },
                     ),
-                ).toImmutableList(),
+                ),
                 onBackClick = {},
                 onContinueClick = {},
                 onHelpClick = {},
