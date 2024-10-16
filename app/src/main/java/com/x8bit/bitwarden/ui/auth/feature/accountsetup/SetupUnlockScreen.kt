@@ -161,7 +161,7 @@ private fun SetupUnlockScreenContent(
 
         Spacer(modifier = Modifier.height(height = 24.dp))
         BitwardenUnlockWithBiometricsSwitch(
-            isBiometricsSupported = biometricsManager.isBiometricsSupported,
+            biometricSupportStatus = biometricsManager.biometricSupportStatus,
             isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
             onDisableBiometrics = handler.onDisableBiometrics,
             onEnableBiometrics = handler.onEnableBiometrics,

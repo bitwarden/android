@@ -1028,4 +1028,6 @@ Do you want to switch to this account?</string>
   <string name="import_logins">Import Logins</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
   <string name="give_your_vault_a_head_start">Give your vault a head start</string>
+  <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
+  <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
 </resources>

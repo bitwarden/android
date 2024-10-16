@@ -232,7 +232,7 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             BitwardenUnlockWithBiometricsSwitch(
-                isBiometricsSupported = biometricsManager.isBiometricsSupported,
+                biometricSupportStatus = biometricsManager.biometricSupportStatus,
                 isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
                 onDisableBiometrics = remember(viewModel) {
                     {

@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -60,7 +61,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     private val captureBiometricsLockOut = slot<() -> Unit>()
     private val captureBiometricsError = slot<() -> Unit>()
     private val biometricsManager: BiometricsManager = mockk {
-        every { isBiometricsSupported } returns true
+        every { biometricSupportStatus } returns BiometricSupportStatus.CLASS_3_SUPPORTED
         every {
             promptBiometrics(
                 onSuccess = capture(captureBiometricsSuccess),

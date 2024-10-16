@@ -9,7 +9,8 @@ import javax.crypto.Cipher
 @Immutable
 interface BiometricsManager {
     /**
-     * Returns `true` if the device supports string biometric authentication, `false` otherwise.
+     * Returns `true` if the device supports Class 3 (STRONG) biometric authentication, `false`
+     * otherwise.
      */
     val isBiometricsSupported: Boolean
 
@@ -18,6 +19,11 @@ interface BiometricsManager {
      * credentials, `false` otherwise.
      */
     val isUserVerificationSupported: Boolean
+
+    /**
+     * Returns the status of biometric support available on the device.
+     */
+    val biometricSupportStatus: BiometricSupportStatus
 
     /**
      * Display a prompt for setting up or verifying biometrics.
@@ -48,4 +54,13 @@ interface BiometricsManager {
         onError: () -> Unit,
         onNotSupported: () -> Unit,
     )
+}
+
+/**
+ * Status of biometric support available on the device.
+ */
+enum class BiometricSupportStatus {
+    CLASS_3_SUPPORTED,
+    CLASS_2_SUPPORTED,
+    NOT_SUPPORTED,
 }

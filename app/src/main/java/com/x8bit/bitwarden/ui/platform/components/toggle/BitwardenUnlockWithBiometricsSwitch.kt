@@ -4,29 +4,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 
 /**
  * Displays a switch for enabling or disabling unlock with biometrics functionality.
  *
  * @param isChecked Indicates that the switch should be checked or not.
- * @param isBiometricsSupported Indicates if biometrics is supported and we should display the
- * switch.
+ * @param biometricSupportStatus Indicates what type of biometrics are supported on device.
  * @param onDisableBiometrics Callback invoked when the toggle has be turned off.
  * @param onEnableBiometrics Callback invoked when the toggle has be turned on.
  * @param modifier The [Modifier] to be applied to the switch.
  */
 @Composable
 fun BitwardenUnlockWithBiometricsSwitch(
-    isBiometricsSupported: Boolean,
+    biometricSupportStatus: BiometricSupportStatus,
     isChecked: Boolean,
     onDisableBiometrics: () -> Unit,
     onEnableBiometrics: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (!isBiometricsSupported) return
+    val biometricsDescription: String = when (biometricSupportStatus) {
+        BiometricSupportStatus.CLASS_3_SUPPORTED -> {
+            stringResource(R.string.class_3_biometrics_description)
+        }
+        BiometricSupportStatus.CLASS_2_SUPPORTED -> {
+            stringResource(R.string.class_2_biometrics_description)
+        }
+
+        BiometricSupportStatus.NOT_SUPPORTED -> return
+    }
     BitwardenWideSwitch(
         modifier = modifier,
-        label = stringResource(id = R.string.unlock_with, stringResource(id = R.string.biometrics)),
+        label = stringResource(
+            id = R.string.unlock_with,
+            stringResource(id = R.string.biometrics),
+        ),
         isChecked = isChecked,
         onCheckedChange = { toggled ->
             if (toggled) {
@@ -35,5 +47,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
                 onDisableBiometrics()
             }
         },
+        enabled = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED,
+        description = biometricsDescription,
     )
 }
