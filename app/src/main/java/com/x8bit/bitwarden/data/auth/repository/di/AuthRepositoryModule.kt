@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -58,6 +59,7 @@ object AuthRepositoryModule {
         pushManager: PushManager,
         policyManager: PolicyManager,
         featureFlagManager: FeatureFlagManager,
+        firstTimeActionManager: FirstTimeActionManager,
     ): AuthRepository = AuthRepositoryImpl(
         accountsService = accountsService,
         devicesService = devicesService,
@@ -79,5 +81,6 @@ object AuthRepositoryModule {
         pushManager = pushManager,
         policyManager = policyManager,
         featureFlagManager = featureFlagManager,
+        firstTimeActionManager = firstTimeActionManager,
     )
 }

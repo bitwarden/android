@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -1639,7 +1640,7 @@ private val VAULT_FILTER_DATA = VaultFilterData(
 private val DEFAULT_STATE: VaultState =
     createMockVaultState(viewState = VaultState.ViewState.Loading)
 
-private val DEFAULT_FIRST_TIME_STATE = UserState.FirstTimeState(
+private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
     showImportLoginsCard = true,
 )
 

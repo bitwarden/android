@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -111,7 +112,7 @@ fun UserStateJson.toUserState(
     userIsUsingKeyConnectorList: List<UserKeyConnectorState>,
     hasPendingAccountAddition: Boolean,
     onboardingStatus: OnboardingStatus?,
-    firstTimeState: UserState.FirstTimeState,
+    firstTimeState: FirstTimeState,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,

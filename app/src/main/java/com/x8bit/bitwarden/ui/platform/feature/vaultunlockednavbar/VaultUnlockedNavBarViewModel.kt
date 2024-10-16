@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
@@ -24,13 +24,13 @@ import javax.inject.Inject
 class VaultUnlockedNavBarViewModel @Inject constructor(
     authRepository: AuthRepository,
     specialCircumstancesManager: SpecialCircumstanceManager,
-    settingsRepository: SettingsRepository,
+    firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
     initialState = VaultUnlockedNavBarState(
         vaultNavBarLabelRes = R.string.my_vault,
         vaultNavBarContentDescriptionRes = R.string.my_vault,
         notificationState = VaultUnlockedNavBarNotificationState(
-            settingsTabNotificationCount = settingsRepository.allSettingsBadgeCountFlow.value,
+            settingsTabNotificationCount = firstTimeActionManager.allSettingsBadgeCountFlow.value,
         ),
     ),
 ) {
@@ -42,7 +42,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        settingsRepository
+        firstTimeActionManager
             .allSettingsBadgeCountFlow
             .onEach {
                 sendAction(VaultUnlockedNavBarAction.Internal.SettingsNotificationCountUpdate(it))

@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
-import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
@@ -30,8 +29,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -340,60 +337,6 @@ class SettingsRepositoryImpl(
                     ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
             )
 
-    override val allSettingsBadgeCountFlow: StateFlow<Int>
-        get() = combine(
-            allSecuritySettingsBadgeCountFlow,
-            allAutofillSettingsBadgeCountFlow,
-            transform = ::sumSettingsBadgeCount,
-        )
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val allSecuritySettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .filterNotNull()
-            .flatMapLatest {
-                // can be expanded to support multiple security settings
-                getShowUnlockBadgeFlow(userId = it)
-                    .map { showUnlockBadge ->
-                        listOf(showUnlockBadge)
-                    }
-                    .map { list ->
-                        list.count { badgeOnValue -> badgeOnValue }
-                    }
-            }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .filterNotNull()
-            .flatMapLatest {
-                // Can be expanded to support multiple autofill settings
-                getShowAutofillBadgeFlow(userId = it)
-                    .map { showAutofillBadge ->
-                        listOf(showAutofillBadge)
-                    }
-                    .map { list ->
-                        list.count { showBadge -> showBadge }
-                    }
-            }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
-
     init {
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
@@ -660,10 +603,6 @@ class SettingsRepositoryImpl(
             }
         }
     }
-
-    // helper function to sum badge counts from different settings sub-menus.
-    private fun sumSettingsBadgeCount(autoFillBadgeCount: Int, securityBadgeCount: Int) =
-        autoFillBadgeCount + securityBadgeCount
 }
 
 /**

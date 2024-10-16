@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -82,7 +83,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -102,6 +102,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -244,6 +245,11 @@ class AuthRepositoryTest {
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
     }
 
+    private val firstTimeActionManager = mockk<FirstTimeActionManager> {
+        every { currentOrDefaultUserFirstTimeState } returns FIRST_TIME_STATE
+        every { firstTimeStateFlow } returns MutableStateFlow(FIRST_TIME_STATE)
+    }
+
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         devicesService = devicesService,
@@ -265,6 +271,7 @@ class AuthRepositoryTest {
         pushManager = pushManager,
         policyManager = policyManager,
         featureFlagManager = featureFlagManager,
+        firstTimeActionManager = firstTimeActionManager,
     )
 
     @BeforeEach
@@ -6544,7 +6551,7 @@ class AuthRepositoryTest {
             ),
         )
 
-        private val FIRST_TIME_STATE = UserState.FirstTimeState(
+        private val FIRST_TIME_STATE = FirstTimeState(
             showImportLoginsCard = true,
         )
 

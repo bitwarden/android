@@ -161,24 +161,6 @@ interface SettingsRepository {
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
     /**
-     * Returns an observable count of the number of settings items that have a badge to display
-     * for the current active user.
-     */
-    val allSettingsBadgeCountFlow: StateFlow<Int>
-
-    /**
-     * Returns an observable count of the number of security settings items that have a badge to
-     * display for the current active user.
-     */
-    val allSecuritySettingsBadgeCountFlow: StateFlow<Int>
-
-    /**
-     * Returns an observable count of the number of autofill settings items that have a badge to
-     * display for the current active user.
-     */
-    val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
-
-    /**
      * Disables autofill if it is currently enabled.
      */
     fun disableAutofill()

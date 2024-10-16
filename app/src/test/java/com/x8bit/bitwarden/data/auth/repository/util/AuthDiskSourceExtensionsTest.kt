@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
@@ -505,48 +504,6 @@ class AuthDiskSourceExtensionsTest {
         assertEquals(
             OnboardingStatus.COMPLETE,
             authDiskSource.currentOnboardingStatus,
-        )
-    }
-
-    @Test
-    fun `firstTimeStateFlow should emit changes when items in the first time state change`() =
-        runTest {
-            authDiskSource.firstTimeStateFlow.test {
-                authDiskSource.userState = MOCK_USER_STATE
-                assertEquals(
-                    UserState.FirstTimeState(
-                        showImportLoginsCard = true,
-                    ),
-                    awaitItem(),
-                )
-                authDiskSource.storeShowImportLogins(MOCK_USER_ID, false)
-                assertEquals(
-                    UserState.FirstTimeState(
-                        showImportLoginsCard = false,
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `currentOrDefaultUserFirstTimeState should return the current first time state or a default state`() {
-        authDiskSource.userState = MOCK_USER_STATE
-        // Assert default state when no values set
-        assertEquals(
-            UserState.FirstTimeState(
-                showImportLoginsCard = true,
-            ),
-            authDiskSource.currentOrDefaultUserFirstTimeState,
-        )
-        authDiskSource.storeShowImportLogins(MOCK_USER_ID, false)
-
-        assertEquals(
-            UserState.FirstTimeState(
-                showImportLoginsCard = false,
-            ),
-            authDiskSource.currentOrDefaultUserFirstTimeState,
         )
     }
 }

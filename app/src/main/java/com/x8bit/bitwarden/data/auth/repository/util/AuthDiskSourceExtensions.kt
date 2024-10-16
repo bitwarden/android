@@ -5,7 +5,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -192,42 +191,3 @@ val AuthDiskSource.currentOnboardingStatus: OnboardingStatus?
         .userState
         ?.activeUserId
         ?.let { this.getOnboardingStatus(userId = it) }
-
-/**
- * Returns a [Flow] that emits every time the active user's first time state is changed.
- */
-@OptIn(ExperimentalCoroutinesApi::class)
-val AuthDiskSource.firstTimeStateFlow: Flow<UserState.FirstTimeState>
-    get() = activeUserIdChangesFlow
-        .flatMapLatest { activeUserId ->
-            combine(
-                listOf(
-                    activeUserId
-                        ?.let {
-                            getShowImportLoginsFlow(it)
-                        }
-                        ?: flowOf(null),
-                ),
-            ) {
-                UserState.FirstTimeState(
-                    showImportLoginsCoachMarker = it[0],
-                )
-            }
-        }
-        .distinctUntilChanged()
-
-/**
- * Get the current [UserState.FirstTimeState] of the active user if available, otherwise return
- * a default configuration.
- */
-val AuthDiskSource.currentOrDefaultUserFirstTimeState
-    get() = userState
-        ?.activeUserId
-        ?.let {
-            UserState.FirstTimeState(
-                showImportLoginsCoachMarker = getShowImportLogins(it),
-            )
-        }
-        ?: UserState.FirstTimeState(
-            showImportLoginsCoachMarker = true,
-        )

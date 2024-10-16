@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -76,8 +77,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.currentOnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.util.currentOrDefaultUserFirstTimeState
-import com.x8bit.bitwarden.data.auth.repository.util.firstTimeStateFlow
 import com.x8bit.bitwarden.data.auth.repository.util.onboardingStatusChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
@@ -96,6 +95,7 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -164,6 +164,7 @@ class AuthRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
@@ -258,7 +259,7 @@ class AuthRepositoryImpl(
         authDiskSource.userOrganizationsListFlow,
         authDiskSource.userKeyConnectorStateFlow,
         authDiskSource.onboardingStatusChangesFlow,
-        authDiskSource.firstTimeStateFlow,
+        firstTimeActionManager.firstTimeStateFlow,
         vaultRepository.vaultUnlockDataStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
         // Ignore the data in the merge, but trigger an update when they emit.
@@ -272,7 +273,7 @@ class AuthRepositoryImpl(
         val userOrganizationsList = array[2] as List<UserOrganizations>
         val userIsUsingKeyConnectorList = array[3] as List<UserKeyConnectorState>
         val onboardingStatus = array[4] as OnboardingStatus?
-        val firstTimeState = array[5] as UserState.FirstTimeState
+        val firstTimeState = array[5] as FirstTimeState
         val vaultState = array[6] as List<VaultUnlockData>
         val hasPendingAccountAddition = array[7] as Boolean
         userStateJson?.toUserState(
@@ -305,7 +306,7 @@ class AuthRepositoryImpl(
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                     isDeviceTrustedProvider = ::isDeviceTrusted,
-                    firstTimeState = authDiskSource.currentOrDefaultUserFirstTimeState,
+                    firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState,
                 ),
         )
 

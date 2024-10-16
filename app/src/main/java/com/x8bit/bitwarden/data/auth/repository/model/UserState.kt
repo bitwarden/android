@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.model
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.Account
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 
 /**
@@ -95,21 +96,4 @@ data class UserState(
         val hasLoginApprovingDevice: Boolean,
         val hasResetPasswordPermission: Boolean,
     )
-
-    /**
-     * Model to encapsulate different states for a user's first time experience.
-     */
-    data class FirstTimeState(
-        val showImportLoginsCard: Boolean,
-    ) {
-        /**
-         * Constructs a [FirstTimeState] accepting nullable values. If a value is null, the default
-         * is used.
-         */
-        constructor(
-            showImportLoginsCoachMarker: Boolean?,
-        ) : this(
-            showImportLoginsCard = showImportLoginsCoachMarker ?: true,
-        )
-    }
 }
