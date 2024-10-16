@@ -8,8 +8,11 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.just
@@ -32,13 +35,16 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         every { stateFlow } returns mutableImportLoginsStateFlow
         every { trySendAction(any()) } just runs
     }
-
+    private val intentManager = mockk<IntentManager> {
+        every { startCustomTabsActivity(any()) } just runs
+    }
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContentWithBackDispatcher {
             ImportLoginsScreen(
                 onNavigateBack = { navigateBackCalled = true },
                 viewModel = viewModel,
+                intentManager = intentManager,
             )
         }
     }
@@ -170,9 +176,158 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         verifyActionSent(ImportLoginsAction.DismissDialog)
     }
 
+    @Test
+    fun `OpenHelpLink event is used to open URI with intent manager`() {
+        mutableImportLoginsEventFlow.tryEmit(ImportLoginsEvent.OpenHelpLink)
+        verify {
+            intentManager.startCustomTabsActivity("https://bitwarden.com/help/import-data/".toUri())
+        }
+    }
+
+    @Test
+    fun `while on initial content system back sends CloseClick action`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.InitialContent,
+            ),
+        )
+        backDispatcher?.onBackPressed()
+        verifyActionSent(ImportLoginsAction.CloseClick)
+    }
+
+    @Test
+    fun `Step one content is displayed when view state is ImportStepOne`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepOne,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Step 1 of 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `while on step one correct actions are sent when buttons are clicked`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepOne,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Back")
+            .performScrollTo()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.MoveToInitialContent)
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performClick()
+        verifyActionSent(ImportLoginsAction.MoveToStepTwo)
+    }
+
+    @Test
+    fun `while on step one system back returns to the previous content`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepOne,
+            ),
+        )
+        backDispatcher?.onBackPressed()
+        verifyActionSent(ImportLoginsAction.MoveToInitialContent)
+    }
+
+    @Test
+    fun `Step two content is displayed when view state is ImportStepTwo`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepTwo,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Step 2 of 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `while on step two correct actions are sent when buttons are clicked`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepTwo,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Back")
+            .performScrollTo()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.MoveToStepOne)
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performClick()
+        verifyActionSent(ImportLoginsAction.MoveToStepThree)
+    }
+
+    @Test
+    fun `while on step two system back returns to the previous content`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepTwo,
+            ),
+        )
+        backDispatcher?.onBackPressed()
+        verifyActionSent(ImportLoginsAction.MoveToStepOne)
+    }
+
+    @Test
+    fun `Step three content is displayed when view state is ImportStepThree`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepThree,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Step 3 of 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `while on step three correct actions are sent when buttons are clicked`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepThree,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Back")
+            .performScrollTo()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.MoveToStepTwo)
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performClick()
+        verifyActionSent(ImportLoginsAction.MoveToSyncInProgress)
+    }
+
+    @Test
+    fun `while on step three system back returns to the previous content`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepThree,
+            ),
+        )
+        backDispatcher?.onBackPressed()
+        verifyActionSent(ImportLoginsAction.MoveToStepTwo)
+    }
+
+    //region Helper methods
+
     private fun verifyActionSent(action: ImportLoginsAction) {
         verify { viewModel.trySendAction(action) }
     }
+
+    //endregion Helper methods
 }
 
-private val DEFAULT_STATE = ImportLoginsState(dialogState = null)
+private val DEFAULT_STATE = ImportLoginsState(
+    dialogState = null,
+    viewState = ImportLoginsState.ViewState.InitialContent,
+)
