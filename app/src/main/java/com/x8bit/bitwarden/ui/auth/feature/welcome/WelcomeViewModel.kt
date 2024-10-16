@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.welcome
 
 import android.os.Parcelable
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -12,7 +14,9 @@ import javax.inject.Inject
  * Manages application state for the welcome screen.
  */
 @HiltViewModel
-class WelcomeViewModel @Inject constructor() :
+class WelcomeViewModel @Inject constructor(
+    private val featureFlagManager: FeatureFlagManager,
+) :
     BaseViewModel<WelcomeState, WelcomeEvent, WelcomeAction>(
         initialState = WelcomeState(
             index = 0,
@@ -43,7 +47,12 @@ class WelcomeViewModel @Inject constructor() :
     }
 
     private fun handleCreateAccountClick() {
-        sendEvent(WelcomeEvent.NavigateToCreateAccount)
+        val event = if (featureFlagManager.getFeatureFlag(FlagKey.EmailVerification)) {
+            WelcomeEvent.NavigateToStartRegistration
+        } else {
+            WelcomeEvent.NavigateToCreateAccount
+        }
+        sendEvent(event)
     }
 
     private fun handleLoginClick() {
@@ -129,6 +138,11 @@ sealed class WelcomeEvent {
      * Navigates to the login screen.
      */
     data object NavigateToLogin : WelcomeEvent()
+
+    /**
+     * Navigates to the start registration screen.
+     */
+    data object NavigateToStartRegistration : WelcomeEvent()
 }
 
 /**

@@ -133,6 +133,7 @@ fun NavGraphBuilder.authGraph(
         welcomeDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { navController.navigateToLanding() },
+            onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
         )
         loginDestination(
             onNavigateBack = { navController.popBackStack() },

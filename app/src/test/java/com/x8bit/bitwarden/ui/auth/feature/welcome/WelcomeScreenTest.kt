@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.robolectric.annotation.Config
 
 class WelcomeScreenTest : BaseComposeTest() {
+    private var onNavigateToStartRegistrationCalled = false
     private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -31,6 +32,7 @@ class WelcomeScreenTest : BaseComposeTest() {
             WelcomeScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { onNavigateToLoginCalled = true },
+                onNavigateToStartRegistration = { onNavigateToStartRegistrationCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -112,6 +114,12 @@ class WelcomeScreenTest : BaseComposeTest() {
             .onNodeWithText("Log In")
             .performClick()
         verify { viewModel.trySendAction(WelcomeAction.LoginClick) }
+    }
+
+    @Test
+    fun `on NavigateToStartRegistration event should call onNavigateToStartRegistration`() {
+        mutableEventFlow.tryEmit(WelcomeEvent.NavigateToStartRegistration)
+        assertTrue(onNavigateToStartRegistrationCalled)
     }
 }
 
