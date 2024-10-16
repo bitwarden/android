@@ -44,15 +44,10 @@ fun <T> BitwardenContentCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .then(
-                        if (index != contentItems.lastIndex && showBottomDivider) {
-                            Modifier.bottomDivider(
-                                paddingStart = bottomDividerPaddingStart,
-                                paddingEnd = bottomDividerPaddingEnd,
-                            )
-                        } else {
-                            Modifier
-                        },
+                    .bottomDivider(
+                        enabled = index != contentItems.lastIndex && showBottomDivider,
+                        paddingStart = bottomDividerPaddingStart,
+                        paddingEnd = bottomDividerPaddingEnd,
                     ),
             ) {
                 content(item)
