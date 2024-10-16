@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
@@ -21,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -100,9 +100,8 @@ class PushManagerImpl @Inject constructor(
 
     init {
         authDiskSource
-            .userStateFlow
-            .mapNotNull { it?.activeUserId }
-            .distinctUntilChanged()
+            .activeUserIdChangesFlow
+            .mapNotNull { it }
             .onEach { registerStoredPushTokenIfNecessary() }
             .launchIn(unconfinedScope)
     }
