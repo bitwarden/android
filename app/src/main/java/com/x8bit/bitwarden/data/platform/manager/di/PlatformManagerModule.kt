@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
@@ -185,7 +184,6 @@ object PlatformManagerModule {
     @Singleton
     fun provideNetworkConfigManager(
         authRepository: AuthRepository,
-        authTokenInterceptor: AuthTokenInterceptor,
         environmentRepository: EnvironmentRepository,
         serverConfigRepository: ServerConfigRepository,
         baseUrlInterceptors: BaseUrlInterceptors,
@@ -194,7 +192,6 @@ object PlatformManagerModule {
     ): NetworkConfigManager =
         NetworkConfigManagerImpl(
             authRepository = authRepository,
-            authTokenInterceptor = authTokenInterceptor,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
             baseUrlInterceptors = baseUrlInterceptors,
