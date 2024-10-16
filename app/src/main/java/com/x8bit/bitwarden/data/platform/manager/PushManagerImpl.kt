@@ -162,19 +162,14 @@ class PushManagerImpl @Inject constructor(
                         string = notification.payload,
                     )
                     .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.takeIf {
-                        it.cipherId != null &&
-                            it.revisionDate != null &&
-                            it.organizationId != null &&
-                            it.collectionIds != null
-                    }
+                    ?.takeIf { it.cipherId != null && it.revisionDate != null }
                     ?.let {
                         mutableSyncCipherUpsertSharedFlow.tryEmit(
                             SyncCipherUpsertData(
                                 cipherId = requireNotNull(it.cipherId),
                                 revisionDate = requireNotNull(it.revisionDate),
-                                organizationId = requireNotNull(it.organizationId),
-                                collectionIds = requireNotNull(it.collectionIds),
+                                organizationId = it.organizationId,
+                                collectionIds = it.collectionIds,
                                 isUpdate = type == NotificationType.SYNC_CIPHER_UPDATE,
                             ),
                         )
@@ -339,6 +334,6 @@ class PushManagerImpl @Inject constructor(
     ): Boolean = authDiskSource.getAccountTokens(userId)?.isLoggedIn == true
 }
 
-private fun NotificationPayload.userMatchesNotification(userId: String?): Boolean {
+private fun NotificationPayload.userMatchesNotification(userId: String): Boolean {
     return this.userId != null && this.userId == userId
 }
