@@ -17,13 +17,18 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOpti
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.encodeToJsonElement
@@ -43,11 +48,18 @@ class AuthDiskSourceTest {
 
     private val json = PlatformNetworkModule.providesJson()
 
+    private val mutableSyncResponseCipherFlow =
+        MutableStateFlow<List<SyncResponseJson.Cipher>>(emptyList())
+    private val vaultDiskSource = mockk<VaultDiskSource> {
+        every { getCiphers(any()) } returns mutableSyncResponseCipherFlow
+    }
+
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
         sharedPreferences = fakeSharedPreferences,
         legacySecureStorageMigrator = legacySecureStorageMigrator,
         json = json,
+        vaultDiskSource = vaultDiskSource,
     )
 
     @Test
@@ -1191,14 +1203,22 @@ class AuthDiskSourceTest {
         assertTrue(actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getShowImportLoginsFlow should react to changes from storeShowImportLogins`() = runTest {
+    fun `getShowImportLoginsFlow should react to changes from storeShowImportLogins and ciphers list`() = runTest {
         val mockUserId = "mockUserId"
+        val mockSyncResponse = createMockSyncResponse(1)
         authDiskSource.getShowImportLoginsFlow(userId = mockUserId).test {
             // The initial values of the Flow and the property are in sync
-            assertNull(awaitItem())
-            authDiskSource.storeShowImportLogins(userId = mockUserId, true)
-            assertTrue(awaitItem() ?: false)
+            assertTrue(awaitItem())
+            authDiskSource.storeShowImportLogins(userId = mockUserId, showImportLogins = false)
+            assertFalse(awaitItem())
+            authDiskSource.storeShowImportLogins(userId = mockUserId, showImportLogins = true)
+            assertTrue(awaitItem())
+            mutableSyncResponseCipherFlow.update {
+                mockSyncResponse.ciphers!!
+            }
+            assertFalse(awaitItem())
         }
     }
 }

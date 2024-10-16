@@ -9,9 +9,12 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -55,6 +58,7 @@ class AuthDiskSourceImpl(
     encryptedSharedPreferences: SharedPreferences,
     sharedPreferences: SharedPreferences,
     legacySecureStorageMigrator: LegacySecureStorageMigrator,
+    private val vaultDiskSource: VaultDiskSource,
     private val json: Json,
 ) : BaseEncryptedDiskSource(
     encryptedSharedPreferences = encryptedSharedPreferences,
@@ -453,9 +457,15 @@ class AuthDiskSourceImpl(
         getMutableShowImportLoginsFlow(userId = userId).tryEmit(showImportLogins)
     }
 
-    override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
+    override fun getShowImportLoginsFlow(userId: String): Flow<Boolean> =
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
+            .combine(
+                vaultDiskSource.getCiphers(userId),
+            ) { showImportLogins, ciphers ->
+                (showImportLogins ?: true) && ciphers.isEmpty()
+            }
+            .distinctUntilChanged()
 
     private fun generateAndStoreUniqueAppId(): String =
         UUID
