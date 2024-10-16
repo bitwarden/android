@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Row item for the content card of the import logins screen instructions.
@@ -53,7 +54,7 @@ private fun InstructionCard_preview() {
     BitwardenTheme {
         Surface {
             BitwardenContentCard(
-                contentItems = listOf(
+                contentItems = persistentListOf(
                     InstructionStep(
                         stepNumber = 1,
                         instructionText = buildAnnotatedString {

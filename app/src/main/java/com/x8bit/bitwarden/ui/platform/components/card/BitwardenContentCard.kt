@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * Reusable card for displaying content for a list of items with a generic type [T].
@@ -24,7 +25,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun <T> BitwardenContentCard(
-    contentItems: List<T>,
+    contentItems: ImmutableList<T>,
     modifier: Modifier = Modifier,
     showBottomDivider: Boolean = true,
     bottomDividerPaddingStart: Dp = 0.dp,

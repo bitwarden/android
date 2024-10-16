@@ -55,7 +55,7 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLogins
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 private const val IMPORT_HELP_URL = "https://bitwarden.com/help/import-data/"
 
@@ -281,7 +281,7 @@ private fun ImportLoginsStepOneContent(
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_1_of_3),
         stepTitle = stringResource(R.string.export_your_saved_logins),
-        instructions = listOf(
+        instructions = persistentListOf(
             InstructionStep(
                 stepNumber = 1,
                 instructionText = instruction1,
@@ -297,7 +297,7 @@ private fun ImportLoginsStepOneContent(
                 instructionText = instruction3,
                 additionalText = stringResource(R.string.delete_this_file_after_import_is_complete),
             ),
-        ).toImmutableList(),
+        ),
         onBackClick = onBackClick,
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
@@ -328,7 +328,7 @@ private fun ImportLoginsStepTwoContent(
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_2_of_3),
         stepTitle = stringResource(R.string.log_in_to_bitwarden),
-        instructions = listOf(
+        instructions = persistentListOf(
             InstructionStep(
                 stepNumber = 1,
                 instructionText = instruction1,
@@ -339,7 +339,7 @@ private fun ImportLoginsStepTwoContent(
                 instructionText = instruction2,
                 additionalText = null,
             ),
-        ).toImmutableList(),
+        ),
         onBackClick = onBackClick,
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
@@ -394,7 +394,7 @@ private fun ImportLoginsStepThreeContent(
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_3_of_3),
         stepTitle = stringResource(R.string.import_logins_to_bitwarden),
-        instructions = listOf(
+        instructions = persistentListOf(
             InstructionStep(
                 stepNumber = 1,
                 instructionText = instruction1,
@@ -415,7 +415,7 @@ private fun ImportLoginsStepThreeContent(
                 instructionText = instruction4,
                 additionalText = null,
             ),
-        ).toImmutableList(),
+        ),
         onBackClick = onBackClick,
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
