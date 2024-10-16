@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.toggle
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,22 +37,21 @@ fun BitwardenUnlockWithBiometricsSwitch(
             "Should not be called when BiometricSupportStatus is NOT_SUPPORTED",
         )
     }
-    Column(modifier = modifier) {
-        BitwardenWideSwitch(
-            label = stringResource(
-                id = R.string.unlock_with,
-                stringResource(id = R.string.biometrics),
-            ),
-            isChecked = isChecked,
-            onCheckedChange = { toggled ->
-                if (toggled) {
-                    onEnableBiometrics()
-                } else {
-                    onDisableBiometrics()
-                }
-            },
-            enabled = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED,
-            description = biometricsDescription,
-        )
-    }
+    BitwardenWideSwitch(
+        modifier = modifier,
+        label = stringResource(
+            id = R.string.unlock_with,
+            stringResource(id = R.string.biometrics),
+        ),
+        isChecked = isChecked,
+        onCheckedChange = { toggled ->
+            if (toggled) {
+                onEnableBiometrics()
+            } else {
+                onDisableBiometrics()
+            }
+        },
+        enabled = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED,
+        description = biometricsDescription,
+    )
 }
