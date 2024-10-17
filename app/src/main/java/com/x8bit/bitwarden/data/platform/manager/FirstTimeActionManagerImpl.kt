@@ -177,9 +177,10 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showSetupUnlockCard = settingsDiskSource.getShowUnlockSettingBadge(it),
                         showSetupAutofillCard = settingsDiskSource.getShowAutoFillSettingBadge(it),
                     )
-                } ?: FirstTimeState(
-                showImportLoginsCard = null,
-                showSetupUnlockCard = null,
-                showSetupAutofillCard = null,
-            )
+                }
+                ?: FirstTimeState(
+                    showImportLoginsCard = null,
+                    showSetupUnlockCard = null,
+                    showSetupAutofillCard = null,
+                )
 }
