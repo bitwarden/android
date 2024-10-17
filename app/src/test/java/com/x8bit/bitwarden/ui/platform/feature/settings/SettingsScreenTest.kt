@@ -312,10 +312,25 @@ class SettingsScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "1", useUnmergedTree = true)[1]
             .assertExists()
+
+        mutableStateFlow.update { it.copy(vaultCount = 1) }
+
+        composeTestRule
+            .onAllNodesWithText(text = "1", useUnmergedTree = true)[0]
+            .assertExists()
+
+        composeTestRule
+            .onAllNodesWithText(text = "1", useUnmergedTree = true)[1]
+            .assertExists()
+
+        composeTestRule
+            .onAllNodesWithText(text = "1", useUnmergedTree = true)[2]
+            .assertExists()
     }
 }
 
 private val DEFAULT_STATE = SettingsState(
     securityCount = 0,
     autoFillCount = 0,
+    vaultCount = 0,
 )
