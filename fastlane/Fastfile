@@ -94,8 +94,8 @@ platform :android do
     )
   end
 
-  desc "Publish release to Firebase"
-  lane :distributeReleaseToFirebase do |options|
+  desc "Publish release AAB to Firebase"
+  lane :distributeReleaseBundleToFirebase do |options|
     release_notes = changelog_from_git_commits(
       commits_count: 1,
       pretty: "- %s"
@@ -105,32 +105,13 @@ platform :android do
 
     firebase_app_distribution(
       app: "1:867301491091:android:50b626dba42a361651e866",
-      android_artifact_type: "APK",
-      android_artifact_path: "app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk",
+      android_artifact_type: "AAB",
+      android_artifact_path: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
       service_credentials_file: options[:serviceCredentialsFile],
       groups: "internal-prod-group",
       release_notes: release_notes,
     )
   end
-
-    desc "Publish release AAB to Firebase"
-    lane :distributeReleaseBundleToFirebase do |options|
-      release_notes = changelog_from_git_commits(
-        commits_count: 1,
-        pretty: "- %s"
-      )
-
-      puts "Release notes #{release_notes}"
-
-      firebase_app_distribution(
-        app: "1:867301491091:android:50b626dba42a361651e866",
-        android_artifact_type: "AAB",
-        android_artifact_path: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
-        service_credentials_file: options[:serviceCredentialsFile],
-        groups: "internal-prod-group",
-        release_notes: release_notes,
-      )
-    end
 
   desc "Publish release to Google Play Store"
   lane :publishReleaseToGooglePlayStore do |options|

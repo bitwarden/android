@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       version-name:
@@ -11,6 +14,11 @@ on:
         description: "Optional. Build number to use. Overrides default of GitHub run number."
         required: false
         type: number
+      distribute-to-firebase:
+        description: "Optional. Distribute artifacts to Firebase."
+        required: false
+        default: false
+        type: boolean
       publish-to-play-store:
         description: "Optional. Deploy bundle artifact to Google Play Store"
         required: false
@@ -120,6 +128,7 @@ jobs:
           --name authenticator_aab-keystore.jks --file ${{ github.workspace }}/keystores/authenticator_aab-keystore.jks --output none
 
       - name: Download Firebase credentials
+        if : ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -230,19 +239,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release artifacts to Firebase
-        if: ${{ github.ref_name == 'main' && matrix.variant == 'apk' }}
-        env:
-          FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
-        run: |
-          bundle exec fastlane distributeReleaseToFirebase \
-          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
-
       - name: Publish release bundle to Firebase
-        if: ${{ github.ref_name == 'main' && matrix.variant == 'aab' }}
+        if: ${{ matrix.variant == 'aab' && (inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
