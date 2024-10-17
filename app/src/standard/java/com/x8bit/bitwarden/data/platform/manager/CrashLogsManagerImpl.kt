@@ -5,6 +5,7 @@ import com.google.firebase.ktx.Firebase
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import timber.log.Timber
 
 /**
  * CrashLogsManager implementation for standard flavor builds.
@@ -20,6 +21,11 @@ class CrashLogsManagerImpl(
         set(value) {
             settingsRepository.isCrashLoggingEnabled = value
             Firebase.crashlytics.isCrashlyticsCollectionEnabled = value
+            if (value) {
+                Timber.plant(Timber.DebugTree())
+            } else {
+                Timber.uprootAll()
+            }
         }
 
     override fun trackNonFatalException(throwable: Throwable) {
