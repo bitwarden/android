@@ -376,12 +376,10 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("File")
             .filterToOne(!isEditableText)
-            .performScrollTo()
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText("Text")
             .filterToOne(!isEditableText)
-            .performScrollTo()
             .assertIsDisplayed()
 
         mutableStateFlow.update {

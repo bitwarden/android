@@ -99,6 +99,12 @@ sealed class SpecialCircumstance : Parcelable {
     data object VaultShortcut : SpecialCircumstance()
 
     /**
+     * The app was launched via deeplink to the account security screen.
+     */
+    @Parcelize
+    data object AccountSecurityShortcut : SpecialCircumstance()
+
+    /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be
      * cleared after a successful login.
      */

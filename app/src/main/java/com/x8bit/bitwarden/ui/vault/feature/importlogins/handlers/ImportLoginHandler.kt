@@ -6,7 +6,7 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.ImportLoginsAction
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.ImportLoginsViewModel
 
 /**
- * Action handlers for the [ImportLoginsScreen].
+ * Action handlers for the [com.x8bit.bitwarden.ui.vault.feature.importlogins.ImportLoginsScreen].
  */
 data class ImportLoginHandler(
     val onGetStartedClick: () -> Unit,
@@ -15,6 +15,12 @@ data class ImportLoginHandler(
     val onConfirmGetStarted: () -> Unit,
     val onConfirmImportLater: () -> Unit,
     val onCloseClick: () -> Unit,
+    val onHelpClick: () -> Unit,
+    val onMoveToInitialContent: () -> Unit,
+    val onMoveToStepOne: () -> Unit,
+    val onMoveToStepTwo: () -> Unit,
+    val onMoveToStepThree: () -> Unit,
+    val onMoveToSyncInProgress: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -30,6 +36,16 @@ data class ImportLoginHandler(
                 viewModel.trySendAction(ImportLoginsAction.ConfirmImportLater)
             },
             onCloseClick = { viewModel.trySendAction(ImportLoginsAction.CloseClick) },
+            onHelpClick = { viewModel.trySendAction(ImportLoginsAction.HelpClick) },
+            onMoveToInitialContent = {
+                viewModel.trySendAction(ImportLoginsAction.MoveToInitialContent)
+            },
+            onMoveToStepOne = { viewModel.trySendAction(ImportLoginsAction.MoveToStepOne) },
+            onMoveToStepTwo = { viewModel.trySendAction(ImportLoginsAction.MoveToStepTwo) },
+            onMoveToStepThree = { viewModel.trySendAction(ImportLoginsAction.MoveToStepThree) },
+            onMoveToSyncInProgress = {
+                viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+            },
         )
     }
 }

@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
@@ -236,6 +237,7 @@ class MainViewModel @Inject constructor(
         val totpData = intent.getTotpDataOrNull()
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
+        val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
         val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
         val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
@@ -329,6 +331,11 @@ class MainViewModel @Inject constructor(
 
             hasVaultShortcut -> {
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
+            }
+
+            hasAccountSecurityShortcut -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.AccountSecurityShortcut
             }
         }
     }

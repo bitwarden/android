@@ -11,11 +11,13 @@ import javax.inject.Inject
 /**
  * View model for the [ImportLoginsScreen].
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class ImportLoginsViewModel @Inject constructor() :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
         initialState = ImportLoginsState(
             null,
+            viewState = ImportLoginsState.ViewState.InitialContent,
         ),
     ) {
     override fun handleAction(action: ImportLoginsAction) {
@@ -26,7 +28,37 @@ class ImportLoginsViewModel @Inject constructor() :
             ImportLoginsAction.GetStartedClick -> handleGetStartedClick()
             ImportLoginsAction.ImportLaterClick -> handleImportLaterClick()
             ImportLoginsAction.CloseClick -> handleCloseClick()
+            ImportLoginsAction.MoveToInitialContent -> handleMoveToInitialContent()
+            ImportLoginsAction.MoveToStepOne -> handleMoveToStepOne()
+            ImportLoginsAction.MoveToStepTwo -> handleMoveToStepTwo()
+            ImportLoginsAction.MoveToStepThree -> handleMoveToStepThree()
+            ImportLoginsAction.MoveToSyncInProgress -> handleMoveToSyncInProgress()
+            ImportLoginsAction.HelpClick -> handleHelpClick()
         }
+    }
+
+    private fun handleMoveToSyncInProgress() {
+        // TODO PM-11186: Implement sync in progress
+    }
+
+    private fun handleHelpClick() {
+        sendEvent(ImportLoginsEvent.OpenHelpLink)
+    }
+
+    private fun handleMoveToStepThree() {
+        updateViewState(ImportLoginsState.ViewState.ImportStepThree)
+    }
+
+    private fun handleMoveToStepTwo() {
+        updateViewState(ImportLoginsState.ViewState.ImportStepTwo)
+    }
+
+    private fun handleMoveToStepOne() {
+        updateViewState(ImportLoginsState.ViewState.ImportStepOne)
+    }
+
+    private fun handleMoveToInitialContent() {
+        updateViewState(ImportLoginsState.ViewState.InitialContent)
     }
 
     private fun handleCloseClick() {
@@ -52,7 +84,13 @@ class ImportLoginsViewModel @Inject constructor() :
 
     private fun handleConfirmGetStarted() {
         dismissDialog()
-        // TODO - PM-11182: Move to first step in instructions.
+        updateViewState(ImportLoginsState.ViewState.ImportStepOne)
+    }
+
+    private fun updateViewState(viewState: ImportLoginsState.ViewState) {
+        mutableStateFlow.update {
+            it.copy(viewState = viewState)
+        }
     }
 
     private fun dismissDialog() {
@@ -71,6 +109,7 @@ class ImportLoginsViewModel @Inject constructor() :
  */
 data class ImportLoginsState(
     val dialogState: DialogState?,
+    val viewState: ViewState,
 ) {
     /**
      * Dialog states for the [ImportLoginsViewModel].
@@ -97,6 +136,51 @@ data class ImportLoginsState(
             override val title: Text = R.string.do_you_have_a_computer_available.asText()
         }
     }
+
+    /**
+     * View states for the [ImportLoginsViewModel].
+     */
+    sealed class ViewState {
+        /**
+         * Back action for each view state.
+         */
+        abstract val backAction: ImportLoginsAction?
+
+        /**
+         * Initial content view state.
+         */
+        data object InitialContent : ViewState() {
+            override val backAction: ImportLoginsAction = ImportLoginsAction.CloseClick
+        }
+
+        /**
+         * Import step one view state.
+         */
+        data object ImportStepOne : ViewState() {
+            override val backAction: ImportLoginsAction = ImportLoginsAction.MoveToInitialContent
+        }
+
+        /**
+         * Import step two view state.
+         */
+        data object ImportStepTwo : ViewState() {
+            override val backAction: ImportLoginsAction = ImportLoginsAction.MoveToStepOne
+        }
+
+        /**
+         * Import step three view state.
+         */
+        data object ImportStepThree : ViewState() {
+            override val backAction: ImportLoginsAction = ImportLoginsAction.MoveToStepTwo
+        }
+
+        /**
+         * Sync in progress view state.
+         */
+        data object SyncInProgress : ViewState() {
+            override val backAction: ImportLoginsAction? = null
+        }
+    }
 }
 
 /**
@@ -107,6 +191,11 @@ sealed class ImportLoginsEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : ImportLoginsEvent()
+
+    /**
+     * Open the help link in a browser.
+     */
+    data object OpenHelpLink : ImportLoginsEvent()
 }
 
 /**
@@ -143,4 +232,34 @@ sealed class ImportLoginsAction {
      * User has clicked the "Close" icon button.
      */
     data object CloseClick : ImportLoginsAction()
+
+    /**
+     * User has clicked the "Help" button.
+     */
+    data object HelpClick : ImportLoginsAction()
+
+    /**
+     * User has performed action which should move to the initial content view state.
+     */
+    data object MoveToInitialContent : ImportLoginsAction()
+
+    /**
+     * User has performed action which should move to the step one view state.
+     */
+    data object MoveToStepOne : ImportLoginsAction()
+
+    /**
+     * User has performed action which should move to the step two view state.
+     */
+    data object MoveToStepTwo : ImportLoginsAction()
+
+    /**
+     * User has performed action which should move to the step three view state.
+     */
+    data object MoveToStepThree : ImportLoginsAction()
+
+    /**
+     * User has performed action which should move to the sync in progress view state.
+     */
+    data object MoveToSyncInProgress : ImportLoginsAction()
 }

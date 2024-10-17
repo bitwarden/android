@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,16 +25,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
+import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
@@ -41,18 +48,27 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLoginsInstructionStep
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
+import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
+import kotlinx.collections.immutable.persistentListOf
+
+private const val IMPORT_HELP_URL = "https://bitwarden.com/help/import-data/"
 
 /**
  * Top level component for the import logins screen.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImportLoginsScreen(
     onNavigateBack: () -> Unit,
     viewModel: ImportLoginsViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberImportLoginHandler(viewModel = viewModel)
@@ -60,10 +76,19 @@ fun ImportLoginsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             ImportLoginsEvent.NavigateBack -> onNavigateBack()
+            ImportLoginsEvent.OpenHelpLink -> {
+                intentManager.startCustomTabsActivity(IMPORT_HELP_URL.toUri())
+            }
         }
     }
 
     ImportLoginsDialogContent(state = state, handler = handler)
+
+    BackHandler(enabled = true) {
+        state.viewState.backAction?.let {
+            viewModel.trySendAction(it)
+        }
+    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -82,15 +107,49 @@ fun ImportLoginsScreen(
             )
         },
     ) { innerPadding ->
-        Column(
+        Crossfade(
+            targetState = state.viewState,
+            label = "CrossfadeBetweenViewStates",
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding),
-        ) {
-            ImportLoginsContent(
-                onGetStartedClick = handler.onGetStartedClick,
-                onImportLaterClick = handler.onImportLaterClick,
-            )
+        ) { viewState ->
+            when (viewState) {
+                ImportLoginsState.ViewState.InitialContent -> {
+                    InitialImportLoginsContent(
+                        onGetStartedClick = handler.onGetStartedClick,
+                        onImportLaterClick = handler.onImportLaterClick,
+                    )
+                }
+
+                ImportLoginsState.ViewState.ImportStepOne -> {
+                    ImportLoginsStepOneContent(
+                        onBackClick = handler.onMoveToInitialContent,
+                        onContinueClick = handler.onMoveToStepTwo,
+                        onHelpClick = handler.onHelpClick,
+                    )
+                }
+
+                ImportLoginsState.ViewState.ImportStepTwo -> {
+                    ImportLoginsStepTwoContent(
+                        onBackClick = handler.onMoveToStepOne,
+                        onContinueClick = handler.onMoveToStepThree,
+                        onHelpClick = handler.onHelpClick,
+                    )
+                }
+
+                ImportLoginsState.ViewState.ImportStepThree -> {
+                    ImportLoginsStepThreeContent(
+                        onBackClick = handler.onMoveToStepTwo,
+                        onContinueClick = handler.onMoveToSyncInProgress,
+                        onHelpClick = handler.onHelpClick,
+                    )
+                }
+
+                ImportLoginsState.ViewState.SyncInProgress -> {
+                    // TODO PM-11186: Implement sync in progress
+                }
+            }
         }
     }
 }
@@ -132,7 +191,7 @@ private fun ImportLoginsDialogContent(
 }
 
 @Composable
-private fun ImportLoginsContent(
+private fun InitialImportLoginsContent(
     onGetStartedClick: () -> Unit,
     onImportLaterClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -189,6 +248,181 @@ private fun ImportLoginsContent(
     }
 }
 
+@Composable
+private fun ImportLoginsStepOneContent(
+    onContinueClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onHelpClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val instruction1 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager,
+        ),
+        highlights = listOf(
+            stringResource(R.string.log_in_to_your_current_browser_or_password_manager_highlight),
+        ),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    val instruction2 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.export_your_passwords_this_option_is_usually_found_in_your_settings,
+        ),
+        listOf(stringResource(R.string.export_your_passwords_highlight)),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    val instruction3 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
+        ),
+        highlights = listOf(stringResource(R.string.save_the_exported_file_highlight)),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    ImportLoginsInstructionStep(
+        stepText = stringResource(R.string.step_1_of_3),
+        stepTitle = stringResource(R.string.export_your_saved_logins),
+        instructions = persistentListOf(
+            InstructionStep(
+                stepNumber = 1,
+                instructionText = instruction1,
+                additionalText = null,
+            ),
+            InstructionStep(
+                stepNumber = 2,
+                instructionText = instruction2,
+                additionalText = null,
+            ),
+            InstructionStep(
+                stepNumber = 3,
+                instructionText = instruction3,
+                additionalText = stringResource(R.string.delete_this_file_after_import_is_complete),
+            ),
+        ),
+        onBackClick = onBackClick,
+        onContinueClick = onContinueClick,
+        onHelpClick = onHelpClick,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun ImportLoginsStepTwoContent(
+    onContinueClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onHelpClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val instruction1 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
+        ),
+        highlights = listOf(stringResource(R.string.go_to_vault_bitwarden_com_highlight)),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    val instruction2Text = stringResource(R.string.log_in_to_the_bitwarden_web_app)
+    val instruction2 = buildAnnotatedString {
+        withStyle(bitwardenBoldSpanStyle) {
+            append(instruction2Text)
+        }
+    }
+    ImportLoginsInstructionStep(
+        stepText = stringResource(R.string.step_2_of_3),
+        stepTitle = stringResource(R.string.log_in_to_bitwarden),
+        instructions = persistentListOf(
+            InstructionStep(
+                stepNumber = 1,
+                instructionText = instruction1,
+                additionalText = null,
+            ),
+            InstructionStep(
+                stepNumber = 2,
+                instructionText = instruction2,
+                additionalText = null,
+            ),
+        ),
+        onBackClick = onBackClick,
+        onContinueClick = onContinueClick,
+        onHelpClick = onHelpClick,
+        modifier = modifier,
+    )
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun ImportLoginsStepThreeContent(
+    onContinueClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onHelpClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val instruction1 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
+        ),
+        highlights = listOf(
+            stringResource(R.string.find_the_tools_highlight),
+            stringResource(R.string.select_import_data_step_3_highlight),
+        ),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    val instruction2 = createAnnotatedString(
+        mainString = stringResource(R.string.fill_out_the_form_and_import_your_saved_password_file),
+        highlights = listOf(
+            stringResource(R.string.import_your_saved_password_file_highlight),
+        ),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    val instruction3 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
+        ),
+        highlights = listOf(
+            stringResource(R.string.select_import_data_highlight),
+            stringResource(R.string.then_done_highlight),
+        ),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    val instruction4 = createAnnotatedString(
+        mainString = stringResource(
+            R.string.for_your_security_be_sure_to_delete_your_saved_password_file,
+        ),
+        highlights = listOf(
+            stringResource(R.string.delete_your_saved_password_file),
+        ),
+        highlightStyle = bitwardenBoldSpanStyle,
+    )
+    ImportLoginsInstructionStep(
+        stepText = stringResource(R.string.step_3_of_3),
+        stepTitle = stringResource(R.string.import_logins_to_bitwarden),
+        instructions = persistentListOf(
+            InstructionStep(
+                stepNumber = 1,
+                instructionText = instruction1,
+                additionalText = null,
+            ),
+            InstructionStep(
+                stepNumber = 2,
+                instructionText = instruction2,
+                additionalText = null,
+            ),
+            InstructionStep(
+                stepNumber = 3,
+                instructionText = instruction3,
+                additionalText = null,
+            ),
+            InstructionStep(
+                stepNumber = 4,
+                instructionText = instruction4,
+                additionalText = null,
+            ),
+        ),
+        onBackClick = onBackClick,
+        onContinueClick = onContinueClick,
+        onHelpClick = onHelpClick,
+        modifier = modifier,
+    )
+}
+
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -199,7 +433,7 @@ private fun ImportLoginsInitialContent_preview() {
                 BitwardenTheme.colorScheme.background.primary,
             ),
         ) {
-            ImportLoginsContent(
+            InitialImportLoginsContent(
                 onGetStartedClick = {},
                 onImportLaterClick = {},
             )
@@ -228,9 +462,15 @@ private fun ImportLoginsScreenDialog_preview(
                     onCloseClick = {},
                     onGetStartedClick = {},
                     onImportLaterClick = {},
+                    onHelpClick = {},
+                    onMoveToInitialContent = {},
+                    onMoveToStepOne = {},
+                    onMoveToStepTwo = {},
+                    onMoveToStepThree = {},
+                    onMoveToSyncInProgress = {},
                 ),
             )
-            ImportLoginsContent(
+            InitialImportLoginsContent(
                 onGetStartedClick = {},
                 onImportLaterClick = {},
             )
@@ -245,9 +485,11 @@ private class ImportLoginsDialogContentPreviewProvider :
         get() = sequenceOf(
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.GetStarted,
+                viewState = ImportLoginsState.ViewState.InitialContent,
             ),
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
+                viewState = ImportLoginsState.ViewState.InitialContent,
             ),
         )
 }

@@ -58,7 +58,9 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun providesAuthTokenInterceptor(): AuthTokenInterceptor = AuthTokenInterceptor()
+    fun providesAuthTokenInterceptor(
+        authDiskSource: AuthDiskSource,
+    ): AuthTokenInterceptor = AuthTokenInterceptor(authDiskSource = authDiskSource)
 
     @Provides
     @Singleton

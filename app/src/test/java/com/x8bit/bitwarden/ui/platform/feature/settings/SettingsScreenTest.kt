@@ -261,6 +261,25 @@ class SettingsScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on NavigateAccountSecurityShortcut should call onNavigateToAccountSecurity`() {
+        var haveCalledNavigateToAccountSecurity = false
+        composeTestRule.setContent {
+            SettingsScreen(
+                viewModel = viewModel,
+                onNavigateToAbout = { },
+                onNavigateToAccountSecurity = { haveCalledNavigateToAccountSecurity = true },
+                onNavigateToAppearance = { },
+                onNavigateToAutoFill = { },
+                onNavigateToOther = { },
+                onNavigateToVault = {
+                },
+            )
+        }
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateAccountSecurityShortcut)
+        assertTrue(haveCalledNavigateToAccountSecurity)
+    }
+
+    @Test
     fun `Settings screen should show correct number of notification badges based on state`() {
         composeTestRule.setContent {
             SettingsScreen(

@@ -12,5 +12,5 @@ class CrashLogsManagerImpl(
 ) : CrashLogsManager {
     override var isEnabled: Boolean = true
 
-    override fun trackNonFatalException(e: Exception) = Unit
+    override fun trackNonFatalException(throwable: Throwable) = Unit
 }

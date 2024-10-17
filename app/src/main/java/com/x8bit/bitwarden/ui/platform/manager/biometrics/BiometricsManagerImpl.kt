@@ -22,12 +22,25 @@ class BiometricsManagerImpl(
     private val fragmentActivity: FragmentActivity get() = activity as FragmentActivity
 
     override val isBiometricsSupported: Boolean
-        get() = canAuthenticate(Authenticators.BIOMETRIC_STRONG)
+        get() = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED
 
     override val isUserVerificationSupported: Boolean
         get() = canAuthenticate(
             authenticators = Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL,
         )
+
+    override val biometricSupportStatus: BiometricSupportStatus
+        get() = when {
+            canAuthenticate(Authenticators.BIOMETRIC_STRONG) -> {
+                BiometricSupportStatus.CLASS_3_SUPPORTED
+            }
+
+            canAuthenticate(Authenticators.BIOMETRIC_WEAK) -> {
+                BiometricSupportStatus.CLASS_2_SUPPORTED
+            }
+
+            else -> BiometricSupportStatus.NOT_SUPPORTED
+        }
 
     override fun promptBiometrics(
         onSuccess: (cipher: Cipher?) -> Unit,

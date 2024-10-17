@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
@@ -21,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -100,9 +100,8 @@ class PushManagerImpl @Inject constructor(
 
     init {
         authDiskSource
-            .userStateFlow
-            .mapNotNull { it?.activeUserId }
-            .distinctUntilChanged()
+            .activeUserIdChangesFlow
+            .mapNotNull { it }
             .onEach { registerStoredPushTokenIfNecessary() }
             .launchIn(unconfinedScope)
     }
@@ -162,19 +161,14 @@ class PushManagerImpl @Inject constructor(
                         string = notification.payload,
                     )
                     .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.takeIf {
-                        it.cipherId != null &&
-                            it.revisionDate != null &&
-                            it.organizationId != null &&
-                            it.collectionIds != null
-                    }
+                    ?.takeIf { it.cipherId != null && it.revisionDate != null }
                     ?.let {
                         mutableSyncCipherUpsertSharedFlow.tryEmit(
                             SyncCipherUpsertData(
                                 cipherId = requireNotNull(it.cipherId),
                                 revisionDate = requireNotNull(it.revisionDate),
-                                organizationId = requireNotNull(it.organizationId),
-                                collectionIds = requireNotNull(it.collectionIds),
+                                organizationId = it.organizationId,
+                                collectionIds = it.collectionIds,
                                 isUpdate = type == NotificationType.SYNC_CIPHER_UPDATE,
                             ),
                         )
@@ -339,6 +333,6 @@ class PushManagerImpl @Inject constructor(
     ): Boolean = authDiskSource.getAccountTokens(userId)?.isLoggedIn == true
 }
 
-private fun NotificationPayload.userMatchesNotification(userId: String?): Boolean {
+private fun NotificationPayload.userMatchesNotification(userId: String): Boolean {
     return this.userId != null && this.userId == userId
 }

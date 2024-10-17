@@ -104,6 +104,21 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToSettingsScreen shortcut event should navigate to SettingsScreen`() {
+        mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
+        composeTestRule.runOnIdle { fakeNavHostController.assertCurrentRoute("send_graph") }
+        mutableEventFlow.tryEmit(
+            VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen,
+        )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "settings_graph",
+                navOptions = expectedNavOptions,
+            )
+        }
+    }
+
+    @Test
     fun `send tab click should send SendTabClick action`() {
         composeTestRule.onNodeWithText("Send").performClick()
         verify { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) }

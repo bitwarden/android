@@ -6,6 +6,7 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
@@ -135,20 +136,13 @@ fun @receiver:StringRes Int.asText(vararg args: Any): Text = ResArgsText(this, a
 fun createAnnotatedString(
     mainString: String,
     highlights: List<String>,
-    highlightStyle: SpanStyle = SpanStyle(
-        color = BitwardenTheme.colorScheme.text.interaction,
-        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-        fontWeight = FontWeight.Bold,
-    ),
-    tag: String,
+    highlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    tag: String? = null,
 ): AnnotatedString {
     return buildAnnotatedString {
         append(mainString)
         addStyle(
-            style = SpanStyle(
-                color = BitwardenTheme.colorScheme.text.primary,
-                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-            ),
+            style = bitwardenDefaultSpanStyle,
             start = 0,
             end = mainString.length,
         )
@@ -160,12 +154,14 @@ fun createAnnotatedString(
                 start = startIndex,
                 end = endIndex,
             )
-            addStringAnnotation(
-                tag = tag,
-                annotation = highlightString,
-                start = startIndex,
-                end = endIndex,
-            )
+            tag?.let {
+                addStringAnnotation(
+                    tag = it,
+                    annotation = highlightString,
+                    start = startIndex,
+                    end = endIndex,
+                )
+            }
         }
     }
 }
@@ -182,15 +178,8 @@ fun createAnnotatedString(
 fun createClickableAnnotatedString(
     mainString: String,
     highlights: List<ClickableTextHighlight>,
-    style: SpanStyle = SpanStyle(
-        color = BitwardenTheme.colorScheme.text.primary,
-        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-    ),
-    highlightStyle: SpanStyle = SpanStyle(
-        color = BitwardenTheme.colorScheme.text.interaction,
-        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-        fontWeight = FontWeight.Bold,
-    ),
+    style: SpanStyle = bitwardenDefaultSpanStyle,
+    highlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
 ): AnnotatedString {
     return buildAnnotatedString {
         append(mainString)
@@ -250,3 +239,26 @@ data class ClickableTextHighlight(
         LAST,
     }
 }
+
+val bitwardenDefaultSpanStyle: SpanStyle
+    @Composable
+    @ReadOnlyComposable
+    get() = SpanStyle(
+        color = BitwardenTheme.colorScheme.text.primary,
+        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
+        fontFamily = BitwardenTheme.typography.bodyMedium.fontFamily,
+    )
+
+val bitwardenBoldSpanStyle: SpanStyle
+    @Composable
+    @ReadOnlyComposable
+    get() = bitwardenDefaultSpanStyle.copy(
+        fontWeight = FontWeight.Bold,
+    )
+
+val bitwardenClickableTextSpanStyle: SpanStyle
+    @Composable
+    @ReadOnlyComposable
+    get() = bitwardenBoldSpanStyle.copy(
+        color = BitwardenTheme.colorScheme.text.interaction,
+    )
