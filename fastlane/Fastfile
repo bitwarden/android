@@ -108,7 +108,7 @@ platform :android do
       android_artifact_type: "AAB",
       android_artifact_path: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
       service_credentials_file: options[:serviceCredentialsFile],
-      groups: "internal-prod-group",
+      groups: "internal-prod-group, livefront",
       release_notes: release_notes,
     )
   end
