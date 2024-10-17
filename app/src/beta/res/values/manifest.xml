@@ -5,5 +5,5 @@
     AuthenticatorBridgeService in the beta variant. If later another variant of the
     Bitwarden Authenticator app is added, a SHA-256 digest of that variant's APK can be added here.
     -->
-    <string name="known_authenticator_app_cert">@null</string>
+    <string-array name="known_authenticator_app_certs" />
 </resources>
