@@ -7,6 +7,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -564,7 +565,7 @@ private val DEFAULT_USER_STATE = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
         ),
     ),
 )

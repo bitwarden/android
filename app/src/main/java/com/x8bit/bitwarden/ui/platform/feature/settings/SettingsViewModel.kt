@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings
 import androidx.compose.material3.Text
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -22,19 +22,19 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    settingsRepository: SettingsRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
+    firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
-        securityCount = settingsRepository.allSecuritySettingsBadgeCountFlow.value,
-        autoFillCount = settingsRepository.allAutofillSettingsBadgeCountFlow.value,
+        securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
+        autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
     ),
 ) {
 
     init {
         combine(
-            settingsRepository.allSecuritySettingsBadgeCountFlow,
-            settingsRepository.allAutofillSettingsBadgeCountFlow,
+            firstTimeActionManager.allSecuritySettingsBadgeCountFlow,
+            firstTimeActionManager.allAutofillSettingsBadgeCountFlow,
         ) { securityCount, autofillCount ->
             SettingsAction.Internal.SettingsNotificationCountUpdate(
                 securityCount = securityCount,

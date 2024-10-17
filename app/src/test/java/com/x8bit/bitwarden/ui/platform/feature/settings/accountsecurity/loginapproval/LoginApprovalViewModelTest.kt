@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
@@ -372,7 +373,7 @@ private val DEFAULT_USER_STATE = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
         ),
     ),
 )

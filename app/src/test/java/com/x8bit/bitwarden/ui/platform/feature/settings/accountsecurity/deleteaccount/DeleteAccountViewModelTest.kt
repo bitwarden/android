@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -244,7 +245,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             hasMasterPassword = true,
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
         ),
     ),
 )

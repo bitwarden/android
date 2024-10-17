@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
@@ -29,7 +29,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     }
 
     private val mutableSettingsBadgeCountFlow = MutableStateFlow(0)
-    private val settingsRepository: SettingsRepository = mockk {
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { allSettingsBadgeCountFlow } returns mutableSettingsBadgeCountFlow
     }
 
@@ -253,7 +253,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,
             specialCircumstancesManager = specialCircumstancesManager,
-            settingsRepository = settingsRepository,
+            firstTimeActionManager = firstTimeActionManager,
         )
 }
 

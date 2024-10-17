@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
@@ -1156,7 +1157,7 @@ private val DEFAULT_STATE: MainState = MainState(
     isScreenCaptureAllowed = true,
 )
 
-private val DEFAULT_FIRST_TIME_STATE = UserState.FirstTimeState(
+private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
     showImportLoginsCard = true,
 )
 

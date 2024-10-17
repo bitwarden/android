@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -87,7 +88,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -114,7 +115,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -145,7 +146,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -176,7 +177,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
             )
@@ -222,7 +223,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                firstTimeState = FirstTimeState(showImportLoginsCard = true),
             )
                 .toAccountSummary(isActive = true),
         )
@@ -266,7 +267,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                firstTimeState = FirstTimeState(showImportLoginsCard = true),
             )
                 .toAccountSummary(isActive = false),
         )
@@ -314,7 +315,7 @@ class UserStateExtensionsTest {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     ),
                 ),
             )
@@ -342,7 +343,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                firstTimeState = FirstTimeState(showImportLoginsCard = true),
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -399,7 +400,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                firstTimeState = FirstTimeState(showImportLoginsCard = true),
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -457,7 +458,7 @@ class UserStateExtensionsTest {
                 hasMasterPassword = true,
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
-                firstTimeState = UserState.FirstTimeState(showImportLoginsCard = true),
+                firstTimeState = FirstTimeState(showImportLoginsCard = true),
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

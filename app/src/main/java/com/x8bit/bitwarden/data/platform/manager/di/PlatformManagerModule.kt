@@ -24,6 +24,8 @@ import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
@@ -55,6 +57,7 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -273,4 +276,20 @@ object PlatformManagerModule {
     fun provideResourceCacheManager(
         @ApplicationContext context: Context,
     ): ResourceCacheManager = ResourceCacheManagerImpl(context = context)
+
+    @Provides
+    @Singleton
+    fun provideFirstTimeActionManager(
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        vaultDiskSource: VaultDiskSource,
+        dispatcherManager: DispatcherManager,
+        featureFlagManager: FeatureFlagManager,
+    ): FirstTimeActionManager = FirstTimeActionManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        vaultDiskSource = vaultDiskSource,
+        dispatcherManager = dispatcherManager,
+        featureFlagManager = featureFlagManager,
+    )
 }

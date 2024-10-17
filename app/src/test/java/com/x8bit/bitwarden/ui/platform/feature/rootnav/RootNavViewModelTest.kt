@@ -4,6 +4,7 @@ import android.content.pm.SigningInfo
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -106,7 +107,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -143,7 +144,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -177,7 +178,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -221,7 +222,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = false,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -262,7 +263,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -303,7 +304,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = false,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -341,7 +342,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -392,7 +393,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -427,7 +428,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -467,7 +468,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -506,7 +507,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
-                        firstTimeState = UserState.FirstTimeState(false),
+                        firstTimeState = FirstTimeState(false),
                         onboardingStatus = OnboardingStatus.COMPLETE,
                     ),
                 ),
@@ -548,7 +549,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -591,7 +592,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -641,7 +642,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -691,7 +692,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -736,7 +737,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -780,7 +781,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -859,7 +860,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -913,7 +914,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -975,7 +976,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1017,7 +1018,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1054,7 +1055,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1089,7 +1090,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1127,7 +1128,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.ACCOUNT_LOCK_SETUP,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1165,7 +1166,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1203,7 +1204,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.FINAL_STEP,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1241,7 +1242,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1279,7 +1280,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),
@@ -1317,7 +1318,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = UserState.FirstTimeState(
+                        firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
                     ),

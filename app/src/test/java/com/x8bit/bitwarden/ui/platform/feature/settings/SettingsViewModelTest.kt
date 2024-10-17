@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
@@ -20,7 +20,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     private val mutableAutofillBadgeCountFlow = MutableStateFlow(0)
     private val mutableSecurityBadgeCountFlow = MutableStateFlow(0)
-    private val settingsRepository = mockk<SettingsRepository> {
+    private val firstTimeManager = mockk<FirstTimeActionManager> {
         every { allSecuritySettingsBadgeCountFlow } returns mutableSecurityBadgeCountFlow
         every { allAutofillSettingsBadgeCountFlow } returns mutableAutofillBadgeCountFlow
     }
@@ -145,7 +145,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         }
 
     private fun createViewModel() = SettingsViewModel(
-        settingsRepository = settingsRepository,
+        firstTimeActionManager = firstTimeManager,
         specialCircumstanceManager = specialCircumstanceManager,
     )
 }
