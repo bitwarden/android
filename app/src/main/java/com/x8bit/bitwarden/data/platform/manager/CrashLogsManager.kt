@@ -11,7 +11,7 @@ interface CrashLogsManager {
     var isEnabled: Boolean
 
     /**
-     * Tracks an exception if logs are enabled.
+     * Tracks a [Throwable] if logs are enabled.
      */
-    fun trackNonFatalException(e: Exception)
+    fun trackNonFatalException(throwable: Throwable)
 }

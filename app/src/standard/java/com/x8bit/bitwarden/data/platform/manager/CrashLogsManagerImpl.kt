@@ -22,9 +22,9 @@ class CrashLogsManagerImpl(
             Firebase.crashlytics.isCrashlyticsCollectionEnabled = value
         }
 
-    override fun trackNonFatalException(e: Exception) {
+    override fun trackNonFatalException(throwable: Throwable) {
         if (settingsRepository.isCrashLoggingEnabled) {
-            Firebase.crashlytics.recordException(e)
+            Firebase.crashlytics.recordException(throwable)
         }
     }
 
