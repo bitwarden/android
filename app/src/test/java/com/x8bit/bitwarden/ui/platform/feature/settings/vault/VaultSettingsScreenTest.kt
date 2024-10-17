@@ -6,7 +6,10 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -34,6 +37,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
         VaultSettingsState(
             importUrl = "testUrl/#/tools/import",
             isNewImportLoginsFlowEnabled = false,
+            showImportActionCard = false,
         ),
     )
     private val intentManager: IntentManager = mockk(relaxed = true) {
@@ -156,5 +160,60 @@ class VaultSettingsScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault(testUrl))
         assertTrue(onNavigateToImportLoginsCalled)
         verify(exactly = 0) { intentManager.launchUri(testUrl.toUri()) }
+    }
+
+    @Test
+    fun `when new show action card is true the import logins card should show`() {
+        mutableStateFlow.update {
+            it.copy(
+                showImportActionCard = true,
+                isNewImportLoginsFlowEnabled = true,
+            )
+        }
+        composeTestRule.onRoot().printToLog("Help")
+        composeTestRule
+            .onNodeWithText("Import saved logins")
+            .performScrollTo()
+            .assertIsDisplayed()
+        mutableStateFlow.update {
+            it.copy(showImportActionCard = false)
+        }
+        composeTestRule
+            .onNodeWithText("Import saved logins")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `when action card is visible clicking the close icon should send correct action`() {
+        mutableStateFlow.update {
+            it.copy(
+                showImportActionCard = true,
+                isNewImportLoginsFlowEnabled = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Close")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
+        }
+    }
+
+    @Test
+    fun `when action card is visible get started button should send correct action`() {
+        mutableStateFlow.update {
+            it.copy(
+                showImportActionCard = true,
+                isNewImportLoginsFlowEnabled = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
+        }
     }
 }
