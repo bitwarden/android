@@ -1,0 +1,115 @@
+---
+name: Calculate Version Name and Number
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_version_number:
+        description: "Base version number to use for version calculation"
+        type: number
+        default: 0
+      version_name:
+        description: "Overrides version name calculation"
+      distinct_id:
+        description: "Unique ID for this dispatch, used by dispatch-and-download.yml"
+      skip_checkout:
+        description: "Skip checking out the repository"
+        type: boolean
+  repository_dispatch:
+
+env:
+  BASE_VERSION_NUMBER: ${{ inputs.base_version_number || 0 }}
+
+jobs:
+  calculate-version:
+    name: Calculate Version Name and Number
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log inputs to job summary
+        run: |
+          echo "<details><summary>Workflow Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}
+
+      - name: Checkout repository
+        if: ${{ !inputs.skip_checkout || false }}
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: Calculate version name
+        id: calc-version-name
+        run: |
+          output() {
+            local version_name=$1
+            echo "version_name=$version_name" >> $GITHUB_OUTPUT
+          }
+
+          # override version name if provided
+          if [[ ! -z "${{ inputs.version_name }}" ]]; then
+            echo -e "\nApplying version override"
+            version_name=${{ inputs.version_name }}
+            echo "::warning::Override applied: $version_name"
+            output "$version_name"
+            exit 0
+          fi
+
+          current_year=$(date +%Y)
+          current_month=$(date +%-m)
+
+          latest_tag_version=$(git tag --sort=committerdate --list | tail -1)
+          if [[ -z "$latest_tag_version" ]]; then
+            version_name="${current_year}.${current_month}.0"
+            echo "::warning::No tags found, did you checkout? Calculating version from current date: $version_name"
+            output "$version_name"
+            exit 0
+          fi
+
+          # Git tag was found, calculate version from latest tag
+          latest_version=${latest_tag_version:1}  # remove 'v' from tag version
+
+          latest_major_version=$(echo $latest_version | cut -d "." -f 1)
+          latest_minor_version=$(echo $latest_version | cut -d "." -f 2)
+          latest_patch_version=$(echo $latest_version | cut -d "." -f 3)
+
+
+          if [[ "$current_year" == "$latest_major_version" && "$current_month" == "$latest_minor_version" ]]; then
+            version_name="${latest_major_version}.${latest_minor_version}.$(($latest_patch_version + 1))"
+          else
+            version_name="${current_year}.${current_month}.0"
+          fi
+
+          output "$version_name"
+
+
+      - name: Calculate version number
+        id: calc-version-number
+        run: |
+          version_number=$(($GITHUB_RUN_NUMBER + ${{ env.BASE_VERSION_NUMBER }}))
+          echo "version_number=$version_number" >> $GITHUB_OUTPUT
+
+      - name: Create version info JSON
+        run: |
+          json='{
+            "version_number": "${{ steps.calc-version-number.outputs.version_number }}",
+            "version_name": "${{ steps.calc-version-name.outputs.version_name }}"
+          }'
+          echo "$json" > version_info.json
+
+          echo "## version-info.json" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$json" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload version info artifact
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          name: version-info
+          path: version_info.json
