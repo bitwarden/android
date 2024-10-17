@@ -274,6 +274,22 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `getToken when response is a 400 with a legacy error body should return Invalid`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(400).setBody(LEGACY_INVALID_LOGIN_JSON))
+            val result = identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+            assertEquals(LEGACY_INVALID_LOGIN.asSuccess(), result)
+        }
+
+    @Test
     fun `prevalidateSso when response is success should return PrevalidateSsoResponseJson`() =
         runTest {
             val organizationId = "organizationId"
@@ -613,6 +629,14 @@ private const val INVALID_LOGIN_JSON = """
 }
 """
 
+private const val LEGACY_INVALID_LOGIN_JSON = """
+{
+  "errorModel": {
+    "message": "Legacy-123"
+  }
+}
+"""
+
 private const val TOO_MANY_REQUEST_ERROR_JSON = """
 {
   "Object": "error",
@@ -644,6 +668,14 @@ private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
         errorMessage = "123",
+    ),
+    legacyErrorModel = null,
+)
+
+private val LEGACY_INVALID_LOGIN = GetTokenResponseJson.Invalid(
+    errorModel = null,
+    legacyErrorModel = GetTokenResponseJson.Invalid.LegacyErrorModel(
+        errorMessage = "Legacy-123",
     ),
 )
 
