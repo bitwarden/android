@@ -225,6 +225,7 @@ class LoginWithDeviceViewModel @Inject constructor(
         }
     }
 
+    @Suppress("MaxLineLength")
     private fun handleReceiveLoginResult(
         action: LoginWithDeviceAction.Internal.ReceiveLoginResult,
     ) {
@@ -256,6 +257,18 @@ class LoginWithDeviceViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.UnofficialServerError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                                .asText(),
                         ),
                     )
                 }

@@ -94,6 +94,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -153,6 +154,7 @@ class AuthRepositoryImpl(
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val configDiskSource: ConfigDiskSource,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
@@ -1472,7 +1474,12 @@ class AuthRepositoryImpl(
             captchaToken = captchaToken,
         )
         .fold(
-            onFailure = { LoginResult.Error(errorMessage = null) },
+            onFailure = {
+                when (configDiskSource.serverConfig?.isOfficialBitwardenServer) {
+                    false -> LoginResult.UnofficialServerError
+                    else -> LoginResult.Error(errorMessage = null)
+                }
+            },
             onSuccess = { loginResponse ->
                 when (loginResponse) {
                     is GetTokenResponseJson.CaptchaRequired -> LoginResult.CaptchaRequired(

@@ -280,6 +280,44 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns UnofficialServerError should update errorDialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = "",
+                    captchaToken = null,
+                )
+            } returns LoginResult.UnofficialServerError
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = LoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            }
+        }
+
     @Test
     fun `LoginButtonClick login returns success should update loadingDialogState`() = runTest {
         coEvery {

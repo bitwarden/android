@@ -138,6 +138,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         prevalidateSso()
     }
 
+    @Suppress("MaxLineLength")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -155,6 +156,17 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.login_sso_error.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.UnofficialServerError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                                .asText(),
                         ),
                     )
                 }
