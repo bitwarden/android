@@ -25,7 +25,7 @@ class Fido2CredentialStoreImpl(
      * Return all active ciphers that contain FIDO 2 credentials.
      */
     override suspend fun allCredentials(): List<CipherView> {
-        val syncResult = vaultRepository.syncFido2Credentials()
+        val syncResult = vaultRepository.syncForResult()
         if (syncResult is SyncVaultDataResult.Error) {
             syncResult.throwable
                 ?.let { throw it }
@@ -46,7 +46,7 @@ class Fido2CredentialStoreImpl(
     override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
         val userId = getActiveUserIdOrThrow()
 
-        val syncResult = vaultRepository.syncFido2Credentials()
+        val syncResult = vaultRepository.syncForResult()
         if (syncResult is SyncVaultDataResult.Error) {
             syncResult.throwable
                 ?.let { throw it }

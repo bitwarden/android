@@ -7,8 +7,10 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -20,12 +22,13 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class ImportLoginsScreenTest : BaseComposeTest() {
-
+    private var navigateToImportLoginSuccessCalled = false
     private var navigateBackCalled = false
 
     private val mutableImportLoginsStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -43,6 +46,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         setContentWithBackDispatcher {
             ImportLoginsScreen(
                 onNavigateBack = { navigateBackCalled = true },
+                onNavigateToImportSuccessScreen = { navigateToImportLoginSuccessCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )
@@ -318,6 +322,56 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         verifyActionSent(ImportLoginsAction.MoveToStepTwo)
     }
 
+    @Test
+    fun `NavigateToImportSuccess event causes correct lambda to invoke`() {
+        mutableImportLoginsEventFlow.tryEmit(ImportLoginsEvent.NavigateToImportSuccess)
+        assertTrue(navigateToImportLoginSuccessCalled)
+    }
+
+    @Test
+    fun `Loading content is displayed when isVaultSyncing is true`() {
+        mutableImportLoginsStateFlow.update {
+            it.copy(isVaultSyncing = true)
+        }
+        composeTestRule.onRoot().printToLog("woo")
+        composeTestRule
+            .onNodeWithText(text = "Syncing logins...")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Error dialog is displayed when dialog state is Error`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                dialogState = ImportLoginsState.DialogState.Error,
+            ),
+        )
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "We were unable to process your request. Please try again or contact us.",
+                useUnmergedTree = true,
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Try again")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.RetryVaultSync)
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.FailSyncAcknowledged)
+    }
+
     //region Helper methods
 
     private fun verifyActionSent(action: ImportLoginsAction) {
@@ -330,4 +384,5 @@ class ImportLoginsScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = ImportLoginsState(
     dialogState = null,
     viewState = ImportLoginsState.ViewState.InitialContent,
+    isVaultSyncing = false,
 )

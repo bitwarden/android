@@ -340,7 +340,7 @@ class VaultRepositoryImpl(
         }
     }
 
-    override suspend fun syncFido2Credentials(): SyncVaultDataResult {
+    override suspend fun syncForResult(): SyncVaultDataResult {
         val userId = activeUserId
             ?: return SyncVaultDataResult.Error(throwable = null)
         syncJob = ioScope
