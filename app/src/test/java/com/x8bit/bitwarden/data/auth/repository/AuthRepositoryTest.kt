@@ -102,6 +102,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSour
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -249,6 +250,9 @@ class AuthRepositoryTest {
         every { currentOrDefaultUserFirstTimeState } returns FIRST_TIME_STATE
         every { firstTimeStateFlow } returns MutableStateFlow(FIRST_TIME_STATE)
     }
+    private val logsManager: LogsManager = mockk {
+        every { setUserData(userId = any(), environmentType = any()) } just runs
+    }
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
@@ -272,6 +276,7 @@ class AuthRepositoryTest {
         policyManager = policyManager,
         featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
+        logsManager = logsManager,
     )
 
     @BeforeEach
