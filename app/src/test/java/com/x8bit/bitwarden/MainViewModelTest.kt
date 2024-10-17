@@ -1106,10 +1106,12 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveNewIntent with a passwordless auth request data userId that doesn't match activeUserId should switchAccount`() {
+    fun `on ReceiveNewIntent with a passwordless auth request data userId that doesn't match activeUserId and the vault is not locked should switchAccount`() {
+        val userId = "userId"
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val passwordlessRequestData = mockk<PasswordlessRequestData>()
+        every { vaultRepository.isVaultUnlocked(ACTIVE_USER_ID) } returns false
         every {
             mockIntent.getPasswordlessRequestDataIntentOrNull()
         } returns passwordlessRequestData
@@ -1121,7 +1123,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.isMyVaultShortcut } returns false
         every { mockIntent.isPasswordGeneratorShortcut } returns false
         every { mockIntent.isAccountSecurityShortcut } returns false
-        every { passwordlessRequestData.userId } returns "userId"
+        every { passwordlessRequestData.userId } returns userId
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -1129,7 +1131,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        verify { authRepository.switchAccount("userId") }
+        verify { authRepository.switchAccount(userId) }
     }
 
     private fun createViewModel(
@@ -1162,8 +1164,9 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
 )
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
+private const val ACTIVE_USER_ID: String = "activeUserId"
 private val DEFAULT_ACCOUNT = UserState.Account(
-    userId = "activeUserId",
+    userId = ACTIVE_USER_ID,
     name = "Active User",
     email = "active@bitwarden.com",
     environment = Environment.Us,
