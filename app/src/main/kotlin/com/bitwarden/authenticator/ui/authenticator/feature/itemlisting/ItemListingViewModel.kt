@@ -20,8 +20,10 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
@@ -420,8 +422,21 @@ class ItemListingViewModel @Inject constructor(
             }
             return
         }
-        if (localItems.isEmpty()) {
-            // If there are no local items, show empty state:
+        val sharedItemsState: SharedCodesDisplayState = when (action.sharedCodesState) {
+            SharedVerificationCodesState.Error -> SharedCodesDisplayState.Error
+            SharedVerificationCodesState.AppNotInstalled,
+            SharedVerificationCodesState.FeatureNotEnabled,
+            SharedVerificationCodesState.Loading,
+            SharedVerificationCodesState.OsVersionNotSupported,
+            SharedVerificationCodesState.SyncNotEnabled,
+                -> SharedCodesDisplayState.Codes(emptyList())
+
+            is SharedVerificationCodesState.Success ->
+                action.sharedCodesState.toSharedCodesDisplayState(state.alertThresholdSeconds)
+        }
+
+        if (localItems.isEmpty() && sharedItemsState.isEmpty()) {
+            // If there are no items, show empty state:
             mutableStateFlow.update {
                 it.copy(
                     viewState = ItemListingState.ViewState.NoItems(
@@ -441,6 +456,7 @@ class ItemListingViewModel @Inject constructor(
                     .map {
                         it.toDisplayItem(alertThresholdSeconds = state.alertThresholdSeconds)
                     },
+                sharedItems = sharedItemsState,
                 actionCard = action.sharedCodesState.toActionCard(),
             )
             mutableStateFlow.update { it.copy(viewState = viewState) }
@@ -590,6 +606,7 @@ data class ItemListingState(
             val actionCard: ActionCardState,
             val favoriteItems: List<VerificationCodeDisplayItem>,
             val itemList: List<VerificationCodeDisplayItem>,
+            val sharedItems: SharedCodesDisplayState,
         ) : ViewState()
     }
 

@@ -51,6 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
@@ -65,6 +66,7 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoBut
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabIcon
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFloatingActionButton
+import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
@@ -418,6 +420,7 @@ private fun ItemListingContent(
                             onItemClick = { onItemClick(it.authCode) },
                             onEditItemClick = { onEditItemClick(it.id) },
                             onDeleteItemClick = { onDeleteItemClick(it.id) },
+                            allowLongPress = it.allowLongPressActions,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
@@ -445,8 +448,55 @@ private fun ItemListingContent(
                         onItemClick = { onItemClick(it.authCode) },
                         onEditItemClick = { onEditItemClick(it.id) },
                         onDeleteItemClick = { onDeleteItemClick(it.id) },
+                        allowLongPress = it.allowLongPressActions,
                         modifier = Modifier.fillMaxWidth(),
                     )
+                }
+
+                // If there are any items in the local lists, add a spacer between
+                // local codes and shared codes:
+                if (state.itemList.isNotEmpty() || state.favoriteItems.isNotEmpty()) {
+                    item {
+                        Spacer(Modifier.height(16.dp))
+                    }
+                }
+
+                when (state.sharedItems) {
+                    is SharedCodesDisplayState.Codes -> {
+                        items(state.sharedItems.sections) { section ->
+                            BitwardenListHeaderText(
+                                label = section.label(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                            )
+                            section.codes.forEach {
+                                VaultVerificationCodeItem(
+                                    authCode = it.authCode,
+                                    primaryLabel = it.issuer,
+                                    secondaryLabel = it.label,
+                                    periodSeconds = it.periodSeconds,
+                                    timeLeftSeconds = it.timeLeftSeconds,
+                                    alertThresholdSeconds = it.alertThresholdSeconds,
+                                    startIcon = it.startIcon,
+                                    onItemClick = { onItemClick(it.authCode) },
+                                    onEditItemClick = { },
+                                    onDeleteItemClick = { },
+                                    allowLongPress = it.allowLongPressActions,
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
+                        }
+                    }
+
+                    SharedCodesDisplayState.Error -> item {
+                        Text(
+                            text = stringResource(R.string.shared_codes_error),
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
                 }
 
                 // Add a spacer item to prevent the FAB from hiding verification codes at the

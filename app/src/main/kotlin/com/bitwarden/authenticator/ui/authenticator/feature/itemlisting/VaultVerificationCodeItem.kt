@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -61,18 +62,27 @@ fun VaultVerificationCodeItem(
     onItemClick: () -> Unit,
     onEditItemClick: () -> Unit,
     onDeleteItemClick: () -> Unit,
+    allowLongPress: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDropdownMenu by remember { mutableStateOf(value = false) }
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
-                .combinedClickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple(color = MaterialTheme.colorScheme.primary),
-                    onClick = onItemClick,
-                    onLongClick = {
-                        shouldShowDropdownMenu = true
+                .then(
+                    if (allowLongPress) {
+                        Modifier.combinedClickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(color = MaterialTheme.colorScheme.primary),
+                            onClick = onItemClick,
+                            onLongClick = { shouldShowDropdownMenu = true },
+                        )
+                    } else {
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(color = MaterialTheme.colorScheme.primary),
+                            onClick = onItemClick,
+                        )
                     },
                 )
                 .defaultMinSize(minHeight = 72.dp)
@@ -185,6 +195,7 @@ private fun VerificationCodeItem_preview() {
             onItemClick = {},
             onEditItemClick = {},
             onDeleteItemClick = {},
+            allowLongPress = true,
             modifier = Modifier.padding(horizontal = 16.dp),
         )
     }

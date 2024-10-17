@@ -16,5 +16,9 @@ fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
         periodSeconds = periodSeconds,
         alertThresholdSeconds = alertThresholdSeconds,
         authCode = code,
+        allowLongPressActions = when (source) {
+            is AuthenticatorItem.Source.Local -> true
+            is AuthenticatorItem.Source.Shared -> false
+        },
         favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     )

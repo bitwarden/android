@@ -9,7 +9,9 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import io.mockk.every
@@ -95,6 +97,7 @@ class ItemListViewModelTest : BaseViewModelTest() {
                 actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
             ),
         )
         every { settingsRepository.hasUserDismissedDownloadBitwardenCard } returns false
@@ -112,11 +115,80 @@ class ItemListViewModelTest : BaseViewModelTest() {
                 actionCard = ItemListingState.ActionCardState.None,
                 favoriteItems = LOCAL_FAVORITE_ITEMS,
                 itemList = LOCAL_NON_FAVORITE_ITEMS,
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
             ),
         )
         every { settingsRepository.hasUserDismissedDownloadBitwardenCard } returns true
         mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
         mutableSharedCodesFlow.value = SharedVerificationCodesState.AppNotInstalled
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow sharedItems value should be Error when shared state is Error `() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = LOCAL_FAVORITE_ITEMS,
+                itemList = LOCAL_NON_FAVORITE_ITEMS,
+                sharedItems = SharedCodesDisplayState.Error,
+            ),
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.Error
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow sharedItems value should be Codes with empty list when shared state is Error `() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = LOCAL_FAVORITE_ITEMS,
+                itemList = LOCAL_NON_FAVORITE_ITEMS,
+                sharedItems = SHARED_DISPLAY_ITEMS,
+            ),
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+        mutableSharedCodesFlow.value =
+            SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow sharedItems value should show items even when local items are empty`() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.None,
+            ),
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
+        mutableSharedCodesFlow.value =
+            SharedVerificationCodesState.Success(emptyList())
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow viewState value should be NoItems when both local and shared codes are empty`() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = emptyList(),
+                itemList = emptyList(),
+                sharedItems = SHARED_DISPLAY_ITEMS,
+            ),
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
+        mutableSharedCodesFlow.value =
+            SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
         val viewModel = createViewModel()
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -139,6 +211,7 @@ class ItemListViewModelTest : BaseViewModelTest() {
                     actionCard = ItemListingState.ActionCardState.None,
                     favoriteItems = LOCAL_FAVORITE_ITEMS,
                     itemList = LOCAL_NON_FAVORITE_ITEMS,
+                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
                 ),
             )
             every { settingsRepository.hasUserDismissedDownloadBitwardenCard = true } just runs
@@ -208,9 +281,30 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
     ),
 )
 
+private val SHARED_VERIFICATION_ITEMS = listOf(
+    VerificationCodeItem(
+        code = "987654",
+        periodSeconds = 60,
+        timeLeftSeconds = 430,
+        issueTime = 35L,
+        id = "1",
+        issuer = "sharedIssue",
+        accountName = "sharedAccountName",
+        source = AuthenticatorItem.Source.Shared(
+            userId = "1",
+            nameOfUser = null,
+            email = "email",
+            environmentLabel = "environmentLabel",
+        ),
+    ),
+)
+
 private val LOCAL_DISPLAY_ITEMS = LOCAL_VERIFICATION_ITEMS.map {
     it.toDisplayItem(AUTHENTICATOR_ALERT_SECONDS)
 }
+
+private val SHARED_DISPLAY_ITEMS = SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
+    .toSharedCodesDisplayState(AUTHENTICATOR_ALERT_SECONDS)
 
 private val LOCAL_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS.filter { it.favorite }
 private val LOCAL_NON_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS.filterNot { it.favorite }
