@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -38,6 +40,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -76,6 +79,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
         every { isUserVerified } returns true
         every { isUserVerified = any() } just runs
+    }
+    private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
+        every { specialCircumstance } returns null
     }
 
     @Test
@@ -174,6 +180,36 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(environmentUrl = "vault.qa.bitwarden.pw"),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `showAccountMenu should be true when unlockType is not STANDARD`() {
+        val viewModel = createViewModel(unlockType = UnlockType.TDE)
+        assertFalse(viewModel.stateFlow.value.showAccountMenu)
+    }
+
+    @Test
+    fun `showAccountMenu should be false when unlocking for FIDO 2 credential discovery`() {
+        every {
+            specialCircumstanceManager.specialCircumstance
+        } returns SpecialCircumstance.Fido2GetCredentials(
+            createMockFido2GetCredentialsRequest(number = 1),
+        )
+        val viewModel = createViewModel()
+
+        assertFalse(viewModel.stateFlow.value.showAccountMenu)
+    }
+
+    @Test
+    fun `showAccountMenu should be false when unlocking for FIDO 2 credential authentication`() {
+        every {
+            specialCircumstanceManager.specialCircumstance
+        } returns SpecialCircumstance.Fido2Assertion(
+            createMockFido2CredentialAssertionRequest(number = 1),
+        )
+        val viewModel = createViewModel()
+
+        assertFalse(viewModel.stateFlow.value.showAccountMenu)
     }
 
     @Test
@@ -316,6 +352,136 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             initialState.copy(input = ""),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a FIDO2 GetCredentialsRequest should switch accounts when the requested user is not the active user`() {
+        val mockFido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
+        val initialState = DEFAULT_STATE.copy(
+            fido2GetCredentialsRequest = mockFido2GetCredentialsRequest,
+            accountSummaries = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+                    .toAccountSummary(isActive = true),
+            ),
+        )
+
+        val viewModel = createViewModel(state = initialState)
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false),
+            ),
+        )
+
+        verify {
+            authRepository.switchAccount(mockFido2GetCredentialsRequest.userId)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a FIDO2 GetCredentialsRequest should not switch accounts when the requested user is the active user`() {
+        val mockFido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(
+            number = 1,
+            userId = DEFAULT_USER_STATE.activeUserId,
+        )
+        val initialState = DEFAULT_STATE.copy(
+            fido2GetCredentialsRequest = mockFido2GetCredentialsRequest,
+            accountSummaries = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+                    .toAccountSummary(isActive = true),
+            ),
+            userId = mockFido2GetCredentialsRequest.userId,
+        )
+
+        val viewModel = createViewModel(state = initialState)
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false),
+            ),
+        )
+
+        verify(exactly = 0) {
+            authRepository.switchAccount(any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a FIDO2 CredentialAssertionRequest should switch accounts when the requested user is not the active user`() {
+        val mockFido2CredentialAssertionRequest =
+            createMockFido2CredentialAssertionRequest(number = 1)
+        val initialState = DEFAULT_STATE.copy(
+            fido2CredentialAssertionRequest = mockFido2CredentialAssertionRequest,
+            accountSummaries = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+                    .toAccountSummary(isActive = true),
+            ),
+        )
+
+        val viewModel = createViewModel(state = initialState)
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false),
+            ),
+        )
+
+        verify {
+            authRepository.switchAccount(mockFido2CredentialAssertionRequest.userId)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a FIDO2 CredentialAssertionRequest should not switch accounts when the requested user is the active user`() {
+        val mockFido2CredentialAssertionRequest =
+            createMockFido2CredentialAssertionRequest(
+                number = 1,
+                userId = DEFAULT_USER_STATE.activeUserId,
+            )
+        val initialState = DEFAULT_STATE.copy(
+            fido2CredentialAssertionRequest = mockFido2CredentialAssertionRequest,
+            accountSummaries = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+                    .toAccountSummary(isActive = true),
+            ),
+            userId = mockFido2CredentialAssertionRequest.userId,
+        )
+
+        val viewModel = createViewModel(state = initialState)
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false),
+            ),
+        )
+
+        verify(exactly = 0) {
+            authRepository.switchAccount(any())
+        }
     }
 
     @Test
@@ -1078,6 +1244,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         environmentRepo = environmentRepo,
         biometricsEncryptionManager = biometricsEncryptionManager,
         fido2CredentialManager = fido2CredentialManager,
+        specialCircumstanceManager = specialCircumstanceManager,
     )
 }
 

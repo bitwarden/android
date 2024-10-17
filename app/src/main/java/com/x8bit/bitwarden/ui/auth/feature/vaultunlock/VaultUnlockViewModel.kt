@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -42,12 +44,13 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the initial vault unlock screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class VaultUnlockViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
@@ -68,6 +71,11 @@ class VaultUnlockViewModel @Inject constructor(
             // There is no valid way to unlock this app.
             authRepository.logout()
         }
+        val specialCircumstance = specialCircumstanceManager.specialCircumstance
+        val showAccountMenu =
+            VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
+                (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&
+                    specialCircumstance !is SpecialCircumstance.Fido2Assertion)
         VaultUnlockState(
             accountSummaries = accountSummaries,
             avatarColorString = activeAccountSummary.avatarColorHex,
@@ -79,7 +87,7 @@ class VaultUnlockViewModel @Inject constructor(
             input = "",
             isBiometricEnabled = activeAccount.isBiometricsEnabled,
             isBiometricsValid = isBiometricsValid,
-            showAccountMenu = VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD,
+            showAccountMenu = showAccountMenu,
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
             userId = userState.activeUserId,
@@ -328,6 +336,16 @@ class VaultUnlockViewModel @Inject constructor(
         // out.
         val userState = action.userState ?: return
 
+        // If the Vault is being unlocked for a FIDO 2 request, make sure we're unlocking the
+        // correct Vault
+        state.fido2RequestUserId
+            ?.let { fido2RequestUserId ->
+                // If the current Vault is not the selected Vault, switch accounts.
+                if (userState.activeUserId != fido2RequestUserId) {
+                    authRepository.switchAccount(fido2RequestUserId)
+                    return
+                }
+            }
         // If the Vault is already unlocked, do nothing.
         if (userState.activeAccount.isVaultUnlocked) return
         // If the user state has changed to add a new account, do nothing.
@@ -401,6 +419,20 @@ data class VaultUnlockState(
      * Indicates if we want force focus on Master Password \ PIN input field and show keyboard.
      */
     val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
+
+    /**
+     * Indicates if the vault is being unlocked as a result of receiving a FIDO 2 request.
+     */
+    val isUnlockingForFido2Request: Boolean
+        get() = fido2GetCredentialsRequest != null ||
+            fido2CredentialAssertionRequest != null
+
+    /**
+     * Returns the user ID present in the current FIDO 2 request, or null when no FIDO 2 request is
+     * present.
+     */
+    val fido2RequestUserId: String?
+        get() = fido2GetCredentialsRequest?.userId ?: fido2CredentialAssertionRequest?.userId
 
     /**
      * Represents the various dialogs the vault unlock screen can display.

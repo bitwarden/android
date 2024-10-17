@@ -5,12 +5,13 @@ import android.os.Bundle
 
 fun createMockFido2GetCredentialsRequest(
     number: Int,
+    userId: String = "mockUserId-$number",
     signingInfo: SigningInfo = SigningInfo(),
     origin: String? = null,
 ): Fido2GetCredentialsRequest = Fido2GetCredentialsRequest(
     candidateQueryData = Bundle(),
     id = "mockId-$number",
-    userId = "mockUserId-$number",
+    userId = userId,
     requestJson = "requestJson-$number",
     clientDataHash = null,
     packageName = "mockPackageName-$number",
