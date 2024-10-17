@@ -243,7 +243,7 @@ jobs:
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release bundle to Firebase
-        if: ${{ matrix.variant == 'aab' && (inputs.distribute-to-firebase || github.event_name == 'push' }}
+        if: ${{ matrix.variant == 'aab' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
