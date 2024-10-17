@@ -96,8 +96,16 @@ sealed class GetTokenResponseJson {
     @Serializable
     data class Invalid(
         @SerialName("ErrorModel")
-        val errorModel: ErrorModel,
+        val errorModel: ErrorModel?,
+        @SerialName("errorModel")
+        val legacyErrorModel: LegacyErrorModel?,
     ) : GetTokenResponseJson() {
+
+        /**
+         * The error message returned from the server, or null.
+         */
+        val errorMessage: String?
+            get() = errorModel?.errorMessage ?: legacyErrorModel?.errorMessage
 
         /**
          * The error body of an invalid request containing a message.
@@ -105,6 +113,18 @@ sealed class GetTokenResponseJson {
         @Serializable
         data class ErrorModel(
             @SerialName("Message")
+            val errorMessage: String,
+        )
+
+        /**
+         * The legacy error body of an invalid request containing a message.
+         *
+         * This model is used to support older versions of the error response model that used
+         * lower-case keys.
+         */
+        @Serializable
+        data class LegacyErrorModel(
+            @SerialName("message")
             val errorMessage: String,
         )
     }
