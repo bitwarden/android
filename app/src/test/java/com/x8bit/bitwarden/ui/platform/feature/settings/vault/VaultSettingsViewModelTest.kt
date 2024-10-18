@@ -1,12 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -21,6 +27,14 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     private val featureFlagManager = mockk<FeatureFlagManager> {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlagFlow
         every { getFeatureFlag(FlagKey.ImportLoginsFlow) } returns false
+    }
+    private val authRepository = mockk<AuthRepository> {
+        every { setShowImportLogins(any()) } just runs
+    }
+    private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
+    private val firstTimeActionManager = mockk<FirstTimeActionManager> {
+        every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
+        every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
     }
 
     @Test
@@ -67,8 +81,64 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         assertTrue(viewModel.stateFlow.value.isNewImportLoginsFlowEnabled)
     }
 
+    @Test
+    fun `shouldShowImportCard should update when first time state changes`() = runTest {
+        mutableImportLoginsFlagFlow.update { true }
+        val viewModel = createViewModel()
+        assertTrue(viewModel.stateFlow.value.shouldShowImportCard)
+        mutableFirstTimeStateFlow.update {
+            it.copy(showImportLoginsCard = false)
+        }
+        assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
+    }
+
+    @Test
+    fun `shouldShowImportCard should be false when feature flag not enabled`() = runTest {
+        val viewModel = createViewModel()
+        mutableImportLoginsFlagFlow.update { false }
+        assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ImportLoginsCardCtaClick action should set repository value to false and send navigation event`() =
+        runTest {
+            val viewModel = createViewModel()
+            val expected = "https://vault.bitwarden.com/#/tools/import"
+            mutableImportLoginsFlagFlow.update { true }
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault(url = expected),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) { authRepository.setShowImportLogins(false) }
+        }
+
+    @Test
+    fun `ImportLoginsCardDismissClick action should set repository value to false `() = runTest {
+        val viewModel = createViewModel()
+        mutableImportLoginsFlagFlow.update { true }
+        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
+        verify(exactly = 1) { authRepository.setShowImportLogins(false) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ImportLoginsCardDismissClick action should not set repository value to false if already false`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
+            verify(exactly = 0) { authRepository.setShowImportLogins(false) }
+        }
+
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
+        authRepository = authRepository,
+        firstTimeActionManager = firstTimeActionManager,
     )
 }
+
+private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(showImportLoginsCard = true)

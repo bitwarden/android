@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,12 +19,17 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -90,6 +96,35 @@ fun VaultSettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            AnimatedVisibility(
+                visible = state.shouldShowImportCard,
+                label = "ImportLoginsActionCard",
+                exit = actionCardExitAnimation(),
+            ) {
+                BitwardenActionCard(
+                    cardTitle = stringResource(id = R.string.import_saved_logins),
+                    actionText = stringResource(R.string.get_started),
+                    cardSubtitle = stringResource(R.string.use_a_computer_to_import_logins),
+                    onActionClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
+                        }
+                    },
+                    onDismissClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                VaultSettingsAction.ImportLoginsCardDismissClick,
+                            )
+                        }
+                    },
+                    leadingContent = {
+                        NotificationBadge(notificationCount = 1)
+                    },
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .padding(top = 12.dp, bottom = 16.dp),
+                )
+            }
             BitwardenTextRow(
                 text = stringResource(R.string.folders),
                 onClick = remember(viewModel) {
