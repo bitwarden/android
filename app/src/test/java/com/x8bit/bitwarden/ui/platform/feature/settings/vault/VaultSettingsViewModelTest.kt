@@ -2,8 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -27,13 +28,13 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlagFlow
         every { getFeatureFlag(FlagKey.ImportLoginsFlow) } returns false
     }
-    private val mockUserState = mockk<UserState> {
-        every { activeUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
-    }
-    private val mockUserStateFlow = MutableStateFlow(mockUserState)
     private val authRepository = mockk<AuthRepository> {
-        every { userStateFlow } returns mockUserStateFlow
         every { setShowImportLogins(any()) } just runs
+    }
+    private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
+    private val firstTimeActionManager = mockk<FirstTimeActionManager> {
+        every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
+        every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
     }
 
     @Test
@@ -81,16 +82,13 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `shouldShowImportCard should update when user state changes`() = runTest {
+    fun `shouldShowImportCard should update when first time state changes`() = runTest {
         mutableImportLoginsFlagFlow.update { true }
         val viewModel = createViewModel()
         assertTrue(viewModel.stateFlow.value.shouldShowImportCard)
-        val newUserState = mockk<UserState>(relaxed = true) {
-            every { activeUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE.copy(
-                showImportLoginsCard = false,
-            )
+        mutableFirstTimeStateFlow.update {
+            it.copy(showImportLoginsCard = false)
         }
-        mockUserStateFlow.update { newUserState }
         assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
     }
 
@@ -139,7 +137,8 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
         authRepository = authRepository,
+        firstTimeActionManager = firstTimeActionManager,
     )
 }
 
-private val DEFAULT_FIRST_TIME_STATE = UserState.FirstTimeState(showImportLoginsCard = true)
+private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(showImportLoginsCard = true)
