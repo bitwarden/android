@@ -170,7 +170,6 @@ class VaultSettingsScreenTest : BaseComposeTest() {
                 isNewImportLoginsFlowEnabled = true,
             )
         }
-        composeTestRule.onRoot().printToLog("Help")
         composeTestRule
             .onNodeWithText("Import saved logins")
             .performScrollTo()
