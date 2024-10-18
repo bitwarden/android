@@ -4335,7 +4335,7 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `syncFido2Credentials should return result`() = runTest {
+    fun `syncForResult should return result`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val userId = "mockId-1"
         val mockSyncResponse = createMockSyncResponse(number = 1)
@@ -4364,19 +4364,19 @@ class VaultRepositoryTest {
             )
         } just runs
 
-        val syncResult = vaultRepository.syncFido2Credentials()
+        val syncResult = vaultRepository.syncForResult()
         assertEquals(SyncVaultDataResult.Success, syncResult)
     }
 
     @Test
-    fun `syncFido2Credentials should return error when getAccountRevisionDateMillis fails`() =
+    fun `syncForResult should return error when getAccountRevisionDateMillis fails`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val throwable = Throwable()
             coEvery {
                 syncService.getAccountRevisionDateMillis()
             } returns throwable.asFailure()
-            val syncResult = vaultRepository.syncFido2Credentials()
+            val syncResult = vaultRepository.syncForResult()
             assertEquals(
                 SyncVaultDataResult.Error(throwable = throwable),
                 syncResult,
@@ -4384,13 +4384,13 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `syncFido2Credentials should return error when sync fails`() = runTest {
+    fun `syncForResult should return error when sync fails`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val throwable = Throwable()
         coEvery {
             syncService.sync()
         } returns throwable.asFailure()
-        val syncResult = vaultRepository.syncFido2Credentials()
+        val syncResult = vaultRepository.syncForResult()
         assertEquals(
             SyncVaultDataResult.Error(throwable = throwable),
             syncResult,

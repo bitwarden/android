@@ -221,6 +221,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         importLoginsScreenDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToImportSuccessScreen = {
+                // TODO: PM-11187 navigate to success screen with popping this screen from stack
+                navController.popBackStack()
+            },
         )
     }
 }

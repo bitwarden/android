@@ -1,11 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -13,11 +17,14 @@ import javax.inject.Inject
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
-class ImportLoginsViewModel @Inject constructor() :
+class ImportLoginsViewModel @Inject constructor(
+    private val vaultRepository: VaultRepository,
+) :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
         initialState = ImportLoginsState(
             null,
             viewState = ImportLoginsState.ViewState.InitialContent,
+            isVaultSyncing = false,
         ),
     ) {
     override fun handleAction(action: ImportLoginsAction) {
@@ -34,11 +41,52 @@ class ImportLoginsViewModel @Inject constructor() :
             ImportLoginsAction.MoveToStepThree -> handleMoveToStepThree()
             ImportLoginsAction.MoveToSyncInProgress -> handleMoveToSyncInProgress()
             ImportLoginsAction.HelpClick -> handleHelpClick()
+            is ImportLoginsAction.Internal.VaultSyncResultReceived -> {
+                handleVaultSyncResultReceived(action)
+            }
+
+            ImportLoginsAction.RetryVaultSync -> handleRetryVaultSync()
+            ImportLoginsAction.FailSyncAcknowledged -> handleFailedSyncAcknowledged()
+        }
+    }
+
+    private fun handleFailedSyncAcknowledged() {
+        mutableStateFlow.update {
+            it.copy(dialogState = null)
+        }
+        sendEvent(ImportLoginsEvent.NavigateBack)
+    }
+
+    private fun handleRetryVaultSync() {
+        mutableStateFlow.update {
+            it.copy(
+                isVaultSyncing = true,
+                dialogState = null,
+            )
+        }
+        syncVault()
+    }
+
+    private fun handleVaultSyncResultReceived(
+        action: ImportLoginsAction.Internal.VaultSyncResultReceived,
+    ) {
+        when (action.result) {
+            is SyncVaultDataResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        isVaultSyncing = false,
+                        dialogState = ImportLoginsState.DialogState.Error,
+                    )
+                }
+            }
+
+            SyncVaultDataResult.Success -> sendEvent(ImportLoginsEvent.NavigateToImportSuccess)
         }
     }
 
     private fun handleMoveToSyncInProgress() {
-        // TODO PM-11186: Implement sync in progress
+        mutableStateFlow.update { it.copy(isVaultSyncing = true) }
+        syncVault()
     }
 
     private fun handleHelpClick() {
@@ -102,6 +150,13 @@ class ImportLoginsViewModel @Inject constructor() :
             it.copy(dialogState = dialogState)
         }
     }
+
+    private fun syncVault() {
+        viewModelScope.launch {
+            val result = vaultRepository.syncForResult()
+            sendAction(ImportLoginsAction.Internal.VaultSyncResultReceived(result))
+        }
+    }
 }
 
 /**
@@ -110,13 +165,14 @@ class ImportLoginsViewModel @Inject constructor() :
 data class ImportLoginsState(
     val dialogState: DialogState?,
     val viewState: ViewState,
+    val isVaultSyncing: Boolean,
 ) {
     /**
      * Dialog states for the [ImportLoginsViewModel].
      */
     sealed class DialogState {
         abstract val message: Text
-        abstract val title: Text
+        abstract val title: Text?
 
         /**
          * Import logins later dialog state.
@@ -134,6 +190,14 @@ data class ImportLoginsState(
             override val message: Text =
                 R.string.the_following_instructions_will_guide_you_through_importing_logins.asText()
             override val title: Text = R.string.do_you_have_a_computer_available.asText()
+        }
+
+        /**
+         * Show a dialog with an error message.
+         */
+        data object Error : DialogState() {
+            override val title: Text? = null
+            override val message: Text = R.string.generic_error_message.asText()
         }
     }
 
@@ -173,13 +237,6 @@ data class ImportLoginsState(
         data object ImportStepThree : ViewState() {
             override val backAction: ImportLoginsAction = ImportLoginsAction.MoveToStepTwo
         }
-
-        /**
-         * Sync in progress view state.
-         */
-        data object SyncInProgress : ViewState() {
-            override val backAction: ImportLoginsAction? = null
-        }
     }
 }
 
@@ -191,6 +248,11 @@ sealed class ImportLoginsEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : ImportLoginsEvent()
+
+    /**
+     * Navigate to the import success screen
+     */
+    data object NavigateToImportSuccess : ImportLoginsEvent()
 
     /**
      * Open the help link in a browser.
@@ -259,7 +321,29 @@ sealed class ImportLoginsAction {
     data object MoveToStepThree : ImportLoginsAction()
 
     /**
-     * User has performed action which should move to the sync in progress view state.
+     * User has performed action which should begin the sync in progress and update the
+     * state accordingly.
      */
     data object MoveToSyncInProgress : ImportLoginsAction()
+
+    /**
+     * User has chosen to retry vault sync after failure.
+     */
+    data object RetryVaultSync : ImportLoginsAction()
+
+    /**
+     * User has acknowledge failed sync and chose not to retry now.
+     */
+    data object FailSyncAcknowledged : ImportLoginsAction()
+
+    /**
+     * Internal actions to be handled, not triggered by user actions.
+     */
+    sealed class Internal : ImportLoginsAction() {
+
+        /**
+         * Vault sync result received. Process in a synchronous manner.
+         */
+        data class VaultSyncResultReceived(val result: SyncVaultDataResult) : Internal()
+    }
 }

@@ -118,10 +118,10 @@ interface VaultRepository : CipherManager, VaultLockManager {
     fun syncIfNecessary()
 
     /**
-     * Syncs the user's FIDO 2 credentials. This is an explicit request to sync and is not dependent
-     * on whether the last sync time was sufficiently in the past.
+     * Syncs the vault data for the current user. This is an explicit request to sync and will
+     * return the result of the sync as a [SyncVaultDataResult].
      */
-    suspend fun syncFido2Credentials(): SyncVaultDataResult
+    suspend fun syncForResult(): SyncVaultDataResult
 
     /**
      * Flow that represents the data for a specific vault item as found by ID. This may emit `null`
