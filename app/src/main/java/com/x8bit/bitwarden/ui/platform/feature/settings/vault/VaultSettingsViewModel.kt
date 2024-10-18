@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.toBaseWebVaultImportUrl
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -24,10 +24,10 @@ class VaultSettingsViewModel @Inject constructor(
     environmentRepository: EnvironmentRepository,
     featureFlagManager: FeatureFlagManager,
     private val authRepository: AuthRepository,
+    private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
-        val userFirstTimeState =
-            requireNotNull(authRepository.userStateFlow.value).activeUserFirstTimeState
+        val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
             importUrl = environmentRepository
                 .environment
@@ -35,7 +35,7 @@ class VaultSettingsViewModel @Inject constructor(
                 .toBaseWebVaultImportUrl,
             isNewImportLoginsFlowEnabled = featureFlagManager
                 .getFeatureFlag(FlagKey.ImportLoginsFlow),
-            showImportActionCard = userFirstTimeState.showImportLoginsCard,
+            showImportActionCard = firstTimeState.showImportLoginsCard,
         )
     },
 ) {
@@ -46,12 +46,11 @@ class VaultSettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        authRepository
-            .userStateFlow
-            .filterNotNull()
+        firstTimeActionManager
+            .firstTimeStateFlow
             .map {
                 VaultSettingsAction.Internal.UserFirstTimeStateChanged(
-                    showImportLoginsCard = it.activeUserFirstTimeState.showImportLoginsCard,
+                    showImportLoginsCard = it.showImportLoginsCard,
                 )
             }
             .onEach(::sendAction)
