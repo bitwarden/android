@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.datasource.sdk
 
-import android.util.Log
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import timber.log.Timber
 
 /**
  * Base class for simplifying sdk interactions.
@@ -29,7 +29,7 @@ abstract class BaseSdkSource(
     ): Result<R> = runCatching(block = block)
         .onFailure {
             if (BuildConfig.DEBUG) {
-                Log.w(this@BaseSdkSource::class.java.simpleName, it)
+                Timber.w(it)
             }
         }
 }
