@@ -19,10 +19,12 @@ import org.junit.jupiter.api.Test
 class SettingsViewModelTest : BaseViewModelTest() {
 
     private val mutableAutofillBadgeCountFlow = MutableStateFlow(0)
+    private val mutableVaultBadgeCountFlow = MutableStateFlow(0)
     private val mutableSecurityBadgeCountFlow = MutableStateFlow(0)
     private val firstTimeManager = mockk<FirstTimeActionManager> {
         every { allSecuritySettingsBadgeCountFlow } returns mutableSecurityBadgeCountFlow
         every { allAutofillSettingsBadgeCountFlow } returns mutableAutofillBadgeCountFlow
+        every { allVaultSettingsBadgeCountFlow } returns mutableVaultBadgeCountFlow
     }
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
@@ -86,11 +88,13 @@ class SettingsViewModelTest : BaseViewModelTest() {
     fun `initial state reflects the current state of the repository`() {
         mutableAutofillBadgeCountFlow.update { 1 }
         mutableSecurityBadgeCountFlow.update { 2 }
+        mutableVaultBadgeCountFlow.update { 3 }
         val viewModel = createViewModel()
         assertEquals(
             SettingsState(
                 autoFillCount = 1,
                 securityCount = 2,
+                vaultCount = 3,
             ),
             viewModel.stateFlow.value,
         )
@@ -104,6 +108,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 SettingsState(
                     autoFillCount = 0,
                     securityCount = 0,
+                    vaultCount = 0,
                 ),
                 awaitItem(),
             )
@@ -113,6 +118,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 SettingsState(
                     autoFillCount = 0,
                     securityCount = 2,
+                    vaultCount = 0,
                 ),
                 awaitItem(),
             )
@@ -122,6 +128,17 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 SettingsState(
                     autoFillCount = 1,
                     securityCount = 2,
+                    vaultCount = 0,
+                ),
+                awaitItem(),
+            )
+
+            mutableVaultBadgeCountFlow.update { 3 }
+            assertEquals(
+                SettingsState(
+                    autoFillCount = 1,
+                    securityCount = 2,
+                    vaultCount = 3,
                 ),
                 awaitItem(),
             )

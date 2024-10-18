@@ -475,7 +475,102 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.talonsec.talon",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "A3:66:03:44:A6:F6:AF:CA:81:8C:BF:43:96:A2:3C:CF:D5:ED:7A:78:1B:B4:A3:D1:85:03:01:E2:F4:6D:23:83"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "E2:A5:64:74:EA:23:7B:06:67:B6:F5:2C:DC:E9:04:5E:24:88:3B:AE:D0:82:59:9A:A2:DF:0B:60:3A:CF:6A:3B"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.talonsec.talon_beta",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "F5:86:62:7A:32:C8:9F:E6:7E:00:6D:B1:8C:34:31:9E:01:7F:B3:B2:BE:D6:9D:01:01:B7:F9:43:E7:7C:48:AE"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "9A:A1:25:D5:E5:5E:3F:B0:DE:96:72:D9:A9:5D:04:65:3F:49:4A:1E:C3:EE:76:1E:94:C4:4E:5D:2F:65:8E:2F"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.duckduckgo.mobile.android.debug",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C4:F0:9E:2B:D7:25:AD:F5:AD:92:0B:A2:80:27:66:AC:16:4A:C1:53:B3:EA:9E:08:48:B0:57:98:37:F7:6A:29"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.duckduckgo.mobile.android",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "BB:7B:B3:1C:57:3C:46:A1:DA:7F:C5:C5:28:A6:AC:F4:32:10:84:56:FE:EC:50:81:0C:7F:33:69:4E:B3:D2:D4"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.naver.whale",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "0B:8B:85:23:BB:4A:EF:FA:34:6E:4B:DD:4F:BF:7D:19:34:50:56:9A:A1:4A:AA:D4:AD:FD:94:A3:F7:B2:27:BB"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.fido.fido2client",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "FC:98:DA:E6:3A:D3:96:26:C8:C6:7F:BE:83:F2:F0:6F:74:93:2A:9C:D1:46:B9:2C:EC:FC:6A:04:7A:90:43:86"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.heytap.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "AF:F8:A7:49:CF:0E:7D:75:44:65:D0:FB:FA:7B:8D:0C:64:5E:22:5C:10:C6:E2:32:AD:A0:D9:74:88:36:B8:E5"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "A8:FE:A4:CA:FB:93:32:DA:26:B8:E6:81:08:17:C1:DA:90:A5:03:0E:35:A6:0A:79:E0:6C:90:97:AA:C6:A4:42"
+          }
+        ]
+      }
     }
   ]
 }
-

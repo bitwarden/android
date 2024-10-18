@@ -28,6 +28,7 @@ class SettingsViewModel @Inject constructor(
     initialState = SettingsState(
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
+        vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
     ),
 ) {
 
@@ -35,10 +36,12 @@ class SettingsViewModel @Inject constructor(
         combine(
             firstTimeActionManager.allSecuritySettingsBadgeCountFlow,
             firstTimeActionManager.allAutofillSettingsBadgeCountFlow,
-        ) { securityCount, autofillCount ->
+            firstTimeActionManager.allVaultSettingsBadgeCountFlow,
+        ) { securityCount, autofillCount, vaultCount ->
             SettingsAction.Internal.SettingsNotificationCountUpdate(
                 securityCount = securityCount,
                 autoFillCount = autofillCount,
+                vaultCount = vaultCount,
             )
         }
             .onEach(::sendAction)
@@ -68,6 +71,7 @@ class SettingsViewModel @Inject constructor(
             it.copy(
                 autoFillCount = action.autoFillCount,
                 securityCount = action.securityCount,
+                vaultCount = action.vaultCount,
             )
         }
     }
@@ -107,10 +111,12 @@ class SettingsViewModel @Inject constructor(
 data class SettingsState(
     private val autoFillCount: Int,
     private val securityCount: Int,
+    private val vaultCount: Int,
 ) {
     val notificationBadgeCountMap: Map<Settings, Int> = mapOf(
         Settings.ACCOUNT_SECURITY to securityCount,
         Settings.AUTO_FILL to autoFillCount,
+        Settings.VAULT to vaultCount,
     )
 }
 
@@ -175,6 +181,7 @@ sealed class SettingsAction {
         data class SettingsNotificationCountUpdate(
             val autoFillCount: Int,
             val securityCount: Int,
+            val vaultCount: Int,
         ) : Internal()
     }
 }
