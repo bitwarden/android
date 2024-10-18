@@ -8,9 +8,10 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -21,6 +22,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -42,6 +44,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val mutableAuthRequestSharedFlow = bufferedMutableSharedFlow<AuthRequestUpdatesResult>()
     private val mockAuthRepository = mockk<AuthRepository> {
+        every { activeUserId } returns USER_ID
         coEvery {
             getAuthRequestByFingerprintFlow(FINGERPRINT)
         } returns mutableAuthRequestSharedFlow
@@ -72,6 +75,85 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         coVerify {
             mockAuthRepository.getAuthRequestByIdFlow(REQUEST_ID)
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `init should call show change account dialog when special circumstance is present but user IDs do not match`() {
+        every {
+            mockSpecialCircumstanceManager.specialCircumstance
+        } returns SpecialCircumstance.PasswordlessRequest(
+            passwordlessRequestData = PasswordlessRequestData(
+                loginRequestId = REQUEST_ID,
+                userId = USER_ID_2,
+            ),
+            shouldFinishWhenComplete = false,
+        )
+        val viewModel = createViewModel(state = null)
+        verify(exactly = 1) {
+            mockAuthRepository.userStateFlow
+        }
+        assertEquals(
+            viewModel.stateFlow.value,
+            LoginApprovalState(
+                fingerprint = "",
+                specialCircumstance = SpecialCircumstance.PasswordlessRequest(
+                    passwordlessRequestData = PasswordlessRequestData(
+                        loginRequestId = REQUEST_ID,
+                        userId = USER_ID_2,
+                    ),
+                    shouldFinishWhenComplete = false,
+                ),
+                masterPasswordHash = null,
+                publicKey = "",
+                requestId = "",
+                viewState = LoginApprovalState.ViewState.Loading,
+                dialogState = LoginApprovalState.DialogState.ChangeAccount(
+                    message = R.string.login_attempt_from_x_do_you_want_to_switch_to_this_account
+                        .asText(EMAIL_2),
+                ),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ApproveAccountChangeClick dialog state should be cleared, user should be switched, and getAuthRequestByIdFlow should be called`() {
+        every {
+            mockAuthRepository.switchAccount(userId = USER_ID_2)
+        } returns SwitchAccountResult.AccountSwitched
+        val specialCircumstance = SpecialCircumstance.PasswordlessRequest(
+            passwordlessRequestData = PasswordlessRequestData(
+                loginRequestId = REQUEST_ID,
+                userId = USER_ID_2,
+            ),
+            shouldFinishWhenComplete = false,
+        )
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(
+                specialCircumstance = specialCircumstance,
+                dialogState = LoginApprovalState.DialogState.ChangeAccount(
+                    message = R.string.login_attempt_from_x_do_you_want_to_switch_to_this_account
+                        .asText(EMAIL_2),
+                ),
+            ),
+        )
+
+        viewModel.trySendAction(LoginApprovalAction.ApproveAccountChangeClick)
+
+        verify(exactly = 1) {
+            mockAuthRepository.switchAccount(userId = USER_ID_2)
+        }
+        coVerify(exactly = 1) {
+            mockAuthRepository.getAuthRequestByIdFlow(requestId = REQUEST_ID)
+        }
+        assertEquals(
+            viewModel.stateFlow.value,
+            DEFAULT_STATE.copy(
+                specialCircumstance = specialCircumstance,
+                dialogState = null,
+            ),
+        )
     }
 
     @Test
@@ -311,20 +393,26 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         } returns AuthRequestResult.Error
         viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
 
-        assertEquals(viewModel.stateFlow.value, DEFAULT_STATE.copy(shouldShowErrorDialog = true))
+        assertEquals(
+            viewModel.stateFlow.value,
+            DEFAULT_STATE.copy(
+                dialogState = LoginApprovalState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+        )
         viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss)
 
-        assertEquals(viewModel.stateFlow.value, DEFAULT_STATE.copy(shouldShowErrorDialog = false))
+        assertEquals(viewModel.stateFlow.value, DEFAULT_STATE.copy(dialogState = null))
     }
 
     private fun createViewModel(
-        authRepository: AuthRepository = mockAuthRepository,
-        specialCircumstanceManager: SpecialCircumstanceManager = mockSpecialCircumstanceManager,
         state: LoginApprovalState? = DEFAULT_STATE,
     ): LoginApprovalViewModel = LoginApprovalViewModel(
         clock = fixedClock,
-        authRepository = authRepository,
-        specialCircumstanceManager = specialCircumstanceManager,
+        authRepository = mockAuthRepository,
+        specialCircumstanceManager = mockSpecialCircumstanceManager,
         savedStateHandle = SavedStateHandle()
             .also { it["fingerprint"] = FINGERPRINT }
             .apply { set("state", state) },
@@ -332,6 +420,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 }
 
 private const val EMAIL = "test@bitwarden.com"
+private const val EMAIL_2 = "test2@bitwarden.com"
 private const val FINGERPRINT = "fingerprint"
 private const val PASSWORD_HASH = "verySecureHash"
 private const val PUBLIC_KEY = "publicKey"
@@ -342,7 +431,7 @@ private val DEFAULT_STATE: LoginApprovalState = LoginApprovalState(
     masterPasswordHash = PASSWORD_HASH,
     publicKey = PUBLIC_KEY,
     requestId = REQUEST_ID,
-    shouldShowErrorDialog = false,
+    dialogState = null,
     viewState = LoginApprovalState.ViewState.Content(
         deviceType = "Android",
         domainUrl = "www.bitwarden.com",
@@ -353,6 +442,7 @@ private val DEFAULT_STATE: LoginApprovalState = LoginApprovalState(
     ),
 )
 private const val USER_ID = "userID"
+private const val USER_ID_2 = "userId_2"
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = USER_ID,
     accounts = listOf(
@@ -360,6 +450,25 @@ private val DEFAULT_USER_STATE = UserState(
             userId = USER_ID,
             name = "Active User",
             email = EMAIL,
+            environment = Environment.Us,
+            avatarColorHex = "#aa00aa",
+            isBiometricsEnabled = false,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
+        ),
+        UserState.Account(
+            userId = USER_ID_2,
+            name = "Second User",
+            email = EMAIL_2,
             environment = Environment.Us,
             avatarColorHex = "#aa00aa",
             isBiometricsEnabled = false,
