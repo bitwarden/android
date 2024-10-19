@@ -9,13 +9,15 @@ import kotlinx.parcelize.Parcelize
  * Represents raw data from the a user deciding to create a password in their vault via the
  * credential manager framework.
  *
- * @property userId The user under which the passkey should be saved.
+ * @property userId The user under which the password should be saved.
+ * @property userName containing the id of the request representing the userName for the login.
  * @property password containing the Password request.
  * @property callingAppInfo Information about the application that initiated the request.
  */
 @Parcelize
 data class PasswordCredentialRequest(
     val userId: String,
+    val userName: String,
     val password: String,
     val packageName: String,
     val signingInfo: SigningInfo,

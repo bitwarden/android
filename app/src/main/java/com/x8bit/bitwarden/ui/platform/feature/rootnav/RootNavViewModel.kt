@@ -161,13 +161,6 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    is SpecialCircumstance.PasswordAssertion -> {
-                        RootNavState.VaultUnlockedForPasswordAssertion(
-                            activeUserId = userState.activeUserId,
-                            passwordCredentialAssertionRequest = specialCircumstance.passwordCredentialAssertionRequest,
-                        )
-                    }
-
                     is SpecialCircumstance.PasswordGetCredentials -> {
                         RootNavState.VaultUnlockedForPasswordGetCredentials(
                             activeUserId = userState.activeUserId,

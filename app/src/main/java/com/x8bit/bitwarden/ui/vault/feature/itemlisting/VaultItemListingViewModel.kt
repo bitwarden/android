@@ -23,6 +23,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -34,6 +36,8 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toPasswordGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toPasswordCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -136,6 +140,8 @@ class VaultItemListingViewModel @Inject constructor(
             fido2CredentialRequest = fido2CredentialRequest,
             fido2CredentialAssertionRequest = specialCircumstance?.toFido2AssertionRequestOrNull(),
             fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
+            passwordCredentialRequest = specialCircumstance?.toPasswordCredentialsRequestOrNull(),
+            passwordGetCredentialRequest = specialCircumstance?.toPasswordGetCredentialsRequestOrNull(),
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
         )
@@ -191,6 +197,8 @@ class VaultItemListingViewModel @Inject constructor(
                         .filterForAutofillIfNecessary()
                         .filterForFido2CreationIfNecessary()
                         .filterForFidoGetCredentialsIfNecessary()
+                        .filterForPasswordCreationIfNecessary()
+                        .filterForPasswordGetCredentialsIfNecessary()
                         .filterForTotpIfNecessary(),
                 )
             }
@@ -1655,6 +1663,46 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+
+    /**
+     * Takes the given vault data and filters it for Password credential creation if necessary.
+     */
+    private suspend fun DataState<VaultData>.filterForPasswordCreationIfNecessary(): DataState<VaultData> {
+        val request = state.passwordCredentialRequest ?: return this
+        val matchUri = request.origin
+            ?: request.packageName
+                .toAndroidAppUriString()
+
+        return this.map { vaultData ->
+            vaultData.copy(
+                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = vaultData.cipherViewList,
+                    matchUri = matchUri,
+                ),
+            )
+        }
+    }
+
+    /**
+     * Takes the given vault data and filters it for Password credential selection.
+     */
+    @Suppress("MaxLineLength")
+    private suspend fun DataState<VaultData>.filterForPasswordGetCredentialsIfNecessary(): DataState<VaultData> {
+        val request = state.passwordGetCredentialRequest ?: return this
+        val matchUri = request.origin
+            ?: request.packageName
+                .toAndroidAppUriString()
+
+        return this.map { vaultData ->
+            vaultData.copy(
+                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = vaultData.cipherViewList,
+                    matchUri = matchUri,
+                ),
+            )
+        }
+    }
+
     /**
      * Takes the given vault data and filters it for totp data.
      */
@@ -1724,6 +1772,8 @@ data class VaultItemListingState(
     val fido2CredentialRequest: Fido2CredentialRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
+    val passwordCredentialRequest: PasswordCredentialRequest? = null,
+    val passwordGetCredentialRequest: PasswordGetCredentialsRequest? = null,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,

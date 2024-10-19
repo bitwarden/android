@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toPasswordCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -121,10 +123,13 @@ class VaultAddEditViewModel @Inject constructor(
             val fido2AttestationOptions = fido2CreationRequest?.let { request ->
                 fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request.requestJson)
             }
+            //Check for Password data to pre-populate
+            val passwordCreationRequest = specialCircumstance?.toPasswordCredentialsRequestOrNull()
 
-            // Exit on save if handling an autofill, Fido2 Attestation, or TOTP link
+            // Exit on save if handling an autofill, Fido2 Attestation, Password creation, or TOTP link
             val shouldExitOnSave = autofillSaveItem != null ||
                 fido2AttestationOptions != null ||
+                passwordCreationRequest != null ||
                 totpData != null
 
             val dialogState = if (!settingsRepository.initialAutofillDialogShown &&
@@ -145,6 +150,9 @@ class VaultAddEditViewModel @Inject constructor(
                             ?: autofillSaveItem?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: fido2CreationRequest?.toDefaultAddTypeContent(
                                 attestationOptions = fido2AttestationOptions,
+                                isIndividualVaultDisabled = isIndividualVaultDisabled,
+                            )
+                            ?: passwordCreationRequest?.toDefaultAddTypeContent(
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
                             )
                             ?: totpData?.toDefaultAddTypeContent(isIndividualVaultDisabled)
@@ -593,7 +601,7 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                 }
             }
-            ?: showFido2ErrorDialog()
+        ?: showFido2ErrorDialog()
 
     private fun handleUserVerificationFail() {
         fido2CredentialManager.isUserVerified = false
@@ -1405,6 +1413,10 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Internal.CreateCipherResultReceive,
     ) {
         clearDialogState()
+        if(specialCircumstanceManager.specialCircumstance?.toPasswordCredentialsRequestOrNull() != null) {
+            handlePasswordRegisterCredentialResult(action)
+            return
+        }
 
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
@@ -1412,6 +1424,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is CreateCipherResult.Success -> {
+
                 specialCircumstanceManager.specialCircumstance = null
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
@@ -1423,6 +1436,24 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun handlePasswordRegisterCredentialResult(
+        action: VaultAddEditAction.Internal.CreateCipherResultReceive,
+    ){
+        val result = when (action.createCipherResult) {
+            is CreateCipherResult.Error -> {
+                sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+                PasswordRegisterCredentialResult.Error
+            }
+
+            is CreateCipherResult.Success -> {
+                sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+                PasswordRegisterCredentialResult.Success
+            }
+        }
+
+        sendEvent(VaultAddEditEvent.CompletePasswordRegistration(result))
     }
 
     private fun handleUpdateCipherResultReceive(
@@ -2416,6 +2447,15 @@ sealed class VaultAddEditEvent {
      */
     data class Fido2UserVerification(
         val isRequired: Boolean,
+    ) : BackgroundEvent, VaultAddEditEvent()
+
+    /**
+     * Complete the current FIDO 2 credential registration process.
+     *
+     * @property result the result of FIDO 2 credential registration.
+     */
+    data class CompletePasswordRegistration(
+        val result: PasswordRegisterCredentialResult,
     ) : BackgroundEvent, VaultAddEditEvent()
 }
 

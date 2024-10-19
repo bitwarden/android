@@ -29,7 +29,6 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.fido2.processor.UNLOCK_ACCOUNT_INTENT
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -40,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 private const val CREATE_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_CREATE_PASSWORD"
 const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_GET_PASSWORD"
+const val UNLOCK_ACCOUNT_INTENT= "com.x8bit.bitwarden.data.autofill.password.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The default implementation of [PasswordProviderProcessor]. Its purpose is to handle Password related
@@ -91,27 +91,14 @@ class PasswordProviderProcessorImpl(
     ): BeginCreateCredentialResponse? {
         return when (request) {
             is BeginCreatePasswordCredentialRequest -> {
-                handleCreatePassword(request)
+                handleCreatePassword()
             }
 
             else                                    -> null
         }
     }
 
-    private fun handleCreatePassword(
-        request: BeginCreatePasswordCredentialRequest,
-    ): BeginCreateCredentialResponse? {
-        println(request)
-        println(
-            request
-                .candidateQueryData
-        )
-        val requestJson = request
-            .candidateQueryData
-            .getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
-
-        if (requestJson.isNullOrEmpty()) return null
-
+    private fun handleCreatePassword(): BeginCreateCredentialResponse? {
         val userState = authRepository.userStateFlow.value ?: return null
 
         return BeginCreateCredentialResponse.Builder()

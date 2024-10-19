@@ -15,6 +15,9 @@ import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerImpl
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerUnsupportedApiImpl
+import com.x8bit.bitwarden.ui.autofill.password.manager.PasswordCompletionManager
+import com.x8bit.bitwarden.ui.autofill.password.manager.PasswordCompletionManagerImpl
+import com.x8bit.bitwarden.ui.autofill.password.manager.PasswordCompletionManagerUnsupportedApiImpl
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -34,20 +37,27 @@ fun LocalManagerProvider(
     content: @Composable () -> Unit,
 ) {
     val activity = LocalContext.current as Activity
-    val fido2IntentManager: IntentManager = IntentManagerImpl(activity)
+    val intentManager: IntentManager = IntentManagerImpl(activity)
     val fido2CompletionManager =
         if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             Fido2CompletionManagerUnsupportedApiImpl
         } else {
-            Fido2CompletionManagerImpl(activity, fido2IntentManager)
+            Fido2CompletionManagerImpl(activity, intentManager)
+        }
+    val passwordCompletionManager =
+        if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+            PasswordCompletionManagerUnsupportedApiImpl
+        } else {
+            PasswordCompletionManagerImpl(activity, intentManager)
         }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),
-        LocalIntentManager provides fido2IntentManager,
+        LocalIntentManager provides intentManager,
         LocalExitManager provides ExitManagerImpl(activity),
         LocalBiometricsManager provides BiometricsManagerImpl(activity),
         LocalNfcManager provides NfcManagerImpl(activity),
         LocalFido2CompletionManager provides fido2CompletionManager,
+        LocalPasswordCompletionManager provides passwordCompletionManager,
     ) {
         content()
     }
@@ -91,4 +101,9 @@ val LocalNfcManager: ProvidableCompositionLocal<NfcManager> = compositionLocalOf
 val LocalFido2CompletionManager: ProvidableCompositionLocal<Fido2CompletionManager> =
     compositionLocalOf {
         error("CompositionLocal Fido2CompletionManager not present")
+    }
+
+val LocalPasswordCompletionManager: ProvidableCompositionLocal<PasswordCompletionManager> =
+    compositionLocalOf {
+        error("CompositionLocal PasswordCompletionManager not present")
     }
