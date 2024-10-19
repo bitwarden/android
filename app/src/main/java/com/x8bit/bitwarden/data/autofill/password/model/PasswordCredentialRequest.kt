@@ -1,0 +1,30 @@
+package com.x8bit.bitwarden.data.autofill.password.model
+
+import android.content.pm.SigningInfo
+import android.os.Parcelable
+import androidx.credentials.provider.CallingAppInfo
+import kotlinx.parcelize.Parcelize
+
+/**
+ * Represents raw data from the a user deciding to create a password in their vault via the
+ * credential manager framework.
+ *
+ * @property userId The user under which the passkey should be saved.
+ * @property password containing the Password request.
+ * @property callingAppInfo Information about the application that initiated the request.
+ */
+@Parcelize
+data class PasswordCredentialRequest(
+    val userId: String,
+    val password: String,
+    val packageName: String,
+    val signingInfo: SigningInfo,
+    val origin: String?,
+) : Parcelable {
+    val callingAppInfo: CallingAppInfo
+        get() = CallingAppInfo(
+            packageName = packageName,
+            signingInfo = signingInfo,
+            origin = origin,
+        )
+}
