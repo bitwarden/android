@@ -151,6 +151,10 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
+                    is SpecialCircumstance.PasswordAssertion -> TODO()
+                    is SpecialCircumstance.PasswordGetCredentials -> TODO()
+                    is SpecialCircumstance.PasswordSave -> TODO()
+
                     SpecialCircumstance.AccountSecurityShortcut,
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
