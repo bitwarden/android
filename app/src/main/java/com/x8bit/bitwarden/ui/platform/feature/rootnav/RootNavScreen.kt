@@ -126,6 +126,9 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForFido2GetCredentials,
+        is RootNavState.VaultUnlockedForPasswordSave,
+        is RootNavState.VaultUnlockedForPasswordAssertion,
+        is RootNavState.VaultUnlockedForPasswordGetCredentials,
             -> VAULT_UNLOCKED_GRAPH_ROUTE
 
         RootNavState.OnboardingAccountLockSetup -> SETUP_UNLOCK_AS_ROOT_ROUTE
@@ -235,6 +238,17 @@ fun RootNavScreen(
             is RootNavState.VaultUnlockedForFido2Save,
             is RootNavState.VaultUnlockedForFido2Assertion,
             is RootNavState.VaultUnlockedForFido2GetCredentials,
+                -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToVaultItemListingAsRoot(
+                    vaultItemListingType = VaultItemListingType.Login,
+                    navOptions = rootNavOptions,
+                )
+            }
+
+            is RootNavState.VaultUnlockedForPasswordSave,
+            is RootNavState.VaultUnlockedForPasswordAssertion,
+            is RootNavState.VaultUnlockedForPasswordGetCredentials,
                 -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultItemListingAsRoot(

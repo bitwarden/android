@@ -12,6 +12,9 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
@@ -151,9 +154,26 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    is SpecialCircumstance.PasswordAssertion -> TODO()
-                    is SpecialCircumstance.PasswordGetCredentials -> TODO()
-                    is SpecialCircumstance.PasswordSave -> TODO()
+                    is SpecialCircumstance.PasswordSave -> {
+                        RootNavState.VaultUnlockedForPasswordSave(
+                            activeUserId = userState.activeUserId,
+                            passwordCredentialRequest = specialCircumstance.passwordCredentialRequest,
+                        )
+                    }
+
+                    is SpecialCircumstance.PasswordAssertion -> {
+                        RootNavState.VaultUnlockedForPasswordAssertion(
+                            activeUserId = userState.activeUserId,
+                            passwordCredentialAssertionRequest = specialCircumstance.passwordCredentialAssertionRequest,
+                        )
+                    }
+
+                    is SpecialCircumstance.PasswordGetCredentials -> {
+                        RootNavState.VaultUnlockedForPasswordGetCredentials(
+                            activeUserId = userState.activeUserId,
+                            passwordGetCredentialsRequest = specialCircumstance.passwordGetCredentialsRequest,
+                        )
+                    }
 
                     SpecialCircumstance.AccountSecurityShortcut,
                     SpecialCircumstance.GeneratorShortcut,
@@ -315,6 +335,39 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlockedForFido2GetCredentials(
         val activeUserId: String,
         val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
+    ) : RootNavState()
+
+    /**
+     * App should show an add item screen for a user to complete the saving of data collected by
+     * the password credential manager framework
+     *
+     * @param activeUserId ID of the active user. Indirectly used to notify [RootNavViewModel] the
+     * active user has changed.
+     * @param passwordCredentialRequest System request containing Password credential data.
+     */
+    @Parcelize
+    data class VaultUnlockedForPasswordSave(
+        val activeUserId: String,
+        val passwordCredentialRequest: PasswordCredentialRequest,
+    ) : RootNavState()
+
+    /**
+     * App should perform Password credential assertion for the user.
+     */
+    @Parcelize
+    data class VaultUnlockedForPasswordAssertion(
+        val activeUserId: String,
+        val passwordCredentialAssertionRequest: PasswordCredentialAssertionRequest,
+    ) : RootNavState()
+
+    /**
+     * App should unlock the user's vault and retrieve Password credentials associated to the relying
+     * party.
+     */
+    @Parcelize
+    data class VaultUnlockedForPasswordGetCredentials(
+        val activeUserId: String,
+        val passwordGetCredentialsRequest: PasswordGetCredentialsRequest,
     ) : RootNavState()
 
     /**

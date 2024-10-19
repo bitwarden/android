@@ -104,7 +104,7 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data class PasswordAssertion(
-        val passwordAssertionRequest: PasswordCredentialAssertionRequest,
+        val passwordCredentialAssertionRequest: PasswordCredentialAssertionRequest,
     ) : SpecialCircumstance()
 
     /**
