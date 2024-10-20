@@ -99,6 +99,15 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
+     * The app was launched via the credential manager framework in order to authenticate a Password
+     * credential saved to the user's vault.
+     */
+    @Parcelize
+    data class PasswordAssertion(
+        val passwordAssertionRequest: PasswordCredentialAssertionRequest,
+    ) : SpecialCircumstance()
+
+    /**
      * The app was launched via the credential manager framework request to retrieve passwords
      * associated with the requesting entity.
      */

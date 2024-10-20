@@ -176,6 +176,10 @@ fun VaultItemListingScreen(
                 fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
             }
 
+            is VaultItemListingEvent.CompletePasswordAssertion -> {
+                passwordCompletionManager.completePasswordAssertion(event.result)
+            }
+
             is VaultItemListingEvent.CompletePasswordGetCredentialsRequest -> {
                 passwordCompletionManager.completePasswordGetCredentialRequest(event.result)
             }

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.password.model
 
 import androidx.credentials.provider.BeginGetPasswordOption
-import com.bitwarden.vault.LoginView
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 
 /**
  * Represents the result of a Password Get Credentials request.
@@ -13,7 +13,7 @@ sealed class PasswordGetCredentialsResult {
     data class Success(
         val userId: String,
         val option: BeginGetPasswordOption,
-        val credential: LoginView,
+        val credentials: List<AutofillCipher.Login>,
     ) : PasswordGetCredentialsResult()
 
     /**

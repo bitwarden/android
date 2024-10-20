@@ -4,11 +4,16 @@ import android.content.Intent
 import android.os.Build
 import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.GetPasswordOption
+import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.PendingIntentHandler
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_PASSWORD_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
 
@@ -42,10 +47,10 @@ fun Intent.getPasswordCredentialRequestOrNull(): PasswordCredentialRequest? {
 }
 
 /**
- * Checks if this [Intent] contains a [PasswordGetCredentialsRequest] related to an ongoing Password
- * credential lookup process.
+ * Checks if this [Intent] contains a [PasswordCredentialAssertionRequest] related to an ongoing Password
+ * credential authentication process.
  */
-fun Intent.getPasswordGetCredentialsRequestOrNull(): PasswordGetCredentialsRequest? {
+fun Intent.getPasswordAssertionRequestOrNull(): PasswordCredentialAssertionRequest? {
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
@@ -69,11 +74,47 @@ fun Intent.getPasswordGetCredentialsRequestOrNull(): PasswordGetCredentialsReque
     val id: String = getStringExtra(EXTRA_KEY_PASSWORD_CREDENTIAL_ID)
         ?: return null
 
-    return PasswordGetCredentialsRequest(
+    return PasswordCredentialAssertionRequest(
         candidateQueryData = option.candidateQueryData,
         id = id,
         userId = userId,
         cipherId = cipherId,
+        allowedUserIds = option.allowedUserIds,
+        packageName = callingAppInfo.packageName,
+        signingInfo = callingAppInfo.signingInfo,
+        origin = callingAppInfo.origin,
+    )
+}
+
+/**
+ * Checks if this [Intent] contains a [PasswordGetCredentialsRequest] related to an ongoing Password
+ * credential lookup process.
+ */
+fun Intent.getPasswordGetCredentialsRequestOrNull(): PasswordGetCredentialsRequest? {
+    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
+
+    val systemRequest = PendingIntentHandler
+        .retrieveBeginGetCredentialRequest(this)
+        ?: return null
+
+    val option: BeginGetPasswordOption = systemRequest
+        .beginGetCredentialOptions
+        .firstNotNullOfOrNull { it as? BeginGetPasswordOption }
+        ?: return null
+
+    val callingAppInfo = systemRequest
+        .callingAppInfo ?: return null
+
+    val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
+        ?: return null
+
+    val id: String = getStringExtra(EXTRA_KEY_PASSWORD_CREDENTIAL_ID)
+        ?: return null
+
+    return PasswordGetCredentialsRequest(
+        candidateQueryData = option.candidateQueryData,
+        userId = userId,
+        id = id,
         allowedUserIds = option.allowedUserIds,
         packageName = callingAppInfo.packageName,
         signingInfo = callingAppInfo.signingInfo,

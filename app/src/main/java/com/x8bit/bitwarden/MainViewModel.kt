@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNu
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
+import com.x8bit.bitwarden.data.autofill.password.util.getPasswordAssertionRequestOrNull
 import com.x8bit.bitwarden.data.autofill.password.util.getPasswordCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.password.util.getPasswordGetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
@@ -240,11 +241,12 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
-        val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
+        val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
         val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
         val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
         val passwordCredentialRequestData = intent.getPasswordCredentialRequestOrNull()
+        val passwordCredentialAssertionRequest = intent.getPasswordAssertionRequestOrNull()
         val passwordGetCredentialsRequest = intent.getPasswordGetCredentialsRequestOrNull()
         when {
             passwordlessRequestData != null -> {
@@ -343,6 +345,13 @@ class MainViewModel @Inject constructor(
                 ) {
                     authRepository.switchAccount(passwordCredentialRequestData.userId)
                 }
+            }
+
+            passwordCredentialAssertionRequest != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.PasswordAssertion(
+                        passwordAssertionRequest = passwordCredentialAssertionRequest,
+                    )
             }
 
             passwordGetCredentialsRequest != null -> {

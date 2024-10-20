@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -62,6 +63,15 @@ fun SpecialCircumstance.toFido2GetCredentialsRequestOrNull(): Fido2GetCredential
 fun SpecialCircumstance.toPasswordCredentialsRequestOrNull(): PasswordCredentialRequest? =
     when (this) {
         is SpecialCircumstance.PasswordSave -> this.passwordCredentialRequest
+        else -> null
+    }
+
+/**
+ * Returns [PasswordCredentialAssertionRequest] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toPasswordAssertionRequestOrNull(): PasswordCredentialAssertionRequest? =
+    when (this) {
+        is SpecialCircumstance.PasswordAssertion -> this.passwordAssertionRequest
         else -> null
     }
 

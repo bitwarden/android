@@ -13,9 +13,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PasswordGetCredentialsRequest(
     val candidateQueryData: Bundle,
-    val id: String,
     val userId: String,
-    val cipherId: String,
+    val id: String,
     val allowedUserIds: Set<String>,
     val packageName: String,
     val signingInfo: SigningInfo,

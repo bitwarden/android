@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.password.model
 
 import android.content.pm.SigningInfo
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.credentials.provider.CallingAppInfo
 import kotlinx.parcelize.Parcelize
@@ -10,11 +11,11 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class PasswordCredentialAssertionRequest(
+    val candidateQueryData: Bundle,
+    val id: String,
     val userId: String,
-    val cipherId: String?,
-    val credentialId: String?,
+    val cipherId: String,
     val allowedUserIds: Set<String>,
-    val isAutoSelectAllowed: Boolean,
     val packageName: String,
     val signingInfo: SigningInfo,
     val origin: String?,

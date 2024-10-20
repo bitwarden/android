@@ -48,7 +48,7 @@ fun LocalManagerProvider(
         if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             PasswordCompletionManagerUnsupportedApiImpl
         } else {
-            PasswordCompletionManagerImpl(activity)
+            PasswordCompletionManagerImpl(activity, intentManager)
         }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.autofill.password.manager
 
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
 
@@ -9,6 +10,6 @@ import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredenti
  */
 object PasswordCompletionManagerUnsupportedApiImpl : PasswordCompletionManager {
     override fun completePasswordRegistration(result: PasswordRegisterCredentialResult) = Unit
-
+    override fun completePasswordAssertion(result: PasswordCredentialAssertionResult) = Unit
     override fun completePasswordGetCredentialRequest(result: PasswordGetCredentialsResult) = Unit
 }
