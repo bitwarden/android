@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
-import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -1334,17 +1333,18 @@ class VaultItemListingViewModel @Inject constructor(
         request: PasswordGetCredentialsRequest
     ) {
 
-        sendEvent(VaultItemListingEvent.CompletePasswordGetCredentialsRequest(
-            vaultData.data.cipherViewList
-                .firstOrNull { it.id == request.cipherId }
-                ?.let {
-                    PasswordGetCredentialsResult.Success(
-                        userId = request.userId,
-                        option = request.option,
-                        credential = it.login ?: return@let null,
-                    )
-                } ?: PasswordGetCredentialsResult.Error
-        )
+        sendEvent(
+            VaultItemListingEvent.CompletePasswordGetCredentialsRequest(
+                vaultData.data.cipherViewList
+                    .firstOrNull { it.id == request.cipherId }
+                    ?.let {
+                        PasswordGetCredentialsResult.Success(
+                            userId = request.userId,
+                            option = request.option,
+                            credential = it.login ?: return@let null,
+                        )
+                    } ?: PasswordGetCredentialsResult.Error
+            )
         )
     }
 

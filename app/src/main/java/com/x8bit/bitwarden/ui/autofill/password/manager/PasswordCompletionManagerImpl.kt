@@ -51,35 +51,26 @@ class PasswordCompletionManagerImpl(
         val resultIntent = Intent()
         when (result) {
             is PasswordGetCredentialsResult.Success -> {
-                val userName = result.credential.username
-                val password = result.credential.password
-
-                if (userName != null && password != null) {
-                    PendingIntentHandler
-                        .setGetCredentialResponse(
-                            resultIntent,
-                            response = GetCredentialResponse(
-                                credential = PasswordCredential(
-                                    id = userName,
-                                    password = password,
-                                ),
-                            ),
-                        )
-                } else {
-                    PendingIntentHandler.setGetCredentialException(
+                PendingIntentHandler
+                    .setGetCredentialResponse(
                         resultIntent,
-                        GetCredentialUnknownException(),
+                        response = GetCredentialResponse(
+                            credential = PasswordCredential(
+                                id = result.credential.username ?: "",
+                                password = result.credential.password ?: "",
+                            ),
+                        ),
                     )
-                }
             }
-        PasswordGetCredentialsResult.Error -> {
-            PendingIntentHandler.setGetCredentialException(
-                resultIntent,
-                GetCredentialUnknownException(),
-            )
+
+            PasswordGetCredentialsResult.Error -> {
+                PendingIntentHandler.setGetCredentialException(
+                    resultIntent,
+                    GetCredentialUnknownException(),
+                )
+            }
         }
+        activity.setResult(Activity.RESULT_OK, resultIntent)
+        activity.finish()
     }
-    activity.setResult(Activity.RESULT_OK, resultIntent)
-    activity.finish()
-}
 }
