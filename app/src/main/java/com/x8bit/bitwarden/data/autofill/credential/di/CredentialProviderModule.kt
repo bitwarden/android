@@ -1,15 +1,18 @@
-package com.x8bit.bitwarden.data.autofill.fido2.di
+package com.x8bit.bitwarden.data.autofill.credential.di
 
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessor
+import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessorImpl
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
+import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -25,44 +28,30 @@ import java.time.Clock
 import javax.inject.Singleton
 
 /**
- * Provides dependencies within the fido2 package.
+ * Provides dependencies within the credential package.
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object Fido2ProviderModule {
+object CredentialProviderModule {
 
     @RequiresApi(Build.VERSION_CODES.S)
     @Provides
     @Singleton
     fun provideCredentialProviderProcessor(
         @ApplicationContext context: Context,
-        vaultRepository: VaultRepository,
-        fido2CredentialManager: Fido2CredentialManager,
+        authRepository: AuthRepository,
         intentManager: IntentManager,
-        clock: Clock,
-    ): Fido2ProviderProcessor =
-        Fido2ProviderProcessorImpl(
+        fido2ProviderProcessor: Fido2ProviderProcessor,
+        passwordProviderProcessor: PasswordProviderProcessor,
+        dispatcherManager: DispatcherManager,
+    ): BitwardenCredentialProcessor =
+        BitwardenCredentialProcessorImpl(
             context,
-            vaultRepository,
-            fido2CredentialManager,
+            authRepository,
             intentManager,
-            clock,
+            fido2ProviderProcessor,
+            passwordProviderProcessor,
+            dispatcherManager,
         )
 
-    @Provides
-    @Singleton
-    fun provideFido2CredentialManager(
-        assetManager: AssetManager,
-        digitalAssetLinkService: DigitalAssetLinkService,
-        vaultSdkSource: VaultSdkSource,
-        fido2CredentialStore: Fido2CredentialStore,
-        json: Json,
-    ): Fido2CredentialManager =
-        Fido2CredentialManagerImpl(
-            assetManager = assetManager,
-            digitalAssetLinkService = digitalAssetLinkService,
-            vaultSdkSource = vaultSdkSource,
-            fido2CredentialStore = fido2CredentialStore,
-            json = json,
-        )
 }

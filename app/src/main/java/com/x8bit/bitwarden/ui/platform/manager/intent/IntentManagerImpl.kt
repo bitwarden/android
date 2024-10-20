@@ -284,7 +284,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createFido2UnlockPendingIntent(
+    override fun createCredentialUnlockPendingIntent(
         action: String,
         userId: String,
         requestCode: Int,
@@ -330,23 +330,6 @@ class IntentManagerImpl(
             .putExtra(EXTRA_KEY_USER_ID, userId)
             .putExtra(EXTRA_KEY_PASSWORD_CREDENTIAL_ID, id)
             .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createPasswordUnlockPendingIntent(
-        action: String,
-        userId: String,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
 
         return PendingIntent.getActivity(
             /* context = */ context,

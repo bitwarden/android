@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.autofill.fido2
+package com.x8bit.bitwarden.data.autofill.credential
 
 import android.os.Build
 import android.os.CancellationSignal
@@ -10,19 +10,17 @@ import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
-import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
-import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
-import androidx.credentials.provider.BeginGetPasswordOption
-import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
-import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
+import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessor
+import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessorImpl
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
+const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The [CredentialProviderService] for the app. This fulfills FIDO2 credential requests from other
@@ -35,39 +33,22 @@ import javax.inject.Inject
 class BitwardenCredentialProviderService : CredentialProviderService() {
 
     /**
-     * A processor to handle the FIDO2 credential fulfillment. We keep the service light because it
+     * A processor to handle the credential fulfillment. We keep the service light because it
      * isn't easily testable.
      */
     @Inject
-    lateinit var fido2Processor: Fido2ProviderProcessor
-    /**
-     * A processor to handle the Password credential fulfillment. We keep the service light because it
-     * isn't easily testable.
-     */
-    @Inject
-    lateinit var passwordProcessor: PasswordProviderProcessor
+    lateinit var processor: BitwardenCredentialProcessor
 
     override fun onBeginCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
     ) {
-        when(request) {
-            is BeginCreatePublicKeyCredentialRequest -> {
-                fido2Processor.processCreateCredentialRequest(
-                    request,
-                    cancellationSignal,
-                    callback,
-                )
-            }
-            is BeginCreatePasswordCredentialRequest -> {
-                passwordProcessor.processCreateCredentialRequest(
-                    request,
-                    cancellationSignal,
-                    callback,
-                )
-            }
-        }
+        processor.processCreateCredentialRequest(
+            request,
+            cancellationSignal,
+            callback,
+        )
     }
 
     override fun onBeginGetCredentialRequest(
@@ -75,14 +56,8 @@ class BitwardenCredentialProviderService : CredentialProviderService() {
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
     ) {
-        fido2Processor.processGetCredentialRequest(
-            request.beginGetCredentialOptions.filterIsInstance<BeginGetPublicKeyCredentialOption>(),
-            cancellationSignal,
-            callback,
-        )
-        passwordProcessor.processGetCredentialRequest(
-            request.callingAppInfo,
-            request.beginGetCredentialOptions.filterIsInstance<BeginGetPasswordOption>(),
+        processor.processGetCredentialRequest(
+            request,
             cancellationSignal,
             callback,
         )
@@ -93,12 +68,7 @@ class BitwardenCredentialProviderService : CredentialProviderService() {
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<Void?, ClearCredentialException>,
     ) {
-        fido2Processor.processClearCredentialStateRequest(
-            request,
-            cancellationSignal,
-            callback,
-        )
-        passwordProcessor.processClearCredentialStateRequest(
+        processor.processClearCredentialStateRequest(
             request,
             cancellationSignal,
             callback,

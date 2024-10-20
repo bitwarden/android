@@ -29,19 +29,15 @@ object PasswordProviderModule {
     @Singleton
     fun providePasswordCredentialProviderProcessor(
         @ApplicationContext context: Context,
-        authRepository: AuthRepository,
-        dispatcherManager: DispatcherManager,
         autofillCipherProvider: AutofillCipherProvider,
         intentManager: IntentManager,
         clock: Clock,
     ): PasswordProviderProcessor =
         PasswordProviderProcessorImpl(
             context,
-            authRepository,
             autofillCipherProvider,
             intentManager,
             clock,
-            dispatcherManager,
         )
 
 }

@@ -2,44 +2,27 @@ package com.x8bit.bitwarden.data.autofill.password.processor
 
 import android.content.Context
 import android.os.Build
-import android.os.CancellationSignal
-import android.os.OutcomeReceiver
 import androidx.annotation.RequiresApi
-import androidx.credentials.exceptions.ClearCredentialException
-import androidx.credentials.exceptions.ClearCredentialUnsupportedException
-import androidx.credentials.exceptions.CreateCredentialCancellationException
-import androidx.credentials.exceptions.CreateCredentialException
-import androidx.credentials.exceptions.CreateCredentialUnknownException
-import androidx.credentials.exceptions.GetCredentialCancellationException
-import androidx.credentials.exceptions.GetCredentialException
-import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnsupportedException
-import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialResponse
 import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
-import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PasswordCredentialEntry
-import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 
 private const val CREATE_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_CREATE_PASSWORD"
 const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_GET_PASSWORD"
-const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The default implementation of [PasswordProviderProcessor]. Its purpose is to handle Password related
@@ -48,56 +31,40 @@ const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.data.autofill.password.AC
 @RequiresApi(Build.VERSION_CODES.S)
 class PasswordProviderProcessorImpl(
     private val context: Context,
-    private val authRepository: AuthRepository,
     private val autofillCipherProvider: AutofillCipherProvider,
     private val intentManager: IntentManager,
     private val clock: Clock,
-    dispatcherManager: DispatcherManager,
 ) : PasswordProviderProcessor {
 
-    /**
-     * The coroutine scope for launching asynchronous operations.
-     */
-    private val scope: CoroutineScope = CoroutineScope(dispatcherManager.unconfined)
-
-    private val requestCode = AtomicInteger()
-
-    override fun processCreateCredentialRequest(
+    override suspend fun processCreateCredentialRequest(
+        requestCode: AtomicInteger,
+        userState: UserState,
         request: BeginCreatePasswordCredentialRequest,
-        cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>
-    ) {
-        val userId = authRepository.activeUserId
-        if (userId == null) {
-            callback.onError(CreateCredentialUnknownException("Active user is required."))
-            return
-        }
-
-        val createCredentialJob = scope.launch {
-            handleCreatePassword()
-                ?.let { callback.onResult(it) }
-                ?: callback.onError(CreateCredentialUnknownException())
-        }
-        cancellationSignal.setOnCancelListener {
-            if (createCredentialJob.isActive) {
-                createCredentialJob.cancel()
-            }
-            callback.onError(CreateCredentialCancellationException())
-        }
-    }
-
-    private fun handleCreatePassword(): BeginCreateCredentialResponse? {
-        val userState = authRepository.userStateFlow.value ?: return null
-
+    ): BeginCreateCredentialResponse {
         return BeginCreateCredentialResponse.Builder()
-            .setCreateEntries(userState.accounts.toCreateEntries(userState.activeUserId))
+            .setCreateEntries(
+                userState.accounts.toCreateEntries(
+                    requestCode = requestCode,
+                    activeUserId = userState.activeUserId
+                )
+            )
             .build()
     }
 
-    private fun List<UserState.Account>.toCreateEntries(activeUserId: String) =
-        map { it.toCreateEntry(isActive = activeUserId == it.userId) }
+    private fun List<UserState.Account>.toCreateEntries(
+        requestCode: AtomicInteger,
+        activeUserId: String
+    ) = map {
+        it.toCreateEntry(
+            requestCode = requestCode,
+            isActive = activeUserId == it.userId,
+        )
+    }
 
-    private fun UserState.Account.toCreateEntry(isActive: Boolean): CreateEntry {
+    private fun UserState.Account.toCreateEntry(
+        requestCode: AtomicInteger,
+        isActive: Boolean,
+    ): CreateEntry {
         val accountName = name ?: email
         return CreateEntry
             .Builder(
@@ -120,64 +87,23 @@ class PasswordProviderProcessorImpl(
             .build()
     }
 
-    override fun processGetCredentialRequest(
+    override suspend fun processGetCredentialRequest(
+        requestCode: AtomicInteger,
+        activeUserId: String,
         callingAppInfo: CallingAppInfo?,
         beginGetPasswordOptions: List<BeginGetPasswordOption>,
-        cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>
-    ) {
-        // If the user is not logged in, return an error.
-        val userState = authRepository.userStateFlow.value
-        if (userState == null) {
-            callback.onError(GetCredentialUnknownException("Active user is required."))
-            return
-        }
-
-        // Return an unlock action if the current account is locked.
-        if (!userState.activeAccount.isVaultUnlocked) {
-            val authenticationAction = AuthenticationAction(
-                title = context.getString(R.string.unlock),
-                pendingIntent = intentManager.createPasswordUnlockPendingIntent(
-                    action = UNLOCK_ACCOUNT_INTENT,
-                    userId = userState.activeUserId,
-                    requestCode = requestCode.getAndIncrement(),
-                ),
-            )
-
-            callback.onResult(
-                BeginGetCredentialResponse(
-                    authenticationActions = listOf(authenticationAction),
-                ),
-            )
-            return
-        }
-
-        // Otherwise, find all matching credentials from the current vault.
-        val getCredentialJob = scope.launch {
-            try {
-                val credentialEntries = getMatchingPasswordCredentialEntries(
-                    userId = userState.activeUserId,
-                    callingAppInfo = callingAppInfo,
-                    beginGetPasswordOptions = beginGetPasswordOptions,
-                )
-
-                callback.onResult(
-                    BeginGetCredentialResponse(
-                        credentialEntries = credentialEntries,
-                    ),
-                )
-            } catch (e: GetCredentialException) {
-                callback.onError(e)
-            }
-        }
-        cancellationSignal.setOnCancelListener {
-            callback.onError(GetCredentialCancellationException())
-            getCredentialJob.cancel()
-        }
+    ): List<CredentialEntry> {
+        return getMatchingPasswordCredentialEntries(
+            requestCode = requestCode,
+            userId = activeUserId,
+            callingAppInfo = callingAppInfo,
+            beginGetPasswordOptions = beginGetPasswordOptions,
+        )
     }
 
     @Throws(GetCredentialUnsupportedException::class)
     private suspend fun getMatchingPasswordCredentialEntries(
+        requestCode: AtomicInteger,
         userId: String,
         callingAppInfo: CallingAppInfo?,
         beginGetPasswordOptions: List<BeginGetPasswordOption>,
@@ -185,6 +111,7 @@ class PasswordProviderProcessorImpl(
         beginGetPasswordOptions.flatMap { option ->
             if (option.allowedUserIds.isEmpty() || option.allowedUserIds.contains(userId)) {
                 buildCredentialEntries(
+                    requestCode = requestCode,
                     userId = userId,
                     matchUri = callingAppInfo?.origin
                         ?: callingAppInfo?.packageName
@@ -198,6 +125,7 @@ class PasswordProviderProcessorImpl(
         }
 
     private suspend fun buildCredentialEntries(
+        requestCode: AtomicInteger,
         userId: String,
         matchUri: String?,
         option: BeginGetPasswordOption,
@@ -205,12 +133,14 @@ class PasswordProviderProcessorImpl(
         return autofillCipherProvider.getLoginAutofillCiphers(
             uri = matchUri ?: return emptyList(),
         ).toCredentialEntries(
+            requestCode = requestCode,
             userId = userId,
             option = option,
         )
     }
 
     private fun List<AutofillCipher.Login>.toCredentialEntries(
+        requestCode: AtomicInteger,
         userId: String,
         option: BeginGetPasswordOption,
     ): List<CredentialEntry> =
@@ -232,14 +162,5 @@ class PasswordProviderProcessorImpl(
                     )
                     .build()
             }
-
-    override fun processClearCredentialStateRequest(
-        request: ProviderClearCredentialStateRequest,
-        cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<Void?, ClearCredentialException>
-    ) {
-        // no-op: RFU
-        callback.onError(ClearCredentialUnsupportedException())
-    }
 
 }

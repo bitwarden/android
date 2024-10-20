@@ -7,7 +7,7 @@ import androidx.annotation.Keep
 import androidx.core.app.AppComponentFactory
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
 import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
-import com.x8bit.bitwarden.data.autofill.fido2.BitwardenCredentialProviderService
+import com.x8bit.bitwarden.data.autofill.credential.BitwardenCredentialProviderService
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.tiles.BitwardenAutofillTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenGeneratorTileService
