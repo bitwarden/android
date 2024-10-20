@@ -6,6 +6,7 @@ import android.os.CancellationSignal
 import android.os.OutcomeReceiver
 import androidx.annotation.RequiresApi
 import androidx.credentials.exceptions.ClearCredentialException
+import androidx.credentials.exceptions.ClearCredentialUnsupportedException
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
@@ -14,12 +15,11 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.provider.AuthenticationAction
-import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
 import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
-import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
+import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PasswordCredentialEntry
@@ -63,7 +63,7 @@ class PasswordProviderProcessorImpl(
     private val requestCode = AtomicInteger()
 
     override fun processCreateCredentialRequest(
-        request: BeginCreateCredentialRequest,
+        request: BeginCreatePasswordCredentialRequest,
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>
     ) {
@@ -74,7 +74,7 @@ class PasswordProviderProcessorImpl(
         }
 
         val createCredentialJob = scope.launch {
-            processCreateCredentialRequest(request = request)
+            handleCreatePassword()
                 ?.let { callback.onResult(it) }
                 ?: callback.onError(CreateCredentialUnknownException())
         }
@@ -83,18 +83,6 @@ class PasswordProviderProcessorImpl(
                 createCredentialJob.cancel()
             }
             callback.onError(CreateCredentialCancellationException())
-        }
-    }
-
-    private fun processCreateCredentialRequest(
-        request: BeginCreateCredentialRequest,
-    ): BeginCreateCredentialResponse? {
-        return when (request) {
-            is BeginCreatePasswordCredentialRequest -> {
-                handleCreatePassword()
-            }
-
-            else                                    -> null
         }
     }
 
@@ -133,7 +121,8 @@ class PasswordProviderProcessorImpl(
     }
 
     override fun processGetCredentialRequest(
-        request: BeginGetCredentialRequest,
+        callingAppInfo: CallingAppInfo?,
+        beginGetPasswordOptions: List<BeginGetPasswordOption>,
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>
     ) {
@@ -168,7 +157,8 @@ class PasswordProviderProcessorImpl(
             try {
                 val credentialEntries = getMatchingPasswordCredentialEntries(
                     userId = userState.activeUserId,
-                    request = request,
+                    callingAppInfo = callingAppInfo,
+                    beginGetPasswordOptions = beginGetPasswordOptions,
                 )
 
                 callback.onResult(
@@ -189,28 +179,23 @@ class PasswordProviderProcessorImpl(
     @Throws(GetCredentialUnsupportedException::class)
     private suspend fun getMatchingPasswordCredentialEntries(
         userId: String,
-        request: BeginGetCredentialRequest,
+        callingAppInfo: CallingAppInfo?,
+        beginGetPasswordOptions: List<BeginGetPasswordOption>,
     ): List<CredentialEntry> =
-        request
-            .beginGetCredentialOptions
-            .flatMap { option ->
-                if (option is BeginGetPasswordOption) {
-                    if (option.allowedUserIds.isEmpty() || option.allowedUserIds.contains(userId)) {
-                        buildCredentialEntries(
-                            userId = userId,
-                            matchUri = request.callingAppInfo?.origin
-                                ?: request.callingAppInfo?.packageName
-                                    ?.toAndroidAppUriString(),
-                            option = option,
-                        )
-                    } else {
-                        //userid did not match any in allowedUserIds
-                        emptySet()
-                    }
-                } else {
-                    throw GetCredentialUnsupportedException("Unsupported option.")
-                }
+        beginGetPasswordOptions.flatMap { option ->
+            if (option.allowedUserIds.isEmpty() || option.allowedUserIds.contains(userId)) {
+                buildCredentialEntries(
+                    userId = userId,
+                    matchUri = callingAppInfo?.origin
+                        ?: callingAppInfo?.packageName
+                            ?.toAndroidAppUriString(),
+                    option = option,
+                )
+            } else {
+                //userid did not match any in allowedUserIds
+                emptySet()
             }
+        }
 
     private suspend fun buildCredentialEntries(
         userId: String,
@@ -253,7 +238,8 @@ class PasswordProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<Void?, ClearCredentialException>
     ) {
-        //TODO("Not yet implemented")
+        // no-op: RFU
+        callback.onError(ClearCredentialUnsupportedException())
     }
 
 }
