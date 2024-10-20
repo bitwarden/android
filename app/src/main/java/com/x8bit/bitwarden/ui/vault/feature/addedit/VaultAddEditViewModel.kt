@@ -278,6 +278,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleConfirmOverwriteExistingPasskeyClick()
             }
 
+            is VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick -> {
+                handleConfirmOverwriteExistingPasswordClick()
+            }
+
             VaultAddEditAction.Common.UserVerificationSuccess -> {
                 handleUserVerificationSuccess()
             }
@@ -419,7 +423,7 @@ class VaultAddEditViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance
             ?.toPasswordCredentialsRequestOrNull()
             ?.let { request ->
-                handlePasswordRequestSpecialCircumstance(request, content.toCipherView())
+                handlePasswordRequestSpecialCircumstance(content.toCipherView())
                 return@onContent
             }
 
@@ -460,11 +464,10 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handlePasswordRequestSpecialCircumstance(
-        request: PasswordCredentialRequest,
         cipherView: CipherView,
     ) {
-        when { //TODO()
-        /*    cipherView.isActiveWithUsernameAndPasswordCredentials -> {
+        when {
+            cipherView.isActiveWithUsernameAndPasswordCredentials -> {
                 mutableStateFlow.update {
                     it.copy(dialog = VaultAddEditState.DialogState.OverwriteUsernameAndPasswordConfirmationPrompt)
                 }
@@ -478,18 +481,21 @@ class VaultAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt)
                 }
-            }*/
-            else -> {
-                viewModelScope.launch {
-                    val result = vaultRepository.createCipher(cipherView = cipherView)
-                    sendAction(
-                        VaultAddEditAction.Internal.CreateCipherResultReceive(result),
-                    )
-                    sendAction(
-                        VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive(result),
-                    )
-                }
             }
+            else -> {
+                registerPasswordCredential(cipherView)
+            }
+        }
+    }
+
+    private fun registerPasswordCredential(
+        cipherView: CipherView,
+    ) {
+        viewModelScope.launch {
+            val result = vaultRepository.createCipher(cipherView = cipherView)
+            sendAction(
+                VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive(result),
+            )
         }
     }
 
@@ -1483,6 +1489,19 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+
+    private fun handleConfirmOverwriteExistingPasswordClick() {
+        specialCircumstanceManager
+            .specialCircumstance
+            ?.toPasswordCredentialsRequestOrNull()
+            ?.let { request ->
+                onContent { content ->
+                    registerPasswordCredential(content.toCipherView())
+                }
+            }
+            ?: showFido2ErrorDialog() //TODO password error dialos
+    }
+
     private fun handlePasswordRegisterCredentialResultReceive(
         action: VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive,
     ){
@@ -2371,6 +2390,24 @@ data class VaultAddEditState(
         data object OverwritePasskeyConfirmationPrompt : DialogState()
 
         /**
+         * Displays the overwrite username and password confirmation prompt to the user.
+         */
+        @Parcelize
+        data object OverwriteUsernameAndPasswordConfirmationPrompt : DialogState()
+
+        /**
+         * Displays the overwrite username confirmation prompt to the user.
+         */
+        @Parcelize
+        data object OverwriteUsernameConfirmationPrompt : DialogState()
+
+        /**
+         * Displays the overwrite password confirmation prompt to the user.
+         */
+        @Parcelize
+        data object OverwritePasswordConfirmationPrompt : DialogState()
+
+        /**
          * Displays a dialog to prompt the user for their master password as part of the FIDO 2
          * user verification flow.
          */
@@ -2558,6 +2595,11 @@ sealed class VaultAddEditAction {
          * The user has confirmed overwriting the existing passkey.
          */
         data object ConfirmOverwriteExistingPasskeyClick : Common()
+
+        /**
+         * The user has confirmed overwriting the existing passkey.
+         */
+        data object ConfirmOverwriteExistingPasswordClick : Common()
 
         /**
          * Represents the action when a type option is selected.

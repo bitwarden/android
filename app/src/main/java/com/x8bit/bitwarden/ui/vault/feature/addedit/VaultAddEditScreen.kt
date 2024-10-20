@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasswordConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -180,6 +181,13 @@ fun VaultAddEditScreen(
             {
                 viewModel.trySendAction(
                     action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick,
+                )
+            }
+        },
+        onConfirmOverwriteExistingPassword = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick,
                 )
             }
         },
@@ -368,6 +376,7 @@ private fun VaultAddEditItemDialogs(
     onAutofillDismissRequest: () -> Unit,
     onFido2ErrorDismiss: () -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
+    onConfirmOverwriteExistingPassword: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
     onSubmitPinFido2Verification: (pin: String) -> Unit,
@@ -416,6 +425,27 @@ private fun VaultAddEditItemDialogs(
         is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.OverwriteUsernameAndPasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = onConfirmOverwriteExistingPassword,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.OverwriteUsernameConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = onConfirmOverwriteExistingPassword,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = onConfirmOverwriteExistingPassword,
                 onDismissRequest = onDismissRequest,
             )
         }

@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasswordConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -169,6 +171,10 @@ fun VaultItemListingScreen(
                 credentialCompletionManager.completeFido2Assertion(event.result)
             }
 
+            is VaultItemListingEvent.CompletePasswordRegistration -> {
+                credentialCompletionManager.completePasswordRegistration(event.result)
+            }
+
             is VaultItemListingEvent.CompletePasswordAssertion -> {
                 credentialCompletionManager.completePasswordAssertion(event.result)
             }
@@ -200,6 +206,15 @@ fun VaultItemListingScreen(
             { cipherId ->
                 viewModel.trySendAction(
                     VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                        cipherViewId = cipherId,
+                    ),
+                )
+            }
+        },
+        onConfirmOverwriteExistingPassword= remember(viewModel) {
+            { cipherId ->
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick(
                         cipherViewId = cipherId,
                     ),
                 )
@@ -284,6 +299,7 @@ private fun VaultItemListingDialogs(
     onDismissRequest: () -> Unit,
     onDismissFido2ErrorDialog: () -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
+    onConfirmOverwriteExistingPassword: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
     onRetryFido2PasswordVerification: (cipherId: String) -> Unit,
     onSubmitPinFido2Verification: (pin: String, cipherId: String) -> Unit,
@@ -316,6 +332,27 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemListingState.DialogState.OverwriteUsernameAndPasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = { onConfirmOverwriteExistingPassword(dialogState.cipherViewId) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemListingState.DialogState.OverwriteUsernameConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = { onConfirmOverwriteExistingPassword(dialogState.cipherViewId) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemListingState.DialogState.OverwritePasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = { onConfirmOverwriteExistingPassword(dialogState.cipherViewId) },
                 onDismissRequest = onDismissRequest,
             )
         }
