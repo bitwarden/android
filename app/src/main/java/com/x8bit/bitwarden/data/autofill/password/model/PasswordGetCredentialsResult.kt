@@ -1,14 +1,19 @@
 package com.x8bit.bitwarden.data.autofill.password.model
 
+import androidx.credentials.provider.BeginGetPasswordOption
+import com.bitwarden.vault.LoginView
+
 /**
- * Represents the result of a FIDO 2 Get Credentials request.
+ * Represents the result of a Password Get Credentials request.
  */
 sealed class PasswordGetCredentialsResult {
     /**
      * Indicates credentials were successfully queried.
      */
     data class Success(
-        val data: String
+        val userId: String,
+        val option: BeginGetPasswordOption,
+        val credential: LoginView,
     ) : PasswordGetCredentialsResult()
 
     /**

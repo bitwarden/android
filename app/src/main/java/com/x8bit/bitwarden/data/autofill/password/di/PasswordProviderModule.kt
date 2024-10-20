@@ -6,8 +6,8 @@ import androidx.annotation.RequiresApi
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
 import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessorImpl
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.Module
 import dagger.Provides
@@ -30,15 +30,15 @@ object PasswordProviderModule {
     fun providePasswordCredentialProviderProcessor(
         @ApplicationContext context: Context,
         authRepository: AuthRepository,
-        vaultRepository: VaultRepository,
         dispatcherManager: DispatcherManager,
+        autofillCipherProvider: AutofillCipherProvider,
         intentManager: IntentManager,
         clock: Clock,
     ): PasswordProviderProcessor =
         PasswordProviderProcessorImpl(
             context,
             authRepository,
-            vaultRepository,
+            autofillCipherProvider,
             intentManager,
             clock,
             dispatcherManager,

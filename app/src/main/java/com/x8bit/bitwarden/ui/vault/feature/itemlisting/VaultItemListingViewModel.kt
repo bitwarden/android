@@ -25,6 +25,8 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -36,8 +38,8 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toPasswordGetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toPasswordCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toPasswordGetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -1317,8 +1319,33 @@ class VaultItemListingViewModel @Inject constructor(
                         ),
                     ),
                 )
+            } ?: state.passwordGetCredentialRequest
+            ?.let { passwordGetCredentialRequest ->
+                handlePasswordGetCredentialRequest(
+                    vaultData = vaultData,
+                    request = passwordGetCredentialRequest,
+                )
             }
-            ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
+        ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
+    }
+
+    private fun handlePasswordGetCredentialRequest(
+        vaultData: DataState.Loaded<VaultData>,
+        request: PasswordGetCredentialsRequest
+    ) {
+
+        sendEvent(VaultItemListingEvent.CompletePasswordGetCredentialsRequest(
+            vaultData.data.cipherViewList
+                .firstOrNull { it.id == request.cipherId }
+                ?.let {
+                    PasswordGetCredentialsResult.Success(
+                        userId = request.userId,
+                        option = request.option,
+                        credential = it.login ?: return@let null,
+                    )
+                } ?: PasswordGetCredentialsResult.Error
+        )
+        )
     }
 
     private fun vaultLoadingReceive() {
@@ -2286,6 +2313,16 @@ sealed class VaultItemListingEvent {
     data class CompleteFido2GetCredentialsRequest(
         val result: Fido2GetCredentialsResult,
     ) : BackgroundEvent, VaultItemListingEvent()
+
+    /**
+     * Password credential lookup result has been received and the process is ready to be completed.
+     *
+     * @property result The result of querying for matching Password credentials.
+     */
+    data class CompletePasswordGetCredentialsRequest(
+        val result: PasswordGetCredentialsResult,
+    ) : BackgroundEvent, VaultItemListingEvent()
+
 }
 
 /**

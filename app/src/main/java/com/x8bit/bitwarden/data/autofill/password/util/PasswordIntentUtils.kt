@@ -3,11 +3,13 @@ package com.x8bit.bitwarden.data.autofill.password.util
 import android.content.Intent
 import android.os.Build
 import androidx.credentials.CreatePasswordRequest
-import androidx.credentials.provider.BeginGetPasswordOption
+import androidx.credentials.GetPasswordOption
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_PASSWORD_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
 
 /**
@@ -47,25 +49,31 @@ fun Intent.getPasswordGetCredentialsRequestOrNull(): PasswordGetCredentialsReque
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
-        .retrieveBeginGetCredentialRequest(this)
+        .retrieveProviderGetCredentialRequest(this)
         ?: return null
 
-    val option: BeginGetPasswordOption = systemRequest
-        .beginGetCredentialOptions
-        .firstNotNullOfOrNull { it as? BeginGetPasswordOption }
+    val option: GetPasswordOption = systemRequest
+        .credentialOptions
+        .firstNotNullOfOrNull { it as? GetPasswordOption }
         ?: return null
 
     val callingAppInfo = systemRequest
         .callingAppInfo
+
+    val cipherId = getStringExtra(EXTRA_KEY_CIPHER_ID)
         ?: return null
 
     val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
+    val id: String = getStringExtra(EXTRA_KEY_PASSWORD_CREDENTIAL_ID)
+        ?: return null
+
     return PasswordGetCredentialsRequest(
         candidateQueryData = option.candidateQueryData,
-        id = option.id,
+        id = id,
         userId = userId,
+        cipherId = cipherId,
         allowedUserIds = option.allowedUserIds,
         packageName = callingAppInfo.packageName,
         signingInfo = callingAppInfo.signingInfo,

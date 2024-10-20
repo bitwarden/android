@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.credentials.CreatePasswordResponse
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.PasswordCredential
 import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Primary implementation of [PasswordCompletionManager] when the build version is
@@ -18,7 +20,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class PasswordCompletionManagerImpl(
     private val activity: Activity,
-    private val intentManager: IntentManager,
 ) : PasswordCompletionManager {
 
     override fun completePasswordRegistration(result: PasswordRegisterCredentialResult) {
@@ -47,6 +48,38 @@ class PasswordCompletionManagerImpl(
     }
 
     override fun completePasswordGetCredentialRequest(result: PasswordGetCredentialsResult) {
-        TODO()
+        val resultIntent = Intent()
+        when (result) {
+            is PasswordGetCredentialsResult.Success -> {
+                val userName = result.credential.username
+                val password = result.credential.password
+
+                if (userName != null && password != null) {
+                    PendingIntentHandler
+                        .setGetCredentialResponse(
+                            resultIntent,
+                            response = GetCredentialResponse(
+                                credential = PasswordCredential(
+                                    id = userName,
+                                    password = password,
+                                ),
+                            ),
+                        )
+                } else {
+                    PendingIntentHandler.setGetCredentialException(
+                        resultIntent,
+                        GetCredentialUnknownException(),
+                    )
+                }
+            }
+        PasswordGetCredentialsResult.Error -> {
+            PendingIntentHandler.setGetCredentialException(
+                resultIntent,
+                GetCredentialUnknownException(),
+            )
+        }
     }
+    activity.setResult(Activity.RESULT_OK, resultIntent)
+    activity.finish()
+}
 }

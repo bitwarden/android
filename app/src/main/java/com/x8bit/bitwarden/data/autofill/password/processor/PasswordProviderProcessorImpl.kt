@@ -24,13 +24,13 @@ import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import com.bitwarden.core.Uuid
-import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 private const val CREATE_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_CREATE_PASSWORD"
 const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_GET_PASSWORD"
-const val UNLOCK_ACCOUNT_INTENT= "com.x8bit.bitwarden.data.autofill.password.ACTION_UNLOCK_ACCOUNT"
+const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The default implementation of [PasswordProviderProcessor]. Its purpose is to handle Password related
@@ -49,7 +49,7 @@ const val UNLOCK_ACCOUNT_INTENT= "com.x8bit.bitwarden.data.autofill.password.ACT
 class PasswordProviderProcessorImpl(
     private val context: Context,
     private val authRepository: AuthRepository,
-    private val vaultRepository: VaultRepository,
+    private val autofillCipherProvider: AutofillCipherProvider,
     private val intentManager: IntentManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -187,7 +187,7 @@ class PasswordProviderProcessorImpl(
     }
 
     @Throws(GetCredentialUnsupportedException::class)
-    private fun getMatchingPasswordCredentialEntries(
+    private suspend fun getMatchingPasswordCredentialEntries(
         userId: String,
         request: BeginGetCredentialRequest,
     ): List<CredentialEntry> =
@@ -198,7 +198,9 @@ class PasswordProviderProcessorImpl(
                     if (option.allowedUserIds.isEmpty() || option.allowedUserIds.contains(userId)) {
                         buildCredentialEntries(
                             userId = userId,
-                            callingPackage = request.callingAppInfo?.packageName,
+                            matchUri = request.callingAppInfo?.origin
+                                ?: request.callingAppInfo?.packageName
+                                    ?.toAndroidAppUriString(),
                             option = option,
                         )
                     } else {
@@ -210,43 +212,35 @@ class PasswordProviderProcessorImpl(
                 }
             }
 
-    private fun buildCredentialEntries(
+    private suspend fun buildCredentialEntries(
         userId: String,
-        callingPackage: String?,
+        matchUri: String?,
         option: BeginGetPasswordOption,
     ): List<CredentialEntry> {
-        //TODO get data and map correctly
-        return listOf(
-            Fido2CredentialAutofillView(
-                credentialId = ByteArray(0),
-                cipherId = Uuid(),
-                rpId = "",
-                userNameForUi = "userNameForUi",
-                userHandle = ByteArray(0)
-            )
+        return autofillCipherProvider.getLoginAutofillCiphers(
+            uri = matchUri ?: return emptyList(),
         ).toCredentialEntries(
             userId = userId,
             option = option,
         )
     }
 
-
-    private fun List<Fido2CredentialAutofillView>.toCredentialEntries(
+    private fun List<AutofillCipher.Login>.toCredentialEntries(
         userId: String,
         option: BeginGetPasswordOption,
     ): List<CredentialEntry> =
         this
-            .map {
+            .mapNotNull {
                 PasswordCredentialEntry
                     .Builder(
                         context = context,
-                        username = it.userNameForUi ?: context.getString(R.string.no_username),
+                        username = it.username,
                         pendingIntent = intentManager
                             .createPasswordGetCredentialPendingIntent(
                                 action = GET_PASSWORD_INTENT,
+                                id = option.id,
                                 userId = userId,
-                                credentialId = "",
-                                cipherId = it.cipherId,
+                                cipherId = it.cipherId ?: return@mapNotNull null,
                                 requestCode = requestCode.getAndIncrement(),
                             ),
                         beginGetPasswordOption = option,
