@@ -52,7 +52,7 @@ fun SpecialCircumstance.toFido2AssertionRequestOrNull(): Fido2CredentialAssertio
  */
 fun SpecialCircumstance.toFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? =
     when (this) {
-        is SpecialCircumstance.Fido2GetCredentials -> this.fido2GetCredentialsRequest
+        is SpecialCircumstance.GetCredentials -> this.fido2GetCredentialsRequest
         else -> null
     }
 
@@ -80,7 +80,7 @@ fun SpecialCircumstance.toPasswordAssertionRequestOrNull(): PasswordCredentialAs
  */
 fun SpecialCircumstance.toPasswordGetCredentialsRequestOrNull(): PasswordGetCredentialsRequest? =
     when (this) {
-        is SpecialCircumstance.PasswordGetCredentials -> this.passwordGetCredentialsRequest
+        is SpecialCircumstance.GetCredentials -> this.passwordGetCredentialsRequest
         else -> null
     }
 

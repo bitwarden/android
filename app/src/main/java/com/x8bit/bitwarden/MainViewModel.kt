@@ -323,10 +323,11 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            fido2GetCredentialsRequest != null -> {
+            fido2GetCredentialsRequest != null || passwordGetCredentialsRequest != null -> {
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.Fido2GetCredentials(
+                    SpecialCircumstance.GetCredentials(
                         fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                        passwordGetCredentialsRequest = passwordGetCredentialsRequest,
                     )
             }
 
@@ -351,13 +352,6 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.PasswordAssertion(
                         passwordAssertionRequest = passwordCredentialAssertionRequest,
-                    )
-            }
-
-            passwordGetCredentialsRequest != null -> {
-                specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PasswordGetCredentials(
-                        passwordGetCredentialsRequest = passwordGetCredentialsRequest,
                     )
             }
 

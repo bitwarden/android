@@ -133,6 +133,14 @@ class RootNavViewModel @Inject constructor(
                         RootNavState.VaultUnlockedForAuthRequest
                     }
 
+                    is SpecialCircumstance.GetCredentials -> {
+                        RootNavState.VaultUnlockedForGetCredentials(
+                            activeUserId = userState.activeUserId,
+                            fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
+                            passwordGetCredentialsRequest = specialCircumstance.passwordGetCredentialsRequest,
+                        )
+                    }
+
                     is SpecialCircumstance.Fido2Save -> {
                         RootNavState.VaultUnlockedForFido2Save(
                             activeUserId = userState.activeUserId,
@@ -147,13 +155,6 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    is SpecialCircumstance.Fido2GetCredentials -> {
-                        RootNavState.VaultUnlockedForFido2GetCredentials(
-                            activeUserId = userState.activeUserId,
-                            fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
-                        )
-                    }
-
                     is SpecialCircumstance.PasswordSave -> {
                         RootNavState.VaultUnlockedForPasswordSave(
                             activeUserId = userState.activeUserId,
@@ -165,13 +166,6 @@ class RootNavViewModel @Inject constructor(
                         RootNavState.VaultUnlockedForPasswordAssertion(
                             activeUserId = userState.activeUserId,
                             passwordCredentialAssertionRequest = specialCircumstance.passwordAssertionRequest,
-                        )
-                    }
-
-                    is SpecialCircumstance.PasswordGetCredentials -> {
-                        RootNavState.VaultUnlockedForPasswordGetCredentials(
-                            activeUserId = userState.activeUserId,
-                            passwordGetCredentialsRequest = specialCircumstance.passwordGetCredentialsRequest,
                         )
                     }
 
@@ -305,6 +299,17 @@ sealed class RootNavState : Parcelable {
     ) : RootNavState()
 
     /**
+     * App should unlock the user's vault and retrieve Password credentials associated to the relying
+     * party.
+     */
+    @Parcelize
+    data class VaultUnlockedForGetCredentials(
+        val activeUserId: String,
+        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest?,
+        val passwordGetCredentialsRequest: PasswordGetCredentialsRequest?,
+    ) : RootNavState()
+
+    /**
      * App should show an add item screen for a user to complete the saving of data collected by
      * the fido2 credential manager framework
      *
@@ -328,16 +333,6 @@ sealed class RootNavState : Parcelable {
     ) : RootNavState()
 
     /**
-     * App should unlock the user's vault and retrieve FIDO 2 credentials associated to the relying
-     * party.
-     */
-    @Parcelize
-    data class VaultUnlockedForFido2GetCredentials(
-        val activeUserId: String,
-        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
-    ) : RootNavState()
-
-    /**
      * App should show an add item screen for a user to complete the saving of data collected by
      * the password credential manager framework
      *
@@ -358,16 +353,6 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlockedForPasswordAssertion(
         val activeUserId: String,
         val passwordCredentialAssertionRequest: PasswordCredentialAssertionRequest,
-    ) : RootNavState()
-
-    /**
-     * App should unlock the user's vault and retrieve Password credentials associated to the relying
-     * party.
-     */
-    @Parcelize
-    data class VaultUnlockedForPasswordGetCredentials(
-        val activeUserId: String,
-        val passwordGetCredentialsRequest: PasswordGetCredentialsRequest,
     ) : RootNavState()
 
     /**

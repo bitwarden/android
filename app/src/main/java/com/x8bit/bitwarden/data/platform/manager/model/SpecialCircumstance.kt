@@ -63,6 +63,16 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
+     * The app was launched via the credential manager framework request to retrieve passkeys or passwords
+     * associated with the requesting entity.
+     */
+    @Parcelize
+    data class GetCredentials(
+        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest?,
+        val passwordGetCredentialsRequest: PasswordGetCredentialsRequest?,
+    ) : SpecialCircumstance()
+
+    /**
      * The app was launched via the credential manager framework in order to allow the user to
      * manually save a passkey to their vault.
      */
@@ -81,15 +91,6 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the credential manager framework request to retrieve passkeys
-     * associated with the requesting entity.
-     */
-    @Parcelize
-    data class Fido2GetCredentials(
-        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
-    ) : SpecialCircumstance()
-
-    /**
      * The app was launched via the credential manager framework in order to allow the user to
      * manually save a password to their vault.
      */
@@ -105,15 +106,6 @@ sealed class SpecialCircumstance : Parcelable {
     @Parcelize
     data class PasswordAssertion(
         val passwordAssertionRequest: PasswordCredentialAssertionRequest,
-    ) : SpecialCircumstance()
-
-    /**
-     * The app was launched via the credential manager framework request to retrieve passwords
-     * associated with the requesting entity.
-     */
-    @Parcelize
-    data class PasswordGetCredentials(
-        val passwordGetCredentialsRequest: PasswordGetCredentialsRequest,
     ) : SpecialCircumstance()
 
     /**

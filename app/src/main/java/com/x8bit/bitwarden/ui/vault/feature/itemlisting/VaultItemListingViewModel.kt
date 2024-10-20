@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -105,7 +106,6 @@ class VaultItemListingViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
-    private val autofillCipherProvider: AutofillCipherProvider,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
@@ -1019,7 +1019,6 @@ class VaultItemListingViewModel @Inject constructor(
                 handlePasswordAssertionResultReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.PasswordAssertionResultReceive -> TODO()
         }
     }
 
@@ -1317,59 +1316,84 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
-        state.fido2GetCredentialsRequest
-            ?.let { fido2GetCredentialsRequest ->
-                val relyingPartyId = fido2CredentialManager
-                    .getPasskeyAssertionOptionsOrNull(
-                        requestJson = fido2GetCredentialsRequest.option.requestJson,
-                    )
-                    ?.relyingPartyId
-                    ?: run {
-                        showFido2ErrorDialog()
-                        return
-                    }
-                sendEvent(
-                    VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
-                        Fido2GetCredentialsResult.Success(
-                            userId = fido2GetCredentialsRequest.userId,
-                            options = fido2GetCredentialsRequest.option,
-                            credentials = vaultData
-                                .data
-                                .fido2CredentialAutofillViewList
-                                ?.filter { it.rpId == relyingPartyId }
-                                ?: emptyList(),
-                        ),
-                    ),
+
+        if(state.fido2CredentialRequest != null || state.passwordGetCredentialRequest != null){
+            viewModelScope.launch {
+                handleGetCredentialsRequest(
+                    vaultData,
+                    state.fido2GetCredentialsRequest,
+                    state.passwordGetCredentialRequest,
                 )
             }
-            ?: state.passwordGetCredentialRequest
-                ?.let { passwordGetCredentialRequest ->
-                    handlePasswordGetCredentialRequest(
-                        request = passwordGetCredentialRequest,
-                    )
-                } ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
+        } else {
+            mutableStateFlow.update { it.copy(isRefreshing = false) }
+        }
     }
 
-    private fun handlePasswordGetCredentialRequest(
-        request: PasswordGetCredentialsRequest,
+    private suspend fun handleGetCredentialsRequest(
+        vaultData: DataState.Loaded<VaultData>,
+        fido2Request: Fido2GetCredentialsRequest?,
+        passwordRequest: PasswordGetCredentialsRequest?
     ) {
-        viewModelScope.launch {
-            val matchUri = request.callingAppInfo.origin
-                ?: request.callingAppInfo.packageName
-                    .toAndroidAppUriString()
-            //TODO simply use filter cipher and return only cipher views
-            val credentials = autofillCipherProvider.getLoginAutofillCiphers(uri = matchUri)
-
-            sendEvent(
-                VaultItemListingEvent.CompletePasswordGetCredentialsRequest(
-                    PasswordGetCredentialsResult.Success(
-                        userId = request.userId,
-                        option = request.option,
-                        credentials = credentials
-                    )
+        val fido2Result = if(fido2Request != null) {
+            //read fido 2 credentials
+            val relyingPartyId = fido2CredentialManager
+                .getPasskeyAssertionOptionsOrNull(
+                    requestJson = fido2Request.option.requestJson,
                 )
+                ?.relyingPartyId
+
+            relyingPartyId?.let {
+                Fido2GetCredentialsResult.Success(
+                    userId = fido2Request.userId,
+                    options = fido2Request.option,
+                    credentials = vaultData
+                        .data
+                        .fido2CredentialAutofillViewList
+                        ?.filter { it.rpId == relyingPartyId }
+                        ?: emptyList(),
+                )
+            } ?: run {
+                showFido2ErrorDialog()
+                Fido2GetCredentialsResult.Error
+            }
+        } else null
+
+        val passwordResult = if(passwordRequest != null) {
+            val matchUri = passwordRequest.callingAppInfo.origin
+                ?: passwordRequest.callingAppInfo.packageName
+                    .toAndroidAppUriString()
+
+            // We only care about non-deleted login ciphers.
+            val loginCiphers = vaultData.data.cipherViewList
+                .filter {
+                    // Must be login type
+                    it.type == CipherType.LOGIN &&
+                        // Must not be deleted.
+                        it.deletedDate == null &&
+                        // Must not require a reprompt.
+                        it.reprompt == CipherRepromptType.NONE
+                }
+            val ciphers = cipherMatchingManager
+                // Filter for ciphers that match the uri in some way.
+                .filterCiphersForMatches(
+                    ciphers = loginCiphers,
+                    matchUri = matchUri,
+                )
+
+            PasswordGetCredentialsResult.Success(
+                userId = passwordRequest.userId,
+                option = passwordRequest.option,
+                credentials = ciphers
             )
-        }
+        } else null
+
+        sendEvent(
+            VaultItemListingEvent.CompleteGetCredentialsRequest(
+                fido2Result = fido2Result,
+                passwordResult = passwordResult
+            )
+        )
     }
 
     private fun vaultLoadingReceive() {
@@ -2363,6 +2387,17 @@ sealed class VaultItemListingEvent {
     data class ShowToast(val text: Text) : VaultItemListingEvent()
 
     /**
+     * FIDO 2 or Password credential lookup result has been received and the process is ready to be completed.
+     *
+     * @property fido2Result The result of querying for matching FIDO 2 credentials.
+     * @property passwordResult The result of querying for matching Password credentials.
+     */
+    data class CompleteGetCredentialsRequest(
+        val fido2Result: Fido2GetCredentialsResult?,
+        val passwordResult: PasswordGetCredentialsResult?,
+    ) : BackgroundEvent, VaultItemListingEvent()
+
+    /**
      * Complete the current FIDO 2 credential registration process.
      *
      * @property result The result of FIDO 2 credential registration.
@@ -2387,24 +2422,6 @@ sealed class VaultItemListingEvent {
      */
     data class CompleteFido2Assertion(
         val result: Fido2CredentialAssertionResult,
-    ) : BackgroundEvent, VaultItemListingEvent()
-
-    /**
-     * FIDO 2 credential lookup result has been received and the process is ready to be completed.
-     *
-     * @property result The result of querying for matching FIDO 2 credentials.
-     */
-    data class CompleteFido2GetCredentialsRequest(
-        val result: Fido2GetCredentialsResult,
-    ) : BackgroundEvent, VaultItemListingEvent()
-
-    /**
-     * Password credential lookup result has been received and the process is ready to be completed.
-     *
-     * @property result The result of querying for matching Password credentials.
-     */
-    data class CompletePasswordGetCredentialsRequest(
-        val result: PasswordGetCredentialsResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**

@@ -151,7 +151,6 @@ interface IntentManager {
      */
     fun createPasswordGetCredentialPendingIntent(
         action: String,
-        id: String,
         userId: String,
         cipherId: String,
         requestCode: Int,

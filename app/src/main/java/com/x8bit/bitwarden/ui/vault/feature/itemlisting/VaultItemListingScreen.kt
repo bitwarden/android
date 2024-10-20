@@ -22,8 +22,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
-import com.x8bit.bitwarden.ui.autofill.password.manager.PasswordCompletionManager
+import com.x8bit.bitwarden.ui.autofill.credential.manager.CredentialCompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -47,10 +46,9 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalPasswordCompletionManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -80,8 +78,7 @@ fun VaultItemListingScreen(
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     exitManager: ExitManager = LocalExitManager.current,
-    fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
-    passwordCompletionManager: PasswordCompletionManager = LocalPasswordCompletionManager.current,
+    credentialCompletionManager: CredentialCompletionManager = LocalCredentialCompletionManager.current,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
@@ -148,7 +145,7 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2Registration -> {
-                fido2CompletionManager.completeFido2Registration(event.result)
+                credentialCompletionManager.completeFido2Registration(event.result)
             }
 
             is VaultItemListingEvent.Fido2UserVerification -> {
@@ -169,19 +166,18 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2Assertion -> {
-                fido2CompletionManager.completeFido2Assertion(event.result)
-            }
-
-            is VaultItemListingEvent.CompleteFido2GetCredentialsRequest -> {
-                fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
+                credentialCompletionManager.completeFido2Assertion(event.result)
             }
 
             is VaultItemListingEvent.CompletePasswordAssertion -> {
-                passwordCompletionManager.completePasswordAssertion(event.result)
+                credentialCompletionManager.completePasswordAssertion(event.result)
             }
 
-            is VaultItemListingEvent.CompletePasswordGetCredentialsRequest -> {
-                passwordCompletionManager.completePasswordGetCredentialRequest(event.result)
+            is VaultItemListingEvent.CompleteGetCredentialsRequest -> {
+                credentialCompletionManager.completeGetCredentialRequest(
+                    event.fido2Result,
+                    event.passwordResult,
+                )
             }
 
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()

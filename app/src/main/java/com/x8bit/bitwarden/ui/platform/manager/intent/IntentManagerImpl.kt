@@ -70,13 +70,6 @@ const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
 /**
- * Key for the credential id included in Password provider "get entries".
- *
- * @see IntentManager.createPasswordGetCredentialPendingIntent
- */
-const val EXTRA_KEY_PASSWORD_CREDENTIAL_ID: String = "password_credential_id"
-
-/**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
  * Intents within a given context.
  */
@@ -320,7 +313,6 @@ class IntentManagerImpl(
 
     override fun createPasswordGetCredentialPendingIntent(
         action: String,
-        id: String,
         userId: String,
         cipherId: String,
         requestCode: Int
@@ -328,7 +320,6 @@ class IntentManagerImpl(
         val intent = Intent(action)
             .setPackage(context.packageName)
             .putExtra(EXTRA_KEY_USER_ID, userId)
-            .putExtra(EXTRA_KEY_PASSWORD_CREDENTIAL_ID, id)
             .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
 
         return PendingIntent.getActivity(

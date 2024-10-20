@@ -12,7 +12,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PasswordCredentialAssertionRequest(
     val candidateQueryData: Bundle,
-    val id: String,
     val userId: String,
     val cipherId: String,
     val allowedUserIds: Set<String>,

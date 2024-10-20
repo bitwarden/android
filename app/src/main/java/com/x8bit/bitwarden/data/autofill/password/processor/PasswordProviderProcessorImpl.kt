@@ -12,7 +12,6 @@ import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PasswordCredentialEntry
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
@@ -153,7 +152,6 @@ class PasswordProviderProcessorImpl(
                         pendingIntent = intentManager
                             .createPasswordGetCredentialPendingIntent(
                                 action = GET_PASSWORD_INTENT,
-                                id = option.id,
                                 userId = userId,
                                 cipherId = it.cipherId ?: return@mapNotNull null,
                                 requestCode = requestCode.getAndIncrement(),
