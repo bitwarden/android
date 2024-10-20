@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.autofill.fido2
+package com.x8bit.bitwarden.data.autofill.password
 
 import android.os.Build
 import android.os.CancellationSignal
@@ -14,32 +14,32 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
+import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * The [CredentialProviderService] for the app. This fulfills FIDO2 credential requests from other
+ * The [CredentialProviderService] for the app. This fulfills Password credential requests from other
  * applications.
  */
 @OmitFromCoverage
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Keep
 @AndroidEntryPoint
-class BitwardenCredentialProviderService : CredentialProviderService() {
+class BitwardenPasswordProviderService : CredentialProviderService() {
 
     /**
-     * A processor to handle the FIDO2 credential fulfillment. We keep the service light because it
+     * A processor to handle the Password credential fulfillment. We keep the service light because it
      * isn't easily testable.
      */
     @Inject
-    lateinit var processor: Fido2ProviderProcessor
+    lateinit var processor: PasswordProviderProcessor
 
     override fun onBeginCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
         cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
+        callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>
     ) {
         processor.processCreateCredentialRequest(
             request,
@@ -51,7 +51,7 @@ class BitwardenCredentialProviderService : CredentialProviderService() {
     override fun onBeginGetCredentialRequest(
         request: BeginGetCredentialRequest,
         cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
+        callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>
     ) {
         processor.processGetCredentialRequest(
             request,
@@ -63,7 +63,7 @@ class BitwardenCredentialProviderService : CredentialProviderService() {
     override fun onClearCredentialStateRequest(
         request: ProviderClearCredentialStateRequest,
         cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<Void?, ClearCredentialException>,
+        callback: OutcomeReceiver<Void?, ClearCredentialException>
     ) {
         processor.processClearCredentialStateRequest(
             request,
@@ -71,4 +71,5 @@ class BitwardenCredentialProviderService : CredentialProviderService() {
             callback,
         )
     }
+
 }

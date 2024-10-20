@@ -15,8 +15,10 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.provider.AuthenticationAction
+import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
 import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
+import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CreateEntry
@@ -24,6 +26,7 @@ import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -52,6 +55,7 @@ class Fido2ProviderProcessorImpl(
     private val context: Context,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
+    private val fido2CredentialStore: Fido2CredentialStore,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
     private val clock: Clock,
@@ -62,7 +66,7 @@ class Fido2ProviderProcessorImpl(
     private val scope = CoroutineScope(dispatcherManager.unconfined)
 
     override fun processCreateCredentialRequest(
-        request: BeginCreatePublicKeyCredentialRequest,
+        request: BeginCreateCredentialRequest,
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
     ) {
@@ -73,7 +77,7 @@ class Fido2ProviderProcessorImpl(
         }
 
         val createCredentialJob = scope.launch {
-            handleCreatePasskeyQuery(request = request)
+            processCreateCredentialRequest(request = request)
                 ?.let { callback.onResult(it) }
                 ?: callback.onError(CreateCredentialUnknownException())
         }
@@ -82,6 +86,18 @@ class Fido2ProviderProcessorImpl(
                 createCredentialJob.cancel()
             }
             callback.onError(CreateCredentialCancellationException())
+        }
+    }
+
+    private fun processCreateCredentialRequest(
+        request: BeginCreateCredentialRequest,
+    ): BeginCreateCredentialResponse? {
+        return when (request) {
+            is BeginCreatePublicKeyCredentialRequest -> {
+                handleCreatePasskeyQuery(request)
+            }
+
+            else -> null
         }
     }
 
@@ -128,7 +144,7 @@ class Fido2ProviderProcessorImpl(
     }
 
     override fun processGetCredentialRequest(
-        beginGetCredentialOptions: List<BeginGetPublicKeyCredentialOption>,
+        request: BeginGetCredentialRequest,
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
     ) {
@@ -163,7 +179,7 @@ class Fido2ProviderProcessorImpl(
             try {
                 val credentialEntries = getMatchingFido2CredentialEntries(
                     userId = userState.activeUserId,
-                    beginGetCredentialOptions = beginGetCredentialOptions,
+                    request = request,
                 )
 
                 callback.onResult(
@@ -184,15 +200,20 @@ class Fido2ProviderProcessorImpl(
     @Throws(GetCredentialUnsupportedException::class)
     private suspend fun getMatchingFido2CredentialEntries(
         userId: String,
-        beginGetCredentialOptions: List<BeginGetPublicKeyCredentialOption>,
+        request: BeginGetCredentialRequest,
     ): List<CredentialEntry> =
-        beginGetCredentialOptions
+        request
+            .beginGetCredentialOptions
             .flatMap { option ->
-                val relyingPartyId = fido2CredentialManager
-                    .getPasskeyAssertionOptionsOrNull(requestJson = option.requestJson)
-                    ?.relyingPartyId
-                    ?: throw GetCredentialUnknownException("Invalid data.")
-                buildCredentialEntries(userId, relyingPartyId, option)
+                if (option is BeginGetPublicKeyCredentialOption) {
+                    val relyingPartyId = fido2CredentialManager
+                        .getPasskeyAssertionOptionsOrNull(requestJson = option.requestJson)
+                        ?.relyingPartyId
+                        ?: throw GetCredentialUnknownException("Invalid data.")
+                    buildCredentialEntries(userId, relyingPartyId, option)
+                } else {
+                    throw GetCredentialUnsupportedException("Unsupported option.")
+                }
             }
 
     private suspend fun buildCredentialEntries(
