@@ -27,7 +27,7 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Keep
 @AndroidEntryPoint
-class BitwardenFido2ProviderService : CredentialProviderService() {
+class BitwardenCredentialProviderService : CredentialProviderService() {
 
     /**
      * A processor to handle the FIDO2 credential fulfillment. We keep the service light because it
