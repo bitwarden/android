@@ -6,7 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -22,6 +21,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionRequest
@@ -29,7 +29,7 @@ import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssert
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
-import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
+import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -93,6 +93,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 /**
@@ -116,6 +117,8 @@ class VaultItemListingViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val organizationEventManager: OrganizationEventManager,
+    private val fido2ProviderProcessor: Fido2ProviderProcessor,
+    private val passwordProviderProcessor: PasswordProviderProcessor,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -1317,10 +1320,9 @@ class VaultItemListingViewModel @Inject constructor(
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
 
-        if(state.fido2CredentialRequest != null || state.passwordGetCredentialRequest != null){
+        if (state.fido2GetCredentialsRequest != null || state.passwordGetCredentialRequest != null) {
             viewModelScope.launch {
                 handleGetCredentialsRequest(
-                    vaultData,
                     state.fido2GetCredentialsRequest,
                     state.passwordGetCredentialRequest,
                 )
@@ -1331,60 +1333,30 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private suspend fun handleGetCredentialsRequest(
-        vaultData: DataState.Loaded<VaultData>,
         fido2Request: Fido2GetCredentialsRequest?,
-        passwordRequest: PasswordGetCredentialsRequest?
+        passwordRequest: PasswordGetCredentialsRequest?,
     ) {
-        val fido2Result = if(fido2Request != null) {
-            //read fido 2 credentials
-            val relyingPartyId = fido2CredentialManager
-                .getPasskeyAssertionOptionsOrNull(
-                    requestJson = fido2Request.option.requestJson,
-                )
-                ?.relyingPartyId
+        val requestCode = AtomicInteger()
+        val userState = authRepository.userStateFlow.value
 
-            relyingPartyId?.let {
-                Fido2GetCredentialsResult.Success(
-                    userId = fido2Request.userId,
-                    options = fido2Request.option,
-                    credentials = vaultData
-                        .data
-                        .fido2CredentialAutofillViewList
-                        ?.filter { it.rpId == relyingPartyId }
-                        ?: emptyList(),
-                )
-            } ?: run {
-                showFido2ErrorDialog()
-                Fido2GetCredentialsResult.Error
-            }
+        val fido2Result = if (fido2Request != null) {
+            Fido2GetCredentialsResult.Success(
+                credentials = fido2ProviderProcessor.processGetCredentialRequest(
+                    requestCode,
+                    userState!!.activeUserId,
+                    listOf(fido2Request.option),
+                ) ?: emptyList()
+            )
         } else null
 
-        val passwordResult = if(passwordRequest != null) {
-            val matchUri = passwordRequest.callingAppInfo.origin
-                ?: passwordRequest.callingAppInfo.packageName
-                    .toAndroidAppUriString()
-
-            // We only care about non-deleted login ciphers.
-            val loginCiphers = vaultData.data.cipherViewList
-                .filter {
-                    // Must be login type
-                    it.type == CipherType.LOGIN &&
-                        // Must not be deleted.
-                        it.deletedDate == null &&
-                        // Must not require a reprompt.
-                        it.reprompt == CipherRepromptType.NONE
-                }
-            val ciphers = cipherMatchingManager
-                // Filter for ciphers that match the uri in some way.
-                .filterCiphersForMatches(
-                    ciphers = loginCiphers,
-                    matchUri = matchUri,
-                )
-
+        val passwordResult = if (passwordRequest != null) {
             PasswordGetCredentialsResult.Success(
-                userId = passwordRequest.userId,
-                option = passwordRequest.option,
-                credentials = ciphers
+                passwordProviderProcessor.processGetCredentialRequest(
+                    requestCode,
+                    userState!!.activeUserId,
+                    passwordRequest.callingAppInfo,
+                    listOf(passwordRequest.option),
+                ) ?: emptyList()
             )
         } else null
 

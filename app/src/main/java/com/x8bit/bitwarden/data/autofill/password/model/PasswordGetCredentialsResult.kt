@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.password.model
 
-import androidx.credentials.provider.BeginGetPasswordOption
-import com.bitwarden.vault.CipherView
+import androidx.credentials.provider.CredentialEntry
 
 /**
  * Represents the result of a Password Get Credentials request.
@@ -11,9 +10,7 @@ sealed class PasswordGetCredentialsResult {
      * Indicates credentials were successfully queried.
      */
     data class Success(
-        val userId: String,
-        val option: BeginGetPasswordOption,
-        val credentials: List<CipherView>,
+        val credentials: List<CredentialEntry>,
     ) : PasswordGetCredentialsResult()
 
     /**

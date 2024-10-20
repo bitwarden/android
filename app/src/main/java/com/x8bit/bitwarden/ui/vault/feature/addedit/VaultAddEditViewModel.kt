@@ -15,8 +15,12 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithUsernameAndPasswordCredentials
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithUsernameCredentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -412,6 +416,13 @@ class VaultAddEditViewModel @Inject constructor(
                 return@onContent
             }
 
+        specialCircumstanceManager.specialCircumstance
+            ?.toPasswordCredentialsRequestOrNull()
+            ?.let { request ->
+                handlePasswordRequestSpecialCircumstance(request, content.toCipherView())
+                return@onContent
+            }
+
         viewModelScope.launch {
             when (val vaultAddEditType = state.vaultAddEditType) {
                 is VaultAddEditType.AddItem -> {
@@ -445,6 +456,40 @@ class VaultAddEditViewModel @Inject constructor(
             }
         } else {
             registerFido2Credential(request, cipherView)
+        }
+    }
+
+    private fun handlePasswordRequestSpecialCircumstance(
+        request: PasswordCredentialRequest,
+        cipherView: CipherView,
+    ) {
+        when { //TODO()
+        /*    cipherView.isActiveWithUsernameAndPasswordCredentials -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultAddEditState.DialogState.OverwriteUsernameAndPasswordConfirmationPrompt)
+                }
+            }
+            cipherView.isActiveWithUsernameCredentials -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultAddEditState.DialogState.OverwriteUsernameConfirmationPrompt)
+                }
+            }
+            cipherView.isActiveWithPasswordCredentials -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt)
+                }
+            }*/
+            else -> {
+                viewModelScope.launch {
+                    val result = vaultRepository.createCipher(cipherView = cipherView)
+                    sendAction(
+                        VaultAddEditAction.Internal.CreateCipherResultReceive(result),
+                    )
+                    sendAction(
+                        VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive(result),
+                    )
+                }
+            }
         }
     }
 
@@ -1406,6 +1451,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.ValidateFido2PinResultReceive -> {
                 handleValidateFido2PinResultReceive(action)
             }
+
+            is VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive -> {
+                handlePasswordRegisterCredentialResultReceive(action)
+            }
         }
     }
 
@@ -1413,10 +1462,6 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Internal.CreateCipherResultReceive,
     ) {
         clearDialogState()
-        if(specialCircumstanceManager.specialCircumstance?.toPasswordCredentialsRequestOrNull() != null) {
-            handlePasswordRegisterCredentialResult(action)
-            return
-        }
 
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
@@ -1438,10 +1483,10 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handlePasswordRegisterCredentialResult(
-        action: VaultAddEditAction.Internal.CreateCipherResultReceive,
+    private fun handlePasswordRegisterCredentialResultReceive(
+        action: VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive,
     ){
-        val result = when (action.createCipherResult) {
+        val result = when (action.result) {
             is CreateCipherResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
                 PasswordRegisterCredentialResult.Error
@@ -3044,5 +3089,13 @@ sealed class VaultAddEditAction {
         data class ValidateFido2PinResultReceive(
             val result: ValidatePinResult,
         ) : Internal()
+
+        /**
+         * Indicates a result for creating a cipher has been received.
+         */
+        data class PasswordRegisterCredentialResultReceive(
+            val result: CreateCipherResult,
+        ) : Internal()
+
     }
 }

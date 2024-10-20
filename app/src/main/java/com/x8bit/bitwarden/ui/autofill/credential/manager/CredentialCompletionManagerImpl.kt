@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.autofill.credential.manager
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,19 +13,18 @@ import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.provider.Action
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.CredentialEntry
-import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
-import androidx.credentials.provider.PublicKeyCredentialEntry
-import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
+import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlin.random.Random
 
@@ -162,29 +162,7 @@ class CredentialCompletionManagerImpl(
         val resultIntent = Intent()
         val responseBuilder = BeginGetCredentialResponse.Builder()
         val fido2Entries: List<CredentialEntry> = when (fido2Result) {
-            is Fido2GetCredentialsResult.Success -> {
-                fido2Result
-                    .credentials
-                    .map {
-                        val pendingIntent = intentManager
-                            .createFido2GetCredentialPendingIntent(
-                                action = GET_PASSKEY_INTENT,
-                                userId = fido2Result.userId,
-                                credentialId = it.credentialId.toString(),
-                                cipherId = it.cipherId,
-                                requestCode = Random.nextInt(),
-                            )
-                        PublicKeyCredentialEntry
-                            .Builder(
-                                context = activity,
-                                username = it.userNameForUi
-                                    ?: activity.getString(R.string.no_username),
-                                pendingIntent = pendingIntent,
-                                beginGetPublicKeyCredentialOption = fido2Result.options,
-                            )
-                            .build()
-                    }
-            }
+            is Fido2GetCredentialsResult.Success -> fido2Result.credentials
 
             Fido2GetCredentialsResult.Error,
             null,
@@ -192,28 +170,7 @@ class CredentialCompletionManagerImpl(
         }
 
         val passwordEntries: List<CredentialEntry> = when (passwordResult) {
-            is PasswordGetCredentialsResult.Success -> {
-                passwordResult
-                    .credentials
-                    .mapNotNull {
-                        val pendingIntent = intentManager
-                            .createPasswordGetCredentialPendingIntent(
-                                action = GET_PASSKEY_INTENT,
-                                userId = passwordResult.userId,
-                                cipherId = it.id ?: return@mapNotNull null,
-                                requestCode = Random.nextInt(),
-                            )
-                        PasswordCredentialEntry
-                            .Builder(
-                                context = activity,
-                                username = it.login?.username
-                                    ?: activity.getString(R.string.no_username),
-                                pendingIntent = pendingIntent,
-                                beginGetPasswordOption = passwordResult.option,
-                            )
-                            .build()
-                    }
-            }
+            is PasswordGetCredentialsResult.Success -> passwordResult.credentials
 
             PasswordGetCredentialsResult.Error,
             null,
@@ -236,6 +193,17 @@ class CredentialCompletionManagerImpl(
                         // Explicitly clear any pending authentication actions since we only
                         // display results from the active account.
                         .setAuthenticationActions(emptyList())
+                        .addAction(
+                            Action(
+                                title = "open bitwarden",
+                                pendingIntent = PendingIntent.getActivity(
+                                    activity,
+                                    Random.nextInt(),
+                                    Intent(activity, MainActivity::class.java),
+                                    PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+                                ),
+                            )
+                        )
                         .build(),
                 )
         }
