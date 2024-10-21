@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
@@ -48,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.components.model.OverwritePasswordConfirmationPromptReason
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
@@ -302,6 +302,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleFido2ErrorDialogDismissed()
             }
 
+            VaultAddEditAction.Common.PasswordErrorDialogDismissed -> {
+                handlePasswordErrorDialogDismissed()
+            }
+
             VaultAddEditAction.Common.UserVerificationNotSupported -> {
                 handleUserVerificationNotSupported()
             }
@@ -469,19 +473,34 @@ class VaultAddEditViewModel @Inject constructor(
         when {
             cipherView.isActiveWithUsernameAndPasswordCredentials -> {
                 mutableStateFlow.update {
-                    it.copy(dialog = VaultAddEditState.DialogState.OverwriteUsernameAndPasswordConfirmationPrompt)
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt(
+                            reason = OverwritePasswordConfirmationPromptReason.UsernameAndPassword
+                        )
+                    )
                 }
             }
+
             cipherView.isActiveWithUsernameCredentials -> {
                 mutableStateFlow.update {
-                    it.copy(dialog = VaultAddEditState.DialogState.OverwriteUsernameConfirmationPrompt)
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt(
+                            reason = OverwritePasswordConfirmationPromptReason.Username
+                        )
+                    )
                 }
             }
+
             cipherView.isActiveWithPasswordCredentials -> {
                 mutableStateFlow.update {
-                    it.copy(dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt)
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt(
+                            reason = OverwritePasswordConfirmationPromptReason.Password
+                        )
+                    )
                 }
             }
+
             else -> {
                 registerPasswordCredential(cipherView)
             }
@@ -652,7 +671,7 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                 }
             }
-        ?: showFido2ErrorDialog()
+            ?: showFido2ErrorDialog()
 
     private fun handleUserVerificationFail() {
         fido2CredentialManager.isUserVerified = false
@@ -665,6 +684,15 @@ class VaultAddEditViewModel @Inject constructor(
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
                 result = Fido2RegisterCredentialResult.Error,
+            ),
+        )
+    }
+
+    private fun handlePasswordErrorDialogDismissed() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompletePasswordRegistration(
+                result = PasswordRegisterCredentialResult.Error,
             ),
         )
     }
@@ -1489,22 +1517,21 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-
     private fun handleConfirmOverwriteExistingPasswordClick() {
         specialCircumstanceManager
             .specialCircumstance
             ?.toPasswordCredentialsRequestOrNull()
-            ?.let { request ->
+            ?.let {
                 onContent { content ->
                     registerPasswordCredential(content.toCipherView())
                 }
             }
-            ?: showFido2ErrorDialog() //TODO password error dialos
+            ?: showPasswordErrorDialog()
     }
 
     private fun handlePasswordRegisterCredentialResultReceive(
         action: VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive,
-    ){
+    ) {
         val result = when (action.result) {
             is CreateCipherResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
@@ -1816,6 +1843,18 @@ class VaultAddEditViewModel @Inject constructor(
             it.copy(
                 dialog = VaultAddEditState.DialogState.Fido2Error(
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
+                ),
+            )
+        }
+    }
+
+    private fun showPasswordErrorDialog() {
+        //TODO does not always fit the reason but matches showFido2ErrorDialog
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.PasswordError(
+                    message = R.string.password_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
             )
@@ -2384,28 +2423,24 @@ data class VaultAddEditState(
         data class Fido2Error(val message: Text) : DialogState()
 
         /**
+         * Displays a Password operation error dialog to the user.
+         */
+        @Parcelize
+        data class PasswordError(val message: Text) : DialogState()
+
+        /**
          * Displays the overwrite passkey confirmation prompt to the user.
          */
         @Parcelize
         data object OverwritePasskeyConfirmationPrompt : DialogState()
 
         /**
-         * Displays the overwrite username and password confirmation prompt to the user.
-         */
-        @Parcelize
-        data object OverwriteUsernameAndPasswordConfirmationPrompt : DialogState()
-
-        /**
-         * Displays the overwrite username confirmation prompt to the user.
-         */
-        @Parcelize
-        data object OverwriteUsernameConfirmationPrompt : DialogState()
-
-        /**
          * Displays the overwrite password confirmation prompt to the user.
          */
         @Parcelize
-        data object OverwritePasswordConfirmationPrompt : DialogState()
+        data class OverwritePasswordConfirmationPrompt(
+            val reason: OverwritePasswordConfirmationPromptReason,
+        ) : DialogState()
 
         /**
          * Displays a dialog to prompt the user for their master password as part of the FIDO 2
@@ -2720,6 +2755,11 @@ sealed class VaultAddEditAction {
          * The user has dismissed the FIDO 2 credential error dialog.
          */
         data object Fido2ErrorDialogDismissed : Common()
+
+        /**
+         * The user has dismissed the Password credential error dialog.
+         */
+        data object PasswordErrorDialogDismissed : Common()
 
         /**
          * User verification cannot be performed with device biometrics or credentials.
