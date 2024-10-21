@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -189,6 +190,9 @@ class VaultRepositoryTest {
             mutableUnlockedUserIdsStateFlow.first { userId in it }
         }
     }
+    private val databaseSchemeManager: DatabaseSchemeManager = mockk {
+        every { lastDatabaseSchemeChangeInstant } returns null
+    }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
     private val mutableSyncCipherDeleteFlow = bufferedMutableSharedFlow<SyncCipherDeleteData>()
@@ -224,6 +228,7 @@ class VaultRepositoryTest {
         fileManager = fileManager,
         clock = clock,
         userLogoutManager = userLogoutManager,
+        databaseSchemeManager = databaseSchemeManager,
     )
 
     @BeforeEach
@@ -1055,6 +1060,60 @@ class VaultRepositoryTest {
         vaultRepository.syncIfNecessary()
 
         coVerify(exactly = 0) { syncService.sync() }
+    }
+
+    @Test
+    fun `syncIfNecessary when there is no last scheme change should not sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId)
+        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
+        every {
+            databaseSchemeManager.lastDatabaseSchemeChangeInstant
+        } returns null
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.syncIfNecessary()
+
+        coVerify(exactly = 0) { syncService.sync() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncIfNecessary when the last scheme change is before the last sync time should not sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId)
+        } returns clock.instant().plus(1, ChronoUnit.MINUTES)
+        every {
+            databaseSchemeManager.lastDatabaseSchemeChangeInstant
+        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
+
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.syncIfNecessary()
+
+        coVerify(exactly = 0) { syncService.sync() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncIfNecessary when the last scheme change is after the last sync time should sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId)
+        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
+        every {
+            databaseSchemeManager.lastDatabaseSchemeChangeInstant
+        } returns clock.instant().plus(1, ChronoUnit.MINUTES)
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.syncIfNecessary()
+
+        coVerify { syncService.sync() }
     }
 
     @Test

@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
@@ -291,5 +293,13 @@ object PlatformManagerModule {
         vaultDiskSource = vaultDiskSource,
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideDatabaseSchemeManager(
+        settingsDiskSource: SettingsDiskSource,
+    ): DatabaseSchemeManager = DatabaseSchemeManagerImpl(
+        settingsDiskSource = settingsDiskSource,
     )
 }
