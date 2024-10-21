@@ -20,7 +20,8 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 
-private const val CREATE_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_CREATE_PASSWORD"
+private const val CREATE_PASSWORD_INTENT =
+    "com.x8bit.bitwarden.data.autofill.password.ACTION_CREATE_PASSWORD"
 const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.data.autofill.password.ACTION_GET_PASSWORD"
 
 /**
@@ -52,7 +53,7 @@ class PasswordProviderProcessorImpl(
 
     private fun List<UserState.Account>.toCreateEntries(
         requestCode: AtomicInteger,
-        activeUserId: String
+        activeUserId: String,
     ) = map {
         it.toCreateEntry(
             requestCode = requestCode,

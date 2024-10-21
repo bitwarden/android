@@ -315,7 +315,7 @@ class IntentManagerImpl(
         action: String,
         userId: String,
         cipherId: String,
-        requestCode: Int
+        requestCode: Int,
     ): PendingIntent {
         val intent = Intent(action)
             .setPackage(context.packageName)

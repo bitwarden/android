@@ -217,7 +217,7 @@ fun VaultItemListingScreen(
                 )
             }
         },
-        onConfirmOverwriteExistingPassword= remember(viewModel) {
+        onConfirmOverwriteExistingPassword = remember(viewModel) {
             { cipherId ->
                 viewModel.trySendAction(
                     VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick(

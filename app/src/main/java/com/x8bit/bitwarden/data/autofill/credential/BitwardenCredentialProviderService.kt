@@ -19,7 +19,8 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.data.autofill.credential.ACTION_UNLOCK_ACCOUNT"
+const val UNLOCK_ACCOUNT_INTENT =
+    "com.x8bit.bitwarden.data.autofill.credential.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The [CredentialProviderService] for the app. This fulfills FIDO2 credential requests from other

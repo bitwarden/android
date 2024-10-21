@@ -56,7 +56,6 @@ fun SpecialCircumstance.toFido2GetCredentialsRequestOrNull(): Fido2GetCredential
         else -> null
     }
 
-
 /**
  * Returns [PasswordCredentialRequest] when contained in the given [SpecialCircumstance].
  */
