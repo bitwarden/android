@@ -10,8 +10,8 @@ import kotlinx.parcelize.Parcelize
  * credential manager framework.
  *
  * @property userId The user under which the password should be saved.
- * @property userName containing the id of the request representing the userName for the login.
- * @property password containing the Password request.
+ * @property userName containing the username from the request.
+ * @property password containing the password from the request.
  * @property callingAppInfo Information about the application that initiated the request.
  */
 @Parcelize

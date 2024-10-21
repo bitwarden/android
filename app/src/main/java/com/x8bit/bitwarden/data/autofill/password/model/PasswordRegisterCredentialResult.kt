@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.password.model
 
 /**
- * Models the data returned from creating a FIDO 2 credential.
+ * Models the data returned from creating a Password credential.
  */
 sealed class PasswordRegisterCredentialResult {
 

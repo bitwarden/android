@@ -3,11 +3,9 @@ package com.x8bit.bitwarden.data.autofill.password.di
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
 import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.Module
 import dagger.Provides
@@ -18,7 +16,7 @@ import java.time.Clock
 import javax.inject.Singleton
 
 /**
- * Provides dependencies within the fido2 package.
+ * Provides dependencies within the password package.
  */
 @Module
 @InstallIn(SingletonComponent::class)

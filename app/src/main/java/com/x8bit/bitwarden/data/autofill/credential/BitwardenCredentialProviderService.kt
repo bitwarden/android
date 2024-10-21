@@ -15,7 +15,6 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessor
-import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessorImpl
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -33,8 +32,8 @@ const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOU
 class BitwardenCredentialProviderService : CredentialProviderService() {
 
     /**
-     * A processor to handle the credential fulfillment. We keep the service light because it
-     * isn't easily testable.
+     * A processor to handle the FIDO2 and/or Password credential fulfillment. We keep the service
+     * light because it isn't easily testable.
      */
     @Inject
     lateinit var processor: BitwardenCredentialProcessor

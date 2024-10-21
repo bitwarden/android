@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.data.autofill.password.model
 import com.bitwarden.vault.LoginView
 
 /**
- * Represents possible outcomes of a FIDO 2 credential assertion request.
+ * Represents possible outcomes of a Password credential assertion request.
  */
 sealed class PasswordCredentialAssertionResult {
 
     /**
-     * Indicates the assertion request completed and [responseJson] was successfully generated.
+     * Indicates the assertion request completed and [credential] was successfully generated.
      */
     data class Success(val credential: LoginView) : PasswordCredentialAssertionResult()
 

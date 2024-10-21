@@ -76,7 +76,7 @@ class PasswordProviderProcessorImpl(
             )
             .setDescription(
                 context.getString(
-                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x, //TODO change text to your password will be saved
+                    R.string.your_username_and_password_will_be_saved_to_your_bitwarden_vault_for_x,
                     accountName,
                 ),
             )

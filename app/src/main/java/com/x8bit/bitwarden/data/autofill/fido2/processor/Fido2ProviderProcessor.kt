@@ -15,13 +15,11 @@ import java.util.concurrent.atomic.AtomicInteger
 interface Fido2ProviderProcessor {
 
     /**
-     * Process the [BeginCreateCredentialRequest] and invoke the [callback] with the result.
+     * Process the [BeginCreateCredentialRequest] and returns the result.
      *
+     * @param requestCode The requestCode to be used for pending intents.
+     * @param userState The userState of the currently active user.
      * @param request The request data from the OS that contains data about the requesting provider.
-     * @param cancellationSignal signal for observing cancellation requests. The system will use
-     * this to notify us that the result is no longer needed and we should stop handling it in order
-     * to save our resources.
-     * @param callback the callback object to be used to notify the response or error
      */
     suspend fun processCreateCredentialRequest(
         requestCode: AtomicInteger,
@@ -30,13 +28,11 @@ interface Fido2ProviderProcessor {
     ): BeginCreateCredentialResponse?
 
     /**
-     * Process the [BeginGetCredentialRequest] and invoke the [callback] with the result.
+     * Process the [BeginGetCredentialRequest] and returns the result.
      *
-     * @param beginGetCredentialOptions data from the OS that contains data about the requesting provider.
-     * @param cancellationSignal signal for observing cancellation requests. The system will use
-     * this to notify us that the result is no longer needed and we should stop handling it in order
-     * to save our resources.
-     * @param callback the callback object to be used to notify the response or error
+     * @param requestCode The requestCode to be used for pending intents.
+     * @param activeUserId The id of the currently active user.
+     * @param beginGetCredentialOptions The request data from the OS that contains data about the requesting provider.
      */
     suspend fun processGetCredentialRequest(
         requestCode: AtomicInteger,

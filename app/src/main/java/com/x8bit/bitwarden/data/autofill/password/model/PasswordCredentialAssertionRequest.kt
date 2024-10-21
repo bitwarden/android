@@ -7,7 +7,7 @@ import androidx.credentials.provider.CallingAppInfo
 import kotlinx.parcelize.Parcelize
 
 /**
- * Models a FIDO 2 credential authentication request parsed from the launching intent.
+ * Models a Password credential authentication request parsed from the launching intent.
  */
 @Parcelize
 data class PasswordCredentialAssertionRequest(
