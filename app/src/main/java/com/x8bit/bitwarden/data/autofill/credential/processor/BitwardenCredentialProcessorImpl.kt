@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.credential.processor
 
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
@@ -15,7 +13,6 @@ import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
-import androidx.credentials.provider.Action
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
@@ -26,23 +23,17 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.credential.UNLOCK_ACCOUNT_INTENT
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
+import com.x8bit.bitwarden.data.autofill.credential.model.getCredentialResponseAction
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
-import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.password.processor.PasswordProviderProcessor
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.ui.autofill.credential.manager.CredentialCompletionManager
-import com.x8bit.bitwarden.ui.autofill.credential.manager.CredentialCompletionManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.random.Random
 
 /**
  * The default implementation of [BitwardenCredentialProcessor]. Its purpose is to handle FIDO2 or Password related
@@ -156,17 +147,7 @@ class BitwardenCredentialProcessorImpl(
                         // Explicitly clear any pending authentication actions since we only
                         // display results from the active account.
                         authenticationActions = emptyList(),
-                        actions = listOf(
-                            Action( //TODO move this somewhere to be reused
-                                title = "open bitwarden",
-                                pendingIntent = PendingIntent.getActivity(
-                                    context,
-                                    Random.nextInt(),
-                                    Intent(context, MainActivity::class.java),
-                                    PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-                                ),
-                            )
-                        )
+                        actions = listOf(getCredentialResponseAction(context)),
                     ),
                 )
             } catch (e: GetCredentialException) {

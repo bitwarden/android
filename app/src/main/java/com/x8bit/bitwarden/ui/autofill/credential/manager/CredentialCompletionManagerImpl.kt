@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.autofill.credential.manager
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,29 +12,24 @@ import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnknownException
-import androidx.credentials.provider.Action
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
-import com.x8bit.bitwarden.MainActivity
+import com.x8bit.bitwarden.data.autofill.credential.model.getCredentialResponseAction
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import kotlin.random.Random
 
 /**
- * Primary implementation of [Fido2CompletionManager] when the build version is
+ * Primary implementation of [CredentialCompletionManager] when the build version is
  * UPSIDE_DOWN_CAKE (34) or above.
  */
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class CredentialCompletionManagerImpl(
     private val activity: Activity,
-    private val intentManager: IntentManager,
 ) : CredentialCompletionManager {
 
     override fun completeFido2Registration(result: Fido2RegisterCredentialResult) {
@@ -193,17 +187,7 @@ class CredentialCompletionManagerImpl(
                         // Explicitly clear any pending authentication actions since we only
                         // display results from the active account.
                         .setAuthenticationActions(emptyList())
-                        .addAction(
-                            Action(
-                                title = "open bitwarden",
-                                pendingIntent = PendingIntent.getActivity(
-                                    activity,
-                                    Random.nextInt(),
-                                    Intent(activity, MainActivity::class.java),
-                                    PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-                                ),
-                            )
-                        )
+                        .addAction(getCredentialResponseAction(activity))
                         .build(),
                 )
         }

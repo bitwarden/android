@@ -7,6 +7,7 @@
   <string name="an_error_has_occurred">An error has occurred.</string>
   <string name="back">Back</string>
   <string name="bitwarden">Bitwarden</string>
+  <string name="open_bitwarden">open Bitwarden</string>
   <string name="cancel">Cancel</string>
   <string name="copy">Copy</string>
   <string name="copy_password">Copy password</string>

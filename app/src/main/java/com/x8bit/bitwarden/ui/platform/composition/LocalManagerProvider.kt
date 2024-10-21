@@ -39,7 +39,7 @@ fun LocalManagerProvider(
         if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             CredentialCompletionManagerUnsupportedApiImpl
         } else {
-            CredentialCompletionManagerImpl(activity, intentManager)
+            CredentialCompletionManagerImpl(activity)
         }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),
