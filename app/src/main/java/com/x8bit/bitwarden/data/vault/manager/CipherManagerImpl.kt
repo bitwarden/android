@@ -46,6 +46,20 @@ class CipherManagerImpl(
 ) : CipherManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
+    override suspend fun createOfflineCipher(cipherView: CipherView): CreateCipherResult {
+        val userId = activeUserId ?: return CreateCipherResult.Error
+
+        return vaultSdkSource.encryptCipher(
+            userId = userId,
+            cipherView = cipherView
+        )
+            .flatMap { vaultDiskSource.saveOfflineCipher(userId = userId, cipher = it) }
+            .fold(
+                onFailure = { CreateCipherResult.Error },
+                onSuccess = { CreateCipherResult.Success }
+            )
+    }
+
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId ?: return CreateCipherResult.Error
         return vaultSdkSource

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
@@ -30,6 +31,7 @@ import kotlinx.serialization.json.Json
  */
 @Suppress("TooManyFunctions", "LongParameterList")
 class VaultDiskSourceImpl(
+    private val offlineCiphersDao: CiphersDao,
     private val ciphersDao: CiphersDao,
     private val collectionsDao: CollectionsDao,
     private val domainsDao: DomainsDao,
@@ -44,6 +46,11 @@ class VaultDiskSourceImpl(
         bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
     private val forceFolderFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
     private val forceSendFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+
+    override suspend fun saveOfflineCipher(userId: String, cipher: CipherView) {
+        TODO("Not yet implemented")
+
+    }
 
     override suspend fun saveCipher(userId: String, cipher: SyncResponseJson.Cipher) {
         ciphersDao.insertCiphers(

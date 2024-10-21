@@ -1858,7 +1858,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
-        return common.selectedOwner?.collections
+        val result = common.selectedOwner?.collections
             ?.filter { it.isSelected }
             ?.map { it.id }
             ?.let {
@@ -1868,6 +1868,13 @@ class VaultAddEditViewModel @Inject constructor(
                 )
             }
             ?: vaultRepository.createCipher(cipherView = toCipherView())
+
+        if (result is CreateCipherResult.Error) {
+            // TODO: Ask for permission to store locally
+            vaultRepository.createOfflineCipher(cipherView = toCipherView())
+        }
+
+        return result;
     }
 
     private fun List<VaultAddEditState.Owner>.toUpdatedOwners(

@@ -17,6 +17,13 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 @Suppress("TooManyFunctions")
 interface CipherManager {
     /**
+     * Attempt to create a cipher in the offline repository
+     */
+    suspend fun createOfflineCipher(
+        cipherView: CipherView
+    ): CreateCipherResult
+
+    /**
      * Attempt to create a cipher.
      */
     suspend fun createCipher(
