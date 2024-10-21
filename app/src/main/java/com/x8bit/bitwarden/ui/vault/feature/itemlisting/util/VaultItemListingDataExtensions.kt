@@ -201,7 +201,7 @@ fun VaultData.toViewState(
         }
         VaultItemListingState.ViewState.NoItems(
             header = totpData
-                ?.let { R.string.no_items_for_uri.asText(it.issuer ?: it.accountName ?: "--") }
+                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") }
                 ?: R.string.save_and_protect_your_data.asText(),
             message = message,
             shouldShowAddButton = shouldShowAddButton,
