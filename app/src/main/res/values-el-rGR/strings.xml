@@ -122,7 +122,10 @@
     <string name="learn_more">Μάθετε περισσότερα</string>
     <string name="import_2fas_password_protected_not_supported">Η εισαγωγή από αρχεία του 2FAS με κωδικό πρόσβασης δεν υποστηρίζεται. Δοκιμάστε ξανά με ένα αρχείο που δεν προστατεύεται με κωδικό πρόσβασης.</string>
     <string name="import_bitwarden_unsupported_format">Η εισαγωγή αρχείων CSV του Bitwarden δεν υποστηρίζεται. Δοκιμάστε ξανά με ένα εξαχθέν αρχείο JSON.</string>
-    <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
+    <string name="download_bitwarden_card_title">Λήψη της εφαρμογής Bitwarden</string>
     <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
-    <string name="download">Download</string>
+    <string name="download">Λήψη</string>
+    <string name="sync_with_bitwarden_app">Συγχρονισμός με την εφαρμογή Bitwarden</string>
+    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="shared_accounts_header">%1$s | %2$s</string>
 </resources>

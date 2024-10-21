@@ -123,6 +123,9 @@
     <string name="import_2fas_password_protected_not_supported">Der Import aus passwortgeschützten 2FAS-Dateien wird nicht unterstützt. Versuche es erneut mit einer exportierten Datei, die nicht passwortgeschützt ist.</string>
     <string name="import_bitwarden_unsupported_format">Der Import von Bitwarden CSV-Dateien wird nicht unterstützt. Versuche es erneut mit einer exportierten JSON-Datei.</string>
     <string name="download_bitwarden_card_title">Bitwarden-App herunterladen</string>
-    <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
-    <string name="download">Download</string>
+    <string name="download_bitwarden_card_message">Speicher alle deine Zugangsdaten und synchronisiere Verifizierungscodes direkt mit der Authenticator-App.</string>
+    <string name="download">Herunterladen</string>
+    <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
+    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="shared_accounts_header">%1$s | %2$s</string>
 </resources>

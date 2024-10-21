@@ -125,4 +125,7 @@
     <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
     <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
     <string name="download">Download</string>
+    <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
+    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="shared_accounts_header">%1$s | %2$s</string>
 </resources>
