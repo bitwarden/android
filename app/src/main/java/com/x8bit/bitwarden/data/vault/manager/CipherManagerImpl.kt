@@ -53,7 +53,7 @@ class CipherManagerImpl(
             userId = userId,
             cipherView = cipherView
         )
-            .flatMap { vaultDiskSource.saveOfflineCipher(userId = userId, cipher = it) }
+            .map { vaultDiskSource.saveOfflineCipher(userId = userId, cipher = it) }
             .fold(
                 onFailure = { CreateCipherResult.Error },
                 onSuccess = { CreateCipherResult.Success }

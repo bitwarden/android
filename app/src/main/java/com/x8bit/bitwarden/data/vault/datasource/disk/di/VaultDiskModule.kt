@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.DomainsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FoldersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.OfflineCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.SendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.database.VaultDatabase
 import dagger.Module
@@ -41,6 +42,10 @@ class VaultDiskModule {
 
     @Provides
     @Singleton
+    fun provideOfflineCipherDao(database: VaultDatabase): OfflineCiphersDao = database.offlineCipherDao()
+
+    @Provides
+    @Singleton
     fun provideCipherDao(database: VaultDatabase): CiphersDao = database.cipherDao()
 
     @Provides
@@ -62,6 +67,7 @@ class VaultDiskModule {
     @Provides
     @Singleton
     fun provideVaultDiskSource(
+        offlineCiphersDao: OfflineCiphersDao,
         ciphersDao: CiphersDao,
         collectionsDao: CollectionsDao,
         domainsDao: DomainsDao,
@@ -70,6 +76,7 @@ class VaultDiskModule {
         json: Json,
         dispatcherManager: DispatcherManager,
     ): VaultDiskSource = VaultDiskSourceImpl(
+        offlineCiphersDao = offlineCiphersDao,
         ciphersDao = ciphersDao,
         collectionsDao = collectionsDao,
         domainsDao = domainsDao,
