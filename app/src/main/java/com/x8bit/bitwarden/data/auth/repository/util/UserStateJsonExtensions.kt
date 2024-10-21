@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
