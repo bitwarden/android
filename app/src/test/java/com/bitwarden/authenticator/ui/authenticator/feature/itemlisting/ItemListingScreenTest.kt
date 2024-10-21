@@ -2,10 +2,12 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
+import androidx.room.util.copy
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
@@ -126,6 +128,76 @@ class ItemListingScreenTest : BaseComposeTest() {
                 ItemListingAction.ItemClick(SHARED_ACCOUNTS_SECTION.codes[0].authCode),
             )
         }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on NavigateToBitwardenSettings receive should launch bitwarden account security deep link`() {
+        every { intentManager.startMainBitwardenAppAccountSettings() } just runs
+        mutableEventFlow.tryEmit(ItemListingEvent.NavigateToBitwardenSettings)
+        verify { intentManager.startMainBitwardenAppAccountSettings() }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on sync with bitwarden action card click in empty state should send SyncWithBitwardenClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Sync with Bitwarden app")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on sync with bitwarden action card click in full state should send SyncWithBitwardenClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                favoriteItems = emptyList(),
+                itemList = emptyList(),
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Sync with Bitwarden app")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on sync with bitwarden action card dismiss in empty state should send SyncWithBitwardenDismiss`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+            ),
+        )
+        composeTestRule
+            .onNodeWithContentDescription("Close")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss) }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on sync with bitwarden action card dismiss in full state should send SyncWithBitwardenDismiss`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                favoriteItems = emptyList(),
+                itemList = emptyList(),
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+            ),
+        )
+        composeTestRule
+            .onNodeWithContentDescription("Close")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss) }
     }
 }
 

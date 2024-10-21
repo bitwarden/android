@@ -32,4 +32,22 @@ class SettingDiskSourceTest {
         }
         assertTrue(settingDiskSource.hasUserDismissedDownloadBitwardenCard!!)
     }
+
+    @Test
+    fun `hasUserDismissedSyncWithBitwardenCard should read and write from shared preferences`() {
+        val sharedPrefsKey = "bwPreferencesStorage:hasUserDismissedSyncWithBitwardenCard"
+
+        // Shared preferences and the disk source start with the same value:
+        assertNull(settingDiskSource.hasUserDismissedSyncWithBitwardenCard)
+        assertNull(sharedPreferences.getString(sharedPrefsKey, null))
+
+        // Updating the disk source updates shared preferences:
+        settingDiskSource.hasUserDismissedSyncWithBitwardenCard = false
+        assertFalse(sharedPreferences.getBoolean(sharedPrefsKey, true))
+
+        sharedPreferences.edit {
+            putBoolean(sharedPrefsKey, true)
+        }
+        assertTrue(settingDiskSource.hasUserDismissedSyncWithBitwardenCard!!)
+    }
 }

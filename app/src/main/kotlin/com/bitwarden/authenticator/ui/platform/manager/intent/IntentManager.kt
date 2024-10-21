@@ -21,6 +21,11 @@ interface IntentManager {
     fun startActivity(intent: Intent)
 
     /**
+     * Start the main Bitwarden app with scheme that routes to the account security screen.
+     */
+    fun startMainBitwardenAppAccountSettings()
+
+    /**
      * Starts the application's settings activity.
      */
     fun startApplicationDetailsSettingsActivity()

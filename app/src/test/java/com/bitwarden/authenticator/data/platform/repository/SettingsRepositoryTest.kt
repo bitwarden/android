@@ -7,7 +7,10 @@ import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -45,5 +48,30 @@ class SettingsRepositoryTest {
     fun `hasUserDismissedDownloadBitwardenCard should return true when disk source is true`() {
         every { settingsDiskSource.hasUserDismissedDownloadBitwardenCard } returns true
         assertTrue(settingsRepository.hasUserDismissedDownloadBitwardenCard)
+    }
+
+    @Test
+    fun `hasUserDismissedSyncWithBitwardenCard should return false when disk source is null`() {
+        every { settingsDiskSource.hasUserDismissedSyncWithBitwardenCard } returns null
+        assertFalse(settingsRepository.hasUserDismissedSyncWithBitwardenCard)
+    }
+
+    @Test
+    fun `hasUserDismissedSyncWithBitwardenCard should return false when disk source is false`() {
+        every { settingsDiskSource.hasUserDismissedSyncWithBitwardenCard } returns false
+        assertFalse(settingsRepository.hasUserDismissedSyncWithBitwardenCard)
+    }
+
+    @Test
+    fun `hasUserDismissedSyncWithBitwardenCard should return true when disk source is true`() {
+        every { settingsDiskSource.hasUserDismissedSyncWithBitwardenCard } returns true
+        assertTrue(settingsRepository.hasUserDismissedSyncWithBitwardenCard)
+    }
+
+    @Test
+    fun `hasUserDismissedSyncWithBitwardenCard set should set disk source`() {
+        every { settingsDiskSource.hasUserDismissedSyncWithBitwardenCard = true } just runs
+        settingsRepository.hasUserDismissedSyncWithBitwardenCard = true
+        verify { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true }
     }
 }

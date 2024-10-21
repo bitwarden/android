@@ -55,6 +55,11 @@ interface SettingsDiskSource {
     var hasUserDismissedDownloadBitwardenCard: Boolean?
 
     /**
+     * Whether or not the user has previously dismissed the sync with Bitwarden action card.
+     */
+    var hasUserDismissedSyncWithBitwardenCard: Boolean?
+
+    /**
      * Stores the threshold at which users are alerted that an items validity period is nearing
      * expiration.
      */

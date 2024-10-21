@@ -18,6 +18,8 @@ private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
 private const val HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY =
     "$BASE_KEY:hasUserDismissedDownloadBitwardenCard"
+private const val HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY =
+    "$BASE_KEY:hasUserDismissedSyncWithBitwardenCard"
 private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
 
 /**
@@ -103,6 +105,12 @@ class SettingsDiskSourceImpl(
         get() = getBoolean(HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY, null)
         set(value) {
             putBoolean(HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY, value)
+        }
+
+    override var hasUserDismissedSyncWithBitwardenCard: Boolean?
+        get() = getBoolean(HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY, null)
+        set(value) {
+            putBoolean(HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY, value)
         }
 
     override fun storeAlertThresholdSeconds(thresholdSeconds: Int) {

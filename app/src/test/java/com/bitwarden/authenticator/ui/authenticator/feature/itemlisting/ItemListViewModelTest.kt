@@ -241,6 +241,121 @@ class ItemListViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
+    @Test
+    fun `on SyncWithBitwardenClick receive should emit NavigateToBitwardenSettings`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick)
+            assertEquals(ItemListingEvent.NavigateToBitwardenSettings, awaitItem())
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on SyncWithBitwardenDismiss receive should dismiss action card and store dismissal in settings`() =
+        runTest {
+            val expectedState = DEFAULT_STATE.copy(
+                viewState = ItemListingState.ViewState.Content(
+                    actionCard = ItemListingState.ActionCardState.None,
+                    favoriteItems = LOCAL_FAVORITE_ITEMS,
+                    itemList = LOCAL_NON_FAVORITE_ITEMS,
+                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                ),
+            )
+            mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
+            every { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true } just runs
+            every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns false
+            mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+            val viewModel = createViewModel()
+            viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
+            verify { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true }
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on SyncWithBitwardenDismiss receive in empty state should dismiss action card and store dismissal in settings`() =
+        runTest {
+            val expectedState = DEFAULT_STATE.copy(
+                viewState = ItemListingState.ViewState.NoItems(
+                    actionCard = ItemListingState.ActionCardState.None,
+                ),
+            )
+            every { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true } just runs
+            every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns false
+            mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
+            val viewModel = createViewModel()
+            viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
+            verify { settingsRepository.hasUserDismissedSyncWithBitwardenCard = true }
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow value should show sync with bitwarden action card when local items are empty and shared state is SyncNotEnabled`() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+            ),
+        )
+        every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns false
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
+        mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow value should not show download bitwarden card when local items are empty and shared state is SyncNotEnabled but user has dismissed card`() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.None,
+            ),
+        )
+        every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns true
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
+        mutableVerificationCodesFlow.value = DataState.Loaded(emptyList())
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow value should show sync with bitwarden card when there are local items and shared state is SyncNotEnabled`() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+                favoriteItems = LOCAL_FAVORITE_ITEMS,
+                itemList = LOCAL_NON_FAVORITE_ITEMS,
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+            ),
+        )
+        every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns false
+        mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `stateFlow value should not show sync with bitwarden card when there are local items and shared state is AppNotInstalled but user has dismissed card`() {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = LOCAL_FAVORITE_ITEMS,
+                itemList = LOCAL_NON_FAVORITE_ITEMS,
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+            ),
+        )
+        every { settingsRepository.hasUserDismissedSyncWithBitwardenCard } returns true
+        mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
+        val viewModel = createViewModel()
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
     private fun createViewModel() = ItemListingViewModel(
         authenticatorRepository = authenticatorRepository,
         clipboardManager = clipboardManager,

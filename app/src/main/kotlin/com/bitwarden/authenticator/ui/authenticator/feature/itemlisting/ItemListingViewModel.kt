@@ -140,6 +140,13 @@ class ItemListingViewModel @Inject constructor(
             ItemListingAction.DownloadBitwardenDismiss -> {
                 handleDownloadBitwardenDismiss()
             }
+
+            ItemListingAction.SyncWithBitwardenClick -> {
+                handleSyncWithBitwardenClick()
+            }
+            ItemListingAction.SyncWithBitwardenDismiss -> {
+                handleSyncWithBitwardenDismiss()
+            }
         }
     }
 
@@ -485,6 +492,28 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleSyncWithBitwardenClick() {
+        sendEvent(ItemListingEvent.NavigateToBitwardenSettings)
+    }
+
+    private fun handleSyncWithBitwardenDismiss() {
+        settingsRepository.hasUserDismissedSyncWithBitwardenCard = true
+        mutableStateFlow.update {
+            it.copy(
+                viewState = when (it.viewState) {
+                    ItemListingState.ViewState.Loading -> it.viewState
+                    is ItemListingState.ViewState.Content -> it.viewState.copy(
+                        actionCard = ItemListingState.ActionCardState.None,
+                    )
+
+                    is ItemListingState.ViewState.NoItems -> it.viewState.copy(
+                        actionCard = ItemListingState.ActionCardState.None,
+                    )
+                },
+            )
+        }
+    }
+
     /**
      * Converts a [SharedVerificationCodesState] into an action card for display.
      */
@@ -498,8 +527,11 @@ class ItemListingViewModel @Inject constructor(
                 }
 
             SharedVerificationCodesState.SyncNotEnabled ->
-                // TODO: Implement sync not enabled action card
-                ItemListingState.ActionCardState.None
+                if (!settingsRepository.hasUserDismissedSyncWithBitwardenCard) {
+                    ItemListingState.ActionCardState.SyncWithBitwarden
+                } else {
+                    ItemListingState.ActionCardState.None
+                }
 
             SharedVerificationCodesState.Error,
             SharedVerificationCodesState.FeatureNotEnabled,
@@ -626,6 +658,12 @@ data class ItemListingState(
          */
         @Parcelize
         data object DownloadBitwardenApp : ActionCardState()
+
+        /**
+         * Display the "Sync with the Bitwarden app" card.
+         */
+        @Parcelize
+        data object SyncWithBitwarden : ActionCardState()
     }
 
     /**
@@ -702,6 +740,11 @@ sealed class ItemListingEvent {
     data object NavigateToBitwardenListing : ItemListingEvent()
 
     /**
+     * Navigate to Bitwarden account security settings.
+     */
+    data object NavigateToBitwardenSettings : ItemListingEvent()
+
+    /**
      * Show a Toast with [message].
      */
     data class ShowToast(
@@ -764,6 +807,16 @@ sealed class ItemListingAction {
      * The user dismissed download Bitwarden action card.
      */
     data object DownloadBitwardenDismiss : ItemListingAction()
+
+    /**
+     * The user tapped sync Bitwarden action card.
+     */
+    data object SyncWithBitwardenClick : ItemListingAction()
+
+    /**
+     * The user dismissed sync Bitwarden action card.
+     */
+    data object SyncWithBitwardenDismiss : ItemListingAction()
 
     /**
      * Models actions that [ItemListingScreen] itself may send.

@@ -135,4 +135,10 @@ class SettingsRepositoryImpl(
         set(value) {
             settingsDiskSource.hasUserDismissedDownloadBitwardenCard = value
         }
+
+    override var hasUserDismissedSyncWithBitwardenCard: Boolean
+        get() = settingsDiskSource.hasUserDismissedSyncWithBitwardenCard ?: false
+        set(value) {
+            settingsDiskSource.hasUserDismissedSyncWithBitwardenCard = value
+        }
 }
