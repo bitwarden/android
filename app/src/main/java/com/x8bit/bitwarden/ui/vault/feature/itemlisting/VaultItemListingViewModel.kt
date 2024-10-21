@@ -834,7 +834,6 @@ class VaultItemListingViewModel @Inject constructor(
         request: Fido2CredentialAssertionRequest,
         cipherView: CipherView,
     ) {
-        println("authenticateFido2Credential - 1")
         val activeUserId = authRepository.activeUserId
             ?: run {
                 showFido2ErrorDialog()
@@ -1416,7 +1415,6 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun continueFido2Operation(cipherView: CipherView) {
-        println("authenticateFido2Credential - continueFido2Operation")
         specialCircumstanceManager
             .specialCircumstance
             ?.toFido2RequestOrNull()

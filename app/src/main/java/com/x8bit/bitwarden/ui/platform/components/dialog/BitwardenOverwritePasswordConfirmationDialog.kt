@@ -22,12 +22,18 @@ fun BitwardenOverwritePasswordConfirmationDialog(
     BitwardenTwoButtonDialog(
         title = stringResource(
             id = when (reason) {
-                OverwritePasswordConfirmationPromptReason.UsernameAndPassword -> R.string.overwrite_password_and_username
+                OverwritePasswordConfirmationPromptReason.UsernameAndPassword -> R.string.overwrite_username_and_password
                 OverwritePasswordConfirmationPromptReason.Username -> R.string.overwrite_username
                 OverwritePasswordConfirmationPromptReason.Password -> R.string.overwrite_password
             }
         ),
-        message = "overwrie password prompt 2",
+        message = stringResource(
+            id = when (reason) {
+                OverwritePasswordConfirmationPromptReason.UsernameAndPassword -> R.string.this_item_already_contains_a_username_and_password_are_you_sure_you_want_to_overwrite_the_current_passkey
+                OverwritePasswordConfirmationPromptReason.Username -> R.string.this_item_already_contains_a_username_are_you_sure_you_want_to_overwrite_the_current_passkey
+                OverwritePasswordConfirmationPromptReason.Password -> R.string.this_item_already_contains_a_password_are_you_sure_you_want_to_overwrite_the_current_passkey
+            }
+        ),
         confirmButtonText = stringResource(id = R.string.ok),
         dismissButtonText = stringResource(id = R.string.cancel),
         onConfirmClick = onConfirmClick,
