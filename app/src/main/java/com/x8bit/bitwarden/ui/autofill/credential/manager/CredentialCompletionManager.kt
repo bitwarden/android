@@ -33,7 +33,7 @@ interface CredentialCompletionManager {
     fun completePasswordAssertion(result: PasswordCredentialAssertionResult)
 
     /**
-     * Complete the FIDO 2 "Get credentials" process with the provided [result].
+     * Complete the FIDO 2 and/or Password "Get credentials" process with the provided [fido2Result] and or [passwordResult].
      */
     fun completeGetCredentialRequest(
         fido2Result: Fido2GetCredentialsResult?,

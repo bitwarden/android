@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRe
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
 
 /**
- * A no-op implementation of [Fido2CompletionManagerImpl] provided when the build version is below
+ * A no-op implementation of [CredentialCompletionManager] provided when the build version is below
  * UPSIDE_DOWN_CAKE (34). These versions do not support [androidx.credentials.CredentialProvider].
  */
 object CredentialCompletionManagerUnsupportedApiImpl : CredentialCompletionManager {
