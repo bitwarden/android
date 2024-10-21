@@ -139,7 +139,8 @@ data class VaultSettingsState(
     /**
      * Should only show the import action card if the import logins feature flag is enabled.
      */
-    val shouldShowImportCard: Boolean = showImportActionCard && isNewImportLoginsFlowEnabled
+    val shouldShowImportCard: Boolean
+        get() = showImportActionCard && isNewImportLoginsFlowEnabled
 }
 
 /**
