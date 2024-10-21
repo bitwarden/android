@@ -54,7 +54,10 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun handleSuccessSyncAcknowledged() {
         mutableStateFlow.update {
-            it.copy(showBottomSheet = false)
+            it.copy(
+                isVaultSyncing = false,
+                showBottomSheet = false,
+            )
         }
         sendEvent(ImportLoginsEvent.NavigateBack)
     }

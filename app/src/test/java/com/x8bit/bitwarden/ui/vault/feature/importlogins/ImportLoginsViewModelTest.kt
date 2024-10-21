@@ -247,18 +247,25 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `MoveToSyncInProgress sets isVaultSyncing to true and calls syncForResult`() {
+    fun `MoveToSyncInProgress sets isVaultSyncing to true and calls syncForResult`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
-        assertEquals(
-            ImportLoginsState(
-                dialogState = null,
-                viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = true,
-                showBottomSheet = false,
-            ),
-            viewModel.stateFlow.value,
-        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE,
+                awaitItem(),
+            )
+            viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+            assertEquals(
+                ImportLoginsState(
+                    dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
+                    isVaultSyncing = true,
+                    showBottomSheet = false,
+                ),
+                awaitItem(),
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
         coVerify { vaultRepository.syncForResult() }
     }
 
@@ -282,6 +289,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
+                cancelAndIgnoreRemainingEvents()
             }
             coVerify { vaultRepository.syncForResult() }
         }
@@ -353,6 +361,15 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             // Initial state
             assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
             viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+            assertEquals(
+                ImportLoginsState(
+                    dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
+                    isVaultSyncing = true,
+                    showBottomSheet = false,
+                ),
+                stateFlow.awaitItem(),
+            )
             assertEquals(
                 ImportLoginsState(
                     dialogState = null,
