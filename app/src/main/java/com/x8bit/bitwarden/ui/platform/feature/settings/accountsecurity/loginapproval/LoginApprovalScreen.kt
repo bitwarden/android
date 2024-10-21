@@ -31,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -39,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -70,17 +70,16 @@ fun LoginApprovalScreen(
         }
     }
 
-    BitwardenBasicDialog(
-        visibilityState = if (state.shouldShowErrorDialog) {
-            BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.generic_error_message.asText(),
-            )
-        } else {
-            BasicDialogState.Hidden
-        },
-        onDismissRequest = remember(viewModel) {
+    LoginApprovalDialogs(
+        state = state.dialogState,
+        onDismissError = remember(viewModel) {
             { viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss) }
+        },
+        onConfirmChangeAccount = remember(viewModel) {
+            { viewModel.trySendAction(LoginApprovalAction.ApproveAccountChangeClick) }
+        },
+        onDismissChangeAccount = remember(viewModel) {
+            { viewModel.trySendAction(LoginApprovalAction.CancelAccountChangeClick) }
         },
     )
 
@@ -281,4 +280,34 @@ private fun LoginApprovalInfoColumn(
     )
 
     Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+private fun LoginApprovalDialogs(
+    state: LoginApprovalState.DialogState?,
+    onDismissError: () -> Unit,
+    onConfirmChangeAccount: () -> Unit,
+    onDismissChangeAccount: () -> Unit,
+) {
+    when (state) {
+        is LoginApprovalState.DialogState.ChangeAccount -> BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.log_in_requested),
+            message = state.message(),
+            confirmButtonText = stringResource(id = R.string.ok),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = onConfirmChangeAccount,
+            onDismissClick = onDismissChangeAccount,
+            onDismissRequest = onDismissChangeAccount,
+        )
+
+        is LoginApprovalState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = state.title,
+                message = state.message,
+            ),
+            onDismissRequest = onDismissError,
+        )
+
+        null -> Unit
+    }
 }
