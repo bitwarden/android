@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.time.Instant
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 
@@ -169,7 +168,6 @@ private val SHARED_ACCOUNT_DATA = SharedAccountData(
             email = "johnyapples@test.com",
             environmentLabel = "bitwarden.com",
             totpUris = listOf("test.com"),
-            lastSyncTime = Instant.parse("2024-09-10T10:15:30.00Z")
         )
     )
 )
