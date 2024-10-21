@@ -39,6 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
@@ -123,6 +125,19 @@ fun VaultUnlockScreen(
                 credentialCompletionManager.completeGetCredentialRequest(
                     fido2Result = Fido2GetCredentialsResult.Error,
                     passwordResult = null,
+                )
+            }
+
+            VaultUnlockEvent.PasswordCredentialAssertionError -> {
+                credentialCompletionManager.completePasswordAssertion(
+                    result = PasswordCredentialAssertionResult.Error,
+                )
+            }
+
+            VaultUnlockEvent.PasswordGetCredentialsError -> {
+                credentialCompletionManager.completeGetCredentialRequest(
+                    fido2Result = null,
+                    passwordResult = PasswordGetCredentialsResult.Error,
                 )
             }
         }
