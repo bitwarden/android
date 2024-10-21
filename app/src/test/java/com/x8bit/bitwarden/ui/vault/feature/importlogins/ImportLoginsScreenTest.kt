@@ -22,7 +22,6 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -47,7 +46,6 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         setContentWithBackDispatcher {
             ImportLoginsScreen(
                 onNavigateBack = { navigateBackCalled = true },
-                onNavigateToImportSuccessScreen = { navigateToImportLoginSuccessCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )
@@ -324,16 +322,10 @@ class ImportLoginsScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToImportSuccess event causes correct lambda to invoke`() {
-        mutableImportLoginsEventFlow.tryEmit(ImportLoginsEvent.NavigateToImportSuccess)
-        assertTrue(navigateToImportLoginSuccessCalled)
-    }
-
-    @Test
     fun `Loading content is displayed when isVaultSyncing is true`() {
-        mutableImportLoginsStateFlow.update {
-            it.copy(isVaultSyncing = true)
-        }
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(isVaultSyncing = true),
+        )
         composeTestRule.onRoot().printToLog("woo")
         composeTestRule
             .onNodeWithText(text = "Syncing logins...")
@@ -370,7 +362,17 @@ class ImportLoginsScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
-        verifyActionSent(ImportLoginsAction.FailSyncAcknowledged)
+        verifyActionSent(ImportLoginsAction.FailedSyncAcknowledged)
+    }
+
+    @Test
+    fun `Success bottom sheet is shown when state is updated`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(showBottomSheet = true),
+        )
+        composeTestRule
+            .onNodeWithText("Import Successful!")
+            .assertIsDisplayed()
     }
 
     //region Helper methods
@@ -386,4 +388,5 @@ private val DEFAULT_STATE = ImportLoginsState(
     dialogState = null,
     viewState = ImportLoginsState.ViewState.InitialContent,
     isVaultSyncing = false,
+    showBottomSheet = false,
 )

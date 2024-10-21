@@ -19,14 +19,12 @@ fun NavController.navigateToImportLoginsScreen(navOptions: NavOptions? = null) {
  */
 fun NavGraphBuilder.importLoginsScreenDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToImportSuccessScreen: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = IMPORT_LOGINS_ROUTE,
     ) {
         ImportLoginsScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToImportSuccessScreen = onNavigateToImportSuccessScreen,
         )
     }
 }

@@ -23,6 +23,7 @@ data class ImportLoginHandler(
     val onMoveToSyncInProgress: () -> Unit,
     val onRetrySync: () -> Unit,
     val onFailedSyncAcknowledged: () -> Unit,
+    val onSuccessfulSyncAcknowledged: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -50,7 +51,10 @@ data class ImportLoginHandler(
             },
             onRetrySync = { viewModel.trySendAction(ImportLoginsAction.RetryVaultSync) },
             onFailedSyncAcknowledged = {
-                viewModel.trySendAction(ImportLoginsAction.FailSyncAcknowledged)
+                viewModel.trySendAction(ImportLoginsAction.FailedSyncAcknowledged)
+            },
+            onSuccessfulSyncAcknowledged = {
+                viewModel.trySendAction(ImportLoginsAction.SuccessfulSyncAcknowledged)
             },
         )
     }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.content
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,33 +15,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * An overloaded version [BitwardenContentBlock] which takes a [String] for the header text.
+ * An overloaded version [BitwardenContentBlock] which takes a [Cont] for the header text.
  */
 @Composable
 fun BitwardenContentBlock(
-    headerText: String,
+    data: ContentBlockData,
     modifier: Modifier = Modifier,
     headerTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
-    subtitleText: String? = null,
     subtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
-    iconPainter: Painter? = null,
     backgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
 ) {
     BitwardenContentBlock(
-        headerText = AnnotatedString(headerText),
+        headerText = data.headerText,
         modifier = modifier,
         headerTextStyle = headerTextStyle,
-        subtitleText = subtitleText,
+        subtitleText = data.subtitleText,
         subtitleTextStyle = subtitleTextStyle,
-        iconPainter = iconPainter,
+        iconResource = data.iconResource,
         backgroundColor = backgroundColor,
     )
 }
@@ -50,13 +50,13 @@ fun BitwardenContentBlock(
  * Implemented to match design component.
  */
 @Composable
-fun BitwardenContentBlock(
+private fun BitwardenContentBlock(
     headerText: AnnotatedString,
     modifier: Modifier = Modifier,
     headerTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
     subtitleText: String? = null,
     subtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
-    iconPainter: Painter? = null,
+    @DrawableRes iconResource: Int? = null,
     backgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
 ) {
     Row(
@@ -65,15 +65,16 @@ fun BitwardenContentBlock(
             .background(backgroundColor),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        iconPainter
+        iconResource
             ?.let {
                 Spacer(Modifier.width(12.dp))
                 Icon(
-                    painter = it,
+                    painter = rememberVectorPainter(it),
                     contentDescription = null,
                     tint = BitwardenTheme.colorScheme.icon.secondary,
                     modifier = Modifier.size(24.dp),
                 )
+                Spacer(Modifier.width(12.dp))
             }
             ?: Spacer(Modifier.width(16.dp))
 
@@ -102,9 +103,11 @@ fun BitwardenContentBlock(
 private fun BitwardenContentBlock_preview() {
     BitwardenTheme {
         BitwardenContentBlock(
-            headerText = "Header",
-            subtitleText = "Subtitle",
-            iconPainter = null,
+            data = ContentBlockData(
+                headerText = "Header",
+                subtitleText = "Subtitle",
+                iconResource = null,
+            ),
         )
     }
 }
