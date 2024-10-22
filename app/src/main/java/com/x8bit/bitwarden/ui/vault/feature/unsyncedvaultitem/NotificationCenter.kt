@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.unsyncedvaultitem
 
+import android.util.Range
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.updateTransition
@@ -55,6 +56,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -99,13 +101,10 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
-fun BitwardenAccountSwitcher(
+fun NotificationCenter(
     isVisible: Boolean,
-    accountSummaries: ImmutableList<AccountSummary>,
-    onSwitchAccountClick: (AccountSummary) -> Unit,
-    onLockAccountClick: (AccountSummary) -> Unit,
-    onLogoutAccountClick: (AccountSummary) -> Unit,
-    onAddAccountClick: () -> Unit,
+    notificationSummaries: ImmutableList<NotificationSummary>,
+    onNotificationClick: (NotificationSummary) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     isAddAccountAvailable: Boolean = true,
@@ -118,52 +117,6 @@ fun BitwardenAccountSwitcher(
     var lockOrLogoutAccount by remember { mutableStateOf<AccountSummary?>(null) }
     var logoutConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
     var removeConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
-    when {
-        isVisibleActual -> {
-            // Can not show dialogs when the switcher itself is visible
-        }
-
-        lockOrLogoutAccount != null -> {
-            LockOrLogoutDialog(
-                accountSummary = requireNotNull(lockOrLogoutAccount),
-                onDismissRequest = { lockOrLogoutAccount = null },
-                onLockAccountClick = {
-                    onLockAccountClick(it)
-                    lockOrLogoutAccount = null
-                },
-                onLogoutAccountClick = {
-                    lockOrLogoutAccount = null
-                    logoutConfirmationAccount = it
-                },
-                onRemoveAccountClick = {
-                    lockOrLogoutAccount = null
-                    removeConfirmationAccount = it
-                },
-            )
-        }
-
-        logoutConfirmationAccount != null -> {
-            BitwardenLogoutConfirmationDialog(
-                accountSummary = requireNotNull(logoutConfirmationAccount),
-                onDismissRequest = { logoutConfirmationAccount = null },
-                onConfirmClick = {
-                    onLogoutAccountClick(requireNotNull(logoutConfirmationAccount))
-                    logoutConfirmationAccount = null
-                },
-            )
-        }
-
-        removeConfirmationAccount != null -> {
-            BitwardenRemovalConfirmationDialog(
-                accountSummary = requireNotNull(removeConfirmationAccount),
-                onDismissRequest = { removeConfirmationAccount = null },
-                onConfirmClick = {
-                    onLogoutAccountClick(requireNotNull(removeConfirmationAccount))
-                    removeConfirmationAccount = null
-                },
-            )
-        }
-    }
 
     Box(modifier = modifier) {
         BitwardenAnimatedScrim(
@@ -172,22 +125,13 @@ fun BitwardenAccountSwitcher(
             modifier = Modifier
                 .fillMaxSize(),
         )
-        AnimatedAccountSwitcher(
+        AnimatedNotificationCenter(
             isVisible = isVisible,
-            accountSummaries = accountSummaries,
-            onSwitchAccountClick = {
+            notificationSummaries = notificationSummaries,
+            onNotificationClick = {
                 onDismissRequest()
-                onSwitchAccountClick(it)
+                onNotificationClick(it)
             },
-            onSwitchAccountLongClick = {
-                onDismissRequest()
-                lockOrLogoutAccount = it
-            },
-            onAddAccountClick = {
-                onDismissRequest()
-                onAddAccountClick()
-            },
-            isAddAccountAvailable = isAddAccountAvailable,
             topAppBarScrollBehavior = topAppBarScrollBehavior,
             currentAnimationState = { isVisibleActual = it },
             modifier = Modifier
@@ -201,13 +145,10 @@ fun BitwardenAccountSwitcher(
     ExperimentalAnimationApi::class,
 )
 @Composable
-private fun AnimatedAccountSwitcher(
+private fun AnimatedNotificationCenter(
     isVisible: Boolean,
-    accountSummaries: ImmutableList<AccountSummary>,
-    onSwitchAccountClick: (AccountSummary) -> Unit,
-    onSwitchAccountLongClick: (AccountSummary) -> Unit,
-    onAddAccountClick: () -> Unit,
-    isAddAccountAvailable: Boolean,
+    notificationSummaries: ImmutableList<NotificationSummary>,
+    onNotificationClick: (NotificationSummary) -> Unit,
     modifier: Modifier = Modifier,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     currentAnimationState: (isVisible: Boolean) -> Unit,
@@ -231,27 +172,15 @@ private fun AnimatedAccountSwitcher(
                 // Match the color of the switcher the different states of the app bar.
                 .scrolledContainerBackground(topAppBarScrollBehavior),
         ) {
-            items(accountSummaries) { accountSummary ->
-                AccountSummaryItem(
-                    accountSummary = accountSummary,
-                    onSwitchAccountClick = onSwitchAccountClick,
-                    onSwitchAccountLongClick = onSwitchAccountLongClick,
+            items(notificationSummaries) { notificationSummary ->
+                NotificationSummaryItem(
+                    notificationSummary = notificationSummary,
+                    onNotificationClick = onNotificationClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
                 BitwardenHorizontalDivider()
-            }
-            if (accountSummaries.size < MAXIMUM_ACCOUNT_LIMIT && isAddAccountAvailable) {
-                item {
-                    AddAccountItem(
-                        onClick = onAddAccountClick,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("AddAccountButton")
-                            .padding(horizontal = 16.dp),
-                    )
-                }
             }
         }
     }
@@ -260,10 +189,9 @@ private fun AnimatedAccountSwitcher(
 @Suppress("LongMethod")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AccountSummaryItem(
-    accountSummary: AccountSummary,
-    onSwitchAccountClick: (AccountSummary) -> Unit,
-    onSwitchAccountLongClick: (AccountSummary) -> Unit,
+private fun NotificationSummaryItem(
+    notificationSummary: NotificationSummary,
+    onNotificationClick: (NotificationSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -276,8 +204,7 @@ private fun AccountSummaryItem(
                 indication = ripple(
                     color = BitwardenTheme.colorScheme.background.pressed,
                 ),
-                onClick = { onSwitchAccountClick(accountSummary) },
-                onLongClick = { onSwitchAccountLongClick(accountSummary) },
+                onClick = { onNotificationClick(notificationSummary) },
             )
             .padding(vertical = 8.dp)
             .then(modifier),
@@ -288,16 +215,14 @@ private fun AccountSummaryItem(
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
                 contentDescription = null,
-                tint = accountSummary.avatarColor,
                 modifier = Modifier.size(40.dp),
             )
 
             Text(
-                text = accountSummary.initials,
+                text = notificationSummary.title.substring(0,2),
                 style = BitwardenTheme.typography.titleMedium
                     // Do not allow scaling
                     .copy(fontSize = 16.dp.toUnscaledTextUnit()),
-                color = accountSummary.avatarColor.toSafeOverlayColor(),
                 modifier = Modifier.clearAndSetSemantics { },
             )
         }
@@ -308,7 +233,7 @@ private fun AccountSummaryItem(
             modifier = Modifier.weight(1f),
         ) {
             Text(
-                text = accountSummary.email,
+                text = notificationSummary.title,
                 style = BitwardenTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -316,35 +241,14 @@ private fun AccountSummaryItem(
             )
 
             Text(
-                text = accountSummary.environmentLabel,
+                text = notificationSummary.subtitle,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier.testTag("AccountEnvironmentLabel"),
             )
-
-            accountSummary.supportingTextResOrNull?.let { supportingTextResId ->
-                Text(
-                    text = stringResource(id = supportingTextResId).lowercaseWithCurrentLocal(),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier.testTag("AccountStatusLabel"),
-                )
-            }
         }
 
         Spacer(modifier = Modifier.width(16.dp))
-
-        Icon(
-            painter = rememberVectorPainter(id = accountSummary.iconRes),
-            contentDescription = null,
-            tint = when (accountSummary.status) {
-                AccountSummary.Status.ACTIVE -> BitwardenTheme.colorScheme.icon.secondary
-                else -> BitwardenTheme.colorScheme.icon.primary
-            },
-            modifier = Modifier
-                .testTag(accountSummary.iconTestTag)
-                .size(24.dp),
-        )
 
         Spacer(modifier = Modifier.width(8.dp))
     }
@@ -430,26 +334,17 @@ private fun AddAccountItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun BitwardenAccountSwitcher_preview() {
-    BitwardenAccountSwitcher(
+private fun NotificationCenter_preview() {
+    NotificationCenter(
         isVisible = true,
-        accountSummaries = listOf(
-            AccountSummary(
-                userId = "123",
-                name = "Cool Guy",
-                email = "coolestguyeverthatlikestosurfandbeachvibes@gmail.com",
-                avatarColorHex = "#EEEEEE",
-                environmentLabel = "label",
-                isActive = true,
-                isLoggedIn = true,
-                isVaultUnlocked = true,
+        notificationSummaries = listOf(
+            NotificationSummary(
+                title = "The title",
+                subtitle = "The subtitle"
             ),
         )
             .toImmutableList(),
-        onSwitchAccountClick = {},
-        onLockAccountClick = {},
-        onLogoutAccountClick = {},
-        onAddAccountClick = {},
+        onNotificationClick = {},
         onDismissRequest = {},
         topAppBarScrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
