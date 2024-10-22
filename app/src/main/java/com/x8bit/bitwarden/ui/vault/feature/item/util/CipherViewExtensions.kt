@@ -156,6 +156,25 @@ fun CipherView.toViewState(
                     address = identity?.identityAddress,
                 )
             }
+
+            CipherType.SSH_KEY -> {
+                val sshKeyValues = requireNotNull(sshKey)
+                VaultItemState.ViewState.Content.ItemType.SshKey(
+                    name = name,
+                    publicKey = sshKeyValues.publicKey,
+                    privateKey = sshKeyValues.privateKey,
+                    fingerprint = sshKeyValues.fingerprint,
+                    showPublicKey = (previousState?.type as?
+                        VaultItemState.ViewState.Content.ItemType.SshKey)
+                        ?.showPublicKey == true,
+                    showPrivateKey = (previousState?.type as?
+                        VaultItemState.ViewState.Content.ItemType.SshKey)
+                        ?.showPrivateKey == true,
+                    showFingerprint = (previousState?.type as?
+                        VaultItemState.ViewState.Content.ItemType.SshKey)
+                        ?.showFingerprint == true,
+                )
+            }
         },
     )
 

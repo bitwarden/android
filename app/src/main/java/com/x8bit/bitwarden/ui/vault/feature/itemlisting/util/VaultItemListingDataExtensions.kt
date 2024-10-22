@@ -369,6 +369,7 @@ private fun CipherView.toIconTestTag(): String =
         CipherType.SECURE_NOTE -> "SecureNoteCipherIcon"
         CipherType.CARD -> "CardCipherIcon"
         CipherType.IDENTITY -> "IdentityCipherIcon"
+        CipherType.SSH_KEY -> "SshKeyCipherIcon"
     }
 
 private fun CipherView.toIconData(
@@ -425,4 +426,5 @@ private val CipherType.iconRes: Int
         CipherType.SECURE_NOTE -> R.drawable.ic_note
         CipherType.CARD -> R.drawable.ic_payment_card
         CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
     }

@@ -45,6 +45,9 @@ val CipherView.subtitle: String?
                     }
                 }
         }
+
+        // TODO: Return SSH key subtitle (PM-10405)
+        CipherType.SSH_KEY -> null
     }
 
 /**

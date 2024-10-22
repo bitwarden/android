@@ -927,6 +927,30 @@ data class VaultState(
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
             }
+
+
+            /**
+             * Represents a SSH key item within the vault, designed to store SSH keys.
+             *
+            * @property publicKey The public key associated with this SSH key item.
+            * @property privateKey The private key associated with this SSH key item.
+            * @property fingerprint The fingerprint associated with this SSH key item.
+             */
+            @Parcelize
+            data class SshKey(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_ssh_key),
+                override val startIconTestTag: String = "SshKeyCipherIcon",
+                override val extraIconList: List<IconRes> = emptyList(),
+                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                val publicKey: Text?,
+                val privateKey: Text?,
+                val fingerprint: Text?,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+            }
         }
     }
 

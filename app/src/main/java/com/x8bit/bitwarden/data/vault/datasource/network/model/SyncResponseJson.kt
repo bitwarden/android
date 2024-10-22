@@ -718,6 +718,16 @@ data class SyncResponseJson(
             )
         }
 
+        @Serializable
+        data class SshKey(
+            @SerialName("publicKey")
+            val publicKey: String?,
+            @SerialName("privateKey")
+            val privateKey: String?,
+            @SerialName("keyFingerprint")
+            val fingerprint: String?,
+        )
+
         /**
          * Represents password history in the vault response.
          *
@@ -927,6 +937,7 @@ data class SyncResponseJson(
      * @property externalId The external ID of the collection (nullable).
      * @property isReadOnly If the collection is marked as read only.
      * @property id The ID of the collection.
+     * @property canManage If the collection can be managed.
      */
     @Serializable
     data class Collection(
@@ -947,5 +958,8 @@ data class SyncResponseJson(
 
         @SerialName("id")
         val id: String,
+
+        @SerialName("manage")
+        val canManage: Boolean,
     )
 }

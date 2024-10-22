@@ -88,6 +88,12 @@ fun CipherView.toViewState(
                 zip = identity?.postalCode.orEmpty(),
                 country = identity?.country.orEmpty(),
             )
+
+            CipherType.SSH_KEY -> VaultAddEditState.ViewState.Content.ItemType.SshKey(
+                publicKey = sshKey?.publicKey.orEmpty(),
+                privateKey = sshKey?.privateKey.orEmpty(),
+                fingerprint = sshKey?.fingerprint.orEmpty(),
+            )
         },
         common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,

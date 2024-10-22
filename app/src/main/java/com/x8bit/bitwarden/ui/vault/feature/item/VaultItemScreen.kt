@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 
 /**
  * Displays the vault item screen.
@@ -265,6 +266,9 @@ fun VaultItemScreen(
             vaultCardItemTypeHandlers = remember(viewModel) {
                 VaultCardItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultSshKeyItemTypeHandlers = remember(viewModel) {
+                VaultSshKeyItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -342,6 +346,7 @@ private fun VaultItemContent(
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
+    vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -386,6 +391,15 @@ private fun VaultItemContent(
                     VaultItemSecureNoteContent(
                         commonState = viewState.common,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.SshKey -> {
+                    VaultItemSshKeyContent(
+                        commonState = viewState.common,
+                        sshKeyItemState = viewState.type,
+                        vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
                         modifier = modifier,
                     )
                 }

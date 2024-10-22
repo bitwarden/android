@@ -155,6 +155,10 @@ fun VaultAddEditScreen(
         VaultAddEditCardTypeHandlers.create(viewModel = viewModel)
     }
 
+    val sshKeyItemTypeHandlers = remember(viewModel) {
+        VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
+    }
+
     val confirmDeleteClickAction = remember(viewModel) {
         { viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick) }
     }
@@ -321,6 +325,7 @@ fun VaultAddEditScreen(
                 VaultAddEditContent(
                     state = viewState,
                     isAddItemMode = state.isAddItemMode,
+                    typeOptions = state.supportedItemTypes,
                     onTypeOptionClicked = remember(viewModel) {
                         { viewModel.trySendAction(VaultAddEditAction.Common.TypeOptionSelect(it)) }
                     },
@@ -329,6 +334,7 @@ fun VaultAddEditScreen(
                     permissionsManager = permissionsManager,
                     identityItemTypeHandlers = identityItemTypeHandlers,
                     cardItemTypeHandlers = cardItemTypeHandlers,
+                    sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
                     modifier = Modifier
                         .imePadding()
                         .padding(innerPadding)

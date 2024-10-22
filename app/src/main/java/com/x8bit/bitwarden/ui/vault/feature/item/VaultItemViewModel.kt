@@ -116,6 +116,7 @@ class VaultItemViewModel @Inject constructor(
         when (action) {
             is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
+            is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -753,6 +754,64 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Card Type Handlers
 
+    //region SSH Key Type Handlers
+
+    private fun handleSshKeyTypeActions(action: VaultItemAction.ItemType.SshKey) {
+        when (action) {
+            is VaultItemAction.ItemType.SshKey.PublicKeyVisibilityClicked -> {
+                handlePublicKeyVisibilityClicked(action)
+            }
+
+            is VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked -> {
+                handlePrivateKeyVisibilityClicked(action)
+            }
+
+            is VaultItemAction.ItemType.SshKey.FingerprintVisibilityClicked -> {
+                handleFingerprintVisibilityClicked(action)
+            }
+        }
+    }
+
+    private fun handlePublicKeyVisibilityClicked(action: VaultItemAction.ItemType.SshKey.PublicKeyVisibilityClicked) {
+        onSshKeyContent { content, sshKey ->
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        type = sshKey.copy(showPublicKey = action.isVisible),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handlePrivateKeyVisibilityClicked(action: VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked) {
+        onSshKeyContent { content, sshKey ->
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        type = sshKey.copy(showPrivateKey = action.isVisible),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleFingerprintVisibilityClicked(
+        action: VaultItemAction.ItemType.SshKey.FingerprintVisibilityClicked,
+    ) {
+        onSshKeyContent { content, sshKey ->
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        type = sshKey.copy(showFingerprint = action.isVisible),
+                    ),
+                )
+            }
+        }
+    }
+
+    //endregion SSH Key Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1054,6 +1113,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.Card)
                     ?.let { loginContent ->
                         block(content, loginContent)
+                    }
+            }
+    }
+
+    private inline fun onSshKeyContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.SshKey,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.SshKey)
+                    ?.let { sshKeyContent ->
+                        block(content, sshKeyContent)
                     }
             }
     }
@@ -1359,6 +1433,24 @@ data class VaultItemState(
                         val isVisible: Boolean,
                     ) : Parcelable
                 }
+
+                /**
+                 * Represents the data for displaying an `SSHKey` item type.
+                 *
+                 * @property name The name of the key.
+                 * @property publicKey The SSH public key.
+                 * @property privateKey The SSH private key.
+                 * @property fingerprint The fingerprint of the key.
+                 */
+                data class SshKey(
+                    val name: String?,
+                    val publicKey: String?,
+                    val privateKey: String?,
+                    val fingerprint: String?,
+                    val showPublicKey: Boolean,
+                    val showPrivateKey: Boolean,
+                    val showFingerprint: Boolean,
+                ) : ItemType()
             }
         }
 
@@ -1696,6 +1788,12 @@ sealed class VaultItemAction {
              * The user has clicked to display the Number.
              */
             data class NumberVisibilityClick(val isVisible: Boolean) : Card()
+        }
+
+        sealed class SshKey : ItemType() {
+            data class PublicKeyVisibilityClicked(val isVisible: Boolean) : SshKey()
+            data class PrivateKeyVisibilityClicked(val isVisible: Boolean) : SshKey()
+            data class FingerprintVisibilityClicked(val isVisible: Boolean) : SshKey()
         }
     }
 

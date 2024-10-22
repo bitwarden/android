@@ -10,10 +10,12 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -21,8 +23,10 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -113,6 +117,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 
 /**
  * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
@@ -138,6 +143,7 @@ class VaultRepositoryImpl(
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     private val userLogoutManager: UserLogoutManager,
+    private val featureFlagManager: FeatureFlagManager,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -176,15 +182,52 @@ class VaultRepositoryImpl(
             foldersStateFlow,
             collectionsStateFlow,
             sendDataStateFlow,
-        ) { ciphersDataState, foldersDataState, collectionsDataState, sendsDataState ->
+            featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems),
+        ) { ciphersDataState, foldersDataState, collectionsDataState, sendsDataState, sshKeyCipherItemsEnabled ->
             combineDataStates(
                 ciphersDataState,
                 foldersDataState,
                 collectionsDataState,
                 sendsDataState,
             ) { ciphersData, foldersData, collectionsData, sendsData ->
+                //{"Cipher":{"reprompt":0,"lastKnownRevisionDate":"2024-10-22T22:05:29.167Z","type":5,"sshKey":{"publicKey":"2.Rt3CPEUQCkax35wOV9dErA==|nocAOVCjoi0hh4PZwXOEIg==|h3WkP+gDNixsiNxAWMBqqBEwpZJRRORB+eX8DNo+EPU=","privateKey":"2.DRnXPdhLeiC14NoRjzmpQg==|a+L20fnV4tpmPm/+l6JEYQ==|CMc0MbQTXkTOayHEeL1G06H30DDOIic3l8wjUARgNIA=","keyFingerprint":"2.MiBuM5TNmWCiMufi3imBTw==|R6R6+dXw8CS5BV5Gk4plAg==|cupnpiK6rCbYaLLVXR8RqA/Iv+PJyIvPgJPwbwEQjrA="},"name":"2.0FJqtenxtVG8zh0AvVbwYA==|wU4BOVzSmEwEf5td1HuJ5g==|0K5wEQ/tMM7PlxBsz5EsZT0tP5fJSj/0hG5SYfUlTq4=","fields":[],"favorite":false,"key":"2.7XaYYaz2ONX/XmESHLj9Ag==|oAtEvfWpU9/47e7L+M4ob3/2D8I6z+0PXdiset/n+QUsCgEIgR3t3M7sQ3sYbH9Ui43Gb1NRNBLqx72Vo5JccfptTrjD2JJ1mffW3ZKNCTc=|hPQP4lKhrmDxwUz6yxwtp9/F2B5eL0aUWqSkDDb+vzY="},"CollectionIds":[]}
+                val mutableCipherStateData = ciphersData.toMutableList()
+                mutableCipherStateData.add(
+                    CipherView(
+                        id = UUID.randomUUID().toString(),
+                        organizationId = null,
+                        folderId = null,
+                        collectionIds = emptyList(),
+                        key = "2.7XaYYaz2ONX/XmESHLj9Ag==|oAtEvfWpU9/47e7L+M4ob3/2D8I6z+0PXdiset/n+QUsCgEIgR3t3M7sQ3sYbH9Ui43Gb1NRNBLqx72Vo5JccfptTrjD2JJ1mffW3ZKNCTc=|hPQP4lKhrmDxwUz6yxwtp9/F2B5eL0aUWqSkDDb+vzY=",
+                        name = "Unlocks doorz",
+                        notes = null,
+                        type = CipherType.SSH_KEY,
+                        login = null,
+                        identity = null,
+                        card = null,
+                        secureNote = null,
+                        sshKey = SshKeyView(
+                            publicKey = "publicKey",
+                            privateKey = "privateKey",
+                            fingerprint = "fingerprint",
+                        ),
+                        favorite = false,
+                        reprompt = CipherRepromptType.NONE,
+                        organizationUseTotp = false,
+                        edit = true,
+                        viewPassword = true,
+                        localData = null,
+                        attachments = emptyList(),
+                        fields = null,
+                        passwordHistory = null,
+                        creationDate = DateTime.parse("2024-10-22T22:05:29.167Z"),
+                        deletedDate = null,
+                        revisionDate = DateTime.parse("2024-10-22T22:05:29.167Z"),
+                    ),
+                )
                 VaultData(
-                    cipherViewList = ciphersData,
+                    cipherViewList = mutableCipherStateData
+                        .filterSshKeyCiphersIfNecessary(sshKeyCipherItemsEnabled),
                     fido2CredentialAutofillViewList = null,
                     folderViewList = foldersData,
                     collectionViewList = collectionsData,
@@ -926,6 +969,8 @@ class VaultRepositoryImpl(
             )
     }
 
+    //{"Cipher":{"reprompt":0,"lastKnownRevisionDate":"2024-10-22T21:15:02.098Z","type":5,"sshKey":{"publicKey":"2.e4Hv/B+xZqgB0LMRfL5Oow==|LbSjpCAxZyOVpiAb+xdIqQ==|MSDMmwQ5rrbtxru4hFFKrzdbHLNiRUpQh8/xX7//2bw=","privateKey":"2./CmD8GAJ4DU5hOCm8GnJMA==|qcJcSSonXLQQcci0ION4/g==|EwXB1bx0yQkY86RW9N2bmrtswC6+cdt6P7wrw+lyR8c=","keyFingerprint":"2.mx/OnN5fJMses2/HG/Q4ag==|cdsSFuXfD6Q8nQ+1sP8F7Q==|tMMUQ0jAGgYwbaEnqm9oMpIL2r1rDBtxDIIt6GN3dto="},"name":"2.TS++PBphUVR5Hrb4p2Vpiw==|hX5D0ZU3sZ455im8nSKxQg==|DvMxpDCbkDtL9TMNJDOt8fuYF1q69Apxke6s08u72JY=","fields":[],"favorite":false,"key":"2.ff7G7cYSv/8CH902tK0iFg==|2Jtmaylw6H6wQezZQepMTNie+jlmSQOWJIScx6I96AFCIP2yX29kLn9XCbFwTLblwkgVDGAGPofz7n7LDk6jY4NxjaiUqEhm/HZJ29oSP1Y=|T/Mj/aIZbW9YovgkTnUrpmCKcW/uwFKH1lHYJd0J3KA="},"CollectionIds":[]}
+
     private fun observeVaultDiskCiphers(
         userId: String,
     ): Flow<DataState<List<CipherView>>> =
@@ -946,6 +991,13 @@ class VaultRepositoryImpl(
             }
             .map { it.orLoadingIfNotSynced(userId = userId) }
             .onEach { mutableCiphersStateFlow.value = it }
+
+    private fun List<CipherView>.filterSshKeyCiphersIfNecessary(enabled: Boolean): List<CipherView> =
+        if (!enabled) {
+            filter { it.type != CipherType.SSH_KEY }
+        } else {
+            this
+        }
 
     private fun observeVaultDiskDomains(
         userId: String,

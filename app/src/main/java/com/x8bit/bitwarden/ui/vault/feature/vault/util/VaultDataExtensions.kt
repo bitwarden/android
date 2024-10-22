@@ -259,6 +259,20 @@ private fun CipherView.toVaultItemOrNull(
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
+
+        CipherType.SSH_KEY -> VaultState.ViewState.VaultItem.SshKey(
+            id = id,
+            name = name.asText(),
+            publicKey = sshKey?.publicKey?.asText(),
+            privateKey = sshKey?.privateKey?.asText(),
+            fingerprint = sshKey?.fingerprint?.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+        )
     }
 }
 
