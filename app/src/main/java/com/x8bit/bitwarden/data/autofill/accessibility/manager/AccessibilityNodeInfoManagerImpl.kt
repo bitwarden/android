@@ -1,11 +1,10 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 import android.net.Uri
-import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.autofill.accessibility.util.getKnownUsernameFieldNull
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isUsername
+import timber.log.Timber
 
 private const val MAX_NODE_COUNT: Int = 100
 
@@ -90,7 +89,6 @@ class AccessibilityNodeInfoManagerImpl : AccessibilityNodeInfoManager {
             ?.let { allNodes.getOrNull(index = allNodes.indexOf(element = it) - 1) }
 
     private fun log(message: String) {
-        if (!BuildConfig.DEBUG) return
-        Log.i("AccessibilityNodeInfoManager", message)
+        Timber.i(message)
     }
 }
