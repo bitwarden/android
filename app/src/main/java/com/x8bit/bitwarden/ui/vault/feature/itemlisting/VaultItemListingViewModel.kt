@@ -1153,6 +1153,10 @@ class VaultItemListingViewModel @Inject constructor(
                     VaultItemListingsAction.OverflowOptionClick(data.action),
                 )
             }
+
+            is MasterPasswordRepromptData.Totp -> {
+                sendEvent(VaultItemListingEvent.NavigateToEditCipher(data.cipherId))
+            }
         }
     }
 
@@ -1972,6 +1976,7 @@ data class VaultItemListingState(
         val optionsTestTag: String,
         val isAutofill: Boolean,
         val isFido2Creation: Boolean,
+        val isTotp: Boolean,
         val shouldShowMasterPasswordReprompt: Boolean,
     )
 
@@ -2548,6 +2553,14 @@ sealed class MasterPasswordRepromptData : Parcelable {
      */
     @Parcelize
     data class Autofill(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * Totp was selected.
+     */
+    @Parcelize
+    data class Totp(
         val cipherId: String,
     ) : MasterPasswordRepromptData()
 
