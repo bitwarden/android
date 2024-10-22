@@ -158,7 +158,12 @@ fun OfflineCipher.toCipher(): Cipher =
         creationDate = creationDate,
         deletedDate = deletedDate,
         revisionDate = revisionDate,
-        mergeConflict = mergeConflict
+        // TODO: how to get real values here
+        organizationUseTotp = true,
+        edit = true,
+        viewPassword = true,
+        localData = null,
+        // TODO
     )
 
 /**
