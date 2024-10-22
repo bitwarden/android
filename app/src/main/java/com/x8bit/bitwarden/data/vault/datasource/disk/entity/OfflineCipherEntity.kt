@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.bitwarden.core.Uuid
 
 /**
  * Entity representing a cipher in the database.

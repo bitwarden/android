@@ -14,8 +14,10 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.DomainsEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.OfflineCipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -27,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.UUID
 
 /**
  * Default implementation of [VaultDiskSource].
@@ -50,8 +53,16 @@ class VaultDiskSourceImpl(
     private val forceSendFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
 
     override suspend fun saveOfflineCipher(userId: String, cipher: Cipher) {
-        TODO("Not yet implemented")
-
+        offlineCiphersDao.insertCiphers(
+            ciphers = listOf(
+                OfflineCipherEntity(
+                    id = cipher.id ?: "create_${UUID.randomUUID()}",
+                    userId = userId,
+                    cipherType = json.encodeToString(cipher.type),
+                    cipherJson = json.encodeToString(cipher.toOfflineCipher()),
+                ),
+            ),
+        )
     }
 
     override suspend fun saveCipher(userId: String, cipher: SyncResponseJson.Cipher) {

@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.bitwarden.core.DateTime
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
@@ -25,11 +26,13 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTyp
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FieldTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.LinkedIdTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SecureNoteTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.util.UUID
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
@@ -55,6 +58,64 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
         isFavorite = favorite,
         card = card?.toEncryptedNetworkCard(),
         key = key,
+    )
+
+fun Cipher.toOfflineCipher(): OfflineCipherJson =
+    OfflineCipherJson(
+        id = id ?: "create_${UUID.randomUUID()}",
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds.orEmpty(),
+        key = key,
+        name = name.orEmpty(),
+        notes = notes,
+        type = type.toNetworkCipherType(),
+        login = login?.toEncryptedNetworkLogin(),
+        identity = identity?.toEncryptedNetworkIdentity(),
+        card = card?.toEncryptedNetworkCard(),
+        secureNote = secureNote?.toEncryptedNetworkSecureNote(),
+        favorite = favorite,
+        reprompt = reprompt.toNetworkRepromptType(),
+        // organizationUseTotp = shouldOrganizationUseTotp,
+        // edit = shouldEdit,
+        // viewPassword = shouldViewPassword,
+        // localData = null,
+        attachments = attachments?.toNetworkAttachmentList(),
+        fields = fields?.toEncryptedNetworkFieldList(),
+        passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
+        creationDate = creationDate?.let { ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC) },
+        deletedDate = deletedDate?.let { ZonedDateTime.ofInstant(deletedDate, ZoneOffset.UTC) },
+        revisionDate = revisionDate?.let { ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC) },
+        )
+
+fun OfflineCipherJson.toCipher(): Cipher =
+    Cipher(
+        id = if(id.startsWith("create")) null else id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds.orEmpty(),
+        key = key,
+        name = name.orEmpty(),
+        notes = notes,
+        type = type.toSdkCipherType(),
+        login = login?.toSdkLogin(),
+        identity = identity?.toSdkIdentity(),
+        card = card?.toSdkCard(),
+        secureNote = secureNote?.toSdkSecureNote(),
+        favorite = favorite,
+        reprompt = reprompt.toSdkRepromptType(),
+        // Need to figure these out
+        organizationUseTotp = true,
+        edit = true,
+        viewPassword = true,
+        localData = null,
+        // ^^
+        attachments = attachments?.toSdkAttachmentList(),
+        fields = fields?.toSdkFieldList(),
+        passwordHistory = passwordHistory?.toSdkPasswordHistoryList(),
+        creationDate = creationDate?.toInstant() ?: DateTime.now(),
+        deletedDate = deletedDate?.toInstant(),
+        revisionDate = revisionDate?.toInstant() ?: DateTime.now(),
     )
 
 /**

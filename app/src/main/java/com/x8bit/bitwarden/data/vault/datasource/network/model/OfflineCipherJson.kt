@@ -1,14 +1,11 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
+import com.bitwarden.core.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import java.time.ZonedDateTime
-
-const val DEFAULT_FIDO_2_KEY_TYPE = "public-key"
-const val DEFAULT_FIDO_2_KEY_ALGORITHM = "ECDSA"
-const val DEFAULT_FIDO_2_KEY_CURVE = "P-256"
 
 /**
  * Represents the response model for vault data fetched from the server.
@@ -22,27 +19,71 @@ const val DEFAULT_FIDO_2_KEY_CURVE = "P-256"
  * @property sends A list of send objects associated with the vault data (nullable).
  */
 @Serializable
-data class SyncResponseJson(
-    @SerialName("folders")
-    val folders: List<Folder>?,
+data class OfflineCipherJson(
+    @SerialName("id")
+    val id: String,
 
-    @SerialName("collections")
-    val collections: List<Collection>?,
+    @SerialName("organizationId")
+    val organizationId: String?,
 
-    @SerialName("profile")
-    val profile: Profile,
+    @SerialName("folderId")
+    val folderId: String?,
 
-    @SerialName("ciphers")
-    val ciphers: List<Cipher>?,
+    @SerialName("collectionIds")
+    val collectionIds: List<String>,
 
-    @SerialName("policies")
-    val policies: List<Policy>?,
+    @SerialName("key")
+    val key: String?,
 
-    @SerialName("domains")
-    val domains: Domains,
+    @SerialName("name")
+    val name: String,
 
-    @SerialName("sends")
-    val sends: List<Send>?,
+    @SerialName("notes")
+    val notes: String?,
+
+    @SerialName("login")
+    val login: SyncResponseJson.Cipher.Login?,
+
+    @SerialName("identity")
+    val identity: SyncResponseJson.Cipher.Identity?,
+
+    @SerialName("card")
+    val card: SyncResponseJson.Cipher.Card?,
+
+    @SerialName("secureNote")
+    val secureNote: SyncResponseJson.Cipher.SecureNote?,
+
+    @SerialName("favorite")
+    val favorite: Boolean,
+
+    @SerialName("reprompt")
+    val reprompt: CipherRepromptTypeJson,
+
+    @SerialName("attachments")
+    val attachments: List<SyncResponseJson.Cipher.Attachment>?,
+
+    @SerialName("fields")
+    val fields: List<SyncResponseJson.Cipher.Field>?,
+
+    @SerialName("passwordHistory")
+    val passwordHistory: List<SyncResponseJson.Cipher.PasswordHistory>?,
+
+    @SerialName("creationDate")
+    @Contextual
+    val creationDate: ZonedDateTime?,
+
+    @SerialName("deletionDate")
+    @Contextual
+    val deletedDate: ZonedDateTime?,
+
+    @SerialName("revisionDate")
+    @Contextual
+    val revisionDate: ZonedDateTime?,
+
+    @SerialName("type")
+    @Contextual
+    val type: CipherTypeJson,
+
 ) {
     /**
      * Represents domains in the vault response.
