@@ -496,19 +496,6 @@ private fun VaultItemListingScaffold(
             }
         }
 
-        BitwardenAccountSwitcher(
-            isVisible = isAccountMenuVisible,
-            accountSummaries = state.accountSummaries.toImmutableList(),
-            onSwitchAccountClick = vaultItemListingHandlers.switchAccountClick,
-            onLockAccountClick = vaultItemListingHandlers.lockAccountClick,
-            onLogoutAccountClick = vaultItemListingHandlers.logoutAccountClick,
-            onAddAccountClick = {
-                // Not available
-            },
-            onDismissRequest = { isAccountMenuVisible = false },
-            isAddAccountAvailable = false,
-            topAppBarScrollBehavior = scrollBehavior,
-            modifier = modifier,
-        )
+
     }
 }

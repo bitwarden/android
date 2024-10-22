@@ -64,7 +64,10 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import com.x8bit.bitwarden.ui.vault.feature.unsyncedvaultitem.NotificationCenter
+import com.x8bit.bitwarden.ui.vault.feature.unsyncedvaultitem.NotificationCenterActionItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -181,6 +184,13 @@ private fun VaultScreenScaffold(
         accountMenuVisible = shouldShowMenu
         onDimBottomNavBarRequest(shouldShowMenu)
     }
+    var notificationMenuVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val updateNotificationMenuVisibility = { shouldShowMenu: Boolean ->
+        notificationMenuVisible = shouldShowMenu
+        onDimBottomNavBarRequest(shouldShowMenu)
+    }
     var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
@@ -231,6 +241,11 @@ private fun VaultScreenScaffold(
                     ?.let { TopAppBarDividerStyle.STATIC }
                     ?: TopAppBarDividerStyle.ON_SCROLL,
                 actions = {
+                    NotificationCenterActionItem(
+                        onClick = {
+                            updateNotificationMenuVisibility(!notificationMenuVisible)
+                        },
+                    )
                     BitwardenAccountActionItem(
                         initials = state.initials,
                         color = state.avatarColor,
@@ -356,6 +371,15 @@ private fun VaultScreenScaffold(
                 onLockAccountClick = vaultHandlers.accountLockClickAction,
                 onLogoutAccountClick = vaultHandlers.accountLogoutClickAction,
                 onAddAccountClick = vaultHandlers.addAccountClickAction,
+                onDismissRequest = { updateAccountMenuVisibility(false) },
+                topAppBarScrollBehavior = scrollBehavior,
+                modifier = outerModifier,
+            )
+
+            NotificationCenter(
+                isVisible = notificationMenuVisible,
+                notificationSummaries = state.notificationSummaries.toImmutableList(),
+                onNotificationClick = {},
                 onDismissRequest = { updateAccountMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = outerModifier,

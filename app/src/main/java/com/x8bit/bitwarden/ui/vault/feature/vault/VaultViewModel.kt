@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -75,6 +76,7 @@ class VaultViewModel @Inject constructor(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
         val accountSummaries = userState.toAccountSummaries()
+        val notificationSummaries = listOf<NotificationSummary>()
         val activeAccountSummary = userState.toActiveAccountSummary()
         val vaultFilterData = userState.activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
@@ -87,6 +89,7 @@ class VaultViewModel @Inject constructor(
             initials = activeAccountSummary.initials,
             avatarColorString = activeAccountSummary.avatarColorHex,
             accountSummaries = accountSummaries,
+            notificationSummaries = notificationSummaries,
             vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
@@ -655,6 +658,7 @@ data class VaultState(
     private val avatarColorString: String,
     val initials: String,
     val accountSummaries: List<AccountSummary>,
+    val notificationSummaries: List<NotificationSummary>,
     val vaultFilterData: VaultFilterData? = null,
     val viewState: ViewState,
     val dialog: DialogState? = null,
