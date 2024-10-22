@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.platform.components.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,8 @@ fun BitwardenOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    colors: ButtonColors = bitwardenOutlinedButtonColors(),
+    outlineBorderColor: Color = BitwardenTheme.colorScheme.outlineButton.border,
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -36,11 +40,11 @@ fun BitwardenOutlinedButton(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
-        colors = bitwardenOutlinedButtonColors(),
+        colors = colors,
         border = BorderStroke(
             width = 1.dp,
             color = if (isEnabled) {
-                BitwardenTheme.colorScheme.outlineButton.border
+                outlineBorderColor
             } else {
                 BitwardenTheme.colorScheme.outlineButton.borderDisabled
             },

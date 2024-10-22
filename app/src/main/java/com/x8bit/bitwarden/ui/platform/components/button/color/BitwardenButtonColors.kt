@@ -42,12 +42,15 @@ fun bitwardenFilledTonalButtonColors(): ButtonColors = ButtonColors(
  * Provides a default set of Bitwarden-styled colors for an outlined button.
  */
 @Composable
-fun bitwardenOutlinedButtonColors(): ButtonColors = ButtonColors(
-    containerColor = Color.Transparent,
-    contentColor = BitwardenTheme.colorScheme.outlineButton.foreground,
-    disabledContainerColor = Color.Transparent,
-    disabledContentColor = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-)
+fun bitwardenOutlinedButtonColors(
+    contentColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+): ButtonColors =
+    ButtonColors(
+        containerColor = Color.Transparent,
+        contentColor = contentColor,
+        disabledContainerColor = Color.Transparent,
+        disabledContentColor = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
+    )
 
 /**
  * Provides a default set of Bitwarden-styled colors for an outlined error button.
