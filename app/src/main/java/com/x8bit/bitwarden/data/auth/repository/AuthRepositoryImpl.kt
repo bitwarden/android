@@ -45,7 +45,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -96,14 +95,17 @@ import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
@@ -164,7 +166,8 @@ class AuthRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
     private val featureFlagManager: FeatureFlagManager,
-    private val firstTimeActionManager: FirstTimeActionManager,
+    firstTimeActionManager: FirstTimeActionManager,
+    logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
@@ -363,6 +366,24 @@ class AuthRepositoryImpl(
             featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
 
     init {
+        combine(
+            mutableHasPendingAccountAdditionStateFlow,
+            authDiskSource.userStateFlow,
+            environmentRepository.environmentStateFlow,
+        ) { hasPendingAddition, userState, environment ->
+            logsManager.setUserData(
+                userId = userState?.activeUserId.takeUnless { hasPendingAddition },
+                environmentType = userState
+                    ?.activeAccount
+                    ?.settings
+                    ?.environmentUrlData
+                    ?.toEnvironmentUrls()
+                    ?.type
+                    .takeUnless { hasPendingAddition }
+                    ?: environment.type,
+            )
+        }
+            .launchIn(unconfinedScope)
         pushManager
             .syncOrgKeysFlow
             .onEach {
@@ -1503,7 +1524,7 @@ class AuthRepositoryImpl(
                     )
 
                     is GetTokenResponseJson.Invalid -> LoginResult.Error(
-                        errorMessage = loginResponse.errorModel.errorMessage,
+                        errorMessage = loginResponse.errorMessage,
                     )
                 }
             },

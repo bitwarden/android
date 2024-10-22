@@ -66,7 +66,7 @@ class MainViewModel @Inject constructor(
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
-    vaultRepository: VaultRepository,
+    private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val savedStateHandle: SavedStateHandle,
@@ -250,8 +250,15 @@ class MainViewModel @Inject constructor(
         val passwordGetCredentialsRequest = intent.getPasswordGetCredentialsRequestOrNull()
         when {
             passwordlessRequestData != null -> {
-                if (authRepository.activeUserId != passwordlessRequestData.userId) {
-                    authRepository.switchAccount(passwordlessRequestData.userId)
+                authRepository.activeUserId?.let {
+                    if (it != passwordlessRequestData.userId &&
+                        !vaultRepository.isVaultUnlocked(it)
+                    ) {
+                        // We only switch the account here if the current user's vault is not
+                        // unlocked, otherwise prompt the user to allow us to change the account
+                        // in the LoginApprovalScreen
+                        authRepository.switchAccount(passwordlessRequestData.userId)
+                    }
                 }
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.PasswordlessRequest(

@@ -748,7 +748,7 @@ class VaultItemListingDataExtensionsTest {
         // Totp
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                header = R.string.no_items_for_uri.asText("issuer"),
+                header = R.string.no_items_for_vault.asText("issuer"),
                 message = R.string.search_for_a_login_or_add_a_new_login.asText(),
                 shouldShowAddButton = false,
                 buttonText = R.string.add_an_item.asText(),

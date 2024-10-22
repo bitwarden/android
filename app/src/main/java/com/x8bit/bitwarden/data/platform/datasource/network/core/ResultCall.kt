@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
+import timber.log.Timber
 import java.lang.reflect.Type
 
 /**
@@ -19,6 +20,7 @@ private const val NO_CONTENT_RESPONSE_CODE: Int = 204
 /**
  * A [Call] for wrapping a network request into a [Result].
  */
+@Suppress("TooManyFunctions")
 class ResultCall<T>(
     private val backingCall: Call<T>,
     private val successType: Type,
@@ -34,7 +36,7 @@ class ResultCall<T>(
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                callback.onResponse(this@ResultCall, Response.success(t.asFailure()))
+                callback.onResponse(this@ResultCall, Response.success(t.toFailure()))
             }
         },
     )
@@ -44,9 +46,9 @@ class ResultCall<T>(
         try {
             Response.success(backingCall.execute().toResult())
         } catch (ioException: IOException) {
-            Response.success(ioException.asFailure())
+            Response.success(ioException.toFailure())
         } catch (runtimeException: RuntimeException) {
-            Response.success(runtimeException.asFailure())
+            Response.success(runtimeException.toFailure())
         }
 
     override fun isCanceled(): Boolean = backingCall.isCanceled
@@ -62,9 +64,14 @@ class ResultCall<T>(
      */
     fun executeForResult(): Result<T> = requireNotNull(execute().body())
 
+    private fun Throwable.toFailure(): Result<T> =
+        this
+            .also { Timber.w(it, "Network Error: ${backingCall.request().url}") }
+            .asFailure()
+
     private fun Response<T>.toResult(): Result<T> =
         if (!this.isSuccessful) {
-            HttpException(this).asFailure()
+            HttpException(this).toFailure()
         } else {
             val body = this.body()
             @Suppress("UNCHECKED_CAST")
@@ -76,7 +83,7 @@ class ResultCall<T>(
                 // We allow null for 204's, just return null.
                 this.code() == NO_CONTENT_RESPONSE_CODE -> (null as T).asSuccess()
                 // All other null bodies result in an error.
-                else -> IllegalStateException("Unexpected null body!").asFailure()
+                else -> IllegalStateException("Unexpected null body!").toFailure()
             }
         }
 }

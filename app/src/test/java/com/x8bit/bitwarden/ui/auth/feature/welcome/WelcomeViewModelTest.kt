@@ -68,15 +68,15 @@ class WelcomeViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = WelcomeViewModel(featureFlagManager = featureFlagManager)
             every { featureFlagManager.getFeatureFlag(FlagKey.EmailVerification) } returns false
-        viewModel.trySendAction(WelcomeAction.CreateAccountClick)
+            viewModel.trySendAction(WelcomeAction.CreateAccountClick)
 
-        viewModel.eventFlow.test {
-            assertEquals(
-                WelcomeEvent.NavigateToCreateAccount,
-                awaitItem(),
-            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    WelcomeEvent.NavigateToCreateAccount,
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test

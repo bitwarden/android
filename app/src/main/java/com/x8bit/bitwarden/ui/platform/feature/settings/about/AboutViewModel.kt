@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
@@ -33,12 +33,12 @@ class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     clock: Clock,
-    private val crashLogsManager: CrashLogsManager,
+    private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
     initialState = savedStateHandle[KEY_STATE] ?: createInitialState(
         clock = clock,
-        isCrashLoggingEnabled = crashLogsManager.isEnabled,
+        isCrashLoggingEnabled = logsManager.isEnabled,
     ),
 ) {
     init {
@@ -84,7 +84,7 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleSubmitCrashLogsClick(action: AboutAction.SubmitCrashLogsClick) {
-        crashLogsManager.isEnabled = action.enabled
+        logsManager.isEnabled = action.enabled
         mutableStateFlow.update { currentState ->
             currentState.copy(isSubmitCrashLogsEnabled = action.enabled)
         }

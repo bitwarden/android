@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
@@ -30,7 +30,7 @@ class AboutViewModelTest : BaseViewModelTest() {
 
     private val environmentRepository = FakeEnvironmentRepository()
     private val clipboardManager: BitwardenClipboardManager = mockk()
-    private val crashLogsManager: CrashLogsManager = mockk {
+    private val logsManager: LogsManager = mockk {
         every { isEnabled } returns false
         every { isEnabled = any() } just runs
     }
@@ -99,12 +99,12 @@ class AboutViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SubmitCrashLogsClick should update crashLogsManager isEnabled`() = runTest {
+    fun `on SubmitCrashLogsClick should update LogsManager isEnabled`() = runTest {
         val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
 
         viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(true))
 
-        coVerify(exactly = 1) { crashLogsManager.isEnabled = true }
+        coVerify(exactly = 1) { logsManager.isEnabled = true }
     }
 
     @Test
@@ -153,7 +153,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         clipboardManager = clipboardManager,
         clock = fixedClock,
         environmentRepository = environmentRepository,
-        crashLogsManager = crashLogsManager,
+        logsManager = logsManager,
     )
 }
 

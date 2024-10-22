@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
-import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -35,7 +35,7 @@ class AutofillProcessorImpl(
     private val parser: AutofillParser,
     private val saveInfoBuilder: SaveInfoBuilder,
     private val settingsRepository: SettingsRepository,
-    private val crashLogsManager: CrashLogsManager,
+    private val logsManager: LogsManager,
 ) : AutofillProcessor {
 
     /**
@@ -146,7 +146,7 @@ class AutofillProcessorImpl(
                 } catch (e: RuntimeException) {
                     // This is to catch any TransactionTooLargeExceptions that could occur here.
                     // These exceptions get wrapped as a RuntimeException.
-                    crashLogsManager.trackNonFatalException(e)
+                    logsManager.trackNonFatalException(e)
                 }
             }
 

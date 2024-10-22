@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -15,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAs
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -297,7 +297,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-
                     ),
                 ),
             )
