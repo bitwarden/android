@@ -24,7 +24,8 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * An overloaded version [BitwardenContentBlock] which takes a [Cont] for the header text.
+ * An overloaded version [BitwardenContentBlock] which takes a [ContentBlockData] for the
+ * header text.
  */
 @Composable
 fun BitwardenContentBlock(
