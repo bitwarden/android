@@ -107,7 +107,6 @@ fun NotificationCenter(
     onNotificationClick: (NotificationSummary) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    isAddAccountAvailable: Boolean = true,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
 ) {
     // Track the actual visibility (according to the internal transitions) so that we know when we
