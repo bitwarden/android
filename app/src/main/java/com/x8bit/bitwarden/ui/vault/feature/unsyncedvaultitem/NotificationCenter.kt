@@ -214,15 +214,17 @@ private fun NotificationSummaryItem(
         ) {
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
+                tint = BitwardenTheme.colorScheme.filledButton.background,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
             )
 
             Text(
-                text = notificationSummary.title.substring(0,2),
+                text = notificationSummary.title.substring(0, 2),
                 style = BitwardenTheme.typography.titleMedium
                     // Do not allow scaling
                     .copy(fontSize = 16.dp.toUnscaledTextUnit()),
+                color = BitwardenTheme.colorScheme.filledButton.background.toSafeOverlayColor(),
                 modifier = Modifier.clearAndSetSemantics { },
             )
         }
