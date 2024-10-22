@@ -27,6 +27,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
         BiometricSupportStatus.CLASS_3_SUPPORTED -> {
             stringResource(R.string.class_3_biometrics_description)
         }
+
         BiometricSupportStatus.CLASS_2_SUPPORTED -> {
             stringResource(R.string.class_2_biometrics_description)
         }

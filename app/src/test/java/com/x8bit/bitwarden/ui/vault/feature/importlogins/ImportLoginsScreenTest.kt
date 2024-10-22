@@ -41,6 +41,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager> {
         every { startCustomTabsActivity(any()) } just runs
     }
+
     @Before
     fun setup() {
         setContentWithBackDispatcher {

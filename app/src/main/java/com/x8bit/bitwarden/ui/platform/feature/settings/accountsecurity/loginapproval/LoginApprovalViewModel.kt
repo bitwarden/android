@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
 import android.os.Parcelable
@@ -47,20 +49,41 @@ class LoginApprovalViewModel @Inject constructor(
                 masterPasswordHash = null,
                 publicKey = "",
                 requestId = "",
-                shouldShowErrorDialog = false,
                 viewState = LoginApprovalState.ViewState.Loading,
+                dialogState = null,
             )
         },
 ) {
     init {
         state
             .specialCircumstance
-            ?.let { circumstance ->
-                authRepository
-                    .getAuthRequestByIdFlow(circumstance.passwordlessRequestData.loginRequestId)
-                    .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
-                    .onEach(::sendAction)
-                    .launchIn(viewModelScope)
+            ?.passwordlessRequestData
+            ?.let { passwordlessRequestData ->
+                if (authRepository.activeUserId != passwordlessRequestData.userId) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = LoginApprovalState.DialogState.ChangeAccount(
+                                message = R.string
+                                    .login_attempt_from_x_do_you_want_to_switch_to_this_account
+                                    .asText(
+                                        authRepository
+                                            .userStateFlow
+                                            .value
+                                            ?.accounts
+                                            ?.find { it.userId == passwordlessRequestData.userId }
+                                            ?.email
+                                            .orEmpty(),
+                                    ),
+                            ),
+                        )
+                    }
+                } else {
+                    authRepository
+                        .getAuthRequestByIdFlow(passwordlessRequestData.loginRequestId)
+                        .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
+                        .onEach(::sendAction)
+                        .launchIn(viewModelScope)
+                }
             }
             ?: run {
                 authRepository
@@ -77,6 +100,8 @@ class LoginApprovalViewModel @Inject constructor(
             LoginApprovalAction.CloseClick -> handleCloseClicked()
             LoginApprovalAction.DeclineRequestClick -> handleDeclineRequestClicked()
             LoginApprovalAction.ErrorDialogDismiss -> handleErrorDialogDismissed()
+            LoginApprovalAction.ApproveAccountChangeClick -> handleApproveAccountChangeClick()
+            LoginApprovalAction.CancelAccountChangeClick -> handleCancelAccountChangeClick()
 
             is LoginApprovalAction.Internal.ApproveRequestResultReceive -> {
                 handleApproveRequestResultReceived(action)
@@ -128,8 +153,25 @@ class LoginApprovalViewModel @Inject constructor(
 
     private fun handleErrorDialogDismissed() {
         mutableStateFlow.update {
-            it.copy(shouldShowErrorDialog = false)
+            it.copy(dialogState = null)
         }
+    }
+
+    private fun handleApproveAccountChangeClick() {
+        state.specialCircumstance?.passwordlessRequestData?.let { data ->
+            authRepository.switchAccount(userId = data.userId)
+            mutableStateFlow.update { it.copy(dialogState = null) }
+            authRepository
+                .getAuthRequestByIdFlow(data.loginRequestId)
+                .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
+                .onEach(::sendAction)
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun handleCancelAccountChangeClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        sendClosingEvent()
     }
 
     private fun handleApproveRequestResultReceived(
@@ -143,7 +185,12 @@ class LoginApprovalViewModel @Inject constructor(
 
             is AuthRequestResult.Error -> {
                 mutableStateFlow.update {
-                    it.copy(shouldShowErrorDialog = true)
+                    it.copy(
+                        dialogState = LoginApprovalState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
                 }
             }
         }
@@ -200,7 +247,12 @@ class LoginApprovalViewModel @Inject constructor(
 
             is AuthRequestResult.Error -> {
                 mutableStateFlow.update {
-                    it.copy(shouldShowErrorDialog = true)
+                    it.copy(
+                        dialogState = LoginApprovalState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
                 }
             }
         }
@@ -223,7 +275,7 @@ class LoginApprovalViewModel @Inject constructor(
 @Parcelize
 data class LoginApprovalState(
     val viewState: ViewState,
-    val shouldShowErrorDialog: Boolean,
+    val dialogState: DialogState?,
     // Internal
     val specialCircumstance: SpecialCircumstance.PasswordlessRequest?,
     val fingerprint: String,
@@ -262,6 +314,27 @@ data class LoginApprovalState(
          */
         @Parcelize
         data object Loading : ViewState()
+    }
+
+    /**
+     * Represents the various dialogs that can be displayed.
+     */
+    @Parcelize
+    sealed class DialogState : Parcelable {
+        /**
+         * Requests permission to change active user.
+         */
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Requests permission to change active user.
+         */
+        data class ChangeAccount(
+            val message: Text,
+        ) : DialogState()
     }
 }
 
@@ -310,6 +383,16 @@ sealed class LoginApprovalAction {
      * User dismissed the error dialog.
      */
     data object ErrorDialogDismiss : LoginApprovalAction()
+
+    /**
+     * User approved changing the account.
+     */
+    data object ApproveAccountChangeClick : LoginApprovalAction()
+
+    /**
+     * User dismissed the change account dialog.
+     */
+    data object CancelAccountChangeClick : LoginApprovalAction()
 
     /**
      * Models action the view model could send itself.
