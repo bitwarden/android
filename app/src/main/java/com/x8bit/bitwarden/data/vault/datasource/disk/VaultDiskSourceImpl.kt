@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import com.bitwarden.vault.Cipher
-import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
@@ -18,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.OfflineCipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipherJson
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -59,7 +59,7 @@ class VaultDiskSourceImpl(
                     id = cipher.id ?: "create_${UUID.randomUUID()}",
                     userId = userId,
                     cipherType = json.encodeToString(cipher.type),
-                    cipherJson = json.encodeToString(cipher.toOfflineCipher()),
+                    cipherJson = json.encodeToString(cipher.toOfflineCipher().toOfflineCipherJson()),
                 ),
             ),
         )

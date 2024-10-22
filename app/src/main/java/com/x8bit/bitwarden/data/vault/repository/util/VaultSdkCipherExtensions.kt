@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SecureNoteTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.OfflineCipher
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -60,7 +61,32 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
         key = key,
     )
 
-fun Cipher.toOfflineCipher(): OfflineCipherJson =
+fun Cipher.toOfflineCipher(): OfflineCipher =
+    OfflineCipher (
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds,
+        key = key,
+        name = name,
+        notes = notes,
+        type = type,
+        login = login,
+        identity = identity,
+        card = card,
+        secureNote = secureNote,
+        favorite = favorite,
+        reprompt = reprompt,
+        attachments = attachments,
+        fields = fields,
+        passwordHistory = passwordHistory,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        mergeConflict = false,
+    )
+
+fun OfflineCipher.toOfflineCipherJson(): OfflineCipherJson =
     OfflineCipherJson(
         id = id ?: "create_${UUID.randomUUID()}",
         organizationId = organizationId,
@@ -76,20 +102,17 @@ fun Cipher.toOfflineCipher(): OfflineCipherJson =
         secureNote = secureNote?.toEncryptedNetworkSecureNote(),
         favorite = favorite,
         reprompt = reprompt.toNetworkRepromptType(),
-        // organizationUseTotp = shouldOrganizationUseTotp,
-        // edit = shouldEdit,
-        // viewPassword = shouldViewPassword,
-        // localData = null,
         attachments = attachments?.toNetworkAttachmentList(),
         fields = fields?.toEncryptedNetworkFieldList(),
         passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
-        creationDate = creationDate?.let { ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC) },
+        creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
         deletedDate = deletedDate?.let { ZonedDateTime.ofInstant(deletedDate, ZoneOffset.UTC) },
-        revisionDate = revisionDate?.let { ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC) },
+        revisionDate =  ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
+        mergeConflict = false, // TODO: Copy from the new OfflineCipher type
         )
 
-fun OfflineCipherJson.toCipher(): Cipher =
-    Cipher(
+fun OfflineCipherJson.toOfflineCipher(): OfflineCipher =
+    OfflineCipher(
         id = if(id.startsWith("create")) null else id,
         organizationId = organizationId,
         folderId = folderId,
@@ -104,18 +127,38 @@ fun OfflineCipherJson.toCipher(): Cipher =
         secureNote = secureNote?.toSdkSecureNote(),
         favorite = favorite,
         reprompt = reprompt.toSdkRepromptType(),
-        // Need to figure these out
-        organizationUseTotp = true,
-        edit = true,
-        viewPassword = true,
-        localData = null,
-        // ^^
         attachments = attachments?.toSdkAttachmentList(),
         fields = fields?.toSdkFieldList(),
         passwordHistory = passwordHistory?.toSdkPasswordHistoryList(),
         creationDate = creationDate?.toInstant() ?: DateTime.now(),
         deletedDate = deletedDate?.toInstant(),
         revisionDate = revisionDate?.toInstant() ?: DateTime.now(),
+        mergeConflict = mergeConflict
+    )
+
+fun OfflineCipher.toCipher(): Cipher =
+    Cipher(
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds.orEmpty(),
+        key = key,
+        name = name.orEmpty(),
+        notes = notes,
+        type = type,
+        login = login,
+        identity = identity,
+        card = card,
+        secureNote = secureNote,
+        favorite = favorite,
+        reprompt = reprompt,
+        attachments = attachments,
+        fields = fields,
+        passwordHistory = passwordHistory,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        mergeConflict = mergeConflict
     )
 
 /**
