@@ -36,10 +36,10 @@ fun BitwardenSnackbar(
     onActionClick: () -> Unit = {},
 ) {
     Box(
-        modifier.padding(12.dp),
+        modifier = modifier.padding(12.dp),
     ) {
         Row(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(
                     color = BitwardenTheme.colorScheme.background.alert,

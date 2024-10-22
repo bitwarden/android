@@ -6,7 +6,10 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 
 /**
@@ -20,7 +23,7 @@ class BitwardenSnackbarHostState(
     /**
      * The current snackbar data to be displayed.
      */
-    var currentSnackbarData: BitwardenSnackbarData? = null
+    var currentSnackbarData: BitwardenSnackbarData? by mutableStateOf(null)
         private set
 
     /**
@@ -33,7 +36,9 @@ class BitwardenSnackbarHostState(
         duration: SnackbarDuration = SnackbarDuration.Short,
     ): SnackbarResult {
         currentSnackbarData = snackbarData
-        return snackbarHostState.showSnackbar(message = snackbarData.key, duration = duration)
+        val result = snackbarHostState.showSnackbar(message = snackbarData.key, duration = duration)
+        currentSnackbarData = null
+        return result
     }
 }
 

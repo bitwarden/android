@@ -24,8 +24,8 @@ fun BitwardenSnackbarHost(
         if (currentCustomSnackbarData?.key == message) {
             BitwardenSnackbar(
                 bitwardenSnackbarData = currentCustomSnackbarData,
-                onDismiss = { snackbarData.dismiss() },
-                onActionClick = { snackbarData.performAction() },
+                onDismiss = snackbarData::dismiss,
+                onActionClick = snackbarData::performAction,
             )
         }
     }
