@@ -124,8 +124,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             // Exit on save if handling an autofill, Fido2 Attestation, or TOTP link
             val shouldExitOnSave = autofillSaveItem != null ||
-                fido2AttestationOptions != null ||
-                totpData != null
+                fido2AttestationOptions != null
 
             val dialogState = if (!settingsRepository.initialAutofillDialogShown &&
                 vaultAddEditType is VaultAddEditType.AddItem &&
