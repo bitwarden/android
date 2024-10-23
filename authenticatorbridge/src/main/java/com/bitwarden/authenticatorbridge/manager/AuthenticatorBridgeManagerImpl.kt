@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -14,11 +15,13 @@ import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType
 import com.bitwarden.authenticatorbridge.manager.util.toPackageName
+import com.bitwarden.authenticatorbridge.model.AddTotpLoginItemData
 import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.provider.AuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.provider.StubAuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
 import com.bitwarden.authenticatorbridge.util.decrypt
+import com.bitwarden.authenticatorbridge.util.encrypt
 import com.bitwarden.authenticatorbridge.util.isBuildVersionBelow
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,6 +106,21 @@ internal class AuthenticatorBridgeManagerImpl(
         )
     }
 
+    override fun startAddTotpLoginItemFlow(totpUri: String): Boolean =
+        bridgeService
+            ?.safeCall {
+                // Grab symmetric key data from local storage:
+                val symmetricKey = symmetricKeyStorageProvider.symmetricKey ?: return@safeCall false
+                // Encrypt the given URI:
+                val addTotpData = AddTotpLoginItemData(totpUri).encrypt(symmetricKey).getOrThrow()
+                return@safeCall this.startAddTotpLoginItemFlow(addTotpData)
+            }
+            ?.fold(
+                onFailure = { false },
+                onSuccess = { true }
+            )
+            ?: false
+
     private fun bindService() {
         if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
             mutableSharedAccountsStateFlow.value = AccountSyncState.OsVersionNotSupported
@@ -119,11 +137,17 @@ internal class AuthenticatorBridgeManagerImpl(
             )
         }
 
+        val flags = if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+            Context.BIND_AUTO_CREATE
+        } else {
+            Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS
+        }
+
         val isBound = try {
             applicationContext.bindService(
                 intent,
                 bridgeServiceConnection,
-                Context.BIND_AUTO_CREATE,
+                flags,
             )
         } catch (e: SecurityException) {
             unbindService()

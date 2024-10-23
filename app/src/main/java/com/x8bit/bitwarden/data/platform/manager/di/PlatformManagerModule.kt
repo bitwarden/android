@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
@@ -86,10 +87,14 @@ object PlatformManagerModule {
     @Singleton
     fun provideAuthenticatorBridgeProcessor(
         authenticatorBridgeRepository: AuthenticatorBridgeRepository,
+        addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
+        @ApplicationContext context: Context,
         dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
     ): AuthenticatorBridgeProcessor = AuthenticatorBridgeProcessorImpl(
         authenticatorBridgeRepository = authenticatorBridgeRepository,
+        addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
+        context = context,
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
     )

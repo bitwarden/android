@@ -118,7 +118,7 @@ internal fun AddTotpLoginItemData.encrypt(
  *
  * @param symmetricEncryptionKeyData Symmetric key used for decryption.
  */
-internal fun EncryptedAddTotpLoginItemData.decrypt(
+fun EncryptedAddTotpLoginItemData.decrypt(
     symmetricEncryptionKeyData: SymmetricEncryptionKeyData,
 ): Result<AddTotpLoginItemData> = runCatching {
     val encodedKey = symmetricEncryptionKeyData
