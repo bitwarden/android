@@ -26,12 +26,14 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRe
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -153,6 +155,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
     }
+    private val mutableSshVaultItemsFeatureFlagFlow = MutableStateFlow<Boolean>(true)
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every {
+            getFeatureFlagFlow(key = FlagKey.SshKeyCipherItems)
+        } returns mutableSshVaultItemsFeatureFlagFlow
+        every {
+            getFeatureFlag(key = FlagKey.SshKeyCipherItems)
+        } returns mutableSshVaultItemsFeatureFlagFlow.value
+    }
 
     @BeforeEach
     fun setup() {
@@ -251,6 +262,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
                 dialog = null,
+                supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             ),
             viewModel.stateFlow.value,
         )
@@ -364,6 +376,56 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             vaultRepository.vaultDataStateFlow
         }
+    }
+
+    @Test
+    fun `initial add state should be correct when SSH key feature flag is enabled`() {
+        mutableSshVaultItemsFeatureFlagFlow.value = true
+        val vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN)
+        val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            initState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `initial add state should be correct when SSH key feature flag is disabled`() {
+        mutableSshVaultItemsFeatureFlagFlow.value = false
+        every {
+            featureFlagManager.getFeatureFlag(key = FlagKey.SshKeyCipherItems)
+        } returns false
+        val vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN)
+        val expectedState = VaultAddEditState(
+            vaultAddEditType = vaultAddEditType,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+            ),
+            dialog = null,
+            totpData = null,
+            shouldShowCloseButton = true,
+            shouldExitOnSave = false,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
+                .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
+        )
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = null,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -1807,6 +1869,36 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `TypeOptionSelect SSH_KEYS should switch to SshKeysItem`() = runTest {
+        mutableVaultDataFlow.value = DataState.Loaded(
+            createVaultData(cipherView = createMockCipherView(1)),
+        )
+        val viewModel = createAddVaultItemViewModel()
+        val action = VaultAddEditAction.Common.TypeOptionSelect(
+            VaultAddEditState.ItemTypeOption.SSH_KEYS,
+        )
+
+        viewModel.trySendAction(action)
+
+        val expectedState = loginInitialState.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = createCommonContentViewState(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
+                previousItemTypes = mapOf(
+                    VaultAddEditState.ItemTypeOption.LOGIN
+                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
+            ),
+        )
+
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Nested
     inner class VaultAddEditLoginTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
@@ -2701,6 +2793,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 resourceManager = resourceManager,
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
+                featureFlagManager = featureFlagManager,
             )
         }
 
@@ -3796,6 +3889,30 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     )
                 }
             }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `SshKeyCipherItemsFeatureFlagReceive should update supportedItemTypes`() = runTest {
+            // Verify SSH keys is supported when feature flag is enabled.
+            viewModel.trySendAction(
+                VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive(enabled = true),
+            )
+            assertEquals(
+                VaultAddEditState.ItemTypeOption.entries,
+                viewModel.stateFlow.value.supportedItemTypes,
+            )
+
+            // Verify SSH keys is not supported when feature flag is disabled.
+            viewModel.trySendAction(
+                VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive(enabled = false),
+            )
+            assertEquals(
+                VaultAddEditState.ItemTypeOption.entries.filterNot {
+                    it == VaultAddEditState.ItemTypeOption.SSH_KEYS
+                },
+                viewModel.stateFlow.value.supportedItemTypes,
+            )
+        }
     }
 
     //region Helper functions
@@ -3809,6 +3926,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
         totpData: TotpData? = null,
+        supportedItemTypes: List<VaultAddEditState.ItemTypeOption> = VaultAddEditState.ItemTypeOption.entries,
     ): VaultAddEditState =
         VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
@@ -3820,6 +3938,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             dialog = dialogState,
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
+            supportedItemTypes = supportedItemTypes,
         )
 
     @Suppress("LongParameterList")
@@ -3894,6 +4013,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 VaultItemCipherType.CARD -> "card"
                 VaultItemCipherType.IDENTITY -> "identity"
                 VaultItemCipherType.SECURE_NOTE -> "secure_note"
+                VaultItemCipherType.SSH_KEY -> "ssh_key"
                 null -> null
             },
         )
@@ -3921,6 +4041,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             resourceManager = bitwardenResourceManager,
             clock = clock,
             organizationEventManager = organizationEventManager,
+            featureFlagManager = featureFlagManager,
         )
 
     private fun createVaultData(

@@ -1444,6 +1444,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Sends.Texts -> "search_type_sends_text"
                     SearchTypeData.Vault.All -> "search_type_vault_all"
                     SearchTypeData.Vault.Cards -> "search_type_vault_cards"
+                    SearchTypeData.Vault.SshKeys -> "search_type_vault_ssh_keys"
                     is SearchTypeData.Vault.Collection -> "search_type_vault_collection"
                     is SearchTypeData.Vault.Folder -> "search_type_vault_folder"
                     SearchTypeData.Vault.Identities -> "search_type_vault_identities"
@@ -1463,6 +1464,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Sends.Texts -> null
                     SearchTypeData.Vault.All -> null
                     SearchTypeData.Vault.Cards -> null
+                    SearchTypeData.Vault.SshKeys -> null
                     is SearchTypeData.Vault.Collection -> searchType.collectionId
                     is SearchTypeData.Vault.Folder -> searchType.folderId
                     SearchTypeData.Vault.Identities -> null

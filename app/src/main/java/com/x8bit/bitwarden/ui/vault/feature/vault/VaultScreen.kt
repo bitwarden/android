@@ -305,6 +305,7 @@ private fun VaultScreenScaffold(
                 when (val viewState = state.viewState) {
                     is VaultState.ViewState.Content -> VaultContent(
                         state = viewState,
+                        showSshKeys = state.showSshKeys,
                         vaultHandlers = vaultHandlers,
                         onOverflowOptionClick = { masterPasswordRepromptAction = it },
                         modifier = innerModifier,

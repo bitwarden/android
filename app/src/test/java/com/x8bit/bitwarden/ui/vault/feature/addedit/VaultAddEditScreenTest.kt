@@ -3444,6 +3444,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -3454,6 +3455,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -3464,6 +3466,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -3474,6 +3477,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         @Suppress("MaxLineLength")
@@ -3495,6 +3499,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -3505,6 +3510,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

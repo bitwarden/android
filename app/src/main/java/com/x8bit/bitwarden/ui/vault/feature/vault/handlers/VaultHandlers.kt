@@ -29,6 +29,7 @@ data class VaultHandlers(
     val cardGroupClick: () -> Unit,
     val identityGroupClick: () -> Unit,
     val secureNoteGroupClick: () -> Unit,
+    val sshKeyGroupClick: () -> Unit,
     val trashClick: () -> Unit,
     val tryAgainClick: () -> Unit,
     val dialogDismiss: () -> Unit,
@@ -77,6 +78,7 @@ data class VaultHandlers(
                 secureNoteGroupClick = {
                     viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
                 },
+                sshKeyGroupClick = { viewModel.trySendAction(VaultAction.SshKeyGroupClick) },
                 trashClick = { viewModel.trySendAction(VaultAction.TrashClick) },
                 tryAgainClick = { viewModel.trySendAction(VaultAction.TryAgainClick) },
                 dialogDismiss = { viewModel.trySendAction(VaultAction.DialogDismiss) },

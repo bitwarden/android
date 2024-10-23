@@ -21,21 +21,24 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTyp
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level content UI state for the [VaultAddEditScreen].
  */
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
+    typeOptions: List<VaultAddEditState.ItemTypeOption>,
     onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
     commonTypeHandlers: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
+    sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     modifier: Modifier = Modifier,
     permissionsManager: PermissionsManager,
 ) {
@@ -45,6 +48,7 @@ fun VaultAddEditContent(
                 is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Card -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.SshKey -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                     loginItemTypeHandlers.onSetupTotpClick(isGranted)
                 }
@@ -77,6 +81,7 @@ fun VaultAddEditContent(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 TypeOptionsItem(
+                    entries = typeOptions,
                     itemType = state.type,
                     onTypeOptionClicked = onTypeOptionClicked,
                     modifier = Modifier
@@ -131,6 +136,15 @@ fun VaultAddEditContent(
                     commonTypeHandlers = commonTypeHandlers,
                 )
             }
+
+            is VaultAddEditState.ViewState.Content.ItemType.SshKey -> {
+                vaultAddEditSshKeyItems(
+                    commonState = state.common,
+                    sshKeyState = state.type,
+                    commonTypeHandlers = commonTypeHandlers,
+                    sshKeyTypeHandlers = sshKeyItemTypeHandlers,
+                )
+            }
         }
 
         item {
@@ -141,12 +155,12 @@ fun VaultAddEditContent(
 
 @Composable
 private fun TypeOptionsItem(
+    entries: List<VaultAddEditState.ItemTypeOption>,
     itemType: VaultAddEditState.ViewState.Content.ItemType,
     onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val possibleMainStates = VaultAddEditState.ItemTypeOption.entries.toList()
-    val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }
+    val optionsWithStrings = entries.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.type),

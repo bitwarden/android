@@ -16,6 +16,7 @@ fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingT
         is VaultItemListingType.Identity -> VaultItemListingState.ItemListingType.Vault.Identity
         is VaultItemListingType.Login -> VaultItemListingState.ItemListingType.Vault.Login
         is VaultItemListingType.SecureNote -> VaultItemListingState.ItemListingType.Vault.SecureNote
+        is VaultItemListingType.SshKey -> VaultItemListingState.ItemListingType.Vault.SshKey
         is VaultItemListingType.Trash -> VaultItemListingState.ItemListingType.Vault.Trash
         is VaultItemListingType.Collection -> {
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = collectionId)
