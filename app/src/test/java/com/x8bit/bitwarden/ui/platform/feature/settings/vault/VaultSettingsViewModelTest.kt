@@ -7,6 +7,10 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -33,6 +37,8 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
+
+    private val snackbarRelayManager = SnackbarRelayManagerImpl()
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
@@ -136,10 +142,24 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `SnackbarDataReceived action should send snackbar event`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            snackbarRelayManager.sendSnackbarData(
+                data = expectedSnackbarData,
+                relay = SnackbarRelay.VAULT_SETTINGS_RELAY,
+            )
+            assertEquals(VaultSettingsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
+    }
+
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 

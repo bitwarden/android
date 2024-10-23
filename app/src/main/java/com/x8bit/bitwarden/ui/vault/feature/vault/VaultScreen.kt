@@ -55,6 +55,9 @@ import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -63,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -83,7 +87,7 @@ fun VaultScreen(
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
@@ -97,6 +101,7 @@ fun VaultScreen(
             { viewModel.trySendAction(VaultAction.RefreshPull) }
         },
     )
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
@@ -124,7 +129,11 @@ fun VaultScreen(
                     .show()
             }
 
-            VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
+            VaultEvent.NavigateToImportLogins -> {
+                onNavigateToImportLogins(SnackbarRelay.MY_VAULT_RELAY)
+            }
+
+            is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -137,6 +146,7 @@ fun VaultScreen(
         pullToRefreshState = pullToRefreshState,
         vaultHandlers = vaultHandlers,
         onDimBottomNavBarRequest = onDimBottomNavBarRequest,
+        snackbarHostState = snackbarHostState,
     )
 }
 
@@ -173,6 +183,7 @@ private fun VaultScreenScaffold(
     pullToRefreshState: BitwardenPullToRefreshState,
     vaultHandlers: VaultHandlers,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    snackbarHostState: BitwardenSnackbarHostState,
 ) {
     var accountMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -259,6 +270,11 @@ private fun VaultScreenScaffold(
                         ),
                     )
                 },
+            )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(
+                bitwardenHostState = snackbarHostState,
             )
         },
         floatingActionButton = {
