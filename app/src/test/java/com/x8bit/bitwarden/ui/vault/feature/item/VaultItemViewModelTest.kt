@@ -166,6 +166,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -179,6 +180,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -196,6 +198,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = false,
+                            canAssignToCollections = true,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -216,6 +219,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = false,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -231,6 +235,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -251,6 +256,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -267,6 +273,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -292,6 +299,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -311,7 +319,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
-                            canDelete = true,
+                            canDelete = true, canAssignToCollections = true,
                         )
                     } returns loginState
                 }
@@ -357,6 +365,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns loginState
                 }
@@ -391,6 +400,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns loginViewState
                 }
@@ -436,6 +446,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns loginViewState
                 }
@@ -484,6 +495,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns loginViewState
                 }
@@ -524,6 +536,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -559,6 +572,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns viewState
                 }
@@ -598,6 +612,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -640,6 +655,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -691,6 +707,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -725,6 +742,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns loginViewState
             }
@@ -743,6 +761,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
                 assertEquals(
@@ -769,7 +788,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -832,7 +851,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -887,7 +906,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -953,7 +972,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -978,7 +997,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -994,7 +1013,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             }
@@ -1013,7 +1032,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    totpCodeItemData = null,
+                    canAssignToCollections = true, totpCodeItemData = null,
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedHiddenField(
@@ -1053,7 +1072,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -1086,7 +1105,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -1120,6 +1139,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns loginViewState
                 }
@@ -1152,7 +1172,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
@@ -1173,7 +1193,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -1198,7 +1218,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -1218,7 +1238,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -1254,7 +1274,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 } returns loginViewState
             }
@@ -1281,7 +1301,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    totpCodeItemData = null,
+                    canAssignToCollections = true, totpCodeItemData = null,
                 )
             }
         }
@@ -1305,7 +1325,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 } returns loginViewState
             }
@@ -1355,7 +1375,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -1380,7 +1400,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    totpCodeItemData = null,
+                    canAssignToCollections = true, totpCodeItemData = null,
                 )
             }
         }
@@ -1400,7 +1420,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -1433,7 +1453,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -1458,7 +1478,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = null,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -1478,7 +1498,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -1496,6 +1516,74 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     )
                 }
             }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `canAssignToCollections should be true when item is in a collection the user can manage and edit`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            verify {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `canAssignToCollections should be false when item is not in a collection the user can manage and edit`() {
+            val mockCipherView = mockk<CipherView> {
+                every { collectionIds } returns listOf("mockId-1", "mockId-2")
+                every {
+                    toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = false,
+                        canAssignToCollections = false,
+                    )
+                } returns DEFAULT_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(
+                data = listOf(
+                    createMockCollectionView(number = 1)
+                        .copy(manage = false, readOnly = true),
+                    createMockCollectionView(number = 2)
+                        .copy(manage = true),
+                ),
+            )
+            verify {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = false,
+                    canAssignToCollections = false,
+                )
+            }
+        }
 
         @Test
         fun `on CollectionsClick should emit NavigateToCollections`() = runTest {
@@ -1522,7 +1610,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -1580,7 +1668,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -1647,7 +1735,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = null,
+                            canAssignToCollections = true, totpCodeItemData = null,
                         )
                     } returns loginViewState
                 }
@@ -1827,7 +1915,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = createTotpCodeData(),
+                        canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                     )
                 } returns DEFAULT_VIEW_STATE
             }
@@ -1869,7 +1957,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    totpCodeItemData = createTotpCodeData(),
+                    canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                 )
             }
             coVerify(exactly = 1) {
@@ -1888,7 +1976,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             canDelete = true,
-                            totpCodeItemData = createTotpCodeData(),
+                            canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -1916,7 +2004,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = createTotpCodeData(),
+                        canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                     )
                 }
             }
@@ -1931,7 +2019,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = createTotpCodeData(),
+                        canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             }
@@ -1951,7 +2039,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    totpCodeItemData = createTotpCodeData(),
+                    canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                 )
             }
         }
@@ -1993,7 +2081,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        totpCodeItemData = createTotpCodeData(),
+                        canAssignToCollections = true, totpCodeItemData = createTotpCodeData(),
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             }
@@ -2012,6 +2100,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2037,6 +2126,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -2063,6 +2153,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2079,6 +2170,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     }
                         .returns(
@@ -2107,6 +2199,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2124,6 +2217,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns DEFAULT_VIEW_STATE
                 }
@@ -2154,6 +2248,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2174,6 +2269,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns loginViewState
                 }
@@ -2207,6 +2303,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledPasswordVisible(
@@ -2242,6 +2339,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns CARD_VIEW_STATE
                 }
@@ -2269,6 +2367,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2284,6 +2383,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2305,6 +2405,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2321,6 +2422,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns CARD_VIEW_STATE
                 }
@@ -2348,6 +2450,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2363,6 +2466,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2390,6 +2494,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2406,6 +2511,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns CARD_VIEW_STATE
                 }
@@ -2433,6 +2539,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2448,6 +2555,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2469,6 +2577,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2485,6 +2594,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns CARD_VIEW_STATE
                 }
@@ -2512,6 +2622,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2527,6 +2638,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2554,6 +2666,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                     canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2583,6 +2696,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
             }
@@ -2613,6 +2727,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                             hasMasterPassword = true,
                             totpCodeItemData = null,
                             canDelete = true,
+                            canAssignToCollections = true,
                         )
                     } returns SSH_KEY_VIEW_STATE
                 }
@@ -2650,6 +2765,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
             }
@@ -2696,6 +2812,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns viewState
             }
@@ -2735,6 +2852,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns viewState
             }
@@ -2775,6 +2893,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns viewState
             }
@@ -2812,6 +2931,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = null,
                         canDelete = true,
+                        canAssignToCollections = true,
                     )
                 } returns viewState
             }
@@ -3027,6 +3147,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                 ),
                 canDelete = true,
+                canAssignToCollections = true,
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

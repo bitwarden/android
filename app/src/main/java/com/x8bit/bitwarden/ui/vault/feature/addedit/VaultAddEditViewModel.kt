@@ -1591,16 +1591,29 @@ class VaultAddEditViewModel @Inject constructor(
                     currentAccount = userData?.activeAccount,
                     vaultAddEditType = vaultAddEditType,
                 ) { currentAccount, cipherView ->
+
+                    // Deletion is not allowed when the item is in a collection that the user
+                    // does not have "manage" permission for.
                     val canDelete = vaultData.collectionViewList
                         .none {
-                            val itemIsInCollection = cipherView
+                            val isItemInCollection = cipherView
                                 ?.collectionIds
                                 ?.contains(it.id) == true
 
-                            val canManageCollection = it.manage
-
-                            itemIsInCollection && !canManageCollection
+                            isItemInCollection && !it.manage
                         }
+
+                    // Assigning to a collection is not allowed when the item is in a collection
+                    // that the user does not have "manage" and "edit" permission for.
+                    val canAssignToCollections = vaultData.collectionViewList
+                        .none {
+                            val isItemInCollection = cipherView
+                                ?.collectionIds
+                                ?.contains(it.id) == true
+
+                            isItemInCollection && (!it.manage || it.readOnly)
+                        }
+
                     // Derive the view state from the current Cipher for Edit mode
                     // or use the current state for Add
                     (cipherView
@@ -1611,6 +1624,7 @@ class VaultAddEditViewModel @Inject constructor(
                             resourceManager = resourceManager,
                             clock = clock,
                             canDelete = canDelete,
+                            canAssignToCollections = canAssignToCollections,
                         )
                         ?: viewState)
                         .appendFolderAndOwnerData(
@@ -2048,6 +2062,12 @@ data class VaultAddEditState(
             ?.canDelete
             ?: false
 
+    val canAssociateToCollections: Boolean
+        get() = (viewState as? ViewState.Content)
+            ?.common
+            ?.canAssignToCollections
+            ?: false
+
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
      *
@@ -2125,6 +2145,7 @@ data class VaultAddEditState(
                 val availableOwners: List<Owner> = emptyList(),
                 val hasOrganizations: Boolean = false,
                 val canDelete: Boolean = true,
+                val canAssignToCollections: Boolean = true,
             ) : Parcelable {
 
                 /**

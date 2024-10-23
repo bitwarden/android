@@ -309,7 +309,11 @@ fun VaultAddEditScreen(
                                     }
                                 },
                             )
-                                .takeUnless { state.isAddItemMode || !state.isCipherInCollection },
+                                .takeUnless {
+                                    state.isAddItemMode ||
+                                        !state.isCipherInCollection ||
+                                            !state.canAssociateToCollections
+                                },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
                                 onClick = { pendingDeleteCipher = true },
