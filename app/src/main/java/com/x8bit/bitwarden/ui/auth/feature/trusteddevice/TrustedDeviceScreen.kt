@@ -128,6 +128,7 @@ private fun TrustedDeviceScaffold(
                 isChecked = state.isRemembered,
                 onCheckedChange = handlers.onRememberToggle,
                 modifier = Modifier
+                    .testTag("RememberThisDeviceSwitch")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -149,6 +150,7 @@ private fun TrustedDeviceScaffold(
                     label = stringResource(id = R.string.approve_with_my_other_device),
                     onClick = handlers.onApproveWithDeviceClick,
                     modifier = Modifier
+                        .testTag("ApproveWithOtherDeviceButton")
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
@@ -161,7 +163,8 @@ private fun TrustedDeviceScaffold(
                     onClick = handlers.onApproveWithAdminClick,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("RequestAdminApprovalButton"),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -171,6 +174,7 @@ private fun TrustedDeviceScaffold(
                     label = stringResource(id = R.string.approve_with_master_password),
                     onClick = handlers.onApproveWithPasswordClick,
                     modifier = Modifier
+                        .testTag("ApproveWithMasterPasswordButton")
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
