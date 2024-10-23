@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -22,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +34,9 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWi
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -55,18 +55,14 @@ fun MasterPasswordGeneratorScreen(
     viewModel: MasterPasswordGeneratorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             MasterPasswordGeneratorEvent.NavigateBack -> onNavigateBack()
             MasterPasswordGeneratorEvent.NavigateToPreventLockout -> onNavigateToPreventLockout()
             is MasterPasswordGeneratorEvent.ShowSnackbar -> {
                 snackbarHostState.showSnackbar(
-                    message = event.text.toString(resources),
+                    snackbarData = BitwardenSnackbarData(message = event.text),
                     duration = SnackbarDuration.Short,
                 )
             }
@@ -100,7 +96,7 @@ fun MasterPasswordGeneratorScreen(
             )
         },
         snackbarHost = {
-            BitwardenSnackbarHost(hostState = snackbarHostState)
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) { innerPadding ->
         Column(

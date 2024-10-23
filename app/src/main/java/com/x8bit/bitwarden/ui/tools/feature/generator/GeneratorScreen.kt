@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -24,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,7 +53,9 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
@@ -86,9 +86,7 @@ fun GeneratorScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
 
     LivecycleEventEffect { _, event ->
         when (event) {
@@ -106,7 +104,7 @@ fun GeneratorScreen(
 
             is GeneratorEvent.ShowSnackbar -> {
                 snackbarHostState.showSnackbar(
-                    message = event.message(resources).toString(),
+                    snackbarData = BitwardenSnackbarData(message = event.message),
                     duration = SnackbarDuration.Short,
                 )
             }
@@ -199,7 +197,7 @@ fun GeneratorScreen(
             }
         },
         snackbarHost = {
-            BitwardenSnackbarHost(hostState = snackbarHostState)
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
