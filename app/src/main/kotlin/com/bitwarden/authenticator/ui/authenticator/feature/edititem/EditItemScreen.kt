@@ -251,6 +251,7 @@ fun EditItemContent(
                 Spacer(Modifier.height(8.dp))
                 BitwardenTextField(
                     modifier = Modifier
+                        .semantics { testTag = "NameTextField" }
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.name),
@@ -264,6 +265,7 @@ fun EditItemContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenPasswordField(
                     modifier = Modifier
+                        .semantics { testTag = "KeyTextField" }
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.key),
@@ -278,6 +280,7 @@ fun EditItemContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     modifier = Modifier
+                        .semantics { testTag = "UsernameTextField" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.username),
@@ -331,6 +334,7 @@ private fun AdvancedOptions(
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
+                .semantics { testTag = "CollapseAdvancedOptions" }
                 .padding(vertical = 4.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .clickable(
@@ -381,7 +385,7 @@ private fun AdvancedOptions(
                     BitwardenMultiSelectButton(
                         modifier = Modifier
                             .fillMaxSize()
-                            .semantics { testTag = "ItemTypePicker" },
+                            .semantics { testTag = "OTPItemTypePicker" },
                         label = stringResource(id = R.string.otp_type),
                         options = typeOptionsWithStrings.values.toImmutableList(),
                         selectedOption = viewState.itemData.type.name,
@@ -403,7 +407,8 @@ private fun AdvancedOptions(
                     Spacer(Modifier.height(8.dp))
                     BitwardenMultiSelectButton(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .semantics { testTag = "AlgorithmItemTypePicker" },
                         label = stringResource(id = R.string.algorithm),
                         options = algorithmOptionsWithStrings.values.toImmutableList(),
                         selectedOption = viewState.itemData.algorithm.name,
@@ -430,7 +435,8 @@ private fun AdvancedOptions(
                     Spacer(modifier = Modifier.height(8.dp))
                     BitwardenMultiSelectButton(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .semantics { testTag = "RefreshPeriodItemTypePicker" },
                         label = stringResource(id = R.string.refresh_period),
                         options = refreshPeriodOptionsWithStrings.values.toImmutableList(),
                         selectedOption = stringResource(

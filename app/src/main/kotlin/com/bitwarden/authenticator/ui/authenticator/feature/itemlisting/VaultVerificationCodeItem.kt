@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,6 +71,7 @@ fun VaultVerificationCodeItem(
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
+                .semantics { testTag = "Item" }
                 .then(
                     if (allowLongPress) {
                         Modifier.combinedClickable(
@@ -98,7 +101,9 @@ fun VaultVerificationCodeItem(
                 iconData = startIcon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier
+                    .semantics { testTag = "BitwardenIcon" }
+                    .size(24.dp),
             )
 
             Column(
@@ -108,6 +113,7 @@ fun VaultVerificationCodeItem(
             ) {
                 if (!primaryLabel.isNullOrEmpty()) {
                     Text(
+                        modifier = Modifier.semantics { testTag = "Name" },
                         text = primaryLabel,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -118,6 +124,7 @@ fun VaultVerificationCodeItem(
 
                 if (!secondaryLabel.isNullOrEmpty()) {
                     Text(
+                        modifier = Modifier.semantics { testTag = "Username" },
                         text = secondaryLabel,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -128,12 +135,14 @@ fun VaultVerificationCodeItem(
             }
 
             BitwardenCircularCountdownIndicator(
+                modifier = Modifier.semantics { testTag = "CircularCountDown" },
                 timeLeftSeconds = timeLeftSeconds,
                 periodSeconds = periodSeconds,
                 alertThresholdSeconds = alertThresholdSeconds,
             )
 
             Text(
+                modifier = Modifier.semantics { testTag = "AuthCode" },
                 text = authCode.chunked(3).joinToString(" "),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
