@@ -80,6 +80,13 @@ jobs:
         run: |
           bundle exec fastlane check
 
+      - name: Upload test reports on failure
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: failure()
+        with:
+          name: test-reports
+          path: app/build/reports/tests/
+
       - name: Upload to codecov.io
         uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4.6.0
         with:
