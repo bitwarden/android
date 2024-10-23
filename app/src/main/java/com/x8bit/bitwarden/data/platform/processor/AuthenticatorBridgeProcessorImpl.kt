@@ -1,23 +1,28 @@
 package com.x8bit.bitwarden.data.platform.processor
 
-import android.content.Intent
+import android.content.Context
 import android.os.Build
 import android.os.IInterface
 import android.os.RemoteCallbackList
+import androidx.core.net.toUri
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
 import com.bitwarden.authenticatorbridge.model.EncryptedAddTotpLoginItemData
 import com.bitwarden.authenticatorbridge.model.SymmetricEncryptionKeyData
 import com.bitwarden.authenticatorbridge.model.SymmetricEncryptionKeyFingerprintData
 import com.bitwarden.authenticatorbridge.util.AUTHENTICATOR_BRIDGE_SDK_VERSION
+import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.encrypt
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
+import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -26,10 +31,13 @@ import kotlinx.coroutines.launch
  */
 class AuthenticatorBridgeProcessorImpl(
     private val authenticatorBridgeRepository: AuthenticatorBridgeRepository,
+    private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
+    context: Context,
 ) : AuthenticatorBridgeProcessor {
 
+    private val applicationContext = context.applicationContext
     private val callbacks by lazy { RemoteCallbackList<IAuthenticatorBridgeServiceCallback>() }
     private val scope by lazy { CoroutineScope(dispatcherManager.default) }
 
@@ -101,13 +109,18 @@ class AuthenticatorBridgeProcessorImpl(
             }
         }
 
-        override fun createAddTotpLoginItemIntent(): Intent {
-            // TODO: BITAU-112
-            return Intent()
-        }
-
-        override fun setPendingAddTotpLoginItemData(data: EncryptedAddTotpLoginItemData?) {
-            // TODO: BITAU-112
+        override fun startAddTotpLoginItemFlow(data: EncryptedAddTotpLoginItemData): Boolean {
+            val symmetricEncryptionKey = symmetricEncryptionKeyData ?: return false
+            val intent = createAddTotpItemFromAuthenticatorIntent(context = applicationContext)
+            val totpData = data.decrypt(symmetricEncryptionKey)
+                .getOrNull()
+                ?.totpUri
+                ?.toUri()
+                ?.getTotpDataOrNull()
+                ?: return false
+            addTotpItemFromAuthenticatorManager.pendingAddTotpLoginItemData = totpData
+            applicationContext.startActivity(intent)
+            return true
         }
     }
 }

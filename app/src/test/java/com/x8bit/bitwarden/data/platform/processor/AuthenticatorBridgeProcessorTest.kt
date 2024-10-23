@@ -1,29 +1,42 @@
 package com.x8bit.bitwarden.data.platform.processor
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.RemoteCallbackList
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
+import com.bitwarden.authenticatorbridge.model.AddTotpLoginItemData
+import com.bitwarden.authenticatorbridge.model.EncryptedAddTotpLoginItemData
 import com.bitwarden.authenticatorbridge.model.EncryptedSharedAccountData
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.bitwarden.authenticatorbridge.util.AUTHENTICATOR_BRIDGE_SDK_VERSION
+import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.encrypt
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -37,23 +50,44 @@ import org.junit.jupiter.api.Test
 class AuthenticatorBridgeProcessorTest {
 
     private val featureFlagManager = mockk<FeatureFlagManager>()
+    private val addTotpItemFromAuthenticatorManager = AddTotpItemFromAuthenticatorManagerImpl()
     private val authenticatorBridgeRepository = mockk<AuthenticatorBridgeRepository>()
+    private val context = mockk<Context> {
+        every { applicationContext } returns this@mockk
+    }
 
     private lateinit var bridgeServiceProcessor: AuthenticatorBridgeProcessorImpl
 
     @BeforeEach
     fun setup() {
         bridgeServiceProcessor = AuthenticatorBridgeProcessorImpl(
+            addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
             authenticatorBridgeRepository = authenticatorBridgeRepository,
+            context = context,
             featureFlagManager = featureFlagManager,
             dispatcherManager = FakeDispatcherManager(),
+        )
+        mockkStatic(::createAddTotpItemFromAuthenticatorIntent)
+        mockkStatic(
+            SharedAccountData::encrypt,
+            EncryptedAddTotpLoginItemData::decrypt,
+            Uri::parse,
+            Uri::getTotpDataOrNull,
         )
     }
 
     @AfterEach
     fun teardown() {
-        unmockkStatic(::isBuildVersionBelow)
-        unmockkStatic(SharedAccountData::encrypt)
+        unmockkStatic(
+            ::createAddTotpItemFromAuthenticatorIntent,
+            ::isBuildVersionBelow,
+        )
+        unmockkStatic(
+            SharedAccountData::encrypt,
+            EncryptedAddTotpLoginItemData::decrypt,
+            Uri::parse,
+            Uri::getTotpDataOrNull,
+        )
     }
 
     @Test
@@ -137,6 +171,80 @@ class AuthenticatorBridgeProcessorTest {
             authenticatorBridgeRepository.authenticatorSyncSymmetricKey
         } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
         assertEquals(SYMMETRIC_KEY, binder.symmetricEncryptionKeyData)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `startAddTotpLoginItemFlow should return false when symmetricEncryptionKeyData is null`() {
+        val binder = getDefaultBinder()
+        every { authenticatorBridgeRepository.authenticatorSyncSymmetricKey } returns null
+        val data: EncryptedAddTotpLoginItemData = mockk()
+        assertFalse(binder.startAddTotpLoginItemFlow(data))
+        verify { authenticatorBridgeRepository.authenticatorSyncSymmetricKey }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `startAddTotpLoginItemFlow should return false when decryption fails`() {
+        val binder = getDefaultBinder()
+        val intent: Intent = mockk()
+        val data: EncryptedAddTotpLoginItemData = mockk()
+        every {
+            authenticatorBridgeRepository.authenticatorSyncSymmetricKey
+        } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
+        every { createAddTotpItemFromAuthenticatorIntent(context) } returns intent
+        every { data.decrypt(SYMMETRIC_KEY) } returns Result.failure(RuntimeException())
+        assertFalse(binder.startAddTotpLoginItemFlow(data))
+        verify { authenticatorBridgeRepository.authenticatorSyncSymmetricKey }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `startAddTotpLoginItemFlow should return false when getTotpDataOrNull returns null`() {
+        val binder = getDefaultBinder()
+        val intent: Intent = mockk()
+        val totpUri = "totpUri"
+        val uri: Uri = mockk()
+        every { Uri.parse(totpUri) } returns uri
+        val data: EncryptedAddTotpLoginItemData = mockk()
+        val decryptedData: AddTotpLoginItemData = mockk()
+        every {
+            authenticatorBridgeRepository.authenticatorSyncSymmetricKey
+        } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
+        every { createAddTotpItemFromAuthenticatorIntent(context) } returns intent
+        every { data.decrypt(SYMMETRIC_KEY) } returns Result.success(decryptedData)
+        every { decryptedData.totpUri } returns totpUri
+        every { uri.getTotpDataOrNull() } returns null
+        assertFalse(binder.startAddTotpLoginItemFlow(data))
+        verify { authenticatorBridgeRepository.authenticatorSyncSymmetricKey }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `startAddTotpLoginItemFlow should return true and set pendingAddTotpLoginItemData when getTotpDataOrNull succeeds`() {
+        val binder = getDefaultBinder()
+        val intent: Intent = mockk()
+        val totpUri = "totpUri"
+        val uri: Uri = mockk()
+        every { Uri.parse(totpUri) } returns uri
+        val expectedPendingData: TotpData = mockk()
+        val data: EncryptedAddTotpLoginItemData = mockk()
+        val decryptedData: AddTotpLoginItemData = mockk()
+        every {
+            authenticatorBridgeRepository.authenticatorSyncSymmetricKey
+        } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
+        every { createAddTotpItemFromAuthenticatorIntent(context) } returns intent
+        every { data.decrypt(SYMMETRIC_KEY) } returns Result.success(decryptedData)
+        every { decryptedData.totpUri } returns totpUri
+        every { uri.getTotpDataOrNull() } returns expectedPendingData
+        every { context.startActivity(intent) } just runs
+        assertTrue(binder.startAddTotpLoginItemFlow(data))
+        assertEquals(
+            expectedPendingData,
+            addTotpItemFromAuthenticatorManager.pendingAddTotpLoginItemData,
+        )
+        verify { context.startActivity(intent) }
+        verify { authenticatorBridgeRepository.authenticatorSyncSymmetricKey }
     }
 
     @Nested
