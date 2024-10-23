@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -98,7 +98,7 @@ fun AttachmentsContent(
 
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.choose_file),
                 onClick = attachmentsHandlers.onChooseFileClick,
                 modifier = Modifier

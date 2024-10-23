@@ -30,7 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -147,7 +147,7 @@ fun ManualCodeEntryScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.add_totp),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
@@ -72,7 +72,7 @@ fun VaultAddEditCustomFieldsButton(
         )
     }
 
-    BitwardenFilledTonalButton(
+    BitwardenOutlinedButton(
         label = stringResource(id = R.string.new_custom_field),
         onClick = { shouldShowChooserDialog = true },
         modifier = modifier.testTag("NewCustomFieldButton"),

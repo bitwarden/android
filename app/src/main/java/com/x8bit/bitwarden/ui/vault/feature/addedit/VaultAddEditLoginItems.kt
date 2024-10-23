@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
@@ -144,7 +144,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     } else {
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenFilledTonalButtonWithIcon(
+            BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.setup_totp),
                 icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
@@ -177,7 +177,7 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        BitwardenFilledTonalButton(
+        BitwardenOutlinedButton(
             label = stringResource(id = R.string.new_uri),
             onClick = loginItemTypeHandlers.onAddNewUriClick,
             modifier = Modifier

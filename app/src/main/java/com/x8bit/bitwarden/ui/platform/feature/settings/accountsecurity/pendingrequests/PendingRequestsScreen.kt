@@ -45,7 +45,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -212,7 +212,7 @@ private fun PendingRequestsContent(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        BitwardenFilledTonalButtonWithIcon(
+        BitwardenOutlinedButtonWithIcon(
             label = stringResource(id = R.string.decline_all_requests),
             icon = rememberVectorPainter(id = R.drawable.ic_trash),
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
