@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -17,7 +19,7 @@ import org.junit.jupiter.api.Test
 class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk() {
-        coEvery { syncForResult() } returns SyncVaultDataResult.Success
+        coEvery { syncForResult() } returns SyncVaultDataResult.Success(itemsAvailable = true)
     }
 
     @Test
@@ -278,7 +280,9 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
             viewModel.stateFlow.test {
                 assertNotNull(awaitItem().dialogState)
-                coEvery { vaultRepository.syncForResult() } returns SyncVaultDataResult.Success
+                coEvery { vaultRepository.syncForResult() } returns SyncVaultDataResult.Success(
+                    itemsAvailable = true,
+                )
                 viewModel.trySendAction(ImportLoginsAction.RetryVaultSync)
                 assertEquals(
                     ImportLoginsState(
@@ -309,6 +313,39 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MoveToSyncInProgress should set no items imported error dialog state when sync succeeds but no items are available`() =
+        runTest {
+            coEvery {
+                vaultRepository.syncForResult()
+            } returns SyncVaultDataResult.Success(itemsAvailable = false)
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+                viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = null,
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = true,
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = ImportLoginsState.DialogState.Error(R.string.no_logins_were_imported.asText()),
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = false,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `SyncVaultDataResult Error should remove loading state and show error dialog`() = runTest {
         coEvery { vaultRepository.syncForResult() } returns SyncVaultDataResult.Error(Exception())
@@ -316,7 +353,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
         assertEquals(
             ImportLoginsState(
-                dialogState = ImportLoginsState.DialogState.Error,
+                dialogState = ImportLoginsState.DialogState.Error(),
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,

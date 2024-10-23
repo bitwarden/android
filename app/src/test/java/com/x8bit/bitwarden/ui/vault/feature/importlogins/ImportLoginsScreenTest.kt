@@ -17,9 +17,11 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.printToLog
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
@@ -342,7 +344,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
     fun `Error dialog is displayed when dialog state is Error`() {
         mutableImportLoginsStateFlow.update {
             it.copy(
-                dialogState = ImportLoginsState.DialogState.Error,
+                dialogState = ImportLoginsState.DialogState.Error(),
             )
         }
         composeTestRule
@@ -351,6 +353,41 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(
                 text = "We were unable to process your request. Please try again or contact us.",
+                useUnmergedTree = true,
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Try again")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.RetryVaultSync)
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+        verifyActionSent(ImportLoginsAction.FailSyncAcknowledged)
+    }
+
+    @Test
+    fun `Error dialog is displayed when dialog state is Error for no logins`() {
+        mutableImportLoginsStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                dialogState = ImportLoginsState.DialogState.Error(
+                    message = R.string.no_logins_were_imported.asText(),
+                ),
+            ),
+        )
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "No logins were imported",
                 useUnmergedTree = true,
             )
             .filterToOne(hasAnyAncestor(isDialog()))

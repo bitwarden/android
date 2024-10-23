@@ -82,22 +82,33 @@ class ImportLoginsViewModel @Inject constructor(
     private fun handleVaultSyncResultReceived(
         action: ImportLoginsAction.Internal.VaultSyncResultReceived,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is SyncVaultDataResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         isVaultSyncing = false,
-                        dialogState = ImportLoginsState.DialogState.Error,
+                        dialogState = ImportLoginsState.DialogState.Error(),
                     )
                 }
             }
 
-            SyncVaultDataResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        showBottomSheet = true,
-                        isVaultSyncing = false,
-                    )
+            is SyncVaultDataResult.Success -> {
+                if (result.itemsAvailable) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            showBottomSheet = true,
+                            isVaultSyncing = false,
+                        )
+                    }
+                } else {
+                    mutableStateFlow.update {
+                        it.copy(
+                            isVaultSyncing = false,
+                            dialogState = ImportLoginsState.DialogState.Error(
+                                R.string.no_logins_were_imported.asText(),
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -215,9 +226,10 @@ data class ImportLoginsState(
         /**
          * Show a dialog with an error message.
          */
-        data object Error : DialogState() {
+        data class Error(
+            override val message: Text = R.string.generic_error_message.asText(),
+        ) : DialogState() {
             override val title: Text? = null
-            override val message: Text = R.string.generic_error_message.asText()
         }
     }
 

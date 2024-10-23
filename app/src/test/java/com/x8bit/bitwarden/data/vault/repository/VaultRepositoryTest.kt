@@ -160,8 +160,11 @@ class VaultRepositoryTest {
     private val sendsService: SendsService = mockk()
     private val ciphersService: CiphersService = mockk()
     private val folderService: FolderService = mockk()
+    private val mutableGetCiphersFlow: MutableStateFlow<List<SyncResponseJson.Cipher>> =
+        MutableStateFlow(listOf(createMockCipher(1)))
     private val vaultDiskSource: VaultDiskSource = mockk {
         coEvery { resyncVaultData(any()) } just runs
+        every { getCiphers(any()) } returns mutableGetCiphersFlow
     }
     private val totpCodeManager: TotpCodeManager = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk {
@@ -4393,8 +4396,9 @@ class VaultRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `syncForResult should return result`() = runTest {
+    fun `syncForResult should return success result with itemsAvailable = true when sync succeeds and ciphers list is not empty`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val userId = "mockId-1"
         val mockSyncResponse = createMockSyncResponse(number = 1)
@@ -4424,7 +4428,42 @@ class VaultRepositoryTest {
         } just runs
 
         val syncResult = vaultRepository.syncForResult()
-        assertEquals(SyncVaultDataResult.Success, syncResult)
+        assertEquals(SyncVaultDataResult.Success(itemsAvailable = true), syncResult)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncForResult should return success result with itemsAvailable = false when sync succeeds and ciphers list is empty`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+        val mockSyncResponse = createMockSyncResponse(number = 1).copy(ciphers = emptyList())
+        coEvery {
+            syncService.sync()
+        } returns mockSyncResponse.asSuccess()
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                userId = userId,
+                request = InitOrgCryptoRequest(
+                    organizationKeys = createMockOrganizationKeys(1),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(
+                userId = MOCK_USER_STATE.activeUserId,
+                vault = mockSyncResponse,
+            )
+        } just runs
+
+        every {
+            settingsDiskSource.storeLastSyncTime(
+                MOCK_USER_STATE.activeUserId,
+                clock.instant(),
+            )
+        } just runs
+
+        val syncResult = vaultRepository.syncForResult()
+        assertEquals(SyncVaultDataResult.Success(itemsAvailable = false), syncResult)
     }
 
     @Test
@@ -4455,6 +4494,30 @@ class VaultRepositoryTest {
             syncResult,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncForResult when the last sync time is more recent than the revision date should return result from disk source data`() =
+        runTest {
+            val userId = "mockId-1"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            every {
+                settingsDiskSource.getLastSyncTime(userId = userId)
+            } returns clock.instant().plus(2, ChronoUnit.MINUTES)
+            mutableGetCiphersFlow.update { emptyList() }
+            val result = vaultRepository.syncForResult()
+            assertEquals(
+                SyncVaultDataResult.Success(itemsAvailable = false),
+                result,
+            )
+            verify(exactly = 1) {
+                settingsDiskSource.storeLastSyncTime(
+                    userId = userId,
+                    lastSyncTime = clock.instant(),
+                )
+            }
+            coVerify(exactly = 0) { syncService.sync() }
+        }
 
     //region Helper functions
 
