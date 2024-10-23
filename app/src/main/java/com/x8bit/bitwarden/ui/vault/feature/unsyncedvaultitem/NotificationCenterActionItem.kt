@@ -21,7 +21,7 @@ fun NotificationCenterActionItem(
     val contentDescription = stringResource(id = R.string.account)
 
     BitwardenStandardIconButton(
-        vectorIconRes = R.drawable.ic,
+        vectorIconRes = R.drawable.ic_clock,
         contentDescription = contentDescription,
         onClick = onClick,
         modifier = Modifier.testTag(tag = "NotificationCenter"),
