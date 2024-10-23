@@ -9,6 +9,9 @@ interface DatabaseSchemeManager {
 
     /**
      * The instant of the last database schema change performed on the database, if any.
+     *
+     * There is only a single scheme change instant tracked for all database schemes. It is expected
+     * that a scheme change to any database will update this value and trigger a sync.
      */
     var lastDatabaseSchemeChangeInstant: Instant?
 }
