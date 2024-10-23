@@ -114,10 +114,12 @@ internal class AuthenticatorBridgeManagerImpl(
                 // Encrypt the given URI:
                 val addTotpData = AddTotpLoginItemData(totpUri).encrypt(symmetricKey).getOrThrow()
                 return@safeCall this.startAddTotpLoginItemFlow(addTotpData)
-            }?.fold(
+            }
+            ?.fold(
                 onFailure = { false },
                 onSuccess = { true }
-            ) ?: false
+            )
+            ?: false
 
     private fun bindService() {
         if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
