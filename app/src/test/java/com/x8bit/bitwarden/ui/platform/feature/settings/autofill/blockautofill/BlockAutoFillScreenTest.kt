@@ -56,7 +56,7 @@ class BlockAutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `Screen should display empty state view when in ViewState Empty`() {
         composeTestRule
-            .onNodeWithText("Auto-fill will not be offered for these URIs.")
+            .onNodeWithText("Autofill will not be offered for these URIs.")
             .assertIsDisplayed()
 
         composeTestRule

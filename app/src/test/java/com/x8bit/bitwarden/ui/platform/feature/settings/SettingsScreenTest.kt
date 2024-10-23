@@ -100,7 +100,7 @@ class SettingsScreenTest : BaseComposeTest() {
                 onNavigateToVault = { },
             )
         }
-        composeTestRule.onNodeWithText("Auto-fill").performClick()
+        composeTestRule.onNodeWithText("Autofill").performClick()
         verify { viewModel.trySendAction(SettingsAction.SettingsClick(Settings.AUTO_FILL)) }
     }
 

@@ -217,15 +217,15 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Do you want to auto-fill or view this item?")
+            .onNodeWithText("Do you want to autofill or view this item?")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -267,7 +267,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -285,7 +285,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -302,7 +302,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -320,7 +320,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -373,7 +373,7 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -394,7 +394,7 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -429,7 +429,7 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
