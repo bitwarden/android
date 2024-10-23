@@ -509,7 +509,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         composeTestRule
-            .onAllNodesWithText("Bitwarden Auto-fill Service")
+            .onAllNodesWithText("Bitwarden Autofill Service")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
