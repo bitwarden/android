@@ -85,9 +85,9 @@ sealed class FlagKey<out T : Any> {
      * Data object holding the feature flag key for the SSH key cipher items feature.
      */
     data object SshKeyCipherItems : FlagKey<Boolean>() {
-        override val keyName: String = "ssh-key-cipher-items"
+        override val keyName: String = "ssh-key-vault-item"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
