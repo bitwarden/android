@@ -194,7 +194,7 @@ private fun VaultScreenScaffold(
     var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
-        canScroll = { !accountMenuVisible },
+        canScroll = { !accountMenuVisible && !notificationMenuVisible },
     )
 
     // Dynamic dialogs
@@ -278,7 +278,7 @@ private fun VaultScreenScaffold(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = state.viewState.hasFab && !accountMenuVisible,
+                visible = state.viewState.hasFab && !accountMenuVisible && !notificationMenuVisible,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
@@ -380,7 +380,7 @@ private fun VaultScreenScaffold(
                 isVisible = notificationMenuVisible,
                 notificationSummaries = state.notificationSummaries.toImmutableList(),
                 onNotificationClick = {},
-                onDismissRequest = { updateAccountMenuVisibility(false) },
+                onDismissRequest = { updateNotificationMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = outerModifier,
             )
