@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeDomainsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeFoldersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeOfflineCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeSendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
@@ -37,6 +38,7 @@ class VaultDiskSourceTest {
     private val json = PlatformNetworkModule.providesJson()
     private val dispatcherManager: FakeDispatcherManager = FakeDispatcherManager()
     private lateinit var ciphersDao: FakeCiphersDao
+    private lateinit var offlineCiphersDao: FakeOfflineCiphersDao
     private lateinit var collectionsDao: FakeCollectionsDao
     private lateinit var domainsDao: FakeDomainsDao
     private lateinit var foldersDao: FakeFoldersDao
@@ -47,6 +49,7 @@ class VaultDiskSourceTest {
     @BeforeEach
     fun setup() {
         ciphersDao = FakeCiphersDao()
+        offlineCiphersDao = FakeOfflineCiphersDao()
         collectionsDao = FakeCollectionsDao()
         domainsDao = FakeDomainsDao()
         foldersDao = FakeFoldersDao()
@@ -57,6 +60,7 @@ class VaultDiskSourceTest {
             domainsDao = domainsDao,
             foldersDao = foldersDao,
             sendsDao = sendsDao,
+            offlineCiphersDao = offlineCiphersDao,
             json = json,
             dispatcherManager = dispatcherManager,
         )

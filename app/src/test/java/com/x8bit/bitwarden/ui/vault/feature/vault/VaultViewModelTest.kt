@@ -1729,4 +1729,5 @@ private fun createMockVaultState(
         hideNotificationsDialog = true,
         showImportActionCard = true,
         isRefreshing = false,
+        notificationSummaries = listOf()
     )
