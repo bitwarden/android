@@ -75,6 +75,7 @@ android {
             isMinifyEnabled = false
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "true")
+            buildConfigField(type = "boolean", name = "HAS_LOGS_ENABLED", value = "true")
         }
 
         // Beta and Release variants are identical except beta has a different package name
@@ -88,6 +89,7 @@ android {
             )
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
+            buildConfigField(type = "boolean", name = "HAS_LOGS_ENABLED", value = "false")
         }
         release {
             isDebuggable = false
@@ -98,6 +100,7 @@ android {
             )
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
+            buildConfigField(type = "boolean", name = "HAS_LOGS_ENABLED", value = "false")
         }
     }
 
@@ -200,6 +203,7 @@ dependencies {
     implementation(platform(libs.square.retrofit.bom))
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.kotlinx.serialization)
+    implementation(libs.timber)
     implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only

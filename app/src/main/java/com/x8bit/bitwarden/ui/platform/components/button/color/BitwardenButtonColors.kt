@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.components.button.color
 import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButtonColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -42,12 +43,21 @@ fun bitwardenFilledTonalButtonColors(): ButtonColors = ButtonColors(
  * Provides a default set of Bitwarden-styled colors for an outlined button.
  */
 @Composable
-fun bitwardenOutlinedButtonColors(): ButtonColors = ButtonColors(
-    containerColor = Color.Transparent,
-    contentColor = BitwardenTheme.colorScheme.outlineButton.foreground,
-    disabledContainerColor = Color.Transparent,
-    disabledContentColor = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-)
+fun bitwardenOutlinedButtonColors(
+    contentColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    outlineColor: Color = BitwardenTheme.colorScheme.outlineButton.border,
+    outlineColorDisabled: Color = BitwardenTheme.colorScheme.outlineButton.borderDisabled,
+): BitwardenOutlinedButtonColors =
+    BitwardenOutlinedButtonColors(
+        materialButtonColors = ButtonColors(
+            containerColor = Color.Transparent,
+            contentColor = contentColor,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
+        ),
+        outlineBorderColor = outlineColor,
+        outlinedDisabledBorderColor = outlineColorDisabled,
+    )
 
 /**
  * Provides a default set of Bitwarden-styled colors for an outlined error button.

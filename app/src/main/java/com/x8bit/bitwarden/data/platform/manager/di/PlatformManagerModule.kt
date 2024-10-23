@@ -19,8 +19,6 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
-import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -28,6 +26,8 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
@@ -240,10 +240,10 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideCrashLogsManager(
+    fun provideLogsManager(
         legacyAppCenterMigrator: LegacyAppCenterMigrator,
         settingsRepository: SettingsRepository,
-    ): CrashLogsManager = CrashLogsManagerImpl(
+    ): LogsManager = LogsManagerImpl(
         settingsRepository = settingsRepository,
         legacyAppCenterMigrator = legacyAppCenterMigrator,
     )

@@ -33,6 +33,7 @@ fun BitwardenOutlinedButtonWithIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    colors: BitwardenOutlinedButtonColors = bitwardenOutlinedButtonColors(),
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -43,13 +44,13 @@ fun BitwardenOutlinedButtonWithIcon(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
-        colors = bitwardenOutlinedButtonColors(),
+        colors = colors.materialButtonColors,
         border = BorderStroke(
             width = 1.dp,
             color = if (isEnabled) {
-                BitwardenTheme.colorScheme.outlineButton.border
+                colors.outlineBorderColor
             } else {
-                BitwardenTheme.colorScheme.outlineButton.borderDisabled
+                colors.outlinedDisabledBorderColor
             },
         ),
     ) {

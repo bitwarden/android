@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
-import android.util.Log
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
@@ -15,8 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-
-private const val MAX_LOG_MESSAGE_LENGTH: Int = 4000
+import timber.log.Timber
 
 /**
  * Primary implementation of [Retrofits].
@@ -79,20 +76,10 @@ class RetrofitsImpl(
 
     //region Helper properties and functions
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
-        HttpLoggingInterceptor { message ->
-            message.chunked(size = MAX_LOG_MESSAGE_LENGTH).forEach { chunk ->
-                Log.d("BitwardenNetworkClient", chunk)
-            }
-        }
+        HttpLoggingInterceptor { message -> Timber.tag("BitwardenNetworkClient").d(message) }
             .apply {
                 redactHeader(name = HEADER_KEY_AUTHORIZATION)
-                setLevel(
-                    if (BuildConfig.DEBUG) {
-                        HttpLoggingInterceptor.Level.BODY
-                    } else {
-                        HttpLoggingInterceptor.Level.NONE
-                    },
-                )
+                setLevel(HttpLoggingInterceptor.Level.BODY)
             }
     }
 

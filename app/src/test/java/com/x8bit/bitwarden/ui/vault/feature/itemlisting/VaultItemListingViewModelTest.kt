@@ -917,6 +917,31 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit with a valid password for totp flow should emit NavigateToEditCipher`() =
+        runTest {
+            val cipherId = "cipherId-1234"
+            val password = "password"
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                        password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
+                            cipherId = cipherId,
+                        ),
+                    ),
+                )
+                // An Edit action navigates to the Edit screen
+                assertEquals(VaultItemListingEvent.NavigateToEditCipher(cipherId), awaitItem())
+            }
+        }
+
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()
@@ -1467,6 +1492,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             createMockDisplayItemForCipher(
                                 number = 1,
                                 secondSubtitleTestTag = "PasskeySite",
+                                isTotp = true,
                             ),
                         ),
                         displayFolderList = emptyList(),

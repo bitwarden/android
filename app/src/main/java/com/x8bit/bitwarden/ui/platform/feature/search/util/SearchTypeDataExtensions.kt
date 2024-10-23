@@ -148,6 +148,7 @@ fun List<CipherView>.toViewState(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): SearchState.ViewState =
     when {
@@ -159,6 +160,7 @@ fun List<CipherView>.toViewState(
                     hasMasterPassword = hasMasterPassword,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
+                    isTotp = isTotp,
                     isPremiumUser = isPremiumUser,
                 )
                     .sortAlphabetically(),
@@ -172,11 +174,13 @@ fun List<CipherView>.toViewState(
         }
     }
 
+@Suppress("LongParameterList")
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
@@ -185,15 +189,18 @@ private fun List<CipherView>.toDisplayItemList(
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
+            isTotp = isTotp,
             isPremiumUser = isPremiumUser,
         )
     }
 
+@Suppress("LongParameterList")
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
@@ -221,6 +228,7 @@ private fun CipherView.toDisplayItem(
             .filter {
                 this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
             },
+        isTotp = isTotp,
         shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
 
@@ -360,6 +368,7 @@ private fun SendView.toDisplayItem(
         overflowTestTag = "SendOptionsButton",
         totpCode = null,
         autofillSelectionOptions = emptyList(),
+        isTotp = false,
         shouldDisplayMasterPasswordReprompt = false,
     )
 
