@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -1200,6 +1201,13 @@ class VaultScreenTest : BaseComposeTest() {
     fun `when NavigateToImportLogins is sent, it should call onNavigateToImportLogins`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToImportLogins)
         assertTrue(onNavigateToImportLoginsCalled)
+    }
+
+    @Test
+    fun `when ShowSnackbar is sent snackbar should be displayed`() {
+        val data = BitwardenSnackbarData("message".asText())
+        mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
+        composeTestRule.onNodeWithText("message").assertIsDisplayed()
     }
 }
 

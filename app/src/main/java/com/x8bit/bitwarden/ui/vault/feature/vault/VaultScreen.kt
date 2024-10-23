@@ -55,6 +55,9 @@ import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -97,6 +100,7 @@ fun VaultScreen(
             { viewModel.trySendAction(VaultAction.RefreshPull) }
         },
     )
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
@@ -125,6 +129,7 @@ fun VaultScreen(
             }
 
             VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
+            is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -137,6 +142,7 @@ fun VaultScreen(
         pullToRefreshState = pullToRefreshState,
         vaultHandlers = vaultHandlers,
         onDimBottomNavBarRequest = onDimBottomNavBarRequest,
+        snackbarHostState = snackbarHostState,
     )
 }
 
@@ -173,6 +179,7 @@ private fun VaultScreenScaffold(
     pullToRefreshState: BitwardenPullToRefreshState,
     vaultHandlers: VaultHandlers,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    snackbarHostState: BitwardenSnackbarHostState,
 ) {
     var accountMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -259,6 +266,11 @@ private fun VaultScreenScaffold(
                         ),
                     )
                 },
+            )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(
+                bitwardenHostState = snackbarHostState,
             )
         },
         floatingActionButton = {
