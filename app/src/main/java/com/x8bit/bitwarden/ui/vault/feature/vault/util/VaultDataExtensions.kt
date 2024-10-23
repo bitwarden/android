@@ -32,13 +32,14 @@ private const val NO_FOLDER_ITEM_THRESHOLD: Int = 100
 /**
  * Transforms [VaultData] into [VaultState.ViewState] using the given [vaultFilterType].
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 fun VaultData.toViewState(
     isPremium: Boolean,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
+    showSshKeys: Boolean,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
@@ -46,6 +47,7 @@ fun VaultData.toViewState(
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
+        .filterSshKeysIfNecessary(showSshKeys)
 
     val filteredFolderViewList = folderViewList
         .toFilteredList(
@@ -61,11 +63,19 @@ fun VaultData.toViewState(
     val noFolderItems = filteredCipherViewList
         .filter { it.folderId.isNullOrBlank() }
 
+    val itemTypesCount: Int = if (showSshKeys) {
+        CipherType.entries
+    } else {
+        CipherType.entries.filterNot { it == CipherType.SSH_KEY }
+    }
+        .size
+
     return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         VaultState.ViewState.Content(
+            itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
                 totpItems.count()
             } else {
@@ -76,6 +86,7 @@ fun VaultData.toViewState(
             identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
             secureNoteItemsCount = filteredCipherViewList
                 .count { it.type == CipherType.SECURE_NOTE },
+            sshKeyItemsCount = filteredCipherViewList.count { it.type == CipherType.SSH_KEY },
             favoriteItems = filteredCipherViewList
                 .filter { it.favorite }
                 .mapNotNull {
@@ -259,6 +270,26 @@ private fun CipherView.toVaultItemOrNull(
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
+
+        CipherType.SSH_KEY -> VaultState.ViewState.VaultItem.SshKey(
+            id = id,
+            name = name.asText(),
+            publicKey = sshKey
+                ?.publicKey
+                ?.asText(),
+            privateKey = sshKey
+                ?.privateKey
+                ?.asText(),
+            fingerprint = sshKey
+                ?.fingerprint
+                ?.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+        )
     }
 }
 
@@ -321,3 +352,16 @@ fun List<CollectionView>.toFilteredList(
                 }
             }
         }
+
+/**
+ * Filters out all [CipherView]s that are of type [CipherType.SSH_KEY] if [showSshKeys] is false.
+ *
+ * @param showSshKeys Whether to show SSH keys in the vault.
+ */
+@JvmName("filterSshKeysIfNecessary")
+fun List<CipherView>.filterSshKeysIfNecessary(showSshKeys: Boolean): List<CipherView> =
+    if (showSshKeys) {
+        this
+    } else {
+        filter { it.type != CipherType.SSH_KEY }
+    }

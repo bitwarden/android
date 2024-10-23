@@ -16,10 +16,12 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -101,6 +103,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -162,6 +165,11 @@ class VaultAddEditViewModel @Inject constructor(
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
+                supportedItemTypes = getSupportedItemTypeOptions(
+                    isSshKeyVaultItemSupported = featureFlagManager.getFeatureFlag(
+                        key = FlagKey.SshKeyCipherItems,
+                    ),
+                ),
             )
         },
 ) {
@@ -203,6 +211,11 @@ class VaultAddEditViewModel @Inject constructor(
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems)
+            .map { VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultAddEditAction) {
@@ -211,6 +224,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.LoginType -> handleAddLoginTypeAction(action)
             is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
             is VaultAddEditAction.ItemType.CardType -> handleCardTypeActions(action)
+            is VaultAddEditAction.ItemType.SshKeyType -> handleSshKeyTypeActions(action)
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -320,6 +334,7 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
             VaultAddEditState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
             VaultAddEditState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
+            VaultAddEditState.ItemTypeOption.SSH_KEYS -> handleSwitchToSshKeyItem()
         }
     }
 
@@ -365,6 +380,18 @@ class VaultAddEditViewModel @Inject constructor(
                 common = currentContent.clearNonSharedData(),
                 type = currentContent.previousItemTypeOrDefault(
                     itemType = VaultAddEditState.ItemTypeOption.IDENTITY,
+                ),
+                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
+            )
+        }
+    }
+
+    private fun handleSwitchToSshKeyItem() {
+        updateContent { currentContent ->
+            currentContent.copy(
+                common = currentContent.clearNonSharedData(),
+                type = currentContent.previousItemTypeOrDefault(
+                    itemType = VaultAddEditState.ItemTypeOption.SSH_KEYS,
                 ),
                 previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
             )
@@ -1363,6 +1390,54 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion Card Type Handlers
 
+    //region SSH Key Type Handlers
+
+    private fun handleSshKeyTypeActions(action: VaultAddEditAction.ItemType.SshKeyType) {
+        when (action) {
+            is VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange -> {
+                handlePublicKeyTextChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange -> {
+                handlePrivateKeyTextChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange -> {
+                handlePrivateKeyVisibilityChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange -> {
+                handleSshKeyFingerprintTextChange(action)
+            }
+        }
+    }
+
+    private fun handlePublicKeyTextChange(
+        action: VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange,
+    ) {
+        updateSshKeyContent { it.copy(publicKey = action.publicKey) }
+    }
+
+    private fun handlePrivateKeyTextChange(
+        action: VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange,
+    ) {
+        updateSshKeyContent { it.copy(privateKey = action.privateKey) }
+    }
+
+    private fun handlePrivateKeyVisibilityChange(
+        action: VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange,
+    ) {
+        updateSshKeyContent { it.copy(showPrivateKey = action.isVisible) }
+    }
+
+    private fun handleSshKeyFingerprintTextChange(
+        action: VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange,
+    ) {
+        updateSshKeyContent { it.copy(fingerprint = action.fingerprint) }
+    }
+
+    //endregion SSH Key Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -1396,6 +1471,10 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.Internal.ValidateFido2PinResultReceive -> {
                 handleValidateFido2PinResultReceive(action)
+            }
+
+            is VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive -> {
+                handleSshKeyCipherItemsFeatureFlagReceive(action)
             }
         }
     }
@@ -1707,6 +1786,18 @@ class VaultAddEditViewModel @Inject constructor(
         getRequestAndRegisterCredential()
     }
 
+    private fun handleSshKeyCipherItemsFeatureFlagReceive(
+        action: VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                supportedItemTypes = getSupportedItemTypeOptions(
+                    isSshKeyVaultItemSupported = action.enabled,
+                ),
+            )
+        }
+    }
+
     //endregion Internal Type Handlers
 
     //region Utility Functions
@@ -1818,6 +1909,19 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateSshKeyContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.SshKey) ->
+        VaultAddEditState.ViewState.Content.ItemType.SshKey,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.SshKey)?.let {
+                currentContent.copy(
+                    type = block(it),
+                )
+            }
+        }
+    }
+
     private fun VaultAddEditState.ViewState.Content.clearNonSharedData():
         VaultAddEditState.ViewState.Content.Common =
         common.copy(
@@ -1851,6 +1955,10 @@ class VaultAddEditViewModel @Inject constructor(
 
                 VaultAddEditState.ItemTypeOption.SECURE_NOTES -> {
                     VaultAddEditState.ViewState.Content.ItemType.SecureNotes
+                }
+
+                VaultAddEditState.ItemTypeOption.SSH_KEYS -> {
+                    VaultAddEditState.ViewState.Content.ItemType.SshKey()
                 }
             },
         )
@@ -1911,6 +2019,7 @@ data class VaultAddEditState(
     val viewState: ViewState,
     val dialog: DialogState?,
     val shouldShowCloseButton: Boolean = true,
+    val supportedItemTypes: List<ItemTypeOption>,
     // Internal
     val shouldExitOnSave: Boolean = false,
     val totpData: TotpData? = null,
@@ -1957,6 +2066,7 @@ data class VaultAddEditState(
         CARD(R.string.type_card),
         IDENTITY(R.string.type_identity),
         SECURE_NOTES(R.string.type_secure_note),
+        SSH_KEYS(R.string.type_ssh_key),
     }
 
     /**
@@ -2161,6 +2271,25 @@ data class VaultAddEditState(
                 @Parcelize
                 data object SecureNotes : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SECURE_NOTES
+                }
+
+                /**
+                 * Represents the `SshKey` item type.
+                 *
+                 * @property publicKey The public key for the SSH key item.
+                 * @property privateKey The private key for the SSH key item.
+                 * @property fingerprint The fingerprint for the SSH key item.
+                 */
+                @Parcelize
+                data class SshKey(
+                    val publicKey: String = "",
+                    val privateKey: String = "",
+                    val fingerprint: String = "",
+                    val showPublicKey: Boolean = false,
+                    val showPrivateKey: Boolean = false,
+                    val showFingerprint: Boolean = false,
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SSH_KEYS
                 }
             }
 
@@ -2928,6 +3057,31 @@ sealed class VaultAddEditAction {
              */
             data class SecurityCodeVisibilityChange(val isVisible: Boolean) : CardType()
         }
+
+        /**
+         * Represents actions specific to the SSH Key type.
+         */
+        sealed class SshKeyType : ItemType() {
+            /**
+             * Fired when the public key text input is changed.
+             */
+            data class PublicKeyTextChange(val publicKey: String) : SshKeyType()
+
+            /**
+             * Fired when the private key text input is changed.
+             */
+            data class PrivateKeyTextChange(val privateKey: String) : SshKeyType()
+
+            /**
+             * Fired when the private key's visibility has changed.
+             */
+            data class PrivateKeyVisibilityChange(val isVisible: Boolean) : SshKeyType()
+
+            /**
+             * Fired when the fingerprint text input is changed.
+             */
+            data class FingerprintTextChange(val fingerprint: String) : SshKeyType()
+        }
     }
 
     /**
@@ -2950,6 +3104,13 @@ sealed class VaultAddEditAction {
          */
         data class GeneratorResultReceive(
             val generatorResult: GeneratorResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the the SSH key vault item feature flag state has been received.
+         */
+        data class SshKeyCipherItemsFeatureFlagReceive(
+            val enabled: Boolean,
         ) : Internal()
 
         /**
@@ -3005,3 +3166,8 @@ sealed class VaultAddEditAction {
         ) : Internal()
     }
 }
+
+private fun getSupportedItemTypeOptions(
+    isSshKeyVaultItemSupported: Boolean,
+) = VaultAddEditState.ItemTypeOption.entries
+    .filter { isSshKeyVaultItemSupported || it != VaultAddEditState.ItemTypeOption.SSH_KEYS }

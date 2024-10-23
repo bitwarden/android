@@ -3322,6 +3322,77 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `in ItemType_SshKeys changing the public key should trigger PublicKeyTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Public key")
+            .performTextInput("TestPublicKey")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange(
+                    publicKey = "TestPublicKey",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_SshKeys changing the private key should trigger PrivateKeyTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Private key")
+            .performTextInput("TestPrivateKey")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange(
+                    privateKey = "TestPrivateKey",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_SshKeys changing the fingerprint should trigger FingerprintTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Fingerprint")
+            .performTextInput("TestFingerprint")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange(
+                    fingerprint = "TestFingerprint",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SshKeys changing the private key visibility should trigger PrivateKeyVisibilityChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Private key")
+            .assertExists()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Show")
+            .assertExists()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange(true),
+            )
+        }
+    }
+
     //region Helper functions
 
     private fun updateLoginType(
@@ -3444,6 +3515,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -3454,6 +3526,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -3464,6 +3537,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -3474,6 +3548,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         @Suppress("MaxLineLength")
@@ -3495,6 +3570,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -3505,6 +3581,18 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+        )
+
+        private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SSH_KEY),
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

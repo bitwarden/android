@@ -256,6 +256,66 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for a trash SshKey cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = true,
+            cipherType = CipherType.SSH_KEY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.SshKey to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for a non trash SshKey cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.SSH_KEY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.SshKey to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for item not in a folder`() {
         val cipherView = createMockCipherView(
             number = 1,
@@ -873,15 +933,76 @@ class VaultItemListingDataExtensionsTest {
             createMockCollectionView(number = 3),
         )
 
-        val result = VaultItemListingState.ItemListingType.Vault.Login
-            .updateWithAdditionalDataIfNecessary(
-                folderList = folderViewList,
-                collectionList = collectionViewList,
-            )
+        assertEquals(
+            VaultItemListingState.ItemListingType.Vault.Identity,
+            VaultItemListingState.ItemListingType.Vault.Identity
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
 
         assertEquals(
             VaultItemListingState.ItemListingType.Vault.Login,
-            result,
+            VaultItemListingState.ItemListingType.Vault.Login
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Vault.SecureNote,
+            VaultItemListingState.ItemListingType.Vault.SecureNote
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Vault.Trash,
+            VaultItemListingState.ItemListingType.Vault.Trash
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Vault.SshKey,
+            VaultItemListingState.ItemListingType.Vault.SshKey
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Vault.Card,
+            VaultItemListingState.ItemListingType.Vault.Card
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Send.SendFile,
+            VaultItemListingState.ItemListingType.Send.SendFile
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Send.SendText,
+            VaultItemListingState.ItemListingType.Send.SendText
+                .updateWithAdditionalDataIfNecessary(
+                    folderList = folderViewList,
+                    collectionList = collectionViewList,
+                ),
         )
     }
 

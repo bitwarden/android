@@ -66,4 +66,5 @@ private val VaultAddEditState.ViewState.Content.ItemType.defaultLinkedFieldTypeO
         is VaultAddEditState.ViewState.Content.ItemType.Identity -> VaultLinkedFieldType.TITLE
         is VaultAddEditState.ViewState.Content.ItemType.Login -> VaultLinkedFieldType.USERNAME
         is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> null
+        is VaultAddEditState.ViewState.Content.ItemType.SshKey -> null
     }

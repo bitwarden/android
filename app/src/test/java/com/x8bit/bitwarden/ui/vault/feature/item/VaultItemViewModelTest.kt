@@ -2337,6 +2337,60 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class SshKeyActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    viewState = SSH_KEY_VIEW_STATE,
+                ),
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on PrivateKeyVisibilityClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val sshKeyViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            previousState = null,
+                            isPremiumUser = true,
+                            hasMasterPassword = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns SSH_KEY_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                assertEquals(sshKeyState, viewModel.stateFlow.value)
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                        isVisible = true,
+                    ),
+                )
+                assertEquals(
+                    sshKeyState.copy(
+                        viewState = sshKeyViewState.copy(
+                            common = DEFAULT_COMMON,
+                            type = DEFAULT_SSH_KEY_TYPE.copy(
+                                showPrivateKey = true,
+                            ),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -2628,6 +2682,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
             )
 
+        private val DEFAULT_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
+            VaultItemState.ViewState.Content.ItemType.SshKey(
+                name = "mockName",
+                publicKey = "mockPublicKey",
+                privateKey = "mockPrivateKey",
+                fingerprint = "mockFingerprint",
+                showPrivateKey = false,
+            )
+
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common(
                 name = "login cipher",
@@ -2683,6 +2746,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_CARD_TYPE,
+            )
+
+        private val SSH_KEY_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_SSH_KEY_TYPE,
             )
     }
 }

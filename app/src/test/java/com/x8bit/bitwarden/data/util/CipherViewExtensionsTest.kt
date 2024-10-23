@@ -310,6 +310,18 @@ class CipherViewExtensionsTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun `subtitle should return null when type is IDENTITY and identity is null`() {
+        val cipherView: CipherView = mockk {
+            every { identity } returns null
+            every { type } returns CipherType.IDENTITY
+        }
+
+        val actual = cipherView.subtitle
+
+        assertNull(actual)
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `subtitle should return null when type is IDENTITY and first and last name are null`() {
@@ -327,6 +339,17 @@ class CipherViewExtensionsTest {
         val actual = cipherView.subtitle
 
         // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `subtitle should return null when type is SSH_KEY`() {
+        val cipherView: CipherView = mockk {
+            every { type } returns CipherType.SSH_KEY
+        }
+
+        val actual = cipherView.subtitle
+
         assertNull(actual)
     }
 }

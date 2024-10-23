@@ -21,6 +21,7 @@ private const val LOGIN: String = "login"
 private const val CARD: String = "card"
 private const val IDENTITY: String = "identity"
 private const val SECURE_NOTE: String = "secure_note"
+private const val SSH_KEY: String = "ssh_key"
 private const val ADD_ITEM_TYPE: String = "vault_add_item_type"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "vault_add_edit_item"
@@ -127,6 +128,7 @@ private fun VaultItemCipherType.toTypeString(): String =
         VaultItemCipherType.CARD -> CARD
         VaultItemCipherType.IDENTITY -> IDENTITY
         VaultItemCipherType.SECURE_NOTE -> SECURE_NOTE
+        VaultItemCipherType.SSH_KEY -> SSH_KEY
     }
 
 private fun String.toVaultItemCipherType(): VaultItemCipherType =
@@ -135,6 +137,7 @@ private fun String.toVaultItemCipherType(): VaultItemCipherType =
         CARD -> VaultItemCipherType.CARD
         IDENTITY -> VaultItemCipherType.IDENTITY
         SECURE_NOTE -> VaultItemCipherType.SECURE_NOTE
+        SSH_KEY -> VaultItemCipherType.SSH_KEY
         else -> throw IllegalStateException(
             "Edit Item string arguments for VaultAddEditNavigation must match!",
         )
