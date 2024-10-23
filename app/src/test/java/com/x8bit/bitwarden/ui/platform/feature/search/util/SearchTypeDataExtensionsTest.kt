@@ -299,6 +299,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -324,6 +325,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = false,
         )
 
         assertEquals(
@@ -364,6 +366,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = false,
         )
 
         assertEquals(
@@ -414,6 +417,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = true,
         )
 
         assertEquals(

@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -46,6 +47,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
+import com.x8bit.bitwarden.ui.vault.model.TotpData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -82,9 +84,7 @@ class SearchViewModel @Inject constructor(
         ?: run {
             val searchType = SearchArgs(savedStateHandle).type
             val userState = requireNotNull(authRepo.userStateFlow.value)
-            val autofillSelectionData = specialCircumstanceManager
-                .specialCircumstance
-                ?.toAutofillSelectionDataOrNull()
+            val specialCircumstance = specialCircumstanceManager.specialCircumstance
 
             SearchState(
                 searchTerm = "",
@@ -102,7 +102,8 @@ class SearchViewModel @Inject constructor(
                 baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
                 baseIconUrl = environmentRepo.environment.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = settingsRepo.isIconLoadingDisabled,
-                autofillSelectionData = autofillSelectionData,
+                autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
+                totpData = specialCircumstance?.toTotpDataOrNull(),
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
                 isPremium = userState.activeAccount.isPremium,
             )
@@ -151,7 +152,11 @@ class SearchViewModel @Inject constructor(
     private fun handleItemClick(action: SearchAction.ItemClick) {
         val event = when (state.searchType) {
             is SearchTypeData.Vault -> {
-                SearchEvent.NavigateToViewCipher(cipherId = action.itemId)
+                if (state.isTotp) {
+                    SearchEvent.NavigateToEditCipher(cipherId = action.itemId)
+                } else {
+                    SearchEvent.NavigateToViewCipher(cipherId = action.itemId)
+                }
             }
 
             is SearchTypeData.Sends -> {
@@ -565,6 +570,10 @@ class SearchViewModel @Inject constructor(
                     ),
                 )
             }
+
+            is MasterPasswordRepromptData.Totp -> {
+                trySendAction(SearchAction.ItemClick(itemId = data.cipherId))
+            }
         }
     }
 
@@ -675,6 +684,7 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
+                                isTotp = state.isTotp,
                                 isPremiumUser = state.isPremium,
                             )
                     }
@@ -718,7 +728,8 @@ data class SearchState(
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     // Internal
-    val autofillSelectionData: AutofillSelectionData? = null,
+    val autofillSelectionData: AutofillSelectionData?,
+    val totpData: TotpData?,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
 ) : Parcelable {
@@ -728,6 +739,11 @@ data class SearchState(
      */
     val isAutofill: Boolean
         get() = autofillSelectionData != null
+
+    /**
+     * Whether or not this represents a listing screen for totp.
+     */
+    val isTotp: Boolean get() = totpData != null
 
     /**
      * Represents the specific view states for the search screen.
@@ -815,6 +831,7 @@ data class SearchState(
         val overflowOptions: List<ListingItemOverflowAction>,
         val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,
+        val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
     ) : Parcelable
 }
@@ -1157,6 +1174,14 @@ sealed class MasterPasswordRepromptData : Parcelable {
      */
     @Parcelize
     data class AutofillAndSave(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * Autofill was selected.
+     */
+    @Parcelize
+    data class Totp(
         val cipherId: String,
     ) : MasterPasswordRepromptData()
 

@@ -104,7 +104,8 @@ private fun ObscuredContent_preview() {
                     BitwardenFilledButton(
                         label = "Obscure Content",
                         onClick = {},
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                     )
                 }
@@ -141,7 +142,8 @@ private fun InteractiveObscuredContent_preview() {
                     BitwardenFilledButton(
                         label = "Obscure Content",
                         onClick = {},
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                     )
                 }

@@ -9,7 +9,6 @@ import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -23,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -193,11 +193,22 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemClick for vault item should emit NavigateToViewCipher`() = runTest {
+    fun `ItemClick for vault item without totp should emit NavigateToViewCipher`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
             assertEquals(SearchEvent.NavigateToViewCipher(cipherId = "mock"), awaitItem())
+        }
+    }
+
+    @Test
+    fun `ItemClick for vault item with totp should emit NavigateToEditCipher`() = runTest {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.AddTotpLoginItem(mockk())
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
+            assertEquals(SearchEvent.NavigateToEditCipher(cipherId = "mock"), awaitItem())
         }
     }
 
@@ -578,6 +589,32 @@ class SearchViewModelTest : BaseViewModelTest() {
                     cipherId = cipherId,
                     cipherView = updatedCipherView,
                 )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for totp should emit NavigateToEditCipher`() =
+        runTest {
+            setupMockUri()
+            val cipherId = CIPHER_ID
+            val password = "password"
+
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+            val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(totpData = mockk()))
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    SearchAction.MasterPasswordRepromptSubmit(
+                        password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
+                            cipherId = cipherId,
+                        ),
+                    ),
+                )
+                assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
             }
         }
 
@@ -979,6 +1016,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1081,6 +1119,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1193,6 +1232,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1308,6 +1348,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1483,6 +1524,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1515,6 +1557,8 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseIconUrl = "https://vault.bitwarden.com/icons",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
+    totpData = null,
+    autofillSelectionData = null,
     isPremium = true,
 )
 

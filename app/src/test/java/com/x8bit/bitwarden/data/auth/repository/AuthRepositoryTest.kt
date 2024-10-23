@@ -65,7 +65,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -103,9 +102,11 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSour
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -249,6 +250,9 @@ class AuthRepositoryTest {
         every { currentOrDefaultUserFirstTimeState } returns FIRST_TIME_STATE
         every { firstTimeStateFlow } returns MutableStateFlow(FIRST_TIME_STATE)
     }
+    private val logsManager: LogsManager = mockk {
+        every { setUserData(userId = any(), environmentType = any()) } just runs
+    }
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
@@ -272,6 +276,7 @@ class AuthRepositoryTest {
         policyManager = policyManager,
         featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
+        logsManager = logsManager,
     )
 
     @BeforeEach
@@ -1522,6 +1527,7 @@ class AuthRepositoryTest {
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
+                legacyErrorModel = null,
             )
             .asSuccess()
 
@@ -2314,6 +2320,7 @@ class AuthRepositoryTest {
                     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                         errorMessage = "mock_error_message",
                     ),
+                    legacyErrorModel = null,
                 )
                 .asSuccess()
 
@@ -2782,6 +2789,7 @@ class AuthRepositoryTest {
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
+                legacyErrorModel = null,
             )
             .asSuccess()
 

@@ -346,6 +346,26 @@ class SearchScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `clicking on totp when reprompt is required should show master password dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = SearchState.ViewState.Content(
+                displayItems = listOf(
+                    createMockDisplayItemForCipher(number = 1, isTotp = true).copy(
+                        shouldDisplayMasterPasswordReprompt = true,
+                    ),
+                ),
+            ),
+            totpData = mockk(),
+        )
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule.assertMasterPasswordDialogDisplayed()
+    }
+
+    @Test
     fun `clicking cancel on the master password dialog should close the dialog`() {
         mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
         composeTestRule
@@ -890,6 +910,8 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseIconUrl = "www.test.com",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
+    totpData = null,
+    autofillSelectionData = null,
     isPremium = true,
 )
 

@@ -12,12 +12,14 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 /**
  * Create a mock [VaultItemListingState.DisplayItem] with a given [number].
  */
+@Suppress("LongParameterList")
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
     subtitle: String? = "mockUsername-$number",
     secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
+    isTotp: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -71,6 +73,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
+                isTotp = isTotp,
             )
         }
 
@@ -111,6 +114,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
+                isTotp = false,
             )
         }
 
@@ -157,6 +161,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "CardCipherIcon",
+                isTotp = false,
             )
         }
 
@@ -194,6 +199,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "IdentityCipherIcon",
+                isTotp = false,
             )
         }
     }
@@ -245,6 +251,7 @@ fun createMockDisplayItemForSend(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
+                isTotp = false,
             )
         }
 
@@ -286,6 +293,7 @@ fun createMockDisplayItemForSend(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
+                isTotp = false,
             )
         }
     }
