@@ -22,6 +22,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -116,6 +117,7 @@ class AuthenticatorBridgeRepositoryTest {
     @AfterEach
     fun teardown() {
         confirmVerified(authRepository, vaultSdkSource, vaultRepository, vaultDiskSource)
+        unmockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
     }
 
     @Test
