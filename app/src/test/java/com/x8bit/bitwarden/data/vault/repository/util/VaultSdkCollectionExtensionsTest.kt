@@ -17,6 +17,7 @@ class VaultSdkCollectionExtensionsTest {
                 externalId = "externalId",
                 readOnly = true,
                 id = "id",
+                manage = true,
             ),
             SyncResponseJson.Collection(
                 organizationId = "organizationId",
@@ -25,6 +26,7 @@ class VaultSdkCollectionExtensionsTest {
                 externalId = "externalId",
                 isReadOnly = true,
                 id = "id",
+                canManage = true,
             )
                 .toEncryptedSdkCollection(),
         )
@@ -42,6 +44,7 @@ class VaultSdkCollectionExtensionsTest {
                     externalId = "externalId",
                     readOnly = true,
                     id = "id",
+                    manage = true,
                 ),
             ),
             listOf(
@@ -52,6 +55,7 @@ class VaultSdkCollectionExtensionsTest {
                     externalId = "externalId",
                     isReadOnly = true,
                     id = "id",
+                    canManage = true,
                 )
                     .toEncryptedSdkCollection(),
             ),

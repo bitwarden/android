@@ -193,7 +193,8 @@ private const val SYNC_SUCCESS_JSON = """
       "name": "mockName-1",
       "externalId": "mockExternalId-1",
       "readOnly": false,
-      "id": "mockId-1"
+      "id": "mockId-1",
+      "manage": true
     }
   ],
   "ciphers": [

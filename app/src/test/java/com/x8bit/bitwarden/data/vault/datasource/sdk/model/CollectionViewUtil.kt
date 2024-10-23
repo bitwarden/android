@@ -13,4 +13,5 @@ fun createMockCollectionView(number: Int, name: String? = null): CollectionView 
         name = name ?: "mockName-$number",
         externalId = "mockExternalId-$number",
         readOnly = false,
+        manage = true,
     )

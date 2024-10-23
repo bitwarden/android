@@ -969,5 +969,8 @@ data class SyncResponseJson(
 
         @SerialName("id")
         val id: String,
+
+        @SerialName("manage")
+        val canManage: Boolean,
     )
 }
