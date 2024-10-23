@@ -297,7 +297,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     @Test
     fun `SyncVaultDataResult success should update state to show bottom sheet`() {
         val viewModel = createViewModel()
-            viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+        viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
         assertEquals(
             ImportLoginsState(
                 dialogState = null,

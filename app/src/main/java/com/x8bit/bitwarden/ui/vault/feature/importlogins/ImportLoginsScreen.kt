@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -49,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
@@ -101,10 +99,28 @@ fun ImportLoginsScreen(
         }
     }
 
-    if (state.showBottomSheet) {
-        ImportLoginsSuccessBottomSheet(
-            onCompleteImportLogins = handler.onSuccessfulSyncAcknowledged,
-            modifier = Modifier.statusBarsPadding(),
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    val hideSheetAndExecuteCompleteImportLogins: () -> Unit = {
+        // This pattern mirrors the onDismissRequest handling in the material ModalBottomSheet
+        scope
+            .launch {
+                sheetState.hide()
+            }
+            .invokeOnCompletion {
+                handler.onSuccessfulSyncAcknowledged()
+            }
+    }
+    BitwardenModalBottomSheet(
+        showBottomSheet = state.showBottomSheet,
+        sheetTitle = stringResource(R.string.bitwarden_tools),
+        onDismiss = hideSheetAndExecuteCompleteImportLogins,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        modifier = Modifier.statusBarsPadding(),
+    ) { paddingValues ->
+        ImportLoginsSuccessBottomSheetContent(
+            onCompleteImportLogins = hideSheetAndExecuteCompleteImportLogins,
+            modifier = Modifier.padding(paddingValues),
         )
     }
 
@@ -456,121 +472,80 @@ private fun ImportLoginsStepThreeContent(
 }
 
 @Suppress("LongMethod")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImportLoginsSuccessBottomSheet(
+private fun ImportLoginsSuccessBottomSheetContent(
     onCompleteImportLogins: () -> Unit,
     modifier: Modifier = Modifier,
-    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
 ) {
-    val scope = rememberCoroutineScope()
-    val hideSheetAndExecuteCompleteImportLogins: () -> Unit = {
-        scope
-            .launch {
-                sheetState.hide()
-            }
-            .invokeOnCompletion {
-                onCompleteImportLogins()
-            }
-    }
-    ModalBottomSheet(
-        onDismissRequest = onCompleteImportLogins,
-        modifier = modifier,
-        dragHandle = null,
-        sheetState = sheetState,
-        contentWindowInsets = {
-                WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
-        },
-        shape = BitwardenTheme.shapes.bottomSheet,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .then(modifier),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-        BitwardenScaffold(
-            topBar = {
-                BitwardenTopAppBar(
-                    title = stringResource(R.string.bitwarden_tools),
-                    navigationIcon = NavigationIcon(
-                        navigationIcon = rememberVectorPainter(R.drawable.ic_close),
-                        onNavigationIconClick = hideSheetAndExecuteCompleteImportLogins,
-                        navigationIconContentDescription = stringResource(R.string.close),
-                    ),
-                    scrollBehavior = scrollBehavior,
-                )
-            },
+        Spacer(Modifier.height(24.dp))
+        Image(
+            painter = rememberVectorPainter(R.drawable.img_secure_devices),
+            contentDescription = null,
             modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxSize(),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = it)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Spacer(Modifier.height(24.dp))
-                Image(
-                    painter = rememberVectorPainter(R.drawable.img_secure_devices),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .size(124.dp),
-                )
-                Spacer(Modifier.height(24.dp))
-                Text(
-                    text = stringResource(R.string.import_successful),
-                    style = BitwardenTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.standardHorizontalMargin(),
-                )
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = stringResource(
-                        R.string.manage_your_logins_from_anywhere_with_bitwarden_tools,
+                .standardHorizontalMargin()
+                .size(124.dp),
+        )
+        Spacer(Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.import_successful),
+            style = BitwardenTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+        Spacer(Modifier.height(12.dp))
+        Text(
+            text = stringResource(
+                R.string.manage_your_logins_from_anywhere_with_bitwarden_tools,
+            ),
+            style = BitwardenTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+        Spacer(Modifier.height(24.dp))
+        @Suppress("MaxLineLength")
+        BitwardenContentCard(
+            contentItems = persistentListOf(
+                ContentBlockData(
+                    headerText = stringResource(R.string.download_the_browser_extension),
+                    subtitleText = stringResource(R.string.go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser),
+                    iconResource = R.drawable.ic_puzzle,
+                ),
+                ContentBlockData(
+                    headerText = stringResource(R.string.use_the_web_app),
+                    subtitleText = stringResource(
+                        R.string.log_in_at_bitwarden_com_to_easily_manage_your_account,
                     ),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.standardHorizontalMargin(),
-                )
-                Spacer(Modifier.height(24.dp))
-                @Suppress("MaxLineLength")
-                BitwardenContentCard(
-                    contentItems = persistentListOf(
-                        ContentBlockData(
-                            headerText = stringResource(R.string.download_the_browser_extension),
-                            subtitleText = stringResource(R.string.go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser),
-                            iconResource = R.drawable.ic_puzzle,
-                        ),
-                        ContentBlockData(
-                            headerText = stringResource(R.string.use_the_web_app),
-                            subtitleText = stringResource(
-                                R.string.log_in_at_bitwarden_com_to_easily_manage_your_account,
-                            ),
-                            iconResource = R.drawable.ic_desktop,
-                        ),
-                        ContentBlockData(
-                            headerText = stringResource(R.string.autofill_passwords),
-                            subtitleText = stringResource(R.string.set_up_autofill_on_all_your_devices),
-                            iconResource = R.drawable.ic_shield,
-                        ),
-                    ),
-                    modifier = Modifier.standardHorizontalMargin(),
-                ) { contentData ->
-                    BitwardenContentBlock(
-                        data = contentData,
-                        subtitleTextStyle = BitwardenTheme.typography.bodySmall,
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
-                BitwardenFilledButton(
-                    label = stringResource(R.string.got_it),
-                    onClick = hideSheetAndExecuteCompleteImportLogins,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-                Spacer(Modifier.navigationBarsPadding())
-            }
+                    iconResource = R.drawable.ic_desktop,
+                ),
+                ContentBlockData(
+                    headerText = stringResource(R.string.autofill_passwords),
+                    subtitleText = stringResource(R.string.set_up_autofill_on_all_your_devices),
+                    iconResource = R.drawable.ic_shield,
+                ),
+            ),
+            modifier = Modifier.standardHorizontalMargin(),
+        ) { contentData ->
+            BitwardenContentBlock(
+                data = contentData,
+                subtitleTextStyle = BitwardenTheme.typography.bodySmall,
+            )
         }
+        Spacer(Modifier.height(24.dp))
+        BitwardenFilledButton(
+            label = stringResource(R.string.got_it),
+            onClick = onCompleteImportLogins,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+        Spacer(Modifier.navigationBarsPadding())
     }
 }
 

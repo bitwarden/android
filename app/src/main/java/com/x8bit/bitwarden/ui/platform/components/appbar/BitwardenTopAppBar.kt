@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
@@ -88,6 +89,7 @@ fun BitwardenTopAppBar(
     modifier: Modifier = Modifier,
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
+    minimunHeight: Dp = 48.dp,
 ) {
     var titleTextHasOverflow by remember {
         mutableStateOf(false)
@@ -131,7 +133,7 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
-            collapsedHeight = 48.dp,
+            collapsedHeight = minimunHeight,
             expandedHeight = 96.dp,
             title = {
                 // The height of the component is controlled and will only allow for 1 extra row,
@@ -151,7 +153,7 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
-            expandedHeight = 48.dp,
+            expandedHeight = minimunHeight,
             title = {
                 Text(
                     text = title,

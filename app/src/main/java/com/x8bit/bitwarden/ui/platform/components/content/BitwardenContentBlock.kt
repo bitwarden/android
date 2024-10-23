@@ -41,7 +41,7 @@ fun BitwardenContentBlock(
         headerTextStyle = headerTextStyle,
         subtitleText = data.subtitleText,
         subtitleTextStyle = subtitleTextStyle,
-        iconResource = data.iconResource,
+        iconVectorResource = data.iconVectorResource,
         backgroundColor = backgroundColor,
     )
 }
@@ -57,7 +57,7 @@ private fun BitwardenContentBlock(
     headerTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
     subtitleText: String? = null,
     subtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
-    @DrawableRes iconResource: Int? = null,
+    @DrawableRes iconVectorResource: Int? = null,
     backgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
 ) {
     Row(
@@ -66,7 +66,7 @@ private fun BitwardenContentBlock(
             .background(backgroundColor),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        iconResource
+        iconVectorResource
             ?.let {
                 Spacer(Modifier.width(12.dp))
                 Icon(

@@ -28,7 +28,7 @@ fun InstructionRowItem(
 ) {
     BitwardenContentBlock(
         data = ContentBlockData(
-            iconResource = instructionStep.imageRes,
+            iconVectorResource = instructionStep.imageRes,
             headerText = instructionStep.instructionText,
             subtitleText = instructionStep.additionalText,
         ),
