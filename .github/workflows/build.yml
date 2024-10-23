@@ -84,6 +84,13 @@ jobs:
       - name: Build
         run: bundle exec fastlane assembleDebugApks
 
+      - name: Upload test reports on failure
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: failure()
+        with:
+          name: test-reports
+          path: app/build/reports/tests/
+
   publish_playstore:
     name: Publish Play Store artifacts
     needs:
