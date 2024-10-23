@@ -275,12 +275,12 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     @Test
     fun `MoveToSyncInProgress should send NavigateToImportSuccess event when sync succeeds`() =
         runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
-            assertEquals(ImportLoginsEvent.NavigateToImportSuccess, awaitItem())
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+                assertEquals(ImportLoginsEvent.NavigateToImportSuccess, awaitItem())
+            }
         }
-    }
 
     @Test
     fun `SyncVaultDataResult Error should remove loading state and show error dialog`() = runTest {

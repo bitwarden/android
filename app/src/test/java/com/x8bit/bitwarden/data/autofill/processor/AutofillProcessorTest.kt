@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -57,7 +56,6 @@ class AutofillProcessorTest {
     private val policyManager: PolicyManager = mockk()
     private val saveInfoBuilder: SaveInfoBuilder = mockk()
     private val settingsRepository: SettingsRepository = mockk()
-    private val crashLogsManager: CrashLogsManager = mockk()
 
     private val appInfo: AutofillAppInfo = AutofillAppInfo(
         context = mockk(),
@@ -79,7 +77,6 @@ class AutofillProcessorTest {
             policyManager = policyManager,
             saveInfoBuilder = saveInfoBuilder,
             settingsRepository = settingsRepository,
-            crashLogsManager = crashLogsManager,
         )
     }
 
@@ -246,7 +243,6 @@ class AutofillProcessorTest {
             } returns fillResponse
             val runtimeException = RuntimeException("TransactionToLarge")
             every { fillCallback.onSuccess(fillResponse) } throws runtimeException
-            every { crashLogsManager.trackNonFatalException(runtimeException) } just runs
 
             // Test
             autofillProcessor.processFillRequest(
@@ -271,7 +267,6 @@ class AutofillProcessorTest {
                     saveInfo = saveInfo,
                 )
                 fillCallback.onSuccess(fillResponse)
-                crashLogsManager.trackNonFatalException(runtimeException)
             }
         }
 

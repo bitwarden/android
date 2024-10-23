@@ -171,6 +171,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: A networking layer interface.
     - License: Apache 2.0
 
+- **Timber**
+    - https://github.com/JakeWharton/timber
+    - Purpose: Extensible logging library for Android.
+    - License: Apache 2.0
+
 - **zxcvbn4j**
     - https://github.com/nulab/zxcvbn4j
     - Purpose: Password strength estimation.

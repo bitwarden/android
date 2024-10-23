@@ -116,7 +116,9 @@ fun SearchContent(
                 supportingLabelTestTag = it.subtitleTestTag,
                 optionsTestTag = it.overflowTestTag,
                 onClick = {
-                    if (it.autofillSelectionOptions.isNotEmpty()) {
+                    if (it.isTotp && it.shouldDisplayMasterPasswordReprompt) {
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(it.id)
+                    } else if (it.autofillSelectionOptions.isNotEmpty()) {
                         autofillSelectionOptionsItem = it
                     } else {
                         searchHandlers.onItemClick(it.id)

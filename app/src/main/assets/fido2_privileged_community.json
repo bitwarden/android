@@ -63,6 +63,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.github.forkmaintainers.iceraven",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "9C:0D:22:37:9F:48:7B:70:A4:F9:F8:BE:C0:17:3C:F9:1A:16:44:F0:8F:93:38:5B:5B:78:2C:E3:76:60:BA:81"
+          }
+        ]
+      }
     }
   ]
 }

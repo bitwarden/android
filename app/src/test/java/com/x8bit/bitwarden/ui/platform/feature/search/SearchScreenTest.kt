@@ -217,15 +217,15 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Do you want to auto-fill or view this item?")
+            .onNodeWithText("Do you want to autofill or view this item?")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -267,7 +267,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -285,7 +285,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -302,7 +302,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -320,7 +320,7 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -346,6 +346,26 @@ class SearchScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `clicking on totp when reprompt is required should show master password dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = SearchState.ViewState.Content(
+                displayItems = listOf(
+                    createMockDisplayItemForCipher(number = 1, isTotp = true).copy(
+                        shouldDisplayMasterPasswordReprompt = true,
+                    ),
+                ),
+            ),
+            totpData = mockk(),
+        )
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule.assertMasterPasswordDialogDisplayed()
+    }
+
+    @Test
     fun `clicking cancel on the master password dialog should close the dialog`() {
         mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
         composeTestRule
@@ -353,7 +373,7 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -374,7 +394,7 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         composeTestRule
-            .onNodeWithText("Auto-fill")
+            .onNodeWithText("Autofill")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -409,7 +429,7 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         composeTestRule
-            .onNodeWithText("Auto-fill and save")
+            .onNodeWithText("Autofill and save")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
