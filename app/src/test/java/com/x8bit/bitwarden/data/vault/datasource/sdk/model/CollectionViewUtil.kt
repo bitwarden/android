@@ -5,7 +5,11 @@ import com.bitwarden.vault.CollectionView
 /**
  * Create a mock [CollectionView] with a given [number].
  */
-fun createMockCollectionView(number: Int, name: String? = null): CollectionView =
+fun createMockCollectionView(
+    number: Int,
+    name: String? = null,
+    manage: Boolean = true,
+): CollectionView =
     CollectionView(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
@@ -13,5 +17,5 @@ fun createMockCollectionView(number: Int, name: String? = null): CollectionView 
         name = name ?: "mockName-$number",
         externalId = "mockExternalId-$number",
         readOnly = false,
-        manage = true,
+        manage = manage,
     )

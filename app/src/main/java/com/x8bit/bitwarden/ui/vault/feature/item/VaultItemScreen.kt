@@ -226,7 +226,8 @@ fun VaultItemScreen(
                                         )
                                     }
                                 },
-                            ),
+                            )
+                                .takeIf { state.canDelete },
                         ),
                     )
                 },

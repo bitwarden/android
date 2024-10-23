@@ -75,6 +75,7 @@ class CipherViewExtensionsTest {
             totpData = null,
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(
@@ -121,6 +122,7 @@ class CipherViewExtensionsTest {
             totpData = null,
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(
@@ -172,6 +174,7 @@ class CipherViewExtensionsTest {
             totpData = null,
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(
@@ -232,6 +235,7 @@ class CipherViewExtensionsTest {
             totpData = mockk { every { uri } returns totp },
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(
@@ -289,6 +293,7 @@ class CipherViewExtensionsTest {
             totpData = null,
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(
@@ -324,6 +329,7 @@ class CipherViewExtensionsTest {
             totpData = null,
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(
@@ -368,6 +374,7 @@ class CipherViewExtensionsTest {
             totpData = null,
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
+            canDelete = true,
         )
 
         assertEquals(

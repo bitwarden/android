@@ -42,7 +42,9 @@ class TotpDataExtensionsTest {
                 isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(totp = uri),
             ),
-            totpData.toDefaultAddTypeContent(isIndividualVaultDisabled = false),
+            totpData.toDefaultAddTypeContent(
+                isIndividualVaultDisabled = false,
+            ),
         )
     }
 }

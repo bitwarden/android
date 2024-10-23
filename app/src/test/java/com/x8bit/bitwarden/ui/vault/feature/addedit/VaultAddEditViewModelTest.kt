@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
@@ -1195,6 +1196,136 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode, canDelete should be false when cipher is in a collection the user cannot manage`() =
+        runTest {
+            val cipherView = createMockCipherView(1)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = cipherView,
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                    notes = "mockNotes-1",
+                    canDelete = false,
+                ),
+            )
+
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = false,
+                )
+            } returns stateWithName.viewState
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    cipherView = cipherView,
+                    collectionViewList = listOf(
+                        createMockCollectionView(
+                            number = 1,
+                            manage = false,
+                        ),
+                    ),
+                ),
+            )
+
+            createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+
+            verify {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = false,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode, canDelete should be true when cipher is in a collection the user can manage`() =
+        runTest {
+            val cipherView = createMockCipherView(1)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = cipherView,
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                    notes = "mockNotes-1",
+                    canDelete = true,
+                ),
+            )
+
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = true,
+                )
+            } returns stateWithName.viewState
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    cipherView = cipherView,
+                    collectionViewList = listOf(
+                        createMockCollectionView(
+                            number = 1,
+                            manage = true,
+                        ),
+                    ),
+                ),
+            )
+
+            createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+
+            verify {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = true,
+                )
+            }
+        }
+
     @Test
     fun `in edit mode, updateCipher success should ShowToast and NavigateBack`() =
         runTest {
@@ -1310,6 +1441,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
+                    canDelete = true,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -1341,6 +1473,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
+                    canDelete = true,
                 )
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             }
@@ -1375,6 +1508,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
+                    canDelete = true,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1437,6 +1571,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
+                    canDelete = true,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1502,6 +1637,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
+                    canDelete = true,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -1558,6 +1694,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 totpData = null,
                 resourceManager = resourceManager,
                 clock = fixedClock,
+                canDelete = true,
             )
         } returns stateWithName.viewState
         every { fido2CredentialManager.isUserVerified } returns true
@@ -1619,6 +1756,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
+                    canDelete = true,
                 )
             } returns stateWithName.viewState
             every { fido2CredentialManager.isUserVerified } returns false
@@ -4027,6 +4165,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         availableOwners: List<VaultAddEditState.Owner> = createOwnerList(),
         selectedOwnerId: String? = null,
         hasOrganizations: Boolean = true,
+        canDelete: Boolean = true,
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
@@ -4040,6 +4179,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             availableFolders = availableFolders,
             availableOwners = availableOwners,
             hasOrganizations = hasOrganizations,
+            canDelete = canDelete,
         )
 
     @Suppress("LongParameterList")

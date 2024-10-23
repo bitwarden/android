@@ -45,6 +45,7 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -80,6 +81,7 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -108,6 +110,7 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -136,6 +139,7 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -170,6 +174,7 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -194,6 +199,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -216,6 +222,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -237,6 +244,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -268,6 +276,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -304,6 +313,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -342,6 +352,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         assertEquals(
@@ -364,6 +375,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
 
         val expectedState = VaultItemState.ViewState.Content(
@@ -384,6 +396,7 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
         )
         assertEquals(
             VaultItemState.ViewState.Content(
