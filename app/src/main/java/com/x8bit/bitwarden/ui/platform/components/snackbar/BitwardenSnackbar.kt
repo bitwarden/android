@@ -68,11 +68,11 @@ fun BitwardenSnackbar(
                         onClick = onActionClick,
                         colors = bitwardenOutlinedButtonColors(
                             contentColor = BitwardenTheme.colorScheme.text.reversed,
+                            outlineColor = BitwardenTheme
+                                .colorScheme
+                                .outlineButton
+                                .borderReversed,
                         ),
-                        outlineBorderColor = BitwardenTheme
-                            .colorScheme
-                            .outlineButton
-                            .borderReversed,
                     )
                 }
             }

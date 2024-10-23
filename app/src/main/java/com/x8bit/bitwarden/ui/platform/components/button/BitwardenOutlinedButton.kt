@@ -6,6 +6,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
@@ -28,8 +29,7 @@ fun BitwardenOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    colors: ButtonColors = bitwardenOutlinedButtonColors(),
-    outlineBorderColor: Color = BitwardenTheme.colorScheme.outlineButton.border,
+    colors: BitwardenOutlinedButtonColors = bitwardenOutlinedButtonColors(),
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -40,13 +40,13 @@ fun BitwardenOutlinedButton(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
-        colors = colors,
+        colors = colors.materialButtonColors,
         border = BorderStroke(
             width = 1.dp,
             color = if (isEnabled) {
-                outlineBorderColor
+                colors.outlineBorderColor
             } else {
-                BitwardenTheme.colorScheme.outlineButton.borderDisabled
+                colors.outlinedDisabledBorderColor
             },
         ),
     ) {
@@ -56,6 +56,16 @@ fun BitwardenOutlinedButton(
         )
     }
 }
+
+/**
+ * Colors for a [BitwardenOutlinedButton].
+ */
+@Immutable
+data class BitwardenOutlinedButtonColors(
+    val materialButtonColors: ButtonColors,
+    val outlineBorderColor: Color,
+    val outlinedDisabledBorderColor: Color,
+)
 
 @Preview
 @Composable

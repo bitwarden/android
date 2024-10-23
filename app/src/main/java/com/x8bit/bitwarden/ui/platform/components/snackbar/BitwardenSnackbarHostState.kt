@@ -36,9 +36,9 @@ class BitwardenSnackbarHostState(
         duration: SnackbarDuration = SnackbarDuration.Short,
     ): SnackbarResult {
         currentSnackbarData = snackbarData
-        val result = snackbarHostState.showSnackbar(message = snackbarData.key, duration = duration)
-        currentSnackbarData = null
-        return result
+        return snackbarHostState
+            .showSnackbar(message = snackbarData.key, duration = duration)
+            .also { currentSnackbarData = null }
     }
 }
 
