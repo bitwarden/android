@@ -1339,7 +1339,8 @@ class VaultRepositoryImpl(
                         val itemsAvailable = vaultDiskSource
                             .getCiphers(userId)
                             .firstOrNull()
-                            ?.isNotEmpty() ?: false
+                            ?.isNotEmpty()
+                            ?: false
                         return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                     }
                 },
