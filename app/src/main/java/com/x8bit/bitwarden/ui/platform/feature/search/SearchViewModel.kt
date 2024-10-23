@@ -570,6 +570,10 @@ class SearchViewModel @Inject constructor(
                     ),
                 )
             }
+
+            is MasterPasswordRepromptData.Totp -> {
+                trySendAction(SearchAction.ItemClick(itemId = data.cipherId))
+            }
         }
     }
 
@@ -680,6 +684,7 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
+                                isTotp = state.isTotp,
                                 isPremiumUser = state.isPremium,
                             )
                     }
@@ -826,6 +831,7 @@ data class SearchState(
         val overflowOptions: List<ListingItemOverflowAction>,
         val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,
+        val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
     ) : Parcelable
 }
@@ -1168,6 +1174,14 @@ sealed class MasterPasswordRepromptData : Parcelable {
      */
     @Parcelize
     data class AutofillAndSave(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * Autofill was selected.
+     */
+    @Parcelize
+    data class Totp(
         val cipherId: String,
     ) : MasterPasswordRepromptData()
 

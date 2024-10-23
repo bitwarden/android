@@ -1052,6 +1052,58 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on a display item when master password reprompt is required for totp flow should show the master password dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createDisplayItem(number = 1).copy(
+                            isTotp = true,
+                            shouldShowMasterPasswordReprompt = true,
+                        ),
+                    ),
+                    displayFolderList = emptyList(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
     @Test
     fun `clicking cancel on the master password dialog should close the dialog`() {
         mutableStateFlow.update {
@@ -2146,6 +2198,7 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         isFido2Creation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
+        isTotp = false,
     )
 
 private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
@@ -2170,4 +2223,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isFido2Creation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
+        isTotp = true,
     )

@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
+    isTotp: Boolean = false,
 ): SearchState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -65,6 +66,7 @@ fun createMockDisplayItemForCipher(
                 totpCode = "mockTotp-$number",
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
+                isTotp = isTotp,
             )
         }
 
@@ -102,6 +104,7 @@ fun createMockDisplayItemForCipher(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
+                isTotp = false,
             )
         }
 
@@ -145,6 +148,7 @@ fun createMockDisplayItemForCipher(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
+                isTotp = false,
             )
         }
 
@@ -179,6 +183,7 @@ fun createMockDisplayItemForCipher(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
+                isTotp = false,
             )
         }
     }
@@ -227,6 +232,7 @@ fun createMockDisplayItemForSend(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
+                isTotp = false,
             )
         }
 
@@ -265,6 +271,7 @@ fun createMockDisplayItemForSend(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
+                isTotp = true,
             )
         }
     }

@@ -215,11 +215,14 @@ fun VaultItemListingContent(
                     supportingLabelTestTag = it.subtitleTestTag,
                     optionsTestTag = it.optionsTestTag,
                     onClick = {
-                        if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
-                            masterPasswordRepromptData =
-                                MasterPasswordRepromptData.Autofill(
-                                    cipherId = it.id,
-                                )
+                        if (it.isTotp && it.shouldShowMasterPasswordReprompt) {
+                            masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
+                                cipherId = it.id,
+                            )
+                        } else if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
+                            masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
+                                cipherId = it.id,
+                            )
                         } else {
                             vaultItemClick(it.id)
                         }
