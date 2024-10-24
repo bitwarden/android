@@ -19,7 +19,14 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
     // codes for that account:
     this.items.forEach {
         codesMap.putIfAbsent(it.source as AuthenticatorItem.Source.Shared, mutableListOf())
-        codesMap[it.source]?.add(it.toDisplayItem(alertThresholdSeconds))
+        codesMap[it.source]?.add(
+            it.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                // Always map based on Error state, because shared codes will never
+                // show "Move to Bitwarden" action.
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
+            ),
+        )
     }
     // Flatten that map down to a list of accounts that each has a list of codes:
     return codesMap

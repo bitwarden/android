@@ -20,4 +20,5 @@ data class VerificationCodeDisplayItem(
     val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
     val favorite: Boolean,
     val allowLongPressActions: Boolean,
+    val showMoveToBitwarden: Boolean,
 ) : Parcelable

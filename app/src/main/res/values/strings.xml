@@ -130,4 +130,7 @@
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
 </resources>

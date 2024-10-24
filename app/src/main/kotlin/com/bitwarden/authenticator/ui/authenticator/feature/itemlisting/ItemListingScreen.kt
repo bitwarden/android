@@ -237,6 +237,11 @@ fun ItemListingScreen(
                         viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
                     }
                 },
+                onMoveToBitwardenClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(ItemListingAction.MoveToBitwardenClick(it))
+                    }
+                },
             )
         }
 
@@ -342,6 +347,7 @@ private fun ItemListingContent(
     onItemClick: (String) -> Unit,
     onEditItemClick: (String) -> Unit,
     onDeleteItemClick: (String) -> Unit,
+    onMoveToBitwardenClick: (String) -> Unit,
     onDownloadBitwardenClick: () -> Unit,
     onDismissDownloadBitwardenClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
@@ -453,6 +459,8 @@ private fun ItemListingContent(
                             onItemClick = { onItemClick(it.authCode) },
                             onEditItemClick = { onEditItemClick(it.id) },
                             onDeleteItemClick = { onDeleteItemClick(it.id) },
+                            onMoveToBitwardenClick = { onMoveToBitwardenClick(it.id) },
+                            showMoveToBitwarden = it.showMoveToBitwarden,
                             allowLongPress = it.allowLongPressActions,
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -481,6 +489,8 @@ private fun ItemListingContent(
                         onItemClick = { onItemClick(it.authCode) },
                         onEditItemClick = { onEditItemClick(it.id) },
                         onDeleteItemClick = { onDeleteItemClick(it.id) },
+                        onMoveToBitwardenClick = { onMoveToBitwardenClick(it.id) },
+                        showMoveToBitwarden = it.showMoveToBitwarden,
                         allowLongPress = it.allowLongPressActions,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -515,6 +525,8 @@ private fun ItemListingContent(
                                     onItemClick = { onItemClick(it.authCode) },
                                     onEditItemClick = { },
                                     onDeleteItemClick = { },
+                                    onMoveToBitwardenClick = { },
+                                    showMoveToBitwarden = it.showMoveToBitwarden,
                                     allowLongPress = it.allowLongPressActions,
                                     modifier = Modifier.fillMaxWidth(),
                                 )

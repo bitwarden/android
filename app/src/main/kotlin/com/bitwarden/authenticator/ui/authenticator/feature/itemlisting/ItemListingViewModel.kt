@@ -28,8 +28,10 @@ import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -46,6 +48,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemListingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
+    private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val clipboardManager: BitwardenClipboardManager,
     private val encodingManager: BitwardenEncodingManager,
     private val settingsRepository: SettingsRepository,
@@ -144,8 +147,13 @@ class ItemListingViewModel @Inject constructor(
             ItemListingAction.SyncWithBitwardenClick -> {
                 handleSyncWithBitwardenClick()
             }
+
             ItemListingAction.SyncWithBitwardenDismiss -> {
                 handleSyncWithBitwardenDismiss()
+            }
+
+            is ItemListingAction.MoveToBitwardenClick -> {
+                handleMoveToBitwardenClick(action)
             }
         }
     }
@@ -165,6 +173,28 @@ class ItemListingViewModel @Inject constructor(
 
     private fun handleEditItemClick(action: ItemListingAction.EditItemClick) {
         sendEvent(ItemListingEvent.NavigateToEditItem(action.itemId))
+    }
+
+    private fun handleMoveToBitwardenClick(action: ItemListingAction.MoveToBitwardenClick) {
+        viewModelScope.launch {
+            val item = authenticatorRepository
+                .getItemStateFlow(action.entityId)
+                .first { it.data != null }
+
+            val didLaunchAddTotpFlow = authenticatorBridgeManager.startAddTotpLoginItemFlow(
+                totpUri = item.data!!.toOtpAuthUriString(),
+            )
+            if (!didLaunchAddTotpFlow) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = ItemListingState.DialogState.Error(
+                            title = R.string.something_went_wrong.asText(),
+                            message = R.string.please_try_again.asText(),
+                        ),
+                    )
+                }
+            }
+        }
     }
 
     private fun handleDeleteItemClick(action: ItemListingAction.DeleteItemClick) {
@@ -439,7 +469,9 @@ class ItemListingViewModel @Inject constructor(
                 -> SharedCodesDisplayState.Codes(emptyList())
 
             is SharedVerificationCodesState.Success ->
-                action.sharedCodesState.toSharedCodesDisplayState(state.alertThresholdSeconds)
+                action.sharedCodesState.toSharedCodesDisplayState(
+                    alertThresholdSeconds = state.alertThresholdSeconds,
+                )
         }
 
         if (localItems.isEmpty() && sharedItemsState.isEmpty()) {
@@ -456,12 +488,20 @@ class ItemListingViewModel @Inject constructor(
                 favoriteItems = localItems
                     .filter { it.source is AuthenticatorItem.Source.Local && it.source.isFavorite }
                     .map {
-                        it.toDisplayItem(alertThresholdSeconds = state.alertThresholdSeconds)
+                        it.toDisplayItem(
+                            alertThresholdSeconds = state.alertThresholdSeconds,
+                            sharedVerificationCodesState =
+                            authenticatorRepository.sharedCodesStateFlow.value,
+                        )
                     },
                 itemList = localItems
                     .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
                     .map {
-                        it.toDisplayItem(alertThresholdSeconds = state.alertThresholdSeconds)
+                        it.toDisplayItem(
+                            alertThresholdSeconds = state.alertThresholdSeconds,
+                            sharedVerificationCodesState =
+                            authenticatorRepository.sharedCodesStateFlow.value,
+                        )
                     },
                 sharedItems = sharedItemsState,
                 actionCard = action.sharedCodesState.toActionCard(),
@@ -538,7 +578,7 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.Loading,
             SharedVerificationCodesState.OsVersionNotSupported,
             is SharedVerificationCodesState.Success,
-            -> ItemListingState.ActionCardState.None
+                -> ItemListingState.ActionCardState.None
         }
 
     private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
@@ -817,6 +857,11 @@ sealed class ItemListingAction {
      * The user dismissed sync Bitwarden action card.
      */
     data object SyncWithBitwardenDismiss : ItemListingAction()
+
+    /**
+     * The user clicked the "Move to Bitwarden" action on a local verification item.
+     */
+    data class MoveToBitwardenClick(val entityId: String) : ItemListingAction()
 
     /**
      * Models actions that [ItemListingScreen] itself may send.

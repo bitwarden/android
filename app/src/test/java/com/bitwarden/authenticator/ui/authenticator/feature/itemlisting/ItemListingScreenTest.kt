@@ -199,10 +199,63 @@ class ItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss) }
     }
+
+    @Test
+    fun `clicking Move to Bitwarden should send MoveToBitwardenClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = emptyList(),
+                itemList = listOf(LOCAL_CODE),
+                sharedItems = SharedCodesDisplayState.Error,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("issuer")
+            .performTouchInput { longClick() }
+
+        composeTestRule
+            .onNodeWithText("Move to Bitwarden")
+            .performClick()
+
+        verify { viewModel.trySendAction(ItemListingAction.MoveToBitwardenClick("1")) }
+    }
+
+    @Test
+    fun `Move to Bitwarden long press action should not show when showMoveToBitwarden is false`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = emptyList(),
+                itemList = listOf(LOCAL_CODE.copy(showMoveToBitwarden = false)),
+                sharedItems = SharedCodesDisplayState.Error,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("issuer")
+            .performTouchInput { longClick() }
+
+        composeTestRule
+            .onNodeWithText("Move to Bitwarden")
+            .assertDoesNotExist()
+    }
 }
 
 private val APP_THEME = AppTheme.DEFAULT
 private const val ALERT_THRESHOLD = 7
+
+private val LOCAL_CODE = VerificationCodeDisplayItem(
+    id = "1",
+    issuer = "issuer",
+    label = null,
+    timeLeftSeconds = 10,
+    periodSeconds = 30,
+    alertThresholdSeconds = 7,
+    authCode = "123456",
+    favorite = false,
+    allowLongPressActions = true,
+    showMoveToBitwarden = true,
+)
 
 private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccountSection(
     label = "test@test.com".asText(),
@@ -217,6 +270,7 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
             authCode = "123456",
             favorite = false,
             allowLongPressActions = false,
+            showMoveToBitwarden = false,
         ),
     ),
 )

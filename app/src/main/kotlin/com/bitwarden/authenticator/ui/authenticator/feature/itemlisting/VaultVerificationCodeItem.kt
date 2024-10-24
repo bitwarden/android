@@ -64,7 +64,9 @@ fun VaultVerificationCodeItem(
     onItemClick: () -> Unit,
     onEditItemClick: () -> Unit,
     onDeleteItemClick: () -> Unit,
+    onMoveToBitwardenClick: () -> Unit,
     allowLongPress: Boolean,
+    showMoveToBitwarden: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDropdownMenu by remember { mutableStateOf(value = false) }
@@ -168,6 +170,24 @@ fun VaultVerificationCodeItem(
                     )
                 },
             )
+            if (showMoveToBitwarden) {
+                HorizontalDivider()
+                DropdownMenuItem(
+                    text = {
+                        Text(text = stringResource(id = R.string.move_to_bitwarden))
+                    },
+                    onClick = {
+                        shouldShowDropdownMenu = false
+                        onMoveToBitwardenClick()
+                    },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = stringResource(id = R.string.move_to_bitwarden),
+                        )
+                    },
+                )
+            }
             HorizontalDivider()
             DropdownMenuItem(
                 text = {
@@ -204,8 +224,10 @@ private fun VerificationCodeItem_preview() {
             onItemClick = {},
             onEditItemClick = {},
             onDeleteItemClick = {},
+            onMoveToBitwardenClick = {},
             allowLongPress = true,
             modifier = Modifier.padding(horizontal = 16.dp),
+            showMoveToBitwarden = true,
         )
     }
 }

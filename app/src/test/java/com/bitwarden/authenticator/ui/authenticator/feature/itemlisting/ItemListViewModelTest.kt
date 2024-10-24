@@ -1,6 +1,8 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import app.cash.turbine.test
+import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
@@ -13,7 +15,9 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.Sh
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
+import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -40,6 +44,7 @@ class ItemListViewModelTest : BaseViewModelTest() {
         every { getLocalVerificationCodesFlow() } returns mutableVerificationCodesFlow
         every { sharedCodesStateFlow } returns mutableSharedCodesFlow
     }
+    private val authenticatorBridgeManager: AuthenticatorBridgeManager = mockk()
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val encodingManager: BitwardenEncodingManager = mockk()
     private val settingsRepository: SettingsRepository = mockk {
@@ -144,12 +149,12 @@ class ItemListViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `stateFlow sharedItems value should be Codes with empty list when shared state is Error `() {
+    fun `stateFlow sharedItems value should be Codes with empty list when shared state is Success `() {
         val expectedState = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
-                favoriteItems = LOCAL_FAVORITE_ITEMS,
-                itemList = LOCAL_NON_FAVORITE_ITEMS,
+                favoriteItems = LOCAL_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                itemList = LOCAL_NON_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
                 sharedItems = SHARED_DISPLAY_ITEMS,
             ),
         )
@@ -356,8 +361,57 @@ class ItemListViewModelTest : BaseViewModelTest() {
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
+    @Test
+    fun `on MoveToBitwardenClick receive should call startAddTotpLoginItemFlow`() {
+        val expectedUriString = "expectedUriString"
+        val entity: AuthenticatorItemEntity = mockk {
+            every { toOtpAuthUriString() } returns expectedUriString
+        }
+        every {
+            authenticatorRepository.getItemStateFlow("1")
+        } returns MutableStateFlow(DataState.Loaded(data = entity))
+        every {
+            authenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUriString)
+        } returns true
+
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(ItemListingAction.MoveToBitwardenClick(entityId = "1"))
+        verify { authenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUriString) }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on MoveToBitwardenClick should show error dialog when startAddTotpLoginItemFlow returns false`() {
+        val expectedState = DEFAULT_STATE.copy(
+            dialog = ItemListingState.DialogState.Error(
+                title = R.string.something_went_wrong.asText(),
+                message = R.string.please_try_again.asText(),
+            ),
+        )
+        val expectedUriString = "expectedUriString"
+        val entity: AuthenticatorItemEntity = mockk {
+            every { toOtpAuthUriString() } returns expectedUriString
+        }
+        every {
+            authenticatorRepository.getItemStateFlow("1")
+        } returns MutableStateFlow(DataState.Loaded(data = entity))
+        every {
+            authenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUriString)
+        } returns false
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ItemListingAction.MoveToBitwardenClick(entityId = "1"))
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+        verify { authenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUriString) }
+    }
+
     private fun createViewModel() = ItemListingViewModel(
         authenticatorRepository = authenticatorRepository,
+        authenticatorBridgeManager = authenticatorBridgeManager,
         clipboardManager = clipboardManager,
         encodingManager = encodingManager,
         settingsRepository = settingsRepository,
@@ -415,7 +469,10 @@ private val SHARED_VERIFICATION_ITEMS = listOf(
 )
 
 private val LOCAL_DISPLAY_ITEMS = LOCAL_VERIFICATION_ITEMS.map {
-    it.toDisplayItem(AUTHENTICATOR_ALERT_SECONDS)
+    it.toDisplayItem(
+        AUTHENTICATOR_ALERT_SECONDS,
+        SharedVerificationCodesState.AppNotInstalled,
+    )
 }
 
 private val SHARED_DISPLAY_ITEMS = SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)

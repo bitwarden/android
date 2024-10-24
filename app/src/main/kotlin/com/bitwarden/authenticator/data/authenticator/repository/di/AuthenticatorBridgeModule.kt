@@ -51,6 +51,8 @@ object AuthenticatorBridgeModule {
             object : AuthenticatorBridgeManager {
                 override val accountSyncStateFlow: StateFlow<AccountSyncState>
                     get() = MutableStateFlow(AccountSyncState.Loading)
+
+                override fun startAddTotpLoginItemFlow(totpUri: String): Boolean = false
             }
         }
 
