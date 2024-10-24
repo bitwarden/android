@@ -37,5 +37,5 @@ class PlatformUiManagerModule {
 
     @Provides
     @Singleton
-    fun provideSnackbarEventManager(): SnackbarRelayManager = SnackbarRelayManagerImpl()
+    fun provideSnackbarRelayManager(): SnackbarRelayManager = SnackbarRelayManagerImpl()
 }
