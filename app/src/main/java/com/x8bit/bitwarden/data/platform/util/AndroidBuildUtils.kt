@@ -10,4 +10,4 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
  *
  * @see Build.VERSION_CODES
  */
-fun isBuildVersionBelow(version: Int): Boolean = version > Build.VERSION.SDK_INT
+internal fun isBuildVersionBelow(version: Int): Boolean = version > Build.VERSION.SDK_INT
