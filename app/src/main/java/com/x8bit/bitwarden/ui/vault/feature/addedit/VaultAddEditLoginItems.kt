@@ -20,7 +20,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
@@ -144,7 +143,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     } else {
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenOutlinedButtonWithIcon(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.setup_totp),
                 icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
