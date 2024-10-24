@@ -84,7 +84,7 @@ fun AttachmentItemContent(
                 onAttachmentDownloadClick(attachmentItem)
             },
             modifier = Modifier
-                .testTag("AttachmentDownloadButton")
+                .testTag("AttachmentDownloadButton"),
         )
     }
 
