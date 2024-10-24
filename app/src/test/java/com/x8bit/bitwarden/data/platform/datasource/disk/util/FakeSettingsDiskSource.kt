@@ -63,6 +63,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
+    private var storedLastDatabaseSchemeChangeInstant: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -131,6 +132,10 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
         }
+
+    override var lastDatabaseSchemeChangeInstant: Instant?
+        get() = storedLastDatabaseSchemeChangeInstant
+        set(value) { storedLastDatabaseSchemeChangeInstant = value }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,

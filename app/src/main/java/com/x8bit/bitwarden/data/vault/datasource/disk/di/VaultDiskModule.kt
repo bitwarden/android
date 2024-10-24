@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.data.vault.datasource.disk.di
 
 import android.app.Application
 import androidx.room.Room
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSourceImpl
+import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
 import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
@@ -17,6 +19,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -28,7 +31,11 @@ class VaultDiskModule {
 
     @Provides
     @Singleton
-    fun provideVaultDatabase(app: Application): VaultDatabase =
+    fun provideVaultDatabase(
+        app: Application,
+        databaseSchemeManager: DatabaseSchemeManager,
+        clock: Clock,
+    ): VaultDatabase =
         Room
             .databaseBuilder(
                 context = app,
@@ -36,6 +43,7 @@ class VaultDiskModule {
                 name = "vault_database",
             )
             .fallbackToDestructiveMigration()
+            .addCallback(DatabaseSchemeCallback(databaseSchemeManager, clock))
             .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()
 

@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -138,6 +139,7 @@ class VaultRepositoryImpl(
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     private val userLogoutManager: UserLogoutManager,
+    private val databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -331,10 +333,13 @@ class VaultRepositoryImpl(
         val userId = activeUserId ?: return
         val currentInstant = clock.instant()
         val lastSyncInstant = settingsDiskSource.getLastSyncTime(userId = userId)
+        val lastDatabaseSchemeChangeInstant = databaseSchemeManager.lastDatabaseSchemeChangeInstant
 
-        // Sync if we have never done so or the last time was at last 30 minutes ago
+        // Sync if we have never done so, the last time was at last 30 minutes ago, or the database
+        // scheme changed since the last sync.
         if (lastSyncInstant == null ||
-            currentInstant.isAfter(lastSyncInstant.plus(30, ChronoUnit.MINUTES))
+            currentInstant.isAfter(lastSyncInstant.plus(30, ChronoUnit.MINUTES)) ||
+            lastDatabaseSchemeChangeInstant?.isAfter(lastSyncInstant) == true
         ) {
             sync()
         }
@@ -1312,12 +1317,20 @@ class VaultRepositoryImpl(
             ?.toEpochMilli()
             ?: 0
 
+        val lastDatabaseSchemeChangeInstant = databaseSchemeManager
+            .lastDatabaseSchemeChangeInstant
+            ?.toEpochMilli()
+            ?: 0
+
         syncService
             .getAccountRevisionDateMillis()
             .fold(
                 onSuccess = { serverRevisionDate ->
-                    if (serverRevisionDate < lastSyncInstant) {
-                        // We can skip the actual sync call if there is no new data
+                    if (serverRevisionDate < lastSyncInstant &&
+                        lastDatabaseSchemeChangeInstant < lastSyncInstant
+                    ) {
+                        // We can skip the actual sync call if there is no new data or database
+                        // scheme changes since the last sync.
                         vaultDiskSource.resyncVaultData(userId)
                         settingsDiskSource.storeLastSyncTime(
                             userId = userId,

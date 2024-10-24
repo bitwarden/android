@@ -4,17 +4,20 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSourceImpl
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSourceImpl
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.dao.PasswordHistoryDao
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.database.PasswordHistoryDatabase
+import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -45,12 +48,22 @@ object GeneratorDiskModule {
 
     @Provides
     @Singleton
-    fun providePasswordHistoryDatabase(app: Application): PasswordHistoryDatabase {
+    fun providePasswordHistoryDatabase(
+        app: Application,
+        databaseSchemeManager: DatabaseSchemeManager,
+        clock: Clock,
+    ): PasswordHistoryDatabase {
         return Room
             .databaseBuilder(
                 context = app,
                 klass = PasswordHistoryDatabase::class.java,
                 name = "passcode_history_database",
+            )
+            .addCallback(
+                DatabaseSchemeCallback(
+                    databaseSchemeManager = databaseSchemeManager,
+                    clock = clock,
+                ),
             )
             .build()
     }
