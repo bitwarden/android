@@ -60,17 +60,6 @@ fun bitwardenOutlinedButtonColors(
     )
 
 /**
- * Provides a default set of Bitwarden-styled colors for an outlined error button.
- */
-@Composable
-fun bitwardenOutlinedErrorButtonColors(): ButtonColors = ButtonColors(
-    containerColor = Color.Transparent,
-    contentColor = BitwardenTheme.colorScheme.status.error,
-    disabledContainerColor = Color.Transparent,
-    disabledContentColor = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-)
-
-/**
  * Provides a default set of Bitwarden-styled colors for a text button.
  */
 @Composable

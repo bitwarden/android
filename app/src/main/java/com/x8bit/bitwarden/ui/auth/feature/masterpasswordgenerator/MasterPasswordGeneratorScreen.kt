@@ -30,7 +30,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -151,7 +151,7 @@ private fun MasterPasswordGeneratorContent(
         )
 
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenFilledButtonWithIcon(
+        BitwardenFilledButton(
             label = stringResource(R.string.generate_button_label),
             onClick = onGenerateNewPassword,
             icon = rememberVectorPainter(id = R.drawable.ic_generate),
