@@ -1054,7 +1054,7 @@
   <string name="then_done_highlight">а след това натиснете Готово</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">За по-сигурно изтрийте файла със запазените пароли.</string>
   <string name="delete_your_saved_password_file">изтрийте файла със запазените пароли.</string>
-  <string name="need_help_checkout_out_import_help">Имате ли нужда от помощ? Прегледайте помощта относно внасянето.</string>
+  <string name="need_help_check_out_import_help">Имате ли нужда от помощ? Прегледайте помощта относно внасянето.</string>
   <string name="import_help_highlight">помощта относно внасянето</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Запазете изнесения файл някъде в компютъра си, така че да може да го намерите лесно.</string>
   <string name="save_the_exported_file_highlight">Запазете изнесения файл</string>

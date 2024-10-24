@@ -1053,7 +1053,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="then_done_highlight">majd Kész lehetőség</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">A biztonság érdekében töröljük a mentett jelszó fájlt.</string>
   <string name="delete_your_saved_password_file">a mentett jelszó fájl törlése.</string>
-  <string name="need_help_checkout_out_import_help">Segítségre van szükség? Nézzük meg az importálás súgót.</string>
+  <string name="need_help_check_out_import_help">Segítségre van szükség? Nézzük meg az importálás súgót.</string>
   <string name="import_help_highlight">importálás súgó</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Mentsük el az exportált fájlt olyan helyre a számítógépen, ahol könnyen megtalálhatjuk.</string>
   <string name="save_the_exported_file_highlight">Exportált fájl mentése</string>

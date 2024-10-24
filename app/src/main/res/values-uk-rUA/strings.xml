@@ -1054,7 +1054,7 @@
   <string name="then_done_highlight">потім натисніть Виконано</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">З міркувань безпеки, обов\'язково видаліть збережений файл із паролями.</string>
   <string name="delete_your_saved_password_file">видаліть збережений файл із паролями.</string>
-  <string name="need_help_checkout_out_import_help">Потрібна допомога? Перегляньте довідку щодо імпорту.</string>
+  <string name="need_help_check_out_import_help">Потрібна допомога? Перегляньте довідку щодо імпорту.</string>
   <string name="import_help_highlight">довідка щодо імпорту</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
