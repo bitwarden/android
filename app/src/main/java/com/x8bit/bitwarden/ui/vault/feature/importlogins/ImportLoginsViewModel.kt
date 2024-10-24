@@ -25,6 +25,7 @@ class ImportLoginsViewModel @Inject constructor(
             null,
             viewState = ImportLoginsState.ViewState.InitialContent,
             isVaultSyncing = false,
+            showBottomSheet = false,
         ),
     ) {
     override fun handleAction(action: ImportLoginsAction) {
@@ -46,8 +47,19 @@ class ImportLoginsViewModel @Inject constructor(
             }
 
             ImportLoginsAction.RetryVaultSync -> handleRetryVaultSync()
-            ImportLoginsAction.FailSyncAcknowledged -> handleFailedSyncAcknowledged()
+            ImportLoginsAction.FailedSyncAcknowledged -> handleFailedSyncAcknowledged()
+            ImportLoginsAction.SuccessfulSyncAcknowledged -> handleSuccessSyncAcknowledged()
         }
+    }
+
+    private fun handleSuccessSyncAcknowledged() {
+        mutableStateFlow.update {
+            it.copy(
+                isVaultSyncing = false,
+                showBottomSheet = false,
+            )
+        }
+        sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
     private fun handleFailedSyncAcknowledged() {
@@ -80,7 +92,14 @@ class ImportLoginsViewModel @Inject constructor(
                 }
             }
 
-            SyncVaultDataResult.Success -> sendEvent(ImportLoginsEvent.NavigateToImportSuccess)
+            SyncVaultDataResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        showBottomSheet = true,
+                        isVaultSyncing = false,
+                    )
+                }
+            }
         }
     }
 
@@ -166,6 +185,7 @@ data class ImportLoginsState(
     val dialogState: DialogState?,
     val viewState: ViewState,
     val isVaultSyncing: Boolean,
+    val showBottomSheet: Boolean,
 ) {
     /**
      * Dialog states for the [ImportLoginsViewModel].
@@ -250,11 +270,6 @@ sealed class ImportLoginsEvent {
     data object NavigateBack : ImportLoginsEvent()
 
     /**
-     * Navigate to the import success screen
-     */
-    data object NavigateToImportSuccess : ImportLoginsEvent()
-
-    /**
      * Open the help link in a browser.
      */
     data object OpenHelpLink : ImportLoginsEvent()
@@ -334,7 +349,12 @@ sealed class ImportLoginsAction {
     /**
      * User has acknowledge failed sync and chose not to retry now.
      */
-    data object FailSyncAcknowledged : ImportLoginsAction()
+    data object FailedSyncAcknowledged : ImportLoginsAction()
+
+    /**
+     * User has imported logins successfully.
+     */
+    data object SuccessfulSyncAcknowledged : ImportLoginsAction()
 
     /**
      * Internal actions to be handled, not triggered by user actions.

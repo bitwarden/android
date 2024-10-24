@@ -38,6 +38,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = ImportLoginsState.DialogState.GetStarted,
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -52,6 +53,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = ImportLoginsState.DialogState.ImportLater,
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -71,6 +73,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     dialogState = ImportLoginsState.DialogState.GetStarted,
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
+                    showBottomSheet = false,
                 ),
                 awaitItem(),
             )
@@ -80,6 +83,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     dialogState = null,
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
+                    showBottomSheet = false,
                 ),
                 awaitItem(),
             )
@@ -102,6 +106,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     dialogState = ImportLoginsState.DialogState.ImportLater,
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
+                    showBottomSheet = false,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -111,6 +116,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     dialogState = null,
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
+                    showBottomSheet = false,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -135,6 +141,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     dialogState = ImportLoginsState.DialogState.GetStarted,
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
+                    showBottomSheet = false,
                 ),
                 awaitItem(),
             )
@@ -144,6 +151,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     dialogState = null,
                     viewState = ImportLoginsState.ViewState.ImportStepOne,
                     isVaultSyncing = false,
+                    showBottomSheet = false,
                 ),
                 awaitItem(),
             )
@@ -183,6 +191,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.ImportStepOne,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -197,6 +206,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.ImportStepTwo,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -211,6 +221,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.ImportStepThree,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -229,23 +240,32 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
     }
 
     @Test
-    fun `MoveToSyncInProgress sets isVaultSyncing to true and calls syncForResult`() {
+    fun `MoveToSyncInProgress sets isVaultSyncing to true and calls syncForResult`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
-        assertEquals(
-            ImportLoginsState(
-                dialogState = null,
-                viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = true,
-            ),
-            viewModel.stateFlow.value,
-        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE,
+                awaitItem(),
+            )
+            viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+            assertEquals(
+                ImportLoginsState(
+                    dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
+                    isVaultSyncing = true,
+                    showBottomSheet = false,
+                ),
+                awaitItem(),
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
         coVerify { vaultRepository.syncForResult() }
     }
 
@@ -265,22 +285,29 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = true,
+                        showBottomSheet = false,
                     ),
                     awaitItem(),
                 )
+                cancelAndIgnoreRemainingEvents()
             }
             coVerify { vaultRepository.syncForResult() }
         }
 
     @Test
-    fun `MoveToSyncInProgress should send NavigateToImportSuccess event when sync succeeds`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
-                assertEquals(ImportLoginsEvent.NavigateToImportSuccess, awaitItem())
-            }
-        }
+    fun `SyncVaultDataResult success should update state to show bottom sheet`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+        assertEquals(
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.InitialContent,
+                isVaultSyncing = false,
+                showBottomSheet = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `SyncVaultDataResult Error should remove loading state and show error dialog`() = runTest {
@@ -292,13 +319,14 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 dialogState = ImportLoginsState.DialogState.Error,
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
+                showBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
     }
 
     @Test
-    fun `on FailSyncAcknowledged should remove dialog state and send NavigateBack event`() =
+    fun `FailSyncAcknowledged should remove dialog state and send NavigateBack event`() =
         runTest {
             coEvery {
                 vaultRepository.syncForResult()
@@ -307,12 +335,13 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
                 assertNotNull(viewModel.stateFlow.value.dialogState)
-                viewModel.trySendAction(ImportLoginsAction.FailSyncAcknowledged)
+                viewModel.trySendAction(ImportLoginsAction.FailedSyncAcknowledged)
                 assertEquals(
                     ImportLoginsState(
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = false,
+                        showBottomSheet = false,
                     ),
                     viewModel.stateFlow.value,
                 )
@@ -323,6 +352,45 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `SuccessfulSyncAcknowledged should hide bottom sheet and send NavigateBack`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateEventFlow(backgroundScope = backgroundScope) { stateFlow, eventFlow ->
+            // Initial state
+            assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+            viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+            assertEquals(
+                ImportLoginsState(
+                    dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
+                    isVaultSyncing = true,
+                    showBottomSheet = false,
+                ),
+                stateFlow.awaitItem(),
+            )
+            assertEquals(
+                ImportLoginsState(
+                    dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
+                    isVaultSyncing = false,
+                    showBottomSheet = true,
+                ),
+                stateFlow.awaitItem(),
+            )
+            viewModel.trySendAction(ImportLoginsAction.SuccessfulSyncAcknowledged)
+            assertEquals(
+                ImportLoginsState(
+                    dialogState = null,
+                    viewState = ImportLoginsState.ViewState.InitialContent,
+                    isVaultSyncing = false,
+                    showBottomSheet = false,
+                ),
+                stateFlow.awaitItem(),
+            )
+            assertEquals(ImportLoginsEvent.NavigateBack, eventFlow.awaitItem())
+        }
+    }
+
     private fun createViewModel(): ImportLoginsViewModel = ImportLoginsViewModel(
         vaultRepository = vaultRepository,
     )
@@ -332,4 +400,5 @@ private val DEFAULT_STATE = ImportLoginsState(
     dialogState = null,
     viewState = ImportLoginsState.ViewState.InitialContent,
     isVaultSyncing = false,
+    showBottomSheet = false,
 )
