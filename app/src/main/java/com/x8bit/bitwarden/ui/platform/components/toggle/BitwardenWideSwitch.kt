@@ -83,8 +83,7 @@ fun BitwardenWideSwitch(
                 } else {
                     BitwardenTheme.colorScheme.filledButton.foregroundDisabled
                 },
-                modifier = modifier
-                    .testTag("SwitchTitle"),
+                modifier = Modifier.testTag("SwitchText"),
             )
             description?.let {
                 Text(
