@@ -332,6 +332,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = true,
+                        showBottomSheet = false,
                     ),
                     awaitItem(),
                 )
@@ -340,6 +341,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         dialogState = ImportLoginsState.DialogState.Error(R.string.no_logins_were_imported.asText()),
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = false,
+                        showBottomSheet = false,
                     ),
                     awaitItem(),
                 )

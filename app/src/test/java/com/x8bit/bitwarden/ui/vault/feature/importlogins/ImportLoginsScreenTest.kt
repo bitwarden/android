@@ -370,7 +370,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
-        verifyActionSent(ImportLoginsAction.FailSyncAcknowledged)
+        verifyActionSent(ImportLoginsAction.FailedSyncAcknowledged)
     }
 
     @Test
