@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.OfflineCipherView
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -62,7 +63,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
      * must be collected in order to trigger state changes.
      */
-    val offlineCiphersStateFlow: StateFlow<DataState<List<CipherView>>>
+    val offlineCiphersStateFlow: StateFlow<DataState<List<OfflineCipherView>>>
     /**
      * Flow that represents all ciphers for the active user.
      *

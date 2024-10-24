@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.OfflineCipherView
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -83,6 +84,8 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
+import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipherView
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CancellationException
@@ -158,7 +161,7 @@ class VaultRepositoryImpl(
     private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
     private val mutableOfflineCiphersStateFlow =
-        MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
+        MutableStateFlow<DataState<List<OfflineCipherView>>>(DataState.Loading)
 
     private val mutableCiphersStateFlow =
         MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
@@ -208,8 +211,8 @@ class VaultRepositoryImpl(
     override val totpCodeFlow: Flow<TotpCodeResult>
         get() = mutableTotpCodeResultFlow.asSharedFlow()
 
-    override val offlineCiphersStateFlow: StateFlow<DataState<List<CipherView>>>
-        get() = mutableOfflineCiphersStateFlow.asStateFlow();
+    override val offlineCiphersStateFlow: StateFlow<DataState<List<OfflineCipherView>>>
+        get() = mutableOfflineCiphersStateFlow.asStateFlow()
 
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
@@ -945,18 +948,21 @@ class VaultRepositoryImpl(
 
     private fun observeVaultDiskOfflineCiphers(
         userId: String,
-    ): Flow<DataState<List<CipherView>>> =
+    ): Flow<DataState<List<OfflineCipherView>>> =
         vaultDiskSource.getOfflineCiphers(userId = userId)
             .onStart { mutableOfflineCiphersStateFlow.updateToPendingOrLoading() }
-            .map {
+            .map { ciphers ->
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
                     .decryptCipherList(
                         userId = userId,
-                        cipherList = it.toCipherList(),
+                        cipherList = ciphers.toCipherList(),
                     )
+                    .map {
+                        it.zip(ciphers).map { (cipher, offlineJson) -> cipher.toOfflineCipherView(offlineJson.toOfflineCipher()) }
+                    }
                     .fold(
-                        onSuccess = { ciphers -> DataState.Loaded(ciphers.sortAlphabetically()) },
+                        onSuccess = { views -> DataState.Loaded(views) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }

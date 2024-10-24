@@ -4,7 +4,9 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.DateTime
 import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Card
+import com.bitwarden.vault.CardView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -12,12 +14,18 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.Field
 import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.Identity
+import com.bitwarden.vault.IdentityView
+import com.bitwarden.vault.LocalDataView
 import com.bitwarden.vault.Login
 import com.bitwarden.vault.LoginUri
+import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistory
+import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
+import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
@@ -31,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SecureNoteTypeJso
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.OfflineCipher
+import com.x8bit.bitwarden.data.vault.repository.model.OfflineCipherView
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -63,7 +72,7 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
     )
 
 fun Cipher.toOfflineCipher(): OfflineCipher =
-    OfflineCipher (
+    OfflineCipher(
         id = id,
         organizationId = organizationId,
         folderId = folderId,
@@ -108,19 +117,51 @@ fun OfflineCipher.toOfflineCipherJson(): OfflineCipherJson =
         passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
         creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
         deletedDate = deletedDate?.let { ZonedDateTime.ofInstant(deletedDate, ZoneOffset.UTC) },
-        revisionDate =  ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
+        revisionDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
         mergeConflict = false, // TODO: Copy from the new OfflineCipher type
-        )
+    )
 
-fun CipherView.toNotificationSummary(): NotificationSummary =
+fun OfflineCipherView.toNotificationSummary(): NotificationSummary =
     NotificationSummary(
         title = name,
-        subtitle = "edited on ${revisionDate.toString()}",
+        subtitle = "edited on $revisionDate. Has Merge Conflict: $mergeConflict",
+    )
+
+fun CipherView.toOfflineCipherView(offlineCipher: OfflineCipher) =
+    OfflineCipherView(
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds,
+        /**
+         * Temporary, required to support re-encrypting existing items.
+         */
+        key = key,
+        name = name,
+        notes = notes,
+        type = type,
+        login = login,
+        identity = identity,
+        card = card,
+        secureNote = secureNote,
+        favorite = favorite,
+        reprompt = reprompt,
+        organizationUseTotp = organizationUseTotp,
+        edit = edit,
+        viewPassword = viewPassword,
+        localData = localData,
+        attachments = attachments,
+        fields = fields,
+        passwordHistory = passwordHistory,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        mergeConflict = offlineCipher.mergeConflict
     )
 
 fun OfflineCipherJson.toOfflineCipher(): OfflineCipher =
     OfflineCipher(
-        id = if(id.startsWith("create")) null else id,
+        id = if (id.startsWith("create")) null else id,
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds.orEmpty(),
@@ -142,8 +183,6 @@ fun OfflineCipherJson.toOfflineCipher(): OfflineCipher =
         revisionDate = revisionDate?.toInstant() ?: DateTime.now(),
         mergeConflict = mergeConflict
     )
-
-
 
 fun OfflineCipher.toCipher(): Cipher =
     Cipher(
@@ -440,7 +479,7 @@ fun List<SyncResponseJson.Cipher>.toEncryptedSdkCipherList(): List<Cipher> =
  * Converts a list of [OfflineCipherJson] objects to a list of corresponding
  * Bitwarden SDK [Cipher] objects.
  */
-fun List<OfflineCipherJson>.toCipherList(): List<Cipher>  =
+fun List<OfflineCipherJson>.toCipherList(): List<Cipher> =
     map { it.toOfflineCipher().toCipher() }
 
 /**

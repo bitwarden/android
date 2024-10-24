@@ -17,7 +17,7 @@ import com.bitwarden.vault.FolderView
  * @param fido2CredentialAutofillViewList List of decrypted fido 2 credentials.
  */
 data class VaultData(
-    val offlineCipherViewList: List<CipherView>,
+    val offlineCipherViewList: List<OfflineCipherView>,
     val cipherViewList: List<CipherView>,
     val collectionViewList: List<CollectionView>,
     val folderViewList: List<FolderView>,
