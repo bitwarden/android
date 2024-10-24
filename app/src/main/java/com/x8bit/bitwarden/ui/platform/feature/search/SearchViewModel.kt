@@ -925,6 +925,16 @@ sealed class SearchTypeData : Parcelable {
         }
 
         /**
+         * Indicates that we should be searching only ssh key ciphers.
+         */
+        data object SshKeys : Vault() {
+            override val title: Text
+                get() = R.string.search.asText()
+                    .concat(" ".asText())
+                    .concat(R.string.ssh_keys.asText())
+        }
+
+        /**
          * Indicates that we should be searching only ciphers in the given collection.
          */
         data class Collection(

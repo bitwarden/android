@@ -38,6 +38,7 @@ fun createMockCipher(
         card = createMockCard(number = number),
         fields = listOf(createMockField(number = number)),
         identity = createMockIdentity(number = number),
+        sshKey = createMockSshKey(number = number),
         isFavorite = false,
         passwordHistory = listOf(createMockPasswordHistory(number = number)),
         reprompt = CipherRepromptTypeJson.NONE,
@@ -148,6 +149,18 @@ fun createMockLogin(
         fido2Credentials = fido2Credentials,
     )
 
+/**
+ * Create a mock [SyncResponseJson.Cipher.SshKey] with a given [number].
+ */
+fun createMockSshKey(number: Int) = SyncResponseJson.Cipher.SshKey(
+    publicKey = "mockPublicKey-$number",
+    privateKey = "mockPrivateKey-$number",
+    keyFingerprint = "mockKeyFingerprint-$number",
+)
+
+/**
+ * Create a mock [SyncResponseJson.Cipher.Fido2Credential] with a given [number].
+ */
 fun createMockFido2Credential(number: Int) = SyncResponseJson.Cipher.Fido2Credential(
     credentialId = "mockCredentialId-$number",
     keyType = "mockKeyType-$number",

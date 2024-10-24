@@ -70,6 +70,10 @@ fun CipherView.determineListingPredicate(
             type == CipherType.SECURE_NOTE && deletedDate == null
         }
 
+        is VaultItemListingState.ItemListingType.Vault.SshKey -> {
+            type == CipherType.SSH_KEY && deletedDate == null
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
@@ -272,6 +276,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Vault.Trash -> this
         is VaultItemListingState.ItemListingType.Send.SendFile -> this
         is VaultItemListingState.ItemListingType.Send.SendText -> this
+        is VaultItemListingState.ItemListingType.Vault.SshKey -> this
     }
 
 @Suppress("LongParameterList")
@@ -374,6 +379,7 @@ private fun CipherView.toIconTestTag(): String =
         CipherType.SECURE_NOTE -> "SecureNoteCipherIcon"
         CipherType.CARD -> "CardCipherIcon"
         CipherType.IDENTITY -> "IdentityCipherIcon"
+        CipherType.SSH_KEY -> "SshKeyCipherIcon"
     }
 
 private fun CipherView.toIconData(
@@ -431,4 +437,5 @@ private val CipherType.iconRes: Int
         CipherType.SECURE_NOTE -> R.drawable.ic_note
         CipherType.CARD -> R.drawable.ic_payment_card
         CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
     }

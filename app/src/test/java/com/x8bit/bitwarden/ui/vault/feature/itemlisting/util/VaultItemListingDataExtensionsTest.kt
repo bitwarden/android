@@ -256,6 +256,66 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for a trash SshKey cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = true,
+            cipherType = CipherType.SSH_KEY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.SshKey to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for a non trash SshKey cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.SSH_KEY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.SshKey to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for item not in a folder`() {
         val cipherView = createMockCipherView(
             number = 1,
@@ -272,6 +332,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Trash to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = null) to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.SshKey to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(

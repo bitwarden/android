@@ -83,5 +83,7 @@ class VaultStateExtensionsTest {
             noFolderItems = listOf(),
             trashItemsCount = 0,
             totpItemsCount = 1,
+            itemTypesCount = 4,
+            sshKeyItemsCount = 0,
         )
 }

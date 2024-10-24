@@ -45,6 +45,8 @@ val CipherView.subtitle: String?
                     }
                 }
         }
+
+        CipherType.SSH_KEY -> null
     }
 
 /**

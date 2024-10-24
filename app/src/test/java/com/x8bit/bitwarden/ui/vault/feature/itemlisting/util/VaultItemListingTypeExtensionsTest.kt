@@ -14,6 +14,13 @@ class VaultItemListingTypeExtensionsTest {
             VaultItemListingType.Folder(folderId = "mock"),
             VaultItemListingType.Trash,
             VaultItemListingType.Collection(collectionId = "collectionId"),
+            VaultItemListingType.SshKey,
+            VaultItemListingType.SendFile,
+            VaultItemListingType.SendText,
+            VaultItemListingType.Card,
+            VaultItemListingType.Identity,
+            VaultItemListingType.Login,
+            VaultItemListingType.SecureNote,
         )
 
         val result = itemListingTypeList.map { it.toItemListingType() }
@@ -25,6 +32,13 @@ class VaultItemListingTypeExtensionsTest {
                 VaultItemListingState.ItemListingType.Vault.Collection(
                     collectionId = "collectionId",
                 ),
+                VaultItemListingState.ItemListingType.Vault.SshKey,
+                VaultItemListingState.ItemListingType.Send.SendFile,
+                VaultItemListingState.ItemListingType.Send.SendText,
+                VaultItemListingState.ItemListingType.Vault.Card,
+                VaultItemListingState.ItemListingType.Vault.Identity,
+                VaultItemListingState.ItemListingType.Vault.Login,
+                VaultItemListingState.ItemListingType.Vault.SecureNote,
             ),
             result,
         )

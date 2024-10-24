@@ -9,6 +9,8 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -701,6 +703,13 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for SshKey type should call onNavigateToVaultItemListingType with SshKey type`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
+        assertEquals(VaultItemListingType.SshKey, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `NavigateToItemListing event for Trash type should call onNavigateToVaultItemListingType with Trash type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
         assertEquals(VaultItemListingType.Trash, onNavigateToVaultItemListingType)
@@ -1201,6 +1210,62 @@ class VaultScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToImportLogins)
         assertTrue(onNavigateToImportLoginsCalled)
     }
+
+    @Test
+    fun `SSH key group header should display correctly based on state`() {
+        val count = 1
+        // Verify SSH key group is displayed when showSshKeys is true
+        mutableStateFlow.update {
+            it.copy(
+                showSshKeys = true,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    sshKeyItemsCount = count,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("SSH key")
+            .assertTextEquals("SSH key", count.toString())
+            .assertIsDisplayed()
+
+        // Verify SSH key group is hidden when showSshKeys is false
+        mutableStateFlow.update { it.copy(showSshKeys = false) }
+        composeTestRule
+            .onNodeWithText("SSH key")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `SSH key vault items should display correctly based on state`() {
+        // Verify SSH key vault items are displayed when showSshKeys is true
+        mutableStateFlow.update {
+            it.copy(
+                showSshKeys = true,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(
+                        VaultState.ViewState.VaultItem.SshKey(
+                            id = "mockId",
+                            name = "mockSshKey".asText(),
+                            publicKey = "mockPublicKey".asText(),
+                            privateKey = "mockPrivateKey".asText(),
+                            fingerprint = "mockFingerprint".asText(),
+                            overflowOptions = emptyList(),
+                            shouldShowMasterPasswordReprompt = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("mockSshKey")
+            .isDisplayed()
+
+        // Verify SSH key vault items are hidden when showSshKeys is false
+        mutableStateFlow.update { it.copy(showSshKeys = false) }
+        composeTestRule
+            .onNodeWithText("mockSshKey")
+            .isNotDisplayed()
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1256,6 +1321,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hideNotificationsDialog = true,
     isRefreshing = false,
     showImportActionCard = false,
+    showSshKeys = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -1269,4 +1335,6 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     collectionItems = emptyList(),
     trashItemsCount = 0,
     totpItemsCount = 0,
+    itemTypesCount = 4,
+    sshKeyItemsCount = 0,
 )

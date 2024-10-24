@@ -112,6 +112,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -295,6 +296,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -426,6 +428,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -611,6 +614,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -911,6 +915,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     creationDate = Instant.MIN,
     deletedDate = null,
     revisionDate = Instant.MIN,
+    sshKey = null,
 )
 
 private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
