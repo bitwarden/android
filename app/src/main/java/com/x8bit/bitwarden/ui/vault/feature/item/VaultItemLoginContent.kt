@@ -203,7 +203,6 @@ fun VaultItemLoginContent(
             items(attachments) { attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
-                        .testTag("CipherAttachment")
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,
