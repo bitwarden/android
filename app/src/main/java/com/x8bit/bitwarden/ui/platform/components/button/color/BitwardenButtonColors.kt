@@ -29,17 +29,6 @@ fun bitwardenFilledErrorButtonColors() = ButtonColors(
 )
 
 /**
- * Provides a default set of Bitwarden-styled colors for a tonal button.
- */
-@Composable
-fun bitwardenFilledTonalButtonColors(): ButtonColors = ButtonColors(
-    containerColor = BitwardenTheme.colorScheme.tonalButton.background,
-    contentColor = BitwardenTheme.colorScheme.tonalButton.foreground,
-    disabledContainerColor = BitwardenTheme.colorScheme.tonalButton.backgroundDisabled,
-    disabledContentColor = BitwardenTheme.colorScheme.tonalButton.foregroundDisabled,
-)
-
-/**
  * Provides a default set of Bitwarden-styled colors for an outlined button.
  */
 @Composable

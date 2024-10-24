@@ -42,8 +42,10 @@ fun BitwardenFilledButton(
         onClick = onClick,
         enabled = isEnabled,
         contentPadding = PaddingValues(
-            vertical = 10.dp,
-            horizontal = 24.dp,
+            top = 10.dp,
+            bottom = 10.dp,
+            start = if (icon == null) 24.dp else 16.dp,
+            end = 24.dp,
         ),
         colors = colors,
     ) {
