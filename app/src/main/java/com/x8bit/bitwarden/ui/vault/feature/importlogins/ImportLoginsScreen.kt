@@ -509,25 +509,26 @@ private fun ImportLoginsSuccessBottomSheetContent(
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(Modifier.height(24.dp))
-        @Suppress("MaxLineLength")
         BitwardenContentCard(
             contentItems = persistentListOf(
                 ContentBlockData(
                     headerText = stringResource(R.string.download_the_browser_extension),
-                    subtitleText = stringResource(R.string.go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser),
-                    iconResource = R.drawable.ic_puzzle,
+                    subtitleText = stringResource(
+                        R.string.go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser,
+                    ),
+                    iconVectorResource = R.drawable.ic_puzzle,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.use_the_web_app),
                     subtitleText = stringResource(
                         R.string.log_in_at_bitwarden_com_to_easily_manage_your_account,
                     ),
-                    iconResource = R.drawable.ic_desktop,
+                    iconVectorResource = R.drawable.ic_desktop,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.autofill_passwords),
                     subtitleText = stringResource(R.string.set_up_autofill_on_all_your_devices),
-                    iconResource = R.drawable.ic_shield,
+                    iconVectorResource = R.drawable.ic_shield,
                 ),
             ),
             modifier = Modifier.standardHorizontalMargin(),

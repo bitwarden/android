@@ -355,9 +355,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     @Test
     fun `SuccessfulSyncAcknowledged should hide bottom sheet and send NavigateBack`() = runTest {
         val viewModel = createViewModel()
-        turbineScope {
-            val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-            val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+        viewModel.stateEventFlow(backgroundScope = backgroundScope) { stateFlow, eventFlow ->
             // Initial state
             assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
             viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)

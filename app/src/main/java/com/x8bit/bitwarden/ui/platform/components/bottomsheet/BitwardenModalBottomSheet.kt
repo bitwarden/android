@@ -44,37 +44,36 @@ fun BitwardenModalBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     sheetContent: @Composable (PaddingValues) -> Unit,
 ) {
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = onDismiss,
-            modifier = modifier,
-            dragHandle = null,
-            sheetState = sheetState,
-            contentWindowInsets = {
-                WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
+    if (!showBottomSheet) return
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        modifier = modifier,
+        dragHandle = null,
+        sheetState = sheetState,
+        contentWindowInsets = {
+            WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
+        },
+        shape = BitwardenTheme.shapes.bottomSheet,
+    ) {
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        BitwardenScaffold(
+            topBar = {
+                BitwardenTopAppBar(
+                    title = sheetTitle,
+                    navigationIcon = NavigationIcon(
+                        navigationIcon = rememberVectorPainter(R.drawable.ic_close),
+                        onNavigationIconClick = onDismiss,
+                        navigationIconContentDescription = stringResource(R.string.close),
+                    ),
+                    scrollBehavior = scrollBehavior,
+                    minimunHeight = 64.dp,
+                )
             },
-            shape = BitwardenTheme.shapes.bottomSheet,
-        ) {
-            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-            BitwardenScaffold(
-                topBar = {
-                    BitwardenTopAppBar(
-                        title = sheetTitle,
-                        navigationIcon = NavigationIcon(
-                            navigationIcon = rememberVectorPainter(R.drawable.ic_close),
-                            onNavigationIconClick = onDismiss,
-                            navigationIconContentDescription = stringResource(R.string.close),
-                        ),
-                        scrollBehavior = scrollBehavior,
-                        minimunHeight = 64.dp,
-                    )
-                },
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .fillMaxSize(),
-            ) { paddingValues ->
-                sheetContent(paddingValues)
-            }
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxSize(),
+        ) { paddingValues ->
+            sheetContent(paddingValues)
         }
     }
 }

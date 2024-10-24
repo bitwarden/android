@@ -107,7 +107,7 @@ private fun BitwardenContentBlock_preview() {
             data = ContentBlockData(
                 headerText = "Header",
                 subtitleText = "Subtitle",
-                iconResource = null,
+                iconVectorResource = null,
             ),
         )
     }

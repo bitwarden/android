@@ -22,10 +22,10 @@ data class ContentBlockData(
     constructor(
         headerText: String,
         subtitleText: String? = null,
-        iconResource: Int? = null,
+        @DrawableRes iconVectorResource: Int? = null,
     ) : this(
         headerText = AnnotatedString(headerText),
         subtitleText = subtitleText,
-        iconVectorResource = iconResource,
+        iconVectorResource = iconVectorResource,
     )
 }
