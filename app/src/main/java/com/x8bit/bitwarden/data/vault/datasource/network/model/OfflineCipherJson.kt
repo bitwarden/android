@@ -87,6 +87,5 @@ data class OfflineCipherJson(
     @SerialName("mergeConflict")
     val mergeConflict: Boolean
 
-){
-    // TODO: Add password history, fields, etc
+) {
 }

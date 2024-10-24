@@ -412,10 +412,16 @@ class VaultAddEditViewModel @Inject constructor(
                 }
 
                 is VaultAddEditType.EditItem -> {
-                    val result = vaultRepository.updateCipher(
+                    var result = vaultRepository.updateCipher(
                         cipherId = vaultAddEditType.vaultItemId,
                         cipherView = content.toCipherView(),
                     )
+
+                    if (result is UpdateCipherResult.Error) {
+                        // TODO: Ask for permission to store locally
+                        result = vaultRepository.updateOfflineCipher(cipherId = vaultAddEditType.vaultItemId, cipherView = content.toCipherView())
+                    }
+
                     sendAction(VaultAddEditAction.Internal.UpdateCipherResultReceive(result))
                 }
 

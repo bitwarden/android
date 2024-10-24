@@ -28,6 +28,7 @@ import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
+import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
@@ -41,6 +42,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.OfflineCipher
 import com.x8bit.bitwarden.data.vault.repository.model.OfflineCipherView
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
+import kotlinx.coroutines.flow.merge
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -118,7 +120,7 @@ fun OfflineCipher.toOfflineCipherJson(id: String): OfflineCipherJson =
         creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
         deletedDate = deletedDate?.let { ZonedDateTime.ofInstant(deletedDate, ZoneOffset.UTC) },
         revisionDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
-        mergeConflict = false, // TODO: Copy from the new OfflineCipher type
+        mergeConflict = mergeConflict,
     )
 
 fun OfflineCipherView.toNotificationSummary(): NotificationSummary =
@@ -157,6 +159,60 @@ fun CipherView.toOfflineCipherView(offlineCipher: OfflineCipher) =
         deletedDate = deletedDate,
         revisionDate = revisionDate,
         mergeConflict = offlineCipher.mergeConflict
+    )
+
+fun SyncResponseJson.Cipher.overlayOfflineCipherJson(offlineCipherJson: OfflineCipherJson) =
+    SyncResponseJson.Cipher(
+        notes = offlineCipherJson.notes,
+        attachments = offlineCipherJson.attachments,
+        shouldOrganizationUseTotp = shouldOrganizationUseTotp,
+        reprompt = offlineCipherJson.reprompt,
+        shouldEdit = shouldEdit,
+        passwordHistory = offlineCipherJson.passwordHistory,
+        revisionDate = offlineCipherJson.revisionDate,
+        type = offlineCipherJson.type,
+        login = offlineCipherJson.login,
+        creationDate = offlineCipherJson.creationDate,
+        secureNote = offlineCipherJson.secureNote,
+        folderId = offlineCipherJson.folderId,
+        organizationId = offlineCipherJson.organizationId,
+        deletedDate = offlineCipherJson.deletedDate,
+        identity = offlineCipherJson.identity,
+        collectionIds = offlineCipherJson.collectionIds,
+        name = offlineCipherJson.name,
+        id = id,
+        fields = offlineCipherJson.fields,
+        shouldViewPassword = shouldViewPassword,
+        isFavorite = offlineCipherJson.favorite,
+        card = offlineCipherJson.card,
+        key = offlineCipherJson.key
+    )
+
+fun OfflineCipherJson.toSdkCipherJson(): SyncResponseJson.Cipher =
+    SyncResponseJson.Cipher(
+        id = id, // TODO, the "create_..." id is invalid, but it's not clear what's better
+        notes = notes,
+        attachments = attachments,
+        shouldOrganizationUseTotp = false, // TODO
+        reprompt = reprompt,
+        shouldEdit = false, // TODO
+        passwordHistory = passwordHistory,
+        revisionDate = revisionDate,
+        type = type,
+        login = login,
+        creationDate = creationDate,
+        secureNote = secureNote,
+        folderId = folderId,
+        organizationId = organizationId,
+        deletedDate = deletedDate,
+        identity = identity,
+        collectionIds = collectionIds,
+        name = name,
+        fields = fields,
+        shouldViewPassword = false, // TODO
+        isFavorite = favorite,
+        card = card,
+        key = key,
     )
 
 fun OfflineCipherJson.toOfflineCipher(): OfflineCipher =

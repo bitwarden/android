@@ -19,10 +19,12 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipherJson
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkCipherJson
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -83,7 +85,6 @@ class VaultDiskSourceImpl(
         )
     }
 
-
     override fun getOfflineCiphers(
         userId: String,
     ): Flow<List<OfflineCipherJson>> =
@@ -130,6 +131,16 @@ class VaultDiskSourceImpl(
                             .awaitAll()
                     }
                 },
+        ).combine(
+            getOfflineCiphers(userId),
+            { ciphers, offlineCiphers ->
+                val overlaid = ciphers.map { cipher ->
+                    offlineCiphers.find { it.id == cipher.id }?.toSdkCipherJson() ?: cipher
+                }
+                // TODO add new offline items to the vault list
+                // val newOffline = offlineCiphers.filter { it.id.startsWith("create") }.map { it.toSdkCipherJson() }
+                overlaid
+            }
         )
 
     override suspend fun deleteCipher(userId: String, cipherId: String) {
