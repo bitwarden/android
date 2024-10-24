@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import android.content.Intent
@@ -60,6 +62,7 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
@@ -174,6 +177,15 @@ fun SettingsScreen(
                         viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
                     }
                 },
+                onDefaultSaveOptionUpdated = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            SettingsAction.DataClick.DefaultSaveOptionUpdated(it),
+                        )
+                    }
+                },
+                defaultSaveOption = state.defaultSaveOption,
+                shouldShowDefaultSaveOptions = state.showDefaultSaveOptionRow,
                 shouldShowSyncWithBitwardenApp = state.showSyncWithBitwarden,
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -265,11 +277,14 @@ private fun SecuritySettings(
 @Suppress("LongMethod")
 private fun VaultSettings(
     modifier: Modifier = Modifier,
+    defaultSaveOption: DefaultSaveOption,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
+    onDefaultSaveOptionUpdated: (DefaultSaveOption) -> Unit,
     shouldShowSyncWithBitwardenApp: Boolean,
+    shouldShowDefaultSaveOptions: Boolean,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -340,6 +355,58 @@ private fun VaultSettings(
                 )
             },
         )
+    }
+    if (shouldShowDefaultSaveOptions) {
+        DefaultSaveOptionSelectionRow(
+            currentSelection = defaultSaveOption,
+            onSaveOptionUpdated = onDefaultSaveOptionUpdated,
+        )
+    }
+}
+
+@Composable
+private fun DefaultSaveOptionSelectionRow(
+    currentSelection: DefaultSaveOption,
+    onSaveOptionUpdated: (DefaultSaveOption) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowDefaultSaveOptionDialog by remember { mutableStateOf(false) }
+
+    BitwardenTextRow(
+        text = stringResource(id = R.string.default_save_options),
+        onClick = { shouldShowDefaultSaveOptionDialog = true },
+        modifier = modifier,
+        withDivider = true,
+    ) {
+        Text(
+            modifier = Modifier.padding(vertical = 20.dp),
+            text = currentSelection.displayLabel(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+    var dialogSelection by remember { mutableStateOf(currentSelection) }
+    if (shouldShowDefaultSaveOptionDialog) {
+        BitwardenSelectionDialog(
+            title = stringResource(id = R.string.default_save_options),
+            subtitle = stringResource(id = R.string.default_save_options_subtitle),
+            dismissLabel = stringResource(id = R.string.confirm),
+            onDismissRequest = { shouldShowDefaultSaveOptionDialog = false },
+            onDismissActionClick = {
+                onSaveOptionUpdated(dialogSelection)
+                shouldShowDefaultSaveOptionDialog = false
+            },
+        ) {
+            DefaultSaveOption.entries.forEach { option ->
+                BitwardenSelectionRow(
+                    text = option.displayLabel,
+                    isSelected = option == dialogSelection,
+                    onClick = {
+                        dialogSelection = DefaultSaveOption.entries.first { it == option }
+                    },
+                )
+            }
+        }
     }
 }
 

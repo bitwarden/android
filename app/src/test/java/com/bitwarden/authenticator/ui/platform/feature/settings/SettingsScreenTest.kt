@@ -1,6 +1,11 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import android.content.Intent
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -13,6 +18,7 @@ import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import io.mockk.every
@@ -24,6 +30,8 @@ import io.mockk.verify
 import org.junit.Test
 import org.junit.Before
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 
 class SettingsScreenTest : BaseComposeTest() {
@@ -109,10 +117,65 @@ class SettingsScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    @Test
+    fun `Default Save Options row should be hidden when showDefaultSaveOptionRow is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule.onNodeWithText("Default save options").assertExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                showDefaultSaveOptionRow = false,
+            )
+        }
+        composeTestRule.onNodeWithText("Default save options").assertDoesNotExist()
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `Default Save Options dialog should send DefaultSaveOptionUpdated when confirm is clicked`() =
+        runTest {
+            val expectedSaveOption = DefaultSaveOption.BITWARDEN_APP
+            mutableStateFlow.value = DEFAULT_STATE
+            composeTestRule
+                .onNodeWithText("Default save options")
+                .performScrollTo()
+                .performClick()
+
+            // Make sure the dialog is showing:
+            composeTestRule
+                .onAllNodesWithText("Default save options")
+                .filterToOne(hasAnyAncestor(isDialog()))
+                .assertIsDisplayed()
+
+            // Select updated option:
+            composeTestRule
+                .onNodeWithText("Save to Bitwarden")
+                .assertIsDisplayed()
+                .performClick()
+
+            // Click confirm:
+            composeTestRule
+                .onNodeWithText("Confirm")
+                .assertIsDisplayed()
+                .performClick()
+
+            verify {
+                viewModel.trySendAction(
+                    SettingsAction.DataClick.DefaultSaveOptionUpdated(expectedSaveOption),
+                )
+            }
+
+            // Make sure the dialog is not showing:
+            composeTestRule
+                .onNode(isDialog())
+                .assertDoesNotExist()
+        }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
 private val APP_THEME = AppTheme.DEFAULT
+private val DEFAULT_SAVE_OPTION = DefaultSaveOption.NONE
 private val DEFAULT_STATE = SettingsState(
     appearance = SettingsState.Appearance(
         APP_LANGUAGE,
@@ -121,6 +184,8 @@ private val DEFAULT_STATE = SettingsState(
     isSubmitCrashLogsEnabled = true,
     isUnlockWithBiometricsEnabled = true,
     showSyncWithBitwarden = true,
+    showDefaultSaveOptionRow = true,
+    defaultSaveOption = DEFAULT_SAVE_OPTION,
     dialog = null,
     version = R.string.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),

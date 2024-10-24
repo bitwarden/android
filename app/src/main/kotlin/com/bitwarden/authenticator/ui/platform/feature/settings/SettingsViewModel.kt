@@ -18,6 +18,7 @@ import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,6 +54,7 @@ class SettingsViewModel @Inject constructor(
             isSyncWithBitwardenFeatureEnabled =
             featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync),
             accountSyncState = authenticatorBridgeManager.accountSyncStateFlow.value,
+            defaultSaveOption = settingsRepository.defaultSaveOption,
         ),
 ) {
     override fun handleAction(action: SettingsAction) {
@@ -141,6 +143,19 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DataClick.ImportClick -> handleImportClick()
             SettingsAction.DataClick.BackupClick -> handleBackupClick()
             SettingsAction.DataClick.SyncWithBitwardenClick -> handleSyncWithBitwardenClick()
+            is SettingsAction.DataClick.DefaultSaveOptionUpdated ->
+                handleDefaultSaveOptionUpdated(action)
+        }
+    }
+
+    private fun handleDefaultSaveOptionUpdated(
+        action: SettingsAction.DataClick.DefaultSaveOptionUpdated,
+    ) {
+        settingsRepository.defaultSaveOption = action.option
+        mutableStateFlow.update {
+            it.copy(
+                defaultSaveOption = action.option,
+            )
         }
     }
 
@@ -253,6 +268,7 @@ class SettingsViewModel @Inject constructor(
             clock: Clock,
             appLanguage: AppLanguage,
             appTheme: AppTheme,
+            defaultSaveOption: DefaultSaveOption,
             unlockWithBiometricsEnabled: Boolean,
             isSubmitCrashLogsEnabled: Boolean,
             accountSyncState: AccountSyncState,
@@ -275,7 +291,9 @@ class SettingsViewModel @Inject constructor(
                     .asText()
                     .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
                 copyrightInfo = copyrightInfo,
+                defaultSaveOption = defaultSaveOption,
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
+                showDefaultSaveOptionRow = shouldShowSyncWithBitwarden,
             )
         }
     }
@@ -287,9 +305,11 @@ class SettingsViewModel @Inject constructor(
 @Parcelize
 data class SettingsState(
     val appearance: Appearance,
+    val defaultSaveOption: DefaultSaveOption,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isSubmitCrashLogsEnabled: Boolean,
     val showSyncWithBitwarden: Boolean,
+    val showDefaultSaveOptionRow: Boolean,
     val dialog: Dialog?,
     val version: Text,
     val copyrightInfo: Text,
@@ -419,6 +439,11 @@ sealed class SettingsAction(
          * Indicates the user clicked sync with Bitwarden.
          */
         data object SyncWithBitwardenClick : DataClick()
+
+        /**
+         * User confirmed a new [DeafultSaveOption].
+         */
+        data class DefaultSaveOptionUpdated(val option: DefaultSaveOption) : DataClick()
     }
 
     /**

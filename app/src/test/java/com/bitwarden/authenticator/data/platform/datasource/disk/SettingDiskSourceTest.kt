@@ -2,6 +2,8 @@ package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import androidx.core.content.edit
 import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -49,5 +51,48 @@ class SettingDiskSourceTest {
             putBoolean(sharedPrefsKey, true)
         }
         assertTrue(settingDiskSource.hasUserDismissedSyncWithBitwardenCard!!)
+    }
+
+    @Test
+    fun `defaultSaveOption should read and write from shared preferences`() {
+        val sharedPrefsKey = "bwPreferencesStorage:defaultSaveOption"
+
+        // Verify initial value is null and disk source should default to NONE
+        assertNull(sharedPreferences.getString(sharedPrefsKey, null))
+        assertEquals(
+            DefaultSaveOption.NONE,
+            settingDiskSource.defaultSaveOption,
+        )
+
+        // Updating the shared preferences should update disk source
+        sharedPreferences.edit {
+            putString(
+                sharedPrefsKey,
+                DefaultSaveOption.BITWARDEN_APP.value,
+            )
+        }
+        assertEquals(
+            DefaultSaveOption.BITWARDEN_APP,
+            settingDiskSource.defaultSaveOption,
+        )
+
+        // Updating the disk source should update shared preferences
+        settingDiskSource.defaultSaveOption = DefaultSaveOption.LOCAL
+        assertEquals(
+            DefaultSaveOption.LOCAL.value,
+            sharedPreferences.getString(sharedPrefsKey, null),
+        )
+
+        // Incorrect value should default to DefaultSaveOption.NONE
+        sharedPreferences.edit {
+            putString(
+                sharedPrefsKey,
+                "invalid",
+            )
+        }
+        assertEquals(
+            DefaultSaveOption.NONE,
+            settingDiskSource.defaultSaveOption,
+        )
     }
 }

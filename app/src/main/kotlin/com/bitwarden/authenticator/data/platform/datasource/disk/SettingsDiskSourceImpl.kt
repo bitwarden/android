@@ -5,11 +5,13 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.BaseDiskSource.
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 
 private const val APP_THEME_KEY = "$BASE_KEY:theme"
 private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
+private const val DEFAULT_SAVE_OPTION_KEY = "$BASE_KEY:defaultSaveOption"
 private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIntegritySource"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
@@ -73,6 +75,19 @@ class SettingsDiskSourceImpl(
     override val appThemeFlow: Flow<AppTheme>
         get() = mutableAppThemeFlow
             .onSubscription { emit(appTheme) }
+
+    override var defaultSaveOption: DefaultSaveOption
+        get() = getString(key = DEFAULT_SAVE_OPTION_KEY)
+            ?.let { storedValue ->
+                DefaultSaveOption.entries.firstOrNull { storedValue == it.value }
+            }
+            ?: DefaultSaveOption.NONE
+        set(newValue) {
+            putString(
+                key = DEFAULT_SAVE_OPTION_KEY,
+                value = newValue.value,
+            )
+        }
 
     override var systemBiometricIntegritySource: String?
         get() = getString(key = SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY)

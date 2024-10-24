@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -23,6 +24,11 @@ interface SettingsDiskSource {
      * Emits updates that track [appTheme].
      */
     val appThemeFlow: Flow<AppTheme>
+
+    /**
+     * The currently persisted default save option.
+     */
+    var defaultSaveOption: DefaultSaveOption
 
     /**
      * The currently persisted biometric integrity source for the system.

@@ -31,7 +31,11 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
  * Displays a dialog with a title and "Cancel" button.
  *
  * @param title Title to display.
+ * @param subtitle Optional subtitle to display below the title.
+ * @param dismissLabel Label to show on the dismiss button at the bottom of the dialog.
  * @param onDismissRequest Invoked when the user dismisses the dialog.
+ * @param onDismissActionClick Invoked when the user dismisses the via the dismiss action button.
+ * By default, this just defers to onDismissRequest.
  * @param selectionItems Lambda containing selection items to show to the user. See
  * [BitwardenSelectionRow].
  */
@@ -40,7 +44,10 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
 @Composable
 fun BitwardenSelectionDialog(
     title: String,
+    subtitle: String? = null,
+    dismissLabel: String = stringResource(R.string.cancel),
     onDismissRequest: () -> Unit,
+    onDismissActionClick: () -> Unit = onDismissRequest,
     selectionItems: @Composable ColumnScope.() -> Unit = {},
 ) {
     Dialog(
@@ -69,6 +76,20 @@ fun BitwardenSelectionDialog(
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineSmall,
             )
+            subtitle?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            bottom = 24.dp,
+                        )
+                        .fillMaxWidth(),
+                    text = subtitle,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
             if (scrollState.canScrollBackward) {
                 Box(
                     modifier = Modifier
@@ -93,8 +114,8 @@ fun BitwardenSelectionDialog(
             }
             BitwardenTextButton(
                 modifier = Modifier.padding(24.dp),
-                label = stringResource(id = R.string.cancel),
-                onClick = onDismissRequest,
+                label = dismissLabel,
+                onClick = onDismissActionClick,
             )
         }
     }

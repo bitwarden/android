@@ -9,6 +9,7 @@ import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,6 +41,8 @@ class SettingsRepositoryImpl(
     override var appTheme: AppTheme by settingsDiskSource::appTheme
 
     override var authenticatorAlertThresholdSeconds = settingsDiskSource.getAlertThresholdSeconds()
+
+    override var defaultSaveOption: DefaultSaveOption by settingsDiskSource::defaultSaveOption
 
     override val isUnlockWithBiometricsEnabled: Boolean
         get() = authDiskSource.getUserBiometricUnlockKey() != null

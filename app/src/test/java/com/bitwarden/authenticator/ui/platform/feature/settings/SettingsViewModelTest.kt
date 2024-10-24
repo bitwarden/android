@@ -13,10 +13,14 @@ import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -33,6 +37,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
+        every { defaultSaveOption } returns DEFAULT_SAVE_OPTION
         every { isUnlockWithBiometricsEnabled } returns true
         every { isCrashLoggingEnabled } returns true
     }
@@ -50,6 +55,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(savedState = null)
         val expectedState = DEFAULT_STATE.copy(
             showSyncWithBitwarden = false,
+            showDefaultSaveOptionRow = false,
         )
         assertEquals(
             expectedState,
@@ -66,6 +72,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(savedState = null)
         val expectedState = DEFAULT_STATE.copy(
             showSyncWithBitwarden = false,
+            showDefaultSaveOptionRow = false,
         )
         assertEquals(
             expectedState,
@@ -123,6 +130,24 @@ class SettingsViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on DefaultSaveOptionUpdated should update SettingsRepository and state`() {
+        val expectedOption = DefaultSaveOption.BITWARDEN_APP
+        every { settingsRepository.defaultSaveOption = expectedOption } just runs
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SettingsAction.DataClick.DefaultSaveOptionUpdated(expectedOption))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                defaultSaveOption = expectedOption,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify { settingsRepository.defaultSaveOption = expectedOption }
+    }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ) = SettingsViewModel(
@@ -141,6 +166,7 @@ private val CLOCK = Clock.fixed(
     Instant.parse("2024-10-12T12:00:00Z"),
     ZoneOffset.UTC,
 )
+private val DEFAULT_SAVE_OPTION = DefaultSaveOption.NONE
 private val DEFAULT_STATE = SettingsState(
     appearance = SettingsState.Appearance(
         APP_LANGUAGE,
@@ -149,6 +175,8 @@ private val DEFAULT_STATE = SettingsState(
     isSubmitCrashLogsEnabled = true,
     isUnlockWithBiometricsEnabled = true,
     showSyncWithBitwarden = true,
+    showDefaultSaveOptionRow = true,
+    defaultSaveOption = DEFAULT_SAVE_OPTION,
     dialog = null,
     version = R.string.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),

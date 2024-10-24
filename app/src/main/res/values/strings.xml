@@ -133,4 +133,10 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_try_again">Please try again</string>
     <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="default_save_options">Default save options</string>
+    <string name="save_to_bitwarden">Save to Bitwarden</string>
+    <string name="save_locally">Save locally</string>
+    <string name="none">None</string>
+    <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
+    <string name="confirm">Confirm</string>
 </resources>
