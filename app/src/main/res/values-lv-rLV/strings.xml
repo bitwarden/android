@@ -1054,7 +1054,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="then_done_highlight">tad \"Darīts\"</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Drošības dēļ jānodrošina, ka paroļu datne tiek izdzēsta.</string>
   <string name="delete_your_saved_password_file">jāizdzēš sava salgabātā paroļu datne.</string>
-  <string name="need_help_checkout_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
+  <string name="need_help_check_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
   <string name="import_help_highlight">ievietošanas palīdzība</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Izgūtā datne jāsaglabā kaut kur viegli atrodamā vietā datorā.</string>
   <string name="save_the_exported_file_highlight">Izgūtā datne jāsaglabā</string>

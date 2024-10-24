@@ -1054,7 +1054,7 @@ Skift til denne konto?</string>
   <string name="then_done_highlight">dernæst Færdig</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Sørg af sikkerhedshensyn for at slette den gemte adgangskodefil.</string>
   <string name="delete_your_saved_password_file">slet den gemte adgangskodefil.</string>
-  <string name="need_help_checkout_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
+  <string name="need_help_check_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
   <string name="import_help_highlight">import-hjælp</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Gem den eksporterede fil et sted på computeren, hvor man nemt kan finde den.</string>
   <string name="save_the_exported_file_highlight">Gem den eksporterede fil</string>

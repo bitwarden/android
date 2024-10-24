@@ -1056,7 +1056,7 @@
   <string name="then_done_highlight">затем Готово</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">В целях безопасности не забудьте удалить сохраненный файл с паролями.</string>
   <string name="delete_your_saved_password_file">удалите файл с сохраненными паролями.</string>
-  <string name="need_help_checkout_out_import_help">Нужна помощь? Ознакомьтесь с помощью по импорту.</string>
+  <string name="need_help_check_out_import_help">Нужна помощь? Ознакомьтесь с помощью по импорту.</string>
   <string name="import_help_highlight">помощь по импорту</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Сохраните экспортированный файл на компьютере, где его можно будет легко найти.</string>
   <string name="save_the_exported_file_highlight">Сохранить экспортированный файл</string>

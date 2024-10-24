@@ -1054,7 +1054,7 @@
   <string name="then_done_highlight">然后「完成」</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">为了您的安全，请务必删除已保存的密码文件。</string>
   <string name="delete_your_saved_password_file">删除已保存的密码文件。</string>
-  <string name="need_help_checkout_out_import_help">需要帮助吗？查看导入帮助。</string>
+  <string name="need_help_check_out_import_help">需要帮助吗？查看导入帮助。</string>
   <string name="import_help_highlight">导入帮助</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">将导出的文件保存到您可以在计算机上轻松找到的地方。</string>
   <string name="save_the_exported_file_highlight">保存导出的文件</string>

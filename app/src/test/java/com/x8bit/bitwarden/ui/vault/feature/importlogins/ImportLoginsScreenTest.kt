@@ -260,6 +260,24 @@ class ImportLoginsScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `Step two content shows correct vault url when vault url is set`() {
+        val url = "vault.bitwarden.com.testing"
+        mutableImportLoginsStateFlow.update {
+            it.copy(
+                viewState = ImportLoginsState.ViewState.ImportStepTwo,
+                currentWebVaultUrl = url,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Step 2 of 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(url, substring = true)
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `while on step two correct actions are sent when buttons are clicked`() {
         mutableImportLoginsStateFlow.update {
             it.copy(
@@ -472,4 +490,5 @@ private val DEFAULT_STATE = ImportLoginsState(
     viewState = ImportLoginsState.ViewState.InitialContent,
     isVaultSyncing = false,
     showBottomSheet = false,
+    currentWebVaultUrl = "vault.bitwarden.com",
 )
