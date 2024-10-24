@@ -36,7 +36,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -290,7 +290,7 @@ private fun ExportVaultScreenContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 label = stringResource(R.string.send_code),
                 onClick = onSendCodeClicked,
                 isEnabled = !state.policyPreventsExport,
@@ -342,7 +342,7 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        BitwardenFilledTonalButton(
+        BitwardenOutlinedButton(
             label = stringResource(id = R.string.export_vault),
             onClick = onExportVaultClick,
             isEnabled = !state.policyPreventsExport,

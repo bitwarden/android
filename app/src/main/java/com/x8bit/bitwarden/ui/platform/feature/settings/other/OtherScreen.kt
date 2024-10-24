@@ -34,7 +34,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequenc
 import com.x8bit.bitwarden.data.platform.repository.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -115,7 +115,7 @@ fun OtherScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(OtherAction.SyncNowButtonClick) }
                 },

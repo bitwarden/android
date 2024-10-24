@@ -36,7 +36,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -171,7 +171,7 @@ fun AddSendContent(
                             style = BitwardenTheme.typography.bodySmall,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        BitwardenFilledTonalButton(
+                        BitwardenOutlinedButton(
                             label = stringResource(id = R.string.choose_file),
                             onClick = {
                                 @Suppress("MaxLineLength")
