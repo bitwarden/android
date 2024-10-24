@@ -55,14 +55,15 @@ class VaultDiskSourceImpl(
     private val forceSendFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
 
     override suspend fun saveOfflineCipher(userId: String, cipher: Cipher) {
+        val id = cipher.id ?: "create_${UUID.randomUUID()}"
         offlineCiphersDao.insertCiphers(
             ciphers = listOf(
                 OfflineCipherEntity(
-                    id = cipher.id ?: "create_${UUID.randomUUID()}",
+                    id = id,
                     userId = userId,
                     cipherType = json.encodeToString(cipher.type),
                     cipherJson = json.encodeToString(
-                        cipher.toOfflineCipher().toOfflineCipherJson()
+                        cipher.toOfflineCipher().toOfflineCipherJson(id)
                     ),
                 ),
             ),

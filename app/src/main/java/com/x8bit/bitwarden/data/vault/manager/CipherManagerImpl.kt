@@ -109,6 +109,7 @@ class CipherManagerImpl(
                                             // TODO: Why are we doing this?
                                             cipher = response.cipher.copy(collectionIds = cipher.collectionIds),
                                         )
+                                        vaultDiskSource.deleteOfflineCipher(userId = userId, cipherId = c.id)
                                         UpdateCipherResult.Success
                                     }
                                 }

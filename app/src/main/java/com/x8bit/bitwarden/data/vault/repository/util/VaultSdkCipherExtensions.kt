@@ -96,9 +96,9 @@ fun Cipher.toOfflineCipher(): OfflineCipher =
         mergeConflict = false,
     )
 
-fun OfflineCipher.toOfflineCipherJson(): OfflineCipherJson =
+fun OfflineCipher.toOfflineCipherJson(id: String): OfflineCipherJson =
     OfflineCipherJson(
-        id = id ?: "create_${UUID.randomUUID()}",
+        id = id,
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds.orEmpty(),
