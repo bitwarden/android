@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import kotlinx.coroutines.flow.StateFlow
+
 /**
  * Manager to detect and handle changes to network connectivity.
  */
@@ -9,4 +11,6 @@ interface NetworkConnectionManager {
      * available.
      */
     val isNetworkConnected: Boolean
+
+    val isNetworkConnectedFlow: StateFlow<Boolean>
 }
