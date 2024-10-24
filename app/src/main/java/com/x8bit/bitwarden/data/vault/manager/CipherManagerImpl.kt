@@ -6,11 +6,13 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -25,16 +27,28 @@ import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.util.toCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
+import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.io.File
 import java.time.Clock
 
 /**
  * The default implementation of the [CipherManager].
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("TooManyFunctions")
 class CipherManagerImpl(
     private val fileManager: FileManager,
@@ -43,8 +57,73 @@ class CipherManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val clock: Clock,
+    private val networkConnectionManager: NetworkConnectionManager,
+    private val externalScope: CoroutineScope,
 ) : CipherManager {
+
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
+
+    init {
+        externalScope.launch {
+            networkConnectionManager.isNetworkConnectedFlow
+                .map {
+                    if (it && activeUserId != null) {
+                        // Device went online
+
+                        // TODO: We need to add support for non active users!
+                        vaultDiskSource.getOfflineCiphers(activeUserId!!)
+                    } else {
+                        flowOf(listOf<OfflineCipherJson>())
+                    }
+                }.flattenConcat().collect {
+                    if (activeUserId == null) {
+                        return@collect
+                    }
+
+                    val userId = activeUserId!!
+
+                    it.map { c ->
+                        val cipher = c.toOfflineCipher().toCipher()
+                        when (cipher.id) {
+                            null -> ciphersService.createCipher(body = cipher.toEncryptedNetworkCipher())
+                                .onSuccess {
+                                    vaultDiskSource.saveCipher(userId = userId, cipher = it)
+                                    vaultDiskSource.deleteOfflineCipher(userId = userId, cipherId = c.id)
+                                }
+                                .fold(
+                                    onFailure = { CreateCipherResult.Error },
+                                    onSuccess = { CreateCipherResult.Success },
+                                )
+                            else -> ciphersService.updateCipher(
+                                cipherId = cipher.id!!,
+                                body = cipher.toEncryptedNetworkCipher()
+                            ).map { response ->
+                                when (response) {
+                                    is UpdateCipherResponseJson.Invalid -> {
+                                        UpdateCipherResult.Error(errorMessage = response.message)
+                                    }
+
+                                    is UpdateCipherResponseJson.Success -> {
+                                        vaultDiskSource.saveCipher(
+                                            userId = userId,
+                                            // TODO: Why are we doing this?
+                                            cipher = response.cipher.copy(collectionIds = cipher.collectionIds),
+                                        )
+                                        UpdateCipherResult.Success
+                                    }
+                                }
+                            }
+                                .fold(
+                                    onFailure = { UpdateCipherResult.Error(errorMessage = null) },
+                                    onSuccess = { it },
+                                )
+                        }
+
+                    }
+                }
+            }
+        }
+
 
     override suspend fun createOfflineCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId ?: return CreateCipherResult.Error

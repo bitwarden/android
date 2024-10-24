@@ -27,6 +27,11 @@ interface VaultDiskSource {
     fun getOfflineCiphers(userId: String): Flow<List<OfflineCipherJson>>
 
     /**
+     * Deletes an offline cipher from the data source for the given [userId] and [cipherId].
+     */
+    suspend fun deleteOfflineCipher(userId: String, cipherId: String)
+
+    /**
      * Retrieves all ciphers from the data source for a given [userId].
      */
     fun getCiphers(userId: String): Flow<List<SyncResponseJson.Cipher>>

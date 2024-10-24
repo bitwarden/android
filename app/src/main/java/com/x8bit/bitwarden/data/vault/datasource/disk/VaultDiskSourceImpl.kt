@@ -105,6 +105,10 @@ class VaultDiskSourceImpl(
                 },
         )
 
+    override suspend fun deleteOfflineCipher(userId: String, cipherId: String) {
+        offlineCiphersDao.deleteCipher(userId, cipherId)
+    }
+
     override fun getCiphers(
         userId: String,
     ): Flow<List<SyncResponseJson.Cipher>> =
