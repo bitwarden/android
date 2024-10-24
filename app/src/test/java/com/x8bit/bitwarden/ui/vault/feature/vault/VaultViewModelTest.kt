@@ -32,6 +32,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -60,6 +62,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+
+    private val snackbarRelayManager = SnackbarRelayManagerImpl()
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>()) } just runs
@@ -1610,6 +1614,16 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            snackbarRelayManager.sendSnackbarData(expectedSnackbarData)
+            assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1620,6 +1634,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             organizationEventManager = organizationEventManager,
             featureFlagManager = featureFlagManager,
+            snackbarRelayManager = snackbarRelayManager,
         )
 }
 

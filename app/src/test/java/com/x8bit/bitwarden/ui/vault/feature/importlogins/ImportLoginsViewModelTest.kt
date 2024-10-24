@@ -7,9 +7,14 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -20,6 +25,10 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk() {
         coEvery { syncForResult() } returns SyncVaultDataResult.Success(itemsAvailable = true)
+    }
+
+    private val snackbarRelayManager: SnackbarRelayManagerImpl = mockk() {
+        coEvery { sendSnackbarData(any()) } just runs
     }
 
     @Test
@@ -391,47 +400,60 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `SuccessfulSyncAcknowledged should hide bottom sheet and send NavigateBack`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateEventFlow(backgroundScope = backgroundScope) { stateFlow, eventFlow ->
-            // Initial state
-            assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
-            viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
-            assertEquals(
-                ImportLoginsState(
-                    dialogState = null,
-                    viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = true,
-                    showBottomSheet = false,
-                ),
-                stateFlow.awaitItem(),
+    fun `SuccessfulSyncAcknowledged should hide bottom sheet and send NavigateBack event and send Snackbar data through snackbar manager`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateEventFlow(backgroundScope = backgroundScope) { stateFlow, eventFlow ->
+                // Initial state
+                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+                viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = null,
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = true,
+                        showBottomSheet = false,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = null,
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = false,
+                        showBottomSheet = true,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                viewModel.trySendAction(ImportLoginsAction.SuccessfulSyncAcknowledged)
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = null,
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = false,
+                        showBottomSheet = false,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(ImportLoginsEvent.NavigateBack, eventFlow.awaitItem())
+            }
+            val expectedSnackbarData = BitwardenSnackbarData(
+                messageHeader = R.string.logins_imported.asText(),
+                message = R.string.remember_to_delete_your_imported_password_file_from_your_computer
+                    .asText(),
             )
-            assertEquals(
-                ImportLoginsState(
-                    dialogState = null,
-                    viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
-                    showBottomSheet = true,
-                ),
-                stateFlow.awaitItem(),
-            )
-            viewModel.trySendAction(ImportLoginsAction.SuccessfulSyncAcknowledged)
-            assertEquals(
-                ImportLoginsState(
-                    dialogState = null,
-                    viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
-                    showBottomSheet = false,
-                ),
-                stateFlow.awaitItem(),
-            )
-            assertEquals(ImportLoginsEvent.NavigateBack, eventFlow.awaitItem())
+            verify {
+                snackbarRelayManager.sendSnackbarData(
+                    data = expectedSnackbarData,
+                )
+            }
         }
-    }
 
     private fun createViewModel(): ImportLoginsViewModel = ImportLoginsViewModel(
         vaultRepository = vaultRepository,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 

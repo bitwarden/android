@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ImportLoginsViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
+    private val snackbarRelayManager: SnackbarRelayManager,
 ) :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
         initialState = ImportLoginsState(
@@ -59,6 +62,13 @@ class ImportLoginsViewModel @Inject constructor(
                 showBottomSheet = false,
             )
         }
+        // instead of doing inline, this approach to avoid "MaxLineLength" suppression.
+        val snackbarData = BitwardenSnackbarData(
+            messageHeader = R.string.logins_imported.asText(),
+            message = R.string.remember_to_delete_your_imported_password_file_from_your_computer
+                .asText(),
+        )
+        snackbarRelayManager.sendSnackbarData(data = snackbarData)
         sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
