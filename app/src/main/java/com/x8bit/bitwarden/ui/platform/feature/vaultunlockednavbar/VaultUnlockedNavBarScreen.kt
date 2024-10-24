@@ -191,6 +191,7 @@ private fun VaultUnlockedNavBarScaffold(
                     generatorTabClickedAction = generatorTabClickedAction,
                     settingsTabClickedAction = settingsTabClickedAction,
                     modifier = Modifier
+                        .testTag("NavigationBarContainer")
                         .onGloballyPositioned {
                             appBarHeightPx = it.size.height
                         },
