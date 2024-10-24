@@ -151,7 +151,8 @@ class VaultDiskSourceImpl(
             getOfflineCiphers(userId),
             { ciphers, offlineCiphers ->
                 val overlaid = ciphers.map { cipher ->
-                    offlineCiphers.find { it.id == cipher.id }?.toSdkCipherJson() ?: cipher
+                    // only overlay ciphers that have not had a merge conflict
+                    offlineCiphers.filter { !it.mergeConflict }.find { it.id == cipher.id }?.toSdkCipherJson() ?: cipher
                 }
                 // TODO add new offline items to the vault list
                 // val newOffline = offlineCiphers.filter { it.id.startsWith("create") }.map { it.toSdkCipherJson() }
