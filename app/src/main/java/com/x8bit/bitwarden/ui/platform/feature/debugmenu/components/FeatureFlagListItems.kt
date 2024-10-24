@@ -27,6 +27,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.OnboardingCarousel,
     FlagKey.OnboardingFlow,
     FlagKey.ImportLoginsFlow,
+    FlagKey.SshKeyCipherItems,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -69,4 +70,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.OnboardingCarousel -> stringResource(R.string.onboarding_carousel)
     FlagKey.OnboardingFlow -> stringResource(R.string.onboarding_flow)
     FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
+    FlagKey.SshKeyCipherItems -> stringResource(R.string.ssh_key_cipher_item_types)
 }

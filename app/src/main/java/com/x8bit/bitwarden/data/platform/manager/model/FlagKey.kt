@@ -31,6 +31,7 @@ sealed class FlagKey<out T : Any> {
                 OnboardingFlow,
                 OnboardingCarousel,
                 ImportLoginsFlow,
+                SshKeyCipherItems,
             )
         }
     }
@@ -78,6 +79,15 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "import-logins-flow"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the SSH key cipher items feature.
+     */
+    data object SshKeyCipherItems : FlagKey<Boolean>() {
+        override val keyName: String = "ssh-key-vault-item"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
