@@ -1336,7 +1336,12 @@ class VaultRepositoryImpl(
                             userId = userId,
                             lastSyncTime = clock.instant(),
                         )
-                        return SyncVaultDataResult.Success
+                        val itemsAvailable = vaultDiskSource
+                            .getCiphers(userId)
+                            .firstOrNull()
+                            ?.isNotEmpty()
+                            ?: false
+                        return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                     }
                 },
                 onFailure = {
@@ -1381,7 +1386,8 @@ class VaultRepositoryImpl(
                         lastSyncTime = clock.instant(),
                     )
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-                    return SyncVaultDataResult.Success
+                    val itemsAvailable = syncResponse.ciphers?.isNotEmpty() ?: false
+                    return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 },
                 onFailure = { throwable ->
                     updateVaultStateFlowsToError(throwable)

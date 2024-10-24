@@ -222,7 +222,7 @@ private fun ImportLoginsDialogContent(
             )
         }
 
-        ImportLoginsState.DialogState.Error -> {
+        is ImportLoginsState.DialogState.Error -> {
             BitwardenTwoButtonDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
