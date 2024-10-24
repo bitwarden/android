@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -85,7 +85,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     actions = {
-                        BitwardenFilledIconButton(
+                        BitwardenTonalIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_number),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
@@ -147,7 +147,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     actions = {
-                        BitwardenFilledIconButton(
+                        BitwardenTonalIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_security_code),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,

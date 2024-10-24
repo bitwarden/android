@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -303,7 +303,7 @@ private fun PasswordField(
             readOnly = true,
             singleLine = false,
             actions = {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_check_mark,
                     contentDescription = stringResource(
                         id = R.string.check_known_data_breaches_for_this_password,
@@ -311,7 +311,7 @@ private fun PasswordField(
                     onClick = onCheckForBreachClick,
                     modifier = Modifier.testTag(tag = "LoginCheckPasswordButton"),
                 )
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_password),
                     onClick = onCopyPasswordClick,
@@ -377,7 +377,7 @@ private fun TotpField(
                         timeLeftSeconds = totpCodeItemData.timeLeftSeconds,
                         periodSeconds = totpCodeItemData.periodSeconds,
                     )
-                    BitwardenFilledIconButton(
+                    BitwardenTonalIconButton(
                         vectorIconRes = R.drawable.ic_copy,
                         contentDescription = stringResource(id = R.string.copy_totp),
                         onClick = onCopyTotpClick,
@@ -416,7 +416,7 @@ private fun UriField(
         singleLine = false,
         actions = {
             if (uriData.isLaunchable) {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_external_link,
                     contentDescription = stringResource(id = R.string.launch),
                     onClick = { onLaunchUriClick(uriData.uri) },
@@ -424,7 +424,7 @@ private fun UriField(
                 )
             }
             if (uriData.isCopyable) {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy),
                     onClick = { onCopyUriClick(uriData.uri) },
@@ -450,7 +450,7 @@ private fun UsernameField(
         readOnly = true,
         singleLine = false,
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy_username),
                 onClick = onCopyUsernameClick,

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
@@ -155,7 +155,7 @@ private fun CustomFieldBoolean(
 
         BitwardenRowOfActions(
             actions = {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
@@ -190,7 +190,7 @@ private fun CustomFieldHiddenField(
         singleLine = true,
         modifier = modifier,
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
@@ -217,7 +217,7 @@ private fun CustomFieldTextField(
         singleLine = true,
         modifier = modifier,
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
@@ -262,7 +262,7 @@ private fun CustomFieldLinkedField(
 
         BitwardenRowOfActions(
             actions = {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
