@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.DomainsEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.OfflineCipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipherJson
@@ -46,6 +47,7 @@ class VaultDiskSourceImpl(
     private val dispatcherManager: DispatcherManager,
 ) : VaultDiskSource {
 
+    private val forceOfflineCiphersFlow = bufferedMutableSharedFlow<List<OfflineCipherJson>>()
     private val forceCiphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
     private val forceCollectionsFlow =
         bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
@@ -59,7 +61,9 @@ class VaultDiskSourceImpl(
                     id = cipher.id ?: "create_${UUID.randomUUID()}",
                     userId = userId,
                     cipherType = json.encodeToString(cipher.type),
-                    cipherJson = json.encodeToString(cipher.toOfflineCipher().toOfflineCipherJson()),
+                    cipherJson = json.encodeToString(
+                        cipher.toOfflineCipher().toOfflineCipherJson()
+                    ),
                 ),
             ),
         )
@@ -77,6 +81,29 @@ class VaultDiskSourceImpl(
             ),
         )
     }
+
+
+    override fun getOfflineCiphers(
+        userId: String,
+    ): Flow<List<OfflineCipherJson>> =
+        merge(
+            forceOfflineCiphersFlow,
+            offlineCiphersDao
+                .getAllCiphers(userId = userId)
+                .map { entities ->
+                    withContext(context = dispatcherManager.default) {
+                        entities
+                            .map { entity ->
+                                async {
+                                    json.decodeFromString<OfflineCipherJson>(
+                                        string = entity.cipherJson,
+                                    )
+                                }
+                            }
+                            .awaitAll()
+                    }
+                },
+        )
 
     override fun getCiphers(
         userId: String,

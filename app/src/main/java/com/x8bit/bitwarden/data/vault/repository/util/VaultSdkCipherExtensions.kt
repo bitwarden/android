@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SecureNoteTypeJso
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.OfflineCipher
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -111,6 +112,12 @@ fun OfflineCipher.toOfflineCipherJson(): OfflineCipherJson =
         mergeConflict = false, // TODO: Copy from the new OfflineCipher type
         )
 
+fun CipherView.toNotificationSummary(): NotificationSummary =
+    NotificationSummary(
+        title = name,
+        subtitle = "edited on ${revisionDate.toString()}",
+    )
+
 fun OfflineCipherJson.toOfflineCipher(): OfflineCipher =
     OfflineCipher(
         id = if(id.startsWith("create")) null else id,
@@ -135,6 +142,8 @@ fun OfflineCipherJson.toOfflineCipher(): OfflineCipher =
         revisionDate = revisionDate?.toInstant() ?: DateTime.now(),
         mergeConflict = mergeConflict
     )
+
+
 
 fun OfflineCipher.toCipher(): Cipher =
     Cipher(
@@ -426,6 +435,13 @@ private fun CipherType.toNetworkCipherType(): CipherTypeJson =
  */
 fun List<SyncResponseJson.Cipher>.toEncryptedSdkCipherList(): List<Cipher> =
     map { it.toEncryptedSdkCipher() }
+
+/**
+ * Converts a list of [OfflineCipherJson] objects to a list of corresponding
+ * Bitwarden SDK [Cipher] objects.
+ */
+fun List<OfflineCipherJson>.toCipherList(): List<Cipher>  =
+    map { it.toOfflineCipher().toCipher() }
 
 /**
  * Converts a [SyncResponseJson.Cipher] object to a corresponding

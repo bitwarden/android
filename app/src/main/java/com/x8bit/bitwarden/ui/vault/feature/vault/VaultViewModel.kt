@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.data.vault.repository.util.toNotificationSummary
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -553,8 +555,9 @@ class VaultViewModel @Inject constructor(
                 ),
             )
         }
-        mutableStateFlow.update {
+        mutableStateFlow.update { it ->
             it.copy(
+                notificationSummaries = vaultData.data.offlineCipherViewList.map { view -> view.toNotificationSummary()},
                 viewState = vaultData.data.toViewState(
                     baseIconUrl = state.baseIconUrl,
                     isIconLoadingDisabled = state.isIconLoadingDisabled,

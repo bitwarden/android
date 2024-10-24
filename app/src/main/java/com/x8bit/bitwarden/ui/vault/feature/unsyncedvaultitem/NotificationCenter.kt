@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.unsyncedvaultitem
 
-import android.util.Range
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.updateTransition
@@ -42,14 +41,10 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenRemovalConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
@@ -57,12 +52,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultViewModel
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.supportingTextResOrNull
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -83,19 +73,8 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
  *
  * @param isVisible Whether or not this component is visible. Changing this value will animate the
  * component in or out of view.
- * @param accountSummaries The accounts to display in the switcher.
- * @param onSwitchAccountClick A callback when an account is clicked indicating that the account
- * should be switched to.
- * @param onLockAccountClick A callback when an account is clicked indicating that the account
- * should be locked.
- * @param onLogoutAccountClick A callback when an account is clicked indicating that the account
- * should be logged out.
- * @param onAddAccountClick A callback when the Add Account row is clicked.
  * @param onDismissRequest A callback when the component requests to be dismissed. This is triggered
  * whenever the user clicks on the scrim or any of the switcher items.
- * @param isAddAccountAvailable Whether or not the "Add account" button is available. Note that even
- * when `true`, this button may be hidden when there are more than [MAXIMUM_ACCOUNT_LIMIT] accounts
- * present.
  * @param modifier A [Modifier] for the composable.
  * @param topAppBarScrollBehavior Used to derive the background color of the content and keep it in
  * sync with the associated app bar.
@@ -104,7 +83,6 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
 @Suppress("LongMethod")
 @Composable
 fun NotificationCenter(
-    viewModel: NotificationCenterViewModel = hiltViewModel(),
     isVisible: Boolean,
     notificationSummaries: ImmutableList<NotificationSummary>,
     onNotificationClick: (NotificationSummary) -> Unit,

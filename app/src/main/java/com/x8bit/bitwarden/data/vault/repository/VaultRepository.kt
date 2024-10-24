@@ -57,6 +57,13 @@ interface VaultRepository : CipherManager, VaultLockManager {
     val vaultDataStateFlow: StateFlow<DataState<VaultData>>
 
     /**
+     * Flow that represents all ciphers stored in the offline cache for the active user.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
+     */
+    val offlineCiphersStateFlow: StateFlow<DataState<List<CipherView>>>
+    /**
      * Flow that represents all ciphers for the active user.
      *
      * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself

@@ -9,6 +9,7 @@ import com.bitwarden.vault.FolderView
 /**
  * Represents decrypted vault data.
  *
+ * @param offlineCipherViewList List of decrypted ciphers from offline cache.
  * @param cipherViewList List of decrypted ciphers.
  * @param collectionViewList List of decrypted collections.
  * @param folderViewList List of decrypted folders.
@@ -16,6 +17,7 @@ import com.bitwarden.vault.FolderView
  * @param fido2CredentialAutofillViewList List of decrypted fido 2 credentials.
  */
 data class VaultData(
+    val offlineCipherViewList: List<CipherView>,
     val cipherViewList: List<CipherView>,
     val collectionViewList: List<CollectionView>,
     val folderViewList: List<FolderView>,

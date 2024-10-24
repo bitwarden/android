@@ -208,6 +208,26 @@ class CipherManagerImpl(
             )
     }
 
+    override suspend fun updateOfflineCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UpdateCipherResult {
+        val userId = activeUserId ?: return UpdateCipherResult.Error(errorMessage = null)
+
+        return vaultSdkSource.encryptCipher(
+            userId = userId,
+            cipherView = cipherView
+        )
+            .map {
+                vaultDiskSource.saveOfflineCipher(userId = userId, cipher = it)
+                UpdateCipherResult.Success
+            }
+            .fold(
+                onFailure = { UpdateCipherResult.Error(errorMessage = null) },
+                onSuccess = { it },
+            )
+    }
+
     override suspend fun updateCipher(
         cipherId: String,
         cipherView: CipherView,

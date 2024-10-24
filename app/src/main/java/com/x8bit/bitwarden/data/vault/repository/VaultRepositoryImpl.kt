@@ -72,6 +72,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
+import com.x8bit.bitwarden.data.vault.repository.util.toCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
@@ -156,6 +157,9 @@ class VaultRepositoryImpl(
 
     private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
+    private val mutableOfflineCiphersStateFlow =
+        MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
+
     private val mutableCiphersStateFlow =
         MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
 
@@ -172,18 +176,21 @@ class VaultRepositoryImpl(
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
         combine(
+            offlineCiphersStateFlow,
             ciphersStateFlow,
             foldersStateFlow,
             collectionsStateFlow,
             sendDataStateFlow,
-        ) { ciphersDataState, foldersDataState, collectionsDataState, sendsDataState ->
+        ) { offlineCiphersDataState, ciphersDataState, foldersDataState, collectionsDataState, sendsDataState ->
             combineDataStates(
+                offlineCiphersDataState,
                 ciphersDataState,
                 foldersDataState,
                 collectionsDataState,
                 sendsDataState,
-            ) { ciphersData, foldersData, collectionsData, sendsData ->
+            ) { offlineCiphersData, ciphersData, foldersData, collectionsData, sendsData ->
                 VaultData(
+                    offlineCipherViewList = offlineCiphersData,
                     cipherViewList = ciphersData,
                     fido2CredentialAutofillViewList = null,
                     folderViewList = foldersData,
@@ -200,6 +207,9 @@ class VaultRepositoryImpl(
 
     override val totpCodeFlow: Flow<TotpCodeResult>
         get() = mutableTotpCodeResultFlow.asSharedFlow()
+
+    override val offlineCiphersStateFlow: StateFlow<DataState<List<CipherView>>>
+        get() = mutableOfflineCiphersStateFlow.asStateFlow();
 
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
@@ -234,6 +244,11 @@ class VaultRepositoryImpl(
             }
             .launchIn(unconfinedScope)
 
+        // Setup offline ciphers MutableStateFlow
+        mutableOfflineCiphersStateFlow
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+                observeVaultDiskOfflineCiphers(activeUserId)
+            }.launchIn(unconfinedScope)
         // Setup ciphers MutableStateFlow
         mutableCiphersStateFlow
             .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
@@ -302,6 +317,7 @@ class VaultRepositoryImpl(
     }
 
     private fun clearUnlockedData() {
+        mutableOfflineCiphersStateFlow.update { DataState.Loading }
         mutableCiphersStateFlow.update { DataState.Loading }
         mutableDomainsStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
@@ -318,6 +334,7 @@ class VaultRepositoryImpl(
     override fun sync() {
         val userId = activeUserId ?: return
         if (!syncJob.isCompleted) return
+        mutableOfflineCiphersStateFlow.updateToPendingOrLoading()
         mutableCiphersStateFlow.updateToPendingOrLoading()
         mutableDomainsStateFlow.updateToPendingOrLoading()
         mutableFoldersStateFlow.updateToPendingOrLoading()
@@ -926,6 +943,25 @@ class VaultRepositoryImpl(
             )
     }
 
+    private fun observeVaultDiskOfflineCiphers(
+        userId: String,
+    ): Flow<DataState<List<CipherView>>> =
+        vaultDiskSource.getOfflineCiphers(userId = userId)
+            .onStart { mutableOfflineCiphersStateFlow.updateToPendingOrLoading() }
+            .map {
+                waitUntilUnlocked(userId = userId)
+                vaultSdkSource
+                    .decryptCipherList(
+                        userId = userId,
+                        cipherList = it.toCipherList(),
+                    )
+                    .fold(
+                        onSuccess = { ciphers -> DataState.Loaded(ciphers.sortAlphabetically()) },
+                        onFailure = { throwable -> DataState.Error(throwable) },
+                    )
+            }
+            .onEach { mutableOfflineCiphersStateFlow.value = it }
+
     private fun observeVaultDiskCiphers(
         userId: String,
     ): Flow<DataState<List<CipherView>>> =
@@ -1029,6 +1065,11 @@ class VaultRepositoryImpl(
             .onEach { mutableSendDataStateFlow.value = it }
 
     private fun updateVaultStateFlowsToError(throwable: Throwable) {
+        mutableOfflineCiphersStateFlow.update { currentState ->
+            throwable.toNetworkOrErrorState(
+                data = currentState.data,
+            )
+        }
         mutableCiphersStateFlow.update { currentState ->
             throwable.toNetworkOrErrorState(
                 data = currentState.data,

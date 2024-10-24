@@ -165,6 +165,34 @@ fun <T1, T2, T3, T4, R> combineDataStates(
         }
 
 /**
+ * Combines the [dataState1], [dataState2], [dataState3], and [dataState4] [DataState]s together
+ * using the provided [transform].
+ *
+ * See [combineDataStates] for details.
+ *
+ * I'm not proud of this...
+ */
+@OmitFromCoverage
+fun <T1, T2, T3, T4, T5, R> combineDataStates(
+    dataState1: DataState<T1>,
+    dataState2: DataState<T2>,
+    dataState3: DataState<T3>,
+    dataState4: DataState<T4>,
+    dataState5: DataState<T5>,
+    transform: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) -> R,
+): DataState<R> =
+    dataState1
+        .combineDataStatesWith(dataState2) { t1, t2 -> t1 to t2 }
+        .combineDataStatesWith(dataState3) { t1t2Pair, t3 ->
+            Triple(t1t2Pair.first, t1t2Pair.second, t3)
+        }
+        .combineDataStatesWith(dataState4) { t1t2t3Triple, t4 -> t1t2t3Triple to t4 }
+        .combineDataStatesWith(dataState5) { t1t2t3Triplet4Pair, t5 ->
+            transform(t1t2t3Triplet4Pair.first.first, t1t2t3Triplet4Pair.first.second, t1t2t3Triplet4Pair.first.third, t1t2t3Triplet4Pair.second, t5)
+        }
+
+
+/**
  * Combines [dataState2] with the given [DataState] using the provided [transform].
  *
  * See [combineDataStates] for details.

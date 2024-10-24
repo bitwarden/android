@@ -100,6 +100,11 @@ interface CipherManager {
         collectionIds: List<String>,
     ): ShareCipherResult
 
+    suspend fun updateOfflineCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UpdateCipherResult
+
     /**
      * Attempt to update a cipher.
      */
