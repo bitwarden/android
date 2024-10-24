@@ -42,6 +42,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
@@ -56,6 +57,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultViewModel
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.NotificationSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
@@ -102,6 +104,7 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
 @Suppress("LongMethod")
 @Composable
 fun NotificationCenter(
+    viewModel: NotificationCenterViewModel = hiltViewModel(),
     isVisible: Boolean,
     notificationSummaries: ImmutableList<NotificationSummary>,
     onNotificationClick: (NotificationSummary) -> Unit,
@@ -113,9 +116,6 @@ fun NotificationCenter(
     // can safely show dialogs.
     var isVisibleActual by remember { mutableStateOf(isVisible) }
 
-    var lockOrLogoutAccount by remember { mutableStateOf<AccountSummary?>(null) }
-    var logoutConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
-    var removeConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
 
     Box(modifier = modifier) {
         BitwardenAnimatedScrim(
