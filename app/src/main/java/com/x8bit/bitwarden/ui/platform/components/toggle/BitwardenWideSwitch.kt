@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
@@ -82,6 +83,8 @@ fun BitwardenWideSwitch(
                 } else {
                     BitwardenTheme.colorScheme.filledButton.foregroundDisabled
                 },
+                modifier = modifier
+                    .testTag("SwitchTitle"),
             )
             description?.let {
                 Text(
@@ -100,7 +103,8 @@ fun BitwardenWideSwitch(
 
         Switch(
             modifier = Modifier
-                .height(56.dp),
+                .height(56.dp)
+                .testTag("SwitchToggle"),
             enabled = enabled,
             checked = isChecked,
             onCheckedChange = null,
