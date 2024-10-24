@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.core.net.toUri
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
@@ -35,9 +37,6 @@ import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -51,6 +50,7 @@ import java.time.Clock
 @OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("TooManyFunctions")
 class CipherManagerImpl(
+    private val context: Context,
     private val fileManager: FileManager,
     private val authDiskSource: AuthDiskSource,
     private val ciphersService: CiphersService,
@@ -81,6 +81,7 @@ class CipherManagerImpl(
                     }
 
                     val userId = activeUserId!!
+                    val hasItems = it.isNotEmpty()
 
                     it.map { c ->
                         val cipher = c.toOfflineCipher().toCipher()
@@ -119,7 +120,16 @@ class CipherManagerImpl(
                                     onSuccess = { it },
                                 )
                         }
+                    }
 
+                    if (hasItems) {
+                        externalScope.launch {
+                            Toast.makeText(
+                                context,
+                                "Offline items uploaded",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }

@@ -40,6 +40,7 @@ object VaultManagerModule {
     @Provides
     @Singleton
     fun provideCipherManager(
+        @ApplicationContext context: Context,
         ciphersService: CiphersService,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
@@ -49,6 +50,7 @@ object VaultManagerModule {
         networkConnectionManager: NetworkConnectionManager,
         dispatcherManager: DispatcherManager
     ): CipherManager = CipherManagerImpl(
+        context = context,
         fileManager = fileManager,
         authDiskSource = authDiskSource,
         ciphersService = ciphersService,
