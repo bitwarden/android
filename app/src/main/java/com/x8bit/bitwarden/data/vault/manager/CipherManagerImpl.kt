@@ -71,7 +71,7 @@ class CipherManagerImpl(
                         // Device went online
 
                         // TODO: We need to add support for non active users!
-                        vaultDiskSource.getOfflineCiphers(activeUserId!!)
+                        vaultDiskSource.getOfflineCiphers(activeUserId!!).map { it.filter { it.mergeConflict == false } }
                     } else {
                         flowOf(listOf<OfflineCipherJson>())
                     }
@@ -91,7 +91,7 @@ class CipherManagerImpl(
                                     vaultDiskSource.deleteOfflineCipher(userId = userId, cipherId = c.id)
                                 }
                                 .fold(
-                                    onFailure = { CreateCipherResult.Error },
+                                    onFailure = { vaultDiskSource.updateOfflineCipher(userId = userId, c.toOfflineCipher().copy(mergeConflict = true)) },
                                     onSuccess = { CreateCipherResult.Success },
                                 )
                             else -> ciphersService.updateCipher(
@@ -115,7 +115,7 @@ class CipherManagerImpl(
                                 }
                             }
                                 .fold(
-                                    onFailure = { UpdateCipherResult.Error(errorMessage = null) },
+                                    onFailure = { vaultDiskSource.updateOfflineCipher(userId = userId, c.toOfflineCipher().copy(mergeConflict = true)) },
                                     onSuccess = { it },
                                 )
                         }

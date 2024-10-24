@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 import com.bitwarden.vault.Cipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.OfflineCipher
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,6 +16,11 @@ interface VaultDiskSource {
      * Saves a cipher to the offline data source for the given [userId].
      */
     suspend fun saveOfflineCipher(userId: String, cipher: Cipher)
+
+    /**
+     * Saves an offline cipher to the offline data source for the given [userId].
+     */
+    suspend fun updateOfflineCipher(userId: String, cipher: OfflineCipher)
 
     /**
      * Saves a cipher to the data source for the given [userId].

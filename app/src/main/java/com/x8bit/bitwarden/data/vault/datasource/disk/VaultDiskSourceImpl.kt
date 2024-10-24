@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.OfflineCipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OfflineCipherJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.OfflineCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toOfflineCipherJson
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkCipherJson
@@ -66,6 +67,21 @@ class VaultDiskSourceImpl(
                     cipherType = json.encodeToString(cipher.type),
                     cipherJson = json.encodeToString(
                         cipher.toOfflineCipher().toOfflineCipherJson(id)
+                    ),
+                ),
+            ),
+        )
+    }
+
+    override suspend fun updateOfflineCipher(userId: String, cipher: OfflineCipher) {
+        offlineCiphersDao.insertCiphers(
+            ciphers = listOf(
+                OfflineCipherEntity(
+                    id = cipher.id!!,
+                    userId = userId,
+                    cipherType = json.encodeToString(cipher.type),
+                    cipherJson = json.encodeToString(
+                        cipher.toOfflineCipherJson(cipher.id)
                     ),
                 ),
             ),
