@@ -195,7 +195,6 @@ private fun VaultUnlockedNavBarScaffold(
                         .onGloballyPositioned {
                             appBarHeightPx = it.size.height
                         },
-
                 )
                 BitwardenAnimatedScrim(
                     isVisible = shouldDimNavBar,
