@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -69,9 +71,9 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.activeAccount
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
-            shouldShowEnableAuthenticatorSync = featureFlagManager.getFeatureFlag(
-                key = FlagKey.AuthenticatorSync,
-            ),
+            shouldShowEnableAuthenticatorSync =
+            featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
+                !isBuildVersionBelow(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -371,9 +373,11 @@ class AccountSecurityViewModel @Inject constructor(
     private fun handleAuthenticatorSyncFeatureFlagUpdate(
         action: AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate,
     ) {
+        val shouldShowAuthenticatorSync =
+            action.isEnabled && !isBuildVersionBelow(Build.VERSION_CODES.S)
         mutableStateFlow.update {
             it.copy(
-                shouldShowEnableAuthenticatorSync = action.isEnabled,
+                shouldShowEnableAuthenticatorSync = shouldShowAuthenticatorSync,
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
@@ -34,7 +36,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -43,7 +47,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -85,6 +91,16 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
         every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(::isBuildVersionBelow)
+    }
+
+    @AfterEach
+    fun teardown() {
+        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
@@ -675,7 +691,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when featureFlagManger returns true for AuthenticatorSync, should show authenticator sync UI`() {
+    fun `when featureFlagManger returns true for AuthenticatorSync, and version is at least 31 should show authenticator sync UI`() {
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns false
         val vm = createViewModel(
             initialState = null,
             featureFlagManager = mockk {
@@ -689,8 +706,26 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when featureFlagManger returns true for AuthenticatorSync, and version is under 31 should not show authenticator sync UI`() {
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+        val vm = createViewModel(
+            initialState = null,
+            featureFlagManager = mockk {
+                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
+                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
+            },
+        )
+        assertEquals(
+            DEFAULT_STATE,
+            vm.stateFlow.value,
+        )
+    }
+
     @Test
     fun `when featureFlagManger updates value AuthenticatorSync, should update UI`() = runTest {
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns false
         val featureFlagFlow = MutableStateFlow(false)
         val vm = createViewModel(
             initialState = null,
@@ -705,6 +740,26 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true), awaitItem())
             featureFlagFlow.value = false
             assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `when featureFlagManger updates value AuthenticatorSync, authenticator sync row should never show if below API 31`() = runTest {
+        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+        val featureFlagFlow = MutableStateFlow(false)
+        val vm = createViewModel(
+            initialState = null,
+            featureFlagManager = mockk {
+                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
+                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns featureFlagFlow
+            },
+        )
+        vm.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            featureFlagFlow.value = true
+            featureFlagFlow.value = false
+            expectNoEvents()
         }
     }
 
