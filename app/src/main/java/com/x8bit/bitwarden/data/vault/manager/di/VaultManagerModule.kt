@@ -26,6 +26,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -45,7 +46,8 @@ object VaultManagerModule {
         authDiskSource: AuthDiskSource,
         fileManager: FileManager,
         clock: Clock,
-        networkConnectionManager: NetworkConnectionManager
+        networkConnectionManager: NetworkConnectionManager,
+        dispatcherManager: DispatcherManager
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
@@ -53,7 +55,8 @@ object VaultManagerModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         clock = clock,
-        networkConnectionManager = networkConnectionManager
+        networkConnectionManager = networkConnectionManager,
+        externalScope = CoroutineScope(dispatcherManager.main)
     )
 
     @Provides
