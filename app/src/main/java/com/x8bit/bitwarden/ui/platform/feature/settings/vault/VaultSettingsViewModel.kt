@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -23,7 +22,6 @@ import javax.inject.Inject
 class VaultSettingsViewModel @Inject constructor(
     environmentRepository: EnvironmentRepository,
     featureFlagManager: FeatureFlagManager,
-    private val authRepository: AuthRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
@@ -80,11 +78,11 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportLoginsCardDismissClicked() {
-        dismissImportLoginsCard()
+        if (!state.shouldShowImportCard) return
+        firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
     }
 
     private fun handleImportLoginsCardClicked() {
-        dismissImportLoginsCard()
         sendEvent(VaultSettingsEvent.NavigateToImportVault(state.importUrl))
     }
 
@@ -120,11 +118,6 @@ class VaultSettingsViewModel @Inject constructor(
         sendEvent(
             VaultSettingsEvent.NavigateToImportVault(state.importUrl),
         )
-    }
-
-    private fun dismissImportLoginsCard() {
-        if (!state.shouldShowImportCard) return
-        authRepository.setShowImportLogins(showImportLogins = false)
     }
 }
 

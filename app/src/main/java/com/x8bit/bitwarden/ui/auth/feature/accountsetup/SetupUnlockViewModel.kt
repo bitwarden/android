@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -32,6 +33,7 @@ class SetupUnlockViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -109,7 +111,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleSetUpLaterClick() {
-        settingsRepository.storeShowUnlockSettingBadge(state.userId, true)
+        firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
         updateOnboardingStatusToNextStep()
     }
 

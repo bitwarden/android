@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -56,7 +57,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
-    private val mutableShowUnlockBadgeFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { isAuthenticatorSyncEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
@@ -64,8 +64,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
         every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
         coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
-        every { getShowUnlockBadgeFlow(any()) } returns mutableShowUnlockBadgeFlow
-        every { storeShowUnlockSettingBadge(any(), false) } just runs
+    }
+
+    private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { storeShowUnlockSettingBadge(any()) } just runs
     }
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
@@ -367,18 +371,18 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         }
 
         verify(exactly = 0) {
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
     @Test
     fun `on EnableBiometricsClick should update user show unlock badge status if shown`() {
-        mutableShowUnlockBadgeFlow.update { true }
+        mutableFirstTimeStateFlow.update { it.copy(showSetupUnlockCard = true) }
         val viewModel = createViewModel()
         viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
 
         verify(exactly = 1) {
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
@@ -599,14 +603,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         }
 
         verify(exactly = 0) {
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `on UnlockWithPinToggle Enabled should update show unlock badge state if card is visible`() {
-        mutableShowUnlockBadgeFlow.update { true }
+        mutableFirstTimeStateFlow.update { it.copy(showSetupUnlockCard = true) }
         val initialState = DEFAULT_STATE.copy(
             isUnlockWithPinEnabled = false,
         )
@@ -630,7 +634,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 pin = "1234",
                 shouldRequireMasterPasswordOnRestart = true,
             )
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
@@ -713,18 +717,18 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            mutableShowUnlockBadgeFlow.update { true }
+            mutableFirstTimeStateFlow.update { it.copy(showSetupUnlockCard = true) }
             assertEquals(DEFAULT_STATE.copy(shouldShowUnlockActionCard = true), awaitItem())
         }
     }
 
     @Test
     fun `when UnlockActionCardDismiss action received, should dismiss unlock action card`() {
-        mutableShowUnlockBadgeFlow.update { true }
+        mutableFirstTimeStateFlow.update { it.copy(showSetupUnlockCard = true) }
         val viewModel = createViewModel()
         viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
         verify {
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
@@ -732,7 +736,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Test
     fun `when UnlockActionCardCtaClick action received, should dismiss unlock action card and send NavigateToSetupUnlockScreen event`() =
         runTest {
-            mutableShowUnlockBadgeFlow.update { true }
+            mutableFirstTimeStateFlow.update { it.copy(showSetupUnlockCard = true) }
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
@@ -741,8 +745,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-            verify {
-                settingsRepository.storeShowUnlockSettingBadge(DEFAULT_STATE.userId, false)
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
             }
         }
 
@@ -767,6 +771,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
         },
+        firstTimeActionManager = firstTimeActionManager,
     )
 }
 
