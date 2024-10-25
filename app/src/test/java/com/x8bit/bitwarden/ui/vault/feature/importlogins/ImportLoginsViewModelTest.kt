@@ -3,13 +3,18 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -18,8 +23,12 @@ import org.junit.jupiter.api.Test
 
 class ImportLoginsViewModelTest : BaseViewModelTest() {
 
-    private val vaultRepository: VaultRepository = mockk() {
+    private val vaultRepository: VaultRepository = mockk {
         coEvery { syncForResult() } returns SyncVaultDataResult.Success(itemsAvailable = true)
+    }
+
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { storeShowImportLogins(any()) } just runs
     }
 
     @Test
@@ -298,8 +307,9 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             coVerify { vaultRepository.syncForResult() }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `SyncVaultDataResult success should update state to show bottom sheet`() {
+    fun `SyncVaultDataResult success should update state to show bottom sheet and set first time values to false`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
         assertEquals(
@@ -311,6 +321,9 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        verify {
+            firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -432,6 +445,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): ImportLoginsViewModel = ImportLoginsViewModel(
         vaultRepository = vaultRepository,
+        firstTimeActionManager = firstTimeActionManager,
     )
 }
 

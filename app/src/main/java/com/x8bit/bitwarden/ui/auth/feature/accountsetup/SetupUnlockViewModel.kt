@@ -80,6 +80,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
+        firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
             updateOnboardingStatusToNextStep()
         } else {
