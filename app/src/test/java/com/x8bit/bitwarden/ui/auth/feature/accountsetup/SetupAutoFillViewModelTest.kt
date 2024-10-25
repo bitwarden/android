@@ -5,6 +5,8 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
@@ -26,7 +28,12 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { isAutofillEnabledStateFlow } returns mutableAutoFillEnabledStateFlow
         every { disableAutofill() } just runs
-        every { storeShowAutoFillSettingBadge(any(), any()) } just runs
+    }
+
+    private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { storeShowAutoFillSettingBadge(any()) } just runs
     }
 
     private val mockUserState = mockk<UserState> {
@@ -153,8 +160,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
         verify {
-            settingsRepository.storeShowAutoFillSettingBadge(
-                userId = DEFAULT_USER_ID,
+            firstTimeActionManager.storeShowAutoFillSettingBadge(
                 showBadge = true,
             )
         }
@@ -180,6 +186,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         ),
         settingsRepository = settingsRepository,
         authRepository = authRepository,
+        firstTimeActionManager = firstTimeActionManager,
     )
 }
 

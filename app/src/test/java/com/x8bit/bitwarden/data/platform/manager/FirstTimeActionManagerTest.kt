@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class FirstTimeActionManagerTest {
@@ -183,6 +185,53 @@ class FirstTimeActionManagerTest {
             ),
             firstTimeActionManager.currentOrDefaultUserFirstTimeState,
         )
+    }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should store value of false to disk`() {
+        fakeAuthDiskSource.userState =
+            MOCK_USER_STATE
+        firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowAutoFillSettingBadge should store value of true to disk`() {
+        fakeAuthDiskSource.userState =
+            MOCK_USER_STATE
+        firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `getShowAutoFillSettingBadge should return the value saved to disk`() {
+        fakeAuthDiskSource.userState =
+            MOCK_USER_STATE
+        firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowUnlockSettingBadge should store value of false to disk`() {
+        fakeAuthDiskSource.userState =
+            MOCK_USER_STATE
+        firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowUnlockSettingBadge should store value of true to disk`() {
+        fakeAuthDiskSource.userState =
+            MOCK_USER_STATE
+        firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowImportLogins should store value of false to disk`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.storeShowImportLogins(showImportLogins = true)
+        assertTrue(fakeAuthDiskSource.getShowImportLogins(userId = USER_ID)!!)
     }
 }
 

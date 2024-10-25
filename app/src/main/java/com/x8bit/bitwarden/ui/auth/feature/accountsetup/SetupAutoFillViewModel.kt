@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class SetupAutoFillViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val authRepository: AuthRepository,
+    private val firstTimeActionManager: FirstTimeActionManager,
 ) :
     BaseViewModel<SetupAutoFillState, SetupAutoFillEvent, SetupAutoFillAction>(
         // We load the state from the savedStateHandle for testing purposes.
@@ -97,7 +99,7 @@ class SetupAutoFillViewModel @Inject constructor(
     }
 
     private fun handleTurnOnLaterConfirmClick() {
-        settingsRepository.storeShowAutoFillSettingBadge(state.userId, true)
+        firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
         updateOnboardingStatusToNextStep()
     }
 

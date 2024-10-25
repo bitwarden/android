@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -28,13 +27,11 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlagFlow
         every { getFeatureFlag(FlagKey.ImportLoginsFlow) } returns false
     }
-    private val authRepository = mockk<AuthRepository> {
-        every { setShowImportLogins(any()) } just runs
-    }
     private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { storeShowImportLogins(any()) } just runs
     }
 
     @Test
@@ -113,15 +110,19 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-            verify(exactly = 1) { authRepository.setShowImportLogins(false) }
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            }
         }
 
     @Test
     fun `ImportLoginsCardDismissClick action should set repository value to false `() = runTest {
-        val viewModel = createViewModel()
         mutableImportLoginsFlagFlow.update { true }
+        val viewModel = createViewModel()
         viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
-        verify(exactly = 1) { authRepository.setShowImportLogins(false) }
+        verify(exactly = 1) {
+            firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -130,13 +131,14 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
-            verify(exactly = 0) { authRepository.setShowImportLogins(false) }
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            }
         }
 
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
-        authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
     )
 }
