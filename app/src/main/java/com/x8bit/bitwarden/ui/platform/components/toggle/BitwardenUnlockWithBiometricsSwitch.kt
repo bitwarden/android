@@ -34,7 +34,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
 
         BiometricSupportStatus.NOT_SUPPORTED -> return
     }
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         modifier = modifier,
         label = stringResource(
             id = R.string.unlock_with,

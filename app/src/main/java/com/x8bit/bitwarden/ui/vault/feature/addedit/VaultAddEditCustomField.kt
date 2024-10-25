@@ -20,7 +20,7 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectB
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.ImmutableList
@@ -146,7 +146,7 @@ private fun CustomFieldBoolean(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BitwardenWideSwitch(
+        BitwardenSwitch(
             label = label,
             isChecked = value,
             onCheckedChange = onValueChanged,
