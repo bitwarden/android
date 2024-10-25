@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -95,9 +94,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     @Test
     fun `ConfirmImportLater sets dialog state to null and sends NavigateBack event`() = runTest {
         val viewModel = createViewModel()
-        turbineScope {
-            val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-            val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             // Initial state
             assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
 

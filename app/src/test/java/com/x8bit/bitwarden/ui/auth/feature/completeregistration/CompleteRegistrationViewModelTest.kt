@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -154,9 +153,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 )
             } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
             val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
-            turbineScope {
-                val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-                val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
                 viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
                 assertEquals(

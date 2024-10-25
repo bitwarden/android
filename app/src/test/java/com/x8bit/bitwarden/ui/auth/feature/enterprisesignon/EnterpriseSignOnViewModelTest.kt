@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -511,10 +510,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
-            turbineScope {
-                val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-                val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 assertEquals(initialState, stateFlow.awaitItem())
 
                 mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
@@ -566,10 +562,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
-            turbineScope {
-                val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-                val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 assertEquals(initialState, stateFlow.awaitItem())
 
                 mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)

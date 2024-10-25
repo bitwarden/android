@@ -4309,18 +4309,11 @@ class VaultRepositoryTest {
                 )
             } returns Throwable().asFailure()
 
-            turbineScope {
-                val expected = DecryptFido2CredentialAutofillViewResult.Error
-                val result = vaultRepository
-                    .getDecryptedFido2CredentialAutofillViews(
-                        cipherViewList = cipherViewList,
-                    )
+            val result = vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                cipherViewList = cipherViewList,
+            )
 
-                assertEquals(
-                    expected,
-                    result,
-                )
-            }
+            assertEquals(DecryptFido2CredentialAutofillViewResult.Error, result)
             coVerify {
                 vaultSdkSource.decryptFido2CredentialAutofillViews(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -4346,17 +4339,11 @@ class VaultRepositoryTest {
                 )
             } returns autofillViewList.asSuccess()
 
-            turbineScope {
-                val result = vaultRepository
-                    .getDecryptedFido2CredentialAutofillViews(
-                        cipherViewList = cipherViewList,
-                    )
+            val result = vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                cipherViewList = cipherViewList,
+            )
 
-                assertEquals(
-                    expected,
-                    result,
-                )
-            }
+            assertEquals(expected, result)
             coVerify {
                 vaultSdkSource.decryptFido2CredentialAutofillViews(
                     userId = MOCK_USER_STATE.activeUserId,
