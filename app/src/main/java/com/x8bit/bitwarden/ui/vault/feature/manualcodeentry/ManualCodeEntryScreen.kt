@@ -127,7 +127,8 @@ fun ManualCodeEntryScreen(
             Text(
                 text = stringResource(id = R.string.enter_key_manually),
                 style = BitwardenTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
                     .testTag("EnterKeyManuallyButton"),
             )
 
