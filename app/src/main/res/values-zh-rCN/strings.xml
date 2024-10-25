@@ -195,6 +195,7 @@
   <string name="translations">翻译</string>
   <string name="items_for_uri">%1$s 的项目</string>
   <string name="no_items_for_uri">您的密码库中没有可用于 %1$s 的项目。</string>
+  <string name="no_items_for_vault">您的密码库中没有匹配 \"%1$s\" 的项目</string>
   <string name="search_for_a_login_or_add_a_new_login">搜索登录或添加新的登录</string>
   <string name="bitwarden_autofill_service_overlay">当您选择一个输入字段并看到一个 Bitwarden 自动填充叠加层时，您可以点击它来启动自动填充服务。</string>
   <string name="bitwarden_autofill_service_notification_content">点击此通知以自动填充密码库中的项目。</string>
@@ -1059,4 +1060,17 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">将导出的文件保存到您可以在计算机上轻松找到的地方。</string>
   <string name="save_the_exported_file_highlight">保存导出的文件</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
+  <string name="syncing_logins_loading_message">正在同步登录信息...</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="download_the_browser_extension">Download the browser extension</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
+  <string name="use_the_web_app">Use the web app</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Log in at bitwarden.com to easily manage your account and update settings.</string>
+  <string name="autofill_passwords">Autofill passwords</string>
+  <string name="set_up_autofill_on_all_your_devices">Set up autofill on all your devices to login with a single tap anywhere.</string>
+  <string name="import_successful">Import Successful!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
+  <string name="bitwarden_tools">Bitwarden Tools</string>
+  <string name="got_it">Got it</string>
+  <string name="no_logins_were_imported">No logins were imported</string>
 </resources>

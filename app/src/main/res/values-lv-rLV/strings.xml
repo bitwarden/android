@@ -195,6 +195,7 @@
   <string name="translations">Tulkojumi</string>
   <string name="items_for_uri">%1$s vienumi</string>
   <string name="no_items_for_uri">Glabātavā nav %1$s vienumu.</string>
+  <string name="no_items_for_vault">Glabātavā nav vienumu, kas atbilst \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Meklēt pieteikšanās vienumu vai pievienot jaunu</string>
   <string name="bitwarden_autofill_service_overlay">Kad tiek atlasīts ievades lauks un parādās Bitwarden automātiskās aizpildes lodziņš, jāpiesit tam, lai palaistu automātiskās aizpildes pakalpojumu.</string>
   <string name="bitwarden_autofill_service_notification_content">Jāpiesit šim paziņojumam, lai automātiski aizpildītu ar vienumu no glabātavas.</string>
@@ -1058,5 +1059,18 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="import_help_highlight">ievietošanas palīdzība</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Izgūtā datne jāsaglabā kaut kur viegli atrodamā vietā datorā.</string>
   <string name="save_the_exported_file_highlight">Izgūtā datne jāsaglabā</string>
-  <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
+  <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Šis nav atzīts Bitwarden serveris. Var būt nepieciešams vērsties pie nodrošinātāja, lai pārbaudītu, vai atjaunināt savu serveri.</string>
+  <string name="syncing_logins_loading_message">Sinhronizē pieteikšanās vienumus...</string>
+  <string name="ssh_key_cipher_item_types">SSH atslēgas šifra vienumu veidi</string>
+  <string name="download_the_browser_extension">Lejupielādēt pārlūka paplašinājumu</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Jādodas uz bitwarden.com/download, lai iekļautu Bitwarden savā iecienītākajā pārlūkā, lai iegūtu nevainojamu pieredzi.</string>
+  <string name="use_the_web_app">Izmantot tīmekļa lietotni</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Piesakies bitwarden.com, lai viegli pārvaldītu savu kontu un atjauninātu iestatījumus!</string>
+  <string name="autofill_passwords">Automātiski aizpildīt paroles</string>
+  <string name="set_up_autofill_on_all_your_devices">Iestati automātisko aizpildi visās savās ierīcēs, lai visur pieteiktos ar vienu piesitienu!</string>
+  <string name="import_successful">Ievietošana veiksmīga.</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Pārvaldi savus pieteikšanās vienumus no jebkurienes ar Bitwarden tīmekļa un darbvirsmas rīkiem!</string>
+  <string name="bitwarden_tools">Bitwarden rīki</string>
+  <string name="got_it">Sapratu</string>
+  <string name="no_logins_were_imported">Netika ievietots neviens pieteikšanās vienums</string>
 </resources>
