@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -85,6 +86,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -5227,6 +5229,47 @@ class AuthRepositoryTest {
             ),
             result,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getVerifiedOrganizationDomainSsoDetails Success should return Success`() = runTest {
+        val email = "test@gmail.com"
+        coEvery {
+            organizationService.getVerifiedOrganizationDomainSsoDetails(email)
+        } returns VerifiedOrganizationDomainSsoDetailsResponse(
+            verifiedOrganizationDomainSsoDetails = listOf(
+                VerifiedOrganizationDomainSsoDetailsResponse.VerifiedOrganizationDomainSsoDetail(
+                    organizationIdentifier = "Test Identifier",
+                    organizationName = "Bitwarden",
+                    domainName = "bitwarden.com",
+                ),
+            ),
+        ).asSuccess()
+        val result = repository.getVerifiedOrganizationDomainSsoDetails(email)
+        assertEquals(
+            VerifiedOrganizationDomainSsoDetailsResult.Success(
+                verifiedOrganizationDomainSsoDetails = listOf(
+                    VerifiedOrganizationDomainSsoDetailsResponse.VerifiedOrganizationDomainSsoDetail(
+                        organizationIdentifier = "Test Identifier",
+                        organizationName = "Bitwarden",
+                        domainName = "bitwarden.com",
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `getVerifiedOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
+        val email = "test@gmail.com"
+        val throwable = Throwable()
+        coEvery {
+            organizationService.getVerifiedOrganizationDomainSsoDetails(email)
+        } returns throwable.asFailure()
+        val result = repository.getVerifiedOrganizationDomainSsoDetails(email)
+        assertEquals(VerifiedOrganizationDomainSsoDetailsResult.Failure, result)
     }
 
     @Test

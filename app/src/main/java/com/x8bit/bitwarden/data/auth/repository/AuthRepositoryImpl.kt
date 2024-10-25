@@ -68,6 +68,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -1126,6 +1127,21 @@ class AuthRepositoryImpl(
                 )
             },
             onFailure = { OrganizationDomainSsoDetailsResult.Failure },
+        )
+
+    override suspend fun getVerifiedOrganizationDomainSsoDetails(
+        email: String,
+    ): VerifiedOrganizationDomainSsoDetailsResult = organizationService
+        .getVerifiedOrganizationDomainSsoDetails(
+            email = email,
+        )
+        .fold(
+            onSuccess = {
+                VerifiedOrganizationDomainSsoDetailsResult.Success(
+                    verifiedOrganizationDomainSsoDetails = it.verifiedOrganizationDomainSsoDetails,
+                )
+            },
+            onFailure = { VerifiedOrganizationDomainSsoDetailsResult.Failure },
         )
 
     override suspend fun prevalidateSso(
