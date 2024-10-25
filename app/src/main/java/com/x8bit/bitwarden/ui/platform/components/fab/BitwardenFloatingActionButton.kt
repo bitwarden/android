@@ -26,6 +26,7 @@ fun BitwardenFloatingActionButton(
         containerColor = BitwardenTheme.colorScheme.filledButton.background,
         contentColor = BitwardenTheme.colorScheme.filledButton.foreground,
         onClick = onClick,
+        shape = BitwardenTheme.shapes.fab,
         modifier = modifier,
     ) {
         Icon(
