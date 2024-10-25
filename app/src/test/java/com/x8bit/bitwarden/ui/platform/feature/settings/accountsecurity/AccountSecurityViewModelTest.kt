@@ -710,13 +710,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Test
     fun `when featureFlagManger returns true for AuthenticatorSync, and version is under 31 should not show authenticator sync UI`() {
         every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
-        val vm = createViewModel(
-            initialState = null,
-            featureFlagManager = mockk {
-                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
-                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
-            },
-        )
+        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
+        every { featureFlagManager.getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
+        val vm = createViewModel(initialState = null)
         assertEquals(
             DEFAULT_STATE,
             vm.stateFlow.value,
@@ -745,23 +741,22 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `when featureFlagManger updates value AuthenticatorSync, authenticator sync row should never show if below API 31`() = runTest {
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
-        val featureFlagFlow = MutableStateFlow(false)
-        val vm = createViewModel(
-            initialState = null,
-            featureFlagManager = mockk {
-                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
-                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns featureFlagFlow
-            },
-        )
-        vm.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            featureFlagFlow.value = true
-            featureFlagFlow.value = false
-            expectNoEvents()
+    fun `when featureFlagManger updates value AuthenticatorSync, authenticator sync row should never show if below API 31`() =
+        runTest {
+            every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+            val featureFlagFlow = MutableStateFlow(false)
+            every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
+            every {
+                featureFlagManager.getFeatureFlagFlow(FlagKey.AuthenticatorSync)
+            } returns featureFlagFlow
+            val vm = createViewModel(initialState = null)
+            vm.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                featureFlagFlow.value = true
+                featureFlagFlow.value = false
+                expectNoEvents()
+            }
         }
-    }
 
     @Test
     fun `when showUnlockBadgeFlow updates value, should update state`() = runTest {
