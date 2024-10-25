@@ -181,6 +181,7 @@ private fun ContentColumn(
             text = stringResource(id = R.string.bitwarden_help_center),
             onConfirmClick = onHelpCenterClick,
             dialogTitle = stringResource(id = R.string.continue_to_help_center),
+            modifier = Modifier.testTag("BitwardenHelpCenterRow"),
             dialogMessage = stringResource(
                 id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
             ),
@@ -189,6 +190,7 @@ private fun ContentColumn(
             text = stringResource(id = R.string.privacy_policy),
             onConfirmClick = onPrivacyPolicyClick,
             dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
+            modifier = Modifier.testTag("PrivacyPolicyRow"),
             dialogMessage = stringResource(
                 id = R.string.privacy_policy_description_long,
             ),
@@ -196,6 +198,7 @@ private fun ContentColumn(
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.web_vault),
             onConfirmClick = onWebVaultClick,
+            modifier = Modifier.testTag("BitwardenWebVaultRow"),
             dialogTitle = stringResource(id = R.string.continue_to_web_app),
             dialogMessage = stringResource(
                 id = R.string.explore_more_features_of_your_bitwarden_account_on_the_web_app,
@@ -205,6 +208,7 @@ private fun ContentColumn(
             text = stringResource(id = R.string.learn_org),
             onConfirmClick = onLearnAboutOrgsClick,
             dialogTitle = stringResource(id = R.string.continue_to_x, "bitwarden.com"),
+            modifier = Modifier.testTag("LearnAboutOrganizationsRow"),
             dialogMessage = stringResource(
                 id = R.string.learn_about_organizations_description_long,
             ),
@@ -212,12 +216,14 @@ private fun ContentColumn(
         BitwardenExternalLinkRow(
             text = stringResource(R.string.give_feedback),
             onConfirmClick = onGiveFeedbackClick,
+            modifier = Modifier.testTag("GiveFeedbackRow"),
             dialogTitle = stringResource(R.string.continue_to_give_feedback),
             dialogMessage = stringResource(R.string.continue_to_provide_feedback),
         )
         CopyRow(
             text = state.version,
             onClick = onVersionClick,
+            modifier = Modifier.testTag("CopyAboutInfoRow"),
         )
         Box(
             modifier = Modifier
