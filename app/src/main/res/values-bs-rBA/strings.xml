@@ -195,6 +195,7 @@
   <string name="translations">Prijevodi</string>
   <string name="items_for_uri">Stavke za %1$s</string>
   <string name="no_items_for_uri">U Vašem trezoru nema stavki za %1$s.</string>
+  <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
   <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Kada izaberete polje za unos i vidite prekrivač za automatsko popunjavanje Bitwarden-a, možete ga dodirnuti da biste pokrenuli uslugu automatskog popunjavanja.</string>
   <string name="bitwarden_autofill_service_notification_content">Dodirnite ovo obaveštenje da biste automatski popunili stavku iz trezora.</string>
@@ -824,8 +825,8 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="trouble_logging_in">Trouble logging in?</string>
   <string name="logging_in_as_x">Logging in as %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Vault timeout action changed to log out</string>
-  <string name="block_auto_fill">Block auto-fill</string>
-  <string name="auto_fill_will_not_be_offered_for_these_ur_is">Auto-fill will not be offered for these URIs.</string>
+  <string name="block_auto_fill">Block autofill</string>
+  <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autofill will not be offered for these URIs.</string>
   <string name="new_blocked_uri">New blocked URI</string>
   <string name="uri_saved">URI saved</string>
   <string name="invalid_format_use_https_http_or_android_app">Invalid format. Use https://, http://, or androidapp://</string>
@@ -904,9 +905,9 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="verifying_identity_ellipsis">Verifying identity...</string>
   <string name="passwords">Passwords</string>
   <string name="unknown_account">Unknown account</string>
-  <string name="set_up_autofill">Set up auto-fill</string>
+  <string name="set_up_autofill">Set up autofill</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
-  <string name="set_up_auto_fill_description_long">To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
+  <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
   <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
@@ -1058,4 +1059,17 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
+  <string name="syncing_logins_loading_message">Syncing logins...</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="download_the_browser_extension">Download the browser extension</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
+  <string name="use_the_web_app">Use the web app</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Log in at bitwarden.com to easily manage your account and update settings.</string>
+  <string name="autofill_passwords">Autofill passwords</string>
+  <string name="set_up_autofill_on_all_your_devices">Set up autofill on all your devices to login with a single tap anywhere.</string>
+  <string name="import_successful">Import Successful!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
+  <string name="bitwarden_tools">Bitwarden Tools</string>
+  <string name="got_it">Got it</string>
+  <string name="no_logins_were_imported">No logins were imported</string>
 </resources>
