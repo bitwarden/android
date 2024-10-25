@@ -458,6 +458,9 @@ private fun ColumnScope.PasswordTypeContent(
         range = passwordTypeState.computedMinimumLength..passwordTypeState.maxLength,
         sliderTag = "PasswordLengthSlider",
         valueTag = "PasswordLengthLabel",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 16.dp),
     )
 
     Spacer(modifier = Modifier.height(8.dp))
