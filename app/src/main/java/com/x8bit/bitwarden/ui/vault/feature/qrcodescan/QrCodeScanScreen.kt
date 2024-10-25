@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -426,6 +427,7 @@ private fun BottomClickableText(
             style = BitwardenTheme.typography.labelLarge,
             innerPadding = PaddingValues(vertical = 4.dp, horizontal = 12.dp),
             onClick = onEnterCodeManuallyClick,
+            modifier = Modifier.testTag("EnterKeyManuallyButton"),
         )
     }
 }
