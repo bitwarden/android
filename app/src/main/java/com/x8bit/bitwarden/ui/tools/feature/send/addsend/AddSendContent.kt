@@ -104,7 +104,8 @@ fun AddSendContent(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("SendPolicyInEffectLabel"),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -113,7 +114,7 @@ fun AddSendContent(
                 BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.send_options_policy_in_effect),
                     modifier = Modifier
-                        .testTag(tag = "SendOptionsPolicyInEffectLabel")
+                        .testTag(tag = "SendPolicyInEffectLabel")
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
