@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
@@ -177,9 +176,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             environmentRepository = fakeEnvironmentRepository,
             featureFlagManager = featureFlagManager,
         )
-        turbineScope {
-            val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-            val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
             viewModel.trySendAction(ContinueClick)
             assertEquals(
