@@ -28,6 +28,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { storeShowImportLogins(any()) } just runs
+        every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
 
     @Test
@@ -100,8 +101,9 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmImportLater sets dialog state to null and sends NavigateBack event`() = runTest {
+    fun `ConfirmImportLater sets dialog state to null, sends NavigateBack event, and stores first time values`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             // Initial state
@@ -132,6 +134,10 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 ImportLoginsEvent.NavigateBack,
                 eventFlow.awaitItem(),
             )
+        }
+        verify(exactly = 1) {
+            firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
         }
     }
 
@@ -320,6 +326,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         )
         verify {
             firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
         }
     }
 

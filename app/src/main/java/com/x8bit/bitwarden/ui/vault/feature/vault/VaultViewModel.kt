@@ -186,6 +186,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleDismissImportActionCard() {
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(true)
         if (!state.showImportActionCard) return
         firstTimeActionManager.storeShowImportLogins(false)
     }
