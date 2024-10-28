@@ -42,7 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -100,7 +100,7 @@ fun OtherScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.enable_sync_on_refresh),
                 description = stringResource(id = R.string.enable_sync_on_refresh_description),
                 isChecked = state.allowSyncOnRefresh,
@@ -183,7 +183,7 @@ private fun ScreenCaptureRow(
 ) {
     var shouldShowScreenCaptureConfirmDialog by remember { mutableStateOf(false) }
 
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.allow_screen_capture),
         isChecked = currentValue,
         onCheckedChange = {

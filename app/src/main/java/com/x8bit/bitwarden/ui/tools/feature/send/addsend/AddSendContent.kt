@@ -45,7 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -242,7 +242,7 @@ fun AddSendContent(
                         onValueChange = addSendHandlers.onTextChange,
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    BitwardenWideSwitch(
+                    BitwardenSwitch(
                         modifier = Modifier
                             .testTag(tag = "SendHideTextByDefaultToggle")
                             .fillMaxWidth()
@@ -502,7 +502,7 @@ private fun AddSendOptions(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 modifier = Modifier
                     .testTag("SendHideEmailSwitch")
                     .fillMaxWidth()
@@ -514,7 +514,7 @@ private fun AddSendOptions(
                 enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
             )
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 modifier = Modifier
                     .testTag("SendDeactivateSwitch")
                     .fillMaxWidth()

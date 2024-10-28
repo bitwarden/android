@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWi
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
@@ -26,7 +26,7 @@ fun CustomField(
 ) {
     when (customField) {
         is VaultItemState.ViewState.Content.Common.Custom.BooleanField -> {
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = customField.name,
                 isChecked = customField.value,
                 readOnly = true,

@@ -57,7 +57,7 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -531,7 +531,7 @@ private fun PasswordCapitalLettersToggleItem(
     onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "A—Z",
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
@@ -550,7 +550,7 @@ private fun PasswordLowercaseLettersToggleItem(
     onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "a—z",
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
@@ -569,7 +569,7 @@ private fun PasswordNumbersToggleItem(
     onPasswordToggleNumbersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "0-9",
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
@@ -588,7 +588,7 @@ private fun PasswordSpecialCharactersToggleItem(
     onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "!@#$%^&*",
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
@@ -647,7 +647,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
     onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.avoid_ambiguous_characters),
         isChecked = avoidAmbiguousChars,
         enabled = enabled,
@@ -758,7 +758,7 @@ private fun PassphraseCapitalizeToggleItem(
     onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
@@ -776,7 +776,7 @@ private fun PassphraseIncludeNumberToggleItem(
     onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
     enabled: Boolean,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         enabled = enabled,
@@ -1127,7 +1127,7 @@ private fun RandomWordCapitalizeToggleItem(
     capitalize: Boolean,
     onRandomWordCapitalizeToggleChange: (Boolean) -> Unit,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onRandomWordCapitalizeToggleChange,
@@ -1143,7 +1143,7 @@ private fun RandomWordIncludeNumberToggleItem(
     includeNumber: Boolean,
     onRandomWordIncludeNumberToggleChange: (Boolean) -> Unit,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         onCheckedChange = onRandomWordIncludeNumberToggleChange,
