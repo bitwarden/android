@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
@@ -43,7 +43,7 @@ fun LazyListScope.collectionItemsSelector(
     if (collectionList?.isNotEmpty() == true) {
         items(collectionList) {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = it.name,
                 isChecked = it.isSelected,
                 onCheckedChange = { _ ->
