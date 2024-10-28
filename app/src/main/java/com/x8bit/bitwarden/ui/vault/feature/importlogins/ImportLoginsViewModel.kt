@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -21,14 +23,21 @@ import javax.inject.Inject
 class ImportLoginsViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val environmentRepository: EnvironmentRepository,
 ) :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
-        initialState = ImportLoginsState(
-            null,
-            viewState = ImportLoginsState.ViewState.InitialContent,
-            isVaultSyncing = false,
-            showBottomSheet = false,
-        ),
+        initialState = run {
+            val vaultUrl = environmentRepository.environment.environmentUrlData.webVault
+                ?: environmentRepository.environment.environmentUrlData.base
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.InitialContent,
+                isVaultSyncing = false,
+                showBottomSheet = false,
+                // attempt to trim the scheme of the vault url
+                currentWebVaultUrl = vaultUrl.toUriOrNull()?.host ?: vaultUrl,
+            )
+        },
     ) {
     override fun handleAction(action: ImportLoginsAction) {
         when (action) {
@@ -203,6 +212,7 @@ data class ImportLoginsState(
     val viewState: ViewState,
     val isVaultSyncing: Boolean,
     val showBottomSheet: Boolean,
+    val currentWebVaultUrl: String,
 ) {
     /**
      * Dialog states for the [ImportLoginsViewModel].
