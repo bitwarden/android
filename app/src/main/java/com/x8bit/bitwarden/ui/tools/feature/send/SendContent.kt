@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -83,7 +82,7 @@ fun SendContent(
 
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenListHeaderTextWithSupportLabel(
+            BitwardenListHeaderText(
                 label = stringResource(id = R.string.all_sends),
                 supportingLabel = state.sendItems.size.toString(),
                 modifier = Modifier
