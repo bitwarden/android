@@ -143,24 +143,25 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     @Test
     fun `handleContinueClick send NavigateBack event when not initial setup and sets first time flag to false`() =
         runTest {
-        val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(isInitialSetup = false))
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
-            assertEquals(
-                SetupAutoFillEvent.NavigateBack,
-                awaitItem(),
-            )
-        }
+            val viewModel =
+                createViewModel(initialState = DEFAULT_STATE.copy(isInitialSetup = false))
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+                assertEquals(
+                    SetupAutoFillEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
             verify(exactly = 1) {
                 firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
             }
-        verify(exactly = 0) {
-            authRepository.setOnboardingStatus(
-                DEFAULT_USER_ID,
-                OnboardingStatus.FINAL_STEP,
-            )
+            verify(exactly = 0) {
+                authRepository.setOnboardingStatus(
+                    DEFAULT_USER_ID,
+                    OnboardingStatus.FINAL_STEP,
+                )
+            }
         }
-    }
 
     @Test
     fun `handleTurnOnLaterConfirmClick sets showAutoFillSettingBadge to true`() {
