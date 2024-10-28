@@ -9,14 +9,15 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class BitwardenShapes(
     val actionCard: CornerBasedShape,
+    val bottomSheet: CornerBasedShape,
     val coachmark: CornerBasedShape,
     val content: CornerBasedShape,
     val contentBottom: CornerBasedShape,
     val contentTop: CornerBasedShape,
     val dialog: CornerBasedShape,
+    val fab: CornerBasedShape,
     val infoCallout: CornerBasedShape,
     val menu: CornerBasedShape,
     val segmentedControl: CornerBasedShape,
     val snackbar: CornerBasedShape,
-    val bottomSheet: CornerBasedShape,
 )

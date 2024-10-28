@@ -183,4 +183,28 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     showSetupUnlockCard = null,
                     showSetupAutofillCard = null,
                 )
+
+    override fun storeShowUnlockSettingBadge(showBadge: Boolean) {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storeShowUnlockSettingBadge(
+            userId = activeUserId,
+            showBadge = showBadge,
+        )
+    }
+
+    override fun storeShowAutoFillSettingBadge(showBadge: Boolean) {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storeShowAutoFillSettingBadge(
+            userId = activeUserId,
+            showBadge = showBadge,
+        )
+    }
+
+    override fun storeShowImportLogins(showImportLogins: Boolean) {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        authDiskSource.storeShowImportLogins(
+            userId = activeUserId,
+            showImportLogins = showImportLogins,
+        )
+    }
 }

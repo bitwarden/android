@@ -5,6 +5,8 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
@@ -26,7 +28,12 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { isAutofillEnabledStateFlow } returns mutableAutoFillEnabledStateFlow
         every { disableAutofill() } just runs
-        every { storeShowAutoFillSettingBadge(any(), any()) } just runs
+    }
+
+    private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { storeShowAutoFillSettingBadge(any()) } just runs
     }
 
     private val mockUserState = mockk<UserState> {
@@ -118,43 +125,50 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `handleContinueClick sets onboarding status to FINAL_STEP`() {
+    fun `handleContinueClick sets onboarding status to FINAL_STEP and sets first time flag to false`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
-        verify {
+        verify(exactly = 1) {
             authRepository.setOnboardingStatus(
                 DEFAULT_USER_ID,
                 OnboardingStatus.FINAL_STEP,
             )
+            firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `handleContinueClick send NavigateBack event when not initial setup`() = runTest {
-        val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(isInitialSetup = false))
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
-            assertEquals(
-                SetupAutoFillEvent.NavigateBack,
-                awaitItem(),
-            )
+    fun `handleContinueClick send NavigateBack event when not initial setup and sets first time flag to false`() =
+        runTest {
+            val viewModel =
+                createViewModel(initialState = DEFAULT_STATE.copy(isInitialSetup = false))
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+                assertEquals(
+                    SetupAutoFillEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
+            }
+            verify(exactly = 0) {
+                authRepository.setOnboardingStatus(
+                    DEFAULT_USER_ID,
+                    OnboardingStatus.FINAL_STEP,
+                )
+            }
         }
-        verify(exactly = 0) {
-            authRepository.setOnboardingStatus(
-                DEFAULT_USER_ID,
-                OnboardingStatus.FINAL_STEP,
-            )
-        }
-    }
 
     @Test
     fun `handleTurnOnLaterConfirmClick sets showAutoFillSettingBadge to true`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
         verify {
-            settingsRepository.storeShowAutoFillSettingBadge(
-                userId = DEFAULT_USER_ID,
+            firstTimeActionManager.storeShowAutoFillSettingBadge(
                 showBadge = true,
             )
         }
@@ -180,6 +194,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         ),
         settingsRepository = settingsRepository,
         authRepository = authRepository,
+        firstTimeActionManager = firstTimeActionManager,
     )
 }
 

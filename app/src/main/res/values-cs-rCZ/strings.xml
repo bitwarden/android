@@ -93,9 +93,9 @@
   <string name="avoid_ambiguous_characters">Nepoužívat zaměnitelné znaky</string>
   <string name="bitwarden_app_extension">Rozšíření aplikace Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">Nejjednodušší způsob přidání nových přihlášení do trezoru je z rozšíření Bitwardenu. Další informace o používání rozšíření Bitwardenu získáte klepnutím na obrazovku Nastavení.</string>
-  <string name="bitwarden_app_extension_description">Použijte Bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</string>
+  <string name="bitwarden_app_extension_description">Použije Bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</string>
   <string name="bitwarden_autofill_service">Služba automatického vyplňování</string>
-  <string name="bitwarden_autofill_accessibility_service_description">Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů.</string>
+  <string name="bitwarden_autofill_accessibility_service_description">Použije službu přístupnosti pro automatické vyplňování přihlašovacích údajů.</string>
   <string name="change_email">Změnit e-mail</string>
   <string name="change_email_confirmation">E-mailovou adresu si můžete změnit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</string>
   <string name="change_master_password">Změnit hlavní heslo</string>
@@ -195,6 +195,7 @@
   <string name="translations">Překlady</string>
   <string name="items_for_uri">Položky pro %1$s</string>
   <string name="no_items_for_uri">Žádné položky ve Vašem trezoru pro %1$s.</string>
+  <string name="no_items_for_vault">Žádné položky ve Vašem trezoru se shodou s \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
   <string name="bitwarden_autofill_service_overlay">Když vyberete vstupní pole a uvidíte překrytí automatického vyplnění, můžete na něj klepnout a spustit službu automatického vyplnění.</string>
   <string name="bitwarden_autofill_service_notification_content">Klepnutím na toto oznámení automaticky vyplníte přihlašovací údaje z trezoru.</string>
@@ -324,7 +325,7 @@ Načtení proběhne automaticky.</string>
   <string name="show_website_icons">Zobrazit ikony webových stránek</string>
   <string name="show_website_icons_description">Zobrazí rozeznatelný obrázek vedle každého přihlášení.</string>
   <string name="icons_url">URL serveru ikon</string>
-  <string name="autofill_with_bitwarden">Automatické vyplnění aplikací Bitwarden</string>
+  <string name="autofill_with_bitwarden">Automatické vyplňování aplikací Bitwarden</string>
   <string name="vault_is_locked">Trezor je uzamčený</string>
   <string name="go_to_my_vault">Přejít do trezoru</string>
   <string name="collections">Kolekce</string>
@@ -477,7 +478,7 @@ Načtení proběhne automaticky.</string>
   <string name="biometrics_direction">Použít biometrii k ověření</string>
   <string name="biometrics">Biometrie</string>
   <string name="use_biometrics_to_unlock">Použít biometrii k odemknutí</string>
-  <string name="accessibility_overlay_permission_alert">Bitwarden vyžaduje pozornost – Zkontrolujte \"Službu automatického vyplňování\" v nastavení Bitwardenu</string>
+  <string name="accessibility_overlay_permission_alert">Bitwarden vyžaduje pozornost - zkontrolujte \"Službu automatického vyplňování\" v nastavení Bitwardenu</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. V nastavení Android aplikace Bitwarden přejděte v části Rozšířená nastavení do \"Zobrazit přes ostatní aplikace\"  a povolte zobrazení přes jiné aplikace.</string>
   <string name="overlay_permission">Oprávnění</string>
   <string name="bitwarden_autofill_service_open_overlay_permission_settings">Otevřít nastavení oprávnění překrytí obrazovky</string>
@@ -536,7 +537,7 @@ Načtení proběhne automaticky.</string>
   <string name="accept_policies_error">Podmínky použití a Zásady ochrany osobních údajů nebyly odsouhlaseny.</string>
   <string name="terms_of_service">Podmínky použití</string>
   <string name="privacy_policy">Zásady ochrany osobních údajů</string>
-  <string name="accessibility_draw_over_permission_alert">Bitwarden vyžaduje pozornost – Povolte volbu \"Zobrazit přes ostatní aplikace\" ve \"Službách automatického vyplňování“ v nastavení aplikace Bitwarden</string>
+  <string name="accessibility_draw_over_permission_alert">Bitwarden vyžaduje pozornost - Povolte volbu \"Zobrazit přes ostatní aplikace\" ve \"Službách automatického vyplňování“ v nastavení aplikace Bitwarden</string>
   <string name="passkey_management">Správa přístupových klíčů</string>
   <string name="autofill_services">Služby automatického vyplňování</string>
   <string name="inline_autofill">Použít automatické vyplňování</string>
@@ -549,7 +550,7 @@ Načtení proběhne automaticky.</string>
   <string name="accessibility_description5">Vyžadováno pro použití v dlaždici rychlé akce automatického vyplňování.</string>
   <string name="draw_over">Použít vykreslování přes ostatní aplikace</string>
   <string name="draw_over_description">Služba přístupnosti aplikace Bitwarden umožní zobrazovat vyskakovací okno při výběru pole s přihlašovacími údaji.</string>
-  <string name="draw_over_description2">Pokud je povoleno, služba usnadnění Bitwardenu zobrazí vyskakovací okno při výběru přihlašovacích polí pro automatické vyplňování přihlašovacích údajů.</string>
+  <string name="draw_over_description2">Pokud je povoleno, služba přístupnosti Bitwardenu zobrazí vyskakovací okno při výběru přihlašovacích polí pro automatické vyplňování přihlašovacích údajů.</string>
   <string name="draw_over_description3">Pokud je povoleno, přístupnost zobrazí vyskakovací okno pro rozšíření služby automatického vyplňování pro starší aplikace, které nepodporují Android Autofill Framework.</string>
   <string name="personal_ownership_submit_error">Z důvodu podnikových zásad nemůžete ukládat položky do svého osobního trezoru. Změňte vlastnictví položky na organizaci a poté si vyberte z dostupných kolekcí.</string>
   <string name="personal_ownership_policy_in_effect">Zásady organizace ovlivňují možnosti vlastnictví.</string>
@@ -1058,4 +1059,17 @@ Chcete se přepnout na tento účet?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný soubor někde na Vašem počítači, kde jej můžete snadno najít.</string>
   <string name="save_the_exported_file_highlight">Uložit exportovaný soubor</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Nejedná se o rozpoznaný server Bitwarden. Možná budete muset zkontrolovat svého poskytovatele nebo aktualizovat svůj server.</string>
+  <string name="syncing_logins_loading_message">Synchronizování přihlášení...</string>
+  <string name="ssh_key_cipher_item_types">Typy položek klíče SSH Cipher</string>
+  <string name="download_the_browser_extension">Stáhnout rozšíření prohlížeče</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Přejděte na bitwarden.com/download a integrujte Bitwarden do svého oblíbeného prohlížeče pro bezproblémové používání.</string>
+  <string name="use_the_web_app">Použít webovou aplikaci</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Přihlaste se na bitwarden.com a snadno spravujte svůj účet a aktualizujte nastavení.</string>
+  <string name="autofill_passwords">Automatické vyplňování hesel</string>
+  <string name="set_up_autofill_on_all_your_devices">Nastavte automatické vyplňování na všech Vašich zařízeních pro přihlášení jedním klepnutím kdekoliv.</string>
+  <string name="import_successful">Import byl úspěšný!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Spravujte přihlašovací údaje odkudkoli pomocí nástrojů Bitwarden pro web i počítač.</string>
+  <string name="bitwarden_tools">Nástroje Bitwarden</string>
+  <string name="got_it">Rozumím</string>
+  <string name="no_logins_were_imported">Nebyla importována žádná přihlášení</string>
 </resources>

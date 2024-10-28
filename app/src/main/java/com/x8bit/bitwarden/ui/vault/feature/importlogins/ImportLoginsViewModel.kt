@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ImportLoginsViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
+    private val firstTimeActionManager: FirstTimeActionManager,
 ) :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
         initialState = ImportLoginsState(
@@ -94,6 +96,7 @@ class ImportLoginsViewModel @Inject constructor(
 
             is SyncVaultDataResult.Success -> {
                 if (result.itemsAvailable) {
+                    firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
                     mutableStateFlow.update {
                         it.copy(
                             showBottomSheet = true,

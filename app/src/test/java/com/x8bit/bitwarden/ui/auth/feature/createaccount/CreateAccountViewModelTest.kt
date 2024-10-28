@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -243,9 +242,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             savedStateHandle = validInputHandle,
             authRepository = repo,
         )
-        turbineScope {
-            val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-            val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
             viewModel.trySendAction(CreateAccountAction.SubmitClick)
             assertEquals(

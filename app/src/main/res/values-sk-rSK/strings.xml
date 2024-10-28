@@ -195,6 +195,7 @@
   <string name="translations">Preklady</string>
   <string name="items_for_uri">Položky pre %1$s</string>
   <string name="no_items_for_uri">V trezore sa nenachádzajú žiadne položky pre %1$s.</string>
+  <string name="no_items_for_vault">Vo vašom trezore nie sú žiadne položky, ktoré zodpovedajú \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Vyhľadať alebo pridať nové prihlasovacie údaje</string>
   <string name="bitwarden_autofill_service_overlay">Keď aktivujute vstupné pole a uvidíte tlačidlo pre automatické vyplnenie cez Bitwarden, môžete ho stlačiť a spustiť službu automatického vypĺňania.</string>
   <string name="bitwarden_autofill_service_notification_content">Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</string>
@@ -1059,4 +1060,17 @@ Chcete prepnúť na tento účet?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný súbor na miesto v počítači, ktoré ľahko nájdete.</string>
   <string name="save_the_exported_file_highlight">Uložte exportovaný súbor</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Toto nie je známy Bitwarden server. Možno bude potrebné overiť si to u svojho poskytovateľa alebo aktualizovať server.</string>
+  <string name="syncing_logins_loading_message">Synchronizácia prihlásení...</string>
+  <string name="ssh_key_cipher_item_types">Typy šifrovania pre SSH kľúče</string>
+  <string name="download_the_browser_extension">Stiahnuť rozšírenie pre prehliadač</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Pre pohodlné použivanie prejdite na stránku bitwarden.com/download a integrujte Bitwarden do svojho obľúbeného prehliadača.</string>
+  <string name="use_the_web_app">Použiť webovú aplikáciu</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Pre jednoduchú správu vášho účtu a aktualizáciu nastavení sa prihláste na bitwarden.com.</string>
+  <string name="autofill_passwords">Automatické vypĺňanie hesiel</string>
+  <string name="set_up_autofill_on_all_your_devices">Nastavte si automatické vypĺňanie na všetkých svojich zariadeniach a prihláste sa jediným ťuknutím kdekoľvek.</string>
+  <string name="import_successful">Import bol úspešný!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Spravujte svoje prihlasovacie údaje kdekoľvek s nástrojmi Bitwardenu pre web a desktop.</string>
+  <string name="bitwarden_tools">Nástroje Bitwardenu</string>
+  <string name="got_it">Chápem</string>
+  <string name="no_logins_were_imported">Neboli importované žiadne prihlasovacie údaje</string>
 </resources>

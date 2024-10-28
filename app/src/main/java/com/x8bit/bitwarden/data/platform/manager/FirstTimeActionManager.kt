@@ -44,4 +44,21 @@ interface FirstTimeActionManager {
      * a default configuration.
      */
     val currentOrDefaultUserFirstTimeState: FirstTimeState
+
+    /**
+     * Stores the given value for whether or not the active user has signalled they want to
+     * set up unlock options later, during onboarding.
+     */
+    fun storeShowUnlockSettingBadge(showBadge: Boolean)
+
+    /**
+     * Stores the given value for whether or not the active user has signalled they want to
+     * enable autofill later, during onboarding.
+     */
+    fun storeShowAutoFillSettingBadge(showBadge: Boolean)
+
+    /**
+     * Update the value of the showImportLogins status for the active user.
+     */
+    fun storeShowImportLogins(showImportLogins: Boolean)
 }
