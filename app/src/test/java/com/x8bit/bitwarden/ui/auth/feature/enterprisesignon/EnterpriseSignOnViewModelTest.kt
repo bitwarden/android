@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -35,6 +37,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
@@ -54,6 +57,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     private val environmentRepository: EnvironmentRepository = FakeEnvironmentRepository()
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
+
+    private val featureFlagManager = mockk<FeatureFlagManager>() {
+        every {
+            getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)
+        } returns false
+    }
 
     @BeforeEach
     fun setUp() {
@@ -701,6 +710,37 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val orgDetails = OrganizationDomainSsoDetailsResult.Success(
                 isSsoAvailable = false,
                 organizationIdentifier = "Bitwarden without SSO",
+                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+            )
+
+            coEvery {
+                authRepository.getOrganizationDomainSsoDetails(any())
+            } returns orgDetails
+
+            coEvery {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
+
+            val viewModel = createViewModel(dismissInitialDialog = false)
+            assertEquals(
+                DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
+                viewModel.stateFlow.value,
+            )
+
+            coVerify(exactly = 1) {
+                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.rememberedOrgIdentifier
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OrganizationDomainSsoDetails success with no verified date available should make a request, hide the dialog, and update the org input based on the remembered org`() =
+        runTest {
+            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+                isSsoAvailable = true,
+                organizationIdentifier = "Bitwarden without SSO",
+                verifiedDate = null,
             )
 
             coEvery {
@@ -730,6 +770,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val orgDetails = OrganizationDomainSsoDetailsResult.Success(
                 isSsoAvailable = true,
                 organizationIdentifier = "",
+                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
             )
 
             coEvery {
@@ -764,6 +805,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val orgDetails = OrganizationDomainSsoDetailsResult.Success(
                 isSsoAvailable = true,
                 organizationIdentifier = "Bitwarden with SSO",
+                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
             )
 
             coEvery {
@@ -809,6 +851,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
         authRepository = authRepository,
         environmentRepository = environmentRepository,
+        featureFlagManager = featureFlagManager,
         generatorRepository = generatorRepository,
         networkConnectionManager = FakeNetworkConnectionManager(isNetworkConnected),
         savedStateHandle = savedStateHandle,
