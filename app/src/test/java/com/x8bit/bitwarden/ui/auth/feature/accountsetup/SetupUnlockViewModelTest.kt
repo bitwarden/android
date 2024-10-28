@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -41,7 +42,11 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         every { isUnlockWithPinEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
         every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledStateFlow
-        every { storeShowUnlockSettingBadge(any(), any()) } just runs
+    }
+    private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { storeShowUnlockSettingBadge(any()) } just runs
     }
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
         every { getOrCreateCipher(userId = DEFAULT_USER_ID) } returns CIPHER
@@ -81,14 +86,16 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should send NavigateBack event if this is not the initial setup`() =
+    fun `ContinueClick should send NavigateBack event if this is not the initial setup and set first time value to false`() =
         runTest {
             val viewModel = createViewModel(DEFAULT_STATE.copy(isInitialSetup = false))
             viewModel.eventFlow.test {
                 viewModel.trySendAction(SetupUnlockAction.ContinueClick)
                 assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
             }
-
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+            }
             verify(exactly = 0) {
                 authRepository.setOnboardingStatus(
                     userId = DEFAULT_USER_ID,
@@ -107,21 +114,22 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
-            settingsRepository.storeShowUnlockSettingBadge(DEFAULT_USER_ID, true)
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled`() {
+    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and set first time value to false`() {
         mutableAutofillEnabledStateFlow.update { true }
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify {
+        verify(exactly = 1) {
             authRepository.setOnboardingStatus(
                 userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.FINAL_STEP,
             )
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
@@ -359,6 +367,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             biometricsEncryptionManager = biometricsEncryptionManager,
+            firstTimeActionManager = firstTimeActionManager,
         )
 }
 

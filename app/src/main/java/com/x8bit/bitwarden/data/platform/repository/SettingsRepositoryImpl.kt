@@ -538,28 +538,6 @@ class SettingsRepositoryImpl(
         settingsDiskSource.storeUseHasLoggedInPreviously(userId)
     }
 
-    override fun getShowAutoFillSettingBadge(userId: String): Boolean =
-        settingsDiskSource.getShowAutoFillSettingBadge(userId) ?: false
-
-    override fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean) {
-        settingsDiskSource.storeShowAutoFillSettingBadge(userId, showBadge)
-    }
-
-    override fun getShowUnlockSettingBadge(userId: String): Boolean =
-        settingsDiskSource.getShowUnlockSettingBadge(userId) ?: false
-
-    override fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean) {
-        settingsDiskSource.storeShowUnlockSettingBadge(userId, showBadge)
-    }
-
-    override fun getShowAutofillBadgeFlow(userId: String): Flow<Boolean> =
-        settingsDiskSource.getShowAutoFillSettingBadgeFlow(userId)
-            .map { it ?: false }
-
-    override fun getShowUnlockBadgeFlow(userId: String): Flow<Boolean> =
-        settingsDiskSource.getShowUnlockSettingBadgeFlow(userId)
-            .map { it ?: false }
-
     /**
      * If there isn't already one generated, generate a symmetric sync key that would be used
      * for communicating via IPC.

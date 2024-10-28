@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
@@ -611,25 +610,22 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createCipherInOrganization(any(), any())
             } returns CreateCipherResult.Success
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(stateWithDialog, stateTurbine.awaitItem())
-                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
+                assertEquals(stateWithDialog, stateFlow.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
                     VaultAddEditEvent.ShowToast(
                         R.string.new_item_created.asText(),
                     ),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
                 assertEquals(
                     VaultAddEditEvent.NavigateBack,
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
             }
             coVerify(exactly = 1) {
@@ -680,19 +676,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createCipherInOrganization(any(), any())
             } returns CreateCipherResult.Success
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(stateWithDialog, stateTurbine.awaitItem())
-                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
+                assertEquals(stateWithDialog, stateFlow.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
                     VaultAddEditEvent.ExitApp,
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
             }
             assertNull(specialCircumstanceManager.specialCircumstance)
@@ -821,17 +814,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns mockAttestationOptions
             every { authRepository.activeUserId } returns "mockUserId"
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithNewLogin, stateTurbine.awaitItem())
-                assertEquals(stateWithSavingDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithNewLogin, stateFlow.awaitItem())
+                assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.Fido2UserVerification(isRequired = true),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -899,22 +889,19 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns mockAttestationOptions
             every { authRepository.activeUserId } returns mockUserId
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(stateWithSavingDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
+                assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
-                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Registration(mockCreateResult),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
                 coVerify(exactly = 1) {
                     fido2CredentialManager.registerFido2Credential(
@@ -1059,11 +1046,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-            turbineScope {
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
+            viewModel.eventFlow.test {
                 assertEquals(
                     VaultAddEditEvent.Fido2UserVerification(isRequired = false),
-                    eventTurbine.awaitItem(),
+                    awaitItem(),
                 )
             }
         }
@@ -1105,11 +1091,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-            turbineScope {
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
+            viewModel.eventFlow.test {
                 assertEquals(
                     VaultAddEditEvent.Fido2UserVerification(isRequired = true),
-                    eventTurbine.awaitItem(),
+                    awaitItem(),
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -48,6 +51,7 @@ class AccountSecurityViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
@@ -69,9 +73,9 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.activeAccount
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
-            shouldShowEnableAuthenticatorSync = featureFlagManager.getFeatureFlag(
-                key = FlagKey.AuthenticatorSync,
-            ),
+            shouldShowEnableAuthenticatorSync =
+            featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
+                !isBuildVersionBelow(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -114,10 +118,10 @@ class AccountSecurityViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        settingsRepository
-            .getShowUnlockBadgeFlow(state.userId)
+        firstTimeActionManager
+            .firstTimeStateFlow
             .map {
-                AccountSecurityAction.Internal.ShowUnlockBadgeUpdated(it)
+                AccountSecurityAction.Internal.ShowUnlockBadgeUpdated(it.showSetupUnlockCard)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -164,7 +168,6 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleUnlockCardCtaClick() {
-        dismissUnlockNotificationBadge()
         sendEvent(AccountSecurityEvent.NavigateToSetupUnlockScreen)
     }
 
@@ -371,9 +374,11 @@ class AccountSecurityViewModel @Inject constructor(
     private fun handleAuthenticatorSyncFeatureFlagUpdate(
         action: AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate,
     ) {
+        val shouldShowAuthenticatorSync =
+            action.isEnabled && !isBuildVersionBelow(Build.VERSION_CODES.S)
         mutableStateFlow.update {
             it.copy(
-                shouldShowEnableAuthenticatorSync = action.isEnabled,
+                shouldShowEnableAuthenticatorSync = shouldShowAuthenticatorSync,
             )
         }
     }
@@ -443,8 +448,7 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun dismissUnlockNotificationBadge() {
         if (!state.shouldShowUnlockActionCard) return
-        settingsRepository.storeShowUnlockSettingBadge(
-            userId = state.userId,
+        firstTimeActionManager.storeShowUnlockSettingBadge(
             showBadge = false,
         )
     }
