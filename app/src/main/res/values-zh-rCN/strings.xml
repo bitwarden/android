@@ -129,4 +129,16 @@
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
+    <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="default_save_options">Default save options</string>
+    <string name="save_to_bitwarden">Save to Bitwarden</string>
+    <string name="save_locally">Save locally</string>
+    <string name="none">None</string>
+    <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
+    <string name="confirm">Confirm</string>
 </resources>

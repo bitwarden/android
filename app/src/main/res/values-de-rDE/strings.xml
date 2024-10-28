@@ -125,7 +125,19 @@
     <string name="download_bitwarden_card_title">Bitwarden-App herunterladen</string>
     <string name="download_bitwarden_card_message">Speicher alle deine Zugangsdaten und synchronisiere Verifizierungscodes direkt mit der Authenticator-App.</string>
     <string name="download">Herunterladen</string>
-    <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
-    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="sync_with_bitwarden_app">Mit der Bitwarden-App synchronisieren</string>
+    <string name="shared_codes_error">Codes aus der Bitwarden-App konnten nicht synchronisiert werden. Stelle sicher, dass beide Apps auf dem neusten Stand sind. Du kannst weiterhin auf deine existierenden Codes in der Bitwarden-App zugreifen.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
+    <string name="sync_with_the_bitwarden_app">Mit der Bitwarden-App synchronisieren</string>
+    <string name="go_to_settings">Gehe zu den Einstellungen</string>
+    <string name="sync_with_bitwarden_action_card_message">Lasse die Authenticator-App-Synchronisierung in den Einstellungen zu, um hier alle deine Verifizierungscodes anzuzeigen.</string>
+    <string name="something_went_wrong">Etwas ist schiefgelaufen</string>
+    <string name="please_try_again">Bitte versuche es erneut</string>
+    <string name="move_to_bitwarden">Zu Bitwarden verschieben</string>
+    <string name="default_save_options">Standard-Speicheroptionen</string>
+    <string name="save_to_bitwarden">In Bitwarden speichern</string>
+    <string name="save_locally">Lokal speichern</string>
+    <string name="none">Keine</string>
+    <string name="default_save_options_subtitle">Wähle aus, wo du neue Verifizierungscodes speichern möchtest.</string>
+    <string name="confirm">Bestätigen</string>
 </resources>

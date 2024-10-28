@@ -126,6 +126,18 @@
     <string name="download_bitwarden_card_message">Uložte všechny Vaše přihlašovací údaje a synchronizujte ověřovací kódy přímo s ověřovací aplikací.</string>
     <string name="download">Stáhnout</string>
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
-    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
+    <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
+    <string name="go_to_settings">Přejít do nastavení</string>
+    <string name="sync_with_bitwarden_action_card_message">V nastavení povolte synchronizaci aplikace Authenticator a zobrazte zde všechny své ověřovací kódy.</string>
+    <string name="something_went_wrong">Něco se pokazilo</string>
+    <string name="please_try_again">Zkuste to znovu</string>
+    <string name="move_to_bitwarden">Přesunout do Bitwardenu</string>
+    <string name="default_save_options">Výchozí volby ukládání</string>
+    <string name="save_to_bitwarden">Uložit do Bitwardenu</string>
+    <string name="save_locally">Uložit lokálně</string>
+    <string name="none">Žádné</string>
+    <string name="default_save_options_subtitle">Vyberte, kde chcete uložit nové ověřovací kódy.</string>
+    <string name="confirm">Potvrdit</string>
 </resources>
