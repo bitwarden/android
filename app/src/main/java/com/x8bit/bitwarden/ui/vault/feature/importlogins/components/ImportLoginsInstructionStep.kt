@@ -74,7 +74,7 @@ fun ImportLoginsInstructionStep(
         Spacer(Modifier.height(24.dp))
         Text(
             text = createClickableAnnotatedString(
-                mainString = stringResource(R.string.need_help_checkout_out_import_help),
+                mainString = stringResource(R.string.need_help_check_out_import_help),
                 highlights = listOf(
                     ClickableTextHighlight(
                         textToHighlight = stringResource(R.string.import_help_highlight),
