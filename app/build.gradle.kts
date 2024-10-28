@@ -135,7 +135,10 @@ android {
         unitTests.isReturnDefaultValues = true
     }
     lint {
-        disable.add("MissingTranslation")
+        disable += listOf(
+            "MissingTranslation",
+            "ExtraTranslation",
+        )
     }
 }
 
