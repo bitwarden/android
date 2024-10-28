@@ -110,7 +110,7 @@ class FirstTimeActionManagerTest {
                 // for the import logins count it is dependent on the feature flag state and
                 // cipher list being empty
                 mutableImportLoginsFlow.update { true }
-                fakeAuthDiskSource.storeShowImportLogins(USER_ID, true)
+                fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
                 assertEquals(2, awaitItem())
             }
         }
@@ -127,15 +127,15 @@ class FirstTimeActionManagerTest {
             firstTimeActionManager.allVaultSettingsBadgeCountFlow.test {
                 assertEquals(0, awaitItem())
                 mutableImportLoginsFlow.update { true }
-                fakeAuthDiskSource.storeShowImportLogins(USER_ID, true)
+                fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
                 assertEquals(1, awaitItem())
                 mutableImportLoginsFlow.update { false }
                 assertEquals(0, awaitItem())
                 mutableImportLoginsFlow.update { true }
                 assertEquals(1, awaitItem())
-                fakeAuthDiskSource.storeShowImportLogins(USER_ID, false)
+                fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, false)
                 assertEquals(0, awaitItem())
-                fakeAuthDiskSource.storeShowImportLogins(USER_ID, true)
+                fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
                 assertEquals(1, awaitItem())
                 mutableCiphersListFlow.update {
                     listOf(mockCipher)
@@ -156,7 +156,7 @@ class FirstTimeActionManagerTest {
                     ),
                     awaitItem(),
                 )
-                fakeAuthDiskSource.storeShowImportLogins(USER_ID, false)
+                firstTimeActionManager.storeShowImportLogins(false)
                 assertEquals(
                     FirstTimeState(
                         showImportLoginsCard = false,
@@ -232,6 +232,13 @@ class FirstTimeActionManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowImportLogins(showImportLogins = true)
         assertTrue(fakeAuthDiskSource.getShowImportLogins(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowImportLoginsSettingsBadge should store value of true to disk`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowImportLoginsSettingBadge(userId = USER_ID)!!)
     }
 }
 

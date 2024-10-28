@@ -61,4 +61,9 @@ interface FirstTimeActionManager {
      * Update the value of the showImportLogins status for the active user.
      */
     fun storeShowImportLogins(showImportLogins: Boolean)
+
+    /**
+     * Update the value of the showImportLoginsSettingsBadge status for the active user.
+     */
+    fun storeShowImportLoginsSettingsBadge(showBadge: Boolean)
 }

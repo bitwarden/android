@@ -97,6 +97,7 @@ class ImportLoginsViewModel @Inject constructor(
             is SyncVaultDataResult.Success -> {
                 if (result.itemsAvailable) {
                     firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+                    firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
                     mutableStateFlow.update {
                         it.copy(
                             showBottomSheet = true,
@@ -160,6 +161,8 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun handleConfirmImportLater() {
         dismissDialog()
+        firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
         sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
