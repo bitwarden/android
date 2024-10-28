@@ -31,7 +31,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
-        every { storeShowImportLogins(any()) } just runs
+        every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
 
     @Test
@@ -84,7 +84,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertTrue(viewModel.stateFlow.value.shouldShowImportCard)
         mutableFirstTimeStateFlow.update {
-            it.copy(showImportLoginsCard = false)
+            it.copy(showImportLoginsCardInSettings = false)
         }
         assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
     }
@@ -111,7 +111,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
                 )
             }
             verify(exactly = 0) {
-                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
             }
         }
 
@@ -121,7 +121,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
         verify(exactly = 1) {
-            firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
         }
     }
 
@@ -132,7 +132,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
             verify(exactly = 0) {
-                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
             }
         }
 
@@ -143,4 +143,4 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(showImportLoginsCard = true)
+private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(showImportLoginsCardInSettings = true)

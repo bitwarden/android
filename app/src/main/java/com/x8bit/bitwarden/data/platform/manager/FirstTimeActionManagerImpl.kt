@@ -99,11 +99,11 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .filterNotNull()
             .flatMapLatest {
                 combine(
-                    getShowImportLoginsFlowInternal(userId = it),
+                    getShowImportLoginsSettingBadgeFlowInternal(userId = it),
                     featureFlagManager.getFeatureFlagFlow(FlagKey.ImportLoginsFlow),
                 ) { showImportLogins, importLoginsEnabled ->
-                    val shouldShowImportLogins = showImportLogins && importLoginsEnabled
-                    listOf(shouldShowImportLogins)
+                    val shouldShowImportLoginsSettings = showImportLogins && importLoginsEnabled
+                    listOf(shouldShowImportLoginsSettings)
                 }
                     .map { list ->
                         list.count { showImportLogins -> showImportLogins }
@@ -129,12 +129,14 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         getShowImportLoginsFlowInternal(userId = activeUserId),
                         settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = activeUserId),
                         settingsDiskSource.getShowAutoFillSettingBadgeFlow(userId = activeUserId),
+                        getShowImportLoginsSettingBadgeFlowInternal(userId = activeUserId),
                     ),
                 ) {
                     FirstTimeState(
                         showImportLoginsCard = it[0],
                         showSetupUnlockCard = it[1],
                         showSetupAutofillCard = it[2],
+                        showImportLoginsCardInSettings = it[3],
                     )
                 }
             }
@@ -144,23 +146,11 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showImportLoginsCard = null,
                         showSetupUnlockCard = null,
                         showSetupAutofillCard = null,
+                        showImportLoginsCardInSettings = null,
                     ),
                 )
             }
             .distinctUntilChanged()
-
-    /**
-     * Internal implementation to get a flow of the showImportLogins value which takes
-     * into account if the vault is empty.
-     */
-    private fun getShowImportLoginsFlowInternal(userId: String): Flow<Boolean> {
-        return authDiskSource.getShowImportLoginsFlow(userId)
-            .combine(
-                vaultDiskSource.getCiphers(userId),
-            ) { showImportLogins, ciphers ->
-                showImportLogins ?: true && ciphers.isEmpty()
-            }
-    }
 
     /**
      * Get the current [FirstTimeState] of the active user if available, otherwise return
@@ -176,12 +166,15 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showImportLoginsCard = authDiskSource.getShowImportLogins(it),
                         showSetupUnlockCard = settingsDiskSource.getShowUnlockSettingBadge(it),
                         showSetupAutofillCard = settingsDiskSource.getShowAutoFillSettingBadge(it),
+                        showImportLoginsCardInSettings = settingsDiskSource
+                            .getShowImportLoginsSettingBadge(it),
                     )
                 }
                 ?: FirstTimeState(
                     showImportLoginsCard = null,
                     showSetupUnlockCard = null,
                     showSetupAutofillCard = null,
+                    showImportLoginsCardInSettings = null,
                 )
 
     override fun storeShowUnlockSettingBadge(showBadge: Boolean) {
@@ -206,5 +199,41 @@ class FirstTimeActionManagerImpl @Inject constructor(
             userId = activeUserId,
             showImportLogins = showImportLogins,
         )
+    }
+
+    override fun storeShowImportLoginsSettingsBadge(showBadge: Boolean) {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storeShowImportLoginsSettingBadge(
+            userId = activeUserId,
+            showBadge = showBadge,
+        )
+    }
+
+    /**
+     * Internal implementation to get a flow of the showImportLogins value which takes
+     * into account if the vault is empty.
+     */
+    private fun getShowImportLoginsFlowInternal(userId: String): Flow<Boolean> {
+        return authDiskSource
+            .getShowImportLoginsFlow(userId)
+            .combine(
+                vaultDiskSource.getCiphers(userId),
+            ) { showImportLogins, ciphers ->
+                showImportLogins ?: true && ciphers.isEmpty()
+            }
+    }
+
+    /**
+     * Internal implementation to get a flow of the showImportLogins value which takes
+     * into account if the vault is empty.
+     */
+    private fun getShowImportLoginsSettingBadgeFlowInternal(userId: String): Flow<Boolean> {
+        return settingsDiskSource
+            .getShowImportLoginsSettingBadgeFlow(userId)
+            .combine(
+                vaultDiskSource.getCiphers(userId),
+            ) { showImportLogins, ciphers ->
+                showImportLogins ?: false && ciphers.isEmpty()
+            }
     }
 }
