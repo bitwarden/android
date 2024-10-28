@@ -104,6 +104,7 @@ class SetupAutoFillViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
+        firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
             updateOnboardingStatusToNextStep()
         } else {

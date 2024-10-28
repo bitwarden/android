@@ -86,14 +86,16 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should send NavigateBack event if this is not the initial setup`() =
+    fun `ContinueClick should send NavigateBack event if this is not the initial setup and set first time value to false`() =
         runTest {
             val viewModel = createViewModel(DEFAULT_STATE.copy(isInitialSetup = false))
             viewModel.eventFlow.test {
                 viewModel.trySendAction(SetupUnlockAction.ContinueClick)
                 assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
             }
-
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+            }
             verify(exactly = 0) {
                 authRepository.setOnboardingStatus(
                     userId = DEFAULT_USER_ID,
@@ -118,15 +120,16 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled`() {
+    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and set first time value to false`() {
         mutableAutofillEnabledStateFlow.update { true }
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify {
+        verify(exactly = 1) {
             authRepository.setOnboardingStatus(
                 userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.FINAL_STEP,
             )
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
