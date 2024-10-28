@@ -1124,6 +1124,7 @@ class AuthRepositoryImpl(
                 OrganizationDomainSsoDetailsResult.Success(
                     isSsoAvailable = it.isSsoAvailable,
                     organizationIdentifier = it.organizationIdentifier,
+                    verifiedDate = it.verifiedDate,
                 )
             },
             onFailure = { OrganizationDomainSsoDetailsResult.Failure },

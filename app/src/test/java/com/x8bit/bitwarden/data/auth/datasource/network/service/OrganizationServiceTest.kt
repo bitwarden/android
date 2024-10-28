@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
+import java.time.ZonedDateTime
 
 class OrganizationServiceTest : BaseServiceTest() {
     private val authenticatedOrganizationApi: AuthenticatedOrganizationApi = retrofit.create()
@@ -157,6 +158,7 @@ private const val ORGANIZATION_DOMAIN_SSO_DETAILS_JSON = """
 private val ORGANIZATION_DOMAIN_SSO_BODY = OrganizationDomainSsoDetailsResponseJson(
     isSsoAvailable = true,
     organizationIdentifier = "Test Org",
+    verifiedDate = ZonedDateTime.parse("2024-09-13T00:00:00.000Z"),
 )
 
 private const val ORGANIZATION_KEYS_JSON = """
