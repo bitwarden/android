@@ -9,12 +9,15 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
+import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseIdentityUrl
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -43,6 +46,7 @@ private const val RANDOM_STRING_LENGTH = 64
 class EnterpriseSignOnViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
+    private val featureFlagManager: FeatureFlagManager,
     private val generatorRepository: GeneratorRepository,
     private val networkConnectionManager: NetworkConnectionManager,
     private val savedStateHandle: SavedStateHandle,
@@ -122,6 +126,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
             is EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken -> {
                 handleOnReceiveCaptchaToken(action)
+            }
+
+            is EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive -> {
+                handleOnVerifiedOrganizationDomainSsoDetailsReceive(action)
             }
         }
     }
@@ -207,6 +215,48 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
             )
         }
+    }
+
+    private fun handleOnVerifiedOrganizationDomainSsoDetailsReceive(
+        action: EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive,
+    ) {
+        when (val orgDetails = action.verifiedOrgDomainSsoDetailsResult) {
+            is VerifiedOrganizationDomainSsoDetailsResult.Failure -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = null,
+                        orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                    )
+                }
+            }
+
+            is VerifiedOrganizationDomainSsoDetailsResult.Success -> {
+                handleOnVerifiedOrganizationDomainSsoDetailsSuccess(orgDetails)
+            }
+        }
+    }
+
+    private fun handleOnVerifiedOrganizationDomainSsoDetailsSuccess(
+        orgDetails: VerifiedOrganizationDomainSsoDetailsResult.Success,
+    ) {
+        if (orgDetails.verifiedOrganizationDomainSsoDetails.isEmpty()) {
+            return
+        }
+
+        val organizationIdentifier = orgDetails
+            .verifiedOrganizationDomainSsoDetails
+            .first()
+            .organizationIdentifier
+
+        mutableStateFlow.update {
+            it.copy(
+                orgIdentifierInput = organizationIdentifier,
+            )
+        }
+
+        // If the email address is associated with a claimed organization we can proceed to the
+        // prevalidation step.
+        prevalidateSso()
     }
 
     private fun handleOnOrganizationDomainSsoDetailsReceive(
@@ -375,12 +425,23 @@ class EnterpriseSignOnViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            val result = authRepository.getOrganizationDomainSsoDetails(
-                email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
-            )
-            sendAction(
-                EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive(result),
-            )
+            if (featureFlagManager.getFeatureFlag(key = FlagKey.VerifiedSsoDomainEndpoint)) {
+                val result = authRepository.getVerifiedOrganizationDomainSsoDetails(
+                    email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                )
+                sendAction(
+                    EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive(
+                        result,
+                    ),
+                )
+            } else {
+                val result = authRepository.getOrganizationDomainSsoDetails(
+                    email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                )
+                sendAction(
+                    EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive(result),
+                )
+            }
         }
     }
 
@@ -561,6 +622,13 @@ sealed class EnterpriseSignOnAction {
          * A captcha callback result has been received
          */
         data class OnReceiveCaptchaToken(val tokenResult: CaptchaCallbackTokenResult) : Internal()
+
+        /**
+         * A result was received when requesting an [VerifiedOrganizationDomainSsoDetailsResult].
+         */
+        data class OnVerifiedOrganizationDomainSsoDetailsReceive(
+            val verifiedOrgDomainSsoDetailsResult: VerifiedOrganizationDomainSsoDetailsResult,
+        ) : Internal()
     }
 }
 
