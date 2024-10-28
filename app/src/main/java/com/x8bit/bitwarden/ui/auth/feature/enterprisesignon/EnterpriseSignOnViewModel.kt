@@ -240,6 +240,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
         orgDetails: VerifiedOrganizationDomainSsoDetailsResult.Success,
     ) {
         if (orgDetails.verifiedOrganizationDomainSsoDetails.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = null,
+                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                )
+            }
             return
         }
 
