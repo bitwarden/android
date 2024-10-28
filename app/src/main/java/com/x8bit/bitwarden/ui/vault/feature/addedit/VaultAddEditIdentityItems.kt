@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectB
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -315,7 +314,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     if (commonState.isUnlockWithPasswordEnabled) {
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenSwitchWithActions(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.password_prompt),
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
