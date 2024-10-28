@@ -74,6 +74,10 @@ class AuthDiskSourceImpl(
     private val mutableOnboardingStatusFlowMap =
         mutableMapOf<String, MutableSharedFlow<OnboardingStatus?>>()
     private val mutableShowImportLoginsFlowMap = mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+    private val mutableBiometricUnlockKeyFlowMap =
+        mutableMapOf<String, MutableSharedFlow<String?>>()
+    private val mutablePinProtectedUserKeyFlowMap =
+        mutableMapOf<String, MutableSharedFlow<String?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     override var userState: UserStateJson?
@@ -284,7 +288,12 @@ class AuthDiskSourceImpl(
             key = BIOMETRICS_UNLOCK_KEY.appendIdentifier(userId),
             value = biometricsKey,
         )
+        getMutableBiometricUnlockKeyFlow(userId).tryEmit(biometricsKey)
     }
+
+    override fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?> =
+        getMutableBiometricUnlockKeyFlow(userId)
+            .onSubscription { emit(getUserBiometricUnlockKey(userId = userId)) }
 
     override fun getPinProtectedUserKey(userId: String): String? =
         inMemoryPinProtectedUserKeys[userId]
@@ -301,7 +310,12 @@ class AuthDiskSourceImpl(
             key = PIN_PROTECTED_USER_KEY_KEY.appendIdentifier(userId),
             value = pinProtectedUserKey,
         )
+        getMutablePinProtectedUserKeyFlow(userId).tryEmit(pinProtectedUserKey)
     }
+
+    override fun getPinProtectedUserKeyFlow(userId: String): Flow<String?> =
+        getMutablePinProtectedUserKeyFlow(userId)
+            .onSubscription { emit(getPinProtectedUserKey(userId = userId)) }
 
     override fun getTwoFactorToken(email: String): String? =
         getString(key = TWO_FACTOR_TOKEN_KEY.appendIdentifier(email))
@@ -503,6 +517,18 @@ class AuthDiskSourceImpl(
     private fun getMutableShowImportLoginsFlow(
         userId: String,
     ): MutableSharedFlow<Boolean?> = mutableShowImportLoginsFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
+
+    private fun getMutableBiometricUnlockKeyFlow(
+        userId: String,
+    ): MutableSharedFlow<String?> = mutableBiometricUnlockKeyFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
+
+    private fun getMutablePinProtectedUserKeyFlow(
+        userId: String,
+    ): MutableSharedFlow<String?> = mutablePinProtectedUserKeyFlowMap.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
     }
 

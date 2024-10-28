@@ -109,9 +109,19 @@ interface SettingsRepository {
     val isUnlockWithBiometricsEnabled: Boolean
 
     /**
+     * Emits updates whenever there is a change in the user status for biometric unlocking.
+     */
+    val isUnlockWithBiometricsEnabledFlow: Flow<Boolean>
+
+    /**
      * Whether or not PIN unlocking is enabled for the current user.
      */
     val isUnlockWithPinEnabled: Boolean
+
+    /**
+     * Emits updates whenever there is a change in the user status for PIN unlocking.
+     */
+    val isUnlockWithPinEnabledFlow: Flow<Boolean>
 
     /**
      * Whether or not inline autofill is enabled for the current user.

@@ -245,10 +245,27 @@ class SettingsRepositoryImpl(
             ?.let { authDiskSource.getUserBiometricUnlockKey(userId = it) != null }
             ?: false
 
+    override val isUnlockWithBiometricsEnabledFlow: Flow<Boolean>
+        get() = activeUserId
+            ?.let { userId ->
+                authDiskSource
+                    .getUserBiometicUnlockKeyFlow(userId)
+                    .map { it != null }
+            }
+            ?: flowOf(false)
+
     override val isUnlockWithPinEnabled: Boolean
         get() = activeUserId
             ?.let { authDiskSource.getEncryptedPin(userId = it) != null }
             ?: false
+
+    override val isUnlockWithPinEnabledFlow: Flow<Boolean>
+        get() = activeUserId
+            ?.let { userId ->
+                authDiskSource
+                    .getPinProtectedUserKeyFlow(userId)
+                    .map { it != null }
+            } ?: flowOf(false)
 
     override var isInlineAutofillEnabled: Boolean
         get() = activeUserId
