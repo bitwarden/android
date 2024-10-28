@@ -39,8 +39,6 @@ fun BitwardenStepper(
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
     stepperActionsTestTag: String? = null,
-    increaseButtonTestTag: String? = null,
-    decreaseButtonTestTag: String? = null,
 ) {
     val clampedValue = value?.coerceIn(range)
     if (clampedValue != value && clampedValue != null) {
