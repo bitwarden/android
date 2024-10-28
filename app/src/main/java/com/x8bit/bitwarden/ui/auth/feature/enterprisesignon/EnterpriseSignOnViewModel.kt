@@ -226,7 +226,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun handleOnOrganizationDomainSsoDetailsSuccess(
         orgDetails: OrganizationDomainSsoDetailsResult.Success,
     ) {
-        if (!orgDetails.isSsoAvailable) {
+        if (!orgDetails.isSsoAvailable || orgDetails.verifiedDate == null) {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = null,
