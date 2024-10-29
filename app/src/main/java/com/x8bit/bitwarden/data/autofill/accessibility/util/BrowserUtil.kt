@@ -45,7 +45,6 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     // "com.google.android.captiveportallogin": URL displayed in ActionBar subtitle without viewId
     Browser(packageName = "com.iode.firefox", urlFieldId = "mozac_browser_toolbar_url_view"),
     Browser(packageName = "com.jamal2367.styx", urlFieldId = "search"),
-    Browser(packageName = "net.quetta.browser", urlFieldId = "url_bar"),
     Browser(packageName = "com.kiwibrowser.browser", urlFieldId = "url_bar"),
     Browser(packageName = "com.kiwibrowser.browser.dev", urlFieldId = "url_bar"),
     Browser(packageName = "com.microsoft.emmx", urlFieldId = "url_bar"),
