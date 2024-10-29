@@ -27,7 +27,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -160,7 +160,7 @@ private fun VerificationCodeContent(
         modifier = modifier,
     ) {
         item {
-            BitwardenListHeaderTextWithSupportLabel(
+            BitwardenListHeaderText(
                 label = stringResource(id = R.string.items),
                 supportingLabel = items.size.toString(),
                 modifier = Modifier

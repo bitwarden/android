@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -38,7 +38,7 @@ fun VaultContent(
     ) {
         if (state.totpItemsCount > 0) {
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.totp),
                     supportingLabel = "1",
                     modifier = Modifier
@@ -64,7 +64,7 @@ fun VaultContent(
 
         if (state.favoriteItems.isNotEmpty()) {
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.favorites),
                     supportingLabel = state.favoriteItems.count().toString(),
                     modifier = Modifier
@@ -120,7 +120,7 @@ fun VaultContent(
         }
 
         item {
-            BitwardenListHeaderTextWithSupportLabel(
+            BitwardenListHeaderText(
                 label = stringResource(id = R.string.types),
                 supportingLabel = "4",
                 modifier = Modifier
@@ -203,7 +203,7 @@ fun VaultContent(
             }
 
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.folders),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
@@ -241,7 +241,7 @@ fun VaultContent(
             }
 
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.folder_none),
                     supportingLabel = state.noFolderItems.count().toString(),
                     modifier = Modifier
@@ -288,7 +288,7 @@ fun VaultContent(
             }
 
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.collections),
                     supportingLabel = state.collectionItems.count().toString(),
                     modifier = Modifier
@@ -321,7 +321,7 @@ fun VaultContent(
         }
 
         item {
-            BitwardenListHeaderTextWithSupportLabel(
+            BitwardenListHeaderText(
                 label = stringResource(id = R.string.trash),
                 supportingLabel = "1",
                 modifier = Modifier

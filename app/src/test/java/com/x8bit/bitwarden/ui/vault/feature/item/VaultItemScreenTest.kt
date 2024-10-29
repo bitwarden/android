@@ -311,7 +311,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         DEFAULT_VIEW_STATES
             .forEach { typeState ->
                 mutableStateFlow.update { it.copy(viewState = typeState) }
-                composeTestRule.onNodeWithTextAfterScroll("Custom fields").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("CUSTOM FIELDS").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("text").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("value").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("hidden").assertIsDisplayed()
@@ -321,7 +321,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                     updateCommonContent(currentState) { copy(customFields = emptyList()) }
                 }
 
-                composeTestRule.assertScrollableNodeDoesNotExist("Custom fields")
+                composeTestRule.assertScrollableNodeDoesNotExist("CUSTOM FIELDS")
                 composeTestRule.assertScrollableNodeDoesNotExist("text")
                 composeTestRule.assertScrollableNodeDoesNotExist("value")
                 composeTestRule.assertScrollableNodeDoesNotExist("hidden")
@@ -334,7 +334,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         DEFAULT_VIEW_STATES
             .forEach { typeState ->
                 mutableStateFlow.update { it.copy(viewState = typeState) }
-                composeTestRule.onNodeWithTextAfterScroll("Attachments").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("ATTACHMENTS").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("test.mp4").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("11 MB").assertIsDisplayed()
 
@@ -342,7 +342,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                     updateCommonContent(currentState) { copy(attachments = emptyList()) }
                 }
 
-                composeTestRule.assertScrollableNodeDoesNotExist("Attachments")
+                composeTestRule.assertScrollableNodeDoesNotExist("ATTACHMENTS")
                 composeTestRule.assertScrollableNodeDoesNotExist("test.mp4")
                 composeTestRule.assertScrollableNodeDoesNotExist("11 MB")
             }
@@ -1706,7 +1706,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in login state, uris should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("URIs").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("URIS").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("URI").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("www.example.com").assertIsDisplayed()
 
@@ -1714,7 +1714,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             updateLoginType(currentState) { copy(uris = emptyList()) }
         }
 
-        composeTestRule.assertScrollableNodeDoesNotExist("URIs")
+        composeTestRule.assertScrollableNodeDoesNotExist("URIS")
         composeTestRule.assertScrollableNodeDoesNotExist("URI")
         composeTestRule.assertScrollableNodeDoesNotExist("www.example.com")
     }
