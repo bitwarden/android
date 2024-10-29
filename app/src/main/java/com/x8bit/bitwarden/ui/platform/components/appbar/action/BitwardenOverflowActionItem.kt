@@ -113,10 +113,8 @@ private fun BitwardenOverflowActionItem_preview() {
  *
  * @param text The text displayed for the item in the menu.
  * @param onClick A callback for when the menu item is clicked.
- * @param testTag Optional test tag for the menu item.
  */
 data class OverflowMenuItemData(
     val text: String,
     val onClick: () -> Unit,
-    val testTag: String? = null,
 )
