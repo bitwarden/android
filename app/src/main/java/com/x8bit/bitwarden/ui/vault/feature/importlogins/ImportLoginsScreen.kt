@@ -116,7 +116,9 @@ fun ImportLoginsScreen(
         sheetTitle = stringResource(R.string.bitwarden_tools),
         onDismiss = hideSheetAndExecuteCompleteImportLogins,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        modifier = Modifier.statusBarsPadding(),
+        modifier = Modifier
+            .statusBarsPadding()
+            .fillMaxSize(),
     ) { paddingValues ->
         ImportLoginsSuccessBottomSheetContent(
             onCompleteImportLogins = hideSheetAndExecuteCompleteImportLogins,

@@ -2,7 +2,9 @@ package com.x8bit.bitwarden.ui.platform.components.bottomsheet
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -10,6 +12,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -52,8 +56,9 @@ fun BitwardenModalBottomSheet(
         sheetState = sheetState,
         contentWindowInsets = {
             WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
+                .union(WindowInsets.displayCutout)
         },
-        shape = BitwardenTheme.shapes.bottomSheet,
+        containerColor = Color.Transparent,
     ) {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         BitwardenScaffold(
@@ -70,6 +75,9 @@ fun BitwardenModalBottomSheet(
                 )
             },
             modifier = Modifier
+                // We apply the shape here due to implementation of the ModalBottomSheet applying
+                // the insets to the content but the shape to an outer container.
+                .clip(shape = BitwardenTheme.shapes.bottomSheet)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize(),
         ) { paddingValues ->
