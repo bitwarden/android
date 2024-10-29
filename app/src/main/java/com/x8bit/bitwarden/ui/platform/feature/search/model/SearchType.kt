@@ -59,6 +59,11 @@ sealed class SearchType : Parcelable {
         data object SecureNotes : Vault()
 
         /**
+         * Indicates that we should be searching only SSH key ciphers.
+         */
+        data object SshKeys : Vault()
+
+        /**
          * Indicates that we should be searching only ciphers in the given collection.
          */
         data class Collection(

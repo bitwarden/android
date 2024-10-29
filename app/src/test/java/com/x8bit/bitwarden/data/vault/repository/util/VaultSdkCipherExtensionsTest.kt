@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockIdentit
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockLogin
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPasswordHistory
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSecureNote
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSshKey
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockUri
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
@@ -28,6 +29,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkIdentity
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkLogin
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPasswordHistory
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSecureNote
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSshKey
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -149,6 +151,16 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(
             createMockSdkSecureNote(),
             sdkSecureNote,
+        )
+    }
+
+    @Test
+    fun `toSdkSshKey should convert a SyncResponseJson Cipher SshKey to a SshKey`() {
+        val syncSshKey = createMockSshKey(number = 1)
+        val sdkSshKey = syncSshKey.toSdkSshKey()
+        assertEquals(
+            createMockSdkSshKey(number = 1),
+            sdkSshKey,
         )
     }
 

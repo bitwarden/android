@@ -35,6 +35,7 @@ private const val PASSKEY_CREATION_TIME_PATTERN: String = "hh:mm a"
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
  */
+@Suppress("LongMethod")
 fun CipherView.toViewState(
     isClone: Boolean,
     isIndividualVaultDisabled: Boolean,
@@ -87,6 +88,12 @@ fun CipherView.toViewState(
                 city = identity?.city.orEmpty(),
                 zip = identity?.postalCode.orEmpty(),
                 country = identity?.country.orEmpty(),
+            )
+
+            CipherType.SSH_KEY -> VaultAddEditState.ViewState.Content.ItemType.SshKey(
+                publicKey = sshKey?.publicKey.orEmpty(),
+                privateKey = sshKey?.privateKey.orEmpty(),
+                fingerprint = sshKey?.fingerprint.orEmpty(),
             )
         },
         common = VaultAddEditState.ViewState.Content.Common(

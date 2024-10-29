@@ -62,6 +62,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.SecureNotes -> this
         SearchTypeData.Vault.Trash -> this
         SearchTypeData.Vault.VerificationCodes -> this
+        SearchTypeData.Vault.SshKeys -> this
     }
 
 /**
@@ -114,6 +115,7 @@ private fun CipherView.filterBySearchType(
         is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY && deletedDate == null
         is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN && deletedDate == null
         is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE && deletedDate == null
+        is SearchTypeData.Vault.SshKeys -> type == CipherType.SSH_KEY && deletedDate == null
         is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
@@ -255,6 +257,7 @@ private val CipherType.iconRes: Int
         CipherType.SECURE_NOTE -> R.drawable.ic_note
         CipherType.CARD -> R.drawable.ic_payment_card
         CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
     }
 
 /**

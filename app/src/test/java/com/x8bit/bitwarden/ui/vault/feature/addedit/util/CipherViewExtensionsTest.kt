@@ -12,6 +12,7 @@ import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
+import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
@@ -314,6 +315,50 @@ class CipherViewExtensionsTest {
     }
 
     @Test
+    fun `toViewState should create SSH Key ViewState`() {
+        val cipherView = DEFAULT_SSH_KEY_CIPHER_VIEW
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isIndividualVaultDisabled = false,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.LinkedField(
+                            TEST_ID,
+                            "TestLinked",
+                            VaultLinkedFieldType.USERNAME,
+                        ),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                ),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(
+                    publicKey = "PublicKey",
+                    privateKey = "PrivateKey",
+                    fingerprint = "Fingerprint",
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `toViewState with isClone true should append clone text to the cipher name`() {
         val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW
 
@@ -578,6 +623,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     creationDate = FIXED_CLOCK.instant(),
     deletedDate = null,
     revisionDate = FIXED_CLOCK.instant(),
+    sshKey = null,
 )
 
 private val DEFAULT_CARD_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
@@ -658,6 +704,15 @@ private val DEFAULT_SECURE_NOTES_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_V
         ),
     ),
     secureNote = SecureNoteView(type = SecureNoteType.GENERIC),
+)
+
+private val DEFAULT_SSH_KEY_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+    type = CipherType.SSH_KEY,
+    sshKey = SshKeyView(
+        publicKey = "PublicKey",
+        privateKey = "PrivateKey",
+        fingerprint = "Fingerprint",
+    ),
 )
 
 private const val TEST_ID = "testID"

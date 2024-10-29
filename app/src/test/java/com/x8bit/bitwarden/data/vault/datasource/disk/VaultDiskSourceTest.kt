@@ -407,7 +407,12 @@ private const val CIPHER_JSON = """
     "cardholderName": "mockCardholderName-1",
     "brand": "mockBrand-1"
   },
-  "key": "mockKey-1"
+  "key": "mockKey-1",
+  "sshKey": {
+    "publicKey": "mockPublicKey-1",
+    "privateKey": "mockPrivateKey-1",
+    "keyFingerprint": "mockKeyFingerprint-1"
+  }
 }
 """
 

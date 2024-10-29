@@ -15,6 +15,7 @@ import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
+import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -49,6 +50,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
         secureNote = type.toSecureNotesView(),
         login = type.toLoginView(common = common),
         card = type.toCardView(),
+        sshKey = type.toSshKeyView(),
 
         // Fields we always grab from the UI
         name = common.name,
@@ -66,6 +68,16 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
         is VaultAddEditState.ViewState.Content.ItemType.Identity -> CipherType.IDENTITY
         is VaultAddEditState.ViewState.Content.ItemType.Login -> CipherType.LOGIN
         is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> CipherType.SECURE_NOTE
+        is VaultAddEditState.ViewState.Content.ItemType.SshKey -> CipherType.SSH_KEY
+    }
+
+private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.SshKey)?.let {
+        SshKeyView(
+            publicKey = it.publicKey.orNullIfBlank(),
+            privateKey = it.privateKey.orNullIfBlank(),
+            fingerprint = it.fingerprint.orNullIfBlank(),
+        )
     }
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toCardView(): CardView? =

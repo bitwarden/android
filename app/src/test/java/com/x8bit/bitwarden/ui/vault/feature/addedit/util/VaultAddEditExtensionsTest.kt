@@ -31,6 +31,7 @@ class VaultAddEditExtensionsTest {
             VaultItemCipherType.CARD,
             VaultItemCipherType.SECURE_NOTE,
             VaultItemCipherType.IDENTITY,
+            VaultItemCipherType.SSH_KEY,
         )
 
         val result = vaultItemCipherTypeList.map { it.toItemType() }
@@ -41,6 +42,7 @@ class VaultAddEditExtensionsTest {
                 VaultAddEditState.ViewState.Content.ItemType.Card(),
                 VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
                 VaultAddEditState.ViewState.Content.ItemType.Identity(),
+                VaultAddEditState.ViewState.Content.ItemType.SshKey(),
             ),
             result,
         )

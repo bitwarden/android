@@ -374,4 +374,32 @@ class CipherViewExtensionsTest {
 
         assertEquals(expectedState, viewState)
     }
+
+    @Test
+    fun `toViewState should transform full CipherView into ViewState SSH Key Content`() {
+        val cipherView = createCipherView(type = CipherType.SSH_KEY, isEmpty = false)
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            hasMasterPassword = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+        )
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
+                    currentCipher = cipherView.copy(
+                        name = "mockName",
+                        sshKey = cipherView.sshKey?.copy(
+                            publicKey = "publicKey",
+                            privateKey = "privateKey",
+                            fingerprint = "fingerprint",
+                        ),
+                    ),
+                ),
+                type = createSshKeyContent(isEmpty = false),
+            ),
+            viewState,
+        )
+    }
 }

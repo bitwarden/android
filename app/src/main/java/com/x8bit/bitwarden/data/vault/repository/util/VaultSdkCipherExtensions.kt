@@ -17,6 +17,7 @@ import com.bitwarden.vault.LoginUri
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
+import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
@@ -55,6 +56,7 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
         isFavorite = favorite,
         card = card?.toEncryptedNetworkCard(),
         key = key,
+        sshKey = sshKey?.toEncryptedNetworkSshKey(),
     )
 
 /**
@@ -77,6 +79,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
         isFavorite = favorite,
         card = card?.toEncryptedNetworkCard(),
         attachments = attachments?.toNetworkAttachmentList(),
+        sshKey = sshKey?.toEncryptedNetworkSshKey(),
         shouldOrganizationUseTotp = organizationUseTotp,
         shouldEdit = edit,
         revisionDate = ZonedDateTime.ofInstant(revisionDate, ZoneOffset.UTC),
@@ -100,6 +103,13 @@ private fun Card.toEncryptedNetworkCard(): SyncResponseJson.Cipher.Card =
         expirationYear = expYear,
         cardholderName = cardholderName,
         brand = brand,
+    )
+
+private fun SshKey.toEncryptedNetworkSshKey(): SyncResponseJson.Cipher.SshKey =
+    SyncResponseJson.Cipher.SshKey(
+        publicKey = publicKey,
+        privateKey = privateKey,
+        keyFingerprint = fingerprint,
     )
 
 /**
@@ -309,6 +319,7 @@ private fun CipherType.toNetworkCipherType(): CipherTypeJson =
         CipherType.SECURE_NOTE -> CipherTypeJson.SECURE_NOTE
         CipherType.CARD -> CipherTypeJson.CARD
         CipherType.IDENTITY -> CipherTypeJson.IDENTITY
+        CipherType.SSH_KEY -> CipherTypeJson.SSH_KEY
     }
 
 /**
@@ -334,6 +345,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         type = type.toSdkCipherType(),
         login = login?.toSdkLogin(),
         identity = identity?.toSdkIdentity(),
+        sshKey = sshKey?.toSdkSshKey(),
         card = card?.toSdkCard(),
         secureNote = secureNote?.toSdkSecureNote(),
         favorite = isFavorite,
@@ -433,6 +445,17 @@ fun SyncResponseJson.Cipher.SecureNote.toSdkSecureNote(): SecureNote =
     )
 
 /**
+ * Transforms a [SyncResponseJson.Cipher.SshKey] into
+ * the corresponding Bitwarden SDK [SshKey].
+ */
+fun SyncResponseJson.Cipher.SshKey.toSdkSshKey(): SshKey =
+    SshKey(
+        publicKey = publicKey,
+        privateKey = privateKey,
+        fingerprint = keyFingerprint,
+    )
+
+/**
  * Transforms a list of [SyncResponseJson.Cipher.Login.Uri] into
  * a corresponding list of  Bitwarden SDK [LoginUri].
  */
@@ -517,6 +540,7 @@ fun CipherTypeJson.toSdkCipherType(): CipherType =
         CipherTypeJson.SECURE_NOTE -> CipherType.SECURE_NOTE
         CipherTypeJson.CARD -> CipherType.CARD
         CipherTypeJson.IDENTITY -> CipherType.IDENTITY
+        CipherTypeJson.SSH_KEY -> CipherType.SSH_KEY
     }
 
 /**
