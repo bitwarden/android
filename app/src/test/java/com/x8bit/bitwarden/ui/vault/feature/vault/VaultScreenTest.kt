@@ -742,8 +742,8 @@ class VaultScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP")
-            .assertTextEquals("TOTP", "1")
+            .onNodeWithText("TOTP (1)")
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -760,7 +760,7 @@ class VaultScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP")
+            .onNodeWithText("TOTP (1)")
             .assertIsNotDisplayed()
 
         composeTestRule
@@ -805,14 +805,15 @@ class VaultScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
         // Header
         composeTestRule
-            .onNodeWithText("Favorites")
-            .assertTextEquals("Favorites", 1.toString())
+            .onNodeWithText("FAVORITES (1)")
+            .performScrollTo()
+            .assertIsDisplayed()
         // Item
         composeTestRule
             .onNodeWithText(itemText)
+            .performScrollTo()
             .assertTextEquals(itemText, username)
             .performClick()
         verify {
@@ -850,8 +851,7 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Test
     fun `collection data should update according to the state`() {
-        val collectionsHeader = "Collections"
-        val collectionsCount = 1
+        val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
         val collectionCount = 3
         val collectionItem = VaultState.ViewState.CollectionItem(
@@ -873,7 +873,7 @@ class VaultScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(collectionsHeader, substring = true)
-            .assertTextEquals(collectionsHeader, collectionsCount.toString())
+            .assertTextEquals(collectionsHeader)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(collectionName)
@@ -1087,37 +1087,31 @@ class VaultScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         }
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
         // Header
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(!hasClickAction())
-            .assertTextEquals(rowText, 1.toString())
+            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .assertIsDisplayed()
         // Item
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(hasClickAction())
+            .onNodeWithTextAfterScroll(rowText)
             .assertTextEquals(rowText, 0.toString())
 
         val trashCount = 5
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    trashItemsCount = 5,
+                    trashItemsCount = trashCount,
                 ),
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
         // Header
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(!hasClickAction())
-            .assertTextEquals(rowText, 1.toString())
+            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .assertIsDisplayed()
         // Item
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(hasClickAction())
+            .onNodeWithTextAfterScroll(rowText)
             .assertTextEquals(rowText, trashCount.toString())
     }
 
