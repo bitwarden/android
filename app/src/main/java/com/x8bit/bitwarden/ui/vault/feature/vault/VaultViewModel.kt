@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
@@ -33,6 +34,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -71,8 +75,9 @@ class VaultViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
-    private val featureFlagManager: FeatureFlagManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    featureFlagManager: FeatureFlagManager,
+    snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -140,6 +145,14 @@ class VaultViewModel @Inject constructor(
                     userState = userState,
                     importLoginsFlowEnabled = importLoginsEnabled,
                 )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY)
+            .map {
+                VaultAction.Internal.SnackbarDataReceive(it)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -458,7 +471,13 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.ValidatePasswordResultReceive -> {
                 handleValidatePasswordResultReceive(action)
             }
+
+            is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
         }
+    }
+
+    private fun handleSnackbarDataReceive(action: VaultAction.Internal.SnackbarDataReceive) {
+        sendEvent(VaultEvent.ShowSnackbar(action.data))
     }
 
     private fun handleGenerateTotpResultReceive(
@@ -1011,6 +1030,11 @@ sealed class VaultEvent {
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
 }
 
 /**
@@ -1216,6 +1240,13 @@ sealed class VaultAction {
         data class ValidatePasswordResultReceive(
             val overflowAction: ListingItemOverflowAction.VaultAction,
             val result: ValidatePasswordResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a snackbar data was received.
+         */
+        data class SnackbarDataReceive(
+            val data: BitwardenSnackbarData,
         ) : Internal()
     }
 }
