@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
+import android.net.Uri
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -14,10 +17,14 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ImportLoginsViewModelTest : BaseViewModelTest() {
@@ -28,6 +35,24 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { storeShowImportLogins(any()) } just runs
+        every { storeShowImportLoginsSettingsBadge(any()) } just runs
+    }
+
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
+    }
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(Uri::parse)
+        every { Uri.parse(Environment.Us.environmentUrlData.base) } returns mockk {
+            every { host } returns DEFAULT_VAULT_URL
+        }
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Uri::parse)
     }
 
     @Test
@@ -49,6 +74,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -64,6 +90,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -84,6 +111,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 awaitItem(),
             )
@@ -94,14 +122,16 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 awaitItem(),
             )
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmImportLater sets dialog state to null and sends NavigateBack event`() = runTest {
+    fun `ConfirmImportLater sets dialog state to null, sends NavigateBack event, and stores first time values`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             // Initial state
@@ -115,6 +145,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -125,6 +156,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -132,6 +164,10 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 ImportLoginsEvent.NavigateBack,
                 eventFlow.awaitItem(),
             )
+        }
+        verify(exactly = 1) {
+            firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
         }
     }
 
@@ -150,6 +186,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 awaitItem(),
             )
@@ -160,6 +197,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.ImportStepOne,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 awaitItem(),
             )
@@ -200,6 +238,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.ImportStepOne,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -215,6 +254,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.ImportStepTwo,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -230,6 +270,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.ImportStepThree,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -249,6 +290,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -269,6 +311,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = true,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 awaitItem(),
             )
@@ -296,6 +339,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = true,
                         showBottomSheet = false,
+                        currentWebVaultUrl = DEFAULT_VAULT_URL,
                     ),
                     awaitItem(),
                 )
@@ -315,11 +359,13 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = true,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
         verify {
             firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
         }
     }
 
@@ -343,6 +389,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = true,
                         showBottomSheet = false,
+                        currentWebVaultUrl = DEFAULT_VAULT_URL,
                     ),
                     awaitItem(),
                 )
@@ -352,6 +399,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = false,
                         showBottomSheet = false,
+                        currentWebVaultUrl = DEFAULT_VAULT_URL,
                     ),
                     awaitItem(),
                 )
@@ -369,6 +417,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = DEFAULT_VAULT_URL,
             ),
             viewModel.stateFlow.value,
         )
@@ -391,6 +440,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = false,
                         showBottomSheet = false,
+                        currentWebVaultUrl = DEFAULT_VAULT_URL,
                     ),
                     viewModel.stateFlow.value,
                 )
@@ -414,6 +464,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = true,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -423,6 +474,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = true,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -433,6 +485,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     isVaultSyncing = false,
                     showBottomSheet = false,
+                    currentWebVaultUrl = DEFAULT_VAULT_URL,
                 ),
                 stateFlow.awaitItem(),
             )
@@ -443,12 +496,16 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     private fun createViewModel(): ImportLoginsViewModel = ImportLoginsViewModel(
         vaultRepository = vaultRepository,
         firstTimeActionManager = firstTimeActionManager,
+        environmentRepository = environmentRepository,
     )
 }
+
+private const val DEFAULT_VAULT_URL = "vault.bitwarden.com"
 
 private val DEFAULT_STATE = ImportLoginsState(
     dialogState = null,
     viewState = ImportLoginsState.ViewState.InitialContent,
     isVaultSyncing = false,
     showBottomSheet = false,
+    currentWebVaultUrl = DEFAULT_VAULT_URL,
 )

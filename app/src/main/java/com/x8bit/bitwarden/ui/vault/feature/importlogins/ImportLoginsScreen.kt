@@ -171,6 +171,7 @@ fun ImportLoginsScreen(
 
                     ImportLoginsState.ViewState.ImportStepTwo -> {
                         ImportLoginsStepTwoContent(
+                            vaultUrl = state.currentWebVaultUrl,
                             onBackClick = handler.onMoveToStepOne,
                             onContinueClick = handler.onMoveToStepThree,
                             onHelpClick = handler.onHelpClick,
@@ -355,6 +356,7 @@ private fun ImportLoginsStepOneContent(
 
 @Composable
 private fun ImportLoginsStepTwoContent(
+    vaultUrl: String,
     onContinueClick: () -> Unit,
     onBackClick: () -> Unit,
     onHelpClick: () -> Unit,
@@ -363,8 +365,14 @@ private fun ImportLoginsStepTwoContent(
     val instruction1 = createAnnotatedString(
         mainString = stringResource(
             R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
+            vaultUrl,
         ),
-        highlights = listOf(stringResource(R.string.go_to_vault_bitwarden_com_highlight)),
+        highlights = listOf(
+            stringResource(
+                R.string.go_to_vault_bitwarden_com_highlight,
+                vaultUrl,
+            ),
+        ),
         highlightStyle = bitwardenBoldSpanStyle,
     )
     val instruction2Text = stringResource(R.string.log_in_to_the_bitwarden_web_app)
@@ -618,12 +626,14 @@ private class ImportLoginsDialogContentPreviewProvider :
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = "vault.bitwarden.com",
             ),
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 isVaultSyncing = false,
                 showBottomSheet = false,
+                currentWebVaultUrl = "vault.bitwarden.com",
             ),
         )
 }

@@ -33,7 +33,7 @@ class VaultSettingsViewModel @Inject constructor(
                 .toBaseWebVaultImportUrl,
             isNewImportLoginsFlowEnabled = featureFlagManager
                 .getFeatureFlag(FlagKey.ImportLoginsFlow),
-            showImportActionCard = firstTimeState.showImportLoginsCard,
+            showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
         )
     },
 ) {
@@ -48,7 +48,7 @@ class VaultSettingsViewModel @Inject constructor(
             .firstTimeStateFlow
             .map {
                 VaultSettingsAction.Internal.UserFirstTimeStateChanged(
-                    showImportLoginsCard = it.showImportLoginsCard,
+                    showImportLoginsCard = it.showImportLoginsCardInSettings,
                 )
             }
             .onEach(::sendAction)
@@ -79,7 +79,7 @@ class VaultSettingsViewModel @Inject constructor(
 
     private fun handleImportLoginsCardDismissClicked() {
         if (!state.shouldShowImportCard) return
-        firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
     }
 
     private fun handleImportLoginsCardClicked() {

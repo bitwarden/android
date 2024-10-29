@@ -44,7 +44,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -165,7 +165,7 @@ private fun ContentColumn(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         if (state.shouldShowCrashLogsButton) {
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.submit_crash_logs),
                 isChecked = state.isSubmitCrashLogsEnabled,
                 onCheckedChange = onSubmitCrashLogsCheckedChange,

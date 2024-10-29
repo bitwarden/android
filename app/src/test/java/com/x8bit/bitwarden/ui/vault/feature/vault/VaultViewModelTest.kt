@@ -86,6 +86,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLogins(any()) } just runs
+        every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
 
     private val authRepository: AuthRepository =
@@ -1555,12 +1556,14 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `when DismissImportActionCard is sent, repository called to set value to false`() {
+    fun `when DismissImportActionCard is sent, repository called to showImportLogins to false and storeShowImportLoginsBadge to true`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.DismissImportActionCard)
         verify(exactly = 1) {
             firstTimeActionManager.storeShowImportLogins(false)
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(true)
         }
     }
 
