@@ -465,7 +465,12 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "cardholderName": "mockCardholderName-1",
       "brand": "mockBrand-1"
     },
-    "key": "mockKey-1"
+    "key": "mockKey-1",
+    "sshKey": {
+      "publicKey": "mockPublicKey-1",
+      "privateKey": "mockPrivateKey-1",
+      "keyFingerprint": "mockKeyFingerprint-1"
+    }
   }
 }
 """
@@ -576,7 +581,12 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "cardholderName": "mockCardholderName-1",
     "brand": "mockBrand-1"
   },
-  "key": "mockKey-1"
+  "key": "mockKey-1",
+  "sshKey": {
+    "publicKey": "mockPublicKey-1",
+    "privateKey": "mockPrivateKey-1",
+    "keyFingerprint": "mockKeyFingerprint-1"
+  }
 }
 """
 

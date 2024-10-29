@@ -3971,6 +3971,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 is VaultItemListingType.Trash -> "trash"
                 is VaultItemListingType.SendFile -> "send_file"
                 is VaultItemListingType.SendText -> "send_text"
+                is VaultItemListingType.SshKey -> "ssh_key"
             },
         )
         set(
@@ -3985,6 +3986,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 is VaultItemListingType.Trash -> null
                 is VaultItemListingType.SendFile -> null
                 is VaultItemListingType.SendText -> null
+                is VaultItemListingType.SshKey -> null
             },
         )
     }

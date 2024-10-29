@@ -72,7 +72,7 @@ fun BitwardenTextField(
     val formattedText = if (shouldAddCustomLineBreaks) {
         value.withLineBreaksAtWidth(
             // Adjust for built in padding
-            widthPx = widthPx - 16.dp.toPx(),
+            widthPx = widthPx - 32.dp.toPx(),
             monospacedTextStyle = textStyle,
         )
     } else {
