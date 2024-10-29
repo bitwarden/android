@@ -63,6 +63,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
+    private val mutableBiometricsUnlockEnabledFlow = bufferedMutableSharedFlow<Boolean>()
+    private val mutablePinUnlockEnabledFlow = bufferedMutableSharedFlow<Boolean>()
     private val settingsRepository: SettingsRepository = mockk {
         every { isAuthenticatorSyncEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
@@ -70,6 +72,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
         every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
         coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
+        every { isUnlockWithBiometricsEnabledFlow } returns mutableBiometricsUnlockEnabledFlow
+        every { isUnlockWithPinEnabledFlow } returns mutablePinUnlockEnabledFlow
     }
 
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
@@ -799,6 +803,28 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
             }
         }
+
+    @Test
+    fun `when BiometricLockUpdate action is handled, should update the state`() = runTest {
+        val viewModel = createViewModel()
+        mutableBiometricsUnlockEnabledFlow.emit(true)
+        val expectedState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
+        assertEquals(
+            viewModel.stateFlow.value,
+            expectedState,
+        )
+    }
+
+    @Test
+    fun `when PinProtectedLockUpdate action is handled, should update the state`() = runTest {
+        val viewModel = createViewModel()
+        mutablePinUnlockEnabledFlow.emit(true)
+        val expectedState = DEFAULT_STATE.copy(isUnlockWithPinEnabled = true)
+        assertEquals(
+            viewModel.stateFlow.value,
+            expectedState,
+        )
+    }
 
     @Suppress("LongParameterList")
     private fun createViewModel(

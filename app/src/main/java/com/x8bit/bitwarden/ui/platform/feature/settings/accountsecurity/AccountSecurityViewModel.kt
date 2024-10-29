@@ -126,6 +126,26 @@ class AccountSecurityViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        settingsRepository
+            .isUnlockWithBiometricsEnabledFlow
+            .map {
+                AccountSecurityAction.Internal.BiometricLockUpdate(
+                    isBiometricEnabled = it,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isUnlockWithPinEnabledFlow
+            .map {
+                AccountSecurityAction.Internal.PinProtectedLockUpdate(
+                    isPinProtected = it,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
             trySendAction(
                 AccountSecurityAction.Internal.FingerprintResultReceive(
@@ -358,6 +378,34 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.ShowUnlockBadgeUpdated -> {
                 handleShowUnlockBadgeUpdated(action)
             }
+
+            is AccountSecurityAction.Internal.BiometricLockUpdate -> {
+                hanleBiometricUnlockUpdate(action)
+            }
+
+            is AccountSecurityAction.Internal.PinProtectedLockUpdate -> {
+                handlePinProtectedLockUpdate(action)
+            }
+        }
+    }
+
+    private fun handlePinProtectedLockUpdate(
+        action: AccountSecurityAction.Internal.PinProtectedLockUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithPinEnabled = action.isPinProtected,
+            )
+        }
+    }
+
+    private fun hanleBiometricUnlockUpdate(
+        action: AccountSecurityAction.Internal.BiometricLockUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = action.isBiometricEnabled,
+            )
         }
     }
 
@@ -734,5 +782,19 @@ sealed class AccountSecurityAction {
          * The show unlock badge update has been received.
          */
         data class ShowUnlockBadgeUpdated(val showUnlockBadge: Boolean) : Internal()
+
+        /**
+         * The user's biometric unlock status has been updated.
+         */
+        data class BiometricLockUpdate(
+            val isBiometricEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * The user's pin unlock status has been updated.
+         */
+        data class PinProtectedLockUpdate(
+            val isPinProtected: Boolean,
+        ) : Internal()
     }
 }

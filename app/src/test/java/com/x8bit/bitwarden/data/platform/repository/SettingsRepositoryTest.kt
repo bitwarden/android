@@ -1150,6 +1150,42 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertFalse(settingsRepository.isAuthenticatorSyncEnabled)
         }
+
+    @Test
+    fun `isUnlockWithBiometricsEnabledFlow should react to changes in AuthDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.isUnlockWithBiometricsEnabledFlow.test {
+            assertFalse(awaitItem())
+            fakeAuthDiskSource.storeUserBiometricUnlockKey(
+                userId = USER_ID,
+                biometricsKey = "biometricsKey",
+            )
+            assertTrue(awaitItem())
+            fakeAuthDiskSource.storeUserBiometricUnlockKey(
+                userId = USER_ID,
+                biometricsKey = null,
+            )
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `isUnlockWithPinEnabledFlow should react to changes in AuthDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.isUnlockWithPinEnabledFlow.test {
+            assertFalse(awaitItem())
+            fakeAuthDiskSource.storePinProtectedUserKey(
+                userId = USER_ID,
+                pinProtectedUserKey = "pinProtectedUserKey",
+            )
+            assertTrue(awaitItem())
+            fakeAuthDiskSource.storePinProtectedUserKey(
+                userId = USER_ID,
+                pinProtectedUserKey = null,
+            )
+            assertFalse(awaitItem())
+        }
+    }
 }
 
 private const val USER_ID: String = "userId"
