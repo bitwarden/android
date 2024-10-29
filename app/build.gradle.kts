@@ -100,7 +100,10 @@ android {
         }
     }
     lint {
-        disable.add("MissingTranslation")
+        disable += listOf(
+            "MissingTranslation",
+            "ExtraTranslation",
+        )
     }
     @Suppress("UnstableApiUsage")
     testOptions {
