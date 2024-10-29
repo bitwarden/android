@@ -610,8 +610,6 @@ private fun PasswordMinNumbersCounterItem(
         value = minNumbers.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinNumbersCounterChange,
-        increaseButtonTestTag = "MinNumberIncreaseButton",
-        decreaseButtonTestTag = "MinNumberDecreaseButton",
         modifier = Modifier
             .testTag("MinNumberValueLabel")
             .padding(horizontal = 16.dp),
@@ -630,8 +628,6 @@ private fun PasswordMinSpecialCharactersCounterItem(
         value = minSpecial.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinSpecialCharactersChange,
-        increaseButtonTestTag = "MinSpecialIncreaseButton",
-        decreaseButtonTestTag = "MinSpecialDecreaseButton",
         modifier = Modifier
             .testTag("MinSpecialValueLabel")
             .padding(horizontal = 16.dp),
@@ -717,8 +713,6 @@ private fun PassphraseNumWordsCounterItem(
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
         stepperActionsTestTag = "NumberOfWordsStepper",
-        increaseButtonTestTag = "NumberOfWordsIncreaseButton",
-        decreaseButtonTestTag = "NumberOfWordsDecreaseButton",
         modifier = Modifier
             .testTag("NumberOfWordsLabel")
             .padding(horizontal = 16.dp),
