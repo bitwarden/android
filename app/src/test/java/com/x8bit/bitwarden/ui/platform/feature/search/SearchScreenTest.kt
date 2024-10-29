@@ -486,6 +486,31 @@ class SearchScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText(text = "Search Verification codes").assertIsDisplayed()
 
         mutableStateFlow.update {
+            it.copy(searchType = SearchTypeData.Vault.SshKeys)
+        }
+        composeTestRule.onNodeWithText(text = "Search SSH keys").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(searchType = SearchTypeData.Vault.Logins)
+        }
+        composeTestRule.onNodeWithText(text = "Search Logins").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(searchType = SearchTypeData.Vault.NoFolder)
+        }
+        composeTestRule.onNodeWithText(text = "Search No Folder").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                searchType = SearchTypeData.Vault.Collection(
+                    collectionId = "mockId",
+                    collectionName = "mockName",
+                ),
+            )
+        }
+        composeTestRule.onNodeWithText(text = "Search mockName").assertIsDisplayed()
+
+        mutableStateFlow.update {
             it.copy(
                 searchType = SearchTypeData.Vault.Folder(
                     folderId = "mockId",

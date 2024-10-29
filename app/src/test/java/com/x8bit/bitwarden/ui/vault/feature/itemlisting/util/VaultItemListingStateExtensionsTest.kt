@@ -112,6 +112,16 @@ class VaultItemListingStateExtensionsTest {
     }
 
     @Test
+    fun `toSearchType should return SshKey when item type is SshKey`() {
+        val expected = SearchType.Vault.SshKeys
+        val itemType = VaultItemListingState.ItemListingType.Vault.SshKey
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `toVaultItemCipherType should return the correct response`() {
         val itemListingTypes = listOf(
             VaultItemListingState.ItemListingType.Vault.Card,
@@ -119,6 +129,7 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.SecureNote,
             VaultItemListingState.ItemListingType.Vault.Login,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
+            VaultItemListingState.ItemListingType.Vault.SshKey,
         )
 
         val result = itemListingTypes.map { it.toVaultItemCipherType() }
@@ -130,6 +141,7 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.SECURE_NOTE,
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.LOGIN,
+                VaultItemCipherType.SSH_KEY,
             ),
             result,
         )

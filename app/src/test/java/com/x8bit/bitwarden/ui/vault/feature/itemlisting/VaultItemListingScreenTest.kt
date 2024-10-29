@@ -1200,6 +1200,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey)
+        }
+        composeTestRule
+            .onNodeWithText(text = "SSH keys")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
             it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
         }
         composeTestRule

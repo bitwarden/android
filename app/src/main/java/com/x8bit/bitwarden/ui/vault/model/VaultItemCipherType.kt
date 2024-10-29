@@ -24,4 +24,9 @@ enum class VaultItemCipherType {
      * A secure note cipher.
      */
     SECURE_NOTE,
+
+    /**
+     * A SSH key cipher.
+     */
+    SSH_KEY,
 }

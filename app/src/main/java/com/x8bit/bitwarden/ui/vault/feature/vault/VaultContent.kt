@@ -31,6 +31,7 @@ fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultHandlers: VaultHandlers,
     onOverflowOptionClick: (action: ListingItemOverflowAction.VaultAction) -> Unit,
+    showSshKeys: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -122,7 +123,7 @@ fun VaultContent(
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.types),
-                supportingLabel = "4",
+                supportingLabel = state.itemTypesCount.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -191,6 +192,23 @@ fun VaultContent(
                     .testTag("SecureNoteFilter")
                     .padding(horizontal = 16.dp),
             )
+        }
+
+        if (showSshKeys) {
+            item {
+                BitwardenGroupItem(
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_ssh_key),
+                    startIconTestTag = "SshKeyCipherIcon",
+                    label = stringResource(id = R.string.type_ssh_key),
+                    supportingLabel = state.sshKeyItemsCount.toString(),
+                    onClick = vaultHandlers.sshKeyGroupClick,
+                    showDivider = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("SshKeyFilter")
+                        .padding(horizontal = 16.dp),
+                )
+            }
         }
 
         if (state.folderItems.isNotEmpty()) {
