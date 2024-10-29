@@ -244,7 +244,7 @@ platform :android do
       track: "internal",
       release_status: "completed",
       rollout: "1",
-      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-release.aab",
+      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab",
     )
   end
 
