@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
-import androidx.lifecycle.SavedStateHandle
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -19,10 +19,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
