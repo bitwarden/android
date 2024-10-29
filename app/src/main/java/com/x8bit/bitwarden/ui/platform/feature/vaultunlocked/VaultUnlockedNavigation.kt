@@ -106,7 +106,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
-            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
+            onNavigateToImportLogins = {
+                navController.navigateToImportLoginsScreen(snackbarRelay = it)
+            },
         )
         deleteAccountDestination(
             onNavigateBack = { navController.popBackStack() },

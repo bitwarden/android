@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
@@ -77,7 +78,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -171,7 +172,7 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     var shouldDimNavBar by remember { mutableStateOf(false) }
 
