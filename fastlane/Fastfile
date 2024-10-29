@@ -237,6 +237,17 @@ platform :android do
     )
   end
 
+  desc "Publish Play Store Beta bundle to Google Play Store"
+  lane :publishProdToPlayStore do
+    upload_to_play_store(
+      package_name: "com.x8bit.bitwarden",
+      track: "internal",
+      release_status: "completed",
+      rollout: "1",
+      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab",
+    )
+  end
+
   desc "Generate release notes"
   lane :generateReleaseNotes do |options|
     branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
