@@ -65,6 +65,7 @@ fun BitwardenOverflowActionItem(
             containerColor = BitwardenTheme.colorScheme.background.primary,
             modifier = Modifier
                 .semantics { testTagsAsResourceId = true }
+                .testTag("FloatingOptionsContent")
                 .widthIn(
                     min = 112.dp,
                     max = 280.dp,
@@ -72,16 +73,13 @@ fun BitwardenOverflowActionItem(
             content = {
                 menuItemDataList.forEach { dropdownMenuItemData ->
                     DropdownMenuItem(
-                        modifier = Modifier.semantics {
-                            dropdownMenuItemData.testTag?.let {
-                                testTag = it
-                            }
-                        },
+                        modifier = Modifier.testTag("FloatingOptionsItem"),
                         colors = bitwardenMenuItemColors(),
                         text = {
                             Text(
                                 text = dropdownMenuItemData.text,
                                 style = BitwardenTheme.typography.bodyLarge,
+                                modifier = Modifier.testTag("FloatingOptionsItemName")
                             )
                         },
                         onClick = {
