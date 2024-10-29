@@ -383,8 +383,8 @@ jobs:
       - name: Publish Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && (inputs.publish-to-play-store || github.ref_name == 'main') }}
         run: |
-        bundle exec fastlane publishProdToPlayStore
-        bundle exec fastlane publishBetaToPlayStore
+          bundle exec fastlane publishProdToPlayStore
+          bundle exec fastlane publishBetaToPlayStore
 
   publish_fdroid:
     name: Publish F-Droid artifacts
