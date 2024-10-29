@@ -265,7 +265,8 @@ class SettingsRepositoryImpl(
                 authDiskSource
                     .getPinProtectedUserKeyFlow(userId)
                     .map { it != null }
-            } ?: flowOf(false)
+            }
+            ?: flowOf(false)
 
     override var isInlineAutofillEnabled: Boolean
         get() = activeUserId
