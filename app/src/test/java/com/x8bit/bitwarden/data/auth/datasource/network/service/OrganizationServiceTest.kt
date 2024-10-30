@@ -114,7 +114,8 @@ class OrganizationServiceTest : BaseServiceTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getVerifiedOrganizationDomainSsoDetails when response is success should return valid response`() = runTest {
+    fun `getVerifiedOrganizationDomainSsoDetails when response is success should return valid response`()
+    = runTest {
         server.enqueue(
             MockResponse()
                 .setResponseCode(200)
