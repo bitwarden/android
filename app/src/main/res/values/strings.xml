@@ -1079,4 +1079,6 @@ Do you want to switch to this account?</string>
   <string name="public_key">Public key</string>
   <string name="private_key">Private key</string>
   <string name="ssh_keys">SSH keys</string>
+  <string name="copy_public_key">Copy public key</string>
+  <string name="copy_fingerprint">Copy fingerprint</string>
 </resources>
