@@ -10,6 +10,7 @@ import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -70,6 +71,13 @@ fun createIdentityView(isEmpty: Boolean): IdentityView =
         username = "username".takeUnless { isEmpty },
         passportNumber = "passportNumber".takeUnless { isEmpty },
         licenseNumber = "licenseNumber".takeUnless { isEmpty },
+    )
+
+fun createSshKeyView(isEmpty: Boolean): SshKeyView =
+    SshKeyView(
+        privateKey = "privateKey".takeUnless { isEmpty },
+        publicKey = "publicKey".takeUnless { isEmpty },
+        fingerprint = "fingerprint".takeUnless { isEmpty },
     )
 
 fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
@@ -146,6 +154,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         creationDate = Instant.ofEpochSecond(1_000L),
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),
+        sshKey = createSshKeyView(isEmpty = isEmpty),
     )
 
 fun createCommonContent(
@@ -258,4 +267,13 @@ fun createIdentityContent(
         email = "email".takeUnless { isEmpty },
         phone = "phone".takeUnless { isEmpty },
         address = address.takeUnless { isEmpty },
+    )
+
+fun createSshKeyContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemType.SshKey =
+    VaultItemState.ViewState.Content.ItemType.SshKey(
+        name = "mockName".takeUnless { isEmpty },
+        privateKey = "privateKey".takeUnless { isEmpty },
+        publicKey = "publicKey".takeUnless { isEmpty },
+        fingerprint = "fingerprint".takeUnless { isEmpty },
+        showPrivateKey = false,
     )

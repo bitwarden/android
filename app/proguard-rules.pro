@@ -6,6 +6,10 @@
 # we keep it here.
 -keep class com.bitwarden.** { *; }
 
+# The Android Verifier component must be kept because it looks like dead code. Proguard is unable to
+# see any JNI usage, so our rules must manually opt into keeping it.
+-keep, includedescriptorclasses class org.rustls.platformverifier.** { *; }
+
 ################################################################################
 # Bitwarden Models
 ################################################################################

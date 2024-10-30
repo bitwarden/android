@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
@@ -33,6 +34,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -71,8 +75,9 @@ class VaultViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
-    private val featureFlagManager: FeatureFlagManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    featureFlagManager: FeatureFlagManager,
+    snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -84,6 +89,7 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
+        val showSshKeys = featureFlagManager.getFeatureFlag(FlagKey.SshKeyCipherItems)
         VaultState(
             appBarTitle = appBarTitle,
             initials = activeAccountSummary.initials,
@@ -99,6 +105,7 @@ class VaultViewModel @Inject constructor(
             hideNotificationsDialog = isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) || isFdroid,
             isRefreshing = false,
             showImportActionCard = false,
+            showSshKeys = showSshKeys,
         )
     },
 ) {
@@ -126,9 +133,16 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        vaultRepository
-            .vaultDataStateFlow
-            .onEach { sendAction(VaultAction.Internal.VaultDataReceive(vaultData = it)) }
+        combine(
+            vaultRepository.vaultDataStateFlow,
+            featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems),
+        ) { vaultData, sshKeyCipherItemsEnabled ->
+            VaultAction.Internal.VaultDataReceive(
+                vaultData = vaultData,
+                showSshKeys = sshKeyCipherItemsEnabled,
+            )
+        }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         authRepository
@@ -140,6 +154,14 @@ class VaultViewModel @Inject constructor(
                     userState = userState,
                     importLoginsFlowEnabled = importLoginsEnabled,
                 )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY)
+            .map {
+                VaultAction.Internal.SnackbarDataReceive(it)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -164,6 +186,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.ExitConfirmationClick -> handleExitConfirmationClick()
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
+            is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
             is VaultAction.TryAgainClick -> handleTryAgainClick()
@@ -198,7 +221,10 @@ class VaultViewModel @Inject constructor(
             it.copy(isIconLoadingDisabled = action.isIconLoadingDisabled)
         }
 
-        updateViewState(vaultRepository.vaultDataStateFlow.value)
+        updateViewState(
+            vaultData = vaultRepository.vaultDataStateFlow.value,
+            showSshKeys = state.showSshKeys,
+        )
     }
 
     //region VaultAction Handlers
@@ -298,7 +324,10 @@ class VaultViewModel @Inject constructor(
         }
 
         // Re-process the current vault data with the new filter
-        updateViewState(vaultData = vaultRepository.vaultDataStateFlow.value)
+        updateViewState(
+            vaultData = vaultRepository.vaultDataStateFlow.value,
+            showSshKeys = state.showSshKeys,
+        )
     }
 
     private fun handleTrashClick() {
@@ -307,6 +336,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleSecureNoteClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote))
+    }
+
+    private fun handleSshKeyClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
@@ -458,7 +491,13 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.ValidatePasswordResultReceive -> {
                 handleValidatePasswordResultReceive(action)
             }
+
+            is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
         }
+    }
+
+    private fun handleSnackbarDataReceive(action: VaultAction.Internal.SnackbarDataReceive) {
+        sendEvent(VaultEvent.ShowSnackbar(action.data))
     }
 
     private fun handleGenerateTotpResultReceive(
@@ -498,6 +537,7 @@ class VaultViewModel @Inject constructor(
         val appBarTitle = vaultFilterData.toAppBarTitle()
         val shouldShowImportActionCard = action.importLoginsFlowEnabled &&
             firstTimeState.showImportLoginsCard
+
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
@@ -518,13 +558,20 @@ class VaultViewModel @Inject constructor(
         // navigating.
         if (state.isSwitchingAccounts) return
 
-        updateViewState(vaultData = action.vaultData)
+        updateViewState(
+            vaultData = action.vaultData,
+            showSshKeys = action.showSshKeys,
+        )
     }
 
-    private fun updateViewState(vaultData: DataState<VaultData>) {
+    private fun updateViewState(vaultData: DataState<VaultData>, showSshKeys: Boolean) {
         when (vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
-            is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
+            is DataState.Loaded -> vaultLoadedReceive(
+                vaultData = vaultData,
+                showSshKeys = showSshKeys,
+            )
+
             is DataState.Loading -> vaultLoadingReceive()
             is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData = vaultData)
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
@@ -545,7 +592,7 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
+    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>, showSshKeys: Boolean) {
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(
                 VaultEvent.ShowToast(
@@ -561,9 +608,11 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
+                    showSshKeys = showSshKeys,
                 ),
                 dialog = null,
                 isRefreshing = false,
+                showSshKeys = showSshKeys,
             )
         }
     }
@@ -595,6 +644,7 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
+                    showSshKeys = state.showSshKeys,
                 ),
             )
         }
@@ -666,6 +716,7 @@ data class VaultState(
     val hideNotificationsDialog: Boolean,
     val isRefreshing: Boolean,
     val showImportActionCard: Boolean,
+    val showSshKeys: Boolean,
 ) : Parcelable {
 
     /**
@@ -748,11 +799,13 @@ data class VaultState(
          */
         @Parcelize
         data class Content(
+            val itemTypesCount: Int,
             val totpItemsCount: Int,
             val loginItemsCount: Int,
             val cardItemsCount: Int,
             val identityItemsCount: Int,
             val secureNoteItemsCount: Int,
+            val sshKeyItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
@@ -925,6 +978,29 @@ data class VaultState(
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
             }
+
+            /**
+             * Represents a SSH key item within the vault, designed to store SSH keys.
+             *
+             * @property publicKey The public key associated with this SSH key item.
+             * @property privateKey The private key associated with this SSH key item.
+             * @property fingerprint The fingerprint associated with this SSH key item.
+             */
+            @Parcelize
+            data class SshKey(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_ssh_key),
+                override val startIconTestTag: String = "SshKeyCipherIcon",
+                override val extraIconList: List<IconRes> = emptyList(),
+                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                val publicKey: Text?,
+                val privateKey: Text?,
+                val fingerprint: Text?,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+            }
         }
     }
 
@@ -1011,6 +1087,11 @@ sealed class VaultEvent {
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
 }
 
 /**
@@ -1131,6 +1212,11 @@ sealed class VaultAction {
     data object SecureNoteGroupClick : VaultAction()
 
     /**
+     * User clicked the SSH key types button.
+     */
+    data object SshKeyGroupClick : VaultAction()
+
+    /**
      * User clicked the trash button.
      */
     data object TrashClick : VaultAction()
@@ -1208,6 +1294,7 @@ sealed class VaultAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
+            val showSshKeys: Boolean,
         ) : Internal()
 
         /**
@@ -1216,6 +1303,13 @@ sealed class VaultAction {
         data class ValidatePasswordResultReceive(
             val overflowAction: ListingItemOverflowAction.VaultAction,
             val result: ValidatePasswordResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a snackbar data was received.
+         */
+        data class SnackbarDataReceive(
+            val data: BitwardenSnackbarData,
         ) : Internal()
     }
 }
@@ -1241,6 +1335,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
+                    showSshKeys = it.showSshKeys,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

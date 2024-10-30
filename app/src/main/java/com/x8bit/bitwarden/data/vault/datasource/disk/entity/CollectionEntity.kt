@@ -30,4 +30,7 @@ data class CollectionEntity(
 
     @ColumnInfo(name = "read_only")
     val isReadOnly: Boolean,
+
+    @ColumnInfo(name = "manage")
+    val canManage: Boolean,
 )

@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenHorizontalDivider(
     modifier: Modifier = Modifier,
-    thickness: Dp = 1.dp,
+    thickness: Dp = (0.5).dp,
     color: Color = BitwardenTheme.colorScheme.stroke.divider,
 ) {
     HorizontalDivider(

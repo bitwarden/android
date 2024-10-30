@@ -11,7 +11,10 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -19,6 +22,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -56,7 +60,10 @@ class VaultSettingsScreenTest : BaseComposeTest() {
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 intentManager = intentManager,
-                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
+                onNavigateToImportLogins = {
+                    onNavigateToImportLoginsCalled = true
+                    assertEquals(SnackbarRelay.VAULT_SETTINGS_RELAY, it)
+                },
             )
         }
     }
@@ -212,5 +219,12 @@ class VaultSettingsScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
         }
+    }
+
+    @Test
+    fun `when ShowSnackbar is sent snackbar should be displayed`() {
+        val data = BitwardenSnackbarData("message".asText())
+        mutableEventFlow.tryEmit(VaultSettingsEvent.ShowSnackbar(data))
+        composeTestRule.onNodeWithText("message").assertIsDisplayed()
     }
 }

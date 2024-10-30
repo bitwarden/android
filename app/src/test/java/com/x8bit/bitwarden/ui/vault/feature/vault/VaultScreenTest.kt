@@ -9,6 +9,8 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -24,9 +26,11 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -91,7 +95,10 @@ class VaultScreenTest : BaseComposeTest() {
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
-                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
+                onNavigateToImportLogins = {
+                    onNavigateToImportLoginsCalled = true
+                    assertEquals(SnackbarRelay.MY_VAULT_RELAY, it)
+                },
                 exitManager = exitManager,
                 intentManager = intentManager,
                 permissionsManager = permissionsManager,
@@ -701,6 +708,13 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for SshKey type should call onNavigateToVaultItemListingType with SshKey type`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
+        assertEquals(VaultItemListingType.SshKey, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `NavigateToItemListing event for Trash type should call onNavigateToVaultItemListingType with Trash type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
         assertEquals(VaultItemListingType.Trash, onNavigateToVaultItemListingType)
@@ -742,8 +756,8 @@ class VaultScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP")
-            .assertTextEquals("TOTP", "1")
+            .onNodeWithText("TOTP (1)")
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -760,7 +774,7 @@ class VaultScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP")
+            .onNodeWithText("TOTP (1)")
             .assertIsNotDisplayed()
 
         composeTestRule
@@ -805,14 +819,15 @@ class VaultScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
         // Header
         composeTestRule
-            .onNodeWithText("Favorites")
-            .assertTextEquals("Favorites", 1.toString())
+            .onNodeWithText("FAVORITES (1)")
+            .performScrollTo()
+            .assertIsDisplayed()
         // Item
         composeTestRule
             .onNodeWithText(itemText)
+            .performScrollTo()
             .assertTextEquals(itemText, username)
             .performClick()
         verify {
@@ -850,8 +865,7 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Test
     fun `collection data should update according to the state`() {
-        val collectionsHeader = "Collections"
-        val collectionsCount = 1
+        val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
         val collectionCount = 3
         val collectionItem = VaultState.ViewState.CollectionItem(
@@ -873,7 +887,7 @@ class VaultScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(collectionsHeader, substring = true)
-            .assertTextEquals(collectionsHeader, collectionsCount.toString())
+            .assertTextEquals(collectionsHeader)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(collectionName)
@@ -1087,37 +1101,31 @@ class VaultScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         }
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
         // Header
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(!hasClickAction())
-            .assertTextEquals(rowText, 1.toString())
+            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .assertIsDisplayed()
         // Item
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(hasClickAction())
+            .onNodeWithTextAfterScroll(rowText)
             .assertTextEquals(rowText, 0.toString())
 
         val trashCount = 5
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    trashItemsCount = 5,
+                    trashItemsCount = trashCount,
                 ),
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
         // Header
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(!hasClickAction())
-            .assertTextEquals(rowText, 1.toString())
+            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .assertIsDisplayed()
         // Item
         composeTestRule
-            .onAllNodes(hasText(rowText))
-            .filterToOne(hasClickAction())
+            .onNodeWithTextAfterScroll(rowText)
             .assertTextEquals(rowText, trashCount.toString())
     }
 
@@ -1201,6 +1209,69 @@ class VaultScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToImportLogins)
         assertTrue(onNavigateToImportLoginsCalled)
     }
+
+    @Test
+    fun `when ShowSnackbar is sent snackbar should be displayed`() {
+        val data = BitwardenSnackbarData("message".asText())
+        mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
+        composeTestRule.onNodeWithText("message").assertIsDisplayed()
+    }
+
+    @Test
+    fun `SSH key group header should display correctly based on state`() {
+        val count = 1
+        // Verify SSH key group is displayed when showSshKeys is true
+        mutableStateFlow.update {
+            it.copy(
+                showSshKeys = true,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    sshKeyItemsCount = count,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("SSH key")
+            .assertTextEquals("SSH key", count.toString())
+            .assertIsDisplayed()
+
+        // Verify SSH key group is hidden when showSshKeys is false
+        mutableStateFlow.update { it.copy(showSshKeys = false) }
+        composeTestRule
+            .onNodeWithText("SSH key")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `SSH key vault items should display correctly based on state`() {
+        // Verify SSH key vault items are displayed when showSshKeys is true
+        mutableStateFlow.update {
+            it.copy(
+                showSshKeys = true,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(
+                        VaultState.ViewState.VaultItem.SshKey(
+                            id = "mockId",
+                            name = "mockSshKey".asText(),
+                            publicKey = "mockPublicKey".asText(),
+                            privateKey = "mockPrivateKey".asText(),
+                            fingerprint = "mockFingerprint".asText(),
+                            overflowOptions = emptyList(),
+                            shouldShowMasterPasswordReprompt = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("mockSshKey")
+            .isDisplayed()
+
+        // Verify SSH key vault items are hidden when showSshKeys is false
+        mutableStateFlow.update { it.copy(showSshKeys = false) }
+        composeTestRule
+            .onNodeWithText("mockSshKey")
+            .isNotDisplayed()
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1256,6 +1327,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hideNotificationsDialog = true,
     isRefreshing = false,
     showImportActionCard = false,
+    showSshKeys = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -1269,4 +1341,6 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     collectionItems = emptyList(),
     trashItemsCount = 0,
     totpItemsCount = 0,
+    itemTypesCount = 4,
+    sshKeyItemsCount = 0,
 )

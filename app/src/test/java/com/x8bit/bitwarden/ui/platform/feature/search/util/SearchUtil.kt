@@ -186,6 +186,36 @@ fun createMockDisplayItemForCipher(
                 isTotp = false,
             )
         }
+
+        CipherType.SSH_KEY -> {
+            SearchState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
+                subtitle = "mockPublicKey-$number",
+                subtitleTestTag = "CipherSubTitleLabel",
+                iconData = IconData.Local(R.drawable.ic_ssh_key),
+                extraIconList = listOf(
+                    IconRes(
+                        iconRes = R.drawable.ic_collections,
+                        contentDescription = R.string.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
+                    ),
+                ),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+                overflowTestTag = "CipherOptionsButton",
+                totpCode = null,
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
+                isTotp = false,
+            )
+        }
     }
 
 /**

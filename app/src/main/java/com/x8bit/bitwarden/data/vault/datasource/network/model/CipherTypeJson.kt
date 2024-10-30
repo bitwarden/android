@@ -33,6 +33,12 @@ enum class CipherTypeJson {
      */
     @SerialName("4")
     IDENTITY,
+
+    /**
+     * A SSH key.
+     */
+    @SerialName("5")
+    SSH_KEY,
 }
 
 @Keep

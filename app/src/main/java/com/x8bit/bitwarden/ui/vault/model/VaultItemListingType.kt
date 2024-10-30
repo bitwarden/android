@@ -21,9 +21,14 @@ sealed class VaultItemListingType {
     data object SecureNote : VaultItemListingType()
 
     /**
-     * A Card  listing.
+     * A Card listing.
      */
     data object Card : VaultItemListingType()
+
+    /**
+     * A SSH key listing.
+     */
+    data object SshKey : VaultItemListingType()
 
     /**
      * A Trash listing.

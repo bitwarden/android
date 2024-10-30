@@ -472,6 +472,9 @@ data class SyncResponseJson(
         @SerialName("identity")
         val identity: Identity?,
 
+        @SerialName("sshKey")
+        val sshKey: SshKey?,
+
         @SerialName("collectionIds")
         val collectionIds: List<String>?,
 
@@ -719,6 +722,25 @@ data class SyncResponseJson(
         }
 
         /**
+         * Represents a SSH key in the vault response.
+         *
+         * @property publicKey The public key of the SSH key.
+         * @property privateKey The private key of the SSH key.
+         * @property keyFingerprint The key fingerprint of the SSH key.
+         */
+        @Serializable
+        data class SshKey(
+            @SerialName("publicKey")
+            val publicKey: String?,
+
+            @SerialName("privateKey")
+            val privateKey: String?,
+
+            @SerialName("keyFingerprint")
+            val keyFingerprint: String?,
+        )
+
+        /**
          * Represents password history in the vault response.
          *
          * @property password The password of the password history object.
@@ -947,5 +969,8 @@ data class SyncResponseJson(
 
         @SerialName("id")
         val id: String,
+
+        @SerialName("manage")
+        val canManage: Boolean,
     )
 }

@@ -80,4 +80,18 @@ class SearchTypeExtensionsTest {
     fun `toSearchTypeData should return Vault Trash then SearchType is Vault Trash`() {
         assertEquals(SearchTypeData.Vault.Trash, SearchType.Vault.Trash.toSearchTypeData())
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSearchTypeData should return Vault VerificationCodes then SearchType is Vault VerificationCodes`() {
+        assertEquals(
+            SearchTypeData.Vault.VerificationCodes,
+            SearchType.Vault.VerificationCodes.toSearchTypeData(),
+        )
+    }
+
+    @Test
+    fun `toSearchTypeData should return Vault SshKeys then SearchType is Vault SshKeys`() {
+        assertEquals(SearchTypeData.Vault.SshKeys, SearchType.Vault.SshKeys.toSearchTypeData())
+    }
 }

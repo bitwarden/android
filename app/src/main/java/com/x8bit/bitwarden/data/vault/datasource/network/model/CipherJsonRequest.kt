@@ -51,6 +51,9 @@ data class CipherJsonRequest(
     @SerialName("secureNote")
     val secureNote: SyncResponseJson.Cipher.SecureNote?,
 
+    @SerialName("sshKey")
+    val sshKey: SyncResponseJson.Cipher.SshKey?,
+
     @SerialName("folderId")
     val folderId: String?,
 

@@ -33,7 +33,7 @@ fun VaultMoveToOrganizationContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.testTag("CollectionListContainer"),
     ) {
         if (!showOnlyCollections) {
             item {

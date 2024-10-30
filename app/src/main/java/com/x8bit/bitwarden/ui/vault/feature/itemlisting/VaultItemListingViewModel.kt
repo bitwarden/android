@@ -2059,6 +2059,14 @@ data class VaultItemListingState(
             }
 
             /**
+             * A SSH key item listing.
+             */
+            data object SshKey : Vault() {
+                override val titleText: Text get() = R.string.ssh_keys.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
              * A Secure Trash item listing.
              */
             data object Trash : Vault() {

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -10,6 +11,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,9 +25,11 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class ImportLoginsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val environmentRepository: EnvironmentRepository,
+    private val snackbarRelayManager: SnackbarRelayManager,
 ) :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
         initialState = run {
@@ -36,6 +42,7 @@ class ImportLoginsViewModel @Inject constructor(
                 showBottomSheet = false,
                 // attempt to trim the scheme of the vault url
                 currentWebVaultUrl = vaultUrl.toUriOrNull()?.host ?: vaultUrl,
+                snackbarRelay = ImportLoginsArgs(savedStateHandle).snackBarRelay,
             )
         },
     ) {
@@ -70,6 +77,13 @@ class ImportLoginsViewModel @Inject constructor(
                 showBottomSheet = false,
             )
         }
+        // instead of doing inline, this approach to avoid "MaxLineLength" suppression.
+        val snackbarData = BitwardenSnackbarData(
+            messageHeader = R.string.logins_imported.asText(),
+            message = R.string.remember_to_delete_your_imported_password_file_from_your_computer
+                .asText(),
+        )
+        snackbarRelayManager.sendSnackbarData(data = snackbarData, relay = state.snackbarRelay)
         sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
@@ -213,6 +227,7 @@ data class ImportLoginsState(
     val isVaultSyncing: Boolean,
     val showBottomSheet: Boolean,
     val currentWebVaultUrl: String,
+    val snackbarRelay: SnackbarRelay,
 ) {
     /**
      * Dialog states for the [ImportLoginsViewModel].

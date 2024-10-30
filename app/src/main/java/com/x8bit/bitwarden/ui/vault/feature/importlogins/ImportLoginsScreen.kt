@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLoginsInstructionStep
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
@@ -627,6 +628,7 @@ private class ImportLoginsDialogContentPreviewProvider :
                 isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = "vault.bitwarden.com",
+                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
@@ -634,6 +636,7 @@ private class ImportLoginsDialogContentPreviewProvider :
                 isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = "vault.bitwarden.com",
+                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
         )
 }

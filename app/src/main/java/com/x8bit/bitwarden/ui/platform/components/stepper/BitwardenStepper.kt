@@ -2,8 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.stepper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
@@ -38,8 +37,6 @@ fun BitwardenStepper(
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
     stepperActionsTestTag: String? = null,
-    increaseButtonTestTag: String? = null,
-    decreaseButtonTestTag: String? = null,
 ) {
     val clampedValue = value?.coerceIn(range)
     if (clampedValue != value && clampedValue != null) {
@@ -64,9 +61,7 @@ fun BitwardenStepper(
                     }
                 },
                 isEnabled = isDecrementEnabled && !isAtRangeMinimum,
-                modifier = Modifier.semantics {
-                    decreaseButtonTestTag?.let { testTag = it }
-                },
+                modifier = Modifier.testTag("DecrementValue"),
             )
             BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_plus,
@@ -78,9 +73,7 @@ fun BitwardenStepper(
                     }
                 },
                 isEnabled = isIncrementEnabled && !isAtRangeMaximum,
-                modifier = Modifier.semantics {
-                    increaseButtonTestTag?.let { testTag = it }
-                },
+                modifier = Modifier.testTag("IncrementValue"),
             )
         },
         readOnly = textFieldReadOnly,

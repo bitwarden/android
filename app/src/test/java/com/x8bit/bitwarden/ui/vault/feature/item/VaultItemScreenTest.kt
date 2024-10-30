@@ -311,7 +311,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         DEFAULT_VIEW_STATES
             .forEach { typeState ->
                 mutableStateFlow.update { it.copy(viewState = typeState) }
-                composeTestRule.onNodeWithTextAfterScroll("Custom fields").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("CUSTOM FIELDS").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("text").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("value").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("hidden").assertIsDisplayed()
@@ -321,7 +321,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                     updateCommonContent(currentState) { copy(customFields = emptyList()) }
                 }
 
-                composeTestRule.assertScrollableNodeDoesNotExist("Custom fields")
+                composeTestRule.assertScrollableNodeDoesNotExist("CUSTOM FIELDS")
                 composeTestRule.assertScrollableNodeDoesNotExist("text")
                 composeTestRule.assertScrollableNodeDoesNotExist("value")
                 composeTestRule.assertScrollableNodeDoesNotExist("hidden")
@@ -334,7 +334,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         DEFAULT_VIEW_STATES
             .forEach { typeState ->
                 mutableStateFlow.update { it.copy(viewState = typeState) }
-                composeTestRule.onNodeWithTextAfterScroll("Attachments").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("ATTACHMENTS").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("test.mp4").assertIsDisplayed()
                 composeTestRule.onNodeWithTextAfterScroll("11 MB").assertIsDisplayed()
 
@@ -342,7 +342,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                     updateCommonContent(currentState) { copy(attachments = emptyList()) }
                 }
 
-                composeTestRule.assertScrollableNodeDoesNotExist("Attachments")
+                composeTestRule.assertScrollableNodeDoesNotExist("ATTACHMENTS")
                 composeTestRule.assertScrollableNodeDoesNotExist("test.mp4")
                 composeTestRule.assertScrollableNodeDoesNotExist("11 MB")
             }
@@ -1706,7 +1706,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in login state, uris should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("URIs").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("URIS").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("URI").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("www.example.com").assertIsDisplayed()
 
@@ -1714,7 +1714,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             updateLoginType(currentState) { copy(uris = emptyList()) }
         }
 
-        composeTestRule.assertScrollableNodeDoesNotExist("URIs")
+        composeTestRule.assertScrollableNodeDoesNotExist("URIS")
         composeTestRule.assertScrollableNodeDoesNotExist("URI")
         composeTestRule.assertScrollableNodeDoesNotExist("www.example.com")
     }
@@ -1866,6 +1866,8 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.assertScrollableNodeDoesNotExist(identityName)
     }
     //endregion identity
+
+    //region card
 
     @Test
     fun `in card state, cardholderName should be displayed according to state`() {
@@ -2139,6 +2141,79 @@ class VaultItemScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
         }
     }
+
+    //endregion card
+
+    //region ssh key
+
+    @Test
+    fun `in ssh key state, public key should be displayed according to state`() {
+        val publicKey = "the public key"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(publicKey).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateSshKeyType(currentState) { copy(publicKey = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(publicKey)
+    }
+
+    @Test
+    fun `in ssh key state, private key should be displayed according to state`() {
+        val privateKey = "the private key"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_SSH_KEY_VIEW_STATE
+                    .copy(
+                        type = DEFAULT_SSH_KEY.copy(showPrivateKey = true),
+                    ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(privateKey)
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateSshKeyType(currentState) { copy(privateKey = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(privateKey)
+    }
+
+    @Test
+    fun `in ssh key state, on show private key click should send ShowPrivateKeyClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Private key")
+            .onChildren()
+            .filterToOne(hasContentDescription("Show"))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                    isVisible = true,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ssh key state, fingerprint should be displayed according to state`() {
+        val fingerprint = "the fingerprint"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(fingerprint).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateSshKeyType(currentState) { copy(fingerprint = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(fingerprint)
+    }
+
+    //endregion ssh key
 }
 
 //region Helper functions
@@ -2198,6 +2273,29 @@ private fun updateCardType(
         is VaultItemState.ViewState.Content -> {
             when (val type = viewState.type) {
                 is VaultItemState.ViewState.Content.ItemType.Card -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+private fun updateSshKeyType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.SshKey.() ->
+    VaultItemState.ViewState.Content.ItemType.SshKey,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.SshKey -> {
                     viewState.copy(
                         type = type.transform(),
                     )
@@ -2333,6 +2431,15 @@ private val DEFAULT_CARD: VaultItemState.ViewState.Content.ItemType.Card =
         ),
     )
 
+private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
+    VaultItemState.ViewState.Content.ItemType.SshKey(
+        name = "the ssh key name",
+        publicKey = "the public key",
+        privateKey = "the private key",
+        fingerprint = "the fingerprint",
+        showPrivateKey = false,
+    )
+
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
@@ -2431,6 +2538,12 @@ private val DEFAULT_SECURE_NOTE_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = DEFAULT_COMMON,
         type = VaultItemState.ViewState.Content.ItemType.SecureNote,
+    )
+
+private val DEFAULT_SSH_KEY_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = DEFAULT_COMMON,
+        type = DEFAULT_SSH_KEY,
     )
 
 private val EMPTY_VIEW_STATES = listOf(

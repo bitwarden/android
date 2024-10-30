@@ -3,11 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasScrollToNodeAction
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
@@ -15,7 +12,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -174,11 +171,10 @@ class VerificationCodeScreenTest : BaseComposeTest() {
 
     @Test
     fun `Items text should be displayed according to state`() {
-        val items = "Items"
         mutableStateFlow.update { DEFAULT_STATE }
 
         composeTestRule
-            .onNodeWithText(text = items)
+            .onNodeWithText(text = "ITEMS (2)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -193,20 +189,16 @@ class VerificationCodeScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasText(items))
-
-        composeTestRule
-            .onNodeWithText(text = items)
+            .onNodeWithText(text = "ITEMS (2)")
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
     @Test
     fun `Items text count should be displayed according to state`() {
-        val items = "Items"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
-            .onNodeWithText(text = items)
+            .onNodeWithText(text = "ITEMS (1)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -220,13 +212,9 @@ class VerificationCodeScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasText(items))
-
-        composeTestRule
-            .onNodeWithText(text = items)
+            .onNodeWithText(text = "ITEMS (1)")
+            .performScrollTo()
             .assertIsDisplayed()
-            .assertTextEquals(items, "1")
 
         mutableStateFlow.update {
             it.copy(
@@ -242,13 +230,9 @@ class VerificationCodeScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasText(items))
-
-        composeTestRule
-            .onNodeWithText(text = items)
+            .onNodeWithText(text = "ITEMS (4)")
+            .performScrollTo()
             .assertIsDisplayed()
-            .assertTextEquals(items, "4")
     }
 
     @Test
@@ -262,10 +246,6 @@ class VerificationCodeScreenTest : BaseComposeTest() {
                 ),
             )
         }
-
-        composeTestRule
-            .onNodeWithText(text = "1")
-            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText(text = "Label 1")

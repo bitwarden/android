@@ -21,7 +21,7 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
@@ -127,7 +127,7 @@ fun VaultItemListingContent(
 
         if (state.displayCollectionList.isNotEmpty()) {
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.collections),
                     supportingLabel = state.displayCollectionList.count().toString(),
                     modifier = Modifier
@@ -156,7 +156,7 @@ fun VaultItemListingContent(
 
         if (state.displayFolderList.isNotEmpty()) {
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.folders),
                     supportingLabel = state.displayFolderList.count().toString(),
                     modifier = Modifier
@@ -195,7 +195,7 @@ fun VaultItemListingContent(
 
         if (state.displayItemList.isNotEmpty()) {
             item {
-                BitwardenListHeaderTextWithSupportLabel(
+                BitwardenListHeaderText(
                     label = stringResource(id = R.string.items),
                     supportingLabel = state.displayItemList.size.toString(),
                     modifier = Modifier

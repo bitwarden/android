@@ -125,7 +125,6 @@ fun BitwardenTopAppBar(
                 TopAppBarDividerStyle.STATIC -> true
                 TopAppBarDividerStyle.ON_SCROLL -> false
             },
-            thickness = (0.5).dp,
         )
 
     if (titleTextHasOverflow) {

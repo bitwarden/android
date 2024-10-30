@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
@@ -38,7 +39,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     composableWithStayTransitions(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
