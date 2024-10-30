@@ -718,7 +718,7 @@ private fun DownloadBitwardenActionCard(
     modifier = modifier,
     actionIcon = rememberVectorPainter(R.drawable.ic_bitwarden),
     actionText = stringResource(R.string.download_bitwarden_card_message),
-    callToActionText = stringResource(R.string.download),
+    callToActionText = stringResource(R.string.download_now),
     titleText = stringResource(R.string.download_bitwarden_card_title),
     onCardClicked = onDownloadBitwardenClick,
     trailingContent = {
