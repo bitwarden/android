@@ -15,16 +15,7 @@ private const val ANDROID_APP_PROTOCOL: String = "androidapp://"
  */
 fun String.toUriOrNull(): URI? =
     try {
-        val uri = URI(this)
-        if (
-            uri.host == null &&
-            this.contains(".") &&
-            !this.hasHttpProtocol()
-        ) {
-            URI("https://$this")
-        } else {
-            uri
-        }
+        URI(this)
     } catch (e: URISyntaxException) {
         null
     }
@@ -80,7 +71,18 @@ fun String.hasPort(): Boolean {
  * Extract the host from this [String] if possible, otherwise return null.
  */
 @OmitFromCoverage
-fun String.getHostOrNull(): String? = this.toUriOrNull()?.host
+fun String.getHostOrNull(): String? = this.toUriOrNull()
+    ?.let { uri ->
+        if (
+            uri.host == null &&
+            this.contains(".") &&
+            !this.hasHttpProtocol()
+        ) {
+            URI("https://$this")
+        } else {
+            uri
+        }
+    }?.host
 
 /**
  * Extract the host with optional port from this [String] if possible, otherwise return null.

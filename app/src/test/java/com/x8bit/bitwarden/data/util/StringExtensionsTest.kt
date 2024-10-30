@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.util
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.util.findLastSubstringIndicesOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
+import com.x8bit.bitwarden.data.platform.util.getHostOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
@@ -37,17 +38,6 @@ class StringExtensionsTest {
     @Test
     fun `toUriOrNull should return URI when uri is valid`() {
         assertNotNull("www.google.com".toUriOrNull())
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toUriOrNull should return URI with accurate host name when a scheme is not present but a port is`() {
-        val expectedHost = "www.google.com"
-        val hostWithPort = "$expectedHost:8080"
-        // control
-        assertNull(URI(hostWithPort).host)
-        val uri = hostWithPort.toUriOrNull()
-        assertEquals(expectedHost, uri?.host)
     }
 
     @Test
@@ -164,5 +154,33 @@ class StringExtensionsTest {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getHostOrNull should return host when one is present`() {
+        val expectedHost = "www.google.com"
+        assertEquals(expectedHost, expectedHost.getHostOrNull())
+    }
+
+    @Test
+    fun `getHostOrNull should return null when no host is present`() {
+        assertNull("boo".getHostOrNull())
+    }
+
+    @Test
+    fun `getHostOrNull should return host from URI string when present and custom URI scheme`() {
+        val expectedHost = "www.google.com"
+        val hostWithScheme = "androidapp://$expectedHost"
+        assertEquals(expectedHost, hostWithScheme.getHostOrNull())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getHostOrNull should return host from URI string when present and has port but no scheme`() {
+        val expectedHost = "www.google.com"
+        val hostWithPort = "$expectedHost:8080"
+        // control
+        assertNull(URI(hostWithPort).host)
+        assertEquals(expectedHost, hostWithPort.toUriOrNull())
     }
 }
