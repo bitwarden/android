@@ -115,23 +115,26 @@ class OrganizationServiceTest : BaseServiceTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `getVerifiedOrganizationDomainSsoDetails when response is success should return valid response`() =
-    runTest {
-        server.enqueue(
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(ORGANIZATION_VERIFIED_DOMAIN_SSO_DETAILS_JSON),
-        )
-        val result = organizationService.getVerifiedOrganizationDomainSsoDetails("example@bitwarden.com")
-        assertEquals(ORGANIZATION_VERIFIED_DOMAIN_SSO_DETAILS_RESPONSE.asSuccess(), result)
-    }
+        runTest {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(ORGANIZATION_VERIFIED_DOMAIN_SSO_DETAILS_JSON),
+            )
+            val result =
+                organizationService.getVerifiedOrganizationDomainSsoDetails("example@bitwarden.com")
+            assertEquals(ORGANIZATION_VERIFIED_DOMAIN_SSO_DETAILS_RESPONSE.asSuccess(), result)
+        }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getVerifiedOrganizationDomainSsoDetails when response is an error should return an error`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(400))
-        val result = organizationService.getVerifiedOrganizationDomainSsoDetails("example@bitwarden.com")
-        assertTrue(result.isFailure)
-    }
+    fun `getVerifiedOrganizationDomainSsoDetails when response is an error should return an error`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(400))
+            val result =
+                organizationService.getVerifiedOrganizationDomainSsoDetails("example@bitwarden.com")
+            assertTrue(result.isFailure)
+        }
 }
 
 private const val ORGANIZATION_AUTO_ENROLL_STATUS_JSON = """
