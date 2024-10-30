@@ -37,7 +37,6 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -201,17 +200,19 @@ fun ManualCodeEntryScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenFilledTonalButton(
-                label = stringResource(id = R.string.add_code),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }
+            SaveManualCodeButtons(
+                state = state.buttonState,
+                onSaveLocallyClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
+                    }
                 },
-                modifier = Modifier
-                    .semantics { testTag = "AddCodeButton" }
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                onSaveToBitwardenClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(ManualCodeEntryAction.SaveToBitwardenClick)
+                    }
+                },
             )
-
             Text(
                 text = stringResource(id = R.string.once_the_key_is_successfully_entered),
                 style = MaterialTheme.typography.bodyMedium,

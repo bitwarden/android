@@ -7,14 +7,20 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
+import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
 import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -24,7 +30,14 @@ import java.util.UUID
 
 class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
-    private val mockAuthenticatorRepository = mockk<AuthenticatorRepository>()
+    private val mockAuthenticatorRepository = mockk<AuthenticatorRepository> {
+        every { sharedCodesStateFlow } returns
+            MutableStateFlow(SharedVerificationCodesState.SyncNotEnabled)
+    }
+    private val mockSettingRepository = mockk<SettingsRepository> {
+        every { defaultSaveOption } returns DefaultSaveOption.NONE
+    }
+    private val mockAuthenticatorBridgeManager = mockk<AuthenticatorBridgeManager>()
 
     @BeforeEach
     fun setUp() {
@@ -43,6 +56,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             code = "ABCD",
             issuer = "mockIssuer",
             dialog = null,
+            buttonState = ManualCodeEntryState.ButtonState.LocalOnly,
         )
         val viewModel = createViewModel(initialState = initialState)
         assertEquals(initialState, viewModel.stateFlow.value)
@@ -52,6 +66,57 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct when saved state is null`() {
         val viewModel = createViewModel(initialState = null)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `initial button state should be SaveToBitwardenPrimary when sync is enabled and default save option is BITWARDEN_APP`() {
+        every {
+            mockAuthenticatorRepository.sharedCodesStateFlow
+        } returns MutableStateFlow(SharedVerificationCodesState.Success(emptyList()))
+        every { mockSettingRepository.defaultSaveOption } returns DefaultSaveOption.BITWARDEN_APP
+
+        val viewModel = createViewModel(initialState = null)
+
+        val expectedState = DEFAULT_STATE.copy(
+            buttonState = ManualCodeEntryState.ButtonState.SaveToBitwardenPrimary,
+        )
+        verify { mockSettingRepository.defaultSaveOption }
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `initial button state should be SaveLocallyPrimary when sync is enabled and default save option is LOCAL`() {
+        every {
+            mockAuthenticatorRepository.sharedCodesStateFlow
+        } returns MutableStateFlow(SharedVerificationCodesState.Success(emptyList()))
+        every { mockSettingRepository.defaultSaveOption } returns DefaultSaveOption.LOCAL
+
+        val viewModel = createViewModel(initialState = null)
+
+        val expectedState = DEFAULT_STATE.copy(
+            buttonState = ManualCodeEntryState.ButtonState.SaveLocallyPrimary,
+        )
+        verify { mockSettingRepository.defaultSaveOption }
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `initial button state should be SaveLocallyPrimary when sync is enabled and default save option is NONE`() {
+        every {
+            mockAuthenticatorRepository.sharedCodesStateFlow
+        } returns MutableStateFlow(SharedVerificationCodesState.Success(emptyList()))
+        every { mockSettingRepository.defaultSaveOption } returns DefaultSaveOption.NONE
+
+        val viewModel = createViewModel(initialState = null)
+
+        val expectedState = DEFAULT_STATE.copy(
+            buttonState = ManualCodeEntryState.ButtonState.SaveToBitwardenPrimary,
+        )
+        verify { mockSettingRepository.defaultSaveOption }
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
     @Test
@@ -88,7 +153,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `CodeSubmit should createItem, show toast, and navigate back on success when code is valid`() =
+    fun `SaveLocallyClick should createItem, show toast, and navigate back on success when code is valid`() =
         runTest {
             coEvery {
                 mockAuthenticatorRepository.createItem(
@@ -109,7 +174,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                     .copy(code = "ABCD", issuer = "mockIssuer"),
             )
 
-            viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+            viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
 
             coVerify {
                 mockAuthenticatorRepository.createItem(
@@ -136,8 +201,57 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `CodeSubmit should replace whitespace from code`() = runTest {
+    fun `SaveToBitwardenClick should launch add to Bitwarden flow and navigate back on success when code is valid`() =
+        runTest {
+            val expectedUri = "otpauth://totp/?secret=ABCD&issuer=mockIssuer"
+            every {
+                mockAuthenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUri)
+            } returns true
+            val viewModel = createViewModel(
+                initialState = DEFAULT_STATE
+                    .copy(code = "ABCD", issuer = "mockIssuer"),
+            )
+            viewModel.trySendAction(ManualCodeEntryAction.SaveToBitwardenClick)
+            verify {
+                mockAuthenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUri)
+            }
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ManualCodeEntryEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SaveToBitwardenClick should show error when code is valid but startAddTotpLoginItemFlow fails`() =
+        runTest {
+            val expectedUri = "otpauth://totp/?secret=ABCD&issuer=mockIssuer"
+            every {
+                mockAuthenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUri)
+            } returns false
+            val viewModel = createViewModel(
+                initialState = DEFAULT_STATE
+                    .copy(code = "ABCD", issuer = "mockIssuer"),
+            )
+            viewModel.trySendAction(ManualCodeEntryAction.SaveToBitwardenClick)
+            verify { mockAuthenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUri) }
+            val expectedState = DEFAULT_STATE.copy(
+                code = "ABCD",
+                issuer = "mockIssuer",
+                dialog = ManualCodeEntryState.DialogState.Error(
+                    title = R.string.something_went_wrong.asText(),
+                    message = R.string.please_try_again.asText(),
+                ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Test
+    fun `SaveLocallyClick should replace whitespace from code`() = runTest {
         coEvery {
             mockAuthenticatorRepository.createItem(
                 item = AuthenticatorItemEntity(
@@ -159,7 +273,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+        viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
 
         coVerify {
             mockAuthenticatorRepository.createItem(
@@ -177,14 +291,14 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CodeSubmit should show error dialog when code is empty`() = runTest {
+    fun `SaveLocallyClick should show error dialog when code is empty`() = runTest {
         val viewModel = createViewModel(
             initialState = DEFAULT_STATE.copy(
                 code = "    ",
             ),
         )
 
-        viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+        viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
@@ -195,14 +309,14 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CodeSubmit should show error dialog when code is not base32`() {
+    fun `SaveLocallyClick should show error dialog when code is not base32`() {
         val viewModel = createViewModel(
             initialState = DEFAULT_STATE.copy(
                 code = "ABCD12345",
             ),
         )
 
-        viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+        viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
@@ -213,7 +327,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CodeSubmit should show error dialog when issuer is empty`() {
+    fun `SaveLocallyClick should show error dialog when issuer is empty`() {
         val viewModel = createViewModel(
             initialState = DEFAULT_STATE.copy(
                 code = "ABCD",
@@ -221,7 +335,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+        viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
@@ -233,7 +347,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `CodeSubmit should set AuthenticatorItemType to STEAM when code starts with steam protocol`() {
+    fun `SaveLocallyClick should set AuthenticatorItemType to STEAM when code starts with steam protocol`() {
         coEvery {
             mockAuthenticatorRepository.createItem(
                 item = AuthenticatorItemEntity(
@@ -255,7 +369,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+        viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick)
 
         coVerify {
             mockAuthenticatorRepository.createItem(
@@ -318,6 +432,8 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
         ManualCodeEntryViewModel(
             savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
             authenticatorRepository = mockAuthenticatorRepository,
+            authenticatorBridgeManager = mockAuthenticatorBridgeManager,
+            settingsRepository = mockSettingRepository,
         )
 }
 
@@ -326,4 +442,5 @@ private val DEFAULT_STATE: ManualCodeEntryState =
         code = "",
         issuer = "",
         dialog = null,
+        buttonState = ManualCodeEntryState.ButtonState.LocalOnly,
     )
