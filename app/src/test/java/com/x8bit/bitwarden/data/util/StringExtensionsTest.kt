@@ -4,8 +4,10 @@ import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.util.findLastSubstringIndicesOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostOrNull
+import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
+import com.x8bit.bitwarden.data.platform.util.hasPort
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
 import com.x8bit.bitwarden.data.platform.util.parseDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
@@ -180,7 +182,52 @@ class StringExtensionsTest {
         val expectedHost = "www.google.com"
         val hostWithPort = "$expectedHost:8080"
         // control
-        assertNull(URI(hostWithPort).host)
-        assertEquals(expectedHost, hostWithPort.toUriOrNull())
+        assertNull(hostWithPort.toUriOrNull()?.host)
+        assertEquals(expectedHost, hostWithPort.getHostOrNull())
+    }
+
+    @Test
+    fun `hasPort returns true when port is present`() {
+        val uriString = "www.google.com:8080"
+        assertEquals(-1, uriString.toUriOrNull()?.port)
+        assertTrue("www.google.com:8080".hasPort())
+    }
+
+    @Test
+    fun `hasPort returns false when port is not present`() {
+        assertFalse("www.google.com".hasPort())
+    }
+
+    @Test
+    fun `hasPort return true when port is present and custom scheme is present`() {
+        val uriString = "androidapp://www.google.com:8080"
+        assertEquals(8080, uriString.toUriOrNull()?.port)
+        assertTrue(uriString.hasPort())
+    }
+
+    @Test
+    fun `getHostWithPortOrNull should return host with port when present`() {
+        val uriString = "www.google.com:8080"
+        assertEquals(8080, uriString.toUriOrNull()?.port)
+        assertEquals("www.google.com:8080", uriString.getHostWithPortOrNull())
+    }
+
+    @Test
+    fun `getHostWithPortOrNull should return host when no port is present`() {
+        val uriString = "www.google.com"
+        assertEquals("www.google.com", uriString.getHostWithPortOrNull())
+    }
+
+    @Test
+    fun `getHostWithPortOrNull should return null when no host is present`() {
+        assertNull("boo".getHostWithPortOrNull())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getHostWithPortOrNull should return host with port when present and custom scheme is present`() {
+        val uriString = "androidapp://www.google.com:8080"
+        assertEquals(8080, uriString.toUriOrNull()?.port)
+        assertEquals("www.google.com:8080", uriString.getHostWithPortOrNull())
     }
 }

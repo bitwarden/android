@@ -63,7 +63,10 @@ fun String.getDomainOrNull(resourceCacheManager: ResourceCacheManager): String? 
  */
 @OmitFromCoverage
 fun String.hasPort(): Boolean {
-    val uri = this.toUriOrNull() ?: return false
+    val uri = this
+        .toUriOrNull()
+        ?.let { addSchemeToUriIfNecessary(this, uri = it) }
+        ?: return false
     return uri.port != -1
 }
 
@@ -73,15 +76,7 @@ fun String.hasPort(): Boolean {
 @OmitFromCoverage
 fun String.getHostOrNull(): String? = this.toUriOrNull()
     ?.let { uri ->
-        if (
-            uri.host == null &&
-            this.contains(".") &&
-            !this.hasHttpProtocol()
-        ) {
-            URI("https://$this")
-        } else {
-            uri
-        }
+        addSchemeToUriIfNecessary(uriString = this, uri = uri)
     }?.host
 
 /**
@@ -89,7 +84,10 @@ fun String.getHostOrNull(): String? = this.toUriOrNull()
  */
 @OmitFromCoverage
 fun String.getHostWithPortOrNull(): String? {
-    val uri = this.toUriOrNull() ?: return null
+    val uri = this
+        .toUriOrNull()
+        ?.let { addSchemeToUriIfNecessary(uriString = this, uri = it) }
+        ?: return null
     return uri.host?.let { host ->
         val port = uri.port
         if (port != -1) {
@@ -112,5 +110,27 @@ fun String.findLastSubstringIndicesOrNull(substring: String): IntRange? {
         IntRange(lastIndex, endIndex)
     } else {
         null
+    }
+}
+
+/**
+ * Private helper method which takes a string and a [URI] derived from that string and adds
+ * an HTTPS scheme to the URI if it is necessary. (i.e. foo.com:9090 -> https://foo.com:9090)
+ * This would be necessary if you have a source string like "foo.com:9090" and you want to want
+ * to extract the [URI.getHost] or [URI.getPort] from it which would fail.
+ */
+private fun addSchemeToUriIfNecessary(uriString: String, uri: URI): URI? {
+    if (uriString.toUriOrNull()?.equals(uri) != true) return null
+    return if (
+    // see if the string contains a host pattern
+        uriString.contains(".") &&
+        // if it does but the URI's host is null, add an https scheme
+        uri.host == null &&
+        // provided that scheme does not exist already.
+        !uriString.hasHttpProtocol()
+    ) {
+        URI("https://$uriString")
+    } else {
+        uri
     }
 }
