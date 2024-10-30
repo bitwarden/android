@@ -272,8 +272,8 @@ fun createIdentityContent(
 fun createSshKeyContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemType.SshKey =
     VaultItemState.ViewState.Content.ItemType.SshKey(
         name = "mockName".takeUnless { isEmpty },
-        privateKey = "privateKey".takeUnless { isEmpty } ?: "",
-        publicKey = "publicKey".takeUnless { isEmpty } ?: "",
-        fingerprint = "fingerprint".takeUnless { isEmpty } ?: "",
+        privateKey = "privateKey".takeUnless { isEmpty }.orEmpty(),
+        publicKey = "publicKey".takeUnless { isEmpty }.orEmpty(),
+        fingerprint = "fingerprint".takeUnless { isEmpty }.orEmpty(),
         showPrivateKey = false,
     )
