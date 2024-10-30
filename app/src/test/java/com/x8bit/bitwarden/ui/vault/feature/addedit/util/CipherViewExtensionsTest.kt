@@ -505,6 +505,7 @@ class CipherViewExtensionsTest {
                                     name = "mockName-1",
                                 ),
                             ),
+                            hasOrganizations = true,
                             availableOwners = listOf(
                                 VaultAddEditState.Owner(
                                     id = null,

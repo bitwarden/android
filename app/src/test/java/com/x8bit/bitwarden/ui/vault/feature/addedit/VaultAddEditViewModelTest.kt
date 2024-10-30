@@ -4026,6 +4026,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         ),
         availableOwners: List<VaultAddEditState.Owner> = createOwnerList(),
         selectedOwnerId: String? = null,
+        hasOrganizations: Boolean = true,
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
@@ -4038,6 +4039,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             originalCipher = originalCipher,
             availableFolders = availableFolders,
             availableOwners = availableOwners,
+            hasOrganizations = hasOrganizations,
         )
 
     @Suppress("LongParameterList")
