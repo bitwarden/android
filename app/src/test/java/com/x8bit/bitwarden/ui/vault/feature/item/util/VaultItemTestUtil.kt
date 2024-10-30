@@ -75,9 +75,9 @@ fun createIdentityView(isEmpty: Boolean): IdentityView =
 
 fun createSshKeyView(isEmpty: Boolean): SshKeyView =
     SshKeyView(
-        privateKey = "privateKey".takeUnless { isEmpty } ?: "",
-        publicKey = "publicKey".takeUnless { isEmpty } ?: "",
-        fingerprint = "fingerprint".takeUnless { isEmpty } ?: "",
+        privateKey = "privateKey".takeUnless { isEmpty }.orEmpty(),
+        publicKey = "publicKey".takeUnless { isEmpty }.orEmpty(),
+        fingerprint = "fingerprint".takeUnless { isEmpty }.orEmpty(),
     )
 
 fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
