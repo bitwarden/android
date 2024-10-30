@@ -56,11 +56,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
+import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
+import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.theme.LocalNonMaterialColors
 import com.bitwarden.authenticator.ui.platform.theme.clickableSpanStyle
@@ -83,9 +87,8 @@ fun QrCodeScanScreen(
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
     }
-
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val orientation = LocalConfiguration.current.orientation
-
     val context = LocalContext.current
 
     val onEnterCodeManuallyClick = remember(viewModel) {
@@ -146,6 +149,37 @@ fun QrCodeScanScreen(
                     modifier = Modifier.padding(innerPadding),
                 )
             }
+        }
+
+        when (state.dialog) {
+            QrCodeScanState.DialogState.ChooseSaveLocation -> {
+                ChooseSaveLocationDialog(
+                    onSaveHereClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it))
+                        }
+                    },
+                    onTakeMeToBitwardenClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it))
+                        }
+                    },
+                )
+            }
+
+            QrCodeScanState.DialogState.SaveToBitwardenError -> BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = R.string.something_went_wrong.asText(),
+                    message = R.string.please_try_again.asText(),
+                ),
+                onDismissRequest = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss)
+                    }
+                },
+            )
+
+            null -> Unit
         }
     }
 }

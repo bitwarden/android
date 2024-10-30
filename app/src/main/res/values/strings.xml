@@ -139,4 +139,9 @@
     <string name="none">None</string>
     <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
     <string name="confirm">Confirm</string>
+    <string name="save_here">Save here</string>
+    <string name="take_me_to_bitwarden">Take me to Bitwarden</string>
+    <string name="verification_code_created">Verification code created</string>
+    <string name="choose_save_location_message">Save this authenticator key here, or add it to a login in your Bitwarden app.</string>
+    <string name="save_option_as_default">Save option as default</string>
 </resources>
