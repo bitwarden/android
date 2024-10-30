@@ -15,7 +15,16 @@ private const val ANDROID_APP_PROTOCOL: String = "androidapp://"
  */
 fun String.toUriOrNull(): URI? =
     try {
-        URI(this)
+        val uri = URI(this)
+        if (
+            uri.host == null &&
+            this.contains(".") &&
+            !this.hasHttpProtocol()
+        ) {
+            URI("https://$this")
+        } else {
+            uri
+        }
     } catch (e: URISyntaxException) {
         null
     }

@@ -39,6 +39,17 @@ class StringExtensionsTest {
         assertNotNull("www.google.com".toUriOrNull())
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUriOrNull should return URI with accurate host name when a scheme is not present but a port is`() {
+        val expectedHost = "www.google.com"
+        val hostWithPort = "$expectedHost:8080"
+        // control
+        assertNull(URI(hostWithPort).host)
+        val uri = hostWithPort.toUriOrNull()
+        assertEquals(expectedHost, uri?.host)
+    }
+
     @Test
     fun `isAndroidApp should return true when string starts with android app protocol`() {
         assertTrue("androidapp://com.x8bit.bitwarden".isAndroidApp())
