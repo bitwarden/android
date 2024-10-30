@@ -373,7 +373,7 @@ private fun DefaultSaveOptionSelectionRow(
     var shouldShowDefaultSaveOptionDialog by remember { mutableStateOf(false) }
 
     BitwardenTextRow(
-        text = stringResource(id = R.string.default_save_options),
+        text = stringResource(id = R.string.default_save_option),
         onClick = { shouldShowDefaultSaveOptionDialog = true },
         modifier = modifier,
         withDivider = true,
@@ -388,7 +388,7 @@ private fun DefaultSaveOptionSelectionRow(
     var dialogSelection by remember { mutableStateOf(currentSelection) }
     if (shouldShowDefaultSaveOptionDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.default_save_options),
+            title = stringResource(id = R.string.default_save_option),
             subtitle = stringResource(id = R.string.default_save_options_subtitle),
             dismissLabel = stringResource(id = R.string.confirm),
             onDismissRequest = { shouldShowDefaultSaveOptionDialog = false },

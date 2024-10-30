@@ -119,32 +119,32 @@ class SettingsScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Default Save Options row should be hidden when showDefaultSaveOptionRow is false`() {
+    fun `Default Save Option row should be hidden when showDefaultSaveOptionRow is false`() {
         mutableStateFlow.value = DEFAULT_STATE
-        composeTestRule.onNodeWithText("Default save options").assertExists()
+        composeTestRule.onNodeWithText("Default save option").assertExists()
 
         mutableStateFlow.update {
             it.copy(
                 showDefaultSaveOptionRow = false,
             )
         }
-        composeTestRule.onNodeWithText("Default save options").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Default save option").assertDoesNotExist()
     }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `Default Save Options dialog should send DefaultSaveOptionUpdated when confirm is clicked`() =
+    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when confirm is clicked`() =
         runTest {
             val expectedSaveOption = DefaultSaveOption.BITWARDEN_APP
             mutableStateFlow.value = DEFAULT_STATE
             composeTestRule
-                .onNodeWithText("Default save options")
+                .onNodeWithText("Default save option")
                 .performScrollTo()
                 .performClick()
 
             // Make sure the dialog is showing:
             composeTestRule
-                .onAllNodesWithText("Default save options")
+                .onAllNodesWithText("Default save option")
                 .filterToOne(hasAnyAncestor(isDialog()))
                 .assertIsDisplayed()
 

@@ -7,6 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
+import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
+import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
@@ -22,6 +25,9 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.Defau
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -34,11 +40,12 @@ private const val KEY_STATE = "state"
 /**
  * View model for the settings screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     clock: Clock,
+    private val authenticatorRepository: AuthenticatorRepository,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
@@ -55,8 +62,18 @@ class SettingsViewModel @Inject constructor(
             featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync),
             accountSyncState = authenticatorBridgeManager.accountSyncStateFlow.value,
             defaultSaveOption = settingsRepository.defaultSaveOption,
+            sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,
         ),
 ) {
+
+    init {
+        authenticatorRepository
+            .sharedCodesStateFlow
+            .map { SettingsAction.Internal.SharedAccountsStateUpdated(it) }
+            .onEach(::handleAction)
+            .launchIn(viewModelScope)
+    }
+
     override fun handleAction(action: SettingsAction) {
         when (action) {
             is SettingsAction.SecurityClick -> {
@@ -82,6 +99,20 @@ class SettingsViewModel @Inject constructor(
             is SettingsAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
+
+            is SettingsAction.Internal.SharedAccountsStateUpdated -> {
+                handleSharedAccountsStateUpdated(action)
+            }
+        }
+    }
+
+    private fun handleSharedAccountsStateUpdated(
+        action: SettingsAction.Internal.SharedAccountsStateUpdated,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                showDefaultSaveOptionRow = action.state.isSyncWithBitwardenEnabled,
+            )
         }
     }
 
@@ -273,12 +304,16 @@ class SettingsViewModel @Inject constructor(
             isSubmitCrashLogsEnabled: Boolean,
             accountSyncState: AccountSyncState,
             isSyncWithBitwardenFeatureEnabled: Boolean,
+            sharedAccountsState: SharedVerificationCodesState,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
             // Show sync with Bitwarden row if feature is enabled and the OS is supported:
             val shouldShowSyncWithBitwarden = isSyncWithBitwardenFeatureEnabled &&
                 accountSyncState != AccountSyncState.OsVersionNotSupported
+            // Show default save options only if the user had enabled sync with Bitwarden:
+            // (They can enable it via the "Sync with Bitwarden" row.
+            val shouldShowDefaultSaveOption = sharedAccountsState.isSyncWithBitwardenEnabled
             return SettingsState(
                 appearance = SettingsState.Appearance(
                     language = appLanguage,
@@ -293,7 +328,7 @@ class SettingsViewModel @Inject constructor(
                 copyrightInfo = copyrightInfo,
                 defaultSaveOption = defaultSaveOption,
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
-                showDefaultSaveOptionRow = shouldShowSyncWithBitwarden,
+                showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
             )
         }
     }
@@ -511,5 +546,12 @@ sealed class SettingsAction(
          * Indicates the biometrics key validation results has been received.
          */
         data class BiometricsKeyResultReceive(val result: BiometricsKeyResult) : SettingsAction()
+
+        /**
+         * Indicates that shared account state was updated.
+         */
+        data class SharedAccountsStateUpdated(
+            val state: SharedVerificationCodesState,
+        ) : SettingsAction()
     }
 }
