@@ -1,4 +1,4 @@
-name: Android Beta Bug Report
+name: Android Bug Report
 description: File a bug report
 labels: [ bug ]
 body:
@@ -7,19 +7,7 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report!
 
-        > [!WARNING]
-        > This is the new native Bitwarden Beta app repository. For the publicly available apps in App Store / Play Store, submit your report in [bitwarden/mobile](https://github.com/bitwarden/mobile)
-
-
         Please do not submit feature requests. The [Community Forums](https://community.bitwarden.com) has a section for submitting, voting for, and discussing product feature requests.
-  - type: checkboxes
-    id: beta
-    attributes:
-      label: Bitwarden Beta
-      options:
-        - label: "I'm using the new native Bitwarden Beta app and I'm aware that legacy .NET app bugs should be reported in [bitwarden/mobile](https://github.com/bitwarden/mobile)"
-    validations:
-      required: true
   - type: textarea
     id: reproduce
     attributes:
