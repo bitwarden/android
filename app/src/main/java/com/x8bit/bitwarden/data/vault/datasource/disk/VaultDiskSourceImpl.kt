@@ -94,6 +94,7 @@ class VaultDiskSourceImpl(
                 shouldHidePasswords = collection.shouldHidePasswords,
                 externalId = collection.externalId,
                 isReadOnly = collection.isReadOnly,
+                canManage = collection.canManage,
             ),
         )
     }
@@ -114,6 +115,7 @@ class VaultDiskSourceImpl(
                             shouldHidePasswords = entity.shouldHidePasswords,
                             externalId = entity.externalId,
                             isReadOnly = entity.isReadOnly,
+                            canManage = entity.canManage,
                         )
                     }
                 },
@@ -229,6 +231,7 @@ class VaultDiskSourceImpl(
                             shouldHidePasswords = collection.shouldHidePasswords,
                             externalId = collection.externalId,
                             isReadOnly = collection.isReadOnly,
+                            canManage = collection.canManage,
                         )
                     },
                 )

@@ -11,4 +11,5 @@ fun createMockCollection(number: Int): SyncResponseJson.Collection =
         externalId = "mockExternalId-$number",
         isReadOnly = false,
         id = "mockId-$number",
+        canManage = true,
     )
