@@ -18,6 +18,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isEditable
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -3323,54 +3324,33 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in ItemType_SshKeys changing the public key should trigger PublicKeyTextChange`() {
+    fun `in ItemType_SshKeys the public key field should be read only`() {
         mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Public key")
-            .performTextInput("TestPublicKey")
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange(
-                    publicKey = "TestPublicKey",
-                ),
-            )
-        }
+            .onNodeWithTextAfterScroll(text = "Public key")
+            .assertExists()
+            .assert(!isEditable())
     }
 
     @Test
-    fun `in ItemType_SshKeys changing the private key should trigger PrivateKeyTextChange`() {
+    fun `in ItemType_SshKeys the private key field should be read only`() {
         mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Private key")
-            .performTextInput("TestPrivateKey")
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange(
-                    privateKey = "TestPrivateKey",
-                ),
-            )
-        }
+            .onNodeWithTextAfterScroll(text = "Private key")
+            .assertExists()
+            .assert(!isEditable())
     }
 
     @Test
-    fun `in ItemType_SshKeys changing the fingerprint should trigger FingerprintTextChange`() {
+    fun `in ItemType_SshKeys the fingerprint field should be read only`() {
         mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Fingerprint")
-            .performTextInput("TestFingerprint")
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange(
-                    fingerprint = "TestFingerprint",
-                ),
-            )
-        }
+            .onNodeWithTextAfterScroll(text = "Fingerprint")
+            .assertExists()
+            .assert(!isEditable())
     }
 
     @Suppress("MaxLineLength")

@@ -2726,36 +2726,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `PublicKeyTextChange should update public key`() = runTest {
-            val action = VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange(
-                publicKey = "newPublicKey",
-            )
-            val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SshKey(
-                    publicKey = "newPublicKey",
-                ),
-            )
-            viewModel.trySendAction(action)
-
-            assertEquals(expectedState, viewModel.stateFlow.value)
-        }
-
-        @Test
-        fun `PrivateKeyTextChange should update private key`() = runTest {
-            val action = VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange(
-                privateKey = "newPrivateKey",
-            )
-            val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SshKey(
-                    privateKey = "newPrivateKey",
-                ),
-            )
-            viewModel.trySendAction(action)
-
-            assertEquals(expectedState, viewModel.stateFlow.value)
-        }
-
-        @Test
         fun `PrivateKeyVisibilityChange should update private key visibility`() = runTest {
             val action = VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange(
                 isVisible = true,
@@ -2763,21 +2733,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val expectedState = createVaultAddItemState(
                 typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SshKey(
                     showPrivateKey = true,
-                ),
-            )
-            viewModel.trySendAction(action)
-
-            assertEquals(expectedState, viewModel.stateFlow.value)
-        }
-
-        @Test
-        fun `FingerprintTextChange should update fingerprint`() = runTest {
-            val action = VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange(
-                fingerprint = "newFingerprint",
-            )
-            val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SshKey(
-                    fingerprint = "newFingerprint",
                 ),
             )
             viewModel.trySendAction(action)
