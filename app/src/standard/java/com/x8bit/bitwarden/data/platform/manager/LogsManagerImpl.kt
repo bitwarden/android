@@ -30,7 +30,7 @@ class LogsManagerImpl(
             }
             if (value) {
                 Timber.plant(nonfatalErrorTree)
-            } else {
+            } else if (Timber.forest().contains(nonfatalErrorTree)) {
                 Timber.uproot(nonfatalErrorTree)
             }
         }
