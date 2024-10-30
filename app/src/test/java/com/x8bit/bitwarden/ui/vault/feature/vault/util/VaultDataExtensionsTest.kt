@@ -906,9 +906,9 @@ class VaultDataExtensionsTest {
                     folderId = null,
                     sshKey = createMockSshKeyView(number = 1)
                         .copy(
-                            publicKey = null,
-                            privateKey = null,
-                            fingerprint = null,
+                            publicKey = "publicKey",
+                            privateKey = "privateKey",
+                            fingerprint = "fingerprint",
                         ),
                 ),
                 createMockCipherView(
@@ -945,16 +945,16 @@ class VaultDataExtensionsTest {
                     createMockSshKeyVaultItem(number = 1),
                     createMockSshKeyVaultItem(number = 2)
                         .copy(
-                            publicKey = null,
-                            privateKey = null,
-                            fingerprint = null,
+                            publicKey = "publicKey".asText(),
+                            privateKey = "privateKey".asText(),
+                            fingerprint = "fingerprint".asText(),
                             shouldShowMasterPasswordReprompt = true,
                         ),
                     createMockSshKeyVaultItem(number = 3)
                         .copy(
-                            publicKey = null,
-                            privateKey = null,
-                            fingerprint = null,
+                            publicKey = "".asText(),
+                            privateKey = "".asText(),
+                            fingerprint = "".asText(),
                         ),
                 ),
                 trashItemsCount = 0,

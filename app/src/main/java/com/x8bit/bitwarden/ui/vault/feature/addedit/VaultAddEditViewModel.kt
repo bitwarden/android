@@ -2114,6 +2114,7 @@ data class VaultAddEditState(
              * @property availableFolders The list of folders that this item could be added too.
              * @property selectedOwnerId The ID of the owner associated with the item.
              * @property availableOwners A list of available owners.
+             * @property hasOrganizations Indicates if the user is part of any organizations.
              */
             @Parcelize
             data class Common(
@@ -2129,6 +2130,7 @@ data class VaultAddEditState(
                 val availableFolders: List<Folder> = emptyList(),
                 val selectedOwnerId: String? = null,
                 val availableOwners: List<Owner> = emptyList(),
+                val hasOrganizations: Boolean = false,
             ) : Parcelable {
 
                 /**

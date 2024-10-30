@@ -2362,6 +2362,31 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `ownership section should not be displayed when no organizations present`() {
+        updateStateWithOwners(selectedOwnerId = "mockOwnerId-2")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "mockCollectionName-2")
+            .assertIsDisplayed()
+
+        updateStateWithOwners(
+            selectedOwnerId = null,
+            availableOwners = listOf(
+                VaultAddEditState.Owner(
+                    id = null,
+                    name = "placeholder@email.com",
+                    collections = DEFAULT_COLLECTIONS,
+                ),
+            ),
+            hasOrganizations = false,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "mockCollectionName-2")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `Collection list should display according to state`() {
         updateStateWithOwners(selectedOwnerId = "mockOwnerId-2")
 
@@ -3482,12 +3507,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private fun updateStateWithOwners(
         selectedOwnerId: String? = null,
         availableOwners: List<VaultAddEditState.Owner> = DEFAULT_OWNERS,
+        hasOrganizations: Boolean = true,
     ) {
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) {
                 copy(
                     selectedOwnerId = selectedOwnerId,
                     availableOwners = availableOwners,
+                    hasOrganizations = hasOrganizations,
                 )
             }
         }

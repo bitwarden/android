@@ -300,7 +300,7 @@ fun LazyListScope.vaultAddEditCardItems(
         )
     }
 
-    if (isAddItemMode) {
+    if (isAddItemMode && commonState.hasOrganizations) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenListHeaderText(

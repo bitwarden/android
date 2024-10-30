@@ -106,6 +106,7 @@ fun CipherView.toViewState(
             masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
             notes = this.notes.orEmpty(),
             availableOwners = emptyList(),
+            hasOrganizations = false,
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
@@ -139,6 +140,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
                 ),
                 isUnlockWithPasswordEnabled = activeAccount.hasMasterPassword,
+                hasOrganizations = activeAccount.organizations.isNotEmpty(),
             ),
         )
     } ?: this
