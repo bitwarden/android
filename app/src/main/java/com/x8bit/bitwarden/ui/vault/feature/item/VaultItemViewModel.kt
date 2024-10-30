@@ -1410,9 +1410,9 @@ data class VaultItemState(
                  */
                 data class SshKey(
                     val name: String?,
-                    val publicKey: String?,
-                    val privateKey: String?,
-                    val fingerprint: String?,
+                    val publicKey: String,
+                    val privateKey: String,
+                    val fingerprint: String,
                     val showPrivateKey: Boolean,
                 ) : ItemType()
             }
