@@ -51,6 +51,22 @@ body:
       description: What version of our software are you running?
     validations:
       required: true
+  - type: dropdown
+    id: server-region
+    attributes:
+      label: What server are you connecting to?
+      options:
+        - US
+        - EU
+        - Self-host
+        - N/A
+    validations:
+      required: true
+  - type: input
+    id: server-version
+    attributes:
+      label: Self-host Server Version
+      description: If self-hosting, what version of Bitwarden Server are you running?
   - type: textarea
     id: environment-details
     attributes:
