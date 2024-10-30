@@ -431,6 +431,7 @@ private val COLLECTION_ENTITY = CollectionEntity(
     name = "mockName-3",
     externalId = "mockExternalId-3",
     isReadOnly = false,
+    canManage = true,
 )
 
 private const val DOMAINS_JSON = """
