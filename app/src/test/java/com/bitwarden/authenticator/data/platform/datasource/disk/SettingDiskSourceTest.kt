@@ -95,4 +95,25 @@ class SettingDiskSourceTest {
             settingDiskSource.defaultSaveOption,
         )
     }
+
+    @Test
+    fun `previouslySyncedBitwardenAccountIds should read and write from shared preferences`() {
+        val sharedPrefsKey = "bwPreferencesStorage:previouslySyncedBitwardenAccountIds"
+
+        // Disk source should read value from shared preferences:
+        sharedPreferences.edit {
+            putStringSet(sharedPrefsKey, setOf("a"))
+        }
+        assertEquals(
+            setOf("a"),
+            settingDiskSource.previouslySyncedBitwardenAccountIds,
+        )
+
+        // Updating the disk source should update shared preferences:
+        settingDiskSource.previouslySyncedBitwardenAccountIds = setOf("1", "2")
+        assertEquals(
+            setOf("1", "2"),
+            settingDiskSource.previouslySyncedBitwardenAccountIds,
+        )
+    }
 }

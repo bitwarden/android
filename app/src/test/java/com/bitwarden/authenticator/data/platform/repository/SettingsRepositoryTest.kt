@@ -92,4 +92,22 @@ class SettingsRepositoryTest {
         settingsRepository.defaultSaveOption = DefaultSaveOption.BITWARDEN_APP
         verify { settingsDiskSource.defaultSaveOption = DefaultSaveOption.BITWARDEN_APP }
     }
+
+    @Test
+    fun `previouslySyncedBitwardenAccountIds should pull from and update SettingsDiskSource`() {
+        // Reading from repository should read from disk source:
+        every { settingsDiskSource.previouslySyncedBitwardenAccountIds } returns emptySet()
+        assertEquals(
+            emptySet<String>(),
+            settingsRepository.previouslySyncedBitwardenAccountIds,
+        )
+        verify { settingsDiskSource.previouslySyncedBitwardenAccountIds }
+
+        // Writing to repository should write to disk source:
+        every {
+            settingsDiskSource.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3")
+        } just runs
+        settingsRepository.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3")
+        verify { settingsDiskSource.previouslySyncedBitwardenAccountIds = setOf("1", "2", "3") }
+    }
 }

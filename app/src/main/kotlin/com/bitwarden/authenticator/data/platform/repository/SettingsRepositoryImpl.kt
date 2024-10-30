@@ -89,6 +89,8 @@ class SettingsRepositoryImpl(
                 isScreenCaptureAllowed = value,
             )
         }
+    override var previouslySyncedBitwardenAccountIds: Set<String> by
+    settingsDiskSource::previouslySyncedBitwardenAccountIds
 
     override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
         get() = settingsDiskSource.getScreenCaptureAllowedFlow()

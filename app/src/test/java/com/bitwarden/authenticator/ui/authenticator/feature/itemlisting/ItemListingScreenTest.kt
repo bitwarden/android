@@ -1,13 +1,13 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
-import androidx.room.util.copy
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
@@ -22,6 +22,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
@@ -238,6 +239,32 @@ class ItemListingScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Move to Bitwarden")
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun `on ShowFirstTimeSyncSnackbar receive should show snackbar`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = ItemListingState.ViewState.Content(
+                    actionCard = ItemListingState.ActionCardState.None,
+                    favoriteItems = emptyList(),
+                    itemList = emptyList(),
+                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                ),
+            )
+        }
+        // Make sure the snackbar isn't showing:
+        composeTestRule
+            .onNodeWithText("Account synced from Bitwarden app")
+            .assertIsNotDisplayed()
+
+        // Send ShowFirstTimeSyncSnackbar event
+        mutableEventFlow.tryEmit(ItemListingEvent.ShowFirstTimeSyncSnackbar)
+
+        // Make sure the snackbar is showing:
+        composeTestRule
+            .onNodeWithText("Account synced from Bitwarden app")
+            .assertIsDisplayed()
     }
 }
 

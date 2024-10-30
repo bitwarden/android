@@ -6,7 +6,7 @@ import androidx.core.content.edit
 /**
  * Base class for simplifying interactions with [SharedPreferences].
  */
-@Suppress("UnnecessaryAbstractClass")
+@Suppress("UnnecessaryAbstractClass", "TooManyFunctions")
 abstract class BaseDiskSource(
     private val sharedPreferences: SharedPreferences,
 ) {
@@ -120,6 +120,18 @@ abstract class BaseDiskSource(
             .filter { it.startsWith(prefix) }
             .forEach { sharedPreferences.edit { remove(it) } }
     }
+
+    protected fun putStringSet(
+        key: String,
+        value: Set<String>?,
+    ): Unit = sharedPreferences.edit {
+        putStringSet(key, value)
+    }
+
+    protected fun getStringSet(
+        key: String,
+        default: Set<String>?,
+    ): Set<String>? = sharedPreferences.getStringSet(key, default)
 
     @Suppress("UndocumentedPublicClass")
     companion object {

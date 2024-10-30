@@ -30,7 +30,7 @@
     <color name="on_surface_variant">@color/grey_45464F</color>
     <color name="outline">@color/grey_757780</color>
     <color name="outline_variant">@color/white_C5C6D0</color>
-    <color name="inverse_surface">@color/grey_303034</color>
+    <color name="inverse_surface">@color/blue_020F66</color>
     <color name="inverse_on_surface">@color/grey_F2F0F4</color>
     <color name="inverse_primary">@color/blue_B2C5FF</color>
     <color name="scrim">@color/black_000000</color>

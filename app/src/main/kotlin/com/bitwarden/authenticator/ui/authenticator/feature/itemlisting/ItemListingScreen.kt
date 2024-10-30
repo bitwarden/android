@@ -24,6 +24,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -105,6 +106,7 @@ fun ItemListingScreen(
             shouldShowPermissionDialog = true
         }
     }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -138,6 +140,11 @@ fun ItemListingScreen(
 
             ItemListingEvent.NavigateToBitwardenSettings -> {
                 intentManager.startMainBitwardenAppAccountSettings()
+            }
+
+            is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {
+                // Message property is overridden by FirstTimeSyncSnackbarHost:
+                snackbarHostState.showSnackbar("")
             }
         }
     }
@@ -177,8 +184,9 @@ fun ItemListingScreen(
     when (val currentState = state.viewState) {
         is ItemListingState.ViewState.Content -> {
             ItemListingContent(
-                currentState,
-                scrollBehavior,
+                state = currentState,
+                snackbarHostState = snackbarHostState,
+                scrollBehavior = scrollBehavior,
                 onNavigateToSearch = remember(viewModel) {
                     {
                         viewModel.trySendAction(
@@ -340,6 +348,7 @@ private fun ItemListingDialogs(
 @Composable
 private fun ItemListingContent(
     state: ItemListingState.ViewState.Content,
+    snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
     onNavigateToSearch: () -> Unit,
     onScanQrCodeClick: () -> Unit,
@@ -406,6 +415,7 @@ private fun ItemListingContent(
             )
         },
         floatingActionButtonPosition = FabPosition.EndOverlay,
+        snackbarHost = { FirstTimeSyncSnackbarHost(state = snackbarHostState) },
     ) { paddingValues ->
         Column(
             modifier = Modifier

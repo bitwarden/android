@@ -22,6 +22,8 @@ private const val HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY =
     "$BASE_KEY:hasUserDismissedDownloadBitwardenCard"
 private const val HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY =
     "$BASE_KEY:hasUserDismissedSyncWithBitwardenCard"
+private const val PREVIOUSLY_SYNCED_BITWARDEN_ACCOUNT_IDS_KEY =
+    "$BASE_KEY:previouslySyncedBitwardenAccountIds"
 private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
 
 /**
@@ -100,6 +102,18 @@ class SettingsDiskSourceImpl(
         set(value) {
             putBoolean(key = FIRST_LAUNCH_KEY, value)
             mutableFirstLaunchFlow.tryEmit(hasSeenWelcomeTutorial)
+        }
+
+    override var previouslySyncedBitwardenAccountIds: Set<String>
+        get() = getStringSet(
+            key = PREVIOUSLY_SYNCED_BITWARDEN_ACCOUNT_IDS_KEY,
+            default = emptySet(),
+        ) ?: emptySet()
+        set(value) {
+            putStringSet(
+                key = PREVIOUSLY_SYNCED_BITWARDEN_ACCOUNT_IDS_KEY,
+                value = value,
+            )
         }
 
     override val hasSeenWelcomeTutorialFlow: Flow<Boolean>

@@ -144,4 +144,5 @@
     <string name="verification_code_created">Verification code created</string>
     <string name="choose_save_location_message">Save this authenticator key here, or add it to a login in your Bitwarden app.</string>
     <string name="save_option_as_default">Save option as default</string>
+    <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
 </resources>

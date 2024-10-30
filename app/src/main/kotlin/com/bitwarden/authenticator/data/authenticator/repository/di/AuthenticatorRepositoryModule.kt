@@ -8,6 +8,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import dagger.Module
 import dagger.Provides
@@ -32,6 +33,7 @@ object AuthenticatorRepositoryModule {
         fileManager: FileManager,
         importManager: ImportManager,
         totpCodeManager: TotpCodeManager,
+        settingsRepository: SettingsRepository,
     ): AuthenticatorRepository = AuthenticatorRepositoryImpl(
         authenticatorBridgeManager = authenticatorBridgeManager,
         authenticatorDiskSource = authenticatorDiskSource,
@@ -40,5 +42,6 @@ object AuthenticatorRepositoryModule {
         fileManager = fileManager,
         importManager = importManager,
         totpCodeManager = totpCodeManager,
+        settingRepository = settingsRepository,
     )
 }

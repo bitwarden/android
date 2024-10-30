@@ -23,8 +23,10 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -38,11 +40,14 @@ class ItemListViewModelTest : BaseViewModelTest() {
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
     private val mutableSharedCodesFlow =
         MutableStateFlow<SharedVerificationCodesState>(SharedVerificationCodesState.Loading)
+    private val firstTimeAccountSyncChannel: Channel<Unit> =
+        Channel(capacity = Channel.UNLIMITED)
 
     private val authenticatorRepository: AuthenticatorRepository = mockk {
         every { totpCodeFlow } returns emptyFlow()
         every { getLocalVerificationCodesFlow() } returns mutableVerificationCodesFlow
         every { sharedCodesStateFlow } returns mutableSharedCodesFlow
+        every { firstTimeAccountSyncFlow } returns firstTimeAccountSyncChannel.receiveAsFlow()
     }
     private val authenticatorBridgeManager: AuthenticatorBridgeManager = mockk()
     private val clipboardManager: BitwardenClipboardManager = mockk()
@@ -407,6 +412,15 @@ class ItemListViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify { authenticatorBridgeManager.startAddTotpLoginItemFlow(expectedUriString) }
+    }
+
+    @Test
+    fun `on FirstTimeUserSyncReceive should emit ShowFirstTimeSyncSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            firstTimeAccountSyncChannel.send(Unit)
+            assertEquals(ItemListingEvent.ShowFirstTimeSyncSnackbar, awaitItem())
+        }
     }
 
     private fun createViewModel() = ItemListingViewModel(

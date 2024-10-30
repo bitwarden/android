@@ -22,6 +22,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.repository.util.map
@@ -31,6 +32,7 @@ import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,6 +46,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -66,6 +69,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     private val totpCodeManager: TotpCodeManager,
     private val fileManager: FileManager,
     private val importManager: ImportManager,
+    private val settingRepository: SettingsRepository,
     dispatcherManager: DispatcherManager,
 ) : AuthenticatorRepository {
 
@@ -76,6 +80,9 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     private val mutableTotpCodeResultFlow =
         bufferedMutableSharedFlow<TotpCodeResult>()
+
+    private val firstTimeAccountSyncChannel: Channel<Unit> =
+        Channel(capacity = Channel.UNLIMITED)
 
     override val totpCodeFlow: Flow<TotpCodeResult>
         get() = mutableTotpCodeResultFlow.asSharedFlow()
@@ -124,6 +131,11 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             .onEach {
                 mutableCiphersStateFlow.value = DataState.Loaded(it.sortAlphabetically())
             }
+            .launchIn(unconfinedScope)
+
+        authenticatorBridgeManager
+            .accountSyncStateFlow
+            .onEach { emitFirstTimeSyncIfNeeded(it) }
             .launchIn(unconfinedScope)
     }
 
@@ -284,6 +296,9 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             onFailure = { ImportDataResult.Error() },
         )
 
+    override val firstTimeAccountSyncFlow: Flow<Unit>
+        get() = firstTimeAccountSyncChannel.receiveAsFlow()
+
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
         val headerLine =
             "folder,favorite,type,name,login_uri,login_totp"
@@ -342,4 +357,30 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         ),
         favorite = false,
     )
+
+    private fun emitFirstTimeSyncIfNeeded(state: AccountSyncState) {
+        when (state) {
+            AccountSyncState.AppNotInstalled,
+            AccountSyncState.Error,
+            AccountSyncState.Loading,
+            AccountSyncState.OsVersionNotSupported,
+            AccountSyncState.SyncNotEnabled,
+                -> Unit
+
+            is AccountSyncState.Success -> {
+                val previouslySyncedAccounts = settingRepository.previouslySyncedBitwardenAccountIds
+                val fistTimeSyncedAccounts = state
+                    .accounts
+                    .map { it.userId }
+                    .filterNot { previouslySyncedAccounts.contains(it) }
+                // If there are fist time synced accounts, emit to the first time sync channel
+                // and store the new account IDs:
+                if (fistTimeSyncedAccounts.isNotEmpty()) {
+                    firstTimeAccountSyncChannel.trySend(Unit)
+                    settingRepository.previouslySyncedBitwardenAccountIds =
+                        previouslySyncedAccounts + fistTimeSyncedAccounts
+                }
+            }
+        }
+    }
 }

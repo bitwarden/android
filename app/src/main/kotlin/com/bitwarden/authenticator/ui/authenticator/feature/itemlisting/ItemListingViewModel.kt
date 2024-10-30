@@ -88,6 +88,12 @@ class ItemListingViewModel @Inject constructor(
             .map { ItemListingAction.Internal.TotpCodeReceive(totpResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        authenticatorRepository
+            .firstTimeAccountSyncFlow
+            .map { ItemListingAction.Internal.FirstTimeUserSyncReceive }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: ItemListingAction) {
@@ -249,7 +255,15 @@ class ItemListingViewModel @Inject constructor(
             is ItemListingAction.Internal.AppThemeChangeReceive -> {
                 handleAppThemeChangeReceive(internalAction.appTheme)
             }
+
+            ItemListingAction.Internal.FirstTimeUserSyncReceive -> {
+                handleFirstTimeUserSync()
+            }
         }
+    }
+
+    private fun handleFirstTimeUserSync() {
+        sendEvent(ItemListingEvent.ShowFirstTimeSyncSnackbar)
     }
 
     private fun handleAppThemeChangeReceive(appTheme: AppTheme) {
@@ -790,6 +804,11 @@ sealed class ItemListingEvent {
     data class ShowToast(
         val message: Text,
     ) : ItemListingEvent()
+
+    /**
+     * Show a Snackbar letting the user know accounts have synced.
+     */
+    data object ShowFirstTimeSyncSnackbar : ItemListingEvent()
 }
 
 /**
@@ -902,6 +921,11 @@ sealed class ItemListingAction {
          * Indicates app theme change has been received.
          */
         data class AppThemeChangeReceive(val appTheme: AppTheme) : Internal()
+
+        /**
+         * Indicates that a user synced with Bitwarden for the first time.
+         */
+        data object FirstTimeUserSyncReceive : Internal()
     }
 
     /**

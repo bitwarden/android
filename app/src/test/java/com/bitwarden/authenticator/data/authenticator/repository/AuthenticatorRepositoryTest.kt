@@ -13,13 +13,16 @@ import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +48,9 @@ class AuthenticatorRepositoryTest {
     private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
         every { getFeatureFlag(LocalFeatureFlag.PasswordManagerSync) } returns true
     }
+    private val settingsRepository: SettingsRepository = mockk {
+        every { previouslySyncedBitwardenAccountIds } returns emptySet()
+    }
 
     private val authenticatorRepository = AuthenticatorRepositoryImpl(
         authenticatorDiskSource = fakeAuthenticatorDiskSource,
@@ -54,6 +60,7 @@ class AuthenticatorRepositoryTest {
         fileManager = mockFileManager,
         importManager = mockImportManager,
         dispatcherManager = mockDispatcherManager,
+        settingRepository = settingsRepository,
     )
 
     @BeforeEach
@@ -89,12 +96,12 @@ class AuthenticatorRepositoryTest {
             fileManager = mockFileManager,
             importManager = mockImportManager,
             dispatcherManager = mockDispatcherManager,
+            settingRepository = settingsRepository,
         )
         assertEquals(
             SharedVerificationCodesState.FeatureNotEnabled,
             repository.sharedCodesStateFlow.value,
         )
-        verify(exactly = 0) { mockAuthenticatorBridgeManager.accountSyncStateFlow }
     }
 
     @Test
@@ -121,6 +128,7 @@ class AuthenticatorRepositoryTest {
             fileManager = mockFileManager,
             importManager = mockImportManager,
             dispatcherManager = mockDispatcherManager,
+            settingRepository = settingsRepository,
         )
         repository.sharedCodesStateFlow.test {
             assertEquals(
@@ -181,7 +189,7 @@ class AuthenticatorRepositoryTest {
     @Test
     fun `sharedCodesStateFlow should emit Success when authenticatorBridgeManager emits Success`() =
         runTest {
-            val sharedAccounts = mockk<List<SharedAccountData.Account>>()
+            val sharedAccounts = emptyList<SharedAccountData.Account>()
             val authenticatorItems = mockk<List<AuthenticatorItem>>()
             val verificationCodes = mockk<List<VerificationCodeItem>>()
             every { sharedAccounts.toAuthenticatorItems() } returns authenticatorItems
@@ -192,6 +200,47 @@ class AuthenticatorRepositoryTest {
                 assertEquals(SharedVerificationCodesState.Loading, awaitItem())
                 mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
                 assertEquals(SharedVerificationCodesState.Success(verificationCodes), awaitItem())
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `firstTimeAccountSyncFlow should emit the first time an account syncs and update SettingsRepository`() =
+        runTest {
+            every { settingsRepository.previouslySyncedBitwardenAccountIds = setOf("1") } just runs
+            val sharedAccounts = listOf(
+                SharedAccountData.Account(
+                    userId = "1",
+                    name = null,
+                    email = "test@test.com",
+                    environmentLabel = "bitwarden.com",
+                    totpUris = emptyList(),
+                ),
+            )
+            authenticatorRepository.firstTimeAccountSyncFlow.test {
+                mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
+                awaitItem()
+            }
+            verify { settingsRepository.previouslySyncedBitwardenAccountIds = setOf("1") }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `firstTimeAccountSyncFlow should not emit if a synced account is already in previouslySyncedBitwardenAccountIds`() =
+        runTest {
+            every { settingsRepository.previouslySyncedBitwardenAccountIds } returns setOf("1")
+            val sharedAccounts = listOf(
+                SharedAccountData.Account(
+                    userId = "1",
+                    name = null,
+                    email = "test@test.com",
+                    environmentLabel = "bitwarden.com",
+                    totpUris = emptyList(),
+                ),
+            )
+            authenticatorRepository.firstTimeAccountSyncFlow.test {
+                mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
+                expectNoEvents()
             }
         }
 }

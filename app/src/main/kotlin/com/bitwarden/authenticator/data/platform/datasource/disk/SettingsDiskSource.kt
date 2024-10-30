@@ -41,6 +41,11 @@ interface SettingsDiskSource {
     var hasSeenWelcomeTutorial: Boolean
 
     /**
+     * A set of Bitwarden account IDs that have previously been synced.
+     */
+    var previouslySyncedBitwardenAccountIds: Set<String>
+
+    /**
      * Emits update that track [hasSeenWelcomeTutorial]
      */
     val hasSeenWelcomeTutorialFlow: Flow<Boolean>
