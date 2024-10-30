@@ -995,9 +995,9 @@ data class VaultState(
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
-                val publicKey: Text?,
-                val privateKey: Text?,
-                val fingerprint: Text?,
+                val publicKey: Text,
+                val privateKey: Text,
+                val fingerprint: Text,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
             }

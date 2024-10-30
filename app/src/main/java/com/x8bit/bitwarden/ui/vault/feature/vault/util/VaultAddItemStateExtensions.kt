@@ -74,9 +74,9 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
 private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyView? =
     (this as? VaultAddEditState.ViewState.Content.ItemType.SshKey)?.let {
         SshKeyView(
-            publicKey = it.publicKey.orNullIfBlank(),
-            privateKey = it.privateKey.orNullIfBlank(),
-            fingerprint = it.fingerprint.orNullIfBlank(),
+            publicKey = it.publicKey,
+            privateKey = it.privateKey,
+            fingerprint = it.fingerprint,
         )
     }
 

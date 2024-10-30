@@ -75,9 +75,9 @@ fun createIdentityView(isEmpty: Boolean): IdentityView =
 
 fun createSshKeyView(isEmpty: Boolean): SshKeyView =
     SshKeyView(
-        privateKey = "privateKey".takeUnless { isEmpty },
-        publicKey = "publicKey".takeUnless { isEmpty },
-        fingerprint = "fingerprint".takeUnless { isEmpty },
+        privateKey = "privateKey".takeUnless { isEmpty } ?: "",
+        publicKey = "publicKey".takeUnless { isEmpty } ?: "",
+        fingerprint = "fingerprint".takeUnless { isEmpty } ?: "",
     )
 
 fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
@@ -154,7 +154,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         creationDate = Instant.ofEpochSecond(1_000L),
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),
-        sshKey = createSshKeyView(isEmpty = isEmpty),
+        sshKey = createSshKeyView(isEmpty),
     )
 
 fun createCommonContent(
@@ -272,8 +272,8 @@ fun createIdentityContent(
 fun createSshKeyContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemType.SshKey =
     VaultItemState.ViewState.Content.ItemType.SshKey(
         name = "mockName".takeUnless { isEmpty },
-        privateKey = "privateKey".takeUnless { isEmpty },
-        publicKey = "publicKey".takeUnless { isEmpty },
-        fingerprint = "fingerprint".takeUnless { isEmpty },
+        privateKey = "privateKey".takeUnless { isEmpty } ?: "",
+        publicKey = "publicKey".takeUnless { isEmpty } ?: "",
+        fingerprint = "fingerprint".takeUnless { isEmpty } ?: "",
         showPrivateKey = false,
     )
