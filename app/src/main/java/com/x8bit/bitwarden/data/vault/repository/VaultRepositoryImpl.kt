@@ -35,7 +35,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
-import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
+import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -238,31 +238,47 @@ class VaultRepositoryImpl(
 
         // Setup ciphers MutableStateFlow
         mutableCiphersStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskCiphers(activeUserId)
             }
             .launchIn(unconfinedScope)
+
         // Setup domains MutableStateFlow
         mutableDomainsStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskDomains(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup folders MutableStateFlow
         mutableFoldersStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskFolders(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup collections MutableStateFlow
         mutableCollectionsStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskCollections(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup sends MutableStateFlow
         mutableSendDataStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskSends(activeUserId)
             }
             .launchIn(unconfinedScope)
