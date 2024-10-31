@@ -276,13 +276,16 @@ private fun CipherView.toVaultItemOrNull(
             name = name.asText(),
             publicKey = sshKey
                 ?.publicKey
-                ?.asText(),
+                .orEmpty()
+                .asText(),
             privateKey = sshKey
                 ?.privateKey
-                ?.asText(),
+                .orEmpty()
+                .asText(),
             fingerprint = sshKey
                 ?.fingerprint
-                ?.asText(),
+                .orEmpty()
+                .asText(),
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
