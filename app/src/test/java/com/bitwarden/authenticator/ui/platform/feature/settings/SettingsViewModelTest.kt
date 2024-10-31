@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import app.cash.turbine.test
 import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.R
@@ -11,6 +12,7 @@ import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
@@ -29,6 +31,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,10 +49,12 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val authenticatorRepository: AuthenticatorRepository = mockk {
         every { sharedCodesStateFlow } returns mutableSharedCodesFlow
     }
+    private val mutableDefaultSaveOptionFlow = bufferedMutableSharedFlow<DefaultSaveOption>()
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
         every { defaultSaveOption } returns DEFAULT_SAVE_OPTION
+        every { defaultSaveOptionFlow } returns mutableDefaultSaveOptionFlow
         every { isUnlockWithBiometricsEnabled } returns true
         every { isCrashLoggingEnabled } returns true
     }
@@ -64,6 +69,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { MOCK_SHARED_CODES_STATE.isSyncWithBitwardenEnabled } returns false
     }
 
+    @AfterEach
     fun teardown() {
         unmockkStatic(SharedVerificationCodesState::isSyncWithBitwardenEnabled)
     }
@@ -177,20 +183,37 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `on DefaultSaveOptionUpdated should update SettingsRepository and state`() {
+    fun `on DefaultSaveOptionUpdated should update SettingsRepository`() {
         val expectedOption = DefaultSaveOption.BITWARDEN_APP
         every { settingsRepository.defaultSaveOption = expectedOption } just runs
         val viewModel = createViewModel()
-
         viewModel.trySendAction(SettingsAction.DataClick.DefaultSaveOptionUpdated(expectedOption))
-
-        assertEquals(
-            DEFAULT_STATE.copy(
-                defaultSaveOption = expectedOption,
-            ),
-            viewModel.stateFlow.value,
-        )
         verify { settingsRepository.defaultSaveOption = expectedOption }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `Default save option should update when repository emits`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableDefaultSaveOptionFlow.emit(DefaultSaveOption.LOCAL)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    defaultSaveOption = DefaultSaveOption.LOCAL,
+                ),
+                awaitItem(),
+            )
+
+            mutableDefaultSaveOptionFlow.emit(DefaultSaveOption.BITWARDEN_APP)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    defaultSaveOption = DefaultSaveOption.BITWARDEN_APP,
+                ),
+                awaitItem(),
+            )
+        }
     }
 
     private fun createViewModel(

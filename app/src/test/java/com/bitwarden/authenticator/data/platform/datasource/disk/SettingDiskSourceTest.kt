@@ -1,8 +1,10 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import androidx.core.content.edit
+import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
@@ -54,46 +56,56 @@ class SettingDiskSourceTest {
     }
 
     @Test
-    fun `defaultSaveOption should read and write from shared preferences`() {
+    fun `defaultSaveOption should read and write from shared preferences`() = runTest {
         val sharedPrefsKey = "bwPreferencesStorage:defaultSaveOption"
 
-        // Verify initial value is null and disk source should default to NONE
-        assertNull(sharedPreferences.getString(sharedPrefsKey, null))
-        assertEquals(
-            DefaultSaveOption.NONE,
-            settingDiskSource.defaultSaveOption,
-        )
+        settingDiskSource.defaultSaveOptionFlow.test {
+            // Verify initial value is null and disk source should default to NONE
+            assertNull(sharedPreferences.getString(sharedPrefsKey, null))
+            assertEquals(
+                DefaultSaveOption.NONE,
+                settingDiskSource.defaultSaveOption,
+            )
+            assertEquals(
+                DefaultSaveOption.NONE,
+                awaitItem(),
+            )
 
-        // Updating the shared preferences should update disk source
-        sharedPreferences.edit {
-            putString(
-                sharedPrefsKey,
-                DefaultSaveOption.BITWARDEN_APP.value,
+            // Updating the shared preferences should update disk source
+            sharedPreferences.edit {
+                putString(
+                    sharedPrefsKey,
+                    DefaultSaveOption.BITWARDEN_APP.value,
+                )
+            }
+            assertEquals(
+                DefaultSaveOption.BITWARDEN_APP,
+                settingDiskSource.defaultSaveOption,
+            )
+
+            // Updating the disk source should update shared preferences
+            settingDiskSource.defaultSaveOption = DefaultSaveOption.LOCAL
+            assertEquals(
+                DefaultSaveOption.LOCAL.value,
+                sharedPreferences.getString(sharedPrefsKey, null),
+            )
+            assertEquals(
+                DefaultSaveOption.LOCAL,
+                awaitItem(),
+            )
+
+            // Incorrect value should default to DefaultSaveOption.NONE
+            sharedPreferences.edit {
+                putString(
+                    sharedPrefsKey,
+                    "invalid",
+                )
+            }
+            assertEquals(
+                DefaultSaveOption.NONE,
+                settingDiskSource.defaultSaveOption,
             )
         }
-        assertEquals(
-            DefaultSaveOption.BITWARDEN_APP,
-            settingDiskSource.defaultSaveOption,
-        )
-
-        // Updating the disk source should update shared preferences
-        settingDiskSource.defaultSaveOption = DefaultSaveOption.LOCAL
-        assertEquals(
-            DefaultSaveOption.LOCAL.value,
-            sharedPreferences.getString(sharedPrefsKey, null),
-        )
-
-        // Incorrect value should default to DefaultSaveOption.NONE
-        sharedPreferences.edit {
-            putString(
-                sharedPrefsKey,
-                "invalid",
-            )
-        }
-        assertEquals(
-            DefaultSaveOption.NONE,
-            settingDiskSource.defaultSaveOption,
-        )
     }
 
     @Test

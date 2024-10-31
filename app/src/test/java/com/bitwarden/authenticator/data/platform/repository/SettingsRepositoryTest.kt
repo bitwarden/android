@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.data.platform.repository
 
+import app.cash.turbine.test
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
@@ -12,6 +13,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -91,6 +94,27 @@ class SettingsRepositoryTest {
         every { settingsDiskSource.defaultSaveOption = DefaultSaveOption.BITWARDEN_APP } just runs
         settingsRepository.defaultSaveOption = DefaultSaveOption.BITWARDEN_APP
         verify { settingsDiskSource.defaultSaveOption = DefaultSaveOption.BITWARDEN_APP }
+    }
+
+    @Test
+    fun `defaultSaveOptionFlow should match SettingsDiskSource`() = runTest {
+        // Reading from repository should read from disk source:
+        val expectedOptions = listOf(
+            DefaultSaveOption.NONE,
+            DefaultSaveOption.LOCAL,
+            DefaultSaveOption.BITWARDEN_APP,
+            DefaultSaveOption.NONE,
+        )
+        every { settingsDiskSource.defaultSaveOptionFlow } returns flow {
+            expectedOptions.forEach { emit(it) }
+        }
+
+        settingsRepository.defaultSaveOptionFlow.test {
+            expectedOptions.forEach {
+                assertEquals(it, awaitItem())
+            }
+            awaitComplete()
+        }
     }
 
     @Test

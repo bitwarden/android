@@ -45,6 +45,9 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableDefaultSaveOptionFlow =
+        bufferedMutableSharedFlow<DefaultSaveOption>()
+
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
             ?.let { storedValue ->
@@ -89,7 +92,11 @@ class SettingsDiskSourceImpl(
                 key = DEFAULT_SAVE_OPTION_KEY,
                 value = newValue.value,
             )
+            mutableDefaultSaveOptionFlow.tryEmit(newValue)
         }
+    override val defaultSaveOptionFlow: Flow<DefaultSaveOption>
+        get() = mutableDefaultSaveOptionFlow
+            .onSubscription { emit(defaultSaveOption) }
 
     override var systemBiometricIntegritySource: String?
         get() = getString(key = SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY)

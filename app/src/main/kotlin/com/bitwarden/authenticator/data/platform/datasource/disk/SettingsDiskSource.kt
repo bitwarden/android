@@ -31,6 +31,11 @@ interface SettingsDiskSource {
     var defaultSaveOption: DefaultSaveOption
 
     /**
+     * Flow that emits changes to [defaultSaveOption]
+     */
+    val defaultSaveOptionFlow: Flow<DefaultSaveOption>
+
+    /**
      * The currently persisted biometric integrity source for the system.
      */
     var systemBiometricIntegritySource: String?

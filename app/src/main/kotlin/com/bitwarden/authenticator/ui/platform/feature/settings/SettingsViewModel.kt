@@ -72,6 +72,12 @@ class SettingsViewModel @Inject constructor(
             .map { SettingsAction.Internal.SharedAccountsStateUpdated(it) }
             .onEach(::handleAction)
             .launchIn(viewModelScope)
+
+        settingsRepository
+            .defaultSaveOptionFlow
+            .map { SettingsAction.Internal.DefaultSaveOptionUpdated(it) }
+            .onEach(::handleAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: SettingsAction) {
@@ -102,6 +108,10 @@ class SettingsViewModel @Inject constructor(
 
             is SettingsAction.Internal.SharedAccountsStateUpdated -> {
                 handleSharedAccountsStateUpdated(action)
+            }
+
+            is SettingsAction.Internal.DefaultSaveOptionUpdated -> {
+                handleDefaultSaveOptionUpdated(action)
             }
         }
     }
@@ -175,14 +185,19 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DataClick.BackupClick -> handleBackupClick()
             SettingsAction.DataClick.SyncWithBitwardenClick -> handleSyncWithBitwardenClick()
             is SettingsAction.DataClick.DefaultSaveOptionUpdated ->
-                handleDefaultSaveOptionUpdated(action)
+                handleDefaultSaveOptionChosen(action)
         }
     }
 
-    private fun handleDefaultSaveOptionUpdated(
+    private fun handleDefaultSaveOptionChosen(
         action: SettingsAction.DataClick.DefaultSaveOptionUpdated,
     ) {
         settingsRepository.defaultSaveOption = action.option
+    }
+
+    private fun handleDefaultSaveOptionUpdated(
+        action: SettingsAction.Internal.DefaultSaveOptionUpdated,
+    ) {
         mutableStateFlow.update {
             it.copy(
                 defaultSaveOption = action.option,
@@ -552,6 +567,13 @@ sealed class SettingsAction(
          */
         data class SharedAccountsStateUpdated(
             val state: SharedVerificationCodesState,
+        ) : SettingsAction()
+
+        /**
+         * Indicates that the default save option on disk was updated.
+         */
+        data class DefaultSaveOptionUpdated(
+            val option: DefaultSaveOption,
         ) : SettingsAction()
     }
 }

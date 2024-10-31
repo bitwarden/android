@@ -44,6 +44,9 @@ class SettingsRepositoryImpl(
 
     override var defaultSaveOption: DefaultSaveOption by settingsDiskSource::defaultSaveOption
 
+    override val defaultSaveOptionFlow: Flow<DefaultSaveOption>
+        by settingsDiskSource::defaultSaveOptionFlow
+
     override val isUnlockWithBiometricsEnabled: Boolean
         get() = authDiskSource.getUserBiometricUnlockKey() != null
 

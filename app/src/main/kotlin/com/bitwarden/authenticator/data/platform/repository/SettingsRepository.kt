@@ -38,6 +38,11 @@ interface SettingsRepository {
     var defaultSaveOption: DefaultSaveOption
 
     /**
+     * Flow that emits changes to [defaultSaveOption]
+     */
+    val defaultSaveOptionFlow: Flow<DefaultSaveOption>
+
+    /**
      * Whether or not biometric unlocking is enabled for the current user.
      */
     val isUnlockWithBiometricsEnabled: Boolean
