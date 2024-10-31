@@ -37,11 +37,11 @@ fun FirstTimeSyncSnackbarHost(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
+                    .shadow(elevation = 6.dp)
                     .background(
                         color = MaterialTheme.colorScheme.inverseSurface,
                         shape = RoundedCornerShape(8.dp),
-                    )
-                    .shadow(elevation = 6.dp),
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
