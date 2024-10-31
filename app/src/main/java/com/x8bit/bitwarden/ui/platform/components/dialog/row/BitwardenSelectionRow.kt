@@ -36,7 +36,7 @@ fun BitwardenSelectionRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .testTag("AlertSelectionOption")
+            .testTag("AlertRadioButtonOption")
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -58,7 +58,7 @@ fun BitwardenSelectionRow(
             text = text(),
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyLarge,
-            modifier = Modifier.testTag("AlertSelectionOptionName"),
+            modifier = Modifier.testTag("AlertRadioButtonOptionName"),
         )
     }
 }
