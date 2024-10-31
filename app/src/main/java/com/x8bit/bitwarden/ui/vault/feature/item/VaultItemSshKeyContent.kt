@@ -12,8 +12,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 
@@ -55,16 +58,24 @@ fun VaultItemSshKeyContent(
 
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextField(
+            BitwardenTextFieldWithActions(
                 label = stringResource(id = R.string.public_key),
                 value = sshKeyItemState.publicKey,
                 onValueChange = { },
                 singleLine = false,
                 readOnly = true,
+                actions = {
+                    BitwardenTonalIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_public_key),
+                        onClick = vaultSshKeyItemTypeHandlers.onCopyPublicKeyClick,
+                        modifier = Modifier.testTag(tag = "SshKeyCopyPublicKeyButton"),
+                    )
+                },
                 modifier = Modifier
                     .testTag("SshKeyItemPublicKeyEntry")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -88,16 +99,24 @@ fun VaultItemSshKeyContent(
 
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextField(
+            BitwardenTextFieldWithActions(
                 label = stringResource(id = R.string.fingerprint),
                 value = sshKeyItemState.fingerprint,
                 onValueChange = { },
                 singleLine = false,
                 readOnly = true,
+                actions = {
+                    BitwardenTonalIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_fingerprint),
+                        onClick = vaultSshKeyItemTypeHandlers.onCopyFingerprintClick,
+                        modifier = Modifier.testTag(tag = "SshKeyCopyFingerprintButton"),
+                    )
+                },
                 modifier = Modifier
                     .testTag("SshKeyItemFingerprintEntry")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
