@@ -90,7 +90,6 @@ fun SearchScreen(
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = searchHandlers.onBackClick,
                 ),
-                modifier = Modifier.testTag(tag = "SearchFieldEntry"),
             )
         },
         modifier = Modifier

@@ -58,7 +58,7 @@ fun BitwardenSelectionRow(
             text = text(),
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyLarge,
-            modifier = Modifier.testTag("AlertSelectionOptionName")
+            modifier = Modifier.testTag("AlertSelectionOptionName"),
         )
     }
 }

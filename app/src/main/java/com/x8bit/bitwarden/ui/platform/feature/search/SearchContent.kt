@@ -155,6 +155,7 @@ fun SearchContent(
                                     else -> searchHandlers.onOverflowItemClick(option)
                                 }
                             },
+                            testTag = "AlertSelectionOption",
                         )
                     }
                     .toPersistentList(),
