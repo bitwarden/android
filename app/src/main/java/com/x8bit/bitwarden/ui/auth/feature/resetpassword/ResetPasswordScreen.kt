@@ -121,7 +121,7 @@ fun ResetPasswordScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         ResetPasswordScreenContent(
             state = state,
             onCurrentPasswordInputChanged = remember(viewModel) {
@@ -136,9 +136,7 @@ fun ResetPasswordScreen(
             onPasswordHintInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged(it)) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

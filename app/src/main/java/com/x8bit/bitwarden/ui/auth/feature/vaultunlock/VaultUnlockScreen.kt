@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import android.widget.Toast
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -205,99 +204,7 @@ fun VaultUnlockScreen(
                 },
             )
         },
-    ) { innerPadding ->
-        Box {
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                if (!state.hideInput) {
-                    BitwardenPasswordField(
-                        label = state.vaultUnlockType.unlockScreenInputLabel(),
-                        value = state.input,
-                        onValueChange = remember(viewModel) {
-                            { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) }
-                        },
-                        keyboardType = state.vaultUnlockType.unlockScreenKeyboardType,
-                        showPasswordTestTag = state
-                            .vaultUnlockType
-                            .inputFieldVisibilityToggleTestTag,
-                        modifier = Modifier
-                            .testTag(state.vaultUnlockType.unlockScreenInputTestTag)
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                        autoFocus = state.showKeyboard,
-                        imeAction = ImeAction.Done,
-                        keyboardActions = KeyboardActions(
-                            onDone = remember(viewModel) {
-                                { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
-                            },
-                        ),
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = state.vaultUnlockType.unlockScreenMessage(),
-                        style = BitwardenTheme.typography.bodyMedium,
-                        color = BitwardenTheme.colorScheme.text.primary,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                Text(
-                    text = stringResource(
-                        id = R.string.logged_in_as_on,
-                        state.email,
-                        state.environmentUrl,
-                    ),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                    modifier = Modifier
-                        .testTag("UserAndEnvironmentDataLabel")
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
-                    BitwardenOutlinedButton(
-                        label = stringResource(id = R.string.use_biometrics_to_unlock),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
-                        },
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                } else if (state.showBiometricInvalidatedMessage) {
-                    Text(
-                        text = stringResource(R.string.account_biometric_invalidated),
-                        textAlign = TextAlign.Start,
-                        style = BitwardenTheme.typography.bodyMedium,
-                        color = BitwardenTheme.colorScheme.status.error,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-                if (!state.hideInput) {
-                    BitwardenFilledButton(
-                        label = stringResource(id = R.string.unlock),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
-                        },
-                        isEnabled = state.input.isNotEmpty(),
-                        modifier = Modifier
-                            .testTag("UnlockVaultButton")
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                    )
-                }
-                Spacer(modifier = Modifier.navigationBarsPadding())
-            }
-
+        overlay = {
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
@@ -315,10 +222,98 @@ fun VaultUnlockScreen(
                 },
                 onDismissRequest = { accountMenuVisible = false },
                 topAppBarScrollBehavior = scrollBehavior,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                modifier = Modifier.fillMaxSize(),
             )
+        },
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            if (!state.hideInput) {
+                BitwardenPasswordField(
+                    label = state.vaultUnlockType.unlockScreenInputLabel(),
+                    value = state.input,
+                    onValueChange = remember(viewModel) {
+                        { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) }
+                    },
+                    keyboardType = state.vaultUnlockType.unlockScreenKeyboardType,
+                    showPasswordTestTag = state
+                        .vaultUnlockType
+                        .inputFieldVisibilityToggleTestTag,
+                    modifier = Modifier
+                        .testTag(state.vaultUnlockType.unlockScreenInputTestTag)
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    autoFocus = state.showKeyboard,
+                    imeAction = ImeAction.Done,
+                    keyboardActions = KeyboardActions(
+                        onDone = remember(viewModel) {
+                            { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
+                        },
+                    ),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = state.vaultUnlockType.unlockScreenMessage(),
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            Text(
+                text = stringResource(
+                    id = R.string.logged_in_as_on,
+                    state.email,
+                    state.environmentUrl,
+                ),
+                style = BitwardenTheme.typography.bodyMedium,
+                color = BitwardenTheme.colorScheme.text.primary,
+                modifier = Modifier
+                    .testTag("UserAndEnvironmentDataLabel")
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
+                BitwardenOutlinedButton(
+                    label = stringResource(id = R.string.use_biometrics_to_unlock),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            } else if (state.showBiometricInvalidatedMessage) {
+                Text(
+                    text = stringResource(R.string.account_biometric_invalidated),
+                    textAlign = TextAlign.Start,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.status.error,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+            if (!state.hideInput) {
+                BitwardenFilledButton(
+                    label = stringResource(id = R.string.unlock),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
+                    },
+                    isEnabled = state.input.isNotEmpty(),
+                    modifier = Modifier
+                        .testTag("UnlockVaultButton")
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }

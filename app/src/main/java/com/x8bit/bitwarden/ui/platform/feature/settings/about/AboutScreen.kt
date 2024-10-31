@@ -111,12 +111,10 @@ fun AboutScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         ContentColumn(
             state = state,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             onHelpCenterClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.HelpCenterClick) }
             },
