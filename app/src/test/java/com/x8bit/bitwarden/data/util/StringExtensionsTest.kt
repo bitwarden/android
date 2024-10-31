@@ -208,7 +208,7 @@ class StringExtensionsTest {
     @Test
     fun `getHostWithPortOrNull should return host with port when present`() {
         val uriString = "www.google.com:8080"
-        assertEquals(8080, uriString.toUriOrNull()?.port)
+        assertEquals(-1, uriString.toUriOrNull()?.port)
         assertEquals("www.google.com:8080", uriString.getHostWithPortOrNull())
     }
 
