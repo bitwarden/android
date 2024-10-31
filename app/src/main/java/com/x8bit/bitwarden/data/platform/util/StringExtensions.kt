@@ -65,7 +65,7 @@ fun String.getDomainOrNull(resourceCacheManager: ResourceCacheManager): String? 
 fun String.hasPort(): Boolean {
     val uri = this
         .toUriOrNull()
-        ?.let { addSchemeToUriIfNecessary(this, uri = it) }
+        ?.addSchemeToUriIfNecessary()
         ?: return false
     return uri.port != -1
 }
@@ -75,9 +75,8 @@ fun String.hasPort(): Boolean {
  */
 @OmitFromCoverage
 fun String.getHostOrNull(): String? = this.toUriOrNull()
-    ?.let { uri ->
-        addSchemeToUriIfNecessary(uriString = this, uri = uri)
-    }?.host
+    ?.addSchemeToUriIfNecessary()
+    ?.host
 
 /**
  * Extract the host with optional port from this [String] if possible, otherwise return null.
@@ -86,7 +85,7 @@ fun String.getHostOrNull(): String? = this.toUriOrNull()
 fun String.getHostWithPortOrNull(): String? {
     val uri = this
         .toUriOrNull()
-        ?.let { addSchemeToUriIfNecessary(uriString = this, uri = it) }
+        ?.addSchemeToUriIfNecessary()
         ?: return null
     return uri.host?.let { host ->
         val port = uri.port
@@ -110,27 +109,5 @@ fun String.findLastSubstringIndicesOrNull(substring: String): IntRange? {
         IntRange(lastIndex, endIndex)
     } else {
         null
-    }
-}
-
-/**
- * Private helper method which takes a string and a [URI] derived from that string and adds
- * an HTTPS scheme to the URI if it is necessary. (i.e. foo.com:9090 -> https://foo.com:9090)
- * This would be necessary if you have a source string like "foo.com:9090" and you want to want
- * to extract the [URI.getHost] or [URI.getPort] from it which would fail.
- */
-private fun addSchemeToUriIfNecessary(uriString: String, uri: URI): URI? {
-    if (uriString.toUriOrNull()?.equals(uri) != true) return null
-    return if (
-    // see if the string contains a host pattern
-        uriString.contains(".") &&
-        // if it does but the URI's host is null, add an https scheme
-        uri.host == null &&
-        // provided that scheme does not exist already.
-        !uriString.hasHttpProtocol()
-    ) {
-        URI("https://$uriString")
-    } else {
-        uri
     }
 }

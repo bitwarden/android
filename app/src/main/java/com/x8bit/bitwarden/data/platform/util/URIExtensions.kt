@@ -45,6 +45,22 @@ fun URI.parseDomainNameOrNull(resourceCacheManager: ResourceCacheManager): Domai
             )
         }
 
+fun URI.addSchemeToUriIfNecessary(): URI {
+    val uriString = this.toString()
+    return if (
+    // see if the string contains a host pattern
+        uriString.contains(".") &&
+        // if it does but the URI's host is null, add an https scheme
+        this.host == null &&
+        // provided that scheme does not exist already.
+        !uriString.hasHttpProtocol()
+    ) {
+        URI("https://$uriString")
+    } else {
+        this
+    }
+}
+
 /**
  * The internal implementation of [parseDomainNameOrNull]. This doesn't extend URI and has a
  * non-null [host] parameter. Technically, URI.host could be null and we want to avoid issues with

@@ -181,15 +181,12 @@ class StringExtensionsTest {
     fun `getHostOrNull should return host from URI string when present and has port but no scheme`() {
         val expectedHost = "www.google.com"
         val hostWithPort = "$expectedHost:8080"
-        // control
-        assertNull(hostWithPort.toUriOrNull()?.host)
         assertEquals(expectedHost, hostWithPort.getHostOrNull())
     }
 
     @Test
     fun `hasPort returns true when port is present`() {
         val uriString = "www.google.com:8080"
-        assertEquals(-1, uriString.toUriOrNull()?.port)
         assertTrue("www.google.com:8080".hasPort())
     }
 
@@ -201,14 +198,12 @@ class StringExtensionsTest {
     @Test
     fun `hasPort return true when port is present and custom scheme is present`() {
         val uriString = "androidapp://www.google.com:8080"
-        assertEquals(8080, uriString.toUriOrNull()?.port)
         assertTrue(uriString.hasPort())
     }
 
     @Test
     fun `getHostWithPortOrNull should return host with port when present`() {
         val uriString = "www.google.com:8080"
-        assertEquals(-1, uriString.toUriOrNull()?.port)
         assertEquals("www.google.com:8080", uriString.getHostWithPortOrNull())
     }
 
@@ -227,7 +222,6 @@ class StringExtensionsTest {
     @Test
     fun `getHostWithPortOrNull should return host with port when present and custom scheme is present`() {
         val uriString = "androidapp://www.google.com:8080"
-        assertEquals(8080, uriString.toUriOrNull()?.port)
         assertEquals("www.google.com:8080", uriString.getHostWithPortOrNull())
     }
 }
