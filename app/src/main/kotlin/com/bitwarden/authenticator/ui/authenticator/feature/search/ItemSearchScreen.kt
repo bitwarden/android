@@ -26,12 +26,6 @@ import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.bottomDivider
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenSearchTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.NavigationIcon
-import com.bitwarden.authenticator.ui.platform.components.content.BitwardenErrorContent
-import com.bitwarden.authenticator.ui.platform.components.content.BitwardenLoadingContent
-import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
@@ -59,11 +53,6 @@ fun ItemSearchScreen(
             }
         }
     }
-
-    ItemSearchDialogs(
-        dialogState = state.dialogState,
-        onDismissRequest = searchHandlers.onDismissRequest,
-    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -110,47 +99,7 @@ fun ItemSearchScreen(
                         modifier = innerModifier,
                     )
                 }
-
-                is ItemSearchState.ViewState.Error -> {
-                    BitwardenErrorContent(
-                        message = viewState.message(),
-                        modifier = innerModifier,
-                    )
-                }
-
-                is ItemSearchState.ViewState.Loading -> {
-                    BitwardenLoadingContent(
-                        modifier = innerModifier,
-                    )
-                }
             }
         }
-    }
-}
-
-/**
- * Dialogs displayed within the context of the item search screen.
- */
-@Composable
-private fun ItemSearchDialogs(
-    dialogState: ItemSearchState.DialogState?,
-    onDismissRequest: () -> Unit,
-) {
-    when (dialogState) {
-        is ItemSearchState.DialogState.Error -> {
-            BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
-                onDismissRequest = onDismissRequest,
-            )
-        }
-
-        is ItemSearchState.DialogState.Loading -> {
-            BitwardenLoadingDialog(visibilityState = LoadingDialogState.Shown(dialogState.message))
-        }
-
-        null -> Unit
     }
 }

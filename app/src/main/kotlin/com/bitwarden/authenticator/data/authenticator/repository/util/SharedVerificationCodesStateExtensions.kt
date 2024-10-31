@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.data.authenticator.repository.util
 
+import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 
 /**
@@ -18,4 +19,20 @@ val SharedVerificationCodesState.isSyncWithBitwardenEnabled: Boolean
             -> false
 
         is SharedVerificationCodesState.Success -> true
+    }
+
+/**
+ * Get a list of shared items, or empty if there are no shared items.
+ */
+val SharedVerificationCodesState.itemsOrEmpty: List<VerificationCodeItem>
+    get() = when (this) {
+        SharedVerificationCodesState.AppNotInstalled,
+        SharedVerificationCodesState.Error,
+        SharedVerificationCodesState.FeatureNotEnabled,
+        SharedVerificationCodesState.Loading,
+        SharedVerificationCodesState.OsVersionNotSupported,
+        SharedVerificationCodesState.SyncNotEnabled,
+            -> emptyList()
+
+        is SharedVerificationCodesState.Success -> this.items
     }

@@ -80,19 +80,18 @@ fun VaultVerificationCodeItem(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.weight(1f),
         ) {
-            issuer?.let {
+            if (!issuer.isNullOrEmpty()) {
                 Text(
-                    text = it,
+                    text = issuer,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-
-            supportingLabel?.let {
+            if (!supportingLabel.isNullOrEmpty()) {
                 Text(
-                    text = it,
+                    text = supportingLabel,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

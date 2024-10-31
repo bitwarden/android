@@ -8,7 +8,6 @@ import com.bitwarden.authenticator.ui.authenticator.feature.search.ItemSearchVie
  */
 class SearchHandlers(
     val onBackClick: () -> Unit,
-    val onDismissRequest: () -> Unit,
     val onItemClick: (String) -> Unit,
     val onSearchTermChange: (String) -> Unit,
 ) {
@@ -25,7 +24,6 @@ class SearchHandlers(
         fun create(viewModel: ItemSearchViewModel): SearchHandlers =
             SearchHandlers(
                 onBackClick = { viewModel.trySendAction(ItemSearchAction.BackClick) },
-                onDismissRequest = { viewModel.trySendAction(ItemSearchAction.DismissDialogClick) },
                 onItemClick = { viewModel.trySendAction(ItemSearchAction.ItemClick(it)) },
                 onSearchTermChange = {
                     viewModel.trySendAction(ItemSearchAction.SearchTermChange(it))
