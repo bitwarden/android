@@ -2151,12 +2151,6 @@ class VaultItemScreenTest : BaseComposeTest() {
         val publicKey = "the public key"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(publicKey).assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateSshKeyType(currentState) { copy(publicKey = null) }
-        }
-
-        composeTestRule.assertScrollableNodeDoesNotExist(publicKey)
     }
 
     @Test
@@ -2173,12 +2167,6 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(privateKey)
             .assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateSshKeyType(currentState) { copy(privateKey = null) }
-        }
-
-        composeTestRule.assertScrollableNodeDoesNotExist(privateKey)
     }
 
     @Test
@@ -2205,12 +2193,6 @@ class VaultItemScreenTest : BaseComposeTest() {
         val fingerprint = "the fingerprint"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(fingerprint).assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateSshKeyType(currentState) { copy(fingerprint = null) }
-        }
-
-        composeTestRule.assertScrollableNodeDoesNotExist(fingerprint)
     }
 
     //endregion ssh key

@@ -53,58 +53,52 @@ fun VaultItemSshKeyContent(
             )
         }
 
-        sshKeyItemState.publicKey?.let { publicKey ->
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextField(
-                    label = stringResource(id = R.string.public_key),
-                    value = publicKey,
-                    onValueChange = { },
-                    singleLine = false,
-                    readOnly = true,
-                    modifier = Modifier
-                        .testTag("SshKeyItemPublicKeyEntry")
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-            }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.public_key),
+                value = sshKeyItemState.publicKey,
+                onValueChange = { },
+                singleLine = false,
+                readOnly = true,
+                modifier = Modifier
+                    .testTag("SshKeyItemPublicKeyEntry")
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
         }
 
-        sshKeyItemState.privateKey?.let { privateKey ->
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenPasswordField(
-                    label = stringResource(id = R.string.private_key),
-                    value = privateKey,
-                    onValueChange = { },
-                    singleLine = false,
-                    readOnly = true,
-                    showPassword = sshKeyItemState.showPrivateKey,
-                    showPasswordTestTag = "ViewPrivateKeyButton",
-                    showPasswordChange = vaultSshKeyItemTypeHandlers.onShowPrivateKeyClick,
-                    modifier = Modifier
-                        .testTag("SshKeyItemPrivateKeyEntry")
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-            }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.private_key),
+                value = sshKeyItemState.privateKey,
+                onValueChange = { },
+                singleLine = false,
+                readOnly = true,
+                showPassword = sshKeyItemState.showPrivateKey,
+                showPasswordTestTag = "ViewPrivateKeyButton",
+                showPasswordChange = vaultSshKeyItemTypeHandlers.onShowPrivateKeyClick,
+                modifier = Modifier
+                    .testTag("SshKeyItemPrivateKeyEntry")
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
         }
 
-        sshKeyItemState.fingerprint?.let { fingerprint ->
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextField(
-                    label = stringResource(id = R.string.fingerprint),
-                    value = fingerprint,
-                    onValueChange = { },
-                    singleLine = false,
-                    readOnly = true,
-                    modifier = Modifier
-                        .testTag("SshKeyItemFingerprintEntry")
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-            }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.fingerprint),
+                value = sshKeyItemState.fingerprint,
+                onValueChange = { },
+                singleLine = false,
+                readOnly = true,
+                modifier = Modifier
+                    .testTag("SshKeyItemFingerprintEntry")
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
         }
 
         item {
