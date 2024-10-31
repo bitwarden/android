@@ -46,7 +46,8 @@ fun LazyListScope.vaultAddEditSshKeyItems(
         BitwardenTextField(
             label = stringResource(id = R.string.public_key),
             value = sshKeyState.publicKey,
-            onValueChange = sshKeyTypeHandlers.onPublicKeyTextChange,
+            readOnly = true,
+            onValueChange = { },
             modifier = Modifier
                 .testTag("PublicKeyEntry")
                 .fillMaxWidth()
@@ -59,7 +60,8 @@ fun LazyListScope.vaultAddEditSshKeyItems(
         BitwardenPasswordField(
             label = stringResource(id = R.string.private_key),
             value = sshKeyState.privateKey,
-            onValueChange = sshKeyTypeHandlers.onPrivateKeyTextChange,
+            readOnly = true,
+            onValueChange = { /* no-op */ },
             showPassword = sshKeyState.showPrivateKey,
             showPasswordChange = { sshKeyTypeHandlers.onPrivateKeyVisibilityChange(it) },
             showPasswordTestTag = "ViewPrivateKeyButton",
@@ -75,7 +77,8 @@ fun LazyListScope.vaultAddEditSshKeyItems(
         BitwardenTextField(
             label = stringResource(id = R.string.fingerprint),
             value = sshKeyState.fingerprint,
-            onValueChange = sshKeyTypeHandlers.onFingerprintTextChange,
+            readOnly = true,
+            onValueChange = { /* no-op */ },
             modifier = Modifier
                 .testTag("FingerprintEntry")
                 .fillMaxWidth()
@@ -116,10 +119,7 @@ private fun VaultAddEditSshKeyItems_preview() {
                     onHiddenFieldVisibilityChange = { },
                 ),
                 sshKeyTypeHandlers = VaultAddEditSshKeyTypeHandlers(
-                    onPublicKeyTextChange = { },
-                    onPrivateKeyTextChange = { },
                     onPrivateKeyVisibilityChange = { },
-                    onFingerprintTextChange = { },
                 ),
             )
         }
