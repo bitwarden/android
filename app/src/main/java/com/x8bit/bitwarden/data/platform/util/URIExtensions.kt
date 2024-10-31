@@ -45,6 +45,11 @@ fun URI.parseDomainNameOrNull(resourceCacheManager: ResourceCacheManager): Domai
             )
         }
 
+/**
+ * Adds and HTTPS scheme to a valid URI if that URI has a valid host in the raw string but
+ * the standard parsing of `URI("foo.com")` is not able to determine a valid host.
+ * (i.e. val uri = URI("foo.bar:1090") -> uri.host == null)
+ */
 fun URI.addSchemeToUriIfNecessary(): URI {
     val uriString = this.toString()
     return if (
