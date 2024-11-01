@@ -41,7 +41,7 @@
   <string name="invalid_pin">செல்லாத கடவெண். மீண்டும் முயலவும்.</string>
   <string name="launch">ஏவு</string>
   <string name="log_in">உள்நுழை</string>
-  <string name="log_in_verb">Log in</string>
+  <string name="log_in_verb">உள்நுழை</string>
   <string name="log_in_noun">உள்நுழைவு</string>
   <string name="log_out">வெளியேறு</string>
   <string name="logout_confirmation">நிச்சயமாக வெளியேற விரும்புகிறீரா?</string>
@@ -50,7 +50,7 @@
   <string name="account_already_added">கணக்கு ஏற்கனவே சேர்க்கப்பட்டது</string>
   <string name="switch_to_already_added_account_confirmation">அதற்கு இப்போது நிலைமாற விரும்புகிறீரா?</string>
   <string name="master_password">பிரதான கடவுச்சொல்</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">பிரதான கடவுச்சொல் (தேவை)</string>
   <string name="more">மேலும்</string>
   <string name="my_vault">என் பெட்டகம்</string>
   <string name="authenticator">அங்கீகரிப்பாளர்</string>
@@ -84,12 +84,12 @@
   <string name="yes">ஆம்</string>
   <string name="account">கணக்கு</string>
   <string name="account_created">உங்கள் புது கணக்கு உருவாக்கப்பட்டது, நீங்கள் இப்போது உள்நுழையலாம்.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">உமது புது கணக்கு உருவாக்கப்பட்டது!</string>
   <string name="add_an_item">ஓர் உருப்படியைச் சேர்</string>
   <string name="app_extension">செயலி நீட்டிப்பு</string>
   <string name="autofill_accessibility_description">செயலிகள் மற்றும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்து.</string>
   <string name="autofill_service">தன்னிரப்பி சேவை</string>
-  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Bitwarden-ஐ உமது கடவுவிசை வழங்குநராகச் சாதன அமைவுகளில் அமை.</string>
   <string name="avoid_ambiguous_characters">தெளிவற்ற எழுத்துக்களைத் தவிர்</string>
   <string name="bitwarden_app_extension">Bitwarden செயலி நீட்டிப்பு</string>
   <string name="bitwarden_app_extension_alert2">உம் பெட்டகத்திற்கு புதிய உள்நுழைவுகளைச் சேர்ப்பதற்கான மிக எளிய வழி பிட்வார்டன் செயலி நீட்டிப்பிலிருந்தே. \"அமைப்புகள்\" திரைக்குச் சென்று பிட்வார்டன் செயலி நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலுமறிக.</string>
@@ -151,7 +151,7 @@
   <string name="no_favorites">உங்கள் பெட்டகத்தில் பிடித்தவை எவையுமில்லை.</string>
   <string name="no_items">உம் பெட்டகத்தில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="no_items_tap">உம் பெட்டகத்தில் இவ்வலைத்தளம்/செயலிக்கான உருப்படிகள் இல்லை. ஒன்றைச் சேர்க்க தட்டுக.</string>
-  <string name="no_username">No Username</string>
+  <string name="no_username">பயனர்பெயர் இல்லை</string>
   <string name="no_username_password_configured">இவ்வுள்நுழைவில் பயனர்பெயர் அ கடவுச்சொல் கட்டமைக்கப்படவில்லை.</string>
   <string name="ok_got_it">சரி, புரிந்தது!</string>
   <string name="option_defaults">விருப்ப இயல்புநிலைகள் முதன்மை Bitwarden செயலியின் கடவுச்சொல் உருவாக்கி கருவியிலிருந்து அமைக்கப்படுகிறது.</string>
@@ -167,7 +167,7 @@
   <string name="rate_the_app_description">ஒரு நல்ல விமர்சனம் மூலம் எங்களுக்கு உதவ தயவுசெய்து கருதுங்கள்!</string>
   <string name="regenerate_password">கடவுச்சொல்லை மீண்டுமுருவாக்கு</string>
   <string name="retype_master_password">பிரதான கடவுச்சொல்லை மீண்டும் தட்டு</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">பிரதான கடவுச்சொல்லை மீண்டும் உள்ளிடு (தேவை)</string>
   <string name="search_vault">பெட்டகத்தைத் தேடுக</string>
   <string name="security">பாதுகாப்பு</string>
   <string name="select">தேர்ந்தெடு</string>
@@ -195,8 +195,8 @@
   <string name="translations">மொழிபெயர்ப்புகள்</string>
   <string name="items_for_uri">%1$s க்கான உருப்படிகள்</string>
   <string name="no_items_for_uri">உம் பெட்டகத்தில் %1$s க்கான உருப்படிகள் ஏதுமில்லை.</string>
-  <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
-  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
+  <string name="no_items_for_vault">உம் பெட்டகத்தில் “%1$s”-உடன் பொருந்தும் உருப்படிகள் இல்லை</string>
+  <string name="search_for_a_login_or_add_a_new_login">உள்நுழைவைத் தேடு அல்லது புது உள்நுழைவைச் சேர்</string>
   <string name="bitwarden_autofill_service_overlay">நீங்கள் ஓர் உள்ளீடு புலத்தை தேர்ந்து Bitwarden தன்னிரப்பி மேலடுக்கை பார்க்கும்போது, தன்னிரப்பி சேவையை தொடங்க நீங்கள் அதை தட்டலாம்.</string>
   <string name="bitwarden_autofill_service_notification_content">உங்கள் பெட்டகத்திலிருந்து உருப்படியைத் தானாக-நிரப்ப இந்த அறிவிப்பைத் தட்டவும்.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">அணுகல்தன்மை அமைவுகளைத் திற</string>
@@ -333,7 +333,7 @@
   <string name="no_items_folder">இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="autofill_accessibility_service">தன்னிரப்பி அணுகல்தன்மை சேவை</string>
-  <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
+  <string name="autofill_accessibility_summary">பிற செயலிகளிலும் வலையிலும் பயனர்பெயர் மற்றும் கடவுச்சொல் புலங்களை நிரப்ப உதவு.</string>
   <string name="autofill_service_description">Bitwarden தன்னிரப்பி சேவை உள்நுழைவு தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்ப உதவ Android தன்னிரப்பி சட்டகத்தைப் பயன்படுத்துகிறது.</string>
   <string name="bitwarden_autofill_service_description">பிற செயலிகளினுள்ளே உள்நுழைவு தகவலை நிரப்ப Bitwarden தன்னிரப்பி சேவை பயன்படுத்து.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">தன்னிரப்பல் அமைவுகளைத் திற</string>
@@ -458,7 +458,7 @@
   <string name="copy_notes">குறிப்பை நகலெடு</string>
   <string name="exit">வெளியேறு</string>
   <string name="exit_confirmation">Bitwarden இலிருந்து வெளியேற விரும்புகிறீர்களா?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">செயலி மறுதுவக்கத்தில் பிரதான கடவுச்சொல் கேட்கவா?</string>
   <string name="pin_require_master_password_restart">செயலி மறுதுவக்கத்தில் பூட்டவிழ்க்க உங்கள் பிரதான கடவுச்சொல்லை கோர வேண்டுமா?</string>
   <string name="black">கருப்பு</string>
   <string name="nord">நார்ட்</string>
@@ -538,7 +538,7 @@
   <string name="terms_of_service">சேவை விதிமுறைகள்</string>
   <string name="privacy_policy">தனியுரிமை கொள்கை</string>
   <string name="accessibility_draw_over_permission_alert">Bitwardenக்கு கவனம் தேவை - Bitwarden அமைப்புகளிலிருந்து \"தன்னிரப்பி சேவைகள்\"-இல் \"மேலே-வரைதல்\"-ஐ இயக்குக</string>
-  <string name="passkey_management">Passkey management</string>
+  <string name="passkey_management">கடவுவிசை நிர்வகிப்பு</string>
   <string name="autofill_services">தன்னிரப்பி சேவைகள்</string>
   <string name="inline_autofill">உள்ளக தன்னிரப்பி பயன்படுத்து</string>
   <string name="inline_autofill_description">உம் தேர்ந்தெடுத்த IME (விசைப்பலகை) ஆதரித்தால் உள்வரி தன்னிரப்பி பயன்படுத்துக. உம் உள்ளமைவு ஆதரிக்கப்படவில்லையெனில் (அ இவ்விருப்பம் முடங்கியிருப்பின்), இயல்பிருப்பு தன்னிரப்பி மேலடுக்கு பயன்படுத்தப்படும்.</string>
@@ -547,7 +547,7 @@
   <string name="accessibility_description2">செயலிகளிலும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து. (மேலே-வரைதலும் இயங்க வேண்டும்)</string>
   <string name="accessibility_description3">தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்த மற்றும்/அல்லது மேலே-வரைதல்(இயங்கினால்) கொண்டு popup காட்ட Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து.</string>
   <string name="accessibility_description4">தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்தவோ மேலே-வரைதல்(இயங்கினால்) கொண்டு தன்னிரப்பிச் சேவையை ஆதரவுமிகுதியாக்கவோ தேவைப்படுகிறது.</string>
-  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
+  <string name="accessibility_description5">தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்தத் தேவை.</string>
   <string name="draw_over">மேலே-வரைதல் பயன்படுத்து</string>
   <string name="draw_over_description">இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது ஒரு popup காண்பிக்க  Bitwarden அணுகல்தன்மை சேவையை அனுமதிக்கிறது.</string>
   <string name="draw_over_description2">இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது உமது உள்நுழைவுகளைத் தன்னிரப்ப உதவ Bitwarden அணுகல்தன்மை சேவை ஒரு popup காண்பிக்கும்.</string>
@@ -556,7 +556,7 @@
   <string name="personal_ownership_policy_in_effect">ஒரு நிறுவன கொள்கை உம் உரிமை விருப்பங்களைப் பாதிக்கிறது.</string>
   <string name="send">Send</string>
   <string name="all_sends">எல்லா Sends</string>
-  <string name="sends">Sends</string>
+  <string name="sends">Sendகள்</string>
   <string name="name_info">இந்த Send ஐ விளக்க ஒரு நட்பார்ந்த பெயர்.</string>
   <string name="text">சொற்சரம்</string>
   <string name="type_text">சொற்சரம்</string>
@@ -802,7 +802,7 @@
   <string name="region">இடம்</string>
   <string name="update_weak_master_password_warning">Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
   <string name="current_master_password">Current master password</string>
-  <string name="logged_in">Logged in!</string>
+  <string name="logged_in">உள்நுழைந்தீர்!</string>
   <string name="approve_with_my_other_device">எனது மற்றொரு சாதனத்துடன் ஒப்புதலளி</string>
   <string name="request_admin_approval">நிர்வாகி ஒப்புதல் கோரு</string>
   <string name="approve_with_master_password">பிரதான கடவுச்சொலுடன் ஒப்புக்கொள்</string>
@@ -887,10 +887,10 @@
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Your organization permissions were updated, requiring you to set a master password.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Your organization requires you to set a master password.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Set up an unlock option to change your vault timeout action.</string>
-  <string name="choose_a_login_to_save_this_passkey_to">Choose a login to save this passkey to</string>
-  <string name="save_passkey_as_new_login">Save passkey as new login</string>
-  <string name="save_passkey">Save passkey</string>
-  <string name="passkeys_for_x">Passkeys for %1$s</string>
+  <string name="choose_a_login_to_save_this_passkey_to">கடவுவிசையைச் சேமிக்க உள்நுழைவைத் தேர்ந்தெடு</string>
+  <string name="save_passkey_as_new_login">கடவுவிசையைப் புதிய உள்நுழைவாகச் சேமி</string>
+  <string name="save_passkey">கடவுவிசையைச் சேமி</string>
+  <string name="passkeys_for_x">%1$s-க்கானக் கடவுவிசைகள்</string>
   <string name="passwords_for_x">Passwords for %1$s</string>
   <string name="overwrite_passkey">Overwrite passkey?</string>
   <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">This item already contains a passkey. Are you sure you want to overwrite the current passkey?</string>
@@ -1001,7 +1001,7 @@
   <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
   <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
   <string name="turn_on_autofill">Turn on autofill</string>
   <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
@@ -1040,8 +1040,8 @@
   <string name="step_1_of_3">Step 1 of 3</string>
   <string name="export_your_saved_logins">Export your saved logins</string>
   <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and go to vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">go to vault.bitwarden.com</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and go to %1$s</string>
+  <string name="go_to_vault_bitwarden_com_highlight">go to %1$s</string>
   <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
   <string name="step_2_of_3">Step 2 of 3</string>
   <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
@@ -1055,7 +1055,7 @@
   <string name="then_done_highlight">then Done</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to delete your saved password file.</string>
   <string name="delete_your_saved_password_file">delete your saved password file.</string>
-  <string name="need_help_checkout_out_import_help">Need help? Checkout out import help.</string>
+  <string name="need_help_check_out_import_help">Need help? Check out import help.</string>
   <string name="import_help_highlight">import help</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
@@ -1073,4 +1073,12 @@
   <string name="bitwarden_tools">Bitwarden Tools</string>
   <string name="got_it">Got it</string>
   <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="logins_imported">Logins imported</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
+  <string name="type_ssh_key">SSH key</string>
+  <string name="public_key">Public key</string>
+  <string name="private_key">Private key</string>
+  <string name="ssh_keys">SSH keys</string>
+  <string name="copy_public_key">Copy public key</string>
+  <string name="copy_fingerprint">Copy fingerprint</string>
 </resources>
