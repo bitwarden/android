@@ -8,7 +8,9 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
  * items in a vault.
  */
 data class VaultSshKeyItemTypeHandlers(
+    val onCopyPublicKeyClick: () -> Unit,
     val onShowPrivateKeyClick: (isVisible: Boolean) -> Unit,
+    val onCopyFingerprintClick: () -> Unit,
 ) {
 
     @Suppress("UndocumentedPublicClass")
@@ -20,11 +22,21 @@ data class VaultSshKeyItemTypeHandlers(
         @Suppress("LongMethod")
         fun create(viewModel: VaultItemViewModel): VaultSshKeyItemTypeHandlers =
             VaultSshKeyItemTypeHandlers(
+                onCopyPublicKeyClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.SshKey.CopyPublicKeyClick,
+                    )
+                },
                 onShowPrivateKeyClick = {
                     viewModel.trySendAction(
                         VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
                             isVisible = it,
                         ),
+                    )
+                },
+                onCopyFingerprintClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.SshKey.CopyFingerprintClick,
                     )
                 },
             )

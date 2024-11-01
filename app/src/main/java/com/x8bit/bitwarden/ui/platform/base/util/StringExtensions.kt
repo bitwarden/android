@@ -21,7 +21,7 @@ import kotlin.math.floor
  * This character takes up no space but can be used to ensure a string is not empty. It can also
  * be used to insert "safe" line-break positions in a string.
  *
- * Note: Is a string only contains this charactor, it is _not_ considered blank.
+ * Note: Is a string only contains this character, it is _not_ considered blank.
  */
 const val ZERO_WIDTH_CHARACTER: String = "\u200B"
 
@@ -126,14 +126,15 @@ fun String.withLineBreaksAtWidth(
 ): String {
     val measurer = rememberTextMeasurer()
     return remember(this, widthPx, monospacedTextStyle) {
-        val characterSizePx = measurer
-            .measure("*", monospacedTextStyle)
-            .size
-            .width
-        val perLineCharacterLimit = floor(widthPx / characterSizePx).toInt()
-        if (widthPx > 0) {
+        if (widthPx > 0 && this.isNotEmpty()) {
+            val stringLengthPx = measurer
+                .measure(text = this, softWrap = false, style = monospacedTextStyle)
+                .size
+                .width
+            val linesRequired = stringLengthPx / widthPx
+            val charsPerLine = floor(this.length / linesRequired).toInt()
             this
-                .chunked(perLineCharacterLimit)
+                .chunked(size = charsPerLine)
                 .joinToString(separator = "\n")
         } else {
             this

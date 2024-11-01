@@ -2172,6 +2172,18 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in ssh key state, on copy public key click should send CopyPublicKeyClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy public key")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
+        }
+    }
+
+    @Test
     fun `in ssh key state, private key should be displayed according to state`() {
         val privateKey = "the private key"
         mutableStateFlow.update {
@@ -2211,6 +2223,18 @@ class VaultItemScreenTest : BaseComposeTest() {
         val fingerprint = "the fingerprint"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(fingerprint).assertIsDisplayed()
+    }
+
+    @Test
+    fun `in ssh key state, on copy fingerprint click should send CopyFingerprintClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescription("Copy fingerprint")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
+        }
     }
 
     //endregion ssh key

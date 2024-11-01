@@ -1396,46 +1396,16 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleSshKeyTypeActions(action: VaultAddEditAction.ItemType.SshKeyType) {
         when (action) {
-            is VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange -> {
-                handlePublicKeyTextChange(action)
-            }
-
-            is VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange -> {
-                handlePrivateKeyTextChange(action)
-            }
-
             is VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange -> {
                 handlePrivateKeyVisibilityChange(action)
             }
-
-            is VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange -> {
-                handleSshKeyFingerprintTextChange(action)
-            }
         }
-    }
-
-    private fun handlePublicKeyTextChange(
-        action: VaultAddEditAction.ItemType.SshKeyType.PublicKeyTextChange,
-    ) {
-        updateSshKeyContent { it.copy(publicKey = action.publicKey) }
-    }
-
-    private fun handlePrivateKeyTextChange(
-        action: VaultAddEditAction.ItemType.SshKeyType.PrivateKeyTextChange,
-    ) {
-        updateSshKeyContent { it.copy(privateKey = action.privateKey) }
     }
 
     private fun handlePrivateKeyVisibilityChange(
         action: VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange,
     ) {
         updateSshKeyContent { it.copy(showPrivateKey = action.isVisible) }
-    }
-
-    private fun handleSshKeyFingerprintTextChange(
-        action: VaultAddEditAction.ItemType.SshKeyType.FingerprintTextChange,
-    ) {
-        updateSshKeyContent { it.copy(fingerprint = action.fingerprint) }
     }
 
     //endregion SSH Key Type Handlers
@@ -3088,25 +3058,11 @@ sealed class VaultAddEditAction {
          * Represents actions specific to the SSH Key type.
          */
         sealed class SshKeyType : ItemType() {
-            /**
-             * Fired when the public key text input is changed.
-             */
-            data class PublicKeyTextChange(val publicKey: String) : SshKeyType()
-
-            /**
-             * Fired when the private key text input is changed.
-             */
-            data class PrivateKeyTextChange(val privateKey: String) : SshKeyType()
 
             /**
              * Fired when the private key's visibility has changed.
              */
             data class PrivateKeyVisibilityChange(val isVisible: Boolean) : SshKeyType()
-
-            /**
-             * Fired when the fingerprint text input is changed.
-             */
-            data class FingerprintTextChange(val fingerprint: String) : SshKeyType()
         }
     }
 

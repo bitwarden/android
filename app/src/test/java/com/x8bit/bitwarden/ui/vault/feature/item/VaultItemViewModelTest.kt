@@ -2572,6 +2572,29 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             )
         }
 
+        @Test
+        fun `on CopyPublicKeyClick should copy public key to clipboard`() = runTest {
+            every { clipboardManager.setText("mockPublicKey") } just runs
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                } returns SSH_KEY_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.publicKey)
+            }
+        }
+
         @Suppress("MaxLineLength")
         @Test
         fun `on PrivateKeyVisibilityClick should show password dialog when re-prompt is required`() =
@@ -2613,6 +2636,29 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewModel.stateFlow.value,
                 )
             }
+
+        @Test
+        fun `on CopyFingerprintClick should copy fingerprint to clipboard`() = runTest {
+            every { clipboardManager.setText("mockFingerprint") } just runs
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                } returns SSH_KEY_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.fingerprint)
+            }
+        }
     }
 
     @Nested
