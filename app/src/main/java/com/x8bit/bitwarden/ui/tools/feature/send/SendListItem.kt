@@ -74,29 +74,24 @@ fun SendListItem(
             SelectionItemData(
                 text = stringResource(id = R.string.edit),
                 onClick = onEditClick,
-                testTag = "AlertSelectionOption",
             ),
             SelectionItemData(
                 text = stringResource(id = R.string.copy_link),
                 onClick = onCopyClick,
-                testTag = "AlertSelectionOption",
             ),
             SelectionItemData(
                 text = stringResource(id = R.string.share_link),
                 onClick = onShareClick,
-                testTag = "AlertSelectionOption",
             ),
             onRemovePasswordClick?.let {
                 SelectionItemData(
                     text = stringResource(id = R.string.remove_password),
                     onClick = it,
-                    testTag = "AlertSelectionOption",
                 )
             },
             SelectionItemData(
                 text = stringResource(id = R.string.delete),
                 onClick = { shouldShowDeleteConfirmationDialog = true },
-                testTag = "AlertSelectionOption",
             ),
         )
             // Only show options if allowed

@@ -258,7 +258,6 @@ fun VaultItemListingContent(
                                         else -> onOverflowItemClick(option)
                                     }
                                 },
-                                testTag = "AlertSelectionOption",
                             )
                         }
                         // Only show options if allowed

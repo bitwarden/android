@@ -186,7 +186,7 @@ fun BitwardenListItem(
 data class SelectionItemData(
     val text: String,
     val onClick: () -> Unit,
-    val testTag: String? = null,
+    val testTag: String? = "AlertSelectionOption",
 )
 
 @Preview(showBackground = true)
