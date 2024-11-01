@@ -758,9 +758,19 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleSshKeyTypeActions(action: VaultItemAction.ItemType.SshKey) {
         when (action) {
+            VaultItemAction.ItemType.SshKey.CopyPublicKeyClick -> handleCopyPublicKeyClick()
+
             is VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked -> {
                 handlePrivateKeyVisibilityClicked(action)
             }
+
+            VaultItemAction.ItemType.SshKey.CopyFingerprintClick -> handleCopyFingerprintClick()
+        }
+    }
+
+    private fun handleCopyPublicKeyClick() {
+        onSshKeyContent { _, sshKey ->
+            clipboardManager.setText(text = sshKey.publicKey)
         }
     }
 
@@ -775,6 +785,12 @@ class VaultItemViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun handleCopyFingerprintClick() {
+        onSshKeyContent { _, sshKey ->
+            clipboardManager.setText(text = sshKey.fingerprint)
         }
     }
 
@@ -1759,9 +1775,19 @@ sealed class VaultItemAction {
          */
         sealed class SshKey : ItemType() {
             /**
+             * The user has clicked the copy button for the public key.
+             */
+            data object CopyPublicKeyClick : SshKey()
+
+            /**
              * The user has clicked to display the private key.
              */
             data class PrivateKeyVisibilityClicked(val isVisible: Boolean) : SshKey()
+
+            /**
+             * The user has clicked the copy button for the fingerprint.
+             */
+            data object CopyFingerprintClick : SshKey()
         }
     }
 
