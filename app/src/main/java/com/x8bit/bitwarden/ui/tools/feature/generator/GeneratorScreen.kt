@@ -460,7 +460,7 @@ private fun ColumnScope.PasswordTypeContent(
         valueTag = "PasswordLengthLabel",
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = 16.dp),
+            .padding(end = 28.dp),
     )
 
     Spacer(modifier = Modifier.height(8.dp))
