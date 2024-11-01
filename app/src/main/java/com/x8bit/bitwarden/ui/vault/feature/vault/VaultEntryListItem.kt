@@ -52,7 +52,6 @@ fun VaultEntryListItem(
                 SelectionItemData(
                     text = option.title(),
                     onClick = { onOverflowOptionClick(option) },
-                    testTag = "AlertSelectionOption",
                 )
             }
             .toImmutableList(),
