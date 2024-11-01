@@ -684,6 +684,22 @@ class AuthDiskSourceTest {
         assertFalse(fakeEncryptedSharedPreferences.contains(biometricsKeyKey))
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometicUnlockKeyFlow`() =
+        runTest {
+            val topSecretKey = "topsecret"
+            val mockUserId = "mockUserId"
+            authDiskSource.getUserBiometicUnlockKeyFlow(mockUserId).test {
+                assertNull(awaitItem())
+                authDiskSource.storeUserBiometricUnlockKey(
+                    userId = mockUserId,
+                    biometricsKey = topSecretKey,
+                )
+                assertEquals(topSecretKey, awaitItem())
+            }
+        }
+
     @Test
     fun `getPinProtectedUserKey should pull from SharedPreferences`() {
         val pinProtectedUserKeyBaseKey = "bwPreferencesStorage:pinKeyEncryptedUserKey"
@@ -722,6 +738,21 @@ class AuthDiskSourceTest {
             actual,
         )
     }
+
+    @Test
+    fun `storePinProtectedUserKey should update result flow from getPinProtectedUserKeyFlow`() =
+        runTest {
+            val topSecretKey = "topsecret"
+            val mockUserId = "mockUserId"
+            authDiskSource.getPinProtectedUserKeyFlow(mockUserId).test {
+                assertNull(awaitItem())
+                authDiskSource.storePinProtectedUserKey(
+                    userId = mockUserId,
+                    pinProtectedUserKey = topSecretKey,
+                )
+                assertEquals(topSecretKey, awaitItem())
+            }
+        }
 
     @Test
     fun `getEncryptedPin should pull from SharedPreferences`() {

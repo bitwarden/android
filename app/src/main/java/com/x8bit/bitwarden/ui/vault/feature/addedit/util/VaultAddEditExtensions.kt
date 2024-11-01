@@ -25,4 +25,5 @@ fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemTy
         VaultItemCipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card()
         VaultItemCipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity()
         VaultItemCipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
+        VaultItemCipherType.SSH_KEY -> VaultAddEditState.ViewState.Content.ItemType.SshKey()
     }

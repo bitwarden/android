@@ -69,6 +69,12 @@ interface SettingsDiskSource {
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
 
     /**
+     * The instant when the last database scheme change was applied. `null` if no scheme changes
+     * have been applied yet.
+     */
+    var lastDatabaseSchemeChangeInstant: Instant?
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
@@ -292,4 +298,20 @@ interface SettingsDiskSource {
      * Emits updates that track [getShowUnlockSettingBadge] for the given [userId].
      */
     fun getShowUnlockSettingBadgeFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets whether or not the given [userId] has signalled they want to import logins later.
+     */
+    fun getShowImportLoginsSettingBadge(userId: String): Boolean?
+
+    /**
+     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * set import logins later, during first time usage.
+     */
+    fun storeShowImportLoginsSettingBadge(userId: String, showBadge: Boolean?)
+
+    /**
+     * Emits updates that track [getShowImportLoginsSettingBadge] for the given [userId].
+     */
+    fun getShowImportLoginsSettingBadgeFlow(userId: String): Flow<Boolean?>
 }

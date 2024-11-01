@@ -109,9 +109,19 @@ interface SettingsRepository {
     val isUnlockWithBiometricsEnabled: Boolean
 
     /**
+     * Emits updates whenever there is a change in the user status for biometric unlocking.
+     */
+    val isUnlockWithBiometricsEnabledFlow: Flow<Boolean>
+
+    /**
      * Whether or not PIN unlocking is enabled for the current user.
      */
     val isUnlockWithPinEnabled: Boolean
+
+    /**
+     * Emits updates whenever there is a change in the user status for PIN unlocking.
+     */
+    val isUnlockWithPinEnabledFlow: Flow<Boolean>
 
     /**
      * Whether or not inline autofill is enabled for the current user.
@@ -254,38 +264,4 @@ interface SettingsRepository {
      * Record that a user has logged in on this device.
      */
     fun storeUserHasLoggedInValue(userId: String)
-
-    /**
-     * Gets whether or not the given [userId] has signalled they want to enable autofill
-     * later, during onboarding.
-     */
-    fun getShowAutoFillSettingBadge(userId: String): Boolean
-
-    /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
-     * enable autofill later, during onboarding.
-     */
-    fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean)
-
-    /**
-     * Gets whether or not the given [userId] has signalled they want to enable unlock options
-     * later, during onboarding.
-     */
-    fun getShowUnlockSettingBadge(userId: String): Boolean
-
-    /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
-     * set up unlock options later, during onboarding.
-     */
-    fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean)
-
-    /**
-     * Gets whether or not the given [userId] has signalled they want to enable autofill
-     */
-    fun getShowAutofillBadgeFlow(userId: String): Flow<Boolean>
-
-    /**
-     * Gets whether or not the given [userId] has signalled they want to enable unlock options
-     */
-    fun getShowUnlockBadgeFlow(userId: String): Flow<Boolean>
 }

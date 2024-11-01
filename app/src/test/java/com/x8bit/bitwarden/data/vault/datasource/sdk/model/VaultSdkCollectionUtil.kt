@@ -13,4 +13,5 @@ fun createMockSdkCollection(number: Int): Collection =
         name = "mockName-$number",
         externalId = "mockExternalId-$number",
         readOnly = false,
+        manage = true,
     )

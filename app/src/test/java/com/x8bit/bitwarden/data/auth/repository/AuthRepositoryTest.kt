@@ -6361,13 +6361,6 @@ class AuthRepositoryTest {
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
-    @Test
-    fun `setShowImportLogins should save the showImportLogins to disk`() {
-        fakeAuthDiskSource.userState = MULTI_USER_STATE
-        repository.setShowImportLogins(showImportLogins = true)
-        assertEquals(true, fakeAuthDiskSource.getShowImportLogins(USER_ID_1))
-    }
-
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"

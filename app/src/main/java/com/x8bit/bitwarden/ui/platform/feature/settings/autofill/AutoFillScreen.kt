@@ -46,7 +46,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
@@ -165,7 +165,7 @@ fun AutoFillScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.autofill_services),
                 description = stringResource(id = R.string.autofill_services_explanation_long),
                 isChecked = state.isAutoFillServicesEnabled,
@@ -178,7 +178,7 @@ fun AutoFillScreen(
                     .padding(horizontal = 16.dp),
             )
             if (state.showInlineAutofillOption) {
-                BitwardenWideSwitch(
+                BitwardenSwitch(
                     label = stringResource(id = R.string.inline_autofill),
                     description = stringResource(
                         id = R.string.use_inline_autofill_explanation_long,
@@ -226,7 +226,7 @@ fun AutoFillScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.copy_totp_automatically),
                 description = stringResource(id = R.string.copy_totp_automatically_description),
                 isChecked = state.isCopyTotpAutomaticallyEnabled,
@@ -238,7 +238,7 @@ fun AutoFillScreen(
                     .testTag("CopyTotpAutomaticallySwitch")
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.ask_to_add_login),
                 description = stringResource(id = R.string.ask_to_add_login_description),
                 isChecked = state.isAskToAddLoginEnabled,
@@ -281,7 +281,7 @@ private fun AccessibilityAutofillSwitch(
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.accessibility),
         description = stringResource(id = R.string.accessibility_description5),
         isChecked = isAccessibilityAutoFillEnabled,

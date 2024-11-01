@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 
 const val SETTINGS_GRAPH_ROUTE: String = "settings_graph"
 private const val SETTINGS_ROUTE: String = "settings"
@@ -35,7 +36,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,

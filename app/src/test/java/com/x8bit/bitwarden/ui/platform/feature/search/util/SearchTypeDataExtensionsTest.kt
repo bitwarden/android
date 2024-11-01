@@ -205,6 +205,32 @@ class SearchTypeDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault SshKeys`() {
+        val searchTypeData = SearchTypeData.Vault.SshKeys
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault VerificationCodes`() {
+        val searchTypeData = SearchTypeData.Vault.VerificationCodes
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Trash`() {
         val searchTypeData = SearchTypeData.Vault.Trash
         assertEquals(
@@ -299,6 +325,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -324,6 +351,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = false,
         )
 
         assertEquals(
@@ -364,6 +392,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = false,
         )
 
         assertEquals(
@@ -414,6 +443,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isTotp = true,
         )
 
         assertEquals(

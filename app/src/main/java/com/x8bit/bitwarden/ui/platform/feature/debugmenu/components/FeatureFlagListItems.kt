@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
  * Creates a list item for a [FlagKey].
@@ -27,6 +27,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.OnboardingCarousel,
     FlagKey.OnboardingFlow,
     FlagKey.ImportLoginsFlow,
+    FlagKey.SshKeyCipherItems,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -47,7 +48,7 @@ private fun BooleanFlagItem(
     onValueChange: (key: FlagKey<Boolean>, value: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = label,
         isChecked = currentValue,
         onCheckedChange = {
@@ -69,4 +70,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.OnboardingCarousel -> stringResource(R.string.onboarding_carousel)
     FlagKey.OnboardingFlow -> stringResource(R.string.onboarding_flow)
     FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
+    FlagKey.SshKeyCipherItems -> stringResource(R.string.ssh_key_cipher_item_types)
 }

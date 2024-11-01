@@ -195,6 +195,7 @@
   <string name="translations">Преводи</string>
   <string name="items_for_uri">Елементи за %1$s</string>
   <string name="no_items_for_uri">В трезора липсват елементи за %1$s.</string>
+  <string name="no_items_for_vault">В трезора няма елементи, които отговарят на „%1$s“</string>
   <string name="search_for_a_login_or_add_a_new_login">Търсене на елемент за вписване или добавяне на нов такъв</string>
   <string name="bitwarden_autofill_service_overlay">При избиране на поле за въвеждане на данни ще се появява изскачащо прозорче на Битуорден. Ако го натиснете, ще задействате услугата за автоматично дописване и имената и паролите ще бъдат попълнени.</string>
   <string name="bitwarden_autofill_service_notification_content">Натиснете известието, за да попълните със запис от трезора.</string>
@@ -1059,4 +1060,17 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Запазете изнесения файл някъде в компютъра си, така че да може да го намерите лесно.</string>
   <string name="save_the_exported_file_highlight">Запазете изнесения файл</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Това не изглежда да е познат сървър на Битуорден. Може да се наложи да го проверите при доставчика си или да обновите сървъра си.</string>
+  <string name="syncing_logins_loading_message">Синхронизиране на елементите за вписване…</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="download_the_browser_extension">Download the browser extension</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
+  <string name="use_the_web_app">Use the web app</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Log in at bitwarden.com to easily manage your account and update settings.</string>
+  <string name="autofill_passwords">Autofill passwords</string>
+  <string name="set_up_autofill_on_all_your_devices">Set up autofill on all your devices to login with a single tap anywhere.</string>
+  <string name="import_successful">Import Successful!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
+  <string name="bitwarden_tools">Bitwarden Tools</string>
+  <string name="got_it">Got it</string>
+  <string name="no_logins_were_imported">No logins were imported</string>
 </resources>

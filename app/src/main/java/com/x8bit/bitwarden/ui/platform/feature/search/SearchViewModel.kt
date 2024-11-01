@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -570,6 +571,10 @@ class SearchViewModel @Inject constructor(
                     ),
                 )
             }
+
+            is MasterPasswordRepromptData.Totp -> {
+                trySendAction(SearchAction.ItemClick(itemId = data.cipherId))
+            }
         }
     }
 
@@ -680,6 +685,7 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
+                                isTotp = state.isTotp,
                                 isPremiumUser = state.isPremium,
                             )
                     }
@@ -826,6 +832,7 @@ data class SearchState(
         val overflowOptions: List<ListingItemOverflowAction>,
         val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,
+        val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
     ) : Parcelable
 }
@@ -870,6 +877,7 @@ sealed class SearchTypeData : Parcelable {
      * Indicates that we should be searching vault items.
      */
     @Parcelize
+    @OmitFromCoverage
     sealed class Vault : SearchTypeData() {
         /**
          * Indicates that we should be searching all vault items.
@@ -916,6 +924,16 @@ sealed class SearchTypeData : Parcelable {
                 get() = R.string.search.asText()
                     .concat(" ".asText())
                     .concat(R.string.secure_notes.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only ssh key ciphers.
+         */
+        data object SshKeys : Vault() {
+            override val title: Text
+                get() = R.string.search.asText()
+                    .concat(" ".asText())
+                    .concat(R.string.ssh_keys.asText())
         }
 
         /**
@@ -1168,6 +1186,14 @@ sealed class MasterPasswordRepromptData : Parcelable {
      */
     @Parcelize
     data class AutofillAndSave(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * Autofill was selected.
+     */
+    @Parcelize
+    data class Totp(
         val cipherId: String,
     ) : MasterPasswordRepromptData()
 

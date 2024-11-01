@@ -1327,11 +1327,6 @@ class AuthRepositoryImpl(
         authDiskSource.storeOnboardingStatus(userId = userId, onboardingStatus = status)
     }
 
-    override fun setShowImportLogins(showImportLogins: Boolean) {
-        val userId: String = activeUserId ?: return
-        authDiskSource.storeShowImportLogins(userId = userId, showImportLogins = showImportLogins)
-    }
-
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
         password: String,

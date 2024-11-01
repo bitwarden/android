@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
@@ -26,12 +25,14 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRe
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -153,6 +154,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
     }
+    private val mutableSshVaultItemsFeatureFlagFlow = MutableStateFlow<Boolean>(true)
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every {
+            getFeatureFlagFlow(key = FlagKey.SshKeyCipherItems)
+        } returns mutableSshVaultItemsFeatureFlagFlow
+        every {
+            getFeatureFlag(key = FlagKey.SshKeyCipherItems)
+        } returns mutableSshVaultItemsFeatureFlagFlow.value
+    }
 
     @BeforeEach
     fun setup() {
@@ -251,6 +261,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
                 dialog = null,
+                supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             ),
             viewModel.stateFlow.value,
         )
@@ -364,6 +375,56 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             vaultRepository.vaultDataStateFlow
         }
+    }
+
+    @Test
+    fun `initial add state should be correct when SSH key feature flag is enabled`() {
+        mutableSshVaultItemsFeatureFlagFlow.value = true
+        val vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN)
+        val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            initState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `initial add state should be correct when SSH key feature flag is disabled`() {
+        mutableSshVaultItemsFeatureFlagFlow.value = false
+        every {
+            featureFlagManager.getFeatureFlag(key = FlagKey.SshKeyCipherItems)
+        } returns false
+        val vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN)
+        val expectedState = VaultAddEditState(
+            vaultAddEditType = vaultAddEditType,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+            ),
+            dialog = null,
+            totpData = null,
+            shouldShowCloseButton = true,
+            shouldExitOnSave = false,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
+                .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
+        )
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = null,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -611,25 +672,22 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createCipherInOrganization(any(), any())
             } returns CreateCipherResult.Success
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(stateWithDialog, stateTurbine.awaitItem())
-                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
+                assertEquals(stateWithDialog, stateFlow.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
                     VaultAddEditEvent.ShowToast(
                         R.string.new_item_created.asText(),
                     ),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
                 assertEquals(
                     VaultAddEditEvent.NavigateBack,
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
             }
             coVerify(exactly = 1) {
@@ -680,19 +738,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createCipherInOrganization(any(), any())
             } returns CreateCipherResult.Success
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(stateWithDialog, stateTurbine.awaitItem())
-                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
+                assertEquals(stateWithDialog, stateFlow.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
                     VaultAddEditEvent.ExitApp,
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
             }
             assertNull(specialCircumstanceManager.specialCircumstance)
@@ -821,17 +876,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns mockAttestationOptions
             every { authRepository.activeUserId } returns "mockUserId"
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithNewLogin, stateTurbine.awaitItem())
-                assertEquals(stateWithSavingDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithNewLogin, stateFlow.awaitItem())
+                assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.Fido2UserVerification(isRequired = true),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -899,22 +951,19 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns mockAttestationOptions
             every { authRepository.activeUserId } returns mockUserId
 
-            turbineScope {
-                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
-
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-                assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(stateWithSavingDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
+                assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
-                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Registration(mockCreateResult),
-                    eventTurbine.awaitItem(),
+                    eventFlow.awaitItem(),
                 )
                 coVerify(exactly = 1) {
                     fido2CredentialManager.registerFido2Credential(
@@ -1059,11 +1108,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-            turbineScope {
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
+            viewModel.eventFlow.test {
                 assertEquals(
                     VaultAddEditEvent.Fido2UserVerification(isRequired = false),
-                    eventTurbine.awaitItem(),
+                    awaitItem(),
                 )
             }
         }
@@ -1105,11 +1153,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
-            turbineScope {
-                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
+            viewModel.eventFlow.test {
                 assertEquals(
                     VaultAddEditEvent.Fido2UserVerification(isRequired = true),
-                    eventTurbine.awaitItem(),
+                    awaitItem(),
                 )
             }
         }
@@ -1794,6 +1841,36 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 common = createCommonContentViewState(),
                 isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                previousItemTypes = mapOf(
+                    VaultAddEditState.ItemTypeOption.LOGIN
+                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
+            ),
+        )
+
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `TypeOptionSelect SSH_KEYS should switch to SshKeysItem`() = runTest {
+        mutableVaultDataFlow.value = DataState.Loaded(
+            createVaultData(cipherView = createMockCipherView(1)),
+        )
+        val viewModel = createAddVaultItemViewModel()
+        val action = VaultAddEditAction.Common.TypeOptionSelect(
+            VaultAddEditState.ItemTypeOption.SSH_KEYS,
+        )
+
+        viewModel.trySendAction(action)
+
+        val expectedState = loginInitialState.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = createCommonContentViewState(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
                 previousItemTypes = mapOf(
                     VaultAddEditState.ItemTypeOption.LOGIN
                         to VaultAddEditState.ViewState.Content.ItemType.Login(),
@@ -2625,6 +2702,45 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Nested
+    inner class VaultAddEditSshKeyTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var sshKeyInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherView = createMockCipherView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
+            )
+            sshKeyInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SSH_KEY),
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = sshKeyInitialSavedStateHandle,
+            )
+        }
+
+        @Test
+        fun `PrivateKeyVisibilityChange should update private key visibility`() = runTest {
+            val action = VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange(
+                isVisible = true,
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SshKey(
+                    showPrivateKey = true,
+                ),
+            )
+            viewModel.trySendAction(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
     @Test
     fun `NumberVisibilityChange should log an event when in edit mode and password is visible`() =
         runTest {
@@ -2701,6 +2817,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 resourceManager = resourceManager,
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
+                featureFlagManager = featureFlagManager,
             )
         }
 
@@ -3796,6 +3913,30 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     )
                 }
             }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `SshKeyCipherItemsFeatureFlagReceive should update supportedItemTypes`() = runTest {
+            // Verify SSH keys is supported when feature flag is enabled.
+            viewModel.trySendAction(
+                VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive(enabled = true),
+            )
+            assertEquals(
+                VaultAddEditState.ItemTypeOption.entries,
+                viewModel.stateFlow.value.supportedItemTypes,
+            )
+
+            // Verify SSH keys is not supported when feature flag is disabled.
+            viewModel.trySendAction(
+                VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive(enabled = false),
+            )
+            assertEquals(
+                VaultAddEditState.ItemTypeOption.entries.filterNot {
+                    it == VaultAddEditState.ItemTypeOption.SSH_KEYS
+                },
+                viewModel.stateFlow.value.supportedItemTypes,
+            )
+        }
     }
 
     //region Helper functions
@@ -3809,6 +3950,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
         totpData: TotpData? = null,
+        supportedItemTypes: List<VaultAddEditState.ItemTypeOption> = VaultAddEditState.ItemTypeOption.entries,
     ): VaultAddEditState =
         VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
@@ -3820,6 +3962,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             dialog = dialogState,
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
+            supportedItemTypes = supportedItemTypes,
         )
 
     @Suppress("LongParameterList")
@@ -3838,6 +3981,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         ),
         availableOwners: List<VaultAddEditState.Owner> = createOwnerList(),
         selectedOwnerId: String? = null,
+        hasOrganizations: Boolean = true,
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
@@ -3850,6 +3994,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             originalCipher = originalCipher,
             availableFolders = availableFolders,
             availableOwners = availableOwners,
+            hasOrganizations = hasOrganizations,
         )
 
     @Suppress("LongParameterList")
@@ -3894,6 +4039,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 VaultItemCipherType.CARD -> "card"
                 VaultItemCipherType.IDENTITY -> "identity"
                 VaultItemCipherType.SECURE_NOTE -> "secure_note"
+                VaultItemCipherType.SSH_KEY -> "ssh_key"
                 null -> null
             },
         )
@@ -3921,6 +4067,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             resourceManager = bitwardenResourceManager,
             clock = clock,
             organizationEventManager = organizationEventManager,
+            featureFlagManager = featureFlagManager,
         )
 
     private fun createVaultData(

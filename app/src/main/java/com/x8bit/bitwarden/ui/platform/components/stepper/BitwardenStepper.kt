@@ -2,13 +2,12 @@ package com.x8bit.bitwarden.ui.platform.components.stepper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 
 /**
@@ -38,8 +37,6 @@ fun BitwardenStepper(
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
     stepperActionsTestTag: String? = null,
-    increaseButtonTestTag: String? = null,
-    decreaseButtonTestTag: String? = null,
 ) {
     val clampedValue = value?.coerceIn(range)
     if (clampedValue != value && clampedValue != null) {
@@ -54,7 +51,7 @@ fun BitwardenStepper(
         value = clampedValue?.toString() ?: ZERO_WIDTH_CHARACTER,
         actionsTestTag = stepperActionsTestTag,
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_minus,
                 contentDescription = "\u2212",
                 onClick = {
@@ -64,11 +61,9 @@ fun BitwardenStepper(
                     }
                 },
                 isEnabled = isDecrementEnabled && !isAtRangeMinimum,
-                modifier = Modifier.semantics {
-                    decreaseButtonTestTag?.let { testTag = it }
-                },
+                modifier = Modifier.testTag("DecrementValue"),
             )
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_plus,
                 contentDescription = "+",
                 onClick = {
@@ -78,9 +73,7 @@ fun BitwardenStepper(
                     }
                 },
                 isEnabled = isIncrementEnabled && !isAtRangeMaximum,
-                modifier = Modifier.semantics {
-                    increaseButtonTestTag?.let { testTag = it }
-                },
+                modifier = Modifier.testTag("IncrementValue"),
             )
         },
         readOnly = textFieldReadOnly,

@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -24,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,8 +39,8 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBa
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -55,9 +53,11 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -86,9 +86,7 @@ fun GeneratorScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
 
     LivecycleEventEffect { _, event ->
         when (event) {
@@ -106,7 +104,7 @@ fun GeneratorScreen(
 
             is GeneratorEvent.ShowSnackbar -> {
                 snackbarHostState.showSnackbar(
-                    message = event.message(resources).toString(),
+                    snackbarData = BitwardenSnackbarData(message = event.message),
                     duration = SnackbarDuration.Short,
                 )
             }
@@ -199,7 +197,7 @@ fun GeneratorScreen(
             }
         },
         snackbarHost = {
-            BitwardenSnackbarHost(hostState = snackbarHostState)
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
@@ -376,13 +374,13 @@ private fun GeneratedStringItem(
         value = generatedText,
         singleLine = false,
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy),
                 onClick = onCopyClick,
                 modifier = Modifier.testTag("CopyValueButton"),
             )
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
                 onClick = onRegenerateClick,
@@ -460,6 +458,9 @@ private fun ColumnScope.PasswordTypeContent(
         range = passwordTypeState.computedMinimumLength..passwordTypeState.maxLength,
         sliderTag = "PasswordLengthSlider",
         valueTag = "PasswordLengthLabel",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 28.dp),
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -530,7 +531,7 @@ private fun PasswordCapitalLettersToggleItem(
     onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "A—Z",
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
@@ -549,7 +550,7 @@ private fun PasswordLowercaseLettersToggleItem(
     onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "a—z",
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
@@ -568,7 +569,7 @@ private fun PasswordNumbersToggleItem(
     onPasswordToggleNumbersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "0-9",
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
@@ -587,7 +588,7 @@ private fun PasswordSpecialCharactersToggleItem(
     onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = "!@#$%^&*",
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
@@ -612,8 +613,6 @@ private fun PasswordMinNumbersCounterItem(
         value = minNumbers.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinNumbersCounterChange,
-        increaseButtonTestTag = "MinNumberIncreaseButton",
-        decreaseButtonTestTag = "MinNumberDecreaseButton",
         modifier = Modifier
             .testTag("MinNumberValueLabel")
             .padding(horizontal = 16.dp),
@@ -632,8 +631,6 @@ private fun PasswordMinSpecialCharactersCounterItem(
         value = minSpecial.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinSpecialCharactersChange,
-        increaseButtonTestTag = "MinSpecialIncreaseButton",
-        decreaseButtonTestTag = "MinSpecialDecreaseButton",
         modifier = Modifier
             .testTag("MinSpecialValueLabel")
             .padding(horizontal = 16.dp),
@@ -646,7 +643,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
     onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.avoid_ambiguous_characters),
         isChecked = avoidAmbiguousChars,
         enabled = enabled,
@@ -719,8 +716,6 @@ private fun PassphraseNumWordsCounterItem(
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
         stepperActionsTestTag = "NumberOfWordsStepper",
-        increaseButtonTestTag = "NumberOfWordsIncreaseButton",
-        decreaseButtonTestTag = "NumberOfWordsDecreaseButton",
         modifier = Modifier
             .testTag("NumberOfWordsLabel")
             .padding(horizontal = 16.dp),
@@ -757,7 +752,7 @@ private fun PassphraseCapitalizeToggleItem(
     onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
@@ -775,7 +770,7 @@ private fun PassphraseIncludeNumberToggleItem(
     onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
     enabled: Boolean,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         enabled = enabled,
@@ -1126,7 +1121,7 @@ private fun RandomWordCapitalizeToggleItem(
     capitalize: Boolean,
     onRandomWordCapitalizeToggleChange: (Boolean) -> Unit,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onRandomWordCapitalizeToggleChange,
@@ -1142,7 +1137,7 @@ private fun RandomWordIncludeNumberToggleItem(
     includeNumber: Boolean,
     onRandomWordIncludeNumberToggleChange: (Boolean) -> Unit,
 ) {
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         onCheckedChange = onRandomWordIncludeNumberToggleChange,

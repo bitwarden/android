@@ -63,11 +63,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
+    private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
+    private var storedLastDatabaseSchemeChangeInstant: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableShowUnlockSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShowImportLoginsSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage? = null
@@ -131,6 +136,10 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
         }
+
+    override var lastDatabaseSchemeChangeInstant: Instant?
+        get() = storedLastDatabaseSchemeChangeInstant
+        set(value) { storedLastDatabaseSchemeChangeInstant = value }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -318,6 +327,19 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(getShowUnlockSettingBadge(userId = userId))
         }
 
+    override fun getShowImportLoginsSettingBadge(userId: String): Boolean? =
+        userShowImportLoginsBadge[userId]
+
+    override fun storeShowImportLoginsSettingBadge(userId: String, showBadge: Boolean?) {
+        userShowImportLoginsBadge[userId] = showBadge
+        getMutableShowImportLoginsSettingBadgeFlow(userId).tryEmit(showBadge)
+    }
+
+    override fun getShowImportLoginsSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowImportLoginsSettingBadgeFlow(userId = userId).onSubscription {
+            emit(getShowImportLoginsSettingBadge(userId = userId))
+        }
+
     //region Private helper functions
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
         return mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
@@ -363,6 +385,12 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         mutableShowUnlockSettingBadgeFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
+    private fun getMutableShowImportLoginsSettingBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> = mutableShowImportLoginsSettingBadgeFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
 
     //endregion Private helper functions
 }

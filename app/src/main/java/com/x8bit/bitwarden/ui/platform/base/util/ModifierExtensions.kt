@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -71,7 +70,6 @@ fun Modifier.scrolledContainerBottomDivider(
     this.bottomDivider(
         alpha = topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
         enabled = enabled,
-        thickness = (0.5).dp,
     )
 
 /**
@@ -83,7 +81,7 @@ fun Modifier.scrolledContainerBottomDivider(
 fun Modifier.bottomDivider(
     paddingStart: Dp = 0.dp,
     paddingEnd: Dp = 0.dp,
-    thickness: Dp = DividerDefaults.Thickness,
+    thickness: Dp = (0.5).dp,
     color: Color = BitwardenTheme.colorScheme.stroke.divider,
     enabled: Boolean = true,
     alpha: Float = 1f,

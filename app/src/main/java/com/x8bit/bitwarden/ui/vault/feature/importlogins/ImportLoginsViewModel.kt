@@ -1,12 +1,19 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,14 +25,26 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class ImportLoginsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
+    private val firstTimeActionManager: FirstTimeActionManager,
+    private val environmentRepository: EnvironmentRepository,
+    private val snackbarRelayManager: SnackbarRelayManager,
 ) :
     BaseViewModel<ImportLoginsState, ImportLoginsEvent, ImportLoginsAction>(
-        initialState = ImportLoginsState(
-            null,
-            viewState = ImportLoginsState.ViewState.InitialContent,
-            isVaultSyncing = false,
-        ),
+        initialState = run {
+            val vaultUrl = environmentRepository.environment.environmentUrlData.webVault
+                ?: environmentRepository.environment.environmentUrlData.base
+            ImportLoginsState(
+                dialogState = null,
+                viewState = ImportLoginsState.ViewState.InitialContent,
+                isVaultSyncing = false,
+                showBottomSheet = false,
+                // attempt to trim the scheme of the vault url
+                currentWebVaultUrl = vaultUrl.toUriOrNull()?.host ?: vaultUrl,
+                snackbarRelay = ImportLoginsArgs(savedStateHandle).snackBarRelay,
+            )
+        },
     ) {
     override fun handleAction(action: ImportLoginsAction) {
         when (action) {
@@ -46,8 +65,26 @@ class ImportLoginsViewModel @Inject constructor(
             }
 
             ImportLoginsAction.RetryVaultSync -> handleRetryVaultSync()
-            ImportLoginsAction.FailSyncAcknowledged -> handleFailedSyncAcknowledged()
+            ImportLoginsAction.FailedSyncAcknowledged -> handleFailedSyncAcknowledged()
+            ImportLoginsAction.SuccessfulSyncAcknowledged -> handleSuccessSyncAcknowledged()
         }
+    }
+
+    private fun handleSuccessSyncAcknowledged() {
+        mutableStateFlow.update {
+            it.copy(
+                isVaultSyncing = false,
+                showBottomSheet = false,
+            )
+        }
+        // instead of doing inline, this approach to avoid "MaxLineLength" suppression.
+        val snackbarData = BitwardenSnackbarData(
+            messageHeader = R.string.logins_imported.asText(),
+            message = R.string.remember_to_delete_your_imported_password_file_from_your_computer
+                .asText(),
+        )
+        snackbarRelayManager.sendSnackbarData(data = snackbarData, relay = state.snackbarRelay)
+        sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
     private fun handleFailedSyncAcknowledged() {
@@ -70,17 +107,37 @@ class ImportLoginsViewModel @Inject constructor(
     private fun handleVaultSyncResultReceived(
         action: ImportLoginsAction.Internal.VaultSyncResultReceived,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is SyncVaultDataResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         isVaultSyncing = false,
-                        dialogState = ImportLoginsState.DialogState.Error,
+                        dialogState = ImportLoginsState.DialogState.Error(),
                     )
                 }
             }
 
-            SyncVaultDataResult.Success -> sendEvent(ImportLoginsEvent.NavigateToImportSuccess)
+            is SyncVaultDataResult.Success -> {
+                if (result.itemsAvailable) {
+                    firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+                    firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
+                    mutableStateFlow.update {
+                        it.copy(
+                            showBottomSheet = true,
+                            isVaultSyncing = false,
+                        )
+                    }
+                } else {
+                    mutableStateFlow.update {
+                        it.copy(
+                            isVaultSyncing = false,
+                            dialogState = ImportLoginsState.DialogState.Error(
+                                R.string.no_logins_were_imported.asText(),
+                            ),
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -127,6 +184,8 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun handleConfirmImportLater() {
         dismissDialog()
+        firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
         sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
@@ -166,6 +225,9 @@ data class ImportLoginsState(
     val dialogState: DialogState?,
     val viewState: ViewState,
     val isVaultSyncing: Boolean,
+    val showBottomSheet: Boolean,
+    val currentWebVaultUrl: String,
+    val snackbarRelay: SnackbarRelay,
 ) {
     /**
      * Dialog states for the [ImportLoginsViewModel].
@@ -195,9 +257,10 @@ data class ImportLoginsState(
         /**
          * Show a dialog with an error message.
          */
-        data object Error : DialogState() {
+        data class Error(
+            override val message: Text = R.string.generic_error_message.asText(),
+        ) : DialogState() {
             override val title: Text? = null
-            override val message: Text = R.string.generic_error_message.asText()
         }
     }
 
@@ -248,11 +311,6 @@ sealed class ImportLoginsEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : ImportLoginsEvent()
-
-    /**
-     * Navigate to the import success screen
-     */
-    data object NavigateToImportSuccess : ImportLoginsEvent()
 
     /**
      * Open the help link in a browser.
@@ -334,7 +392,12 @@ sealed class ImportLoginsAction {
     /**
      * User has acknowledge failed sync and chose not to retry now.
      */
-    data object FailSyncAcknowledged : ImportLoginsAction()
+    data object FailedSyncAcknowledged : ImportLoginsAction()
+
+    /**
+     * User has imported logins successfully.
+     */
+    data object SuccessfulSyncAcknowledged : ImportLoginsAction()
 
     /**
      * Internal actions to be handled, not triggered by user actions.

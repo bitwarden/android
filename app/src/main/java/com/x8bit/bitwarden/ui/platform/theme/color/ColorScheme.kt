@@ -51,12 +51,6 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         foregroundDisabled = PrimitiveColors.gray900,
         foregroundReversed = PrimitiveColors.gray1100,
     ),
-    tonalButton = BitwardenColorScheme.TonalButtonColors(
-        background = PrimitiveColors.gray900,
-        backgroundDisabled = PrimitiveColors.gray900,
-        foreground = PrimitiveColors.gray200,
-        foregroundDisabled = PrimitiveColors.gray500,
-    ),
     toggleButton = BitwardenColorScheme.ToggleButtonColors(
         backgroundOn = PrimitiveColors.blue400,
         backgroundOff = PrimitiveColors.gray900,
@@ -124,12 +118,6 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         foreground = PrimitiveColors.blue500,
         foregroundDisabled = PrimitiveColors.gray500,
         foregroundReversed = PrimitiveColors.gray100,
-    ),
-    tonalButton = BitwardenColorScheme.TonalButtonColors(
-        background = PrimitiveColors.blue100,
-        backgroundDisabled = PrimitiveColors.gray400,
-        foreground = PrimitiveColors.gray1300,
-        foregroundDisabled = PrimitiveColors.gray500,
     ),
     toggleButton = BitwardenColorScheme.ToggleButtonColors(
         backgroundOn = PrimitiveColors.blue500,
@@ -204,12 +192,6 @@ fun dynamicBitwardenColorScheme(
             foreground = materialColorScheme.primary,
             foregroundDisabled = materialColorScheme.onSurface,
             foregroundReversed = materialColorScheme.inversePrimary,
-        ),
-        tonalButton = BitwardenColorScheme.TonalButtonColors(
-            background = materialColorScheme.primary,
-            backgroundDisabled = materialColorScheme.onSurface.copy(alpha = 0.12f),
-            foreground = materialColorScheme.onPrimary,
-            foregroundDisabled = materialColorScheme.onSurface.copy(alpha = 0.38f),
         ),
         toggleButton = BitwardenColorScheme.ToggleButtonColors(
             backgroundOn = materialColorScheme.primary,

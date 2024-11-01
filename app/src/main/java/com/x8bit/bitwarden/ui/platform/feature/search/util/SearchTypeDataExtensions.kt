@@ -62,6 +62,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.SecureNotes -> this
         SearchTypeData.Vault.Trash -> this
         SearchTypeData.Vault.VerificationCodes -> this
+        SearchTypeData.Vault.SshKeys -> this
     }
 
 /**
@@ -114,6 +115,7 @@ private fun CipherView.filterBySearchType(
         is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY && deletedDate == null
         is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN && deletedDate == null
         is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE && deletedDate == null
+        is SearchTypeData.Vault.SshKeys -> type == CipherType.SSH_KEY && deletedDate == null
         is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
@@ -148,6 +150,7 @@ fun List<CipherView>.toViewState(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): SearchState.ViewState =
     when {
@@ -159,6 +162,7 @@ fun List<CipherView>.toViewState(
                     hasMasterPassword = hasMasterPassword,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
+                    isTotp = isTotp,
                     isPremiumUser = isPremiumUser,
                 )
                     .sortAlphabetically(),
@@ -172,11 +176,13 @@ fun List<CipherView>.toViewState(
         }
     }
 
+@Suppress("LongParameterList")
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
@@ -185,15 +191,18 @@ private fun List<CipherView>.toDisplayItemList(
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
+            isTotp = isTotp,
             isPremiumUser = isPremiumUser,
         )
     }
 
+@Suppress("LongParameterList")
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
@@ -221,6 +230,7 @@ private fun CipherView.toDisplayItem(
             .filter {
                 this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
             },
+        isTotp = isTotp,
         shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
 
@@ -247,6 +257,7 @@ private val CipherType.iconRes: Int
         CipherType.SECURE_NOTE -> R.drawable.ic_note
         CipherType.CARD -> R.drawable.ic_payment_card
         CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
     }
 
 /**
@@ -360,6 +371,7 @@ private fun SendView.toDisplayItem(
         overflowTestTag = "SendOptionsButton",
         totpCode = null,
         autofillSelectionOptions = emptyList(),
+        isTotp = false,
         shouldDisplayMasterPasswordReprompt = false,
     )
 

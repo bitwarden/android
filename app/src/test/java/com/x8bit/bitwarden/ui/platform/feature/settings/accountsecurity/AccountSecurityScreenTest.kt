@@ -1465,7 +1465,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Test
     fun `sync with Bitwarden authenticator UI should be displayed according to state`() {
-        val toggleText = "Allow Bitwarden Authenticator Syncing"
+        val toggleText = "Allow authenticator syncing"
         composeTestRule.onNodeWithText(toggleText).assertDoesNotExist()
 
         mutableStateFlow.update { DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true) }
@@ -1486,7 +1486,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     fun `sync with Bitwarden authenticator click should send AuthenticatorSyncToggle action`() {
         mutableStateFlow.update { DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true) }
         composeTestRule
-            .onNodeWithText("Allow Bitwarden Authenticator Syncing")
+            .onNodeWithText("Allow authenticator syncing")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AccountSecurityAction.AuthenticatorSyncToggle(true)) }

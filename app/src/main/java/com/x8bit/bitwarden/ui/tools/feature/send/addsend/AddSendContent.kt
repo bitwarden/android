@@ -36,7 +36,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -45,7 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -104,7 +104,8 @@ fun AddSendContent(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("SendPolicyInEffectLabel"),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -113,7 +114,7 @@ fun AddSendContent(
                 BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.send_options_policy_in_effect),
                     modifier = Modifier
-                        .testTag(tag = "SendOptionsPolicyInEffectLabel")
+                        .testTag(tag = "SendPolicyInEffectLabel")
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
@@ -171,7 +172,7 @@ fun AddSendContent(
                             style = BitwardenTheme.typography.bodySmall,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        BitwardenFilledTonalButton(
+                        BitwardenOutlinedButton(
                             label = stringResource(id = R.string.choose_file),
                             onClick = {
                                 @Suppress("MaxLineLength")
@@ -242,7 +243,7 @@ fun AddSendContent(
                         onValueChange = addSendHandlers.onTextChange,
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    BitwardenWideSwitch(
+                    BitwardenSwitch(
                         modifier = Modifier
                             .testTag(tag = "SendHideTextByDefaultToggle")
                             .fillMaxWidth()
@@ -502,7 +503,7 @@ private fun AddSendOptions(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 modifier = Modifier
                     .testTag("SendHideEmailSwitch")
                     .fillMaxWidth()
@@ -514,7 +515,7 @@ private fun AddSendOptions(
                 enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
             )
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 modifier = Modifier
                     .testTag("SendDeactivateSwitch")
                     .fillMaxWidth()

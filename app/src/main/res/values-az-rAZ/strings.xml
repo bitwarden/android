@@ -195,6 +195,7 @@
   <string name="translations">Tərcümələr</string>
   <string name="items_for_uri">%1$s üçün elementlər</string>
   <string name="no_items_for_uri">Seyfinizdə %1$s üçün heç bir element yoxdur.</string>
+  <string name="no_items_for_vault">Seyfinizdə \"%1$s\" ilə uyuşan heç bir element yoxdur</string>
   <string name="search_for_a_login_or_add_a_new_login">Bir giriş axtar və ya yenisini əlavə et</string>
   <string name="bitwarden_autofill_service_overlay">Bir giriş xanası seçdikdə və Bitwarden avto-doldurma örtüyünü gördükdə, avto-doldurma xidmətini başlatmaq üçün buna toxuna bilərsiniz.</string>
   <string name="bitwarden_autofill_service_notification_content">Bir elementi seyfinizdən avto-doldurmaq üçün bu bildirişə toxunun.</string>
@@ -1057,5 +1058,18 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="import_help_highlight">daxilə köçürmə üzrə kömək</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Xaricə köçürdüyünüz faylı kompüterinizdə rahatlıqla tapa biləcəyiniz yerdə saxlayın.</string>
   <string name="save_the_exported_file_highlight">Xaricə köçürülən faylı saxlayın</string>
-  <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
+  <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu, bilinən Bitwarden serveri deyil. Provayderinizi yoxlamağınız və ya serverinizi güncəlləməyiniz lazım gələ bilər.</string>
+  <string name="syncing_logins_loading_message">Girişlər sinxronlaşdırılır...</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher element növləri</string>
+  <string name="download_the_browser_extension">Brauzer uzantısını endir</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha problemsiz bir təcrübə üçün Bitwarden-i sevimli brauzerinizə inteqrasiya etmək üçün bitwarden.com/download ünvanına gedin. </string>
+  <string name="use_the_web_app">Veb tətbiqi istifadə et</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Hesabınızı asanlıqla idarə etmək və ayarları güncəlləmək üçün bitwarden.com saytında giriş edin.</string>
+  <string name="autofill_passwords">Parolları avto-doldur</string>
+  <string name="set_up_autofill_on_all_your_devices">Bütün cihazlarınızda avto-doldurmanı quraraq tək toxunuşla istənilən yerdən giriş edin.</string>
+  <string name="import_successful">Uğurla daxilə köçürüldü!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Bitwarden-in veb və masaüstü alətləri ilə istənilən yerdən girişlərinizi idarə edin.</string>
+  <string name="bitwarden_tools">Bitwarden Alətləri</string>
+  <string name="got_it">Anladım</string>
+  <string name="no_logins_were_imported">No logins were imported</string>
 </resources>

@@ -1062,10 +1062,10 @@ class SettingsDiskSourceTest {
     @Test
     fun `storeShowAutoFillSettingBadge should update the flow value`() = runTest {
         val mockUserId = "mockUserId"
-        settingsDiskSource.storeShowAutoFillSettingBadge(mockUserId, true)
         settingsDiskSource.getShowAutoFillSettingBadgeFlow(userId = mockUserId).test {
             // The initial values of the Flow are in sync
-            assertTrue(awaitItem() ?: false)
+            assertFalse(awaitItem() ?: false)
+            settingsDiskSource.storeShowAutoFillSettingBadge(mockUserId, true)
             assertTrue(awaitItem() ?: false)
 
             // update the value to false
@@ -1103,14 +1103,106 @@ class SettingsDiskSourceTest {
     @Test
     fun `storeShowUnlockSettingsBadge should update the flow value`() = runTest {
         val mockUserId = "mockUserId"
-        settingsDiskSource.storeShowUnlockSettingBadge(mockUserId, true)
         settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = mockUserId).test {
             // The initial values of the Flow are in sync
-            assertTrue(awaitItem() ?: false)
+            assertFalse(awaitItem() ?: false)
+            settingsDiskSource.storeShowUnlockSettingBadge(mockUserId, true)
             assertTrue(awaitItem() ?: false)
 
             // update the value to false
             settingsDiskSource.storeShowUnlockSettingBadge(
+                userId = mockUserId, false,
+            )
+            assertFalse(awaitItem() ?: true)
+        }
+    }
+
+    @Test
+    fun `lastDatabaseSchemeChangeInstant should pull from SharedPreferences`() {
+        val schemeChangeKey = "bwPreferencesStorage:lastDatabaseSchemeChangeInstant"
+        val expected: Long = Instant.now().toEpochMilli()
+
+        fakeSharedPreferences
+            .edit {
+                remove(schemeChangeKey)
+            }
+        assertEquals(0, fakeSharedPreferences.getLong(schemeChangeKey, 0))
+        assertNull(settingsDiskSource.lastDatabaseSchemeChangeInstant)
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences
+            .edit {
+                putLong(
+                    schemeChangeKey,
+                    expected,
+                )
+            }
+        val actual = settingsDiskSource.lastDatabaseSchemeChangeInstant
+        assertEquals(
+            expected,
+            actual?.toEpochMilli(),
+        )
+    }
+
+    @Test
+    fun `setting lastDatabaseSchemeChangeInstant should update SharedPreferences`() {
+        val schemeChangeKey = "bwPreferencesStorage:lastDatabaseSchemeChangeInstant"
+        val schemeChangeInstant = Instant.now()
+
+        // Setting to null should update disk source
+        settingsDiskSource.lastDatabaseSchemeChangeInstant = null
+        assertEquals(0, fakeSharedPreferences.getLong(schemeChangeKey, 0))
+        assertNull(settingsDiskSource.lastDatabaseSchemeChangeInstant)
+
+        // Setting to value should update disk source
+        settingsDiskSource.lastDatabaseSchemeChangeInstant = schemeChangeInstant
+        val actual = fakeSharedPreferences.getLong(
+            schemeChangeKey,
+            0,
+        )
+        assertEquals(
+            schemeChangeInstant.toEpochMilli(),
+            actual,
+        )
+    }
+
+    @Test
+    fun `getShowImportLoginsSettingBadge should pull from shared preferences`() {
+        val mockUserId = "mockUserId"
+        val showImportLoginsSettingBadgeKey =
+            "bwPreferencesStorage:showImportLoginsSettingBadge_$mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean(showImportLoginsSettingBadgeKey, true)
+        }
+        assertTrue(
+            settingsDiskSource.getShowImportLoginsSettingBadge(userId = mockUserId)!!,
+        )
+    }
+
+    @Test
+    fun `storeShowImportLoginsSettingBadge should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val showImportLoginsSettingBadgeKey =
+            "bwPreferencesStorage:showImportLoginsSettingBadge_$mockUserId"
+        settingsDiskSource.storeShowImportLoginsSettingBadge(mockUserId, true)
+        assertTrue(
+            fakeSharedPreferences.getBoolean(showImportLoginsSettingBadgeKey, false),
+        )
+    }
+
+    @Test
+    fun `storeShowImportLoginsSettingBadge should update the flow value`() = runTest {
+        val mockUserId = "mockUserId"
+        settingsDiskSource.getShowImportLoginsSettingBadgeFlow(mockUserId).test {
+            // The initial values of the Flow are in sync
+            assertFalse(awaitItem() ?: false)
+            settingsDiskSource.storeShowImportLoginsSettingBadge(
+                userId = mockUserId,
+                showBadge = true,
+            )
+            assertTrue(awaitItem() ?: false)
+            // update the value to false
+            settingsDiskSource.storeShowImportLoginsSettingBadge(
                 userId = mockUserId, false,
             )
             assertFalse(awaitItem() ?: true)

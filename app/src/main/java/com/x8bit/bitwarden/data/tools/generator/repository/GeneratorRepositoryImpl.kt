@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -190,7 +191,7 @@ class GeneratorRepositoryImpl(
 
     override suspend fun generateForwardedServiceUsername(
         forwardedServiceGeneratorRequest: UsernameGeneratorRequest.Forwarded,
-    ): GeneratedForwardedServiceUsernameResult =
+    ): GeneratedForwardedServiceUsernameResult = withContext(scope.coroutineContext) {
         generatorSdkSource.generateForwardedServiceEmail(forwardedServiceGeneratorRequest)
             .fold(
                 onSuccess = { generatedEmail ->
@@ -200,6 +201,7 @@ class GeneratorRepositoryImpl(
                     GeneratedForwardedServiceUsernameResult.InvalidRequest(it.message)
                 },
             )
+    }
 
     override fun getPasscodeGenerationOptions(): PasscodeGenerationOptions? {
         val userId = authDiskSource.userState?.activeUserId

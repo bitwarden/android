@@ -195,6 +195,7 @@
   <string name="translations">Fordítások</string>
   <string name="items_for_uri">%1$s elemei</string>
   <string name="no_items_for_uri">Nincs elem a széfben: %1$s.</string>
+  <string name="no_items_for_vault">Nincs elem a széfben \"%1$s\" egyezéssel.</string>
   <string name="search_for_a_login_or_add_a_new_login">Keressünk egy bejelentkezést vagy adjunk hozzá új bejelentkezést.</string>
   <string name="bitwarden_autofill_service_overlay">Egy beviteli mezőt kiválasztva és megjelenik a Bitwarden automatikus kitöltési ablaka, arra rákoppintva elindítható az automatikus kitöltési szolgáltatás.</string>
   <string name="bitwarden_autofill_service_notification_content">Erre az értesítésre koppintva automatikusan kitölthető egy elem a széfből.</string>
@@ -1058,4 +1059,17 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Mentsük el az exportált fájlt olyan helyre a számítógépen, ahol könnyen megtalálhatjuk.</string>
   <string name="save_the_exported_file_highlight">Exportált fájl mentése</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ez nem egy felismert Bitwarden szerver. Konzultálhatunk a szolgáltatóval vagy frissítsük a szervert.</string>
+  <string name="syncing_logins_loading_message">Bejelentkezések szinkronizálása...</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="download_the_browser_extension">Böngésző bővítmény letöltése</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Keressük fel  a bitwarden.com/download webhelyet és integráljuk a Bitwardent kedvenc böngészőbe a zökkenőmentes élmény érdekében.</string>
+  <string name="use_the_web_app">Webalkalmazás használata</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Jelentkezzünk be a bitwarden.com webhelyen, hogy egyszerűen kezeljük a fiókot és frissítsük a beállításokat.</string>
+  <string name="autofill_passwords">Jelszavak automatikus kitöltése</string>
+  <string name="set_up_autofill_on_all_your_devices">Állítsuk be az automatikus kitöltést az összes eszközön, hogy bárhol egyetlen érintéssel bejelentkezhessünk.</string>
+  <string name="import_successful">Az Importálás sikeres volt.</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Állítsuk be az automatikus kitöltést az összes eszközön, hogy bárhol egyetlen érintéssel bejelentkezhessünk.</string>
+  <string name="bitwarden_tools">Bitwarden eszközök</string>
+  <string name="got_it">Rendben</string>
+  <string name="no_logins_were_imported">Nem lett bejelentkezés importáva.</string>
 </resources>

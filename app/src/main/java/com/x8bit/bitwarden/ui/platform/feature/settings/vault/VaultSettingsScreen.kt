@@ -33,9 +33,12 @@ import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 
 /**
  * Displays the vault settings screen.
@@ -47,12 +50,13 @@ fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -65,11 +69,13 @@ fun VaultSettingsScreen(
 
             is VaultSettingsEvent.NavigateToImportVault -> {
                 if (state.isNewImportLoginsFlowEnabled) {
-                    onNavigateToImportLogins()
+                    onNavigateToImportLogins(SnackbarRelay.VAULT_SETTINGS_RELAY)
                 } else {
                     intentManager.launchUri(event.url.toUri())
                 }
             }
+
+            is VaultSettingsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -87,6 +93,11 @@ fun VaultSettingsScreen(
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.BackClick) }
                 },
+            )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(
+                bitwardenHostState = snackbarHostState,
             )
         },
     ) { innerPadding ->

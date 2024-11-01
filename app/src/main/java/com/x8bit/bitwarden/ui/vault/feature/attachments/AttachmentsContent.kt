@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -65,7 +65,8 @@ fun AttachmentsContent(
                     onDeleteClick = attachmentsHandlers.onDeleteClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .testTag("AttachmentList"),
                 )
             }
         }
@@ -92,18 +93,20 @@ fun AttachmentsContent(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .testTag("SelectedFileNameLabel"),
             )
         }
 
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.choose_file),
                 onClick = attachmentsHandlers.onChooseFileClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .testTag("AttachmentSelectFileButton"),
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -159,7 +162,9 @@ private fun AttachmentListEntry(
             style = BitwardenTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .testTag("AttachmentNameLabel"),
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -168,7 +173,8 @@ private fun AttachmentListEntry(
             text = attachmentItem.displaySize,
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.labelSmall,
-            modifier = Modifier,
+            modifier = Modifier
+                .testTag("AttachmentSizeLabel"),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -177,6 +183,8 @@ private fun AttachmentListEntry(
             vectorIconRes = R.drawable.ic_trash,
             contentDescription = stringResource(id = R.string.delete),
             onClick = { shouldShowDeleteDialog = true },
+            modifier = Modifier
+                .testTag("AttachmentDeleteButton"),
         )
     }
 }

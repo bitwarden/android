@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsServ
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
+import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
@@ -124,4 +126,9 @@ object AuthManagerModule {
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = dispatcherManager,
         )
+
+    @Provides
+    @Singleton
+    fun providesAddTotpItemFromAuthenticatorManager(): AddTotpItemFromAuthenticatorManager =
+        AddTotpItemFromAuthenticatorManagerImpl()
 }

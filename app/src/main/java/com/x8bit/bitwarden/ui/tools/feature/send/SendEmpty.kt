@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -81,7 +81,7 @@ fun SendEmpty(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        BitwardenFilledButtonWithIcon(
+        BitwardenFilledButton(
             onClick = onAddItemClick,
             label = stringResource(id = R.string.add_a_send),
             modifier = Modifier.standardHorizontalMargin(),

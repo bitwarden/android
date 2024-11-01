@@ -23,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -126,7 +127,9 @@ fun ManualCodeEntryScreen(
             Text(
                 text = stringResource(id = R.string.enter_key_manually),
                 style = BitwardenTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .testTag("EnterKeyManuallyButton"),
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -143,18 +146,20 @@ fun ManualCodeEntryScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .testTag("AddManualTOTPField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.add_totp),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .testTag("AddManualTOTPButton"),
             )
 
             Text(
@@ -191,6 +196,7 @@ fun ManualCodeEntryScreen(
                     }
                 },
                 style = BitwardenTheme.typography.bodyMedium,
+                modifier = Modifier.testTag("ScanQRCodeButton"),
             )
         }
     }

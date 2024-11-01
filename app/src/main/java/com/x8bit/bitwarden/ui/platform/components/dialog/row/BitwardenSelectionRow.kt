@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ fun BitwardenSelectionRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .testTag("AlertRadioButtonOption")
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -56,6 +58,7 @@ fun BitwardenSelectionRow(
             text = text(),
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyLarge,
+            modifier = Modifier.testTag("AlertRadioButtonOptionName"),
         )
     }
 }

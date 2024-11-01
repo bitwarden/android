@@ -35,6 +35,8 @@ private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
+private const val SHOW_IMPORT_LOGINS_SETTING_BADGE = "showImportLoginsSettingBadge"
+private const val LAST_SCHEME_CHANGE_INSTANT = "lastDatabaseSchemeChangeInstant"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -62,6 +64,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableShowUnlockSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShowImportLoginsSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -150,6 +155,10 @@ class SettingsDiskSourceImpl(
     override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
         get() = mutableHasUserLoggedInOrCreatedAccountFlow
             .onSubscription { emit(getBoolean(HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)) }
+
+    override var lastDatabaseSchemeChangeInstant: Instant?
+        get() = getLong(LAST_SCHEME_CHANGE_INSTANT)?.let { Instant.ofEpochMilli(it) }
+        set(value) = putLong(LAST_SCHEME_CHANGE_INSTANT, value?.toEpochMilli())
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
@@ -407,6 +416,24 @@ class SettingsDiskSourceImpl(
         getMutableShowUnlockSettingBadgeFlow(userId = userId)
             .onSubscription { emit(getShowUnlockSettingBadge(userId)) }
 
+    override fun getShowImportLoginsSettingBadge(userId: String): Boolean? {
+        return getBoolean(
+            key = SHOW_IMPORT_LOGINS_SETTING_BADGE.appendIdentifier(userId),
+        )
+    }
+
+    override fun storeShowImportLoginsSettingBadge(userId: String, showBadge: Boolean?) {
+        putBoolean(
+            key = SHOW_IMPORT_LOGINS_SETTING_BADGE.appendIdentifier(userId),
+            showBadge,
+        )
+        getMutableShowImportLoginsSettingBadgeFlow(userId).tryEmit(showBadge)
+    }
+
+    override fun getShowImportLoginsSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowImportLoginsSettingBadgeFlow(userId)
+            .onSubscription { emit(getShowImportLoginsSettingBadge(userId)) }
+
     private fun getMutableLastSyncFlow(
         userId: String,
     ): MutableSharedFlow<Instant?> =
@@ -448,6 +475,13 @@ class SettingsDiskSourceImpl(
 
     private fun getMutableShowUnlockSettingBadgeFlow(userId: String): MutableSharedFlow<Boolean?> =
         mutableShowUnlockSettingBadgeFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableShowImportLoginsSettingBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShowImportLoginsSettingBadgeFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 }

@@ -33,7 +33,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -100,7 +100,7 @@ fun AppearanceScreen(
                     .fillMaxWidth(),
             )
 
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.show_website_icons),
                 description = stringResource(id = R.string.show_website_icons_description),
                 isChecked = state.showWebsiteIcons,

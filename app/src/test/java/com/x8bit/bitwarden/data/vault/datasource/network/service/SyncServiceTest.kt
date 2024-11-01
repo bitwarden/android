@@ -193,7 +193,8 @@ private const val SYNC_SUCCESS_JSON = """
       "name": "mockName-1",
       "externalId": "mockExternalId-1",
       "readOnly": false,
-      "id": "mockId-1"
+      "id": "mockId-1",
+      "manage": true
     }
   ],
   "ciphers": [
@@ -302,7 +303,12 @@ private const val SYNC_SUCCESS_JSON = """
         "cardholderName": "mockCardholderName-1",
         "brand": "mockBrand-1"
       },
-      "key": "mockKey-1"
+      "key": "mockKey-1",
+      "sshKey": {
+        "publicKey": "mockPublicKey-1",
+        "privateKey": "mockPrivateKey-1",
+        "keyFingerprint": "mockKeyFingerprint-1"
+      }
     }
   ],
   "domains": {

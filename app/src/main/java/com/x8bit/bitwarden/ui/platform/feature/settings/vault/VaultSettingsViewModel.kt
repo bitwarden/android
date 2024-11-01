@@ -1,13 +1,16 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.toBaseWebVaultImportUrl
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -23,7 +26,7 @@ import javax.inject.Inject
 class VaultSettingsViewModel @Inject constructor(
     environmentRepository: EnvironmentRepository,
     featureFlagManager: FeatureFlagManager,
-    private val authRepository: AuthRepository,
+    snackbarRelayManager: SnackbarRelayManager,
     private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
@@ -35,7 +38,7 @@ class VaultSettingsViewModel @Inject constructor(
                 .toBaseWebVaultImportUrl,
             isNewImportLoginsFlowEnabled = featureFlagManager
                 .getFeatureFlag(FlagKey.ImportLoginsFlow),
-            showImportActionCard = firstTimeState.showImportLoginsCard,
+            showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
         )
     },
 ) {
@@ -50,8 +53,16 @@ class VaultSettingsViewModel @Inject constructor(
             .firstTimeStateFlow
             .map {
                 VaultSettingsAction.Internal.UserFirstTimeStateChanged(
-                    showImportLoginsCard = it.showImportLoginsCard,
+                    showImportLoginsCard = it.showImportLoginsCardInSettings,
                 )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.VAULT_SETTINGS_RELAY)
+            .map {
+                VaultSettingsAction.Internal.SnackbarDataReceived(it)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -76,15 +87,25 @@ class VaultSettingsViewModel @Inject constructor(
             is VaultSettingsAction.Internal.UserFirstTimeStateChanged -> {
                 handleUserFirstTimeStateChanged(action)
             }
+
+            is VaultSettingsAction.Internal.SnackbarDataReceived -> {
+                handleSnackbarDataReceived(action)
+            }
         }
     }
 
+    private fun handleSnackbarDataReceived(
+        action: VaultSettingsAction.Internal.SnackbarDataReceived,
+    ) {
+        sendEvent(VaultSettingsEvent.ShowSnackbar(action.data))
+    }
+
     private fun handleImportLoginsCardDismissClicked() {
-        dismissImportLoginsCard()
+        if (!state.shouldShowImportCard) return
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
     }
 
     private fun handleImportLoginsCardClicked() {
-        dismissImportLoginsCard()
         sendEvent(VaultSettingsEvent.NavigateToImportVault(state.importUrl))
     }
 
@@ -120,11 +141,6 @@ class VaultSettingsViewModel @Inject constructor(
         sendEvent(
             VaultSettingsEvent.NavigateToImportVault(state.importUrl),
         )
-    }
-
-    private fun dismissImportLoginsCard() {
-        if (!state.shouldShowImportCard) return
-        authRepository.setShowImportLogins(showImportLogins = false)
     }
 }
 
@@ -173,6 +189,11 @@ sealed class VaultSettingsEvent {
     data class ShowToast(
         val message: String,
     ) : VaultSettingsEvent()
+
+    /**
+     * Shows a snackbar with the given [data].
+     */
+    data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultSettingsEvent(), BackgroundEvent
 }
 
 /**
@@ -227,5 +248,10 @@ sealed class VaultSettingsAction {
         data class UserFirstTimeStateChanged(
             val showImportLoginsCard: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the snackbar data has been received.
+         */
+        data class SnackbarDataReceived(val data: BitwardenSnackbarData) : Internal()
     }
 }

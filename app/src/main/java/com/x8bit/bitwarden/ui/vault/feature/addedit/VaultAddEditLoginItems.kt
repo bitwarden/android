@@ -18,10 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -30,7 +29,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
@@ -125,14 +123,14 @@ fun LazyListScope.vaultAddEditLoginItems(
                 readOnly = true,
                 singleLine = true,
                 actions = {
-                    BitwardenFilledIconButton(
+                    BitwardenTonalIconButton(
                         vectorIconRes = R.drawable.ic_copy,
                         contentDescription = stringResource(id = R.string.copy_totp),
                         onClick = {
                             loginItemTypeHandlers.onCopyTotpKeyClick(loginState.totp)
                         },
                     )
-                    BitwardenFilledIconButton(
+                    BitwardenTonalIconButton(
                         vectorIconRes = R.drawable.ic_camera,
                         contentDescription = stringResource(id = R.string.camera),
                         onClick = onTotpSetupClick,
@@ -144,7 +142,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     } else {
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenFilledTonalButtonWithIcon(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.setup_totp),
                 icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
@@ -177,7 +175,7 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        BitwardenFilledTonalButton(
+        BitwardenOutlinedButton(
             label = stringResource(id = R.string.new_uri),
             onClick = loginItemTypeHandlers.onAddNewUriClick,
             modifier = Modifier
@@ -236,7 +234,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     if (commonState.isUnlockWithPasswordEnabled) {
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenSwitchWithActions(
+            BitwardenSwitch(
                 label = stringResource(id = R.string.password_prompt),
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonActionHandler.onToggleMasterPasswordReprompt,
@@ -319,7 +317,7 @@ fun LazyListScope.vaultAddEditLoginItems(
         )
     }
 
-    if (isAddItemMode) {
+    if (isAddItemMode && commonState.hasOrganizations) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenListHeaderText(
@@ -378,7 +376,7 @@ private fun UsernameRow(
         value = username,
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_username),
                 onClick = {
@@ -445,13 +443,13 @@ private fun PasswordRow(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_check_mark,
                 contentDescription = stringResource(id = R.string.check_password),
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                 modifier = Modifier.testTag(tag = "CheckPasswordButton"),
             )
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
                 onClick = {
@@ -514,7 +512,7 @@ private fun PasskeyField(
         modifier = modifier,
         actions = {
             if (canRemovePasskey) {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_minus,
                     contentDescription = stringResource(id = R.string.remove_passkey),
                     onClick = loginItemTypeHandlers.onClearFido2CredentialClick,

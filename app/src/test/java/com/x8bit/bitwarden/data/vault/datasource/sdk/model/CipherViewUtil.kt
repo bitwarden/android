@@ -15,6 +15,7 @@ import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
+import com.bitwarden.vault.SshKeyView
 import com.bitwarden.vault.UriMatchType
 import java.time.Clock
 import java.time.Instant
@@ -47,6 +48,7 @@ fun createMockCipherView(
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
+    sshKey: SshKeyView? = createMockSshKeyView(number = number),
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -77,6 +79,7 @@ fun createMockCipherView(
         identity = createMockIdentityView(number = number).takeIf {
             cipherType == CipherType.IDENTITY
         },
+        sshKey = sshKey.takeIf { cipherType == CipherType.SSH_KEY },
         favorite = false,
         passwordHistory = listOf(createMockPasswordHistoryView(number = number, clock)),
         reprompt = repromptType,
@@ -221,6 +224,16 @@ fun createMockIdentityView(number: Int): IdentityView =
         state = "mockState-$number",
         email = "mockEmail-$number",
         username = "mockUsername-$number",
+    )
+
+/**
+ * Create a mock [SshKeyView] with a given [number].
+ */
+fun createMockSshKeyView(number: Int): SshKeyView =
+    SshKeyView(
+        publicKey = "mockPublicKey-$number",
+        privateKey = "mockPrivateKey-$number",
+        fingerprint = "mockKeyFingerprint-$number",
     )
 
 /**

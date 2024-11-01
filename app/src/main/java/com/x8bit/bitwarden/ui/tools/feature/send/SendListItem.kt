@@ -78,7 +78,6 @@ fun SendListItem(
             SelectionItemData(
                 text = stringResource(id = R.string.copy_link),
                 onClick = onCopyClick,
-                testTag = "Copy",
             ),
             SelectionItemData(
                 text = stringResource(id = R.string.share_link),

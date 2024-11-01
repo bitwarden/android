@@ -12,12 +12,14 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 /**
  * Create a mock [VaultItemListingState.DisplayItem] with a given [number].
  */
+@Suppress("LongParameterList")
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
     subtitle: String? = "mockUsername-$number",
     secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
+    isTotp: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -71,6 +73,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
+                isTotp = isTotp,
             )
         }
 
@@ -111,6 +114,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
+                isTotp = false,
             )
         }
 
@@ -157,6 +161,7 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "CardCipherIcon",
+                isTotp = false,
             )
         }
 
@@ -194,6 +199,45 @@ fun createMockDisplayItemForCipher(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "IdentityCipherIcon",
+                isTotp = false,
+            )
+        }
+
+        CipherType.SSH_KEY -> {
+            VaultItemListingState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
+                secondSubtitle = null,
+                secondSubtitleTestTag = secondSubtitleTestTag,
+                subtitle = subtitle,
+                subtitleTestTag = "CipherSubTitleLabel",
+                iconData = IconData.Local(R.drawable.ic_ssh_key),
+                extraIconList = listOf(
+                    IconRes(
+                        iconRes = R.drawable.ic_collections,
+                        contentDescription = R.string.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
+                    ),
+                    IconRes(
+                        iconRes = R.drawable.ic_paperclip,
+                        contentDescription = R.string.attachments.asText(),
+                        testTag = "CipherWithAttachmentsIcon",
+                    ),
+                ),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        requiresPasswordReprompt = requiresPasswordReprompt,
+                    ),
+                ),
+                optionsTestTag = "CipherOptionsButton",
+                isAutofill = false,
+                isFido2Creation = false,
+                shouldShowMasterPasswordReprompt = false,
+                iconTestTag = "SshKeyCipherIcon",
+                isTotp = false,
             )
         }
     }
@@ -245,6 +289,7 @@ fun createMockDisplayItemForSend(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
+                isTotp = false,
             )
         }
 
@@ -286,6 +331,7 @@ fun createMockDisplayItemForSend(
                 isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
+                isTotp = false,
             )
         }
     }

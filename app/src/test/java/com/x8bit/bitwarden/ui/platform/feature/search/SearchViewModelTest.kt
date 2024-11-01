@@ -594,6 +594,32 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for totp should emit NavigateToEditCipher`() =
+        runTest {
+            setupMockUri()
+            val cipherId = CIPHER_ID
+            val password = "password"
+
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+            val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(totpData = mockk()))
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    SearchAction.MasterPasswordRepromptSubmit(
+                        password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
+                            cipherId = cipherId,
+                        ),
+                    ),
+                )
+                assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `MasterPasswordRepromptSubmit for a request Success with a valid password for an overflow action should perform the action`() =
         runTest {
             val cipherId = "cipherId-1234"
@@ -990,6 +1016,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1092,6 +1119,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1204,6 +1232,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1319,6 +1348,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1414,6 +1444,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Sends.Texts -> "search_type_sends_text"
                     SearchTypeData.Vault.All -> "search_type_vault_all"
                     SearchTypeData.Vault.Cards -> "search_type_vault_cards"
+                    SearchTypeData.Vault.SshKeys -> "search_type_vault_ssh_keys"
                     is SearchTypeData.Vault.Collection -> "search_type_vault_collection"
                     is SearchTypeData.Vault.Folder -> "search_type_vault_folder"
                     SearchTypeData.Vault.Identities -> "search_type_vault_identities"
@@ -1433,6 +1464,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Sends.Texts -> null
                     SearchTypeData.Vault.All -> null
                     SearchTypeData.Vault.Cards -> null
+                    SearchTypeData.Vault.SshKeys -> null
                     is SearchTypeData.Vault.Collection -> searchType.collectionId
                     is SearchTypeData.Vault.Folder -> searchType.folderId
                     SearchTypeData.Vault.Identities -> null
@@ -1494,6 +1526,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(

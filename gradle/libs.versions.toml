@@ -7,12 +7,12 @@ targetSdk = "34"
 minSdk = "29"
 
 # Dependency Versions
-androidGradlePlugin = "8.7.1"
+androidGradlePlugin = "8.7.2"
 androidxActivity = "1.9.3"
 androidXBiometrics = "1.2.0-alpha05"
 androidxBrowser = "1.8.0"
-androidxCamera = "1.3.4"
-androidxComposeBom = "2024.10.00"
+androidxCamera = "1.4.0"
+androidxComposeBom = "2024.10.01"
 androidxCore = "1.13.1"
 androidxCredentials = "1.3.0"
 androidxHiltNavigationCompose = "1.2.0"
@@ -24,10 +24,10 @@ androidxSplash = "1.1.0-rc01"
 androidXAppCompat = "1.7.0"
 androdixAutofill = "1.1.0"
 androidxWork = "2.9.1"
-bitwardenSdk = "1.0.0-20240924.112512-21"
+bitwardenSdk = "1.0.0-20241030.101847-8"
 crashlytics = "3.0.2"
 detekt = "1.23.7"
-firebaseBom = "33.5.0"
+firebaseBom = "33.5.1"
 glide = "1.0.0-beta01"
 googleServices = "4.4.2"
 hilt = "2.52"
@@ -39,7 +39,7 @@ kotlinxCollectionsImmutable = "0.3.8"
 kotlinxCoroutines = "1.9.0"
 kotlinxSerialization = "1.7.3"
 kotlinxKover = "0.8.3"
-ksp = "2.0.21-1.0.25"
+ksp = "2.0.21-1.0.26"
 mockk = "1.13.13"
 okhttp = "4.12.0"
 retrofitBom = "2.11.0"
@@ -84,7 +84,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidXSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
-bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
+bitwarden-sdk = { module = "com.bitwarden:sdk-android-temp", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }

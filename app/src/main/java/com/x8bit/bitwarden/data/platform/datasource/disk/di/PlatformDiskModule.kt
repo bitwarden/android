@@ -26,8 +26,10 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStor
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigratorImpl
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
 import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
 import dagger.Module
 import dagger.Provides
@@ -35,6 +37,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -68,7 +71,11 @@ object PlatformDiskModule {
 
     @Provides
     @Singleton
-    fun provideEventDatabase(app: Application): PlatformDatabase =
+    fun provideEventDatabase(
+        app: Application,
+        databaseSchemeManager: DatabaseSchemeManager,
+        clock: Clock,
+    ): PlatformDatabase =
         Room
             .databaseBuilder(
                 context = app,
@@ -77,6 +84,12 @@ object PlatformDiskModule {
             )
             .fallbackToDestructiveMigration()
             .addTypeConverter(ZonedDateTimeTypeConverter())
+            .addCallback(
+                DatabaseSchemeCallback(
+                    databaseSchemeManager = databaseSchemeManager,
+                    clock = clock,
+                ),
+            )
             .build()
 
     @Provides

@@ -4,7 +4,6 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -654,7 +653,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `Folders text should be displayed according to state`() {
-        val folders = "Folders"
+        val folders = "FOLDERS (1)"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
             .onNodeWithText(text = folders)
@@ -666,7 +665,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                     displayItemList = emptyList(),
                     displayFolderList = listOf(
                         VaultItemListingState.FolderDisplayItem(
-                            name = "test", id = "1", count = 0,
+                            name = "test",
+                            id = "1",
+                            count = 0,
                         ),
                     ),
                     displayCollectionList = emptyList(),
@@ -680,10 +681,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `Folders text count should be displayed according to state`() {
-        val folders = "Folders"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
-            .onNodeWithText(text = folders)
+            .onNodeWithText(text = "FOLDERS (1)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -698,9 +698,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = folders)
+            .onNodeWithTextAfterScroll(text = "FOLDERS (1)")
             .assertIsDisplayed()
-            .assertTextEquals(folders, 1.toString())
 
         mutableStateFlow.update {
             it.copy(
@@ -729,9 +728,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = folders)
+            .onNodeWithTextAfterScroll(text = "FOLDERS (3)")
             .assertIsDisplayed()
-            .assertTextEquals(folders, 3.toString())
     }
 
     @Test
@@ -778,7 +776,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                     displayFolderList = emptyList(),
                     displayCollectionList = listOf(
                         VaultItemListingState.CollectionDisplayItem(
-                            name = "Collection",
+                            name = collectionName,
                             id = "1",
                             count = 0,
                         ),
@@ -793,10 +791,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `Collection text count should be displayed according to state`() {
-        val collections = "Collections"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
-            .onNodeWithText(text = collections)
+            .onNodeWithText(text = "COLLECTIONS (3)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -825,9 +822,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = collections)
+            .onNodeWithTextAfterScroll(text = "COLLECTIONS (3)")
             .assertIsDisplayed()
-            .assertTextEquals(collections, 3.toString())
 
         mutableStateFlow.update {
             it.copy(
@@ -846,9 +842,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = collections)
+            .onNodeWithTextAfterScroll(text = "COLLECTIONS (1)")
             .assertIsDisplayed()
-            .assertTextEquals(collections, 1.toString())
     }
 
     @Test
@@ -882,7 +877,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `Items text should be displayed according to state`() {
-        val items = "Items"
+        val items = "ITEMS (1)"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
             .onNodeWithText(text = items)
@@ -906,10 +901,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `Items text count should be displayed according to state`() {
-        val items = "Items"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
-            .onNodeWithText(text = items)
+            .onNodeWithText(text = "ITEMS (1)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -924,9 +918,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = items)
+            .onNodeWithTextAfterScroll(text = "ITEMS (1)")
             .assertIsDisplayed()
-            .assertTextEquals(items, 1.toString())
 
         mutableStateFlow.update {
             it.copy(
@@ -944,9 +937,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = items)
+            .onNodeWithTextAfterScroll(text = "ITEMS (4)")
             .assertIsDisplayed()
-            .assertTextEquals(items, 4.toString())
     }
 
     @Test
@@ -1012,6 +1004,58 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                                 isAutofill = true,
                                 shouldShowMasterPasswordReprompt = true,
                             ),
+                    ),
+                    displayFolderList = emptyList(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on a display item when master password reprompt is required for totp flow should show the master password dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createDisplayItem(number = 1).copy(
+                            isTotp = true,
+                            shouldShowMasterPasswordReprompt = true,
+                        ),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -1153,6 +1197,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNodeWithText(text = "Identities")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey)
+        }
+        composeTestRule
+            .onNodeWithText(text = "SSH keys")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -2146,6 +2197,7 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         isFido2Creation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
+        isTotp = false,
     )
 
 private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
@@ -2170,4 +2222,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isFido2Creation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
+        isTotp = true,
     )

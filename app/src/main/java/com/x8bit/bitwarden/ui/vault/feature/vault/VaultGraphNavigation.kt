@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
@@ -24,7 +25,7 @@ fun NavGraphBuilder.vaultGraph(
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     navigation(
         route = VAULT_GRAPH_ROUTE,

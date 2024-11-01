@@ -13,7 +13,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
-import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -21,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * The default implementation of [AutofillProcessor]. Its purpose is to handle autofill related
@@ -35,7 +35,6 @@ class AutofillProcessorImpl(
     private val parser: AutofillParser,
     private val saveInfoBuilder: SaveInfoBuilder,
     private val settingsRepository: SettingsRepository,
-    private val logsManager: LogsManager,
 ) : AutofillProcessor {
 
     /**
@@ -146,7 +145,7 @@ class AutofillProcessorImpl(
                 } catch (e: RuntimeException) {
                     // This is to catch any TransactionTooLargeExceptions that could occur here.
                     // These exceptions get wrapped as a RuntimeException.
-                    logsManager.trackNonFatalException(e)
+                    Timber.e(e, "Autofill Error")
                 }
             }
 

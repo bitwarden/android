@@ -56,9 +56,9 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -705,7 +705,7 @@ private fun SyncWithAuthenticatorRow(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(R.string.allow_bitwarden_authenticator_syncing),
         onCheckedChange = onCheckedChange,
         isChecked = isChecked,

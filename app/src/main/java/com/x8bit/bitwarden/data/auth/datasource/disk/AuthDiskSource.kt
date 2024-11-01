@@ -182,6 +182,11 @@ interface AuthDiskSource {
     fun storeUserBiometricUnlockKey(userId: String, biometricsKey: String?)
 
     /**
+     * Gets the flow for the biometrics key for the given [userId].
+     */
+    fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?>
+
+    /**
      * Retrieves a pin-protected user key for the given [userId].
      */
     fun getPinProtectedUserKey(userId: String): String?
@@ -197,6 +202,11 @@ interface AuthDiskSource {
         pinProtectedUserKey: String?,
         inMemoryOnly: Boolean = false,
     )
+
+    /**
+     * Retrieves a flow for the pin-protected user key for the given [userId].
+     */
+    fun getPinProtectedUserKeyFlow(userId: String): Flow<String?>
 
     /**
      * Gets a two-factor auth token using a user's [email].

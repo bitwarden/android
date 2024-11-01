@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
@@ -39,7 +39,7 @@ fun VaultAddEditUriItem(
         value = uriItem.uri.orEmpty(),
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
         actions = {
-            BitwardenFilledIconButton(
+            BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowOptionsDialog = true },

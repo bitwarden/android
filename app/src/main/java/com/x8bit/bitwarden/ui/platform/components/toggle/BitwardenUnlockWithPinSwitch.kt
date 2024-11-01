@@ -32,7 +32,7 @@ fun BitwardenUnlockWithPinSwitch(
     var shouldShowPinInputDialog by rememberSaveable { mutableStateOf(value = false) }
     var shouldShowPinConfirmationDialog by rememberSaveable { mutableStateOf(value = false) }
     var pin by remember { mutableStateOf(value = "") }
-    BitwardenWideSwitch(
+    BitwardenSwitch(
         label = stringResource(id = R.string.unlock_with_pin),
         isChecked = isUnlockWithPinEnabled,
         onCheckedChange = { isChecked ->

@@ -21,7 +21,6 @@ private const val CARD_DIGITS_DISPLAYED: Int = 4
 val CipherView.subtitle: String?
     get() = when (type) {
         CipherType.LOGIN -> this.login?.username.orEmpty()
-        CipherType.SECURE_NOTE -> null
         CipherType.CARD -> {
             this
                 .card
@@ -45,6 +44,10 @@ val CipherView.subtitle: String?
                     }
                 }
         }
+
+        CipherType.SECURE_NOTE,
+        CipherType.SSH_KEY,
+            -> null
     }
 
 /**

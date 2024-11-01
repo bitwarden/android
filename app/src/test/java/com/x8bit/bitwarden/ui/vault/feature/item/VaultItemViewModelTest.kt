@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -653,9 +652,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
-                turbineScope {
-                    val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
-                    val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+                viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                     assertEquals(loginState, stateFlow.awaitItem())
                     viewModel.trySendAction(
                         VaultItemAction.Common.MasterPasswordSubmit(
@@ -2340,6 +2337,106 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class SshKeyActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    viewState = SSH_KEY_VIEW_STATE,
+                ),
+            )
+        }
+
+        @Test
+        fun `on CopyPublicKeyClick should copy public key to clipboard`() = runTest {
+            every { clipboardManager.setText("mockPublicKey") } just runs
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                } returns SSH_KEY_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.publicKey)
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on PrivateKeyVisibilityClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val sshKeyViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            previousState = null,
+                            isPremiumUser = true,
+                            hasMasterPassword = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns SSH_KEY_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                assertEquals(sshKeyState, viewModel.stateFlow.value)
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                        isVisible = true,
+                    ),
+                )
+                assertEquals(
+                    sshKeyState.copy(
+                        viewState = sshKeyViewState.copy(
+                            common = DEFAULT_COMMON,
+                            type = DEFAULT_SSH_KEY_TYPE.copy(
+                                showPrivateKey = true,
+                            ),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Test
+        fun `on CopyFingerprintClick should copy fingerprint to clipboard`() = runTest {
+            every { clipboardManager.setText("mockFingerprint") } just runs
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                } returns SSH_KEY_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.fingerprint)
+            }
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -2631,6 +2728,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
             )
 
+        private val DEFAULT_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
+            VaultItemState.ViewState.Content.ItemType.SshKey(
+                name = "mockName",
+                publicKey = "mockPublicKey",
+                privateKey = "mockPrivateKey",
+                fingerprint = "mockFingerprint",
+                showPrivateKey = false,
+            )
+
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common(
                 name = "login cipher",
@@ -2686,6 +2792,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_CARD_TYPE,
+            )
+
+        private val SSH_KEY_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_SSH_KEY_TYPE,
             )
     }
 }

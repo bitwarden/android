@@ -195,6 +195,7 @@
   <string name="translations">Çeviriler</string>
   <string name="items_for_uri">%1$s kayıtları</string>
   <string name="no_items_for_uri">Kasanızda hiç %1$s kaydı bulunmuyor.</string>
+  <string name="no_items_for_vault">Kasanızda “%1$s” ile eşleşen kayıt yok</string>
   <string name="search_for_a_login_or_add_a_new_login">Hesap ara veya yeni hesap ekle</string>
   <string name="bitwarden_autofill_service_overlay">Bir giriş alanını seçip Bitwarden otomatik doldurma kutusunu gördüğünüzde otomatik doldurmayı başlatmak için kutuya dokunabilirsiniz.</string>
   <string name="bitwarden_autofill_service_notification_content">Formu kasanızdaki bilgilerle otomatik doldurmak için bu bildirime dokunun.</string>
@@ -331,7 +332,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="no_items_collection">Bu koleksiyonda hiç kayıt yok.</string>
   <string name="no_items_folder">Bu klasörde hiç kayıt yok.</string>
   <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
-  <string name="autofill_accessibility_service">Otomatik doldur erişilebilirlik hizmeti</string>
+  <string name="autofill_accessibility_service">Otomatik Doldurma Erişilebilirlik Hizmeti</string>
   <string name="autofill_accessibility_summary">Diğer uygulamalarda ve web\'de kullanıcı adlarını ve parolaları doldurmaya yardımcı ol.</string>
   <string name="autofill_service_description">Bitwarden otomatik doldurma hizmeti, cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi\'ni kullanır.</string>
   <string name="bitwarden_autofill_service_description">Diğer uygulamalarda hesap bilgilerinizi doldurmak için Bitwarden otomatik doldurma hizmetini kullanabilirsiniz.</string>
@@ -353,7 +354,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="remove">Kaldır</string>
   <string name="new_uri">Yeni URI</string>
   <string name="uri_position">URI %1$s</string>
-  <string name="base_domain">Taban alan adı</string>
+  <string name="base_domain">Ana alan adı</string>
   <string name="default_text">Varsayılan</string>
   <string name="exact">Tam</string>
   <string name="host">Sunucu</string>
@@ -426,7 +427,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="generator">Üreteç</string>
   <string name="no_folders_to_list">Listelenecek klasör yok.</string>
   <string name="fingerprint_phrase">Parmak izi ifadesi</string>
-  <string name="your_accounts_fingerprint">Hesabınızın parmak izi kelimeleri</string>
+  <string name="your_accounts_fingerprint">Hesabınızın parmak izi ifadesi</string>
   <string name="learn_org_confirmation">Bitwarden, kuruluş hesabı kullanarak kasanızdaki kayıtları başkalarıyla paylaşmanıza olanak verir. Daha fazla bilgi için bitwarden.com sitesini ziyaret etmek ister misiniz?</string>
   <string name="export_vault">Kasayı dışa aktar</string>
   <string name="lock_now">Şimdi kilitle</string>
@@ -516,8 +517,8 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="account_biometric_invalidated_extension">Otomatik doldurma biyometrik kilit açma devre dışı. Ana parolanın doğrulanması bekleniyor.</string>
   <string name="enable_sync_on_refresh">Yenileme sırasında eşitlemeye izin ver</string>
   <string name="enable_sync_on_refresh_description">Parmağımla aşağı çektiğimde kasayı eşitle.</string>
-  <string name="log_in_sso">Kurumsal tek oturum açma</string>
-  <string name="log_in_sso_summary">Kuruluşunuzun tek oturum açma portalını kullanarak hızlıca giriş yapabilirsiniz.  Başlamak için lütfen kuruluşunuzun tanımlayıcısını girin.</string>
+  <string name="log_in_sso">Kurumsal çoklu oturum açma</string>
+  <string name="log_in_sso_summary">Kuruluşunuzun çoklu oturum açma portalını kullanarak hızlıca giriş yapabilirsiniz. Başlamak için lütfen kuruluşunuzun tanımlayıcısını girin.</string>
   <string name="org_identifier">Kuruluş tanımlayıcı</string>
   <string name="login_sso_error">Şu anda SSO ile giriş yapılamıyor</string>
   <string name="set_master_password">Ana parolayı belirle</string>
@@ -1058,4 +1059,17 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu Bitwarden sunucusu tanınmıyor. Servis sağlayıcınızdan bilgi alın veya sunucunuzu güncelleyin.</string>
+  <string name="syncing_logins_loading_message">Hesaplar eşitleniyor...</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="download_the_browser_extension">Tarayıcı uzantısını indirin</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha rahat kullanım için Bitwarden\'ı en sevdiğiniz tarayıcınıza entegre etmek isterseniz bitwarden.com/download adresine gidin.</string>
+  <string name="use_the_web_app">Web uygulamasını kullanın</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Hesabınızı kolayca yönetmek ve ayarlarınızı güncellemek isterseniz bitwarden.com adresine giriş yapın.</string>
+  <string name="autofill_passwords">Parolaları otomatik doldurun</string>
+  <string name="set_up_autofill_on_all_your_devices">Her yere tek dokunuşla giriş yapmak için tüm cihazlarınızda otomatik doldurmayı etkinleştirin.</string>
+  <string name="import_successful">İçe aktarma başarılı!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Hesaplarınızı Bitwarden web ve masaüstü araçlarıyla her yerden yönetebilirsiniz.</string>
+  <string name="bitwarden_tools">Bitwarden Araçları</string>
+  <string name="got_it">Anladım</string>
+  <string name="no_logins_were_imported">Hiç hesap aktarılmadı</string>
 </resources>

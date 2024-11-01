@@ -195,6 +195,7 @@
   <string name="translations">Traduções</string>
   <string name="items_for_uri">Itens para %1$s</string>
   <string name="no_items_for_uri">Não existem itens no seu cofre para %1$s.</string>
+  <string name="no_items_for_vault">Não existem itens no seu cofre que correspondam a \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Procure uma credencial ou adicione uma nova</string>
   <string name="bitwarden_autofill_service_overlay">Quando seleciona um campo de entrada e vê uma sobreposição de preenchimento automático do Bitwarden, pode tocar nela para iniciar o serviço de preenchimento automático.</string>
   <string name="bitwarden_autofill_service_notification_content">Toque nesta notificação para preencher automaticamente um item do seu cofre.</string>
@@ -1059,4 +1060,17 @@ Anule a subscrição em qualquer altura.</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Guarde o ficheiro exportado num local do seu computador que possa encontrar facilmente.</string>
   <string name="save_the_exported_file_highlight">Guarde o ficheiro exportado</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Este não é um servidor Bitwarden reconhecido. Poderá ter de verificar com o seu fornecedor ou atualizar o seu servidor.</string>
+  <string name="syncing_logins_loading_message">A sincronizar credenciais...</string>
+  <string name="ssh_key_cipher_item_types">Tipos de itens de cifra de chave SSH</string>
+  <string name="download_the_browser_extension">Descarregue a extensão do navegador</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Vá a bitwarden.com/download para integrar o Bitwarden no seu navegador favorito para uma experiência perfeita.</string>
+  <string name="use_the_web_app">Utilize a aplicação Web</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Inicie sessão em bitwarden.com para gerir facilmente a sua conta e atualizar as definições.</string>
+  <string name="autofill_passwords">Preenchimento automático de palavras-passe</string>
+  <string name="set_up_autofill_on_all_your_devices">Configure o preenchimento automático em todos os seus dispositivos para iniciar sessão com um simples toque em qualquer lugar.</string>
+  <string name="import_successful">Importação bem-sucedida!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Gira as suas credenciais a partir de qualquer lugar com as ferramentas do Bitwarden para a Web e computador.</string>
+  <string name="bitwarden_tools">Ferramentas do Bitwarden</string>
+  <string name="got_it">Percebido</string>
+  <string name="no_logins_were_imported">Não foram importadas credenciais</string>
 </resources>

@@ -6,8 +6,10 @@ package com.x8bit.bitwarden.data.vault.repository.model
 sealed class SyncVaultDataResult {
     /**
      * Indicates a successful sync operation.
+     *
+     * @property itemsAvailable indicated whether the sync returned any vault items or not.
      */
-    data object Success : SyncVaultDataResult()
+    data class Success(val itemsAvailable: Boolean) : SyncVaultDataResult()
 
     /**
      * Indicates a failed sync operation.

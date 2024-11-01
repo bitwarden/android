@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
+import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 import kotlinx.collections.immutable.persistentListOf
@@ -26,10 +27,13 @@ fun InstructionRowItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenContentBlock(
+        data = ContentBlockData(
+            iconVectorResource = instructionStep.imageRes,
+            headerText = instructionStep.instructionText,
+            subtitleText = instructionStep.additionalText,
+        ),
         modifier = modifier,
-        headerText = instructionStep.instructionText,
         headerTextStyle = BitwardenTheme.typography.bodyMedium,
-        subtitleText = instructionStep.additionalText,
         subtitleTextStyle = BitwardenTheme.typography.labelSmall,
     )
 }

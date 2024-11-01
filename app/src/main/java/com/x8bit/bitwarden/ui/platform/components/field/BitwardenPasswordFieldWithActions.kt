@@ -15,7 +15,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -130,7 +130,7 @@ private fun BitwardenPasswordFieldWithActions_preview() {
             value = "samplePassword",
             onValueChange = {},
             actions = {
-                BitwardenFilledIconButton(
+                BitwardenTonalIconButton(
                     vectorIconRes = R.drawable.ic_check_mark,
                     contentDescription = "",
                     onClick = {},

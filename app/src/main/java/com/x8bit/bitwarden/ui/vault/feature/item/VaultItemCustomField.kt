@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
@@ -26,7 +26,7 @@ fun CustomField(
 ) {
     when (customField) {
         is VaultItemState.ViewState.Content.Common.Custom.BooleanField -> {
-            BitwardenWideSwitch(
+            BitwardenSwitch(
                 label = customField.name,
                 isChecked = customField.value,
                 readOnly = true,
@@ -47,7 +47,7 @@ fun CustomField(
                 modifier = modifier,
                 actions = {
                     if (customField.isCopyable) {
-                        BitwardenFilledIconButton(
+                        BitwardenTonalIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomHiddenField(customField.value) },
@@ -82,7 +82,7 @@ fun CustomField(
                 modifier = modifier,
                 actions = {
                     if (customField.isCopyable) {
-                        BitwardenFilledIconButton(
+                        BitwardenTonalIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomTextField(customField.value) },

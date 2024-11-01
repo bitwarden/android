@@ -46,14 +46,14 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalNfcManager
@@ -263,7 +263,7 @@ private fun TwoFactorLoginScreenContent(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        BitwardenWideSwitch(
+        BitwardenSwitch(
             label = stringResource(id = R.string.remember_me),
             isChecked = state.isRememberMeEnabled,
             onCheckedChange = onRememberMeToggle,
@@ -286,7 +286,7 @@ private fun TwoFactorLoginScreenContent(
         if (state.authMethod == TwoFactorAuthMethod.EMAIL) {
             Spacer(modifier = Modifier.height(12.dp))
 
-            BitwardenFilledTonalButton(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.send_verification_code_again),
                 onClick = onResendEmailButtonClick,
                 modifier = Modifier

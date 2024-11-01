@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -48,6 +51,7 @@ class AccountSecurityViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
@@ -69,9 +73,9 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.activeAccount
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
-            shouldShowEnableAuthenticatorSync = featureFlagManager.getFeatureFlag(
-                key = FlagKey.AuthenticatorSync,
-            ),
+            shouldShowEnableAuthenticatorSync =
+            featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
+                !isBuildVersionBelow(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -114,10 +118,30 @@ class AccountSecurityViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        settingsRepository
-            .getShowUnlockBadgeFlow(state.userId)
+        firstTimeActionManager
+            .firstTimeStateFlow
             .map {
-                AccountSecurityAction.Internal.ShowUnlockBadgeUpdated(it)
+                AccountSecurityAction.Internal.ShowUnlockBadgeUpdated(it.showSetupUnlockCard)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isUnlockWithBiometricsEnabledFlow
+            .map {
+                AccountSecurityAction.Internal.BiometricLockUpdate(
+                    isBiometricEnabled = it,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isUnlockWithPinEnabledFlow
+            .map {
+                AccountSecurityAction.Internal.PinProtectedLockUpdate(
+                    isPinProtected = it,
+                )
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -164,7 +188,6 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleUnlockCardCtaClick() {
-        dismissUnlockNotificationBadge()
         sendEvent(AccountSecurityEvent.NavigateToSetupUnlockScreen)
     }
 
@@ -355,6 +378,34 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.ShowUnlockBadgeUpdated -> {
                 handleShowUnlockBadgeUpdated(action)
             }
+
+            is AccountSecurityAction.Internal.BiometricLockUpdate -> {
+                hanleBiometricUnlockUpdate(action)
+            }
+
+            is AccountSecurityAction.Internal.PinProtectedLockUpdate -> {
+                handlePinProtectedLockUpdate(action)
+            }
+        }
+    }
+
+    private fun handlePinProtectedLockUpdate(
+        action: AccountSecurityAction.Internal.PinProtectedLockUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithPinEnabled = action.isPinProtected,
+            )
+        }
+    }
+
+    private fun hanleBiometricUnlockUpdate(
+        action: AccountSecurityAction.Internal.BiometricLockUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = action.isBiometricEnabled,
+            )
         }
     }
 
@@ -371,9 +422,11 @@ class AccountSecurityViewModel @Inject constructor(
     private fun handleAuthenticatorSyncFeatureFlagUpdate(
         action: AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate,
     ) {
+        val shouldShowAuthenticatorSync =
+            action.isEnabled && !isBuildVersionBelow(Build.VERSION_CODES.S)
         mutableStateFlow.update {
             it.copy(
-                shouldShowEnableAuthenticatorSync = action.isEnabled,
+                shouldShowEnableAuthenticatorSync = shouldShowAuthenticatorSync,
             )
         }
     }
@@ -443,8 +496,7 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun dismissUnlockNotificationBadge() {
         if (!state.shouldShowUnlockActionCard) return
-        settingsRepository.storeShowUnlockSettingBadge(
-            userId = state.userId,
+        firstTimeActionManager.storeShowUnlockSettingBadge(
             showBadge = false,
         )
     }
@@ -730,5 +782,19 @@ sealed class AccountSecurityAction {
          * The show unlock badge update has been received.
          */
         data class ShowUnlockBadgeUpdated(val showUnlockBadge: Boolean) : Internal()
+
+        /**
+         * The user's biometric unlock status has been updated.
+         */
+        data class BiometricLockUpdate(
+            val isBiometricEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * The user's pin unlock status has been updated.
+         */
+        data class PinProtectedLockUpdate(
+            val isPinProtected: Boolean,
+        ) : Internal()
     }
 }

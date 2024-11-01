@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTyp
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
 
 /**
@@ -158,6 +159,10 @@ fun VaultAddEditScreen(
 
     val cardItemTypeHandlers = remember(viewModel) {
         VaultAddEditCardTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val sshKeyItemTypeHandlers = remember(viewModel) {
+        VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
     }
 
     val confirmDeleteClickAction = remember(viewModel) {
@@ -336,6 +341,7 @@ fun VaultAddEditScreen(
                 VaultAddEditContent(
                     state = viewState,
                     isAddItemMode = state.isAddItemMode,
+                    typeOptions = state.supportedItemTypes,
                     onTypeOptionClicked = remember(viewModel) {
                         { viewModel.trySendAction(VaultAddEditAction.Common.TypeOptionSelect(it)) }
                     },
@@ -344,6 +350,7 @@ fun VaultAddEditScreen(
                     permissionsManager = permissionsManager,
                     identityItemTypeHandlers = identityItemTypeHandlers,
                     cardItemTypeHandlers = cardItemTypeHandlers,
+                    sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
                     modifier = Modifier
                         .imePadding()
                         .padding(innerPadding)

@@ -66,7 +66,11 @@ class ResultCall<T>(
 
     private fun Throwable.toFailure(): Result<T> =
         this
-            .also { Timber.w(it, "Network Error: ${backingCall.request().url}") }
+            .also {
+                // We rebuild the URL without query params, we do not want to log those
+                val url = backingCall.request().url.toUrl().run { "$protocol://$authority$path" }
+                Timber.w(it, "Network Error: $url")
+            }
             .asFailure()
 
     private fun Response<T>.toResult(): Result<T> =

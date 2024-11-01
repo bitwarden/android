@@ -14,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,7 +41,8 @@ fun AttachmentItemContent(
         modifier = modifier
             .bottomDivider()
             .defaultMinSize(minHeight = 56.dp)
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .testTag("CipherAttachment"),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -49,7 +51,8 @@ fun AttachmentItemContent(
             style = BitwardenTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f)
+                .testTag("AttachmentNameLabel"),
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -58,7 +61,8 @@ fun AttachmentItemContent(
             text = attachmentItem.displaySize,
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.labelSmall,
-            modifier = Modifier,
+            modifier = Modifier
+                .testTag("AttachmentSizeLabel"),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -79,6 +83,8 @@ fun AttachmentItemContent(
 
                 onAttachmentDownloadClick(attachmentItem)
             },
+            modifier = Modifier
+                .testTag("AttachmentDownloadButton"),
         )
     }
 

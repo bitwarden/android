@@ -18,6 +18,7 @@ private const val COLLECTION: String = "collection"
 private const val FOLDER: String = "folder"
 private const val IDENTITY: String = "identity"
 private const val LOGIN: String = "login"
+private const val SSH_KEY: String = "ssh_key"
 private const val SECURE_NOTE: String = "secure_note"
 private const val SEND_FILE: String = "send_file"
 private const val SEND_TEXT: String = "send_text"
@@ -234,6 +235,7 @@ private fun VaultItemListingType.toTypeString(): String {
         is VaultItemListingType.Trash -> TRASH
         is VaultItemListingType.SendFile -> SEND_FILE
         is VaultItemListingType.SendText -> SEND_TEXT
+        is VaultItemListingType.SshKey -> SSH_KEY
     }
 }
 
@@ -248,6 +250,7 @@ private fun VaultItemListingType.toIdOrNull(): String? =
         is VaultItemListingType.Trash -> null
         is VaultItemListingType.SendFile -> null
         is VaultItemListingType.SendText -> null
+        is VaultItemListingType.SshKey -> null
     }
 
 private fun determineVaultItemListingType(
@@ -259,6 +262,7 @@ private fun determineVaultItemListingType(
         CARD -> VaultItemListingType.Card
         IDENTITY -> VaultItemListingType.Identity
         SECURE_NOTE -> VaultItemListingType.SecureNote
+        SSH_KEY -> VaultItemListingType.SshKey
         TRASH -> VaultItemListingType.Trash
         FOLDER -> VaultItemListingType.Folder(folderId = id)
         COLLECTION -> VaultItemListingType.Collection(collectionId = requireNotNull(id))

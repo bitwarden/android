@@ -195,18 +195,19 @@
   <string name="translations">Traduzioni</string>
   <string name="items_for_uri">Elementi per %1$s</string>
   <string name="no_items_for_uri">Nessun elemento per %1$s</string>
+  <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
   <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Quando selezioni un campo di login e vedi un pop-up di riempimento automatico di Bitwarden, puoi cliccarlo per aprire il servizio di riempimento automatico.</string>
   <string name="bitwarden_autofill_service_notification_content">Clicca questa notifica per riempire automaticamente un login dalla tua cassaforte.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Apri impostazioni di accessibilità</string>
   <string name="bitwarden_autofill_service_step1">1. Nelle impostazioni di accessibilità di Android, clicca \"Bitwarden\" sotto Servizi.</string>
-  <string name="bitwarden_autofill_service_step2">2. Attiva l\'interruttore e clicca Consenti per accettare.</string>
+  <string name="bitwarden_autofill_service_step2">2. Attiva Bitwarden e clicca Consenti per accettare.</string>
   <string name="disabled">Disabilitato</string>
   <string name="enabled">Attivo</string>
   <string name="off" tools:override="true">No</string>
   <string name="on" tools:override="true">Sì</string>
   <string name="status">Stato</string>
-  <string name="bitwarden_autofill_service_alert2">Puoi aggiungere facilmente nuovi login alla cassaforte con il servizio di riempimento automatico di Bitwarden. Scopri di più su come usare il riempimento automatico nelle impostazioni dell\'applicazione.</string>
+  <string name="bitwarden_autofill_service_alert2">Puoi aggiungere facilmente nuovi login alla cassaforte con il servizio di riempimento automatico di Bitwarden. Scopri di più su come usare il riempimento automatico nelle impostazioni dell\'app.</string>
   <string name="autofill">Riempimento automatico</string>
   <string name="autofill_or_view">Vuoi riempire automaticamente o vedere questo elemento?</string>
   <string name="bitwarden_autofill_service_match_confirm">Questo elemento non è una corrispondenza completa per \"%1$s\". Sei sicuro di voler riempire automaticamente questo elemento?</string>
@@ -271,7 +272,7 @@ La scansione è automatica.</string>
   <string name="self_hosted_environment_footer">Inserisci l\'URL principale dell\'installazione Bitwarden self-hosted.</string>
   <string name="server_url">URL del server</string>
   <string name="web_vault_url">URL della cassaforte web</string>
-  <string name="bitwarden_autofill_service_notification_content_old">Tocca qui per visualizzare gli elementi della cassaforte</string>
+  <string name="bitwarden_autofill_service_notification_content_old">Clicca qui per visualizzare gli elementi della tua cassaforte.</string>
   <string name="custom_fields">Campi personalizzati</string>
   <string name="copy_number">Copia il numero</string>
   <string name="copy_security_code">Copia il CVC</string>
@@ -332,7 +333,7 @@ La scansione è automatica.</string>
   <string name="no_items_folder">Nessun elemento in questa cartella</string>
   <string name="no_items_trash">Nessun elemento nel cestino</string>
   <string name="autofill_accessibility_service">Servizio di accessibilità di riempimento automatico</string>
-  <string name="autofill_accessibility_summary">Assistere con il riempimento dei campi nome utente e password in altre applicazioni e sul web.</string>
+  <string name="autofill_accessibility_summary">Assiste con il riempimento dei campi nome utente e password in altre applicazioni e nei siti web.</string>
   <string name="autofill_service_description">Il servizio di riempimento automatico di Bitwarden usa la struttura di riempimento automatico di Android per aiutare a inserire le tue credenziali su altre app nel tuo dispositivo.</string>
   <string name="bitwarden_autofill_service_description">Usa il servizio di riempimento automatico di Bitwarden per riempire le informazioni su login, carte di credito e identità su altre app.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Apri impostazioni di riempimento automatico</string>
@@ -382,7 +383,7 @@ La scansione è automatica.</string>
   <string name="autofill_turn_on4">4. Attiva il riempimento automatico</string>
   <string name="autofill_turn_on5">5. Seleziona \"Bitwarden\"</string>
   <string name="password_autofill">Riempimento automatico password</string>
-  <string name="bitwarden_autofill_alert2">Puoi aggiungere facilmente nuovi login alla cassaforte con l\'estensione per browser di Bitwarden. Scopri di più su come usare il riempimento automatico nelle impostazioni dell\'applicazione.</string>
+  <string name="bitwarden_autofill_alert2">Il modo più semplice per aggiungere nuovi login alla tua cassaforte è usare l\'estensione di riempimento automatico di Bitwarden. Scopri di più su come usare l\'estensione di riempimento automatico di Bitwarden nelle impostazioni.</string>
   <string name="invalid_email">Inserisci un indirizzo email valido</string>
   <string name="cards">Carte</string>
   <string name="identities">Identità</string>
@@ -480,8 +481,8 @@ La scansione è automatica.</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden richiede la tua attenzione - Vedi \"Servizio di accessibilità di riempimento automatico\" dalle impostazioni di Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Nelle Impostazioni di Android per Bitwarden, vai alle opzioni \"Mostra sopra altre app\" (sotto \"Avanzate\") e abilita il supporto della sovrapposizione.</string>
   <string name="overlay_permission">Permessi</string>
-  <string name="bitwarden_autofill_service_open_overlay_permission_settings">Apri le impostazioni di permesso alla sovrapposizione</string>
-  <string name="bitwarden_autofill_service_step3">3. Nelle Impostazioni di Android per Bitwarden, seleziona \"Mostra sopra altre app\" (sotto \"Avanzate\") e abilitalo per consentire la sovrapposizione.</string>
+  <string name="bitwarden_autofill_service_open_overlay_permission_settings">Apri \"Mostra sopra altre app\" in Impostazioni</string>
+  <string name="bitwarden_autofill_service_step3">3. Nelle Impostazioni di Android per Bitwarden, seleziona \"Mostra sopra altre app\" (sotto \"Avanzate\") e attivalo per consentire la sovrapposizione.</string>
   <string name="denied">Negato</string>
   <string name="granted">Concesso</string>
   <string name="file_format">Formato file</string>
@@ -546,7 +547,7 @@ La scansione è automatica.</string>
   <string name="accessibility_description2">Usa il servizio di accessibilità di Bitwarden per riempire automaticamente i tuoi login su siti web e app (anche \"Mostra sopra altre app\" deve essere abilitato).</string>
   <string name="accessibility_description3">Abilita il servizio di accessibilità di Bitwarden per usare il riquadro di riempimento automatico rapido, e/o mostra un pop-up se \"Mostra sopra altre app\" è abilitato.</string>
   <string name="accessibility_description4">Necessario per usare il riquadro di riempimento automatico rapido o per migliorare il servizio di riempimento automatico se \"Mostra sopra altre app\" è abilitato.</string>
-  <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
+  <string name="accessibility_description5">Necessario per usare il riquadro di azione rapida di riempimento automatico.</string>
   <string name="draw_over">Usa \"Mostra sopra altre app\"</string>
   <string name="draw_over_description">Permette al servizio di accessibilità di Bitwarden di mostrare un pop-up quando i campi di login sono selezionati.</string>
   <string name="draw_over_description2">Se abilitato, il servizio di accessibilità di Bitwarden mostrerà un pop-up per aiutarti a riempire automaticamente i tuoi login quando selezioni dei campi di login.</string>
@@ -952,7 +953,7 @@ Vuoi passare a questo account?</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Ottieni consigli, annunci e opportunità di ricerca da Bitwarden nella tua casella di posta. Disiscriviti in qualsiasi momento.</string>
   <string name="privacy_prioritized">Privacy, al primo posto</string>
   <string name="welcome_message_1">Salva login, carte e identità nella tua cassaforte sicura. Bitwarden usa la crittografia end-to-end e zero-knowledge per proteggere ciò che è importante.</string>
-  <string name="welcome_message_2">Imposta lo sblocco con la biometria e il riempimento automatico per accedere istantaneamente agli account.</string>
+  <string name="welcome_message_2">Imposta lo sblocco biometrico e il riempimento automatico per accedere ai tuoi account senza digitare una sola lettera.</string>
   <string name="quick_and_easy_login">Accesso facile e veloce</string>
   <string name="level_up_your_logins">Porta i login a un altro livello</string>
   <string name="welcome_message_3">Usa il generatore per creare e salvare password forti e uniche per tutti gli account.</string>
@@ -974,7 +975,7 @@ Vuoi passare a questo account?</string>
   <string name="set_up_unlock_later">Imposta lo sblocco più tardi</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Sei sicuro di voler impostare lo sblocco dell\'app più tardi? Potrai farlo nelle impostazioni di sicurezza dell\'account.</string>
   <string name="confirm">Conferma</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Imposta un codice PIN o la biometria per accedere alla cassaforte e riempire automaticamente i login in un istante.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Imposta la biometria o scegli un codice PIN per accedere rapidamente alla tua cassaforte e riempire automaticamente i tuoi login.</string>
   <string name="never_lose_access_to_your_vault">Non perdere l\'accesso alla cassaforte</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Il miglior modo per assicurarti di poter sempre accedere all\'account è configurare tutto dall\'inizio.</string>
   <string name="create_a_hint">Crea un suggerimento</string>
@@ -1002,7 +1003,7 @@ Vuoi passare a questo account?</string>
   <string name="allow_bitwarden_authenticator_syncing">Permetti il sync di Bitwarden Authenticator</string>
   <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
   <string name="turn_on_autofill">Attiva il riempimento automatico</string>
-  <string name="use_autofill_to_log_into_your_accounts">Usa riempimento automatico per accedere ai tuoi account con un solo tocco.</string>
+  <string name="use_autofill_to_log_into_your_accounts">Usa il riempimento automatico per accedere ai tuoi account con un solo tocco.</string>
   <string name="turn_on_later">Attiva più tardi</string>
   <string name="turn_on_autofill_later">Attivare il riempimento automatico più tardi?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Puoi completare questo passaggio in qualsiasi momento tornando nelle Impostazioni.</string>
@@ -1058,4 +1059,17 @@ Vuoi passare a questo account?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
+  <string name="syncing_logins_loading_message">Syncing logins...</string>
+  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="download_the_browser_extension">Download the browser extension</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
+  <string name="use_the_web_app">Use the web app</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Log in at bitwarden.com to easily manage your account and update settings.</string>
+  <string name="autofill_passwords">Autofill passwords</string>
+  <string name="set_up_autofill_on_all_your_devices">Set up autofill on all your devices to login with a single tap anywhere.</string>
+  <string name="import_successful">Import Successful!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
+  <string name="bitwarden_tools">Bitwarden Tools</string>
+  <string name="got_it">Got it</string>
+  <string name="no_logins_were_imported">No logins were imported</string>
 </resources>

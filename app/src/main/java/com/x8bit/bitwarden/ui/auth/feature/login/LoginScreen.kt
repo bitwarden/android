@@ -41,7 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -273,7 +273,7 @@ private fun LoginScreenContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         if (state.shouldShowLoginWithDevice) {
-            BitwardenOutlinedButtonWithIcon(
+            BitwardenOutlinedButton(
                 label = stringResource(id = R.string.log_in_with_device),
                 icon = rememberVectorPainter(id = R.drawable.ic_mobile),
                 onClick = onLoginWithDeviceClick,
@@ -286,7 +286,7 @@ private fun LoginScreenContent(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        BitwardenOutlinedButtonWithIcon(
+        BitwardenOutlinedButton(
             label = stringResource(id = R.string.log_in_sso),
             icon = rememberVectorPainter(id = R.drawable.ic_briefcase),
             onClick = onSingleSignOnClick,

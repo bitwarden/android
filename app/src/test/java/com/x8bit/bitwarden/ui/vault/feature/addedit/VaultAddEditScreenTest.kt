@@ -18,6 +18,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isEditable
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -509,7 +510,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         composeTestRule
-            .onAllNodesWithText("Bitwarden Auto-fill Service")
+            .onAllNodesWithText("Bitwarden Autofill Service")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -2362,6 +2363,31 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `ownership section should not be displayed when no organizations present`() {
+        updateStateWithOwners(selectedOwnerId = "mockOwnerId-2")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "mockCollectionName-2")
+            .assertIsDisplayed()
+
+        updateStateWithOwners(
+            selectedOwnerId = null,
+            availableOwners = listOf(
+                VaultAddEditState.Owner(
+                    id = null,
+                    name = "placeholder@email.com",
+                    collections = DEFAULT_COLLECTIONS,
+                ),
+            ),
+            hasOrganizations = false,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "mockCollectionName-2")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `Collection list should display according to state`() {
         updateStateWithOwners(selectedOwnerId = "mockOwnerId-2")
 
@@ -3322,6 +3348,56 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `in ItemType_SshKeys the public key field should be read only`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Public key")
+            .assertExists()
+            .assert(!isEditable())
+    }
+
+    @Test
+    fun `in ItemType_SshKeys the private key field should be read only`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Private key")
+            .assertExists()
+            .assert(!isEditable())
+    }
+
+    @Test
+    fun `in ItemType_SshKeys the fingerprint field should be read only`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Fingerprint")
+            .assertExists()
+            .assert(!isEditable())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SshKeys changing the private key visibility should trigger PrivateKeyVisibilityChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_SSH_KEYS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Private key")
+            .assertExists()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Show")
+            .assertExists()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange(true),
+            )
+        }
+    }
+
     //region Helper functions
 
     private fun updateLoginType(
@@ -3411,12 +3487,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private fun updateStateWithOwners(
         selectedOwnerId: String? = null,
         availableOwners: List<VaultAddEditState.Owner> = DEFAULT_OWNERS,
+        hasOrganizations: Boolean = true,
     ) {
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) {
                 copy(
                     selectedOwnerId = selectedOwnerId,
                     availableOwners = availableOwners,
+                    hasOrganizations = hasOrganizations,
                 )
             }
         }
@@ -3444,6 +3522,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -3454,6 +3533,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -3464,6 +3544,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -3474,6 +3555,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         @Suppress("MaxLineLength")
@@ -3495,6 +3577,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -3505,6 +3588,18 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+        )
+
+        private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SSH_KEY),
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

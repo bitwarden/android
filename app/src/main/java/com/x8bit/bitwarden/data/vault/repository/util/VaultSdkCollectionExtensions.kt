@@ -17,6 +17,7 @@ fun SyncResponseJson.Collection.toEncryptedSdkCollection(): Collection =
         externalId = this.externalId,
         hidePasswords = this.shouldHidePasswords,
         readOnly = this.isReadOnly,
+        manage = this.canManage,
     )
 
 /**

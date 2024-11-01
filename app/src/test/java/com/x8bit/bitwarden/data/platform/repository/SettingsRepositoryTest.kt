@@ -1152,88 +1152,40 @@ class SettingsRepositoryTest {
         }
 
     @Test
-    fun `storeShowAutoFillSettingBadge should store value of false to disk`() {
-        val userId = "userId"
-        settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = false)
-        assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
-    }
-
-    @Test
-    fun `storeShowAutoFillSettingBadge should store value of true to disk`() {
-        val userId = "userId"
-        settingsRepository.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
-        assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = userId)!!)
-    }
-
-    @Test
-    fun `getShowAutoFillSettingBadge get value of false if does not exist`() {
-        val userId = "userId"
-        assertFalse(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
-    }
-
-    @Test
-    fun `getShowAutoFillSettingBadge should return the value saved to disk`() {
-        val userId = "userId"
-        fakeSettingsDiskSource.storeShowAutoFillSettingBadge(userId = userId, showBadge = true)
-        assertTrue(settingsRepository.getShowAutoFillSettingBadge(userId = userId))
-    }
-
-    @Test
-    fun `storeShowUnlockSettingBadge should store value of false to disk`() {
-        val userId = "userId"
-        settingsRepository.storeShowUnlockSettingBadge(userId = userId, showBadge = false)
-        assertFalse(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = userId)!!)
-    }
-
-    @Test
-    fun `storeShowUnlockSettingBadge should store value of true to disk`() {
-        val userId = "userId"
-        settingsRepository.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
-        assertTrue(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = userId)!!)
-    }
-
-    @Test
-    fun `getUnlockSettingBadge get value of false if does not exist`() {
-        val userId = "userId"
-        assertFalse(settingsRepository.getShowUnlockSettingBadge(userId = userId))
-    }
-
-    @Test
-    fun `getShowUnlockSettingBadge should return the value saved to disk`() {
-        val userId = "userId"
-        fakeSettingsDiskSource.storeShowUnlockSettingBadge(userId = userId, showBadge = true)
-        assertTrue(settingsRepository.getShowUnlockSettingBadge(userId = userId))
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getShowAutoFillBadgeFlow should emit the values saved to disk and update when they change`() =
-        runTest {
-            val userId = "userId"
-            settingsRepository.getShowAutofillBadgeFlow(userId).test {
-                assertFalse(awaitItem())
-                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
-                    userId = userId,
-                    showBadge = true,
-                )
-                assertTrue(awaitItem())
-            }
+    fun `isUnlockWithBiometricsEnabledFlow should react to changes in AuthDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.isUnlockWithBiometricsEnabledFlow.test {
+            assertFalse(awaitItem())
+            fakeAuthDiskSource.storeUserBiometricUnlockKey(
+                userId = USER_ID,
+                biometricsKey = "biometricsKey",
+            )
+            assertTrue(awaitItem())
+            fakeAuthDiskSource.storeUserBiometricUnlockKey(
+                userId = USER_ID,
+                biometricsKey = null,
+            )
+            assertFalse(awaitItem())
         }
+    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `getShowUnlockBadgeFlow should emit the values saved to disk and update when they change`() =
-        runTest {
-            val userId = "userId"
-            settingsRepository.getShowUnlockBadgeFlow(userId).test {
-                assertFalse(awaitItem())
-                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
-                    userId = userId,
-                    showBadge = true,
-                )
-                assertTrue(awaitItem())
-            }
+    fun `isUnlockWithPinEnabledFlow should react to changes in AuthDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.isUnlockWithPinEnabledFlow.test {
+            assertFalse(awaitItem())
+            fakeAuthDiskSource.storePinProtectedUserKey(
+                userId = USER_ID,
+                pinProtectedUserKey = "pinProtectedUserKey",
+            )
+            assertTrue(awaitItem())
+            fakeAuthDiskSource.storePinProtectedUserKey(
+                userId = USER_ID,
+                pinProtectedUserKey = null,
+            )
+            assertFalse(awaitItem())
         }
+    }
 }
 
 private const val USER_ID: String = "userId"

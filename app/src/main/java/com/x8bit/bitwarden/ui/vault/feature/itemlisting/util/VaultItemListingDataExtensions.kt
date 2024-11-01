@@ -70,6 +70,10 @@ fun CipherView.determineListingPredicate(
             type == CipherType.SECURE_NOTE && deletedDate == null
         }
 
+        is VaultItemListingState.ItemListingType.Vault.SshKey -> {
+            type == CipherType.SSH_KEY && deletedDate == null
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
@@ -137,6 +141,7 @@ fun VaultData.toViewState(
                 isFido2Creation = fido2CreationData != null,
                 fido2CredentialAutofillViews = fido2CredentialAutofillViews,
                 isPremiumUser = isPremiumUser,
+                isTotp = totpData != null,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -271,6 +276,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Vault.Trash -> this
         is VaultItemListingState.ItemListingType.Send.SendFile -> this
         is VaultItemListingState.ItemListingType.Send.SendText -> this
+        is VaultItemListingState.ItemListingType.Vault.SshKey -> this
     }
 
 @Suppress("LongParameterList")
@@ -282,6 +288,7 @@ private fun List<CipherView>.toDisplayItemList(
     isFido2Creation: Boolean,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     isPremiumUser: Boolean,
+    isTotp: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -295,6 +302,7 @@ private fun List<CipherView>.toDisplayItemList(
                     fido2CredentialAutofillView.cipherId == it.id
                 },
             isPremiumUser = isPremiumUser,
+            isTotp = isTotp,
         )
     }
 
@@ -318,6 +326,7 @@ private fun CipherView.toDisplayItem(
     isFido2Creation: Boolean,
     fido2CredentialAutofillView: Fido2CredentialAutofillView?,
     isPremiumUser: Boolean,
+    isTotp: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -345,6 +354,7 @@ private fun CipherView.toDisplayItem(
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isFido2Creation = isFido2Creation,
+        isTotp = isTotp,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
     )
@@ -369,6 +379,7 @@ private fun CipherView.toIconTestTag(): String =
         CipherType.SECURE_NOTE -> "SecureNoteCipherIcon"
         CipherType.CARD -> "CardCipherIcon"
         CipherType.IDENTITY -> "IdentityCipherIcon"
+        CipherType.SSH_KEY -> "SshKeyCipherIcon"
     }
 
 private fun CipherView.toIconData(
@@ -416,6 +427,7 @@ private fun SendView.toDisplayItem(
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
         isFido2Creation = false,
+        isTotp = false,
     )
 
 @get:DrawableRes
@@ -425,4 +437,5 @@ private val CipherType.iconRes: Int
         CipherType.SECURE_NOTE -> R.drawable.ic_note
         CipherType.CARD -> R.drawable.ic_payment_card
         CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
     }

@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
@@ -29,6 +30,7 @@ class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
+    private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<AutoFillState, AutoFillEvent, AutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -74,9 +76,9 @@ class AutoFillViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        settingsRepository
-            .getShowAutofillBadgeFlow(userId = state.activeUserId)
-            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it) }
+        firstTimeActionManager
+            .firstTimeStateFlow
+            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it.showSetupAutofillCard) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -117,7 +119,6 @@ class AutoFillViewModel @Inject constructor(
     }
 
     private fun handleAutoFillActionCardCtClick() {
-        dismissShowAutofillActionCard()
         sendEvent(AutoFillEvent.NavigateToSetupAutofill)
     }
 
@@ -194,8 +195,7 @@ class AutoFillViewModel @Inject constructor(
 
     private fun dismissShowAutofillActionCard() {
         if (!state.showAutofillActionCard) return
-        settingsRepository.storeShowAutoFillSettingBadge(
-            userId = state.activeUserId,
+        firstTimeActionManager.storeShowAutoFillSettingBadge(
             showBadge = false,
         )
     }

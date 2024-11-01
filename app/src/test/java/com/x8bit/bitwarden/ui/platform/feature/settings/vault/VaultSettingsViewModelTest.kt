@@ -1,13 +1,16 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -28,14 +31,14 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlagFlow
         every { getFeatureFlag(FlagKey.ImportLoginsFlow) } returns false
     }
-    private val authRepository = mockk<AuthRepository> {
-        every { setShowImportLogins(any()) } just runs
-    }
     private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
+
+    private val snackbarRelayManager = SnackbarRelayManagerImpl()
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
@@ -87,7 +90,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertTrue(viewModel.stateFlow.value.shouldShowImportCard)
         mutableFirstTimeStateFlow.update {
-            it.copy(showImportLoginsCard = false)
+            it.copy(showImportLoginsCardInSettings = false)
         }
         assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
     }
@@ -113,15 +116,19 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-            verify(exactly = 1) { authRepository.setShowImportLogins(false) }
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
+            }
         }
 
     @Test
     fun `ImportLoginsCardDismissClick action should set repository value to false `() = runTest {
-        val viewModel = createViewModel()
         mutableImportLoginsFlagFlow.update { true }
+        val viewModel = createViewModel()
         viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
-        verify(exactly = 1) { authRepository.setShowImportLogins(false) }
+        verify(exactly = 1) {
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -130,15 +137,30 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
-            verify(exactly = 0) { authRepository.setShowImportLogins(false) }
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
+            }
         }
+
+    @Test
+    fun `SnackbarDataReceived action should send snackbar event`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            snackbarRelayManager.sendSnackbarData(
+                data = expectedSnackbarData,
+                relay = SnackbarRelay.VAULT_SETTINGS_RELAY,
+            )
+            assertEquals(VaultSettingsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
+    }
 
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
-        authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 
-private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(showImportLoginsCard = true)
+private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(showImportLoginsCardInSettings = true)

@@ -13,6 +13,7 @@ import com.bitwarden.vault.LoginUri
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
+import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
 import java.time.Clock
 import java.time.Instant
@@ -49,6 +50,7 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         card = createMockSdkCard(number = number),
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
+        sshKey = createMockSdkSshKey(number = number),
         favorite = false,
         passwordHistory = listOf(createMockSdkPasswordHistory(number = number, clock = clock)),
         reprompt = CipherRepromptType.NONE,
@@ -99,6 +101,16 @@ fun createMockSdkIdentity(number: Int): Identity =
         state = "mockState-$number",
         email = "mockEmail-$number",
         username = "mockUsername-$number",
+    )
+
+/**
+ * Create a mock [SshKey] with a given [number].
+ */
+fun createMockSdkSshKey(number: Int): SshKey =
+    SshKey(
+        publicKey = "mockPublicKey-$number",
+        privateKey = "mockPrivateKey-$number",
+        fingerprint = "mockKeyFingerprint-$number",
     )
 
 /**

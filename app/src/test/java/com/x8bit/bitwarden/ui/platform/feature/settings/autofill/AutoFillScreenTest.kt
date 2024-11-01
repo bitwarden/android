@@ -453,7 +453,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `on block auto fill click should send BlockAutoFillClick`() {
         composeTestRule
-            .onNodeWithText("Block auto-fill")
+            .onNodeWithText("Block autofill")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) }

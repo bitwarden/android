@@ -30,4 +30,9 @@ class FlagKeyTest {
     fun `ImportLoginsFlow default value should be false`() {
         assertFalse(FlagKey.ImportLoginsFlow.defaultValue)
     }
+
+    @Test
+    fun `SshKeyCipherItems default value should be false`() {
+        assertFalse(FlagKey.SshKeyCipherItems.defaultValue)
+    }
 }

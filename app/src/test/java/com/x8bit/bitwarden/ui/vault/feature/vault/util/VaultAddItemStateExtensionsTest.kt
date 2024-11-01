@@ -12,6 +12,7 @@ import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
+import com.bitwarden.vault.SshKeyView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -112,6 +113,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -295,6 +297,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -426,6 +429,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -611,6 +615,7 @@ class VaultAddItemStateExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+                sshKey = null,
             ),
             result,
         )
@@ -697,6 +702,65 @@ class VaultAddItemStateExtensionsTest {
                         password = "hidden: value",
                         lastUsedDate = Instant.MIN,
                     ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform SSH Key ItemType to CipherView`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MIN
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedFolderId = "mockId-1",
+                favorite = false,
+                masterPasswordReprompt = false,
+                notes = "mockNotes-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.SshKey(
+                publicKey = "mockPublicKey-1",
+                privateKey = "mockPrivateKey-1",
+                fingerprint = "mockFingerprint-1",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = "mockId-1",
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.SSH_KEY,
+                login = null,
+                identity = null,
+                card = null,
+                secureNote = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                creationDate = Instant.MIN,
+                deletedDate = null,
+                revisionDate = Instant.MIN,
+                sshKey = SshKeyView(
+                    publicKey = "mockPublicKey-1",
+                    privateKey = "mockPrivateKey-1",
+                    fingerprint = "mockFingerprint-1",
                 ),
             ),
             result,
@@ -911,6 +975,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     creationDate = Instant.MIN,
     deletedDate = null,
     revisionDate = Instant.MIN,
+    sshKey = null,
 )
 
 private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(

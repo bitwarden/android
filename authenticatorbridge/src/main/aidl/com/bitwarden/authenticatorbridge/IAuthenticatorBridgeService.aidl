@@ -49,13 +49,8 @@ interface IAuthenticatorBridgeService {
     // Add TOTP Item
     // ==============
 
-    // Returns an intent that can be launched to navigate the user to the add Totp item flow
-    // in the main password manager app.
-    Intent createAddTotpLoginItemIntent();
-
-    // Give the given TOTP item data to the main Bitwarden app before launching the add TOTP
-    // item flow. This should be called before launching the intent returned from
-    // createAddTotpLoginItemIntent().
-    void setPendingAddTotpLoginItemData(in EncryptedAddTotpLoginItemData data);
+    // Start the add TOTP item flow in the main Bitwarden app with the given data.
+    // Returns true if the flow was successfully launched and false otherwise.
+    boolean startAddTotpLoginItemFlow(in EncryptedAddTotpLoginItemData data);
 
 }

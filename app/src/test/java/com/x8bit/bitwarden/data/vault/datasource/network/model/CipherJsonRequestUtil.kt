@@ -21,6 +21,7 @@ fun createMockCipherJsonRequest(number: Int, hasNullUri: Boolean = false): Ciphe
         type = CipherTypeJson.LOGIN,
         login = createMockLogin(number = number, hasNullUri = hasNullUri),
         card = createMockCard(number = number),
+        sshKey = createMockSshKey(number = number),
         fields = listOf(createMockField(number = number)),
         identity = createMockIdentity(number = number),
         isFavorite = false,

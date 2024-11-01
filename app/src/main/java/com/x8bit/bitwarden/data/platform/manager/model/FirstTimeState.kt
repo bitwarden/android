@@ -5,6 +5,7 @@ package com.x8bit.bitwarden.data.platform.manager.model
  */
 data class FirstTimeState(
     val showImportLoginsCard: Boolean,
+    val showImportLoginsCardInSettings: Boolean,
     val showSetupUnlockCard: Boolean,
     val showSetupAutofillCard: Boolean,
 ) {
@@ -16,9 +17,11 @@ data class FirstTimeState(
         showImportLoginsCard: Boolean? = null,
         showSetupUnlockCard: Boolean? = null,
         showSetupAutofillCard: Boolean? = null,
+        showImportLoginsCardInSettings: Boolean? = null,
     ) : this(
         showImportLoginsCard = showImportLoginsCard ?: true,
         showSetupUnlockCard = showSetupUnlockCard ?: false,
         showSetupAutofillCard = showSetupAutofillCard ?: false,
+        showImportLoginsCardInSettings = showImportLoginsCardInSettings ?: false,
     )
 }

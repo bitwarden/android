@@ -14,7 +14,6 @@ data class BitwardenColorScheme(
     val icon: IconColors,
     val filledButton: FilledButtonColors,
     val outlineButton: OutlineButtonColors,
-    val tonalButton: TonalButtonColors,
     val toggleButton: ToggleButtonColors,
     val sliderButton: SliderButtonColors,
     val status: StatusColors,
@@ -91,17 +90,6 @@ data class BitwardenColorScheme(
         val foreground: Color,
         val foregroundDisabled: Color,
         val foregroundReversed: Color,
-    )
-
-    /**
-     * Defines all the tonal button colors for the app.
-     */
-    @Immutable
-    data class TonalButtonColors(
-        val background: Color,
-        val backgroundDisabled: Color,
-        val foreground: Color,
-        val foregroundDisabled: Color,
     )
 
     /**

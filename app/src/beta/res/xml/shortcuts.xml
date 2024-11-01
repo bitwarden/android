@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_generator_shortcut"
+        android:shortcutId="bitwarden_password_generator"
+        android:shortcutLongLabel="@string/password_generator"
+        android:shortcutShortLabel="@string/password_generator">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="bitwarden://password_generator"
+            android:targetClass="com.x8bit.bitwarden.MainActivity"
+            android:targetPackage="com.x8bit.bitwarden.beta" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_vault_shortcut"
+        android:shortcutId="bitwarden_my_vault"
+        android:shortcutLongLabel="@string/my_vault"
+        android:shortcutShortLabel="@string/my_vault">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="bitwarden://my_vault"
+            android:targetClass="com.x8bit.bitwarden.MainActivity"
+            android:targetPackage="com.x8bit.bitwarden.beta" />
+    </shortcut>
+</shortcuts>

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
@@ -19,6 +20,8 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
@@ -84,10 +87,14 @@ object PlatformManagerModule {
     @Singleton
     fun provideAuthenticatorBridgeProcessor(
         authenticatorBridgeRepository: AuthenticatorBridgeRepository,
+        addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
+        @ApplicationContext context: Context,
         dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
     ): AuthenticatorBridgeProcessor = AuthenticatorBridgeProcessorImpl(
         authenticatorBridgeRepository = authenticatorBridgeRepository,
+        addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
+        context = context,
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
     )
@@ -291,5 +298,13 @@ object PlatformManagerModule {
         vaultDiskSource = vaultDiskSource,
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideDatabaseSchemeManager(
+        settingsDiskSource: SettingsDiskSource,
+    ): DatabaseSchemeManager = DatabaseSchemeManagerImpl(
+        settingsDiskSource = settingsDiskSource,
     )
 }

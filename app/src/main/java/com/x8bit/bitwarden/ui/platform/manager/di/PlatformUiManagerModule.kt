@@ -5,6 +5,8 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManagerImpl
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,4 +34,8 @@ class PlatformUiManagerModule {
     @Singleton
     fun provideResourceManager(@ApplicationContext context: Context): ResourceManager =
         ResourceManagerImpl(context = context)
+
+    @Provides
+    @Singleton
+    fun provideSnackbarRelayManager(): SnackbarRelayManager = SnackbarRelayManagerImpl()
 }
