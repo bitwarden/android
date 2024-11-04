@@ -20,11 +20,13 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
+import com.x8bit.bitwarden.data.platform.util.AuthenticatorBridgeException
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Default implementation of [AuthenticatorBridgeProcessor].
@@ -93,7 +95,13 @@ class AuthenticatorBridgeProcessorImpl(
         }
 
         override fun syncAccounts() {
-            val symmetricEncryptionKey = symmetricEncryptionKeyData ?: return
+            val symmetricEncryptionKey = symmetricEncryptionKeyData ?: run {
+                Timber.e(
+                    t = AuthenticatorBridgeException(),
+                    message = "Unable to sync accounts when symmetricEncryptionKeyData is null.",
+                )
+                return
+            }
             scope.launch {
                 // Encrypt the shared account data with the symmetric key:
                 val encryptedSharedAccountData = authenticatorBridgeRepository
@@ -110,14 +118,33 @@ class AuthenticatorBridgeProcessorImpl(
         }
 
         override fun startAddTotpLoginItemFlow(data: EncryptedAddTotpLoginItemData): Boolean {
-            val symmetricEncryptionKey = symmetricEncryptionKeyData ?: return false
+            val symmetricEncryptionKey = symmetricEncryptionKeyData ?: run {
+                Timber.e(
+                    t = AuthenticatorBridgeException(),
+                    message = "Unable to start add TOTP item flow when " +
+                        "symmetricEncryptionKeyData is null.",
+                )
+                return false
+            }
             val intent = createAddTotpItemFromAuthenticatorIntent(context = applicationContext)
             val totpData = data.decrypt(symmetricEncryptionKey)
+                .onFailure {
+                    Timber.e(
+                        t = AuthenticatorBridgeException(),
+                        message = "Unable to decrypt TOTP data.",
+                    )
+                }
                 .getOrNull()
                 ?.totpUri
                 ?.toUri()
                 ?.getTotpDataOrNull()
-                ?: return false
+                ?: run {
+                    Timber.e(
+                        t = AuthenticatorBridgeException(),
+                        message = "Unable to parse TOTP URI.",
+                    )
+                    return false
+                }
             addTotpItemFromAuthenticatorManager.pendingAddTotpLoginItemData = totpData
             applicationContext.startActivity(intent)
             return true
