@@ -56,6 +56,7 @@ fun String.getWebHostFromAndroidUriOrNull(): String? =
 fun String.getDomainOrNull(resourceCacheManager: ResourceCacheManager): String? =
     this
         .toUriOrNull()
+        ?.addSchemeToUriIfNecessary()
         ?.parseDomainOrNull(resourceCacheManager = resourceCacheManager)
 
 /**
