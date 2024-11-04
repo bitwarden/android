@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -15,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,11 +58,9 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnac
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
@@ -90,7 +85,6 @@ fun VaultScreen(
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
-    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -137,10 +131,6 @@ fun VaultScreen(
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
-    VaultScreenPushNotifications(
-        hideNotificationsDialog = state.hideNotificationsDialog,
-        permissionsManager = permissionsManager,
-    )
     VaultScreenScaffold(
         state = state,
         pullToRefreshState = pullToRefreshState,
@@ -148,28 +138,6 @@ fun VaultScreen(
         onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         snackbarHostState = snackbarHostState,
     )
-}
-
-/**
- * Handles the notifications permission request.
- */
-@Composable
-private fun VaultScreenPushNotifications(
-    hideNotificationsDialog: Boolean,
-    permissionsManager: PermissionsManager,
-) {
-    if (hideNotificationsDialog) return
-    val launcher = permissionsManager.getLauncher {
-        // We do not actually care what the response is, we just need
-        // to give the user a chance to give us the permission.
-    }
-    LaunchedEffect(key1 = Unit) {
-        @SuppressLint("InlinedApi")
-        // We check the version code as part of the 'hideNotificationsDialog' property.
-        if (!permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
-            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
 }
 
 /**
