@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -70,7 +69,6 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToSearchScreen = false
     private val exitManager = mockk<ExitManager>(relaxed = true)
     private val intentManager = mockk<IntentManager>(relaxed = true)
-    private val permissionsManager = FakePermissionManager()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -94,7 +92,6 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 exitManager = exitManager,
                 intentManager = intentManager,
-                permissionsManager = permissionsManager,
             )
         }
     }
@@ -1136,14 +1133,6 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `permissionManager is invoked for notifications based on state`() {
-        assertFalse(permissionsManager.hasGetLauncherBeenCalled)
-        mutableStateFlow.update { it.copy(hideNotificationsDialog = false) }
-        composeTestRule.waitForIdle()
-        assertTrue(permissionsManager.hasGetLauncherBeenCalled)
-    }
-
-    @Test
     fun `action card for importing logins should show based on state`() {
         mutableStateFlow.update {
             it.copy(
@@ -1253,7 +1242,6 @@ private val DEFAULT_STATE: VaultState = VaultState(
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
-    hideNotificationsDialog = true,
     isRefreshing = false,
     showImportActionCard = false,
 )
