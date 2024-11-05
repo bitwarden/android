@@ -14,5 +14,5 @@ data class DomainsEntity(
     val userId: String,
 
     @ColumnInfo(name = "domains_json")
-    val domainsJson: String,
+    val domainsJson: String?,
 )

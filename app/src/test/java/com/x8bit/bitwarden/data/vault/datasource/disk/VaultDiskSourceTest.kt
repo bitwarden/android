@@ -248,10 +248,13 @@ class VaultDiskSourceTest {
         // We cannot compare the JSON strings directly because of formatting differences
         // So we split that off into its own assertion.
         assertEquals(
-            DOMAINS_ENTITY.copy(domainsJson = ""),
-            storedDomainsEntity.copy(domainsJson = ""),
+            DOMAINS_ENTITY.copy(domainsJson = null),
+            storedDomainsEntity.copy(domainsJson = null),
         )
-        assertJsonEquals(DOMAINS_ENTITY.domainsJson, storedDomainsEntity.domainsJson)
+        assertJsonEquals(
+            requireNotNull(DOMAINS_ENTITY.domainsJson),
+            requireNotNull(storedDomainsEntity.domainsJson),
+        )
 
         // Verify the folders dao is updated
         assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
