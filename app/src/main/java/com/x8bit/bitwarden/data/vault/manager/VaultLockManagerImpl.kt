@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -90,6 +91,7 @@ class VaultLockManagerImpl(
         get() = mutableVaultStateEventSharedFlow.asSharedFlow()
 
     init {
+        observeAppCreationChanges()
         observeAppForegroundChanges()
         observeUserSwitchingChanges()
         observeVaultTimeoutChanges()
@@ -299,6 +301,27 @@ class VaultLockManagerImpl(
                         )
                     }
             }
+        }
+    }
+
+    private fun observeAppCreationChanges() {
+        appStateManager
+            .appCreatedStateFlow
+            .onEach { appCreationState ->
+                when (appCreationState) {
+                    AppCreationState.CREATED -> Unit
+                    AppCreationState.DESTROYED -> handleOnDestroyed()
+                }
+            }
+            .launchIn(unconfinedScope)
+    }
+
+    private fun handleOnDestroyed() {
+        activeUserId?.let { userId ->
+            checkForVaultTimeout(
+                userId = userId,
+                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
+            )
         }
     }
 

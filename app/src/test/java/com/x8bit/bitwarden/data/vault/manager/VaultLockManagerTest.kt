@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.manager.util.FakeAppStateManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -145,6 +146,74 @@ class VaultLockManagerTest {
                 expectNoEvents()
             }
         }
+
+    @Test
+    fun `app being destroyed should perform timeout action if necessary`() {
+        setAccountTokens()
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Will be used within each loop to reset the test to a suitable initial state.
+        fun resetTest(vaultTimeout: VaultTimeout) {
+            clearVerifications(userLogoutManager)
+            mutableVaultTimeoutStateFlow.value = vaultTimeout
+            fakeAppStateManager.appCreationState = AppCreationState.CREATED
+            verifyUnlockedVaultBlocking(userId = USER_ID)
+            assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+        }
+
+        // Test Lock action
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
+        MOCK_TIMEOUTS.forEach { vaultTimeout ->
+            resetTest(vaultTimeout = vaultTimeout)
+            fakeAppStateManager.appCreationState = AppCreationState.DESTROYED
+
+            when (vaultTimeout) {
+                VaultTimeout.FifteenMinutes,
+                VaultTimeout.ThirtyMinutes,
+                VaultTimeout.OneHour,
+                VaultTimeout.FourHours,
+                is VaultTimeout.Custom,
+                VaultTimeout.Immediately,
+                VaultTimeout.OneMinute,
+                VaultTimeout.FiveMinutes,
+                VaultTimeout.OnAppRestart,
+                    -> {
+                    assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
+                }
+
+                VaultTimeout.Never -> {
+                    assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+                }
+            }
+            verify(exactly = 0) { userLogoutManager.softLogout(any()) }
+        }
+
+        // Test Logout action
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
+        MOCK_TIMEOUTS.forEach { vaultTimeout ->
+            resetTest(vaultTimeout = vaultTimeout)
+            fakeAppStateManager.appCreationState = AppCreationState.DESTROYED
+
+            when (vaultTimeout) {
+                VaultTimeout.OnAppRestart,
+                VaultTimeout.FifteenMinutes,
+                VaultTimeout.ThirtyMinutes,
+                VaultTimeout.OneHour,
+                VaultTimeout.FourHours,
+                is VaultTimeout.Custom,
+                VaultTimeout.Immediately,
+                VaultTimeout.OneMinute,
+                VaultTimeout.FiveMinutes,
+                    -> {
+                    verify(exactly = 1) { userLogoutManager.softLogout(any()) }
+                }
+
+                VaultTimeout.Never -> {
+                    verify(exactly = 0) { userLogoutManager.softLogout(any()) }
+                }
+            }
+        }
+    }
 
     @Test
     fun `app coming into background subsequent times should perform timeout action if necessary`() {

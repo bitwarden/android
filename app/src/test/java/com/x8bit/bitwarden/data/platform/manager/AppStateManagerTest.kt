@@ -76,9 +76,6 @@ class AppStateManagerTest {
                 expectNoEvents()
 
                 activityLifecycleCallbacks.captured.onActivityDestroyed(activity)
-                expectNoEvents()
-
-                activityLifecycleCallbacks.captured.onActivityDestroyed(activity)
                 assertEquals(AppCreationState.DESTROYED, awaitItem())
             }
         }
