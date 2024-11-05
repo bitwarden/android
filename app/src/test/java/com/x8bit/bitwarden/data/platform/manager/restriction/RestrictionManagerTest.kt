@@ -7,7 +7,7 @@ import android.os.Bundle
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.platform.manager.util.FakeAppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.util.FakeAppStateManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import io.mockk.clearMocks
@@ -27,7 +27,7 @@ class RestrictionManagerTest {
         every { registerReceiver(any(), any()) } returns null
         every { unregisterReceiver(any()) } just runs
     }
-    private val fakeAppForegroundManager = FakeAppForegroundManager()
+    private val fakeAppStateManager = FakeAppStateManager()
     private val fakeDispatcherManager = FakeDispatcherManager().apply {
         setMain(unconfined)
     }
@@ -35,7 +35,7 @@ class RestrictionManagerTest {
     private val restrictionsManager = mockk<RestrictionsManager>()
 
     private val restrictionManager: RestrictionManager = RestrictionManagerImpl(
-        appForegroundManager = fakeAppForegroundManager,
+        appStateManager = fakeAppStateManager,
         dispatcherManager = fakeDispatcherManager,
         context = context,
         environmentRepository = fakeEnvironmentRepository,
@@ -51,7 +51,7 @@ class RestrictionManagerTest {
     fun `on app foreground with a null bundle should register receiver and do nothing else`() {
         every { restrictionsManager.applicationRestrictions } returns null
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -63,7 +63,7 @@ class RestrictionManagerTest {
     fun `on app foreground with an empty bundle should register receiver and do nothing else`() {
         every { restrictionsManager.applicationRestrictions } returns mockBundle()
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -78,7 +78,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("key" to "unknown")
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -93,7 +93,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to "https://vault.bitwarden.com")
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -109,7 +109,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to baseUrl)
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -130,7 +130,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to "https://vault.bitwarden.eu")
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -147,7 +147,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to baseUrl)
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -172,7 +172,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to baseUrl)
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -192,7 +192,7 @@ class RestrictionManagerTest {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to baseUrl)
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) {
             context.registerReceiver(any(), any())
@@ -207,7 +207,7 @@ class RestrictionManagerTest {
 
     @Test
     fun `on app background when not foregrounded should do nothing`() {
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
 
         verify(exactly = 0) {
             context.unregisterReceiver(any())
@@ -218,10 +218,10 @@ class RestrictionManagerTest {
     @Test
     fun `on app background after foreground should unregister receiver`() {
         every { restrictionsManager.applicationRestrictions } returns null
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
         clearMocks(context, restrictionsManager, answers = false)
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
 
         verify(exactly = 1) {
             context.unregisterReceiver(any())

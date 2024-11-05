@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.manager
 import android.content.Context
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.onEach
 class AccessibilityActivityManagerImpl(
     private val context: Context,
     private val accessibilityEnabledManager: AccessibilityEnabledManager,
-    appForegroundManager: AppForegroundManager,
+    appStateManager: AppStateManager,
     lifecycleScope: LifecycleCoroutineScope,
 ) : AccessibilityActivityManager {
     init {
-        appForegroundManager
+        appStateManager
             .appForegroundStateFlow
             .onEach {
                 accessibilityEnabledManager.isAccessibilityEnabled =

@@ -9,13 +9,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * Primary implementation of [AppForegroundManager].
+ * Primary implementation of [AppStateManager].
  */
-class AppForegroundManagerImpl(
+class AppStateManagerImpl(
     processLifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get(),
-) : AppForegroundManager {
-    private val mutableAppForegroundStateFlow =
-        MutableStateFlow(AppForegroundState.BACKGROUNDED)
+) : AppStateManager {
+    private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
 
     override val appForegroundStateFlow: StateFlow<AppForegroundState>
         get() = mutableAppForegroundStateFlow.asStateFlow()

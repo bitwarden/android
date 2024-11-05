@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -65,7 +65,7 @@ class VaultLockManagerImpl(
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
     private val settingsRepository: SettingsRepository,
-    private val appForegroundManager: AppForegroundManager,
+    private val appStateManager: AppStateManager,
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     dispatcherManager: DispatcherManager,
@@ -305,7 +305,7 @@ class VaultLockManagerImpl(
     private fun observeAppForegroundChanges() {
         var isFirstForeground = true
 
-        appForegroundManager
+        appStateManager
             .appForegroundStateFlow
             .onEach { appForegroundState ->
                 when (appForegroundState) {

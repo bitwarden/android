@@ -7,11 +7,11 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class AppForegroundManagerTest {
+class AppStateManagerTest {
 
     private val fakeLifecycleOwner = FakeLifecycleOwner()
 
-    private val appForegroundManager = AppForegroundManagerImpl(
+    private val appStateManager = AppStateManagerImpl(
         processLifecycleOwner = fakeLifecycleOwner,
     )
 
@@ -19,7 +19,7 @@ class AppForegroundManagerTest {
     @Test
     fun `appForegroundStateFlow should emit whenever the underlying ProcessLifecycleOwner receives start and stop events`() =
         runTest {
-            appForegroundManager.appForegroundStateFlow.test {
+            appStateManager.appForegroundStateFlow.test {
                 // Initial state is BACKGROUNDED
                 assertEquals(
                     AppForegroundState.BACKGROUNDED,

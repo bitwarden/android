@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * A manager for tracking app foreground state changes.
  */
-interface AppForegroundManager {
+interface AppStateManager {
 
     /**
      * Emits whenever there are changes to the app foreground state.

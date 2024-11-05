@@ -1,15 +1,15 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * A faked implementation of [AppForegroundManager]
+ * A faked implementation of [AppStateManager]
  */
-class FakeAppForegroundManager : AppForegroundManager {
+class FakeAppStateManager : AppStateManager {
     private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
 
     override val appForegroundStateFlow: StateFlow<AppForegroundState>
