@@ -166,6 +166,13 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on HideBottomSheet should make hideBottomSheet true`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(PendingRequestsAction.HideBottomSheet)
+        assertEquals(DEFAULT_STATE.copy(hideBottomSheet = true), viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `on RefreshPull should make auth request`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(PendingRequestsAction.RefreshPull)
@@ -370,13 +377,12 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
-
-    companion object {
-        val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
-            authRequests = emptyList(),
-            viewState = PendingRequestsState.ViewState.Empty,
-            isPullToRefreshSettingEnabled = false,
-            isRefreshing = false,
-        )
-    }
 }
+
+private val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
+    authRequests = emptyList(),
+    viewState = PendingRequestsState.ViewState.Empty,
+    isPullToRefreshSettingEnabled = false,
+    isRefreshing = false,
+    hideBottomSheet = false,
+)
