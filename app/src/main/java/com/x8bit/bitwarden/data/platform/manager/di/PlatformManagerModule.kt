@@ -80,7 +80,9 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideAppStateManager(): AppStateManager = AppStateManagerImpl()
+    fun provideAppStateManager(
+        application: Application,
+    ): AppStateManager = AppStateManagerImpl(application = application)
 
     @Provides
     @Singleton
