@@ -124,7 +124,7 @@
     <string name="import_bitwarden_unsupported_format">A importação de ficheiros Bitwarden CSV não é suportada. Tente novamente com um ficheiro JSON exportado.</string>
     <string name="download_bitwarden_card_title">Descarregar a app Bitwarden</string>
     <string name="download_bitwarden_card_message">Armazene todas as suas credenciais e sincronize os códigos de verificação diretamente com a app Authenticator.</string>
-    <string name="download">Descarregar</string>
+    <string name="download_now">Descarregar agora</string>
     <string name="sync_with_bitwarden_app">Sincronizar com a app Bitwarden</string>
     <string name="shared_codes_error">Não é possível sincronizar códigos da app Bitwarden. Certifique-se de que ambas as aplicações estão atualizadas. Ainda pode aceder aos seus códigos existentes na app Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
@@ -134,10 +134,18 @@
     <string name="something_went_wrong">Alguma coisa correu mal</string>
     <string name="please_try_again">Por favor, tente novamente</string>
     <string name="move_to_bitwarden">Mover para o Bitwarden</string>
-    <string name="default_save_options">Opções de guardar predefinidas</string>
+    <string name="default_save_option">Opção de guardar predefinida</string>
     <string name="save_to_bitwarden">Guardar no Bitwarden</string>
     <string name="save_locally">Guardar localmente</string>
     <string name="none">Nenhum</string>
     <string name="default_save_options_subtitle">Selecione o local onde pretende guardar os novos códigos de verificação.</string>
     <string name="confirm">Confirmar</string>
+    <string name="save_here">Guardar aqui</string>
+    <string name="take_me_to_bitwarden">Levem-me ao Bitwarden</string>
+    <string name="verification_code_created">Código de verificação criado</string>
+    <string name="choose_save_location_message">Guarde esta chave de autenticação aqui ou adicione-a a uma credencial na sua app Bitwarden.</string>
+    <string name="save_option_as_default">Guardar opção como predefinição</string>
+    <string name="account_synced_from_bitwarden_app">Conta sincronizada a partir da app Bitwarden</string>
+    <string name="add_code_to_bitwarden">Adicionar código ao Bitwarden</string>
+    <string name="add_code_locally">Adicionar código localmente</string>
 </resources>

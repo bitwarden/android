@@ -124,7 +124,7 @@
     <string name="import_bitwarden_unsupported_format">Імпарт CSV-файлаў Bitwarden не падтрымліваецца. Паўторыце спробу з экспартаваным JSON-файлам.</string>
     <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
     <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
-    <string name="download">Download</string>
+    <string name="download_now">Download now</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
@@ -134,10 +134,18 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_try_again">Please try again</string>
     <string name="move_to_bitwarden">Move to Bitwarden</string>
-    <string name="default_save_options">Default save options</string>
+    <string name="default_save_option">Default save option</string>
     <string name="save_to_bitwarden">Save to Bitwarden</string>
     <string name="save_locally">Save locally</string>
     <string name="none">None</string>
     <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
     <string name="confirm">Confirm</string>
+    <string name="save_here">Save here</string>
+    <string name="take_me_to_bitwarden">Take me to Bitwarden</string>
+    <string name="verification_code_created">Verification code created</string>
+    <string name="choose_save_location_message">Save this authenticator key here, or add it to a login in your Bitwarden app.</string>
+    <string name="save_option_as_default">Save option as default</string>
+    <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
+    <string name="add_code_to_bitwarden">Add code to Bitwarden</string>
+    <string name="add_code_locally">Add code locally</string>
 </resources>

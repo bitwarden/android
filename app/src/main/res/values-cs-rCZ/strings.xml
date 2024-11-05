@@ -124,7 +124,7 @@
     <string name="import_bitwarden_unsupported_format">Importování CSV souborů Bitwardenu není podporováno. Zkuste to znovu s exportovaným souborem JSON.</string>
     <string name="download_bitwarden_card_title">Stáhnout aplikaci Bitwarden</string>
     <string name="download_bitwarden_card_message">Uložte všechny Vaše přihlašovací údaje a synchronizujte ověřovací kódy přímo s ověřovací aplikací.</string>
-    <string name="download">Stáhnout</string>
+    <string name="download_now">Stáhnout nyní</string>
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
@@ -134,10 +134,18 @@
     <string name="something_went_wrong">Něco se pokazilo</string>
     <string name="please_try_again">Zkuste to znovu</string>
     <string name="move_to_bitwarden">Přesunout do Bitwardenu</string>
-    <string name="default_save_options">Výchozí volby ukládání</string>
+    <string name="default_save_option">Výchozí volby ukládání</string>
     <string name="save_to_bitwarden">Uložit do Bitwardenu</string>
     <string name="save_locally">Uložit lokálně</string>
     <string name="none">Žádné</string>
     <string name="default_save_options_subtitle">Vyberte, kde chcete uložit nové ověřovací kódy.</string>
     <string name="confirm">Potvrdit</string>
+    <string name="save_here">Uložit zde</string>
+    <string name="take_me_to_bitwarden">Přejít na Bitwarden</string>
+    <string name="verification_code_created">Ověřovací kód byl vytvořen</string>
+    <string name="choose_save_location_message">Uložte tento ověřovací klíč zde nebo ho přidejte do Vaší aplikace Bitwarden.</string>
+    <string name="save_option_as_default">Uložit volbu jako výchozí</string>
+    <string name="account_synced_from_bitwarden_app">Účet je synchronizován s aplikací Bitwarden</string>
+    <string name="add_code_to_bitwarden">Přidat kód do Bitwardenu</string>
+    <string name="add_code_locally">Přidat kód místně</string>
 </resources>
