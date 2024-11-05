@@ -213,19 +213,9 @@ fun ManualCodeEntryScreen(
                     }
                 },
             )
-            Text(
-                text = stringResource(id = R.string.once_the_key_is_successfully_entered),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 16.dp,
-                        horizontal = 16.dp,
-                    ),
-            )
 
             Text(
-                text = stringResource(id = R.string.cannot_add_key),
+                text = stringResource(id = R.string.cannot_add_authenticator_key),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
