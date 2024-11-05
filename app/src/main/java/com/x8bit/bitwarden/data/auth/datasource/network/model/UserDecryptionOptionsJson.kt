@@ -14,12 +14,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserDecryptionOptionsJson(
-    @SerialName("HasMasterPassword")
+    @SerialName("hasMasterPassword")
     val hasMasterPassword: Boolean,
 
-    @SerialName("TrustedDeviceOption")
+    @SerialName("trustedDeviceOption")
     val trustedDeviceUserDecryptionOptions: TrustedDeviceUserDecryptionOptionsJson?,
 
-    @SerialName("KeyConnectorOption")
+    @SerialName("keyConnectorOption")
     val keyConnectorUserDecryptionOptions: KeyConnectorUserDecryptionOptionsJson?,
 )

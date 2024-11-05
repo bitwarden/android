@@ -32,52 +32,52 @@ sealed class GetTokenResponseJson {
      */
     @Serializable
     data class Success(
-        @SerialName("access_token")
+        @SerialName("accessToken")
         val accessToken: String,
 
-        @SerialName("refresh_token")
+        @SerialName("refreshToken")
         val refreshToken: String,
 
-        @SerialName("token_type")
+        @SerialName("tokenType")
         val tokenType: String,
 
-        @SerialName("expires_in")
+        @SerialName("expiresIn")
         val expiresInSeconds: Int,
 
-        @SerialName("Key")
+        @SerialName("key")
         val key: String?,
 
-        @SerialName("PrivateKey")
+        @SerialName("privateKey")
         val privateKey: String?,
 
-        @SerialName("Kdf")
+        @SerialName("kdf")
         val kdfType: KdfTypeJson,
 
-        @SerialName("KdfIterations")
+        @SerialName("kdfIterations")
         val kdfIterations: Int?,
 
-        @SerialName("KdfMemory")
+        @SerialName("kdfMemory")
         val kdfMemory: Int?,
 
-        @SerialName("KdfParallelism")
+        @SerialName("kdfParallelism")
         val kdfParallelism: Int?,
 
-        @SerialName("ForcePasswordReset")
+        @SerialName("forcePasswordReset")
         val shouldForcePasswordReset: Boolean,
 
-        @SerialName("ResetMasterPassword")
+        @SerialName("resetMasterPassword")
         val shouldResetMasterPassword: Boolean,
 
-        @SerialName("TwoFactorToken")
+        @SerialName("twoFactorToken")
         val twoFactorToken: String?,
 
-        @SerialName("MasterPasswordPolicy")
+        @SerialName("masterPasswordPolicy")
         val masterPasswordPolicyOptions: MasterPasswordPolicyOptionsJson?,
 
-        @SerialName("UserDecryptionOptions")
+        @SerialName("userDecryptionOptions")
         val userDecryptionOptions: UserDecryptionOptionsJson?,
 
-        @SerialName("KeyConnectorUrl")
+        @SerialName("keyConnectorUrl")
         val keyConnectorUrl: String?,
     ) : GetTokenResponseJson()
 
@@ -86,7 +86,7 @@ sealed class GetTokenResponseJson {
      */
     @Serializable
     data class CaptchaRequired(
-        @SerialName("HCaptcha_SiteKey")
+        @SerialName("hCaptchaSiteKey")
         val captchaKey: String,
     ) : GetTokenResponseJson()
 
@@ -95,35 +95,15 @@ sealed class GetTokenResponseJson {
      */
     @Serializable
     data class Invalid(
-        @SerialName("ErrorModel")
-        val errorModel: ErrorModel?,
         @SerialName("errorModel")
-        val legacyErrorModel: LegacyErrorModel?,
+        val errorModel: ErrorModel?,
     ) : GetTokenResponseJson() {
-
-        /**
-         * The error message returned from the server, or null.
-         */
-        val errorMessage: String?
-            get() = errorModel?.errorMessage ?: legacyErrorModel?.errorMessage
 
         /**
          * The error body of an invalid request containing a message.
          */
         @Serializable
         data class ErrorModel(
-            @SerialName("Message")
-            val errorMessage: String,
-        )
-
-        /**
-         * The legacy error body of an invalid request containing a message.
-         *
-         * This model is used to support older versions of the error response model that used
-         * lower-case keys.
-         */
-        @Serializable
-        data class LegacyErrorModel(
             @SerialName("message")
             val errorMessage: String,
         )
@@ -145,16 +125,16 @@ sealed class GetTokenResponseJson {
      */
     @Serializable
     data class TwoFactorRequired(
-        @SerialName("TwoFactorProviders2")
+        @SerialName("twoFactorProviders2")
         val authMethodsData: Map<TwoFactorAuthMethod, JsonObject?>,
 
-        @SerialName("TwoFactorProviders")
+        @SerialName("twoFactorProviders")
         val twoFactorProviders: List<String>?,
 
-        @SerialName("CaptchaBypassToken")
+        @SerialName("captchaBypassToken")
         val captchaToken: String?,
 
-        @SerialName("SsoEmail2faSessionToken")
+        @SerialName("ssoEmail2faSessionToken")
         val ssoToken: String?,
     ) : GetTokenResponseJson()
 }

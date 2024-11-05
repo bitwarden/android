@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.Refres
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.ResponseJsonKeyTransformerInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.ZonedDateTimeSerializer
@@ -68,6 +69,12 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
+    fun providesResponseJsonKeyTransformerInterceptor(
+        json: Json,
+    ): ResponseJsonKeyTransformerInterceptor = ResponseJsonKeyTransformerInterceptor(json)
+
+    @Provides
+    @Singleton
     fun providesRefreshAuthenticator(): RefreshAuthenticator = RefreshAuthenticator()
 
     @Provides
@@ -76,6 +83,7 @@ object PlatformNetworkModule {
         authTokenInterceptor: AuthTokenInterceptor,
         baseUrlInterceptors: BaseUrlInterceptors,
         headersInterceptor: HeadersInterceptor,
+        responseJsonKeyTransformerInterceptor: ResponseJsonKeyTransformerInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
         json: Json,
     ): Retrofits =
@@ -84,6 +92,7 @@ object PlatformNetworkModule {
             baseUrlInterceptors = baseUrlInterceptors,
             headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
+            responseJsonKeyTransformerInterceptor = responseJsonKeyTransformerInterceptor,
             json = json,
         )
 

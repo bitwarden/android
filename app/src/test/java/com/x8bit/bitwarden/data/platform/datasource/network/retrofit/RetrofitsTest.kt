@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.Refres
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.ResponseJsonKeyTransformerInterceptor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -39,11 +40,15 @@ class RetrofitsTest {
         }
     }
     private val headersInterceptors = mockk<HeadersInterceptor> {
-        mockIntercept { isheadersInterceptorCalled = true }
+        mockIntercept { isHeadersInterceptorCalled = true }
     }
     private val refreshAuthenticator = mockk<RefreshAuthenticator> {
         mockAuthenticate { isRefreshAuthenticatorCalled = true }
     }
+    private val responseJsonKeyTransformerInterceptor =
+        mockk<ResponseJsonKeyTransformerInterceptor> {
+            mockIntercept { isResponseJsonKeyTransformerInterceptorCalled = true }
+        }
     private val json = Json
     private val server = MockWebServer()
 
@@ -52,15 +57,17 @@ class RetrofitsTest {
         baseUrlInterceptors = baseUrlInterceptors,
         headersInterceptor = headersInterceptors,
         refreshAuthenticator = refreshAuthenticator,
+        responseJsonKeyTransformerInterceptor = responseJsonKeyTransformerInterceptor,
         json = json,
     )
 
     private var isAuthInterceptorCalled = false
     private var isApiInterceptorCalled = false
-    private var isheadersInterceptorCalled = false
+    private var isHeadersInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
     private var isEventsInterceptorCalled = false
     private var isRefreshAuthenticatorCalled = false
+    private var isResponseJsonKeyTransformerInterceptorCalled = false
 
     @Before
     fun setUp() {
@@ -158,7 +165,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -176,7 +183,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertTrue(isEventsInterceptorCalled)
     }
@@ -194,7 +201,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -212,7 +219,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertTrue(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -231,7 +238,7 @@ class RetrofitsTest {
 
             assertTrue(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
-            assertTrue(isheadersInterceptorCalled)
+            assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
         }
@@ -250,7 +257,7 @@ class RetrofitsTest {
 
             assertFalse(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
-            assertTrue(isheadersInterceptorCalled)
+            assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
         }

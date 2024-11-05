@@ -1344,4 +1344,4 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
     ZoneOffset.UTC,
 )
 
-private const val ACCESS_TOKEN: String = "access_token"
+private const val ACCESS_TOKEN: String = "accessToken"

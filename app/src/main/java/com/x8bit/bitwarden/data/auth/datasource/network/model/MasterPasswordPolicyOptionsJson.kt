@@ -16,24 +16,24 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class MasterPasswordPolicyOptionsJson(
-    @SerialName("MinComplexity")
+    @SerialName("minComplexity")
     val minimumComplexity: Int?,
 
-    @SerialName("MinLength")
+    @SerialName("minLength")
     val minimumLength: Int?,
 
-    @SerialName("RequireUpper")
+    @SerialName("requireUpper")
     val shouldRequireUppercase: Boolean?,
 
-    @SerialName("RequireLower")
+    @SerialName("requireLower")
     val shouldRequireLowercase: Boolean?,
 
-    @SerialName("RequireNumbers")
+    @SerialName("requireNumbers")
     val shouldRequireNumbers: Boolean?,
 
-    @SerialName("RequireSpecial")
+    @SerialName("requireSpecial")
     val shouldRequireSpecialCharacters: Boolean?,
 
-    @SerialName("EnforceOnLogin")
+    @SerialName("enforceOnLogin")
     val shouldEnforceOnLogin: Boolean?,
 )

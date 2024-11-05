@@ -869,7 +869,7 @@ class AuthRepositoryImpl(
                                     ?.values
                                     ?.firstOrNull()
                                     ?.firstOrNull()
-                                    ?: it.message,
+                                    ?: it.invalidMessage,
                             )
                         }
                     }
@@ -1524,7 +1524,7 @@ class AuthRepositoryImpl(
                     )
 
                     is GetTokenResponseJson.Invalid -> LoginResult.Error(
-                        errorMessage = loginResponse.errorMessage,
+                        errorMessage = loginResponse.errorModel?.errorMessage,
                     )
                 }
             },

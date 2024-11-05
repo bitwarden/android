@@ -38,7 +38,7 @@ sealed class RegisterResponseJson {
          */
         @Serializable
         data class ValidationErrors(
-            @SerialName("HCaptcha_SiteKey")
+            @SerialName("hCaptchaSiteKey")
             val captchaKeys: List<String>,
         )
     }
@@ -53,17 +53,9 @@ sealed class RegisterResponseJson {
     @Serializable
     data class Invalid(
         @SerialName("message")
-        private val invalidMessage: String? = null,
-
-        @SerialName("Message")
-        private val errorMessage: String? = null,
+        val invalidMessage: String? = null,
 
         @SerialName("validationErrors")
         val validationErrors: Map<String, List<String>>?,
-    ) : RegisterResponseJson() {
-        /**
-         * A generic error message.
-         */
-        val message: String? get() = invalidMessage ?: errorMessage
-    }
+    ) : RegisterResponseJson()
 }

@@ -167,7 +167,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.register(registerRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -179,7 +179,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val json = """
             {
               "validationErrors": {
-                "HCaptcha_SiteKey": [
+                "hCaptchaSiteKey": [
                   "mock_token"
                 ]
               }
@@ -274,22 +274,6 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `getToken when response is a 400 with a legacy error body should return Invalid`() =
-        runTest {
-            server.enqueue(MockResponse().setResponseCode(400).setBody(LEGACY_INVALID_LOGIN_JSON))
-            val result = identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-            assertEquals(LEGACY_INVALID_LOGIN.asSuccess(), result)
-        }
-
-    @Test
     fun `prevalidateSso when response is success should return PrevalidateSsoResponseJson`() =
         runTest {
             val organizationId = "organizationId"
@@ -358,7 +342,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -503,10 +487,10 @@ private val PREVALIDATE_SSO_BODY = PrevalidateSsoResponseJson(
 
 private const val REFRESH_TOKEN_JSON = """
 {
-  "access_token": "accessToken",
-  "expires_in": 3600,
-  "refresh_token": "refreshToken",
-  "token_type": "Bearer"
+  "accessToken": "accessToken",
+  "expiresIn": 3600,
+  "refreshToken": "refreshToken",
+  "tokenType": "Bearer"
 }
 """
 
@@ -519,23 +503,23 @@ private val REFRESH_TOKEN_BODY = RefreshTokenResponseJson(
 
 private const val CAPTCHA_BODY_JSON = """
 {
-  "HCaptcha_SiteKey": "123"
+  "hCaptchaSiteKey": "123"
 }
 """
 private val CAPTCHA_BODY = GetTokenResponseJson.CaptchaRequired("123")
 
 private const val TWO_FACTOR_BODY_JSON = """
 {
-  "TwoFactorProviders2": {"1": {"Email": "ex***@email.com"}, "0": {"Email": null}},
-  "SsoEmail2faSessionToken": "exampleToken",
-  "CaptchaBypassToken": "BWCaptchaBypass_ABCXYZ",
-  "TwoFactorProviders": ["1", "3", "0"]
+  "twoFactorProviders2": {"1": {"email": "ex***@email.com"}, "0": {"email": null}},
+  "ssoEmail2faSessionToken": "exampleToken",
+  "captchaBypassToken": "BWCaptchaBypass_ABCXYZ",
+  "twoFactorProviders": ["1", "3", "0"]
 }
 """
 private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
     authMethodsData = mapOf(
-        TwoFactorAuthMethod.EMAIL to JsonObject(mapOf("Email" to JsonPrimitive("ex***@email.com"))),
-        TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
+        TwoFactorAuthMethod.EMAIL to JsonObject(mapOf("email" to JsonPrimitive("ex***@email.com"))),
+        TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("email" to JsonNull)),
     ),
     ssoToken = "exampleToken",
     captchaToken = "BWCaptchaBypass_ABCXYZ",
@@ -544,41 +528,41 @@ private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
 
 private const val LOGIN_SUCCESS_JSON = """
 {
-  "access_token": "accessToken",
-  "expires_in": 3600,
-  "token_type": "Bearer",
-  "refresh_token": "refreshToken",
-  "PrivateKey": "privateKey",
-  "Key": "key",
-  "MasterPasswordPolicy": {
-    "MinComplexity": 10,
-    "MinLength": 100,
-    "RequireUpper": true,
-    "RequireLower": true,
-    "RequireNumbers": true,
-    "RequireSpecial": true,
-    "EnforceOnLogin": true
+  "accessToken": "accessToken",
+  "expiresIn": 3600,
+  "tokenType": "Bearer",
+  "refreshToken": "refreshToken",
+  "privateKey": "privateKey",
+  "key": "key",
+  "masterPasswordPolicy": {
+    "minComplexity": 10,
+    "minLength": 100,
+    "requireUpper": true,
+    "requireLower": true,
+    "requireNumbers": true,
+    "requireSpecial": true,
+    "enforceOnLogin": true
   },
-  "ForcePasswordReset": true,
-  "ResetMasterPassword": true,
-  "Kdf": 1,
-  "KdfIterations": 600000,
-  "KdfMemory": 16,
-  "KdfParallelism": 4,
-  "UserDecryptionOptions": {
-    "HasMasterPassword": true,
-    "TrustedDeviceOption": {
-      "EncryptedPrivateKey": "encryptedPrivateKey",
-      "EncryptedUserKey": "encryptedUserKey",
-      "HasAdminApproval": true,
-      "HasLoginApprovingDevice": true,
-      "HasManageResetPasswordPermission": true
+  "forcePasswordReset": true,
+  "resetMasterPassword": true,
+  "kdf": 1,
+  "kdfIterations": 600000,
+  "kdfMemory": 16,
+  "kdfParallelism": 4,
+  "userDecryptionOptions": {
+    "hasMasterPassword": true,
+    "trustedDeviceOption": {
+      "encryptedPrivateKey": "encryptedPrivateKey",
+      "encryptedUserKey": "encryptedUserKey",
+      "hasAdminApproval": true,
+      "hasLoginApprovingDevice": true,
+      "hasManageResetPasswordPermission": true
     },
-    "KeyConnectorOption": {
-      "KeyConnectorUrl": "keyConnectorUrl"
+    "keyConnectorOption": {
+      "keyConnectorUrl": "keyConnectorUrl"
     }
   },
-  "KeyConnectorUrl": "keyConnectorUrl"
+  "keyConnectorUrl": "keyConnectorUrl"
 }
 """
 
@@ -623,24 +607,16 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
 
 private const val INVALID_LOGIN_JSON = """
 {
-  "ErrorModel": {
-    "Message": "123"
-  }
-}
-"""
-
-private const val LEGACY_INVALID_LOGIN_JSON = """
-{
   "errorModel": {
-    "message": "Legacy-123"
+    "message": "123"
   }
 }
 """
 
 private const val TOO_MANY_REQUEST_ERROR_JSON = """
 {
-  "Object": "error",
-  "Message": "Slow down! Too many requests. Try again soon."
+  "object": "error",
+  "message": "Slow down! Too many requests. Try again soon."
 }
 """
 
@@ -668,14 +644,6 @@ private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
         errorMessage = "123",
-    ),
-    legacyErrorModel = null,
-)
-
-private val LEGACY_INVALID_LOGIN = GetTokenResponseJson.Invalid(
-    errorModel = null,
-    legacyErrorModel = GetTokenResponseJson.Invalid.LegacyErrorModel(
-        errorMessage = "Legacy-123",
     ),
 )
 

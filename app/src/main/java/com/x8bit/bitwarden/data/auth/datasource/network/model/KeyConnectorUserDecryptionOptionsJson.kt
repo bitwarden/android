@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class KeyConnectorUserDecryptionOptionsJson(
-    @SerialName("KeyConnectorUrl")
+    @SerialName("keyConnectorUrl")
     val keyConnectorUrl: String,
 )

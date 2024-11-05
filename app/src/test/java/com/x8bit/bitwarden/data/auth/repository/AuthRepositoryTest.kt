@@ -1527,7 +1527,6 @@ class AuthRepositoryTest {
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
-                legacyErrorModel = null,
             )
             .asSuccess()
 
@@ -2320,7 +2319,6 @@ class AuthRepositoryTest {
                     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                         errorMessage = "mock_error_message",
                     ),
-                    legacyErrorModel = null,
                 )
                 .asSuccess()
 
@@ -2789,7 +2787,6 @@ class AuthRepositoryTest {
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
-                legacyErrorModel = null,
             )
             .asSuccess()
 

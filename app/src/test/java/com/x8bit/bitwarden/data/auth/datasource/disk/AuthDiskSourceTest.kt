@@ -1223,16 +1223,16 @@ private const val USER_STATE_JSON = """
             "kdfMemory": 16,
             "kdfParallelism": 4,
             "accountDecryptionOptions": {
-              "HasMasterPassword": true,
-              "TrustedDeviceOption": {
-                "EncryptedPrivateKey": "encryptedPrivateKey",
-                "EncryptedUserKey": "encryptedUserKey",
-                "HasAdminApproval": true,
-                "HasLoginApprovingDevice": true,
-                "HasManageResetPasswordPermission": true
+              "hasMasterPassword": true,
+              "trustedDeviceOption": {
+                "encryptedPrivateKey": "encryptedPrivateKey",
+                "encryptedUserKey": "encryptedUserKey",
+                "hasAdminApproval": true,
+                "hasLoginApprovingDevice": true,
+                "hasManageResetPasswordPermission": true
               },
-              "KeyConnectorOption": {
-                "KeyConnectorUrl": "keyConnectorUrl"
+              "keyConnectorOption": {
+                "keyConnectorUrl": "keyConnectorUrl"
               }
             }
           },

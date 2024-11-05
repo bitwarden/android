@@ -15,18 +15,18 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class TrustedDeviceUserDecryptionOptionsJson(
-    @SerialName("EncryptedPrivateKey")
+    @SerialName("encryptedPrivateKey")
     val encryptedPrivateKey: String?,
 
-    @SerialName("EncryptedUserKey")
+    @SerialName("encryptedUserKey")
     val encryptedUserKey: String?,
 
-    @SerialName("HasAdminApproval")
+    @SerialName("hasAdminApproval")
     val hasAdminApproval: Boolean,
 
-    @SerialName("HasLoginApprovingDevice")
+    @SerialName("hasLoginApprovingDevice")
     val hasLoginApprovingDevice: Boolean,
 
-    @SerialName("HasManageResetPasswordPermission")
+    @SerialName("hasManageResetPasswordPermission")
     val hasManageResetPasswordPermission: Boolean,
 )

@@ -50,7 +50,7 @@ class AuthTokenInterceptorTest {
 }
 
 private const val USER_ID: String = "user_id"
-private const val ACCESS_TOKEN: String = "access_token"
+private const val ACCESS_TOKEN: String = "accessToken"
 private val USER_STATE: UserStateJson = UserStateJson(
     activeUserId = USER_ID,
     accounts = mapOf(USER_ID to mockk()),
