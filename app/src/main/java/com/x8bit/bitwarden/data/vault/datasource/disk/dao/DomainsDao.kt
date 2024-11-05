@@ -25,7 +25,7 @@ interface DomainsDao {
     @Query("SELECT * FROM domains WHERE user_id = :userId")
     fun getDomains(
         userId: String,
-    ): Flow<DomainsEntity>
+    ): Flow<DomainsEntity?>
 
     /**
      * Inserts domains into the database.
