@@ -16,12 +16,10 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -103,7 +101,6 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -165,11 +162,7 @@ class VaultAddEditViewModel @Inject constructor(
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
-                supportedItemTypes = getSupportedItemTypeOptions(
-                    isSshKeyVaultItemSupported = featureFlagManager.getFeatureFlag(
-                        key = FlagKey.SshKeyCipherItems,
-                    ),
-                ),
+                supportedItemTypes = getSupportedItemTypeOptions(),
             )
         },
 ) {
@@ -209,11 +202,6 @@ class VaultAddEditViewModel @Inject constructor(
                 }
                 VaultAddEditAction.Internal.GeneratorResultReceive(generatorResult = result)
             }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems)
-            .map { VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -1442,10 +1430,6 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.ValidateFido2PinResultReceive -> {
                 handleValidateFido2PinResultReceive(action)
             }
-
-            is VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive -> {
-                handleSshKeyCipherItemsFeatureFlagReceive(action)
-            }
         }
     }
 
@@ -1755,19 +1739,6 @@ class VaultAddEditViewModel @Inject constructor(
 
         getRequestAndRegisterCredential()
     }
-
-    private fun handleSshKeyCipherItemsFeatureFlagReceive(
-        action: VaultAddEditAction.Internal.SshKeyCipherItemsFeatureFlagReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(
-                supportedItemTypes = getSupportedItemTypeOptions(
-                    isSshKeyVaultItemSupported = action.enabled,
-                ),
-            )
-        }
-    }
-
     //endregion Internal Type Handlers
 
     //region Utility Functions
@@ -3065,13 +3036,6 @@ sealed class VaultAddEditAction {
         ) : Internal()
 
         /**
-         * Indicates that the the SSH key vault item feature flag state has been received.
-         */
-        data class SshKeyCipherItemsFeatureFlagReceive(
-            val enabled: Boolean,
-        ) : Internal()
-
-        /**
          * Indicates that the vault item data has been received.
          */
         data class VaultDataReceive(
@@ -3125,7 +3089,10 @@ sealed class VaultAddEditAction {
     }
 }
 
-private fun getSupportedItemTypeOptions(
-    isSshKeyVaultItemSupported: Boolean,
-) = VaultAddEditState.ItemTypeOption.entries
-    .filter { isSshKeyVaultItemSupported || it != VaultAddEditState.ItemTypeOption.SSH_KEYS }
+/**
+ * Returns a list of item type options that can be selected during item creation.
+ *
+ * TODO: [PM-10413] Allow SSH key creation when the SDK supports it.
+ */
+private fun getSupportedItemTypeOptions() = VaultAddEditState.ItemTypeOption.entries
+    .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS }
