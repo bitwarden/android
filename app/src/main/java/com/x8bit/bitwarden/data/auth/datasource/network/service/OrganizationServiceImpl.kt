@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomain
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetPasswordEnrollRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 
 /**
  * Default implementation of [OrganizationService].
@@ -51,5 +53,14 @@ class OrganizationServiceImpl(
     ): Result<OrganizationKeysResponseJson> = authenticatedOrganizationApi
         .getOrganizationKeys(
             organizationId = organizationId,
+        )
+
+    override suspend fun getVerifiedOrganizationDomainSsoDetails(
+        email: String,
+    ): Result<VerifiedOrganizationDomainSsoDetailsResponse> = unauthenticatedOrganizationApi
+        .getVerifiedOrganizationDomainsByEmail(
+            body = VerifiedOrganizationDomainSsoDetailsRequest(
+                email = email,
+            ),
         )
 }

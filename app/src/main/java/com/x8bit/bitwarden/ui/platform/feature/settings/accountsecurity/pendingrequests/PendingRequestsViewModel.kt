@@ -27,6 +27,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the pending login requests screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class PendingRequestsViewModel @Inject constructor(
     private val clock: Clock,
@@ -39,6 +40,7 @@ class PendingRequestsViewModel @Inject constructor(
         viewState = PendingRequestsState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
+        hideBottomSheet = false,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
@@ -56,6 +58,7 @@ class PendingRequestsViewModel @Inject constructor(
         when (action) {
             PendingRequestsAction.CloseClick -> handleCloseClicked()
             PendingRequestsAction.DeclineAllRequestsConfirm -> handleDeclineAllRequestsConfirmed()
+            PendingRequestsAction.HideBottomSheet -> handleHideBottomSheet()
             PendingRequestsAction.LifecycleResume -> handleOnLifecycleResumed()
             PendingRequestsAction.RefreshPull -> handleRefreshPull()
             is PendingRequestsAction.PendingRequestRowClick -> {
@@ -87,6 +90,10 @@ class PendingRequestsViewModel @Inject constructor(
             }
             updateAuthRequestList()
         }
+    }
+
+    private fun handleHideBottomSheet() {
+        mutableStateFlow.update { it.copy(hideBottomSheet = true) }
     }
 
     private fun handleOnLifecycleResumed() {
@@ -193,6 +200,7 @@ data class PendingRequestsState(
     val viewState: ViewState,
     private val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
+    val hideBottomSheet: Boolean,
 ) : Parcelable {
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
@@ -296,6 +304,11 @@ sealed class PendingRequestsAction {
      * The user has confirmed they want to deny all login requests.
      */
     data object DeclineAllRequestsConfirm : PendingRequestsAction()
+
+    /**
+     * The user has dismissed the bottom sheet.
+     */
+    data object HideBottomSheet : PendingRequestsAction()
 
     /**
      * The screen has been re-opened and should be updated.

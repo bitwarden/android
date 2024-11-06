@@ -23,7 +23,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -65,7 +64,6 @@ import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHan
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 
 private const val IMPORT_HELP_URL = "https://bitwarden.com/help/import-data/"
 
@@ -100,27 +98,15 @@ fun ImportLoginsScreen(
         }
     }
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-    val hideSheetAndExecuteCompleteImportLogins: () -> Unit = {
-        // This pattern mirrors the onDismissRequest handling in the material ModalBottomSheet
-        scope
-            .launch {
-                sheetState.hide()
-            }
-            .invokeOnCompletion {
-                handler.onSuccessfulSyncAcknowledged()
-            }
-    }
     BitwardenModalBottomSheet(
         showBottomSheet = state.showBottomSheet,
         sheetTitle = stringResource(R.string.bitwarden_tools),
-        onDismiss = hideSheetAndExecuteCompleteImportLogins,
+        onDismiss = handler.onSuccessfulSyncAcknowledged,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = Modifier.statusBarsPadding(),
-    ) { paddingValues ->
+    ) { paddingValues, animatedOnDismiss ->
         ImportLoginsSuccessBottomSheetContent(
-            onCompleteImportLogins = hideSheetAndExecuteCompleteImportLogins,
+            onCompleteImportLogins = animatedOnDismiss,
             modifier = Modifier.padding(paddingValues),
         )
     }

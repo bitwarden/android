@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -16,4 +18,12 @@ interface UnauthenticatedOrganizationApi {
     suspend fun getClaimedDomainOrganizationDetails(
         @Body body: OrganizationDomainSsoDetailsRequestJson,
     ): Result<OrganizationDomainSsoDetailsResponseJson>
+
+    /**
+     * Checks for the verfied organization domains of an email for SSO purposes.
+     */
+    @POST("/organizations/domain/sso/verified")
+    suspend fun getVerifiedOrganizationDomainsByEmail(
+        @Body body: VerifiedOrganizationDomainSsoDetailsRequest,
+    ): Result<VerifiedOrganizationDomainSsoDetailsResponse>
 }

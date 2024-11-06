@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
+import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -328,6 +329,13 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     suspend fun getOrganizationDomainSsoDetails(
         email: String,
     ): OrganizationDomainSsoDetailsResult
+
+    /**
+     * Get the verified organization domain SSO details for the given [email].
+     */
+    suspend fun getVerifiedOrganizationDomainSsoDetails(
+        email: String,
+    ): VerifiedOrganizationDomainSsoDetailsResult
 
     /**
      * Prevalidates the organization identifier used in an SSO request.

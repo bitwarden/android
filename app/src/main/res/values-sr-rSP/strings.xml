@@ -1002,7 +1002,7 @@
   <string name="please_restart_registration_or_try_logging_in">Поново покрените регистрацију или покушајте да се пријавите. Можда већ имате налог.</string>
   <string name="restart_registration">Поново покрените регистрацију</string>
   <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
   <string name="there_was_an_issue_validating_the_registration_token">Дошло је до проблема са валидацијом регистрационог токена.</string>
   <string name="turn_on_autofill">Омогућите ауто-пуњење</string>
   <string name="use_autofill_to_log_into_your_accounts">Користите ауто-пуњење да бисте се пријавили на своје налоге једним додиром.</string>
@@ -1056,7 +1056,7 @@
   <string name="then_done_highlight">и после Заврши</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Ради ваше безбедности, обавезно избришите своју сачувану датотеку лозинке.</string>
   <string name="delete_your_saved_password_file">избришите своју сачувану датотеку лозинке.</string>
-  <string name="need_help_checkout_out_import_help">Треба вам помоћ? Проверите помоћ за увоз.</string>
+  <string name="need_help_check_out_import_help">Need help? Check out import help.</string>
   <string name="import_help_highlight">помоћ за увоз</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Сачувајте извезену датотеку негде на рачунару где можете лако да пронађете.</string>
   <string name="save_the_exported_file_highlight">Сачувајте извезену датотеку</string>
@@ -1074,4 +1074,12 @@
   <string name="bitwarden_tools">Bitwarden Tools</string>
   <string name="got_it">Got it</string>
   <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="logins_imported">Logins imported</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
+  <string name="type_ssh_key">SSH key</string>
+  <string name="public_key">Public key</string>
+  <string name="private_key">Private key</string>
+  <string name="ssh_keys">SSH keys</string>
+  <string name="copy_public_key">Copy public key</string>
+  <string name="copy_fingerprint">Copy fingerprint</string>
 </resources>

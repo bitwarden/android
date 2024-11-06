@@ -1,4 +1,4 @@
-v0.1.0 (pending)
+v1.1.0 (pending)
 --------
 
 ### API Changes
@@ -6,3 +6,7 @@ v0.1.0 (pending)
 ### Breaking Changes
 
 ### Bug Fixes
+
+v1.0.0
+--------
+Initial release.

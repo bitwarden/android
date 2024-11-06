@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.manager
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import io.mockk.every
 import io.mockk.just
@@ -28,7 +28,7 @@ class AutofillActivityManagerTest {
     private val autofillEnabledManager: AutofillEnabledManager = AutofillEnabledManagerImpl()
 
     private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
-    private val appForegroundManager: AppForegroundManager = mockk {
+    private val appStateManager: AppStateManager = mockk {
         every { appForegroundStateFlow } returns mutableAppForegroundStateFlow
     }
     private val lifecycleScope = mockk<LifecycleCoroutineScope> {
@@ -39,7 +39,7 @@ class AutofillActivityManagerTest {
     @Suppress("unused")
     private val autofillActivityManager: AutofillActivityManager = AutofillActivityManagerImpl(
         autofillManager = autofillManager,
-        appForegroundManager = appForegroundManager,
+        appStateManager = appStateManager,
         autofillEnabledManager = autofillEnabledManager,
         lifecycleScope = lifecycleScope,
     )

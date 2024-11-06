@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -72,7 +72,7 @@ object VaultManagerModule {
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
         settingsRepository: SettingsRepository,
-        appForegroundManager: AppForegroundManager,
+        appStateManager: AppStateManager,
         userLogoutManager: UserLogoutManager,
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
@@ -82,7 +82,7 @@ object VaultManagerModule {
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,
             settingsRepository = settingsRepository,
-            appForegroundManager = appForegroundManager,
+            appStateManager = appStateManager,
             userLogoutManager = userLogoutManager,
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,

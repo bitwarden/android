@@ -1055,7 +1055,7 @@ Skift til denne konto?</string>
   <string name="then_done_highlight">dernæst Færdig</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Sørg af sikkerhedshensyn for at slette den gemte adgangskodefil.</string>
   <string name="delete_your_saved_password_file">slet den gemte adgangskodefil.</string>
-  <string name="need_help_checkout_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
+  <string name="need_help_check_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
   <string name="import_help_highlight">import-hjælp</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Gem den eksporterede fil et sted på computeren, hvor man nemt kan finde den.</string>
   <string name="save_the_exported_file_highlight">Gem den eksporterede fil</string>
@@ -1073,4 +1073,12 @@ Skift til denne konto?</string>
   <string name="bitwarden_tools">Bitwarden-værktøjer</string>
   <string name="got_it">Forstået</string>
   <string name="no_logins_were_imported">Ingen logins blev importeret</string>
+  <string name="logins_imported">Logins importeret</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Husk at slette den importerede adgangskodefil fra computeren</string>
+  <string name="type_ssh_key">SSH-nøgle</string>
+  <string name="public_key">Offentlig nøgle</string>
+  <string name="private_key">Privat nøgle</string>
+  <string name="ssh_keys">SSH-nøgler</string>
+  <string name="copy_public_key">Copy public key</string>
+  <string name="copy_fingerprint">Copy fingerprint</string>
 </resources>

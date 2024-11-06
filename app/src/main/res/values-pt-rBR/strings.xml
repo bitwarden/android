@@ -1029,7 +1029,7 @@ Você deseja mudar para esta conta?</string>
   <string name="import_logins">Importar Logins</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">A partir do seu computador, siga estas instruções para exportar senhas salvas do seu navegador ou de outro gerenciador de senhas. Em seguida, importe-as com segurança para o Bitwarden.</string>
   <string name="give_your_vault_a_head_start">Dê ao seu cofre uma entrada de cabeça</string>
-  <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
+  <string name="class_3_biometrics_description">O desbloqueio com dados biométricos requer uma autenticação biométrica forte e pode não ser compatível com todas as opções biométricas deste dispositivo.</string>
   <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, log in to your current browser or password manager.</string>
   <string name="log_in_to_your_current_browser_or_password_manager_highlight">log in to your current browser or password manager.</string>
@@ -1055,7 +1055,7 @@ Você deseja mudar para esta conta?</string>
   <string name="then_done_highlight">then Done</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to delete your saved password file.</string>
   <string name="delete_your_saved_password_file">delete your saved password file.</string>
-  <string name="need_help_checkout_out_import_help">Need help? Checkout out import help.</string>
+  <string name="need_help_check_out_import_help">Need help? Check out import help.</string>
   <string name="import_help_highlight">import help</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
@@ -1073,4 +1073,12 @@ Você deseja mudar para esta conta?</string>
   <string name="bitwarden_tools">Bitwarden Tools</string>
   <string name="got_it">Got it</string>
   <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="logins_imported">Logins imported</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
+  <string name="type_ssh_key">SSH key</string>
+  <string name="public_key">Public key</string>
+  <string name="private_key">Private key</string>
+  <string name="ssh_keys">SSH keys</string>
+  <string name="copy_public_key">Copy public key</string>
+  <string name="copy_fingerprint">Copy fingerprint</string>
 </resources>

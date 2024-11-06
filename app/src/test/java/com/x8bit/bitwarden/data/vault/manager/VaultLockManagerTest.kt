@@ -15,8 +15,9 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.platform.manager.util.FakeAppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.util.FakeAppStateManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -53,7 +54,7 @@ import org.junit.jupiter.api.Test
 @Suppress("LargeClass")
 class VaultLockManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
-    private val fakeAppForegroundManager = FakeAppForegroundManager()
+    private val fakeAppStateManager = FakeAppStateManager()
     private val authSdkSource: AuthSdkSource = mockk {
         coEvery {
             hashPassword(
@@ -90,7 +91,7 @@ class VaultLockManagerTest {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         settingsRepository = settingsRepository,
-        appForegroundManager = fakeAppForegroundManager,
+        appStateManager = fakeAppStateManager,
         userLogoutManager = userLogoutManager,
         trustedDeviceManager = trustedDeviceManager,
         dispatcherManager = fakeDispatcherManager,
@@ -147,18 +148,86 @@ class VaultLockManagerTest {
         }
 
     @Test
-    fun `app coming into background subsequent times should perform timeout action if necessary`() {
+    fun `app being destroyed should perform timeout action if necessary`() {
         setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-        // Start in a foregrounded state
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
             clearVerifications(userLogoutManager)
             mutableVaultTimeoutStateFlow.value = vaultTimeout
-            fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+            fakeAppStateManager.appCreationState = AppCreationState.CREATED
+            verifyUnlockedVaultBlocking(userId = USER_ID)
+            assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+        }
+
+        // Test Lock action
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
+        MOCK_TIMEOUTS.forEach { vaultTimeout ->
+            resetTest(vaultTimeout = vaultTimeout)
+            fakeAppStateManager.appCreationState = AppCreationState.DESTROYED
+
+            when (vaultTimeout) {
+                VaultTimeout.FifteenMinutes,
+                VaultTimeout.ThirtyMinutes,
+                VaultTimeout.OneHour,
+                VaultTimeout.FourHours,
+                is VaultTimeout.Custom,
+                VaultTimeout.Immediately,
+                VaultTimeout.OneMinute,
+                VaultTimeout.FiveMinutes,
+                VaultTimeout.OnAppRestart,
+                    -> {
+                    assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
+                }
+
+                VaultTimeout.Never -> {
+                    assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+                }
+            }
+            verify(exactly = 0) { userLogoutManager.softLogout(any()) }
+        }
+
+        // Test Logout action
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
+        MOCK_TIMEOUTS.forEach { vaultTimeout ->
+            resetTest(vaultTimeout = vaultTimeout)
+            fakeAppStateManager.appCreationState = AppCreationState.DESTROYED
+
+            when (vaultTimeout) {
+                VaultTimeout.OnAppRestart,
+                VaultTimeout.FifteenMinutes,
+                VaultTimeout.ThirtyMinutes,
+                VaultTimeout.OneHour,
+                VaultTimeout.FourHours,
+                is VaultTimeout.Custom,
+                VaultTimeout.Immediately,
+                VaultTimeout.OneMinute,
+                VaultTimeout.FiveMinutes,
+                    -> {
+                    verify(exactly = 1) { userLogoutManager.softLogout(any()) }
+                }
+
+                VaultTimeout.Never -> {
+                    verify(exactly = 0) { userLogoutManager.softLogout(any()) }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `app coming into background subsequent times should perform timeout action if necessary`() {
+        setAccountTokens()
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Start in a foregrounded state
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
+
+        // Will be used within each loop to reset the test to a suitable initial state.
+        fun resetTest(vaultTimeout: VaultTimeout) {
+            clearVerifications(userLogoutManager)
+            mutableVaultTimeoutStateFlow.value = vaultTimeout
+            fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
             verifyUnlockedVaultBlocking(userId = USER_ID)
             assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
         }
@@ -168,7 +237,7 @@ class VaultLockManagerTest {
         MOCK_TIMEOUTS.forEach { vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
 
-            fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+            fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -201,7 +270,7 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
         MOCK_TIMEOUTS.forEach { vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
-            fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+            fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -236,11 +305,11 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.Never
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -253,11 +322,11 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.OnAppRestart
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -269,11 +338,11 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -286,7 +355,7 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -298,11 +367,11 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 1) { settingsRepository.getVaultTimeoutActionStateFlow(USER_ID) }
     }
@@ -314,11 +383,11 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         verify(exactly = 0) { settingsRepository.getVaultTimeoutActionStateFlow(USER_ID) }
     }
@@ -329,14 +398,14 @@ class VaultLockManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Start in a foregrounded state
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
         // We want to skip the first time since that is different from subsequent foregrounds
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
             mutableVaultTimeoutStateFlow.value = vaultTimeout
-            fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+            fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
             clearVerifications(userLogoutManager)
             verifyUnlockedVaultBlocking(userId = USER_ID)
             assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
@@ -347,7 +416,7 @@ class VaultLockManagerTest {
         MOCK_TIMEOUTS.forEach { vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
 
-            fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+            fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -361,7 +430,7 @@ class VaultLockManagerTest {
         MOCK_TIMEOUTS.forEach { vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
 
-            fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+            fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -376,7 +445,7 @@ class VaultLockManagerTest {
     fun `switching users should perform lock actions or start a timer for each user if necessary`() {
         val userId2 = "mockId-2"
         setAccountTokens(listOf(USER_ID, userId2))
-        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
         fakeAuthDiskSource.userState = UserStateJson(
             activeUserId = USER_ID,
             accounts = mapOf(

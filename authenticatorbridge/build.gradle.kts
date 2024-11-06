@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 // For more info on versioning, see the README.
-val version = "0.1.0"
+val version = "1.0.0"
 
 plugins {
     alias(libs.plugins.android.library)
@@ -46,7 +46,7 @@ android {
         outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "authenticatorbridge-${version}-SNAPSHOT-${variant.baseName}.aar"
+                val outputFileName = "authenticatorbridge-${version}-${variant.baseName}.aar"
                 output.outputFileName = outputFileName
             }
     }

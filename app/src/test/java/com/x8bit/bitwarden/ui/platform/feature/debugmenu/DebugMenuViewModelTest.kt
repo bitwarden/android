@@ -113,6 +113,7 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.OnboardingFlow to true,
     FlagKey.ImportLoginsFlow to true,
     FlagKey.SshKeyCipherItems to true,
+    FlagKey.VerifiedSsoDomainEndpoint to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -122,6 +123,7 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.OnboardingFlow to false,
     FlagKey.ImportLoginsFlow to false,
     FlagKey.SshKeyCipherItems to false,
+    FlagKey.VerifiedSsoDomainEndpoint to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

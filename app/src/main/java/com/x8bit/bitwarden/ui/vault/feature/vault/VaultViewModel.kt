@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
-import android.os.Build
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
@@ -19,8 +18,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -76,8 +73,8 @@ class VaultViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     featureFlagManager: FeatureFlagManager,
-    snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -102,7 +99,6 @@ class VaultViewModel @Inject constructor(
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
-            hideNotificationsDialog = isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) || isFdroid,
             isRefreshing = false,
             showImportActionCard = false,
             showSshKeys = showSshKeys,
@@ -287,6 +283,9 @@ class VaultViewModel @Inject constructor(
                 SwitchAccountResult.AccountSwitched -> true
                 SwitchAccountResult.NoChange -> false
             }
+        if (isSwitchingAccounts) {
+            snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
+        }
         mutableStateFlow.update {
             it.copy(isSwitchingAccounts = isSwitchingAccounts)
         }
@@ -713,7 +712,6 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
-    val hideNotificationsDialog: Boolean,
     val isRefreshing: Boolean,
     val showImportActionCard: Boolean,
     val showSshKeys: Boolean,

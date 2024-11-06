@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.util
 
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.model.DomainName
+import com.x8bit.bitwarden.data.platform.util.addSchemeToUriIfNecessary
 import com.x8bit.bitwarden.data.platform.util.parseDomainNameOrNull
 import com.x8bit.bitwarden.data.platform.util.parseDomainOrNull
 import io.mockk.every
@@ -320,5 +321,39 @@ class UriExtensionsTest {
                 // Verify
                 assertEquals(expected[index], actual)
             }
+    }
+
+    @Test
+    fun `addSchemeToUriIfNecessary should add https when missing`() {
+        val uriWithNoScheme = URI("example.com")
+        assertEquals(URI("https://example.com"), uriWithNoScheme.addSchemeToUriIfNecessary())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `addSchemeToUriIfNecessary should add https when https scheme is missing and a port is present`() {
+        val uriWithPort = URI("example.com:8080")
+        assertEquals(URI("https://example.com:8080"), uriWithPort.addSchemeToUriIfNecessary())
+    }
+
+    @Test
+    fun `addSchemeToUriIfNecessary should not add https when http scheme is present`() {
+        val uriWithHttpScheme = URI("http://example.com")
+        assertEquals(URI("http://example.com"), uriWithHttpScheme.addSchemeToUriIfNecessary())
+    }
+
+    @Test
+    fun `addSchemeToUriIfNecessary should not add https when https scheme is present`() {
+        val uriWithHttpsScheme = URI("https://example.com")
+        assertEquals(URI("https://example.com"), uriWithHttpsScheme.addSchemeToUriIfNecessary())
+    }
+
+    @Test
+    fun `addSchemeToUriIfNecessary should not add https when custom scheme is already present`() {
+        val uriWithCustomScheme = URI("bitwarden://example.com")
+        assertEquals(
+            URI("bitwarden://example.com"),
+            uriWithCustomScheme.addSchemeToUriIfNecessary(),
+        )
     }
 }

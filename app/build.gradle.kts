@@ -162,8 +162,7 @@ dependencies {
         add("standardImplementation", dependencyNotation)
     }
 
-    // TODO: this should use a versioned AAR instead of referencing a local AAR BITAU-94
-    implementation(files("libs/authenticatorbridge-0.1.0-SNAPSHOT-release.aar"))
+    implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

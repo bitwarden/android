@@ -1055,7 +1055,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="then_done_highlight">potom Hotovo</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">V záujme vašej bezpečnosti nezabudnite odstrániť uložený súbor s heslami.</string>
   <string name="delete_your_saved_password_file">odstrániť súbor s uloženými heslami.</string>
-  <string name="need_help_checkout_out_import_help">Potrebujete pomoc? Pozrite si pomoc pre importovanie.</string>
+  <string name="need_help_check_out_import_help">Potrebujete pomoc? Pozrite si pomoc pre importovanie.</string>
   <string name="import_help_highlight">pomoc pre importovanie</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný súbor na miesto v počítači, ktoré ľahko nájdete.</string>
   <string name="save_the_exported_file_highlight">Uložte exportovaný súbor</string>
@@ -1073,4 +1073,12 @@ Chcete prepnúť na tento účet?</string>
   <string name="bitwarden_tools">Nástroje Bitwardenu</string>
   <string name="got_it">Chápem</string>
   <string name="no_logins_were_imported">Neboli importované žiadne prihlasovacie údaje</string>
+  <string name="logins_imported">Prihlasovacie údaje boli importované</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Nezabudnite z počítača odstrániť importovaný súbor s heslami</string>
+  <string name="type_ssh_key">SSH kľúč</string>
+  <string name="public_key">Verejný kľúč</string>
+  <string name="private_key">Súkromný kľúč</string>
+  <string name="ssh_keys">SSH kľúče</string>
+  <string name="copy_public_key">Copy public key</string>
+  <string name="copy_fingerprint">Copy fingerprint</string>
 </resources>
