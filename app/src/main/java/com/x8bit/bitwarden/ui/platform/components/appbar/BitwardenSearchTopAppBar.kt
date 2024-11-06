@@ -84,6 +84,7 @@ fun BitwardenSearchTopAppBar(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
                     .tabNavigation()
+                    .testTag("SearchFieldEntry")
                     .focusRequester(focusRequester)
                     .fillMaxWidth(),
             )

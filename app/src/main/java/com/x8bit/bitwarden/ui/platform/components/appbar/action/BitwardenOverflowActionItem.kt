@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
@@ -65,6 +64,7 @@ fun BitwardenOverflowActionItem(
             containerColor = BitwardenTheme.colorScheme.background.primary,
             modifier = Modifier
                 .semantics { testTagsAsResourceId = true }
+                .testTag("FloatingOptionsContent")
                 .widthIn(
                     min = 112.dp,
                     max = 280.dp,
@@ -72,16 +72,13 @@ fun BitwardenOverflowActionItem(
             content = {
                 menuItemDataList.forEach { dropdownMenuItemData ->
                     DropdownMenuItem(
-                        modifier = Modifier.semantics {
-                            dropdownMenuItemData.testTag?.let {
-                                testTag = it
-                            }
-                        },
+                        modifier = Modifier.testTag("FloatingOptionsItem"),
                         colors = bitwardenMenuItemColors(),
                         text = {
                             Text(
                                 text = dropdownMenuItemData.text,
                                 style = BitwardenTheme.typography.bodyLarge,
+                                modifier = Modifier.testTag("FloatingOptionsItemName"),
                             )
                         },
                         onClick = {
@@ -115,10 +112,8 @@ private fun BitwardenOverflowActionItem_preview() {
  *
  * @param text The text displayed for the item in the menu.
  * @param onClick A callback for when the menu item is clicked.
- * @param testTag Optional test tag for the menu item.
  */
 data class OverflowMenuItemData(
     val text: String,
     val onClick: () -> Unit,
-    val testTag: String? = null,
 )

@@ -351,7 +351,7 @@ class GeneratorViewModel @Inject constructor(
                     GeneratorState.MainType.Passphrase(
                         numWords = max(options.numWords, minNumWords),
                         minNumWords = minNumWords,
-                        wordSeparator = options.wordSeparator.toCharArray().first(),
+                        wordSeparator = options.wordSeparator.toCharArray().firstOrNull(),
                         capitalize = options.allowCapitalize || policy.capitalize == true,
                         capitalizeEnabled = policy.capitalize != true,
                         includeNumber = options.allowIncludeNumber || policy.includeNumber == true,
@@ -462,7 +462,7 @@ class GeneratorViewModel @Inject constructor(
         val newOptions = options.copy(
             type = PasscodeGenerationOptions.PasscodeType.PASSPHRASE,
             numWords = passphrase.numWords,
-            wordSeparator = passphrase.wordSeparator.toString(),
+            wordSeparator = passphrase.wordSeparator?.toString().orEmpty(),
             allowCapitalize = passphrase.capitalize,
             allowIncludeNumber = passphrase.includeNumber,
         )

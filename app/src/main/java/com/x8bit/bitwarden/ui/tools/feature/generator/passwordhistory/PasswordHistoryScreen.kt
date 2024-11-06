@@ -82,7 +82,6 @@ fun PasswordHistoryScreen(
                         BitwardenOverflowActionItem(
                             menuItemDataList = persistentListOf(
                                 OverflowMenuItemData(
-                                    testTag = "ClearPasswordList",
                                     text = stringResource(id = R.string.clear),
                                     onClick = remember(viewModel) {
                                         {

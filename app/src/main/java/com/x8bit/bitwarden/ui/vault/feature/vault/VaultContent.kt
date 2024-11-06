@@ -57,7 +57,7 @@ fun VaultContent(
                     showDivider = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .testTag("FolderFilter")
+                        .testTag("VerificationCodesFilter")
                         .padding(16.dp),
                 )
             }

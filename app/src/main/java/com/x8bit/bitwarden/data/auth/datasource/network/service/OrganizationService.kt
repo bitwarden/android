@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 
 /**
  * Provides an API for querying organization endpoints.
@@ -38,4 +39,12 @@ interface OrganizationService {
     suspend fun getOrganizationKeys(
         organizationId: String,
     ): Result<OrganizationKeysResponseJson>
+
+    /**
+     * Request organization verified domain details for an [email] needed for SSO
+     * requests.
+     */
+    suspend fun getVerifiedOrganizationDomainSsoDetails(
+        email: String,
+    ): Result<VerifiedOrganizationDomainSsoDetailsResponse>
 }
