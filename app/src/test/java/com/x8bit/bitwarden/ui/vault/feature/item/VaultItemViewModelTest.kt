@@ -2582,11 +2582,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
             }
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
 
@@ -2647,11 +2649,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
             }
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
 
