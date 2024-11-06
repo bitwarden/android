@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import io.mockk.every
 import io.mockk.mockk
@@ -26,7 +26,7 @@ class AccessibilityActivityManagerTest {
     private val accessibilityEnabledManager: AccessibilityEnabledManager =
         AccessibilityEnabledManagerImpl()
     private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
-    private val appForegroundManager: AppForegroundManager = mockk {
+    private val appStateManager: AppStateManager = mockk {
         every { appForegroundStateFlow } returns mutableAppForegroundStateFlow
     }
     private val lifecycleScope = mockk<LifecycleCoroutineScope> {
@@ -43,7 +43,7 @@ class AccessibilityActivityManagerTest {
         autofillActivityManager = AccessibilityActivityManagerImpl(
             context = context,
             accessibilityEnabledManager = accessibilityEnabledManager,
-            appForegroundManager = appForegroundManager,
+            appStateManager = appStateManager,
             lifecycleScope = lifecycleScope,
         )
     }

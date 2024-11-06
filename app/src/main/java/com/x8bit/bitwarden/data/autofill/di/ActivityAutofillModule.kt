@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,13 +27,13 @@ object ActivityAutofillModule {
     @Provides
     fun provideAutofillActivityManager(
         @ActivityScopedManager autofillManager: AutofillManager,
-        appForegroundManager: AppForegroundManager,
+        appStateManager: AppStateManager,
         autofillEnabledManager: AutofillEnabledManager,
         lifecycleScope: LifecycleCoroutineScope,
     ): AutofillActivityManager =
         AutofillActivityManagerImpl(
             autofillManager = autofillManager,
-            appForegroundManager = appForegroundManager,
+            appStateManager = appStateManager,
             autofillEnabledManager = autofillEnabledManager,
             lifecycleScope = lifecycleScope,
         )

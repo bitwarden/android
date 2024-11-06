@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 class AutofillActivityManagerImpl(
     private val autofillManager: AutofillManager,
     private val autofillEnabledManager: AutofillEnabledManager,
-    appForegroundManager: AppForegroundManager,
+    appStateManager: AppStateManager,
     lifecycleScope: LifecycleCoroutineScope,
 ) : AutofillActivityManager {
     private val isAutofillEnabledAndSupported: Boolean
@@ -21,7 +21,7 @@ class AutofillActivityManagerImpl(
             autofillManager.isAutofillSupported
 
     init {
-        appForegroundManager
+        appStateManager
             .appForegroundStateFlow
             .onEach { autofillEnabledManager.isAutofillEnabled = isAutofillEnabledAndSupported }
             .launchIn(lifecycleScope)

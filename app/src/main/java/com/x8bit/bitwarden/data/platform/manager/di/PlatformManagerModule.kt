@@ -14,8 +14,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.Refres
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -80,8 +80,9 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideAppForegroundManager(): AppForegroundManager =
-        AppForegroundManagerImpl()
+    fun provideAppStateManager(
+        application: Application,
+    ): AppStateManager = AppStateManagerImpl(application = application)
 
     @Provides
     @Singleton
@@ -267,11 +268,11 @@ object PlatformManagerModule {
     @Singleton
     fun provideRestrictionManager(
         @ApplicationContext context: Context,
-        appForegroundManager: AppForegroundManager,
+        appStateManager: AppStateManager,
         dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
     ): RestrictionManager = RestrictionManagerImpl(
-        appForegroundManager = appForegroundManager,
+        appStateManager = appStateManager,
         dispatcherManager = dispatcherManager,
         context = context,
         environmentRepository = environmentRepository,
