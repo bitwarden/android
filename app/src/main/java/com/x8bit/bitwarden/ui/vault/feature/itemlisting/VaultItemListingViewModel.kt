@@ -2089,7 +2089,7 @@ data class VaultItemListingState(
                     get() = folderId
                         ?.let { folderName.asText() }
                         ?: R.string.folder_none.asText()
-                override val hasFab: Boolean get() = false
+                override val hasFab: Boolean get() = true
             }
 
             /**
