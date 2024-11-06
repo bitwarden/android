@@ -109,6 +109,7 @@ class VaultAddEditViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
+            val selectedFolderId = VaultAddEditArgs(savedStateHandle).selectedFolderId
             val isIndividualVaultDisabled = policyManager
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any()
@@ -151,7 +152,9 @@ class VaultAddEditViewModel @Inject constructor(
                             )
                             ?: totpData?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: VaultAddEditState.ViewState.Content(
-                                common = VaultAddEditState.ViewState.Content.Common(),
+                                common = VaultAddEditState.ViewState.Content.Common(
+                                    selectedFolderId = selectedFolderId,
+                                ),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
                                 type = vaultAddEditType.vaultItemCipherType.toItemType(),
                             )

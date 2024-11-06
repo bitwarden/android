@@ -149,15 +149,8 @@ class VaultItemListingStateExtensionsTest {
 
     @Test
     fun `toVaultItemCipherType should throw an exception for unsupported ItemListingTypes`() {
-        val itemListingTypes = listOf(
-            VaultItemListingState.ItemListingType.Vault.Trash,
-            VaultItemListingState.ItemListingType.Vault.Folder(
-                folderId = "mockId",
-            ),
-        )
-
-        itemListingTypes.forEach {
-            assertThrows<IllegalStateException> { it.toVaultItemCipherType() }
+        assertThrows<IllegalStateException> {
+            VaultItemListingState.ItemListingType.Vault.Trash.toVaultItemCipherType()
         }
     }
 }

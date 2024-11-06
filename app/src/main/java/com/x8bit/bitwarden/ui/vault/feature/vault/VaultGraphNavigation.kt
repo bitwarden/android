@@ -20,7 +20,10 @@ const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultGraph(
     navController: NavController,
-    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
+    onNavigateToVaultAddItemScreen: (
+        vaultItemCipherType: VaultItemCipherType,
+        selectedFolderId: String?,
+        ) -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
@@ -33,7 +36,7 @@ fun NavGraphBuilder.vaultGraph(
     ) {
         vaultDestination(
             onNavigateToVaultAddItemScreen = {
-                onNavigateToVaultAddItemScreen(VaultItemCipherType.LOGIN)
+                onNavigateToVaultAddItemScreen(VaultItemCipherType.LOGIN, null)
             },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
