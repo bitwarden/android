@@ -73,8 +73,8 @@ class VaultViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     featureFlagManager: FeatureFlagManager,
-    snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -283,6 +283,9 @@ class VaultViewModel @Inject constructor(
                 SwitchAccountResult.AccountSwitched -> true
                 SwitchAccountResult.NoChange -> false
             }
+        if (isSwitchingAccounts) {
+            snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
+        }
         mutableStateFlow.update {
             it.copy(isSwitchingAccounts = isSwitchingAccounts)
         }
