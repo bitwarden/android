@@ -32,6 +32,7 @@ sealed class FlagKey<out T : Any> {
                 OnboardingCarousel,
                 ImportLoginsFlow,
                 SshKeyCipherItems,
+                VerifiedSsoDomainEndpoint,
             )
         }
     }
@@ -86,6 +87,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object SshKeyCipherItems : FlagKey<Boolean>() {
         override val keyName: String = "ssh-key-vault-item"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+    /**
+     * Data object holding the feature flag key for the new verified SSO domain endpoint feature.
+     */
+    data object VerifiedSsoDomainEndpoint : FlagKey<Boolean>() {
+        override val keyName: String = "pm-12337-refactor-sso-details-endpoint"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }

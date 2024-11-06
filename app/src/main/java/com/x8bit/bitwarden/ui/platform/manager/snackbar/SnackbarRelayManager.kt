@@ -19,4 +19,9 @@ interface SnackbarRelayManager {
      * the [relay] to receive the data from.
      */
     fun getSnackbarDataFlow(relay: SnackbarRelay): Flow<BitwardenSnackbarData>
+
+    /**
+     * Clears the buffer for the given [relay].
+     */
+    fun clearRelayBuffer(relay: SnackbarRelay)
 }
