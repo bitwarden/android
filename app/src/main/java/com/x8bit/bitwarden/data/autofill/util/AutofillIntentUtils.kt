@@ -38,7 +38,7 @@ fun createAutofillSelectionIntent(
         .apply {
             // This helps prevent a crash when using the accessibility framework
             if (framework == AutofillSelectionData.Framework.ACCESSIBILITY) {
-                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
             putExtra(
                 AUTOFILL_BUNDLE_KEY,
