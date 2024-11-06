@@ -314,7 +314,7 @@ fun VaultAddEditScreen(
                                 text = stringResource(id = R.string.delete),
                                 onClick = { pendingDeleteCipher = true },
                             )
-                                .takeUnless { state.isAddItemMode },
+                                .takeUnless { state.isAddItemMode || !state.canDelete },
                         ),
                     )
                 },

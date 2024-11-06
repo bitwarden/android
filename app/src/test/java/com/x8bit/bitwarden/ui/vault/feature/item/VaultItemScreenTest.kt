@@ -780,22 +780,39 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `menu Delete option click should be displayed`() {
-
-        // Confirm dropdown version of item is absent
+    fun `menu Delete option should be displayed based on state`() {
+        // Confirm overflow is closed on initial load
         composeTestRule
             .onAllNodesWithText("Delete")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
+
         // Open the overflow menu
         composeTestRule
             .onNodeWithContentDescription("More")
             .performClick()
-        // Click on the delete item in the dropdown
+
+        // Confirm Delete option is present
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule
             .onAllNodesWithText("Delete")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
+
+        // Confirm Delete option is not present when canDelete is false
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(canDelete = false),
+                    ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
     }
 
     @Test
@@ -1166,6 +1183,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `Menu should display correct items when cipher is not in a collection`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule
             .onNodeWithContentDescription("More")
             .performClick()
@@ -2374,6 +2392,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
                 title = "test.mp4",
             ),
         ),
+        canDelete = true,
     )
 
 private val DEFAULT_PASSKEY = R.string.created_xy.asText(
@@ -2455,6 +2474,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         requiresReprompt = true,
         requiresCloneConfirmation = false,
         attachments = emptyList(),
+        canDelete = true,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

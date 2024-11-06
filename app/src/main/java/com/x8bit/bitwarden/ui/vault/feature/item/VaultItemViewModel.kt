@@ -82,7 +82,8 @@ class VaultItemViewModel @Inject constructor(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
             vaultRepository.getAuthCodeFlow(state.vaultItemId),
-        ) { cipherViewState, userState, authCodeState ->
+            vaultRepository.collectionsStateFlow,
+        ) { cipherViewState, userState, authCodeState, collectionsState ->
             val totpCodeData = authCodeState.data?.let {
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
@@ -96,14 +97,30 @@ class VaultItemViewModel @Inject constructor(
                 vaultDataState = combineDataStates(
                     cipherViewState,
                     authCodeState,
-                ) { _, _ ->
+                    collectionsState,
+                ) { _, _, _ ->
                     // We are only combining the DataStates to know the overall state,
                     // we map it to the appropriate value below.
                 }
                     .mapNullable {
+                        // Deletion is not allowed when the item is in a collection that the user
+                        // does not have "manage" permission for.
+                        val canDelete = collectionsState.data
+                            ?.none {
+                                val itemIsInCollection = cipherViewState.data
+                                    ?.collectionIds
+                                    ?.contains(it.id) == true
+
+                                val canManageCollection = it.manage
+
+                                itemIsInCollection && !canManageCollection
+                            }
+                            ?: true
+
                         VaultItemStateData(
                             cipher = cipherViewState.data,
                             totpCodeItemData = totpCodeData,
+                            canDelete = canDelete,
                         )
                     },
             )
@@ -915,6 +932,7 @@ class VaultItemViewModel @Inject constructor(
             isPremiumUser = account.isPremium,
             hasMasterPassword = account.hasMasterPassword,
             totpCodeItemData = this.data?.totpCodeItemData,
+            canDelete = this.data?.canDelete == true,
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1154,6 +1172,14 @@ data class VaultItemState(
             ?: false
 
     /**
+     * Whether or not the cipher can be deleted.
+     */
+    val canDelete: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canDelete == true
+
+    /**
      * The text to display on the deletion confirmation dialog.
      */
     val deletionConfirmationText: Text
@@ -1216,6 +1242,7 @@ data class VaultItemState(
                 @IgnoredOnParcel
                 val currentCipher: CipherView? = null,
                 val attachments: List<AttachmentItem>?,
+                val canDelete: Boolean,
             ) : Parcelable {
 
                 /**
