@@ -39,7 +39,7 @@ data class SyncResponseJson(
     val policies: List<Policy>?,
 
     @SerialName("domains")
-    val domains: Domains,
+    val domains: Domains?,
 
     @SerialName("sends")
     val sends: List<Send>?,
