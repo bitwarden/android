@@ -130,6 +130,7 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Login,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
             VaultItemListingState.ItemListingType.Vault.SshKey,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId"),
         )
 
         val result = itemListingTypes.map { it.toVaultItemCipherType() }
@@ -142,6 +143,7 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.SSH_KEY,
+                VaultItemCipherType.LOGIN,
             ),
             result,
         )
