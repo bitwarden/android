@@ -26,7 +26,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
         FolderEntity::class,
         SendEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 @TypeConverters(ZonedDateTimeTypeConverter::class)
