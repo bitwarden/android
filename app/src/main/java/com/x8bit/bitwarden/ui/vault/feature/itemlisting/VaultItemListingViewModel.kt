@@ -1747,6 +1747,13 @@ data class VaultItemListingState(
     val isRefreshing: Boolean,
 ) {
     /**
+     * Whether or not the add FAB should be shown.
+     */
+    val hasAddItemFabButton: Boolean
+        get() = itemListingType.hasFab &&
+            !(viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+
+    /**
      * Whether or not this represents a listing screen for autofill.
      */
     val isAutofill: Boolean

@@ -449,7 +449,7 @@ private fun VaultItemListingScaffold(
             )
         },
         floatingActionButton = {
-            if (state.itemListingType.hasFab) {
+            if (state.hasAddItemFabButton) {
                 BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
                     painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
