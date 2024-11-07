@@ -67,6 +67,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateToVaultAddItemScreen: (
         cipherType: VaultItemCipherType,
         selectedFolderId: String?,
+        selectedCollectionId: String?,
     ) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
@@ -93,7 +94,8 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     onNavigateToVaultAddItemScreen: (
         cipherType: VaultItemCipherType,
         selectedFolderId: String?,
-    ) -> Unit,
+        selectedCollectionId: String?,
+        ) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     composableWithStayTransitions(
@@ -134,7 +136,7 @@ fun NavGraphBuilder.sendItemListingDestination(
         onNavigateBack = onNavigateBack,
         onNavigateToAddSendItem = onNavigateToAddSendItem,
         onNavigateToEditSendItem = onNavigateToEditSendItem,
-        onNavigateToVaultAddItemScreen = { _, _ -> },
+        onNavigateToVaultAddItemScreen = { _, _, _ -> },
         onNavigateToVaultItemScreen = { },
         onNavigateToVaultEditItemScreen = { },
         onNavigateToVaultItemListing = { },
@@ -155,6 +157,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
     onNavigateToVaultAddItemScreen: (
         cipherType: VaultItemCipherType,
         selectedFolderId: String?,
+        selectedCollectionId: String?,
     ) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,

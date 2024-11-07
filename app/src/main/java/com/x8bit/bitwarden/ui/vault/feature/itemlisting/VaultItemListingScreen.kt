@@ -75,6 +75,7 @@ fun VaultItemListingScreen(
     onNavigateToVaultAddItemScreen: (
         vaultItemCipherType: VaultItemCipherType,
         selectedFolderId: String?,
+        selectedCollectionId: String?,
     ) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -119,6 +120,7 @@ fun VaultItemListingScreen(
                 onNavigateToVaultAddItemScreen(
                     event.vaultItemCipherType,
                     event.selectedFolderId,
+                    event.selectedCollectionId,
                 )
             }
 

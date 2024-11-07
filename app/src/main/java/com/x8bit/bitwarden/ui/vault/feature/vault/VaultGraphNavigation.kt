@@ -23,7 +23,8 @@ fun NavGraphBuilder.vaultGraph(
     onNavigateToVaultAddItemScreen: (
         vaultItemCipherType: VaultItemCipherType,
         selectedFolderId: String?,
-    ) -> Unit,
+        selectedCollectionId: String?,
+        ) -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
@@ -36,7 +37,7 @@ fun NavGraphBuilder.vaultGraph(
     ) {
         vaultDestination(
             onNavigateToVaultAddItemScreen = {
-                onNavigateToVaultAddItemScreen(VaultItemCipherType.LOGIN, null)
+                onNavigateToVaultAddItemScreen(VaultItemCipherType.LOGIN, null, null)
             },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
