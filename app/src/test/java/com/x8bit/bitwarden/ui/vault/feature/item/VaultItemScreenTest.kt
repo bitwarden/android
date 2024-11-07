@@ -1106,6 +1106,50 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `menu Collection option should be displayed based on state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(currentCipher = createMockCipherView(1)),
+                    ),
+            )
+        }
+        // Confirm overflow is closed on initial load
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        // Confirm Collections option is present
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        // Confirm Collections option is not present when canDelete is false
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(canAssignToCollections = false),
+                    ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+    }
+
+    @Test
     fun `Collections menu click should send CollectionsClick action`() {
         mutableStateFlow.update {
             it.copy(
@@ -2393,6 +2437,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             ),
         ),
         canDelete = true,
+        canAssignToCollections = true,
     )
 
 private val DEFAULT_PASSKEY = R.string.created_xy.asText(
@@ -2475,6 +2520,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         requiresCloneConfirmation = false,
         attachments = emptyList(),
         canDelete = true,
+        canAssignToCollections = true,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

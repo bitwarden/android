@@ -7,9 +7,12 @@ import com.bitwarden.vault.CipherView
  *
  * @property cipher The cipher view for the item.
  * @property totpCodeItemData The data for the totp code.
+ * @property canDelete Whether the item can be deleted.
+ * @property canAssociateToCollections Whether the item can be associated to a collection.
  */
 data class VaultItemStateData(
     val cipher: CipherView?,
     val totpCodeItemData: TotpCodeItemData?,
     val canDelete: Boolean,
+    val canAssociateToCollections: Boolean,
 )

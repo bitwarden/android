@@ -43,6 +43,7 @@ fun CipherView.toViewState(
     resourceManager: ResourceManager,
     clock: Clock,
     canDelete: Boolean,
+    canAssignToCollections: Boolean,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
@@ -110,6 +111,7 @@ fun CipherView.toViewState(
             hasOrganizations = false,
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
+            canAssignToCollections = canAssignToCollections,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )

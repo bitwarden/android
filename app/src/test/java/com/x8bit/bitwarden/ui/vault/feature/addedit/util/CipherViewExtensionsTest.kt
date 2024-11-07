@@ -76,6 +76,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -123,6 +124,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -175,6 +177,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -236,6 +239,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -294,6 +298,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -330,6 +335,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -375,6 +381,7 @@ class CipherViewExtensionsTest {
             resourceManager = resourceManager,
             clock = FIXED_CLOCK,
             canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
