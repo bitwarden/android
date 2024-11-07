@@ -117,7 +117,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 biometricsManager = biometricsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItem = { onNavigateToVaultItemId = it },
-                onNavigateToVaultAddItemScreen = { _, _ ->
+                onNavigateToVaultAddItemScreen = { _, _, _ ->
                     onNavigateToVaultAddItemScreenCalled = true
                 },
                 onNavigateToAddSendItem = { onNavigateToAddSendScreenCalled = true },
