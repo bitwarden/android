@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import android.util.Log
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.x8bit.bitwarden.BuildConfig
@@ -49,6 +50,12 @@ class LogsManagerImpl(
         }
     }
 
+    override fun trackBreadCrumb(breadCrumbMessage: String) {
+        if (isEnabled) {
+            Firebase.crashlytics.log(breadCrumbMessage)
+        }
+    }
+
     init {
         legacyAppCenterMigrator.migrateIfNecessary()
         isEnabled = settingsRepository.isCrashLoggingEnabled
@@ -56,6 +63,9 @@ class LogsManagerImpl(
 
     private inner class NonfatalErrorTree : Timber.Tree() {
         override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+            if (priority == Log.INFO) {
+                trackBreadCrumb(message)
+            }
             t?.let { trackNonFatalException(BitwardenNonfatalException(message, it)) }
         }
     }

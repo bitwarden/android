@@ -18,6 +18,11 @@ interface LogsManager {
     fun trackNonFatalException(throwable: Throwable)
 
     /**
+     * Logs a breadcrumb to be used for debugging errors if logs are enabled.
+     */
+    fun trackBreadCrumb(breadCrumbMessage: String)
+
+    /**
      * Tracks the current user data.
      */
     fun setUserData(userId: String?, environmentType: Environment.Type)

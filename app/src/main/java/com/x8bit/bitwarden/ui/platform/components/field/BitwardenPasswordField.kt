@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -28,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import timber.log.Timber
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
@@ -52,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param imeAction the preferred IME action for the keyboard to have.
  * @param keyboardActions the callbacks of keyboard actions.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenPasswordField(
     label: String,
@@ -70,6 +73,29 @@ fun BitwardenPasswordField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     val focusRequester = remember { FocusRequester() }
+    /*
+     * Added here to attempt to gather more information for debugging issue PM-14333
+     */
+    val (visualTransformation, transformationLogKey) = when {
+        !showPassword -> PasswordVisualTransformation() to "PasswordTransformation"
+        readOnly -> nonLetterColorVisualTransformation() to "NonLetterColorTransformation"
+        else -> VisualTransformation.None to "None"
+    }
+    val currentLocale = LocalConfiguration.current.locales[0]
+    LaunchedEffect(
+        key1 = showPassword,
+        key2 = readOnly,
+    ) {
+        val anyUndefinedChars = value.any { !it.isDefined() }
+        Timber.i(
+            message = "Recording this value for debugging issue related to issue PM-14333\n" +
+                "Transformation applied: $transformationLogKey " +
+                "the length of the text is ${value.length}. \n" +
+                "Current system language is ${currentLocale.language}.\n" +
+                "Determined that there are undefined characters: $anyUndefinedChars",
+        )
+    }
+
     OutlinedTextField(
         modifier = modifier
             .tabNavigation()
@@ -79,11 +105,7 @@ fun BitwardenPasswordField(
         label = { Text(text = label) },
         value = value,
         onValueChange = onValueChange,
-        visualTransformation = when {
-            !showPassword -> PasswordVisualTransformation()
-            readOnly -> nonLetterColorVisualTransformation()
-            else -> VisualTransformation.None
-        },
+        visualTransformation = visualTransformation,
         singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions(
