@@ -11,4 +11,5 @@ import com.bitwarden.vault.CipherView
 data class VaultItemStateData(
     val cipher: CipherView?,
     val totpCodeItemData: TotpCodeItemData?,
+    val canDelete: Boolean,
 )

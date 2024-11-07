@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.RestrictionsManager
 import android.os.Bundle
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
  * The default implementation of the [RestrictionManager].
  */
 class RestrictionManagerImpl(
-    appForegroundManager: AppForegroundManager,
+    appStateManager: AppStateManager,
     dispatcherManager: DispatcherManager,
     private val context: Context,
     private val environmentRepository: EnvironmentRepository,
@@ -31,7 +31,7 @@ class RestrictionManagerImpl(
     private var isReceiverRegistered = false
 
     init {
-        appForegroundManager
+        appStateManager
             .appForegroundStateFlow
             .onEach {
                 when (it) {

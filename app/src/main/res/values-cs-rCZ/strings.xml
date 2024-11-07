@@ -207,7 +207,7 @@
   <string name="off" tools:override="true">Vypnuto</string>
   <string name="on" tools:override="true">Zapnuto</string>
   <string name="status">Stav</string>
-  <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwardenu. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
+  <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
   <string name="autofill">Automatické vyplňování</string>
   <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
   <string name="bitwarden_autofill_service_match_confirm">Opravdu chcete tyto přihlašovací údaje automaticky vyplnit? Nejsou úplně shodné s \"%1$s\".</string>
@@ -1040,7 +1040,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="export_your_saved_logins">Export Vašich uložených přihlášení</string>
   <string name="delete_this_file_after_import_is_complete">Po dokončení importu tento soubor smažete.</string>
   <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na Vašem počítači otevřete novou kartu prohlížeče a přejděte na vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">přejděte na vault.bitwarden.com</string>
+  <string name="go_to_vault_bitwarden_com_highlight">přejděte na %1$s</string>
   <string name="log_in_to_the_bitwarden_web_app">Přihlaste se do webové aplikace Bitwarden.</string>
   <string name="step_2_of_3">Krok 2 ze 3</string>
   <string name="log_in_to_bitwarden">Přihlásit se do Bitwardenu</string>
@@ -1054,7 +1054,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="then_done_highlight">a poté klepněte na tlačítko Hotovo</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Z důvodu bezpečnosti nezapomeňte smazat soubor s uloženým heslem.</string>
   <string name="delete_your_saved_password_file">smazat soubor s uloženým heslem.</string>
-  <string name="need_help_checkout_out_import_help">Potřebujete pomoc? Podívejte se na nápovědu pro import.</string>
+  <string name="need_help_check_out_import_help">Potřebujete pomoc? Podívejte se na nápovědu pro import.</string>
   <string name="import_help_highlight">nápověda pro import</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný soubor někde na Vašem počítači, kde jej můžete snadno najít.</string>
   <string name="save_the_exported_file_highlight">Uložit exportovaný soubor</string>
@@ -1072,4 +1072,12 @@ Chcete se přepnout na tento účet?</string>
   <string name="bitwarden_tools">Nástroje Bitwarden</string>
   <string name="got_it">Rozumím</string>
   <string name="no_logins_were_imported">Nebyla importována žádná přihlášení</string>
+  <string name="logins_imported">Přihlášení byla importována</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Nezapomeňte smazat soubor importovaných hesel z Vašeho počítače</string>
+  <string name="type_ssh_key">SSH klíč</string>
+  <string name="public_key">Veřejný klíč</string>
+  <string name="private_key">Soukromý klíč</string>
+  <string name="ssh_keys">SSH klíče</string>
+  <string name="copy_public_key">Kopírovat veřejný klíč</string>
+  <string name="copy_fingerprint">Kopírovat otisk prstu</string>
 </resources>
