@@ -6,7 +6,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -45,20 +44,20 @@ fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndLoggedIn(
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndUnlocked(
     userStateFlow: Flow<UserStateJson?>,
-    vaultUnlockFlow: StateFlow<List<VaultUnlockData>>,
+    vaultUnlockFlow: Flow<List<VaultUnlockData>>,
     observer: (activeUserId: String) -> Flow<R>,
 ): Flow<R> =
     combine(
         this.subscriptionCount.map { it > 0 }.distinctUntilChanged(),
-        userStateFlow.map {
-            it?.activeUserId
-        }.distinctUntilChanged(),
-        userStateFlow.map { it?.activeUserId }
+        userStateFlow.map { it?.activeUserId }.distinctUntilChanged(),
+        userStateFlow
+            .map { it?.activeUserId }
+            .distinctUntilChanged()
             .filterNotNull()
             .flatMapLatest { activeUserId ->
-                vaultUnlockFlow.map { vaultUnlockDataList ->
-                    vaultUnlockDataList.any { it.userId == activeUserId }
-                }.distinctUntilChanged()
+                vaultUnlockFlow
+                    .map { it.any { it.userId == activeUserId } }
+                    .distinctUntilChanged()
             },
     ) { isSubscribed, activeUserId, isUnlocked ->
         activeUserId.takeIf { isSubscribed && isUnlocked }

@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
+import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -222,7 +223,13 @@ class VaultRepositoryImpl(
         // Cancel any ongoing sync request and clear the vault data in memory every time
         // the user switches or the vault is locked for the active user.
         merge(
-            authDiskSource.userSwitchingChangesFlow,
+            authDiskSource
+                .userSwitchingChangesFlow
+                .onEach {
+                    // DomainState is not part of the locked data but should still be cleared
+                    // when the user changes
+                    mutableDomainsStateFlow.update { DataState.Loading }
+                },
             vaultLockManager
                 .vaultUnlockDataStateFlow
                 .filter { vaultUnlockDataList ->
@@ -239,7 +246,7 @@ class VaultRepositoryImpl(
         // Setup ciphers MutableStateFlow
         mutableCiphersStateFlow
             .observeWhenSubscribedAndUnlocked(
-                authDiskSource.userStateFlow,
+                userStateFlow = authDiskSource.userStateFlow,
                 vaultUnlockFlow = vaultUnlockDataStateFlow,
             ) { activeUserId ->
                 observeVaultDiskCiphers(activeUserId)
@@ -248,9 +255,8 @@ class VaultRepositoryImpl(
 
         // Setup domains MutableStateFlow
         mutableDomainsStateFlow
-            .observeWhenSubscribedAndUnlocked(
-                authDiskSource.userStateFlow,
-                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            .observeWhenSubscribedAndLoggedIn(
+                userStateFlow = authDiskSource.userStateFlow,
             ) { activeUserId ->
                 observeVaultDiskDomains(activeUserId)
             }
@@ -258,7 +264,7 @@ class VaultRepositoryImpl(
         // Setup folders MutableStateFlow
         mutableFoldersStateFlow
             .observeWhenSubscribedAndUnlocked(
-                authDiskSource.userStateFlow,
+                userStateFlow = authDiskSource.userStateFlow,
                 vaultUnlockFlow = vaultUnlockDataStateFlow,
             ) { activeUserId ->
                 observeVaultDiskFolders(activeUserId)
@@ -267,7 +273,7 @@ class VaultRepositoryImpl(
         // Setup collections MutableStateFlow
         mutableCollectionsStateFlow
             .observeWhenSubscribedAndUnlocked(
-                authDiskSource.userStateFlow,
+                userStateFlow = authDiskSource.userStateFlow,
                 vaultUnlockFlow = vaultUnlockDataStateFlow,
             ) { activeUserId ->
                 observeVaultDiskCollections(activeUserId)
@@ -321,7 +327,6 @@ class VaultRepositoryImpl(
 
     private fun clearUnlockedData() {
         mutableCiphersStateFlow.update { DataState.Loading }
-        mutableDomainsStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
         mutableCollectionsStateFlow.update { DataState.Loading }
         mutableSendDataStateFlow.update { DataState.Loading }

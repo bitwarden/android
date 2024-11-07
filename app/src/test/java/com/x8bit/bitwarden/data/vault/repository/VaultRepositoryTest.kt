@@ -339,7 +339,11 @@ class VaultRepositoryTest {
             collectionsStateFlow.expectNoEvents()
             foldersStateFlow.expectNoEvents()
             sendsStateFlow.expectNoEvents()
-            domainsStateFlow.expectNoEvents()
+            // Domains does not care about being unlocked
+            assertEquals(
+                DataState.Loaded(createMockDomainsData(number = 1)),
+                domainsStateFlow.awaitItem(),
+            )
 
             setVaultToUnlocked(userId = userId)
 
@@ -365,10 +369,8 @@ class VaultRepositoryTest {
                 DataState.Loaded(SendData(listOf(createMockSendView(number = 1)))),
                 sendsStateFlow.awaitItem(),
             )
-            assertEquals(
-                DataState.Loaded(createMockDomainsData(number = 1)),
-                domainsStateFlow.awaitItem(),
-            )
+            // Domain data has not changed
+            domainsStateFlow.expectNoEvents()
 
             fakeAuthDiskSource.userState = null
 
@@ -492,7 +494,7 @@ class VaultRepositoryTest {
                 assertEquals(DataState.Loading, collectionsStateFlow.awaitItem())
                 assertEquals(DataState.Loading, foldersStateFlow.awaitItem())
                 assertEquals(DataState.Loading, sendsStateFlow.awaitItem())
-                assertEquals(DataState.Loading, domainsStateFlow.awaitItem())
+                domainsStateFlow.expectNoEvents()
             }
         }
 
