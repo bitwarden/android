@@ -541,6 +541,13 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
 
+            is VaultItemListingState.ItemListingType.Vault.Collection -> {
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = itemListingType.toVaultItemCipherType(),
+                    selectedCollectionId = itemListingType.collectionId,
+                )
+            }
+
             is VaultItemListingState.ItemListingType.Vault -> {
                 VaultItemListingEvent.NavigateToAddVaultItem(
                     vaultItemCipherType = itemListingType.toVaultItemCipherType(),
@@ -2158,6 +2165,7 @@ sealed class VaultItemListingEvent {
     data class NavigateToAddVaultItem(
         val vaultItemCipherType: VaultItemCipherType,
         val selectedFolderId: String? = null,
+        val selectedCollectionId: String? = null,
     ) : VaultItemListingEvent()
 
     /**
