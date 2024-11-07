@@ -83,16 +83,15 @@ fun BitwardenPasswordField(
     }
     val currentLocale = LocalConfiguration.current.locales[0]
     LaunchedEffect(
-        key1 = showPassword,
-        key2 = readOnly,
+        key1 = transformationLogKey,
     ) {
         val anyUndefinedChars = value.any { !it.isDefined() }
         Timber.i(
-            message = "Recording this value for debugging issue related to issue PM-14333\n" +
-                "Transformation applied: $transformationLogKey " +
-                "the length of the text is ${value.length}. \n" +
+            message = "Recording this value for debugging issue related to issue PM-14333.\n" +
+                "Transformation applied: $transformationLogKey.\n " +
+                "the length of the text is ${value.length}.\n" +
                 "Current system language is ${currentLocale.language}.\n" +
-                "Determined that there are undefined characters: $anyUndefinedChars",
+                "Determined that there are undefined characters: $anyUndefinedChars.",
         )
     }
 
