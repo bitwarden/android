@@ -127,17 +127,23 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
             common = currentContentState.common.copy(
                 selectedFolderId = folderViewList.toSelectedFolderId(
                     cipherView = currentContentState.common.originalCipher,
-                ) ?: currentContentState.common.selectedFolderId,
+                )
+                ?: currentContentState.common.selectedFolderId,
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),
                 selectedOwnerId = activeAccount.toSelectedOwnerId(
                     cipherView = currentContentState.common.originalCipher,
-                ),
+                )
+                    ?: collectionViewList.firstOrNull {
+                        it.id == currentContentState.common.selectedCollectionId
+                    }
+                        ?.organizationId,
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
+                    selectedCollectionId = currentContentState.common.selectedCollectionId,
                 ),
                 isUnlockWithPasswordEnabled = activeAccount.hasMasterPassword,
                 hasOrganizations = activeAccount.organizations.isNotEmpty(),
@@ -192,6 +198,7 @@ private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
+    selectedCollectionId: String? = null,
 ): List<VaultAddEditState.Owner> =
     listOfNotNull(
         VaultAddEditState.Owner(
@@ -214,9 +221,11 @@ private fun UserState.Account.toAvailableOwners(
                             VaultCollection(
                                 id = collection.id.orEmpty(),
                                 name = collection.name,
-                                isSelected = cipherView
+                                isSelected = (cipherView
                                     ?.collectionIds
-                                    ?.contains(collection.id) == true,
+                                    ?.contains(collection.id))
+                                    ?: (selectedCollectionId != null &&
+                                        collection.id == selectedCollectionId),
                             )
                         },
                 )
