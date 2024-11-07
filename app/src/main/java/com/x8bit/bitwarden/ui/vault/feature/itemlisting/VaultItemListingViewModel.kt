@@ -2111,7 +2111,7 @@ data class VaultItemListingState(
                 val collectionName: String = "",
             ) : Vault() {
                 override val titleText: Text get() = collectionName.asText()
-                override val hasFab: Boolean get() = false
+                override val hasFab: Boolean get() = true
             }
         }
 
