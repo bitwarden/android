@@ -127,7 +127,8 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
             common = currentContentState.common.copy(
                 selectedFolderId = folderViewList.toSelectedFolderId(
                     cipherView = currentContentState.common.originalCipher,
-                ) ?: currentContentState.common.selectedFolderId,
+                )
+                ?: currentContentState.common.selectedFolderId,
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),

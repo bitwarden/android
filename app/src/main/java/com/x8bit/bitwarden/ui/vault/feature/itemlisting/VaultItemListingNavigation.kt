@@ -93,7 +93,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     onNavigateToVaultAddItemScreen: (
         cipherType: VaultItemCipherType,
         selectedFolderId: String?,
-        ) -> Unit,
+    ) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     composableWithStayTransitions(
