@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
 /**
@@ -14,4 +15,9 @@ interface DatabaseSchemeManager {
      * that a scheme change to any database will update this value and trigger a sync.
      */
     var lastDatabaseSchemeChangeInstant: Instant?
+
+    /**
+     * A flow of the last database schema change instant.
+     */
+    val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
 }

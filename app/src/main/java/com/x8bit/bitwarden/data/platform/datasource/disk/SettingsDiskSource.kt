@@ -75,6 +75,11 @@ interface SettingsDiskSource {
     var lastDatabaseSchemeChangeInstant: Instant?
 
     /**
+     * Emits updates that track [lastDatabaseSchemeChangeInstant].
+     */
+    val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
