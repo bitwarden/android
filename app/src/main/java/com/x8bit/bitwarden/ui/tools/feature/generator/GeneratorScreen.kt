@@ -202,16 +202,14 @@ fun GeneratorScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            if (state.generatorMode == GeneratorMode.Default) {
-                MainStateOptionsItem(
-                    selectedType = state.selectedType,
-                    passcodePolicyOverride = state.passcodePolicyOverride,
-                    possibleMainStates = state.typeOptions.toImmutableList(),
-                    onMainStateOptionClicked = onMainStateOptionClicked,
-                    modifier = Modifier
-                        .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
-                )
-            }
+            MainStateOptionsItem(
+                selectedType = state.selectedType,
+                passcodePolicyOverride = state.passcodePolicyOverride,
+                possibleMainStates = state.typeOptions.toImmutableList(),
+                onMainStateOptionClicked = onMainStateOptionClicked,
+                modifier = Modifier
+                    .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+            )
             ScrollContent(
                 state = state,
                 onRegenerateClick = onRegenerateClick,

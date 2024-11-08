@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+import kotlin.collections.filter
 import kotlin.math.max
 
 private const val KEY_STATE = "state"
@@ -1726,10 +1727,17 @@ data class GeneratorState(
 ) : Parcelable {
 
     /**
-     * Provides a list of available main types for the generator.
+     * Provides a list of available main types for the generator based on the [GeneratorMode].
      */
     val typeOptions: List<MainTypeOption>
-        get() = MainTypeOption.entries.toList()
+        get() = when (generatorMode) {
+            GeneratorMode.Default -> MainTypeOption.entries.toList()
+            GeneratorMode.Modal.Password -> MainTypeOption
+                .entries
+                .filter { it != MainTypeOption.USERNAME }
+
+            is GeneratorMode.Modal.Username -> emptyList()
+        }
 
     /**
      * Enum representing the main type options for the generator, such as PASSWORD PASSPHRASE, and
