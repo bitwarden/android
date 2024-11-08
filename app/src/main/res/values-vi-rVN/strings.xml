@@ -1073,12 +1073,17 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="bitwarden_tools">Công cụ Bitwarden</string>
   <string name="got_it">Đã hiểu</string>
   <string name="no_logins_were_imported">Chưa nhập lượt đăng nhập nào</string>
+  <string name="verified_sso_domain_verified">Điểm cuối tên miền SSO đã xác minh</string>
   <string name="logins_imported">Đã nhập lượt đăng nhập</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Nhớ xóa file mật khẩu đã nhập khỏi máy tính</string>
   <string name="type_ssh_key">Khóa SSH</string>
   <string name="public_key">Khóa công khai</string>
   <string name="private_key">Khóa riêng tư</string>
   <string name="ssh_keys">Khóa SSH</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="copy_public_key">Chép khóa công khai</string>
+  <string name="copy_fingerprint">Chép vân tay</string>
+  <string name="enable_notifications">Bật thông báo</string>
+  <string name="log_in_quickly_and_easily_across_devices">Đăng nhập nhanh và dễ dàng giữa các thiết bị</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden có thể thông báo cho bạn mỗi khi bạn nhận được yêu cầu đăng nhập mới từ thiết bị khác.</string>
+  <string name="skip_for_now">Bỏ qua</string>
 </resources>

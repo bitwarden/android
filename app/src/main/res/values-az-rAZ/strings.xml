@@ -1072,12 +1072,17 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="bitwarden_tools">Bitwarden Alətləri</string>
   <string name="got_it">Anladım</string>
   <string name="no_logins_were_imported">Heç bir giriş daxilə köçürülmədi</string>
+  <string name="verified_sso_domain_verified">Doğrulanmış SSO Domen Endpoint</string>
   <string name="logins_imported">Girişlər daxilə köçürüldü</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Kompüterinizdən daxilə köçürdüyünüz parol faylını silməyi unutmayın</string>
   <string name="type_ssh_key">SSH açarı</string>
   <string name="public_key">Public açar</string>
   <string name="private_key">Private açar</string>
   <string name="ssh_keys">SSH açarları</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="copy_public_key">Public açarı kopyala</string>
+  <string name="copy_fingerprint">Barmaq izini kopyala</string>
+  <string name="enable_notifications">Bildirişləri fəallaşdır</string>
+  <string name="log_in_quickly_and_easily_across_devices">Cihazlar arasında cəld və asan giriş et</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden, başqa bir cihazdan yeni bir giriş tələbi aldığınız hər dəfəsində sizi məlumatlandıracaq.</string>
+  <string name="skip_for_now">İndilik ötür</string>
 </resources>
