@@ -1726,7 +1726,6 @@ private fun createMockVaultState(
         baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
         isIconLoadingDisabled = false,
         hasMasterPassword = true,
-        hideNotificationsDialog = true,
         showImportActionCard = true,
         isRefreshing = false,
     )
