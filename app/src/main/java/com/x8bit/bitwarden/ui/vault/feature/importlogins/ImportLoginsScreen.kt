@@ -460,6 +460,7 @@ private fun ImportLoginsStepThreeContent(
             ),
         ),
         onBackClick = onBackClick,
+        ctaText = stringResource(R.string.done_text),
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
         modifier = modifier,

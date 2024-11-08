@@ -40,6 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun ImportLoginsInstructionStep(
     stepText: String,
     stepTitle: String,
+    ctaText: String = stringResource(R.string.continue_text),
     instructions: ImmutableList<InstructionStep>,
     onBackClick: () -> Unit,
     onContinueClick: () -> Unit,
@@ -88,7 +89,7 @@ fun ImportLoginsInstructionStep(
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.continue_text),
+            label = ctaText,
             onClick = onContinueClick,
             modifier = Modifier
                 .fillMaxWidth()
