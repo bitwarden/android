@@ -134,12 +134,10 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),
-                selectedOwnerId = activeAccount.toSelectedOwnerId(
-                    cipherView = currentContentState.common.originalCipher,
-                )
-                    ?: collectionViewList.firstOrNull {
-                        it.id == currentContentState.common.selectedCollectionId
-                    }
+                selectedOwnerId = activeAccount
+                    .toSelectedOwnerId(cipherView = currentContentState.common.originalCipher)
+                    ?: collectionViewList
+                        .firstOrNull { it.id == currentContentState.common.selectedCollectionId }
                         ?.organizationId,
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
