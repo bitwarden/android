@@ -63,7 +63,9 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     @Test
     fun `vault tab click should send VaultTabClick action`() {
-        composeTestRule.onNodeWithText("My vault").performClick()
+        composeTestRule
+            .onNodeWithText("My vault")
+            .performClick()
         verify { viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick) }
     }
 
@@ -120,7 +122,9 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     @Test
     fun `send tab click should send SendTabClick action`() {
-        composeTestRule.onNodeWithText("Send").performClick()
+        composeTestRule
+            .onNodeWithText("Send")
+            .performClick()
         verify { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) }
     }
 
@@ -140,7 +144,9 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     @Test
     fun `generator tab click should send GeneratorTabClick action`() {
-        composeTestRule.onNodeWithText("Generator").performClick()
+        composeTestRule
+            .onNodeWithText("Generator")
+            .performClick()
         verify { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) }
     }
 
@@ -174,7 +180,9 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     @Test
     fun `settings tab click should send SendTabClick action`() {
-        composeTestRule.onNodeWithText("Settings").performClick()
+        composeTestRule
+            .onNodeWithText("Settings")
+            .performClick()
         verify { viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick) }
     }
 
@@ -194,8 +202,12 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     @Test
     fun `vault nav bar should update according to state`() {
-        composeTestRule.onNodeWithText("My vault").assertExists()
-        composeTestRule.onNodeWithText("Vaults").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("My vault")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("Vaults")
+            .assertDoesNotExist()
 
         mutableStateFlow.tryEmit(
             VaultUnlockedNavBarState(
@@ -207,8 +219,12 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithText("My vault").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Vaults").assertExists()
+        composeTestRule
+            .onNodeWithText("My vault")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Vaults")
+            .assertExists()
     }
 
     @Suppress("MaxLineLength")

@@ -107,7 +107,9 @@ fun CipherView.toViewState(
             notes = this.notes.orEmpty(),
             availableOwners = emptyList(),
             hasOrganizations = false,
-            customFieldData = this.fields.orEmpty().map { it.toCustomField() },
+            customFieldData = this.fields
+                .orEmpty()
+                .map { it.toCustomField() },
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
@@ -128,7 +130,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                 selectedFolderId = folderViewList.toSelectedFolderId(
                     cipherView = currentContentState.common.originalCipher,
                 )
-                ?: currentContentState.common.selectedFolderId,
+                    ?: currentContentState.common.selectedFolderId,
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),
@@ -201,11 +203,12 @@ private fun UserState.Account.toAvailableOwners(
     selectedCollectionId: String? = null,
 ): List<VaultAddEditState.Owner> =
     listOfNotNull(
-        VaultAddEditState.Owner(
-            name = email,
-            id = null,
-            collections = emptyList(),
-        )
+        VaultAddEditState
+            .Owner(
+                name = email,
+                id = null,
+                collections = emptyList(),
+            )
             .takeUnless { isIndividualVaultDisabled },
         *organizations
             .map {
@@ -236,25 +239,33 @@ private fun UserState.Account.toAvailableOwners(
 private fun FieldView.toCustomField() =
     when (this.type) {
         FieldType.TEXT -> VaultAddEditState.Custom.TextField(
-            itemId = UUID.randomUUID().toString(),
+            itemId = UUID
+                .randomUUID()
+                .toString(),
             name = this.name.orEmpty(),
             value = this.value.orEmpty(),
         )
 
         FieldType.HIDDEN -> VaultAddEditState.Custom.HiddenField(
-            itemId = UUID.randomUUID().toString(),
+            itemId = UUID
+                .randomUUID()
+                .toString(),
             name = this.name.orEmpty(),
             value = this.value.orEmpty(),
         )
 
         FieldType.BOOLEAN -> VaultAddEditState.Custom.BooleanField(
-            itemId = UUID.randomUUID().toString(),
+            itemId = UUID
+                .randomUUID()
+                .toString(),
             name = this.name.orEmpty(),
             value = this.value.toBoolean(),
         )
 
         FieldType.LINKED -> VaultAddEditState.Custom.LinkedField(
-            itemId = UUID.randomUUID().toString(),
+            itemId = UUID
+                .randomUUID()
+                .toString(),
             name = this.name.orEmpty(),
             vaultLinkedFieldType = fromId(requireNotNull(this.linkedId)),
         )
@@ -291,7 +302,9 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
     if (this.isNullOrEmpty()) {
         listOf(
             UriItem(
-                id = UUID.randomUUID().toString(),
+                id = UUID
+                    .randomUUID()
+                    .toString(),
                 uri = "",
                 match = null,
                 checksum = null,
@@ -300,7 +313,9 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
     } else {
         this.map { loginUriView ->
             UriItem(
-                id = UUID.randomUUID().toString(),
+                id = UUID
+                    .randomUUID()
+                    .toString(),
                 uri = loginUriView.uri,
                 match = loginUriView.match,
                 checksum = loginUriView.uriChecksum,
