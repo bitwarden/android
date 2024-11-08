@@ -487,6 +487,17 @@ private fun ItemListingContent(
                     }
                 }
 
+                if (state.shouldShowLocalHeader) {
+                    item {
+                        BitwardenListHeaderText(
+                            label = stringResource(id = R.string.local_codes),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                        )
+                    }
+                }
+
                 items(state.itemList) {
                     VaultVerificationCodeItem(
                         authCode = it.authCode,

@@ -693,7 +693,21 @@ data class ItemListingState(
             val favoriteItems: List<VerificationCodeDisplayItem>,
             val itemList: List<VerificationCodeDisplayItem>,
             val sharedItems: SharedCodesDisplayState,
-        ) : ViewState()
+        ) : ViewState() {
+
+            /**
+             * Whether or not there should be a "Local codes" header shown above local codes.
+             */
+            val shouldShowLocalHeader
+                get() =
+                    // Only show header if there are shared items
+                    !sharedItems.isEmpty() &&
+                        // And also local items
+                        itemList.isNotEmpty() &&
+                        // But there are no favorite items
+                        // (If there are favorite items, the favorites header will take care of us)
+                        favoriteItems.isEmpty()
+        }
     }
 
     /**
