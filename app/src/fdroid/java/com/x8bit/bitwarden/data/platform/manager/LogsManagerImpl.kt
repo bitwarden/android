@@ -24,4 +24,6 @@ class LogsManagerImpl(
     override fun setUserData(userId: String?, environmentType: Environment.Type) = Unit
 
     override fun trackNonFatalException(throwable: Throwable) = Unit
+
+    override fun trackBreadCrumb(breadCrumbMessage: String) = Unit
 }
