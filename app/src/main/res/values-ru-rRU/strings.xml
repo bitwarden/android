@@ -1075,12 +1075,17 @@
   <string name="bitwarden_tools">Инструменты Bitwarden</string>
   <string name="got_it">Понятно</string>
   <string name="no_logins_were_imported">Ни один логин не был импортирован</string>
+  <string name="verified_sso_domain_verified">Конечная точка домена SSO верифицирована</string>
   <string name="logins_imported">Логины импортированы</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Не забудьте удалить файл импортированных паролей с компьютера</string>
   <string name="type_ssh_key">Ключ SSH</string>
   <string name="public_key">Публичный ключ</string>
   <string name="private_key">Приватный ключ</string>
   <string name="ssh_keys">Ключи SSH</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="copy_public_key">Скопировать публичный ключ</string>
+  <string name="copy_fingerprint">Скопировать отпечаток</string>
+  <string name="enable_notifications">Включить уведомления</string>
+  <string name="log_in_quickly_and_easily_across_devices">Быстро и легко авторизуйтесь на разных устройствах</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden может уведомлять вас каждый раз, когда вы получаете новый запрос на вход с другого устройства.</string>
+  <string name="skip_for_now">Пока пропустить</string>
 </resources>

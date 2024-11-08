@@ -1073,6 +1073,7 @@ Vil du bytte til denne kontoen?</string>
   <string name="bitwarden_tools">Bitwarden Tools</string>
   <string name="got_it">Got it</string>
   <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
   <string name="logins_imported">Logins imported</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
   <string name="type_ssh_key">SSH key</string>
@@ -1081,4 +1082,8 @@ Vil du bytte til denne kontoen?</string>
   <string name="ssh_keys">SSH keys</string>
   <string name="copy_public_key">Copy public key</string>
   <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="enable_notifications">Enable notifications</string>
+  <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
+  <string name="skip_for_now">Skip for now</string>
 </resources>

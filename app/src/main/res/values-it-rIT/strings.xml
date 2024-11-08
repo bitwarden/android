@@ -130,7 +130,7 @@
   <string name="one_hour">1 ora</string>
   <string name="one_minute">1 minuto</string>
   <string name="four_hours">4 ore</string>
-  <string name="immediately">Immediatamente</string>
+  <string name="immediately">Immediato</string>
   <string name="vault_timeout">Blocco automatico della cassaforte</string>
   <string name="vault_timeout_action">Azione programmata</string>
   <string name="vault_timeout_log_out_confirmation">Uscire rimuoverà tutti gli accessi alla tua cassaforte e richiede l\'autenticazione online dopo il periodo di timeout. Sei sicuro di voler usare questa opzione?</string>
@@ -146,7 +146,7 @@
   <string name="min_special">Numero minimo di caratteri speciali</string>
   <string name="more_settings">Altre impostazioni</string>
   <string name="must_log_in_main_app">È necessario accedere all\'app principale di Bitwarden prima di poter utilizzare l\'estensione.</string>
-  <string name="never">Nessuna</string>
+  <string name="never">Nessuno</string>
   <string name="new_item_created">Elemento aggiunto</string>
   <string name="no_favorites">Nessun elemento importante</string>
   <string name="no_items">Nessun elemento</string>
@@ -1013,9 +1013,9 @@ Vuoi passare a questo account?</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
   <string name="get_started">Get started</string>
-  <string name="save_and_protect_your_data">Save and protect your data</string>
-  <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-  <string name="new_login">New login</string>
+  <string name="save_and_protect_your_data">Salva e proteggi i tuoi dati</string>
+  <string name="the_vault_protects_more_than_just_passwords">La cassaforte protegge non solo le password ma anche i login, le identità, le carte e le note in modo sicuro.</string>
+  <string name="new_login">Aggiungi un elemento</string>
   <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
   <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
   <string name="import_saved_logins">Import saved logins</string>
@@ -1072,6 +1072,7 @@ Vuoi passare a questo account?</string>
   <string name="bitwarden_tools">Bitwarden Tools</string>
   <string name="got_it">Got it</string>
   <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
   <string name="logins_imported">Logins imported</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
   <string name="type_ssh_key">SSH key</string>
@@ -1080,4 +1081,8 @@ Vuoi passare a questo account?</string>
   <string name="ssh_keys">SSH keys</string>
   <string name="copy_public_key">Copy public key</string>
   <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="enable_notifications">Enable notifications</string>
+  <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
+  <string name="skip_for_now">Skip for now</string>
 </resources>

@@ -1073,12 +1073,17 @@ Chcete prepnúť na tento účet?</string>
   <string name="bitwarden_tools">Nástroje Bitwardenu</string>
   <string name="got_it">Chápem</string>
   <string name="no_logins_were_imported">Neboli importované žiadne prihlasovacie údaje</string>
+  <string name="verified_sso_domain_verified">Overený koncový bod domény SSO</string>
   <string name="logins_imported">Prihlasovacie údaje boli importované</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Nezabudnite z počítača odstrániť importovaný súbor s heslami</string>
   <string name="type_ssh_key">SSH kľúč</string>
   <string name="public_key">Verejný kľúč</string>
   <string name="private_key">Súkromný kľúč</string>
   <string name="ssh_keys">SSH kľúče</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="copy_public_key">Kopírovať verejný kľúč</string>
+  <string name="copy_fingerprint">Kopírovať odtlačok prsta</string>
+  <string name="enable_notifications">Povoliť upozornenia</string>
+  <string name="log_in_quickly_and_easily_across_devices">Rýchle a jednoduché prihlásenie v rôznych zariadeniach</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden vás môže upozorniť vždy, keď dostanete novú žiadosť o prihlásenie z iného zariadenia.</string>
+  <string name="skip_for_now">Teraz preskočiť</string>
 </resources>
