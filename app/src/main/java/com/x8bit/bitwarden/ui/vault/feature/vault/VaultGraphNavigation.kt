@@ -24,7 +24,7 @@ fun NavGraphBuilder.vaultGraph(
         vaultItemCipherType: VaultItemCipherType,
         selectedFolderId: String?,
         selectedCollectionId: String?,
-        ) -> Unit,
+    ) -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
