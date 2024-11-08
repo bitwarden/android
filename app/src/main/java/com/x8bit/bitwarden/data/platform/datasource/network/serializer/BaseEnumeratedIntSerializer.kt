@@ -10,11 +10,13 @@ import kotlinx.serialization.encoding.Encoder
 
 /**
  * Base [KSerializer] for mapping an [Enum] with possible values given by [values] to/from integer
- * values, which should be specified using [SerialName].
+ * values, which should be specified using [SerialName]. If a [default] value is provided, it will
+ * be used when an unknown value is provided.
  */
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseEnumeratedIntSerializer<T : Enum<T>>(
     private val values: Array<T>,
+    private val default: T? = null,
 ) : KSerializer<T> {
 
     override val descriptor: SerialDescriptor
@@ -25,7 +27,9 @@ abstract class BaseEnumeratedIntSerializer<T : Enum<T>>(
 
     override fun deserialize(decoder: Decoder): T {
         val decodedValue = decoder.decodeInt().toString()
-        return values.first { it.serialNameAnnotation?.value == decodedValue }
+        return values.firstOrNull { it.serialNameAnnotation?.value == decodedValue }
+            ?: default
+            ?: throw IllegalArgumentException("Unknown value $decodedValue")
     }
 
     override fun serialize(encoder: Encoder, value: T) {
