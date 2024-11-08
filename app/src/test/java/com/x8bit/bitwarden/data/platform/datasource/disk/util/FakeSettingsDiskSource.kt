@@ -42,6 +42,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableLastDatabaseSchemeChangeInstant =
+        bufferedMutableSharedFlow<Instant?>()
+
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
@@ -136,6 +139,11 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override var lastDatabaseSchemeChangeInstant: Instant?
         get() = storedLastDatabaseSchemeChangeInstant
         set(value) { storedLastDatabaseSchemeChangeInstant = value }
+
+    override val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
+        get() = mutableLastDatabaseSchemeChangeInstant.onSubscription {
+            emit(lastDatabaseSchemeChangeInstant)
+        }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
