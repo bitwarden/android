@@ -460,8 +460,8 @@ private fun ItemListingContent(
                     items(state.favoriteItems) {
                         VaultVerificationCodeItem(
                             authCode = it.authCode,
-                            primaryLabel = it.issuer,
-                            secondaryLabel = it.label,
+                            primaryLabel = it.title,
+                            secondaryLabel = it.subtitle,
                             periodSeconds = it.periodSeconds,
                             timeLeftSeconds = it.timeLeftSeconds,
                             alertThresholdSeconds = it.alertThresholdSeconds,
@@ -490,8 +490,8 @@ private fun ItemListingContent(
                 items(state.itemList) {
                     VaultVerificationCodeItem(
                         authCode = it.authCode,
-                        primaryLabel = it.issuer,
-                        secondaryLabel = it.label,
+                        primaryLabel = it.title,
+                        secondaryLabel = it.subtitle,
                         periodSeconds = it.periodSeconds,
                         timeLeftSeconds = it.timeLeftSeconds,
                         alertThresholdSeconds = it.alertThresholdSeconds,
@@ -526,8 +526,8 @@ private fun ItemListingContent(
                             section.codes.forEach {
                                 VaultVerificationCodeItem(
                                     authCode = it.authCode,
-                                    primaryLabel = it.issuer,
-                                    secondaryLabel = it.label,
+                                    primaryLabel = it.title,
+                                    secondaryLabel = it.subtitle,
                                     periodSeconds = it.periodSeconds,
                                     timeLeftSeconds = it.timeLeftSeconds,
                                     alertThresholdSeconds = it.alertThresholdSeconds,

@@ -20,7 +20,7 @@ data class VerificationCodeItem(
     val issueTime: Long,
     val id: String,
     val issuer: String?,
-    val accountName: String?,
+    val label: String?,
     val source: AuthenticatorItem.Source,
 ) {
     /**
@@ -29,9 +29,9 @@ data class VerificationCodeItem(
      *  label = issuer (“:” / “%3A”) *”%20” username
      *  ```
      */
-    val label = if (issuer != null) {
-        issuer + accountName?.let { ":$it" }.orEmpty()
+    val otpAuthUriLabel = if (issuer != null) {
+        issuer + label?.let { ":$it" }.orEmpty()
     } else {
-        accountName.orEmpty()
+        label.orEmpty()
     }
 }

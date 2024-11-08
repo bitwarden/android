@@ -13,8 +13,13 @@ fun VerificationCodeItem.toDisplayItem(
     sharedVerificationCodesState: SharedVerificationCodesState,
 ) = VerificationCodeDisplayItem(
     id = id,
-    issuer = issuer,
-    label = accountName,
+    title = issuer ?: label ?: "--",
+    subtitle = if (issuer != null) {
+        // Only show label if it is not being used as the primary title:
+        label
+    } else {
+        null
+    },
     timeLeftSeconds = timeLeftSeconds,
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,

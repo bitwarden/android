@@ -17,8 +17,8 @@ class VerificationCodeItemExtensionsTest {
 
         val expectedFavoriteItem = VerificationCodeDisplayItem(
             id = favoriteItem.id,
-            issuer = favoriteItem.issuer,
-            label = favoriteItem.accountName,
+            title = favoriteItem.issuer!!,
+            subtitle = favoriteItem.label,
             timeLeftSeconds = favoriteItem.timeLeftSeconds,
             periodSeconds = favoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
@@ -30,8 +30,8 @@ class VerificationCodeItemExtensionsTest {
 
         val expectedNonFavoriteItem = VerificationCodeDisplayItem(
             id = nonFavoriteItem.id,
-            issuer = nonFavoriteItem.issuer,
-            label = nonFavoriteItem.accountName,
+            title = nonFavoriteItem.issuer!!,
+            subtitle = nonFavoriteItem.label,
             timeLeftSeconds = nonFavoriteItem.timeLeftSeconds,
             periodSeconds = nonFavoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
@@ -65,8 +65,8 @@ class VerificationCodeItemExtensionsTest {
         val expectedDontShowMoveToBitwardenItem =
             VerificationCodeDisplayItem(
                 id = item.id,
-                issuer = item.issuer,
-                label = item.accountName,
+                title = item.issuer!!,
+                subtitle = item.label,
                 timeLeftSeconds = item.timeLeftSeconds,
                 periodSeconds = item.periodSeconds,
                 alertThresholdSeconds = alertThresholdSeconds,
@@ -146,8 +146,8 @@ class VerificationCodeItemExtensionsTest {
 
         val expectedFavoriteItem = VerificationCodeDisplayItem(
             id = favoriteItem.id,
-            issuer = favoriteItem.issuer,
-            label = favoriteItem.accountName,
+            title = favoriteItem.issuer!!,
+            subtitle = favoriteItem.label,
             timeLeftSeconds = favoriteItem.timeLeftSeconds,
             periodSeconds = favoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,

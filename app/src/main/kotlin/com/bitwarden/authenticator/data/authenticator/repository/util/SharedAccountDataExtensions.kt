@@ -7,8 +7,6 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountData
 
 /**
  * Convert a list of [SharedAccountData.Account] to a list of [AuthenticatorItem].
- *
- * Note that URIs without an issuer query param will be omitted.
  */
 fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorItem> =
     flatMap { sharedAccount ->
@@ -16,11 +14,9 @@ fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorIt
             runCatching {
                 val uri = Uri.parse(totpUriString)
                 val issuer = uri.getQueryParameter(TotpCodeManager.ISSUER_PARAM)
-                    ?: return@mapNotNull null
                 val label = uri.pathSegments
                     .firstOrNull()
-                    .orEmpty()
-                    .removePrefix("$issuer:")
+                    ?.removePrefix("$issuer:")
 
                 AuthenticatorItem(
                     source = AuthenticatorItem.Source.Shared(
@@ -34,6 +30,6 @@ fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorIt
                     label = label,
                 )
             }
-            .getOrNull()
+                .getOrNull()
         }
     }

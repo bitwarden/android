@@ -273,8 +273,8 @@ private const val ALERT_THRESHOLD = 7
 
 private val LOCAL_CODE = VerificationCodeDisplayItem(
     id = "1",
-    issuer = "issuer",
-    label = null,
+    title = "issuer",
+    subtitle = null,
     timeLeftSeconds = 10,
     periodSeconds = 30,
     alertThresholdSeconds = 7,
@@ -289,8 +289,8 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
     codes = listOf(
         VerificationCodeDisplayItem(
             id = "1",
-            issuer = "bitwarden.com",
-            label = "joe+shared_code_1@test.com",
+            title = "bitwarden.com",
+            subtitle = "joe+shared_code_1@test.com",
             timeLeftSeconds = 10,
             periodSeconds = 30,
             alertThresholdSeconds = ALERT_THRESHOLD,

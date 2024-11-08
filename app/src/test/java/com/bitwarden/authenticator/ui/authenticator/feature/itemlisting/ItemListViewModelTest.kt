@@ -449,7 +449,7 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
         issueTime = 35L,
         id = "1",
         issuer = "issuer",
-        accountName = "accountName",
+        label = "accountName",
         source = AuthenticatorItem.Source.Local("1", isFavorite = false),
     ),
     VerificationCodeItem(
@@ -459,7 +459,7 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
         issueTime = 35L,
         id = "1",
         issuer = "issuer",
-        accountName = "accountName",
+        label = "accountName",
         source = AuthenticatorItem.Source.Local("1", isFavorite = true),
     ),
 )
@@ -472,7 +472,7 @@ private val SHARED_VERIFICATION_ITEMS = listOf(
         issueTime = 35L,
         id = "1",
         issuer = "sharedIssue",
-        accountName = "sharedAccountName",
+        label = "sharedAccountName",
         source = AuthenticatorItem.Source.Shared(
             userId = "1",
             nameOfUser = null,

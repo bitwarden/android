@@ -12,7 +12,7 @@ package com.bitwarden.authenticator.data.authenticator.repository.model
 data class AuthenticatorItem(
     val source: Source,
     val otpUri: String,
-    val issuer: String,
+    val issuer: String?,
     val label: String?,
 ) {
 

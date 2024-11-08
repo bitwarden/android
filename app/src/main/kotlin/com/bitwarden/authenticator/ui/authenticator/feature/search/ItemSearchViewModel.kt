@@ -124,8 +124,8 @@ class ItemSearchViewModel @Inject constructor(
                 .groupBy { it.matchedSearch(searchTerm) }
                 .flatMap { (priority, items) ->
                     when (priority) {
-                        SortPriority.HIGH -> items.sortedBy { it.label }
-                        SortPriority.LOW -> items.sortedBy { it.label }
+                        SortPriority.HIGH -> items.sortedBy { it.otpAuthUriLabel }
+                        SortPriority.LOW -> items.sortedBy { it.otpAuthUriLabel }
                         null -> emptyList()
                     }
                 }
@@ -134,7 +134,7 @@ class ItemSearchViewModel @Inject constructor(
     @Suppress("MagicNumber")
     private fun VerificationCodeItem.matchedSearch(searchTerm: String): SortPriority? {
         val term = searchTerm.removeDiacritics()
-        val itemName = label?.removeDiacritics()
+        val itemName = otpAuthUriLabel?.removeDiacritics()
         val itemId = id.takeIf { term.length > 8 }.orEmpty().removeDiacritics()
         val itemIssuer = issuer.orEmpty().removeDiacritics()
         return when {
@@ -176,12 +176,17 @@ class ItemSearchViewModel @Inject constructor(
         ItemSearchState.DisplayItem(
             id = id,
             authCode = code,
-            issuer = issuer,
+            title = issuer ?: label ?: "--",
+            subtitle = if (issuer != null) {
+                // Only show label if it is not being used as the primary title:
+                label
+            } else {
+                null
+            },
             periodSeconds = periodSeconds,
             timeLeftSeconds = timeLeftSeconds,
             alertThresholdSeconds = 7,
             startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
-            label = accountName,
         )
 
     /**
@@ -192,8 +197,8 @@ class ItemSearchViewModel @Inject constructor(
     private fun List<ItemSearchState.DisplayItem>.sortAlphabetically() =
         this.sortedWith { item1, item2 ->
             SpecialCharWithPrecedenceComparator.compare(
-                item1.issuer.orEmpty(),
-                item2.issuer.orEmpty(),
+                item1.title.orEmpty(),
+                item2.title.orEmpty(),
             )
         }
     //endregion Utility Functions
@@ -234,12 +239,12 @@ data class ItemSearchState(
     data class DisplayItem(
         val id: String,
         val authCode: String,
-        val issuer: String?,
+        val title: String,
+        val subtitle: String? = null,
         val periodSeconds: Int,
         val timeLeftSeconds: Int,
         val alertThresholdSeconds: Int,
         val startIcon: IconData,
-        val label: String? = null,
     ) : Parcelable
 }
 
