@@ -115,7 +115,7 @@ fun PendingRequestsScreen(
         isFdroid ||
         isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) ||
         permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS) ||
-        !permissionsManager.shouldShowRequestPermissionRationale(
+        permissionsManager.shouldShowRequestPermissionRationale(
             permission = Manifest.permission.POST_NOTIFICATIONS,
         )
     BitwardenModalBottomSheet(
