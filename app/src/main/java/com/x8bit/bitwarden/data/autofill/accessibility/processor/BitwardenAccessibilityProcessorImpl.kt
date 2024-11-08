@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.processor
 
 import android.content.Context
 import android.os.PowerManager
+import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 import com.x8bit.bitwarden.R
@@ -25,15 +26,18 @@ class BitwardenAccessibilityProcessorImpl(
     private val launcherPackageNameManager: LauncherPackageNameManager,
     private val powerManager: PowerManager,
 ) : BitwardenAccessibilityProcessor {
-    override fun processAccessibilityEvent(rootAccessibilityNodeInfo: AccessibilityNodeInfo?) {
-        val rootNode = rootAccessibilityNodeInfo ?: return
+    override fun processAccessibilityEvent(
+        event: AccessibilityEvent,
+        rootAccessibilityNodeInfoProvider: () -> AccessibilityNodeInfo?,
+    ) {
+        val eventNode = event.source ?: return
         // Ignore the event when the phone is inactive
         if (!powerManager.isInteractive) return
         // We skip if the system package
-        if (rootNode.isSystemPackage) return
+        if (eventNode.isSystemPackage) return
         // We skip any package that is a launcher or unsupported
-        if (rootNode.shouldSkipPackage ||
-            launcherPackageNameManager.launcherPackages.any { it == rootNode.packageName }
+        if (eventNode.shouldSkipPackage ||
+            launcherPackageNameManager.launcherPackages.any { it == eventNode.packageName }
         ) {
             // Clear the action since this event needs to be ignored completely
             accessibilityAutofillManager.accessibilityAction = null
@@ -42,14 +46,19 @@ class BitwardenAccessibilityProcessorImpl(
 
         // Only process the event if the tile was clicked
         val accessibilityAction = accessibilityAutofillManager.accessibilityAction ?: return
+        // We only call for the root node once after all other checks
+        // have passed because it is significant performance hit
+        if (rootAccessibilityNodeInfoProvider()?.packageName != event.packageName) return
+
+        // Clear the action since we are now acting on it
         accessibilityAutofillManager.accessibilityAction = null
 
         when (accessibilityAction) {
             is AccessibilityAction.AttemptFill -> {
-                handleAttemptFill(rootNode = rootNode, attemptFill = accessibilityAction)
+                handleAttemptFill(rootNode = eventNode, attemptFill = accessibilityAction)
             }
 
-            AccessibilityAction.AttemptParseUri -> handleAttemptParseUri(rootNode = rootNode)
+            AccessibilityAction.AttemptParseUri -> handleAttemptParseUri(rootNode = eventNode)
         }
     }
 
