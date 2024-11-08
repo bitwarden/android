@@ -64,7 +64,7 @@ class ManualCodeEntryScreenTest : BaseComposeTest() {
             it.copy(buttonState = ManualCodeEntryState.ButtonState.SaveToBitwardenPrimary)
         }
         composeTestRule
-            .onNodeWithText("Add code to Bitwarden")
+            .onNodeWithText("Save to Bitwarden")
             .performClick()
 
         // Make sure locally only save isn't showing:
@@ -74,7 +74,7 @@ class ManualCodeEntryScreenTest : BaseComposeTest() {
 
         // Make sure locally option is showing:
         composeTestRule
-            .onNodeWithText("Add code locally")
+            .onNodeWithText("Save here")
             .assertIsDisplayed()
 
         verify { viewModel.trySendAction(ManualCodeEntryAction.SaveToBitwardenClick) }
@@ -86,7 +86,7 @@ class ManualCodeEntryScreenTest : BaseComposeTest() {
             it.copy(buttonState = ManualCodeEntryState.ButtonState.SaveLocallyPrimary)
         }
         composeTestRule
-            .onNodeWithText("Add code locally")
+            .onNodeWithText("Save here")
             .performClick()
 
         // Make sure locally only save isn't showing:
@@ -96,7 +96,7 @@ class ManualCodeEntryScreenTest : BaseComposeTest() {
 
         // Make sure save to bitwarden option is showing:
         composeTestRule
-            .onNodeWithText("Add code to Bitwarden")
+            .onNodeWithText("Save to Bitwarden")
             .assertIsDisplayed()
 
         verify { viewModel.trySendAction(ManualCodeEntryAction.SaveLocallyClick) }

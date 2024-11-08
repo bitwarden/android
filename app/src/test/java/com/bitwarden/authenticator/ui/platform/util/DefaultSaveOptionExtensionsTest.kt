@@ -13,7 +13,7 @@ class DefaultSaveOptionExtensionsTest {
         DefaultSaveOption.entries.forEach {
             val expected = when (it) {
                 DefaultSaveOption.BITWARDEN_APP -> R.string.save_to_bitwarden.asText()
-                DefaultSaveOption.LOCAL -> R.string.save_locally.asText()
+                DefaultSaveOption.LOCAL -> R.string.save_here.asText()
                 DefaultSaveOption.NONE -> R.string.none.asText()
             }
             assertEquals(

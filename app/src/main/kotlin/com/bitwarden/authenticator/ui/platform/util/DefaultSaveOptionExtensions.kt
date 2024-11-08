@@ -11,6 +11,6 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.Defau
 val DefaultSaveOption.displayLabel: Text
     get() = when (this) {
         DefaultSaveOption.NONE -> R.string.none.asText()
-        DefaultSaveOption.LOCAL -> R.string.save_locally.asText()
+        DefaultSaveOption.LOCAL -> R.string.save_here.asText()
         DefaultSaveOption.BITWARDEN_APP -> R.string.save_to_bitwarden.asText()
     }

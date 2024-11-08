@@ -108,7 +108,7 @@ fun ChooseSaveLocationDialog(
                 BitwardenTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
-                    label = stringResource(R.string.take_me_to_bitwarden),
+                    label = stringResource(R.string.save_to_bitwarden),
                     labelTextColor = MaterialTheme.colorScheme.primary,
                     onClick = { onTakeMeToBitwardenClick.invoke(isSaveAsDefaultChecked) },
                 )

@@ -43,14 +43,14 @@ fun SaveManualCodeButtons(
         ManualCodeEntryState.ButtonState.SaveLocallyPrimary -> {
             Column {
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.add_code_locally),
+                    label = stringResource(id = R.string.save_here),
                     onClick = onSaveLocallyClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
                 BitwardenOutlinedButton(
-                    label = stringResource(R.string.add_code_to_bitwarden),
+                    label = stringResource(R.string.save_to_bitwarden),
                     onClick = onSaveToBitwardenClick,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -62,14 +62,14 @@ fun SaveManualCodeButtons(
         ManualCodeEntryState.ButtonState.SaveToBitwardenPrimary -> {
             Column {
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.add_code_to_bitwarden),
+                    label = stringResource(id = R.string.save_to_bitwarden),
                     onClick = onSaveToBitwardenClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
                 BitwardenOutlinedButton(
-                    label = stringResource(R.string.add_code_locally),
+                    label = stringResource(R.string.save_here),
                     onClick = onSaveLocallyClick,
                     modifier = Modifier
                         .fillMaxWidth()
