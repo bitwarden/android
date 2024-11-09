@@ -1073,12 +1073,17 @@
   <string name="bitwarden_tools">Инструменти на Битуорден</string>
   <string name="got_it">Разбрано</string>
   <string name="no_logins_were_imported">Не бяха внесени никакви елементи за вписване</string>
+  <string name="verified_sso_domain_verified">Потвърден адрес на домейн за еднократно удостоверяване</string>
   <string name="logins_imported">Данните за вписване са внесени</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Не забравяйте да изтриете файла с паролите за внасяне от компютъра си</string>
   <string name="type_ssh_key">SSH ключ</string>
   <string name="public_key">Публичен ключ</string>
   <string name="private_key">Частен ключ</string>
   <string name="ssh_keys">SSH ключове</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
+  <string name="copy_public_key">Копиране на публичния ключ</string>
+  <string name="copy_fingerprint">Копиране на отпечатъка</string>
+  <string name="enable_notifications">Включване на известията</string>
+  <string name="log_in_quickly_and_easily_across_devices">Вписввайте се бързо и лесно на всяко устройство</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Битуорден може да Ви известява всеки път, когато получите нова заявка за вписване от друго устройство.</string>
+  <string name="skip_for_now">Пропускане засега</string>
 </resources>

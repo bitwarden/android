@@ -1072,6 +1072,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="bitwarden_tools">Bitwarden Araçları</string>
   <string name="got_it">Anladım</string>
   <string name="no_logins_were_imported">Hiç hesap aktarılmadı</string>
+  <string name="verified_sso_domain_verified">Doğrulanmış SSO Alan Adı Uç Noktası</string>
   <string name="logins_imported">Hesaplar içe aktarıldı</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">İçe aktardığınız parola dosyasını bilgisayarınızdan silmeyi unutmayın</string>
   <string name="type_ssh_key">SSH anahtarı</string>
@@ -1080,4 +1081,8 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="ssh_keys">SSH anahtarları</string>
   <string name="copy_public_key">Ortak anahtarı kopyala</string>
   <string name="copy_fingerprint">Parmak izini kopyala</string>
+  <string name="enable_notifications">Bildirimleri etkinleştir</string>
+  <string name="log_in_quickly_and_easily_across_devices">Farklı cihazlarda hızlıca ve kolayca oturum açın</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Başka bir cihazdan yeni bir giriş isteği aldığınızda Bitwarden size bildirim gönderebilir.</string>
+  <string name="skip_for_now">Şimdilik geç</string>
 </resources>
