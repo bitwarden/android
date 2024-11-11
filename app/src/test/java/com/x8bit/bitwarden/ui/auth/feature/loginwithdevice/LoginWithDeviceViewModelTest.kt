@@ -524,23 +524,17 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on createAuthRequestWithUpdates with OTHER_DEVICE, Declined received should show error dialog`() {
-        val viewModel = createViewModel()
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = "",
-                    isResendNotificationLoading = false,
-                ),
-                dialogState = LoginWithDeviceState.DialogState.Error(
-                    title = null,
-                    message = R.string.this_request_is_no_longer_valid.asText(),
-                ),
+    fun `on createAuthRequestWithUpdates with OTHER_DEVICE, Declined received should show unchanged content`() {
+        val initialState = DEFAULT_STATE.copy(
+            loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
+            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
             ),
-            viewModel.stateFlow.value,
         )
+        val viewModel = createViewModel(state = initialState)
+        assertEquals(initialState, viewModel.stateFlow.value)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
+        assertEquals(initialState, viewModel.stateFlow.value)
     }
 
     @Suppress("MaxLineLength")
