@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.core
 
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -10,14 +11,14 @@ import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET
 
-class ResultCallAdapterTest {
+class NetworkResultCallAdapterTest {
 
     private val server: MockWebServer = MockWebServer().apply { start() }
     private val testService: FakeService =
         Retrofit.Builder()
             .baseUrl(server.url("/").toString())
             // add the adapter being tested
-            .addCallAdapterFactory(ResultCallAdapterFactory())
+            .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .build()
             .create()
 
@@ -30,14 +31,14 @@ class ResultCallAdapterTest {
     fun `when server returns error response code result should be failure`() = runBlocking {
         server.enqueue(MockResponse().setResponseCode(500))
         val result = testService.requestWithUnitData()
-        assertTrue(result.isFailure)
+        assertTrue(result is NetworkResult.Failure)
     }
 
     @Test
     fun `when server returns successful response result should be success`() = runBlocking {
         server.enqueue(MockResponse())
         val result = testService.requestWithUnitData()
-        assertTrue(result.isSuccess)
+        assertTrue(result is NetworkResult.Success)
     }
 }
 
@@ -46,5 +47,5 @@ class ResultCallAdapterTest {
  */
 private interface FakeService {
     @GET("/fake")
-    suspend fun requestWithUnitData(): Result<Unit>
+    suspend fun requestWithUnitData(): NetworkResult<Unit>
 }

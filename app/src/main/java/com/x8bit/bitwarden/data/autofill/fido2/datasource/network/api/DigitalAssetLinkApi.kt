@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.api
 
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import retrofit2.http.GET
 import retrofit2.http.Url
 
@@ -15,5 +16,5 @@ interface DigitalAssetLinkApi {
     @GET
     suspend fun getDigitalAssetLinks(
         @Url url: String,
-    ): Result<List<DigitalAssetLinkResponseJson>>
+    ): NetworkResult<List<DigitalAssetLinkResponseJson>>
 }
