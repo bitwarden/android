@@ -20,7 +20,6 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
-import com.x8bit.bitwarden.data.platform.util.AuthenticatorBridgeException
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
@@ -97,7 +96,7 @@ class AuthenticatorBridgeProcessorImpl(
         override fun syncAccounts() {
             val symmetricEncryptionKey = symmetricEncryptionKeyData ?: run {
                 Timber.e(
-                    t = AuthenticatorBridgeException(),
+                    t = IllegalStateException(),
                     message = "Unable to sync accounts when symmetricEncryptionKeyData is null.",
                 )
                 return
@@ -120,7 +119,7 @@ class AuthenticatorBridgeProcessorImpl(
         override fun startAddTotpLoginItemFlow(data: EncryptedAddTotpLoginItemData): Boolean {
             val symmetricEncryptionKey = symmetricEncryptionKeyData ?: run {
                 Timber.e(
-                    t = AuthenticatorBridgeException(),
+                    t = IllegalStateException(),
                     message = "Unable to start add TOTP item flow when " +
                         "symmetricEncryptionKeyData is null.",
                 )
@@ -130,7 +129,7 @@ class AuthenticatorBridgeProcessorImpl(
             val totpData = data.decrypt(symmetricEncryptionKey)
                 .onFailure {
                     Timber.e(
-                        t = AuthenticatorBridgeException(),
+                        t = IllegalStateException(),
                         message = "Unable to decrypt TOTP data.",
                     )
                 }
@@ -140,7 +139,7 @@ class AuthenticatorBridgeProcessorImpl(
                 ?.getTotpDataOrNull()
                 ?: run {
                     Timber.e(
-                        t = AuthenticatorBridgeException(),
+                        t = IllegalStateException(),
                         message = "Unable to parse TOTP URI.",
                     )
                     return false
