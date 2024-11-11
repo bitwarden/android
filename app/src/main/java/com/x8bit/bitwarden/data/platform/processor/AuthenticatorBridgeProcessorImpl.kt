@@ -128,10 +128,8 @@ class AuthenticatorBridgeProcessorImpl(
             val intent = createAddTotpItemFromAuthenticatorIntent(context = applicationContext)
             val totpData = data.decrypt(symmetricEncryptionKey)
                 .onFailure {
-                    Timber.e(
-                        t = IllegalStateException(),
-                        message = "Unable to decrypt TOTP data.",
-                    )
+                    Timber.e(t = it, message = "Unable to decrypt TOTP data.")
+                    return false
                 }
                 .getOrNull()
                 ?.totpUri
