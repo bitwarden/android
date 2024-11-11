@@ -116,11 +116,11 @@ class LoginWithDeviceViewModel @Inject constructor(
                         ),
                         dialogState = null,
                         loginData = LoginWithDeviceState.LoginData(
-                            accessCode = result.authRequestResponse.accessCode,
+                            accessCode = result.accessCode,
                             requestId = result.authRequest.id,
                             masterPasswordHash = result.authRequest.masterPasswordHash,
                             asymmetricalKey = requireNotNull(result.authRequest.key),
-                            privateKey = result.authRequestResponse.privateKey,
+                            privateKey = result.privateKey,
                             captchaToken = null,
                         ),
                     )

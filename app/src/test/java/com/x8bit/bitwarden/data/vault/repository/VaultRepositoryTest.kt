@@ -344,7 +344,14 @@ class VaultRepositoryTest {
                 DataState.Loaded(createMockDomainsData(number = 1)),
                 domainsStateFlow.awaitItem(),
             )
+
             setVaultToUnlocked(userId = userId)
+
+            ciphersFlow.tryEmit(listOf(createMockCipher(number = 1)))
+            collectionsFlow.tryEmit(listOf(createMockCollection(number = 1)))
+            foldersFlow.tryEmit(listOf(createMockFolder(number = 1)))
+            sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
+            domainsFlow.tryEmit(createMockDomains(number = 1))
 
             assertEquals(
                 DataState.Loaded(listOf(createMockCipherView(number = 1))),
@@ -487,7 +494,7 @@ class VaultRepositoryTest {
                 assertEquals(DataState.Loading, collectionsStateFlow.awaitItem())
                 assertEquals(DataState.Loading, foldersStateFlow.awaitItem())
                 assertEquals(DataState.Loading, sendsStateFlow.awaitItem())
-                assertEquals(DataState.Loading, domainsStateFlow.awaitItem())
+                domainsStateFlow.expectNoEvents()
             }
         }
 
@@ -1807,6 +1814,9 @@ class VaultRepositoryTest {
                 settingsDiskSource.getLastSyncTime(userId = userId)
             } returns clock.instant()
 
+            mutableVaultStateFlow.update {
+                listOf(VaultUnlockData(userId, VaultUnlockData.Status.UNLOCKED))
+            }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             setupEmptyDecryptionResults()
             setupVaultDiskSourceFlows(
@@ -1963,6 +1973,7 @@ class VaultRepositoryTest {
             expectNoEvents()
             setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
 
+            sendsFlow.tryEmit(emptyList())
             assertEquals(DataState.Loaded<SendView?>(null), awaitItem())
             sendsFlow.tryEmit(listOf(createMockSend(number = sendId)))
             assertEquals(DataState.Loaded<SendView?>(sendView), awaitItem())
@@ -4596,6 +4607,14 @@ class VaultRepositoryTest {
      */
     private fun setVaultToUnlocked(userId: String) {
         mutableUnlockedUserIdsStateFlow.update { it + userId }
+        mutableVaultStateFlow.tryEmit(
+            listOf(
+                VaultUnlockData(
+                    userId,
+                    VaultUnlockData.Status.UNLOCKED,
+                ),
+            ),
+        )
     }
 
     /**

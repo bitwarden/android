@@ -14,9 +14,16 @@ inline fun <T, R> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> =
 
 /**
  * Returns the given receiver of type [T] as a "success" [Result].
+ *
+ * Note that this will never double wrap the `Result` and we return the original value if [T] is
+ * already an instance of `Result`
  */
-fun <T> T.asSuccess(): Result<T> =
+fun <T> T.asSuccess(): Result<T> = if (this is Result<*>) {
+    @Suppress("UNCHECKED_CAST")
+    this as Result<T>
+} else {
     Result.success(this)
+}
 
 /**
  * Returns the given [Throwable] as a "failure" [Result].

@@ -190,12 +190,14 @@ class MainViewModel @Inject constructor(
     private fun handleAccessibilitySelectionReceive(
         action: MainAction.Internal.AccessibilitySelectionReceive,
     ) {
+        specialCircumstanceManager.specialCircumstance = null
         sendEvent(MainEvent.CompleteAccessibilityAutofill(cipherView = action.cipherView))
     }
 
     private fun handleAutofillSelectionReceive(
         action: MainAction.Internal.AutofillSelectionReceive,
     ) {
+        specialCircumstanceManager.specialCircumstance = null
         sendEvent(MainEvent.CompleteAutofill(cipherView = action.cipherView))
     }
 

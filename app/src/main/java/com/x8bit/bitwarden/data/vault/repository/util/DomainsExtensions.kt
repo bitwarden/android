@@ -6,14 +6,14 @@ import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 /**
  * Map the API [Domains] model to the internal [DomainsData] model.
  */
-fun Domains.toDomainsData(): DomainsData {
+fun Domains?.toDomainsData(): DomainsData {
     val globalEquivalentDomains = this
-        .globalEquivalentDomains
+        ?.globalEquivalentDomains
         ?.map { it.toInternalModel() }
         .orEmpty()
 
     return DomainsData(
-        equivalentDomains = this.equivalentDomains.orEmpty(),
+        equivalentDomains = this?.equivalentDomains.orEmpty(),
         globalEquivalentDomains = globalEquivalentDomains,
     )
 }

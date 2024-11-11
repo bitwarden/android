@@ -534,6 +534,13 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleAddVaultItemClick() {
         val event = when (val itemListingType = state.itemListingType) {
+            is VaultItemListingState.ItemListingType.Vault.Folder -> {
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = itemListingType.toVaultItemCipherType(),
+                    selectedFolderId = itemListingType.folderId,
+                )
+            }
+
             is VaultItemListingState.ItemListingType.Vault -> {
                 VaultItemListingEvent.NavigateToAddVaultItem(
                     vaultItemCipherType = itemListingType.toVaultItemCipherType(),
@@ -2089,7 +2096,7 @@ data class VaultItemListingState(
                     get() = folderId
                         ?.let { folderName.asText() }
                         ?: R.string.folder_none.asText()
-                override val hasFab: Boolean get() = false
+                override val hasFab: Boolean get() = true
             }
 
             /**
@@ -2150,6 +2157,7 @@ sealed class VaultItemListingEvent {
      */
     data class NavigateToAddVaultItem(
         val vaultItemCipherType: VaultItemCipherType,
+        val selectedFolderId: String? = null,
     ) : VaultItemListingEvent()
 
     /**
