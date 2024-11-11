@@ -45,6 +45,8 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -80,6 +82,8 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -108,6 +112,8 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -136,6 +142,8 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -170,6 +178,8 @@ class CipherViewExtensionsTest {
                 totpCode = "testCode",
             ),
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -194,6 +204,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -216,6 +228,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -237,6 +251,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -268,6 +284,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -304,6 +322,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -342,6 +362,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         assertEquals(
@@ -364,6 +386,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
 
         val expectedState = VaultItemState.ViewState.Content(
@@ -384,6 +408,8 @@ class CipherViewExtensionsTest {
             hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
+            canDelete = true,
+            canAssignToCollections = true,
         )
         assertEquals(
             VaultItemState.ViewState.Content(

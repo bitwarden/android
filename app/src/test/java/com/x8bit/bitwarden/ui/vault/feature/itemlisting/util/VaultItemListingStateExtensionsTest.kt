@@ -130,6 +130,7 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Login,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
             VaultItemListingState.ItemListingType.Vault.SshKey,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId"),
         )
 
         val result = itemListingTypes.map { it.toVaultItemCipherType() }
@@ -142,6 +143,7 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.SSH_KEY,
+                VaultItemCipherType.LOGIN,
             ),
             result,
         )
@@ -149,15 +151,8 @@ class VaultItemListingStateExtensionsTest {
 
     @Test
     fun `toVaultItemCipherType should throw an exception for unsupported ItemListingTypes`() {
-        val itemListingTypes = listOf(
-            VaultItemListingState.ItemListingType.Vault.Trash,
-            VaultItemListingState.ItemListingType.Vault.Folder(
-                folderId = "mockId",
-            ),
-        )
-
-        itemListingTypes.forEach {
-            assertThrows<IllegalStateException> { it.toVaultItemCipherType() }
+        assertThrows<IllegalStateException> {
+            VaultItemListingState.ItemListingType.Vault.Trash.toVaultItemCipherType()
         }
     }
 }

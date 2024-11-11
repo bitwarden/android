@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.io.File
 import java.time.Clock
@@ -82,7 +84,7 @@ class IntentManagerImpl(
     override fun startActivity(intent: Intent) {
         try {
             context.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             // no-op
         }
     }
@@ -115,7 +117,7 @@ class IntentManagerImpl(
                 }
             context.startActivity(intent)
             true
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             false
         }
 
@@ -132,12 +134,28 @@ class IntentManagerImpl(
     }
 
     override fun launchUri(uri: Uri) {
-        val newUri = if (uri.scheme == null) {
-            uri.buildUpon().scheme("https").build()
+        if (uri.scheme.equals(other = "androidapp", ignoreCase = true)) {
+            val packageName = uri.toString().removePrefix(prefix = "androidapp://")
+            if (isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU)) {
+                startActivity(createPlayStoreIntent(packageName))
+            } else {
+                try {
+                    context
+                        .packageManager
+                        .getLaunchIntentSenderForPackage(packageName)
+                        .sendIntent(context, Activity.RESULT_OK, null, null, null)
+                } catch (_: IntentSender.SendIntentException) {
+                    startActivity(createPlayStoreIntent(packageName))
+                }
+            }
         } else {
-            uri.normalizeScheme()
+            val newUri = if (uri.scheme == null) {
+                uri.buildUpon().scheme("https").build()
+            } else {
+                uri.normalizeScheme()
+            }
+            startActivity(Intent(Intent.ACTION_VIEW, newUri))
         }
-        startActivity(Intent(Intent.ACTION_VIEW, newUri))
     }
 
     override fun shareText(text: String) {
@@ -299,6 +317,15 @@ class IntentManagerImpl(
         intent.addCategory(Intent.CATEGORY_APP_EMAIL)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    private fun createPlayStoreIntent(packageName: String): Intent {
+        val playStoreUri = "https://play.google.com/store/apps/details"
+            .toUri()
+            .buildUpon()
+            .appendQueryParameter("id", packageName)
+            .build()
+        return Intent(Intent.ACTION_VIEW, playStoreUri)
     }
 
     private fun getCameraFileData(): IntentManager.FileData {

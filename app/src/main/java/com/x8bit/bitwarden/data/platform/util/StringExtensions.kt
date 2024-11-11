@@ -56,6 +56,7 @@ fun String.getWebHostFromAndroidUriOrNull(): String? =
 fun String.getDomainOrNull(resourceCacheManager: ResourceCacheManager): String? =
     this
         .toUriOrNull()
+        ?.addSchemeToUriIfNecessary()
         ?.parseDomainOrNull(resourceCacheManager = resourceCacheManager)
 
 /**
@@ -63,7 +64,10 @@ fun String.getDomainOrNull(resourceCacheManager: ResourceCacheManager): String? 
  */
 @OmitFromCoverage
 fun String.hasPort(): Boolean {
-    val uri = this.toUriOrNull() ?: return false
+    val uri = this
+        .toUriOrNull()
+        ?.addSchemeToUriIfNecessary()
+        ?: return false
     return uri.port != -1
 }
 
@@ -71,14 +75,19 @@ fun String.hasPort(): Boolean {
  * Extract the host from this [String] if possible, otherwise return null.
  */
 @OmitFromCoverage
-fun String.getHostOrNull(): String? = this.toUriOrNull()?.host
+fun String.getHostOrNull(): String? = this.toUriOrNull()
+    ?.addSchemeToUriIfNecessary()
+    ?.host
 
 /**
  * Extract the host with optional port from this [String] if possible, otherwise return null.
  */
 @OmitFromCoverage
 fun String.getHostWithPortOrNull(): String? {
-    val uri = this.toUriOrNull() ?: return null
+    val uri = this
+        .toUriOrNull()
+        ?.addSchemeToUriIfNecessary()
+        ?: return null
     return uri.host?.let { host ->
         val port = uri.port
         if (port != -1) {

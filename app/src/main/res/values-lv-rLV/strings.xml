@@ -1055,7 +1055,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="then_done_highlight">tad \"Darīts\"</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Drošības dēļ jānodrošina, ka paroļu datne tiek izdzēsta.</string>
   <string name="delete_your_saved_password_file">jāizdzēš sava salgabātā paroļu datne.</string>
-  <string name="need_help_checkout_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
+  <string name="need_help_check_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
   <string name="import_help_highlight">ievietošanas palīdzība</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Izgūtā datne jāsaglabā kaut kur viegli atrodamā vietā datorā.</string>
   <string name="save_the_exported_file_highlight">Izgūtā datne jāsaglabā</string>
@@ -1073,4 +1073,17 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="bitwarden_tools">Bitwarden rīki</string>
   <string name="got_it">Sapratu</string>
   <string name="no_logins_were_imported">Netika ievietots neviens pieteikšanās vienums</string>
+  <string name="verified_sso_domain_verified">Apliecināts SSO domēna galamērķis</string>
+  <string name="logins_imported">Pieteikšanās vienumi ievietoti</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Jāatceras datorā izdzēst savu ievietoto paroļu datni</string>
+  <string name="type_ssh_key">SSH atslēga</string>
+  <string name="public_key">Publiskā atslēga</string>
+  <string name="private_key">Privātā atslēga</string>
+  <string name="ssh_keys">SSH atslēgas</string>
+  <string name="copy_public_key">Ievietot starpliktuvē publisko atslēgu</string>
+  <string name="copy_fingerprint">Ievietot starpliktuvē pirkstu nospiedumu</string>
+  <string name="enable_notifications">Iespējot paziņojumus</string>
+  <string name="log_in_quickly_and_easily_across_devices">Ātra un viegla pieteikšanās dažādās ierīcēs</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden var paziņot par katru reizi, kad tiek saņemts jauns pieteikšanās pieprasījums no citas ierīces.</string>
+  <string name="skip_for_now">Pagaidām izlaist</string>
 </resources>

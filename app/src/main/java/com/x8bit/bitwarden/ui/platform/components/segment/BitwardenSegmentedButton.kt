@@ -29,6 +29,7 @@ fun BitwardenSegmentedButton(
     options: ImmutableList<SegmentedButtonState>,
     modifier: Modifier = Modifier,
 ) {
+    if (options.isEmpty()) return
     Box(
         modifier = modifier
             .background(color = BitwardenTheme.colorScheme.background.secondary)

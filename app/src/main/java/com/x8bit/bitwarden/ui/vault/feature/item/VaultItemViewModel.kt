@@ -82,7 +82,8 @@ class VaultItemViewModel @Inject constructor(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
             vaultRepository.getAuthCodeFlow(state.vaultItemId),
-        ) { cipherViewState, userState, authCodeState ->
+            vaultRepository.collectionsStateFlow,
+        ) { cipherViewState, userState, authCodeState, collectionsState ->
             val totpCodeData = authCodeState.data?.let {
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
@@ -96,14 +97,41 @@ class VaultItemViewModel @Inject constructor(
                 vaultDataState = combineDataStates(
                     cipherViewState,
                     authCodeState,
-                ) { _, _ ->
+                    collectionsState,
+                ) { _, _, _ ->
                     // We are only combining the DataStates to know the overall state,
                     // we map it to the appropriate value below.
                 }
                     .mapNullable {
+                        // Deletion is not allowed when the item is in a collection that the user
+                        // does not have "manage" permission for.
+                        val canDelete = collectionsState.data
+                            ?.none {
+                                val itemIsInCollection = cipherViewState.data
+                                    ?.collectionIds
+                                    ?.contains(it.id) == true
+
+                                itemIsInCollection && !it.manage
+                            }
+                            ?: true
+
+                        // Assigning to a collection is not allowed when the item is in a collection
+                        // that the user does not have "manage" and "edit" permission for.
+                        val canAssignToCollections = collectionsState.data
+                            ?.none {
+                                val itemIsInCollection = cipherViewState.data
+                                    ?.collectionIds
+                                    ?.contains(it.id) == true
+
+                                itemIsInCollection && !it.manage && it.readOnly
+                            }
+                            ?: true
+
                         VaultItemStateData(
                             cipher = cipherViewState.data,
                             totpCodeItemData = totpCodeData,
+                            canDelete = canDelete,
+                            canAssociateToCollections = canAssignToCollections,
                         )
                     },
             )
@@ -915,6 +943,8 @@ class VaultItemViewModel @Inject constructor(
             isPremiumUser = account.isPremium,
             hasMasterPassword = account.hasMasterPassword,
             totpCodeItemData = this.data?.totpCodeItemData,
+            canDelete = this.data?.canDelete == true,
+            canAssignToCollections = this.data?.canAssociateToCollections == true,
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1154,6 +1184,20 @@ data class VaultItemState(
             ?: false
 
     /**
+     * Whether or not the cipher can be deleted.
+     */
+    val canDelete: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canDelete == true
+
+    val canAssignToCollections: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canAssignToCollections
+            ?: false
+
+    /**
      * The text to display on the deletion confirmation dialog.
      */
     val deletionConfirmationText: Text
@@ -1204,6 +1248,10 @@ data class VaultItemState(
              * @property requiresCloneConfirmation Indicates user confirmation is required when
              * cloning a cipher.
              * @property currentCipher The cipher that is currently being viewed (nullable).
+             * @property attachments A list of attachments associated with the cipher.
+             * @property canDelete Indicates if the cipher can be deleted.
+             * @property canAssignToCollections Indicates if the cipher can be assigned to
+             * collections.
              */
             @Parcelize
             data class Common(
@@ -1216,6 +1264,8 @@ data class VaultItemState(
                 @IgnoredOnParcel
                 val currentCipher: CipherView? = null,
                 val attachments: List<AttachmentItem>?,
+                val canDelete: Boolean,
+                val canAssignToCollections: Boolean,
             ) : Parcelable {
 
                 /**

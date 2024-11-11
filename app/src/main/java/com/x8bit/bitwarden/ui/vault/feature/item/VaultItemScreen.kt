@@ -163,7 +163,7 @@ fun VaultItemScreen(
                     { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
                 },
                 actions = {
-                    if (state.isCipherDeleted) {
+                    if (state.isCipherDeleted && state.canDelete) {
                         BitwardenTextButton(
                             label = stringResource(id = R.string.restore),
                             onClick = remember(viewModel) {
@@ -216,7 +216,10 @@ fun VaultItemScreen(
                                     }
                                 },
                             )
-                                .takeIf { state.isCipherInCollection },
+                                .takeIf {
+                                    state.isCipherInCollection &&
+                                        state.canAssignToCollections
+                                },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
                                 onClick = remember(viewModel) {
@@ -226,7 +229,8 @@ fun VaultItemScreen(
                                         )
                                     }
                                 },
-                            ),
+                            )
+                                .takeIf { state.canDelete },
                         ),
                     )
                 },

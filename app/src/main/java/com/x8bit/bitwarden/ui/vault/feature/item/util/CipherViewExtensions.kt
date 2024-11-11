@@ -32,13 +32,15 @@ private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 /**
  * Transforms [VaultData] into [VaultState.ViewState].
  */
-@Suppress("CyclomaticComplexMethod", "LongMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod", "LongParameterList")
 fun CipherView.toViewState(
     previousState: VaultItemState.ViewState.Content?,
     isPremiumUser: Boolean,
     hasMasterPassword: Boolean,
     totpCodeItemData: TotpCodeItemData?,
     clock: Clock = Clock.systemDefaultZone(),
+    canDelete: Boolean,
+    canAssignToCollections: Boolean,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -79,6 +81,8 @@ fun CipherView.toViewState(
                     }
                 }
                 .orEmpty(),
+            canDelete = canDelete,
+            canAssignToCollections = canAssignToCollections,
         ),
         type = when (type) {
             CipherType.LOGIN -> {

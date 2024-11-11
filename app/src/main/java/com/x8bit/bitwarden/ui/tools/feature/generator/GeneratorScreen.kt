@@ -67,6 +67,20 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.CatchAllEmailHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.ForwardedEmailAliasHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.PassphraseHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.PasswordHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.PlusAddressedEmailHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.RandomWordHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.UsernameTypeHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberCatchAllEmailHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberForwardedEmailAliasHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPassphraseHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPasswordHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPlusAddressedEmailHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberRandomWordHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberUsernameTypeHandlers
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -135,47 +149,26 @@ fun GeneratorScreen(
         remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
-                        it,
-                    ),
+                    GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it),
                 )
             }
         }
 
-    val passwordHandlers = remember(viewModel) {
-        PasswordHandlers.create(viewModel = viewModel)
-    }
-
-    val passphraseHandlers = remember(viewModel) {
-        PassphraseHandlers.create(viewModel = viewModel)
-    }
-
-    val usernameTypeHandlers = remember(viewModel) {
-        UsernameTypeHandlers.create(viewModel = viewModel)
-    }
-
-    val forwardedEmailAliasHandlers = remember(viewModel) {
-        ForwardedEmailAliasHandlers.create(viewModel = viewModel)
-    }
-
-    val plusAddressedEmailHandlers = remember(viewModel) {
-        PlusAddressedEmailHandlers.create(viewModel = viewModel)
-    }
-
-    val catchAllEmailHandlers = remember(viewModel) {
-        CatchAllEmailHandlers.create(viewModel = viewModel)
-    }
-
-    val randomWordHandlers = remember(viewModel) {
-        RandomWordHandlers.create(viewModel = viewModel)
-    }
+    val passwordHandlers = rememberPasswordHandlers(viewModel)
+    val passphraseHandlers = rememberPassphraseHandlers(viewModel)
+    val usernameTypeHandlers = rememberUsernameTypeHandlers(viewModel)
+    val forwardedEmailAliasHandlers = rememberForwardedEmailAliasHandlers(viewModel)
+    val plusAddressedEmailHandlers = rememberPlusAddressedEmailHandlers(viewModel)
+    val catchAllEmailHandlers = rememberCatchAllEmailHandlers(viewModel)
+    val randomWordHandlers = rememberRandomWordHandlers(viewModel)
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         topBar = {
-            when (state.generatorMode) {
+            when (val generatorMode = state.generatorMode) {
                 is GeneratorMode.Modal -> {
                     ModalAppBar(
+                        generatorMode = generatorMode,
                         scrollBehavior = scrollBehavior,
                         onCloseClick = remember(viewModel) {
                             { viewModel.trySendAction(GeneratorAction.CloseClick) }
@@ -202,16 +195,14 @@ fun GeneratorScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            if (state.generatorMode == GeneratorMode.Default) {
-                MainStateOptionsItem(
-                    selectedType = state.selectedType,
-                    passcodePolicyOverride = state.passcodePolicyOverride,
-                    possibleMainStates = state.typeOptions.toImmutableList(),
-                    onMainStateOptionClicked = onMainStateOptionClicked,
-                    modifier = Modifier
-                        .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
-                )
-            }
+            MainStateOptionsItem(
+                selectedType = state.selectedType,
+                passcodePolicyOverride = state.passcodePolicyOverride,
+                possibleMainStates = state.typeOptions.toImmutableList(),
+                onMainStateOptionClicked = onMainStateOptionClicked,
+                modifier = Modifier
+                    .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+            )
             ScrollContent(
                 state = state,
                 onRegenerateClick = onRegenerateClick,
@@ -236,6 +227,7 @@ fun GeneratorScreen(
 private fun DefaultAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onPasswordHistoryClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenMediumTopAppBar(
         title = stringResource(id = R.string.generator),
@@ -251,15 +243,18 @@ private fun DefaultAppBar(
                 ),
             )
         },
+        modifier = modifier,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ModalAppBar(
+    generatorMode: GeneratorMode.Modal,
     scrollBehavior: TopAppBarScrollBehavior,
     onCloseClick: () -> Unit,
     onSelectClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenTopAppBar(
         title = stringResource(id = R.string.generator),
@@ -267,6 +262,10 @@ private fun ModalAppBar(
         navigationIconContentDescription = stringResource(id = R.string.close),
         onNavigationIconClick = onCloseClick,
         scrollBehavior = scrollBehavior,
+        dividerStyle = when (generatorMode) {
+            GeneratorMode.Modal.Password -> TopAppBarDividerStyle.NONE
+            is GeneratorMode.Modal.Username -> TopAppBarDividerStyle.ON_SCROLL
+        },
         actions = {
             BitwardenTextButton(
                 label = stringResource(id = R.string.select),
@@ -274,6 +273,7 @@ private fun ModalAppBar(
                 modifier = Modifier.testTag("SelectButton"),
             )
         },
+        modifier = modifier,
     )
 }
 
@@ -367,6 +367,7 @@ private fun GeneratedStringItem(
     generatedText: String,
     onCopyClick: () -> Unit,
     onRegenerateClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
         label = "",
@@ -392,7 +393,7 @@ private fun GeneratedStringItem(
         textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = modifier.padding(horizontal = 16.dp),
     )
 }
 
@@ -471,26 +472,25 @@ private fun ColumnScope.PasswordTypeContent(
 
         PasswordCapitalLettersToggleItem(
             useCapitals = passwordTypeState.useCapitals,
-            onPasswordToggleCapitalLettersChange =
-            passwordHandlers.onPasswordToggleCapitalLettersChange,
+            onPasswordToggleCapitalLettersChange = passwordHandlers
+                .onPasswordToggleCapitalLettersChange,
             enabled = passwordTypeState.capitalsEnabled,
         )
         PasswordLowercaseLettersToggleItem(
             useLowercase = passwordTypeState.useLowercase,
-            onPasswordToggleLowercaseLettersChange =
-            passwordHandlers.onPasswordToggleLowercaseLettersChange,
+            onPasswordToggleLowercaseLettersChange = passwordHandlers
+                .onPasswordToggleLowercaseLettersChange,
             enabled = passwordTypeState.lowercaseEnabled,
         )
         PasswordNumbersToggleItem(
             useNumbers = passwordTypeState.useNumbers,
-            onPasswordToggleNumbersChange =
-            passwordHandlers.onPasswordToggleNumbersChange,
+            onPasswordToggleNumbersChange = passwordHandlers.onPasswordToggleNumbersChange,
             enabled = passwordTypeState.numbersEnabled,
         )
         PasswordSpecialCharactersToggleItem(
             useSpecialChars = passwordTypeState.useSpecialChars,
-            onPasswordToggleSpecialCharactersChange =
-            passwordHandlers.onPasswordToggleSpecialCharactersChange,
+            onPasswordToggleSpecialCharactersChange = passwordHandlers
+                .onPasswordToggleSpecialCharactersChange,
             enabled = passwordTypeState.specialCharsEnabled,
         )
     }
@@ -499,8 +499,7 @@ private fun ColumnScope.PasswordTypeContent(
 
     PasswordMinNumbersCounterItem(
         minNumbers = passwordTypeState.minNumbers,
-        onPasswordMinNumbersCounterChange =
-        passwordHandlers.onPasswordMinNumbersCounterChange,
+        onPasswordMinNumbersCounterChange = passwordHandlers.onPasswordMinNumbersCounterChange,
         maxValue = max(passwordTypeState.maxNumbersAllowed, passwordTypeState.minNumbersAllowed),
         minValue = passwordTypeState.minNumbersAllowed,
     )
@@ -509,8 +508,8 @@ private fun ColumnScope.PasswordTypeContent(
 
     PasswordMinSpecialCharactersCounterItem(
         minSpecial = passwordTypeState.minSpecial,
-        onPasswordMinSpecialCharactersChange =
-        passwordHandlers.onPasswordMinSpecialCharactersChange,
+        onPasswordMinSpecialCharactersChange = passwordHandlers
+            .onPasswordMinSpecialCharactersChange,
         maxValue = max(passwordTypeState.maxSpecialAllowed, passwordTypeState.minSpecialAllowed),
         minValue = passwordTypeState.minSpecialAllowed,
     )
@@ -519,8 +518,8 @@ private fun ColumnScope.PasswordTypeContent(
 
     PasswordAvoidAmbiguousCharsToggleItem(
         avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
-        onPasswordToggleAvoidAmbiguousCharsChange =
-        passwordHandlers.onPasswordToggleAvoidAmbiguousCharsChange,
+        onPasswordToggleAvoidAmbiguousCharsChange = passwordHandlers
+            .onPasswordToggleAvoidAmbiguousCharsChange,
         enabled = passwordTypeState.ambiguousCharsEnabled,
     )
 }
@@ -529,18 +528,19 @@ private fun ColumnScope.PasswordTypeContent(
 private fun PasswordCapitalLettersToggleItem(
     useCapitals: Boolean,
     onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
         label = "A—Z",
+        contentDescription = stringResource(id = R.string.uppercase_ato_z),
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
         enabled = enabled,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("UppercaseAtoZToggle")
             .padding(horizontal = 16.dp),
-        contentDescription = stringResource(id = R.string.uppercase_ato_z),
     )
 }
 
@@ -548,18 +548,19 @@ private fun PasswordCapitalLettersToggleItem(
 private fun PasswordLowercaseLettersToggleItem(
     useLowercase: Boolean,
     onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
         label = "a—z",
+        contentDescription = stringResource(id = R.string.lowercase_ato_z),
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
         enabled = enabled,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("LowercaseAtoZToggle")
             .padding(horizontal = 16.dp),
-        contentDescription = stringResource(id = R.string.lowercase_ato_z),
     )
 }
 
@@ -567,18 +568,19 @@ private fun PasswordLowercaseLettersToggleItem(
 private fun PasswordNumbersToggleItem(
     useNumbers: Boolean,
     onPasswordToggleNumbersChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
         label = "0-9",
+        contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
         enabled = enabled,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("NumbersZeroToNineToggle")
             .padding(horizontal = 16.dp),
-        contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
     )
 }
 
@@ -586,18 +588,19 @@ private fun PasswordNumbersToggleItem(
 private fun PasswordSpecialCharactersToggleItem(
     useSpecialChars: Boolean,
     onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
         label = "!@#$%^&*",
+        contentDescription = stringResource(id = R.string.special_characters),
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
         enabled = enabled,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("SpecialCharactersToggle")
             .padding(horizontal = 16.dp),
-        contentDescription = stringResource(id = R.string.special_characters),
     )
 }
 
@@ -607,13 +610,14 @@ private fun PasswordMinNumbersCounterItem(
     onPasswordMinNumbersCounterChange: (Int) -> Unit,
     minValue: Int,
     maxValue: Int,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenStepper(
         label = stringResource(id = R.string.min_numbers),
         value = minNumbers.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinNumbersCounterChange,
-        modifier = Modifier
+        modifier = modifier
             .testTag("MinNumberValueLabel")
             .padding(horizontal = 16.dp),
     )
@@ -625,13 +629,14 @@ private fun PasswordMinSpecialCharactersCounterItem(
     onPasswordMinSpecialCharactersChange: (Int) -> Unit,
     minValue: Int,
     maxValue: Int,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenStepper(
         label = stringResource(id = R.string.min_special),
         value = minSpecial.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinSpecialCharactersChange,
-        modifier = Modifier
+        modifier = modifier
             .testTag("MinSpecialValueLabel")
             .padding(horizontal = 16.dp),
     )
@@ -641,6 +646,7 @@ private fun PasswordMinSpecialCharactersCounterItem(
 private fun PasswordAvoidAmbiguousCharsToggleItem(
     avoidAmbiguousChars: Boolean,
     onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
@@ -648,7 +654,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
         isChecked = avoidAmbiguousChars,
         enabled = enabled,
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("AvoidAmbiguousCharsToggle")
             .padding(horizontal = 16.dp),
@@ -668,8 +674,7 @@ private fun ColumnScope.PassphraseTypeContent(
 
     PassphraseNumWordsCounterItem(
         numWords = passphraseTypeState.numWords,
-        onPassphraseNumWordsCounterChange =
-        passphraseHandlers.onPassphraseNumWordsCounterChange,
+        onPassphraseNumWordsCounterChange = passphraseHandlers.onPassphraseNumWordsCounterChange,
         minValue = passphraseTypeState.minNumWords,
         maxValue = passphraseTypeState.maxNumWords,
     )
@@ -688,14 +693,14 @@ private fun ColumnScope.PassphraseTypeContent(
     ) {
         PassphraseCapitalizeToggleItem(
             capitalize = passphraseTypeState.capitalize,
-            onPassphraseCapitalizeToggleChange =
-            passphraseHandlers.onPassphraseCapitalizeToggleChange,
+            onPassphraseCapitalizeToggleChange = passphraseHandlers
+                .onPassphraseCapitalizeToggleChange,
             enabled = passphraseTypeState.capitalizeEnabled,
         )
         PassphraseIncludeNumberToggleItem(
             includeNumber = passphraseTypeState.includeNumber,
-            onPassphraseIncludeNumberToggleChange =
-            passphraseHandlers.onPassphraseIncludeNumberToggleChange,
+            onPassphraseIncludeNumberToggleChange = passphraseHandlers
+                .onPassphraseIncludeNumberToggleChange,
             enabled = passphraseTypeState.includeNumberEnabled,
         )
     }
@@ -705,6 +710,7 @@ private fun ColumnScope.PassphraseTypeContent(
 private fun PassphraseNumWordsCounterItem(
     numWords: Int,
     onPassphraseNumWordsCounterChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
     minValue: Int = PASSPHRASE_MIN_NUMBER_OF_WORDS,
     maxValue: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
 ) {
@@ -716,7 +722,7 @@ private fun PassphraseNumWordsCounterItem(
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
         stepperActionsTestTag = "NumberOfWordsStepper",
-        modifier = Modifier
+        modifier = modifier
             .testTag("NumberOfWordsLabel")
             .padding(horizontal = 16.dp),
     )
@@ -726,6 +732,7 @@ private fun PassphraseNumWordsCounterItem(
 private fun PassphraseWordSeparatorInputItem(
     wordSeparator: Char?,
     onPassphraseWordSeparatorChange: (wordSeparator: Char?) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
         label = stringResource(id = R.string.word_separator),
@@ -739,7 +746,7 @@ private fun PassphraseWordSeparatorInputItem(
                 onPassphraseWordSeparatorChange(char)
             }
         },
-        modifier = Modifier
+        modifier = modifier
             .testTag("WordSeparatorEntry")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -750,6 +757,7 @@ private fun PassphraseWordSeparatorInputItem(
 private fun PassphraseCapitalizeToggleItem(
     capitalize: Boolean,
     onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
@@ -757,7 +765,7 @@ private fun PassphraseCapitalizeToggleItem(
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
         enabled = enabled,
-        modifier = Modifier
+        modifier = modifier
             .testTag("CapitalizePassphraseToggle")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -769,13 +777,14 @@ private fun PassphraseIncludeNumberToggleItem(
     includeNumber: Boolean,
     onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
     enabled: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         enabled = enabled,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
-        modifier = Modifier
+        modifier = modifier
             .testTag("IncludeNumbersToggle")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -834,6 +843,7 @@ private fun UsernameOptionsItem(
     currentSubState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     usernameTypeHandlers: UsernameTypeHandlers,
+    modifier: Modifier = Modifier,
 ) {
     val possibleSubStates = GeneratorState.MainType.Username.UsernameTypeOption.entries
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
@@ -847,10 +857,6 @@ private fun UsernameOptionsItem(
                 optionsWithStrings.entries.first { it.value == selectedOption }.key
             onSubStateOptionClicked(selectedOptionId)
         },
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .testTag("UsernameTypePicker"),
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
@@ -858,6 +864,10 @@ private fun UsernameOptionsItem(
             onClick = usernameTypeHandlers.onUsernameTooltipClicked,
             contentDescription = stringResource(id = R.string.learn_more),
         ),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .testTag("UsernameTypePicker"),
     )
 }
 
@@ -1004,6 +1014,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
 private fun ServiceTypeOptionsItem(
     currentSubState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
     onSubStateOptionClicked: (ServiceTypeOption) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val possibleSubStates = ServiceTypeOption.entries
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
@@ -1019,7 +1030,7 @@ private fun ServiceTypeOptionsItem(
                 optionsWithStrings.entries.first { it.value == selectedOption }.key
             onSubStateOptionClicked(selectedOptionId)
         },
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp)
             .testTag("ServiceTypePicker")
             .fillMaxWidth(),
@@ -1045,14 +1056,13 @@ private fun ColumnScope.PlusAddressedEmailTypeContent(
 private fun PlusAddressedEmailTextInputItem(
     email: String,
     onPlusAddressedEmailTextChange: (email: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
         label = stringResource(id = R.string.email_required_parenthesis),
         value = email,
-        onValueChange = {
-            onPlusAddressedEmailTextChange(it)
-        },
-        modifier = Modifier
+        onValueChange = onPlusAddressedEmailTextChange,
+        modifier = modifier
             .fillMaxWidth()
             .testTag("PlusAddressedEmailEntry")
             .padding(horizontal = 16.dp),
@@ -1080,14 +1090,13 @@ private fun ColumnScope.CatchAllEmailTypeContent(
 private fun CatchAllEmailTextInputItem(
     domain: String,
     onDomainTextChange: (domain: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
         label = stringResource(id = R.string.domain_name_required_parenthesis),
         value = domain,
-        onValueChange = {
-            onDomainTextChange(it)
-        },
-        modifier = Modifier
+        onValueChange = onDomainTextChange,
+        modifier = modifier
             .fillMaxWidth()
             .testTag("CatchAllEmailDomainEntry")
             .padding(horizontal = 16.dp),
@@ -1120,12 +1129,13 @@ private fun ColumnScope.RandomWordTypeContent(
 private fun RandomWordCapitalizeToggleItem(
     capitalize: Boolean,
     onRandomWordCapitalizeToggleChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onRandomWordCapitalizeToggleChange,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("CapitalizeRandomWordUsernameToggle")
             .padding(horizontal = 16.dp),
@@ -1136,12 +1146,13 @@ private fun RandomWordCapitalizeToggleItem(
 private fun RandomWordIncludeNumberToggleItem(
     includeNumber: Boolean,
     onRandomWordIncludeNumberToggleChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         onCheckedChange = onRandomWordIncludeNumberToggleChange,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("IncludeNumberRandomWordUsernameToggle")
             .padding(horizontal = 16.dp),
@@ -1152,412 +1163,11 @@ private fun RandomWordIncludeNumberToggleItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun GeneratorPreview() {
+private fun Generator_preview() {
     BitwardenTheme {
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
             onNavigateBack = {},
         )
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to password configuration.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-@Suppress("LongParameterList")
-private data class PasswordHandlers(
-    val onPasswordSliderLengthChange: (Int, Boolean) -> Unit,
-    val onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
-    val onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
-    val onPasswordToggleNumbersChange: (Boolean) -> Unit,
-    val onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
-    val onPasswordMinNumbersCounterChange: (Int) -> Unit,
-    val onPasswordMinSpecialCharactersChange: (Int) -> Unit,
-    val onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        @Suppress("LongMethod")
-        fun create(viewModel: GeneratorViewModel): PasswordHandlers {
-            return PasswordHandlers(
-                onPasswordSliderLengthChange = { newLength, isUserInteracting ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.SliderLengthChange(
-                            length = newLength,
-                            isUserInteracting = isUserInteracting,
-                        ),
-                    )
-                },
-                onPasswordToggleCapitalLettersChange = { shouldUseCapitals ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.ToggleCapitalLettersChange(
-                            useCapitals = shouldUseCapitals,
-                        ),
-                    )
-                },
-                onPasswordToggleLowercaseLettersChange = { shouldUseLowercase ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.ToggleLowercaseLettersChange(
-                            useLowercase = shouldUseLowercase,
-                        ),
-                    )
-                },
-                onPasswordToggleNumbersChange = { shouldUseNumbers ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.ToggleNumbersChange(
-                            useNumbers = shouldUseNumbers,
-                        ),
-                    )
-                },
-                onPasswordToggleSpecialCharactersChange = { shouldUseSpecialChars ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.ToggleSpecialCharactersChange(
-                            useSpecialChars = shouldUseSpecialChars,
-                        ),
-                    )
-                },
-                onPasswordMinNumbersCounterChange = { newMinNumbers ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.MinNumbersCounterChange(
-                            minNumbers = newMinNumbers,
-                        ),
-                    )
-                },
-                onPasswordMinSpecialCharactersChange = { newMinSpecial ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.MinSpecialCharactersChange(
-                            minSpecial = newMinSpecial,
-                        ),
-                    )
-                },
-                onPasswordToggleAvoidAmbiguousCharsChange = { shouldAvoidAmbiguousChars ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
-                            avoidAmbiguousChars = shouldAvoidAmbiguousChars,
-                        ),
-                    )
-                },
-            )
-        }
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to passphrase configuration.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-private data class PassphraseHandlers(
-    val onPassphraseNumWordsCounterChange: (Int) -> Unit,
-    val onPassphraseWordSeparatorChange: (Char?) -> Unit,
-    val onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
-    val onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        fun create(viewModel: GeneratorViewModel): PassphraseHandlers {
-            return PassphraseHandlers(
-                onPassphraseNumWordsCounterChange = { changeInCounter ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Passphrase.NumWordsCounterChange(
-                            numWords = changeInCounter,
-                        ),
-                    )
-                },
-                onPassphraseWordSeparatorChange = { newSeparator ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Passphrase.WordSeparatorTextChange(
-                            wordSeparator = newSeparator,
-                        ),
-                    )
-                },
-                onPassphraseCapitalizeToggleChange = { shouldCapitalize ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Passphrase.ToggleCapitalizeChange(
-                            capitalize = shouldCapitalize,
-                        ),
-                    )
-                },
-                onPassphraseIncludeNumberToggleChange = { shouldIncludeNumber ->
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Passphrase.ToggleIncludeNumberChange(
-                            includeNumber = shouldIncludeNumber,
-                        ),
-                    )
-                },
-            )
-        }
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to all username configurations.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-@Suppress("LongParameterList")
-private data class UsernameTypeHandlers(
-    val onUsernameTooltipClicked: () -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        fun create(viewModel: GeneratorViewModel): UsernameTypeHandlers {
-            return UsernameTypeHandlers(
-                onUsernameTooltipClicked = {
-                    viewModel.trySendAction(
-                        GeneratorAction.MainType.Username.UsernameType.TooltipClick,
-                    )
-                },
-            )
-        }
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to forwarded email alias
- * configuration.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-@Suppress("LongParameterList")
-private data class ForwardedEmailAliasHandlers(
-    val onServiceChange: (ServiceTypeOption) -> Unit,
-    val onAddyIoAccessTokenTextChange: (String) -> Unit,
-    val onAddyIoDomainNameTextChange: (String) -> Unit,
-    val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
-    val onFastMailApiKeyTextChange: (String) -> Unit,
-    val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
-    val onForwardEmailApiKeyTextChange: (String) -> Unit,
-    val onForwardEmailDomainNameTextChange: (String) -> Unit,
-    val onSimpleLoginApiKeyTextChange: (String) -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        @Suppress("LongMethod")
-        fun create(viewModel: GeneratorViewModel): ForwardedEmailAliasHandlers {
-            return ForwardedEmailAliasHandlers(
-                onServiceChange = { newServiceTypeOption ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceTypeOptionSelect(
-                                serviceTypeOption = newServiceTypeOption,
-                            ),
-                    )
-                },
-                onAddyIoAccessTokenTextChange = { newAccessToken ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .AddyIo
-                            .AccessTokenTextChange(
-                                accessToken = newAccessToken,
-                            ),
-                    )
-                },
-                onAddyIoDomainNameTextChange = { newDomainName ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .AddyIo
-                            .DomainTextChange(
-                                domain = newDomainName,
-                            ),
-                    )
-                },
-                onDuckDuckGoApiKeyTextChange = { newApiKey ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .DuckDuckGo
-                            .ApiKeyTextChange(
-                                apiKey = newApiKey,
-                            ),
-                    )
-                },
-                onFastMailApiKeyTextChange = { newApiKey ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .FastMail
-                            .ApiKeyTextChange(
-                                apiKey = newApiKey,
-                            ),
-                    )
-                },
-                onFirefoxRelayAccessTokenTextChange = { newAccessToken ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .FirefoxRelay
-                            .AccessTokenTextChange(
-                                accessToken = newAccessToken,
-                            ),
-                    )
-                },
-                onForwardEmailApiKeyTextChange = { newApiKey ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ForwardEmail
-                            .ApiKeyTextChange(
-                                apiKey = newApiKey,
-                            ),
-                    )
-                },
-                onForwardEmailDomainNameTextChange = { newDomainName ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ForwardEmail
-                            .DomainNameTextChange(
-                                domainName = newDomainName,
-                            ),
-                    )
-                },
-                onSimpleLoginApiKeyTextChange = { newApiKey ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .SimpleLogin
-                            .ApiKeyTextChange(
-                                apiKey = newApiKey,
-                            ),
-                    )
-                },
-            )
-        }
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to plus addressed email
- * configuration.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-private data class PlusAddressedEmailHandlers(
-    val onEmailChange: (String) -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        fun create(viewModel: GeneratorViewModel): PlusAddressedEmailHandlers {
-            return PlusAddressedEmailHandlers(
-                onEmailChange = { newEmail ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .PlusAddressedEmail
-                            .EmailTextChange(
-                                email = newEmail,
-                            ),
-                    )
-                },
-            )
-        }
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to plus addressed email
- * configuration.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-private data class CatchAllEmailHandlers(
-    val onDomainChange: (String) -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        fun create(viewModel: GeneratorViewModel): CatchAllEmailHandlers {
-            return CatchAllEmailHandlers(
-                onDomainChange = { newDomain ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .CatchAllEmail
-                            .DomainTextChange(
-                                domain = newDomain,
-                            ),
-                    )
-                },
-            )
-        }
-    }
-}
-
-/**
- * A class dedicated to handling user interactions related to Random Word
- * configuration.
- * Each lambda corresponds to a specific user action, allowing for easy delegation of
- * logic when user input is detected.
- */
-private data class RandomWordHandlers(
-    val onCapitalizeChange: (Boolean) -> Unit,
-    val onIncludeNumberChange: (Boolean) -> Unit,
-) {
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        fun create(viewModel: GeneratorViewModel): RandomWordHandlers {
-            return RandomWordHandlers(
-                onCapitalizeChange = { shouldCapitalize ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .RandomWord
-                            .ToggleCapitalizeChange(
-                                capitalize = shouldCapitalize,
-                            ),
-                    )
-                },
-                onIncludeNumberChange = { shouldIncludeNumber ->
-                    viewModel.trySendAction(
-                        GeneratorAction
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .RandomWord
-                            .ToggleIncludeNumberChange(
-                                includeNumber = shouldIncludeNumber,
-                            ),
-                    )
-                },
-            )
-        }
     }
 }

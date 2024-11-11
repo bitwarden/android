@@ -1000,7 +1000,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="please_restart_registration_or_try_logging_in">Lütfen kaydı yeniden başlatın veya giriş yapmayı deneyin. Mevcut bir hesabınız olabilir.</string>
   <string name="restart_registration">Kaydı yeniden başlat</string>
   <string name="authenticator_sync">Authenticator Sync</string>
-  <string name="allow_bitwarden_authenticator_syncing">Allow Bitwarden Authenticator Syncing</string>
+  <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
   <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
   <string name="turn_on_autofill">Otomatik doldurmayı etkinleştir</string>
   <string name="use_autofill_to_log_into_your_accounts">Hesaplarınıza tek dokunuşla giriş yapmak için otomatik doldurmayı kullanabilirsiniz.</string>
@@ -1039,8 +1039,8 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="step_1_of_3">Step 1 of 3</string>
   <string name="export_your_saved_logins">Export your saved logins</string>
   <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and go to vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">go to vault.bitwarden.com</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and go to %1$s</string>
+  <string name="go_to_vault_bitwarden_com_highlight">go to %1$s</string>
   <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
   <string name="step_2_of_3">Step 2 of 3</string>
   <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
@@ -1054,7 +1054,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="then_done_highlight">then Done</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to delete your saved password file.</string>
   <string name="delete_your_saved_password_file">delete your saved password file.</string>
-  <string name="need_help_checkout_out_import_help">Need help? Checkout out import help.</string>
+  <string name="need_help_check_out_import_help">Yardıma mı ihtiyacınız var? İçe aktarma yardımına göz atın.</string>
   <string name="import_help_highlight">import help</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
   <string name="save_the_exported_file_highlight">Save the exported file</string>
@@ -1072,4 +1072,17 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="bitwarden_tools">Bitwarden Araçları</string>
   <string name="got_it">Anladım</string>
   <string name="no_logins_were_imported">Hiç hesap aktarılmadı</string>
+  <string name="verified_sso_domain_verified">Doğrulanmış SSO Alan Adı Uç Noktası</string>
+  <string name="logins_imported">Hesaplar içe aktarıldı</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">İçe aktardığınız parola dosyasını bilgisayarınızdan silmeyi unutmayın</string>
+  <string name="type_ssh_key">SSH anahtarı</string>
+  <string name="public_key">Ortak anahtar</string>
+  <string name="private_key">Özel anahtar</string>
+  <string name="ssh_keys">SSH anahtarları</string>
+  <string name="copy_public_key">Ortak anahtarı kopyala</string>
+  <string name="copy_fingerprint">Parmak izini kopyala</string>
+  <string name="enable_notifications">Bildirimleri etkinleştir</string>
+  <string name="log_in_quickly_and_easily_across_devices">Farklı cihazlarda hızlıca ve kolayca oturum açın</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Başka bir cihazdan yeni bir giriş isteği aldığınızda Bitwarden size bildirim gönderebilir.</string>
+  <string name="skip_for_now">Şimdilik geç</string>
 </resources>
