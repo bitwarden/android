@@ -3566,6 +3566,8 @@ class AuthRepositoryTest {
             val pendingAuthRequest = PendingAuthRequestJson(
                 requestId = "requestId",
                 requestPrivateKey = "requestPrivateKey",
+                requestFingerprint = "fingerprint",
+                requestAccessCode = "accessCode",
             )
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
                 key = null,
