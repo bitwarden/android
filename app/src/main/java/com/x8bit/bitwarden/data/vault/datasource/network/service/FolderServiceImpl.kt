@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.vault.datasource.network.api.FoldersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -13,7 +14,9 @@ class FolderServiceImpl(
     private val json: Json,
 ) : FolderService {
     override suspend fun createFolder(body: FolderJsonRequest): Result<SyncResponseJson.Folder> =
-        foldersApi.createFolder(body = body)
+        foldersApi
+            .createFolder(body = body)
+            .toResult()
 
     override suspend fun updateFolder(
         folderId: String,
@@ -24,6 +27,7 @@ class FolderServiceImpl(
                 folderId = folderId,
                 body = body,
             )
+            .toResult()
             .map { UpdateFolderResponseJson.Success(folder = it) }
             .recoverCatching { throwable ->
                 throwable
@@ -36,10 +40,13 @@ class FolderServiceImpl(
             }
 
     override suspend fun deleteFolder(folderId: String): Result<Unit> =
-        foldersApi.deleteFolder(folderId = folderId)
+        foldersApi
+            .deleteFolder(folderId = folderId)
+            .toResult()
 
     override suspend fun getFolder(
         folderId: String,
     ): Result<SyncResponseJson.Folder> = foldersApi
         .getFolder(folderId = folderId)
+        .toResult()
 }

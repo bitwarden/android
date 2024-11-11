@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -15,5 +16,5 @@ interface UnauthenticatedOrganizationApi {
     @POST("/organizations/domain/sso/details")
     suspend fun getClaimedDomainOrganizationDetails(
         @Body body: OrganizationDomainSsoDetailsRequestJson,
-    ): Result<OrganizationDomainSsoDetailsResponseJson>
+    ): NetworkResult<OrganizationDomainSsoDetailsResponseJson>
 }
