@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.HaveIBeenPwnedApi
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import java.security.MessageDigest
 
 class HaveIBeenPwnedServiceImpl(private val api: HaveIBeenPwnedApi) : HaveIBeenPwnedService {
@@ -17,6 +18,7 @@ class HaveIBeenPwnedServiceImpl(private val api: HaveIBeenPwnedApi) : HaveIBeenP
 
         return api
             .fetchBreachedPasswords(hashPrefix = hashPrefix)
+            .toResult()
             .mapCatching { responseBody ->
                 responseBody.string()
                     // First split the response by newline: each hashed password is on a new line.
