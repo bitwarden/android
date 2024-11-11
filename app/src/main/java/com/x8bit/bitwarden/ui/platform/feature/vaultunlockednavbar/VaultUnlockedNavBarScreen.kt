@@ -64,7 +64,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
-    onNavigateToVaultAddItem: (VaultItemCipherType) -> Unit,
+    onNavigateToVaultAddItem: (VaultItemCipherType, String?) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -158,7 +158,7 @@ private fun VaultUnlockedNavBarScaffold(
     sendTabClickedAction: () -> Unit,
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
-    navigateToVaultAddItem: (VaultItemCipherType) -> Unit,
+    navigateToVaultAddItem: (VaultItemCipherType, String?) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,

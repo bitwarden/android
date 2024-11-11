@@ -942,6 +942,27 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick inside a folder should emit NavigateToAddVaultItem with a selected folder id`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+                assertEquals(
+                    VaultItemListingEvent.NavigateToAddVaultItem(
+                        VaultItemCipherType.LOGIN,
+                        selectedFolderId = "id",
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()

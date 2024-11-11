@@ -72,7 +72,10 @@ fun VaultItemListingScreen(
     onNavigateToVaultItem: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
+    onNavigateToVaultAddItemScreen: (
+        vaultItemCipherType: VaultItemCipherType,
+        selectedFolderId: String?,
+    ) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
@@ -113,7 +116,10 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
-                onNavigateToVaultAddItemScreen(event.vaultItemCipherType)
+                onNavigateToVaultAddItemScreen(
+                    event.vaultItemCipherType,
+                    event.selectedFolderId,
+                )
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {
