@@ -37,8 +37,8 @@ jobs:
           else
             branch_name="release/rc${{ github.run_number }}"
           fi
-          git checkout main
-          git checkout -b $branch_name
+          git switch main
+          git switch -c $branch_name
           git push origin $branch_name
           echo "# :cherry_blossom: RC branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
 
@@ -51,7 +51,6 @@ jobs:
             exit 1
           fi
           branch_name="release/hotfix-${latest_tag}"
-          git checkout $latest_tag
-          git checkout -b $branch_name
+          git switch -c $branch_name $latest_tag
           git push origin $branch_name
           echo "# :fire: Hotfix branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
