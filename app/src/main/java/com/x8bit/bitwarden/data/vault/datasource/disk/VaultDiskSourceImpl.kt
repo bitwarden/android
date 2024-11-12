@@ -17,7 +17,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -125,7 +124,6 @@ class VaultDiskSourceImpl(
     override fun getDomains(userId: String): Flow<SyncResponseJson.Domains?> =
         domainsDao
             .getDomains(userId)
-            .filterNotNull()
             .map { entity ->
                 withContext(dispatcherManager.default) {
                     entity?.domainsJson?.let { json.decodeFromString<SyncResponseJson.Domains>(it) }

@@ -4,6 +4,7 @@ import androidx.core.net.toUri
 import com.bitwarden.vault.Attachment
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
@@ -34,20 +35,26 @@ class CiphersServiceImpl(
     private val clock: Clock,
 ) : CiphersService {
     override suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher> =
-        ciphersApi.createCipher(body = body)
+        ciphersApi
+            .createCipher(body = body)
+            .toResult()
 
     override suspend fun createCipherInOrganization(
         body: CreateCipherInOrganizationJsonRequest,
-    ): Result<SyncResponseJson.Cipher> = ciphersApi.createCipherInOrganization(body = body)
+    ): Result<SyncResponseJson.Cipher> = ciphersApi
+        .createCipherInOrganization(body = body)
+        .toResult()
 
     override suspend fun createAttachment(
         cipherId: String,
         body: AttachmentJsonRequest,
     ): Result<AttachmentJsonResponse> =
-        ciphersApi.createAttachment(
-            cipherId = cipherId,
-            body = body,
-        )
+        ciphersApi
+            .createAttachment(
+                cipherId = cipherId,
+                body = body,
+            )
+            .toResult()
 
     override suspend fun uploadAttachment(
         attachmentJsonResponse: AttachmentJsonResponse,
@@ -82,6 +89,7 @@ class CiphersServiceImpl(
                 )
             }
         }
+            .toResult()
             .map { cipher }
     }
 
@@ -94,6 +102,7 @@ class CiphersServiceImpl(
                 cipherId = cipherId,
                 body = body,
             )
+            .toResult()
             .map { UpdateCipherResponseJson.Success(cipher = it) }
             .recoverCatching { throwable ->
                 throwable
@@ -115,77 +124,97 @@ class CiphersServiceImpl(
             ?: return IllegalStateException("Attachment must have ID").asFailure()
         val attachmentKey = attachment.key
             ?: return IllegalStateException("Attachment must have Key").asFailure()
-        return ciphersApi.shareAttachment(
-            cipherId = cipherId,
-            attachmentId = attachmentId,
-            organizationId = organizationId,
-            body = this
-                .createMultipartBodyBuilder(
-                    encryptedFile = encryptedFile,
-                    filename = attachment.fileName,
-                )
-                .addPart(
-                    part = MultipartBody.Part.createFormData(
-                        name = "key",
-                        value = attachmentKey,
-                    ),
-                )
-                .build(),
-        )
+        return ciphersApi
+            .shareAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+                organizationId = organizationId,
+                body = this
+                    .createMultipartBodyBuilder(
+                        encryptedFile = encryptedFile,
+                        filename = attachment.fileName,
+                    )
+                    .addPart(
+                        part = MultipartBody.Part.createFormData(
+                            name = "key",
+                            value = attachmentKey,
+                        ),
+                    )
+                    .build(),
+            )
+            .toResult()
     }
 
     override suspend fun shareCipher(
         cipherId: String,
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher> =
-        ciphersApi.shareCipher(
-            cipherId = cipherId,
-            body = body,
-        )
+        ciphersApi
+            .shareCipher(
+                cipherId = cipherId,
+                body = body,
+            )
+            .toResult()
 
     override suspend fun updateCipherCollections(
         cipherId: String,
         body: UpdateCipherCollectionsJsonRequest,
     ): Result<Unit> =
-        ciphersApi.updateCipherCollections(
-            cipherId = cipherId,
-            body = body,
-        )
+        ciphersApi
+            .updateCipherCollections(
+                cipherId = cipherId,
+                body = body,
+            )
+            .toResult()
 
     override suspend fun hardDeleteCipher(cipherId: String): Result<Unit> =
-        ciphersApi.hardDeleteCipher(cipherId = cipherId)
+        ciphersApi
+            .hardDeleteCipher(cipherId = cipherId)
+            .toResult()
 
     override suspend fun softDeleteCipher(cipherId: String): Result<Unit> =
-        ciphersApi.softDeleteCipher(cipherId = cipherId)
+        ciphersApi
+            .softDeleteCipher(cipherId = cipherId)
+            .toResult()
 
     override suspend fun deleteCipherAttachment(
         cipherId: String,
         attachmentId: String,
     ): Result<Unit> =
-        ciphersApi.deleteCipherAttachment(
-            cipherId = cipherId,
-            attachmentId = attachmentId,
-        )
+        ciphersApi
+            .deleteCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+            )
+            .toResult()
 
     override suspend fun restoreCipher(cipherId: String): Result<SyncResponseJson.Cipher> =
-        ciphersApi.restoreCipher(cipherId = cipherId)
+        ciphersApi
+            .restoreCipher(cipherId = cipherId)
+            .toResult()
 
     override suspend fun getCipher(
         cipherId: String,
     ): Result<SyncResponseJson.Cipher> =
-        ciphersApi.getCipher(cipherId = cipherId)
+        ciphersApi
+            .getCipher(cipherId = cipherId)
+            .toResult()
 
     override suspend fun getCipherAttachment(
         cipherId: String,
         attachmentId: String,
     ): Result<SyncResponseJson.Cipher.Attachment> =
-        ciphersApi.getCipherAttachment(
-            cipherId = cipherId,
-            attachmentId = attachmentId,
-        )
+        ciphersApi
+            .getCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+            )
+            .toResult()
 
     override suspend fun hasUnassignedCiphers(): Result<Boolean> =
-        ciphersApi.hasUnassignedCiphers()
+        ciphersApi
+            .hasUnassignedCiphers()
+            .toResult()
 
     private fun createMultipartBodyBuilder(
         encryptedFile: File,
