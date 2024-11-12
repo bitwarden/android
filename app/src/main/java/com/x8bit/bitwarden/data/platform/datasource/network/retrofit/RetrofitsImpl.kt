@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
+import com.x8bit.bitwarden.data.platform.datasource.network.core.NetworkResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
@@ -105,7 +105,7 @@ class RetrofitsImpl(
     private val baseRetrofitBuilder: Retrofit.Builder by lazy {
         Retrofit.Builder()
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .addCallAdapterFactory(ResultCallAdapterFactory())
+            .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .client(baseOkHttpClient)
     }
 
