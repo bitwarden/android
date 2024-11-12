@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -226,5 +227,18 @@ class VaultSettingsScreenTest : BaseComposeTest() {
         val data = BitwardenSnackbarData("message".asText())
         mutableEventFlow.tryEmit(VaultSettingsEvent.ShowSnackbar(data))
         composeTestRule.onNodeWithText("message").assertIsDisplayed()
+    }
+
+    @Test
+    fun `when snackbar is displayed clicking on it should dismiss`() {
+        val data = BitwardenSnackbarData("message".asText())
+        mutableEventFlow.tryEmit(VaultSettingsEvent.ShowSnackbar(data))
+        composeTestRule
+            .onNodeWithText("message")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("message")
+            .assertIsNotDisplayed()
     }
 }
