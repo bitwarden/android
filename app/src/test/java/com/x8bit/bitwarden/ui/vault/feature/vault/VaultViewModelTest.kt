@@ -36,7 +36,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -49,6 +49,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -66,7 +67,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
 
-    private val snackbarRelayManager = SnackbarRelayManagerImpl()
+    private val mutableSnackbarDataFlow = MutableStateFlow<BitwardenSnackbarData?>(null)
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every { getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY) } returns mutableSnackbarDataFlow
+            .filterNotNull()
+        every { clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY) } just runs
+    }
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>()) } just runs
@@ -1802,15 +1808,28 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
         val viewModel = createViewModel()
         val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        mutableSnackbarDataFlow.update { expectedSnackbarData }
         viewModel.eventFlow.test {
-            snackbarRelayManager.sendSnackbarData(
-                data = expectedSnackbarData,
-                relay = SnackbarRelay.MY_VAULT_RELAY,
-            )
             assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
 
+    @Test
+    fun `when account switch action is handled, clear snackbar relay buffer should be called`() =
+        runTest {
+            val viewModel = createViewModel()
+            switchAccountResult = SwitchAccountResult.AccountSwitched
+            viewModel.trySendAction(
+                VaultAction.SwitchAccountClick(
+                    accountSummary = mockk() {
+                        every { userId } returns "updatedUserId"
+                    },
+                ),
+            )
+            verify(exactly = 1) {
+                snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
+            }
+        }
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,

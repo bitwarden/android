@@ -12,6 +12,7 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
@@ -3047,6 +3048,57 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Delete")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Menu Collections should display correctly according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+        // Confirm overflow is closed on initial load
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        // Confirm Collections option is present
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        // Confirm Collections option is not present when canAssignToCollections is false
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                        canAssignToCollections = false,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
     }
 
     @Test

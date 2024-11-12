@@ -170,6 +170,8 @@ fun createCommonContent(
             requiresReprompt = true,
             requiresCloneConfirmation = false,
             attachments = emptyList(),
+            canDelete = true,
+            canAssignToCollections = true,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -213,6 +215,8 @@ fun createCommonContent(
                     title = "test.mp4",
                 ),
             ),
+            canDelete = true,
+            canAssignToCollections = true,
         )
     }
 

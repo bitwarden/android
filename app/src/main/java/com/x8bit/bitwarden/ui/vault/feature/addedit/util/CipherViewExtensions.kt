@@ -35,13 +35,15 @@ private const val PASSKEY_CREATION_TIME_PATTERN: String = "hh:mm a"
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 fun CipherView.toViewState(
     isClone: Boolean,
     isIndividualVaultDisabled: Boolean,
     totpData: TotpData?,
     resourceManager: ResourceManager,
     clock: Clock,
+    canDelete: Boolean,
+    canAssignToCollections: Boolean,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
@@ -107,9 +109,9 @@ fun CipherView.toViewState(
             notes = this.notes.orEmpty(),
             availableOwners = emptyList(),
             hasOrganizations = false,
-            customFieldData = this.fields
-                .orEmpty()
-                .map { it.toCustomField() },
+            customFieldData = this.fields.orEmpty().map { it.toCustomField() },
+            canDelete = canDelete,
+            canAssignToCollections = canAssignToCollections,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )

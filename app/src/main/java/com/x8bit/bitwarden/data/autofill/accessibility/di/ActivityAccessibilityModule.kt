@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityActivityManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityActivityManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,13 +24,13 @@ object ActivityAccessibilityModule {
     fun providesAccessibilityActivityManager(
         @ApplicationContext context: Context,
         accessibilityEnabledManager: AccessibilityEnabledManager,
-        appForegroundManager: AppForegroundManager,
+        appStateManager: AppStateManager,
         lifecycleScope: LifecycleCoroutineScope,
     ): AccessibilityActivityManager =
         AccessibilityActivityManagerImpl(
             context = context,
             accessibilityEnabledManager = accessibilityEnabledManager,
-            appForegroundManager = appForegroundManager,
+            appStateManager = appStateManager,
             lifecycleScope = lifecycleScope,
         )
 }

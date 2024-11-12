@@ -45,7 +45,6 @@ data class VaultAddEditArgs(
     val vaultAddEditType: VaultAddEditType,
     val selectedFolderId: String? = null,
     val selectedCollectionId: String? = null,
-    val ownerId: String? = null,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         vaultAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {

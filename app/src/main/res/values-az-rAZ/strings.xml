@@ -1054,7 +1054,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="then_done_highlight">\"Hazırdır\"a toxunun</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Təhlükəsizliyiniz üçün saxlanılmış parol faylınızı sildiyinizə əmin olun.</string>
   <string name="delete_your_saved_password_file">saxlanılmış parol faylınızı silin.</string>
-  <string name="need_help_checkout_out_import_help">Kömək lazımdır? Daxilə köçürmə üzrə kömək səhifəmizə baxın.</string>
+  <string name="need_help_check_out_import_help">Kömək lazımdır? Daxilə köçürmə üzrə kömək səhifəmizə baxın.</string>
   <string name="import_help_highlight">daxilə köçürmə üzrə kömək</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Xaricə köçürdüyünüz faylı kompüterinizdə rahatlıqla tapa biləcəyiniz yerdə saxlayın.</string>
   <string name="save_the_exported_file_highlight">Xaricə köçürülən faylı saxlayın</string>
@@ -1071,5 +1071,18 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Bitwarden-in veb və masaüstü alətləri ilə istənilən yerdən girişlərinizi idarə edin.</string>
   <string name="bitwarden_tools">Bitwarden Alətləri</string>
   <string name="got_it">Anladım</string>
-  <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="no_logins_were_imported">Heç bir giriş daxilə köçürülmədi</string>
+  <string name="verified_sso_domain_verified">Doğrulanmış SSO Domen Endpoint</string>
+  <string name="logins_imported">Girişlər daxilə köçürüldü</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Kompüterinizdən daxilə köçürdüyünüz parol faylını silməyi unutmayın</string>
+  <string name="type_ssh_key">SSH açarı</string>
+  <string name="public_key">Public açar</string>
+  <string name="private_key">Private açar</string>
+  <string name="ssh_keys">SSH açarları</string>
+  <string name="copy_public_key">Public açarı kopyala</string>
+  <string name="copy_fingerprint">Barmaq izini kopyala</string>
+  <string name="enable_notifications">Bildirişləri fəallaşdır</string>
+  <string name="log_in_quickly_and_easily_across_devices">Cihazlar arasında cəld və asan giriş et</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden, başqa bir cihazdan yeni bir giriş tələbi aldığınız hər dəfəsində sizi məlumatlandıracaq.</string>
+  <string name="skip_for_now">İndilik ötür</string>
 </resources>
