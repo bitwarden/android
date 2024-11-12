@@ -1,0 +1,26 @@
+changelog:
+  exclude:
+    labels:
+      - refactor
+      - ignore-for-release
+      - tests-only
+      - chore
+  categories:
+    - title:  ':tada: Exciting New Features'
+      labels:
+        - '*'
+      exclude:
+        authors:
+          - renovate[bot]
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+    - title: ':mega: Community Contributions Highlight'
+      labels:
+        - community-pr
+    - title: ⚡ Performance
+      labels:
+        - performance
+    - title: 👒 Dependencies
+      authors:
+        - renovate[bot]
