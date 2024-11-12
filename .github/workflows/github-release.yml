@@ -91,6 +91,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_ID: ${{ steps.create_release.outputs.id }}
+          RELEASE_URL: ${{ steps.create_release.outputs.url }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
         run: |
           # Get current release body
@@ -103,3 +104,6 @@ jobs:
           # Update release
           gh api --method PATCH /repos/${{ github.repository }}/releases/$RELEASE_ID \
             -f body="$updated_body"
+
+          echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
+          echo "$RELEASE_URL" >> $GITHUB_STEP_SUMMARY
