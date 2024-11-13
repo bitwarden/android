@@ -1,10 +1,8 @@
 changelog:
   exclude:
     labels:
-      - refactor
       - ignore-for-release
       - tests-only
-      - chore
   categories:
     - title:  ':tada: Exciting New Features'
       labels:
@@ -21,6 +19,12 @@ changelog:
     - title: ⚡ Performance
       labels:
         - performance
-    - title: 👒 Dependencies
+    - title: 👒 Dependencies & Housekeeping
       authors:
         - renovate[bot]
+      labels:
+        - ci/cd
+        - chore
+        - tests-only
+        - refactor
+        - tests-only
