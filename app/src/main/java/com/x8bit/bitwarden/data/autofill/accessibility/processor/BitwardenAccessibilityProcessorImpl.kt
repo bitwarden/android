@@ -35,12 +35,10 @@ class BitwardenAccessibilityProcessorImpl(
         if (!powerManager.isInteractive) return
         // We skip if the system package
         if (eventNode.isSystemPackage) return
-        // We skip any package that is a launcher or unsupported
-        if (eventNode.shouldSkipPackage ||
-            launcherPackageNameManager.launcherPackages.any { it == eventNode.packageName }
-        ) {
-            // Clear the action since this event needs to be ignored completely
-            accessibilityAutofillManager.accessibilityAction = null
+        // We skip any package that is unsupported
+        if (eventNode.shouldSkipPackage) return
+        // We skip any package that is a launcher
+        if (launcherPackageNameManager.launcherPackages.any { it == eventNode.packageName }) {
             return
         }
 
@@ -65,6 +63,11 @@ class BitwardenAccessibilityProcessorImpl(
     private fun handleAttemptParseUri(rootNode: AccessibilityNodeInfo) {
         accessibilityParser
             .parseForUriOrPackageName(rootNode = rootNode)
+            ?.takeIf {
+                accessibilityParser
+                    .parseForFillableFields(rootNode = rootNode, uri = it)
+                    .hasFields
+            }
             ?.let { uri ->
                 context.startActivity(
                     createAutofillSelectionIntent(

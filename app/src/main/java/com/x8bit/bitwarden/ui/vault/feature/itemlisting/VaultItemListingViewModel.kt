@@ -850,7 +850,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleBackClick() {
         sendEvent(
-            event = if (state.isTotp) {
+            event = if (state.isTotp || state.isAutofill) {
                 VaultItemListingEvent.ExitApp
             } else {
                 VaultItemListingEvent.NavigateBack
