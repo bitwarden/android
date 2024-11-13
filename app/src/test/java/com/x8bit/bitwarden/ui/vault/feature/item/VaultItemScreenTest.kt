@@ -19,6 +19,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
@@ -1926,6 +1927,141 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `on copy identity name field click should send CopyIdentityNameClick`() {
+
+        val identityName = "the identity name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyNameButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyIdentityNameClick)
+        }
+    }
+    @Test
+    fun `on copy username field click should send CopyUsernameClick`() {
+        val username = "the username"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(username)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyUsernameButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyUsernameClick)
+        }
+    }
+
+    @Test
+    fun `on copy company field click should send CopyCompanyClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+
+        // Scroll so we can see the Copy company button but not have it covered by the FAB
+        composeTestRule.onNodeWithTextAfterScroll("the SSN")
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyCompanyButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyCompanyClick)
+        }
+    }
+
+    @Test
+    fun `on copy SSN field click should send CopySsnClick`() {
+        val ssn = "the SSN"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(ssn)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopySsnButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopySsnClick)
+        }
+    }
+
+    @Test
+    fun `on copy passport number field click should send CopyPassportNumberClick`() {
+        val passportNumber = "the passport number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(passportNumber)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyPassportNumberButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyPassportNumberClick)
+        }
+    }
+
+    @Test
+    fun `on copy license number field click should send CopyLicenseNumberClick`() {
+        val licenseNumber = "the license number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(licenseNumber)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyLicenseNumberButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyLicenseNumberClick)
+        }
+    }
+
+    @Test
+    fun `on copy email field click should send CopyEmailClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onFirstNodeWithTextAfterScroll("the address")
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy email")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyEmailClick)
+        }
+    }
+
+    @Test
+    fun `on copy phone field click should send CopyPhoneClick`() {
+        val phone = "the phone number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(phone)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyPhoneButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyPhoneClick)
+        }
+    }
+
+    @Test
+    fun `on copy address field click should send CopyAddressClick`() {
+        val address = "the address"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(address)
+
+        composeTestRule
+            .onNodeWithTag("IdentityCopyAddressButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyAddressClick)
+        }
     }
     //endregion identity
 

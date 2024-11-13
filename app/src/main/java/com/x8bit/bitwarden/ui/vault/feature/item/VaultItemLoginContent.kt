@@ -275,12 +275,20 @@ private fun NotesField(
     notes: String,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextField(
+    BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.notes),
         value = notes,
         onValueChange = { },
         readOnly = true,
         singleLine = false,
+        actions = {
+            BitwardenTonalIconButton(
+                vectorIconRes = R.drawable.ic_copy,
+                contentDescription = stringResource(id = R.string.copy),
+                onClick = onCopyClick,
+                modifier = Modifier.testTag(tag = copyActionTestTag),
+            )
+        },
         modifier = modifier,
     )
 }

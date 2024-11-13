@@ -145,6 +145,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
+            is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -824,6 +825,160 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion SSH Key Type Handlers
 
+    //region Identity Type Handlers
+
+    @Suppress("MaxLineLength")
+    private fun handleIdentityTypeActions(action: VaultItemAction.ItemType.Identity) {
+        when (action) {
+            VaultItemAction.ItemType.Identity.CopyIdentityNameClick -> handleCopyIdentityNameClick()
+            VaultItemAction.ItemType.Identity.CopyUsernameClick -> handleCopyIdentityUsernameClick()
+            VaultItemAction.ItemType.Identity.CopyCompanyClick -> handleCopyCompanyClick()
+            VaultItemAction.ItemType.Identity.CopySsnClick -> handleCopySsnClick()
+            VaultItemAction.ItemType.Identity.CopyPassportNumberClick -> handleCopyPassportNumberClick()
+            VaultItemAction.ItemType.Identity.CopyLicenseNumberClick -> handleCopyLicenseNumberClick()
+            VaultItemAction.ItemType.Identity.CopyEmailClick -> handleCopyEmailClick()
+            VaultItemAction.ItemType.Identity.CopyPhoneClick -> handleCopyPhoneClick()
+            VaultItemAction.ItemType.Identity.CopyAddressClick -> handleCopyAddressClick()
+        }
+    }
+
+    private fun handleCopyIdentityNameClick() {
+        onIdentityContent { content, identity ->
+            val identityName = requireNotNull(identity.identityName)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = identityName),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = identityName)
+        }
+    }
+
+    private fun handleCopyIdentityUsernameClick() {
+        onIdentityContent { content, identity ->
+            val username = requireNotNull(identity.username)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = username),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = username)
+        }
+    }
+
+    private fun handleCopyCompanyClick() {
+        onIdentityContent { content, identity ->
+            val company = requireNotNull(identity.company)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = company),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = company)
+        }
+    }
+
+    private fun handleCopySsnClick() {
+        onIdentityContent { content, identity ->
+            val ssn = requireNotNull(identity.ssn)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = ssn),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = ssn)
+        }
+    }
+
+    private fun handleCopyPassportNumberClick() {
+        onIdentityContent { content, identity ->
+            val passportNumber = requireNotNull(identity.passportNumber)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = passportNumber),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = passportNumber)
+        }
+    }
+
+    private fun handleCopyLicenseNumberClick() {
+        onIdentityContent { content, identity ->
+            val licenseNumber = requireNotNull(identity.licenseNumber)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = licenseNumber),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = licenseNumber)
+        }
+    }
+
+    private fun handleCopyEmailClick() {
+        onIdentityContent { content, identity ->
+            val email = requireNotNull(identity.email)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = email),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = email)
+        }
+    }
+
+    private fun handleCopyPhoneClick() {
+        onIdentityContent { content, identity ->
+            val phone = requireNotNull(identity.phone)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = phone),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = phone)
+        }
+    }
+
+    private fun handleCopyAddressClick() {
+        onIdentityContent { content, identity ->
+            val address = requireNotNull(identity.address)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = address),
+                    ),
+                )
+                return@onIdentityContent
+            }
+            clipboardManager.setText(text = address)
+        }
+    }
+
+    //endregion Identity Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1142,6 +1297,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.SshKey)
                     ?.let { sshKeyContent ->
                         block(content, sshKeyContent)
+                    }
+            }
+    }
+
+    private inline fun onIdentityContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Identity,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Identity)
+                    ?.let { identityContent ->
+                        block(content, identityContent)
                     }
             }
     }
@@ -1838,6 +2008,48 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the fingerprint.
              */
             data object CopyFingerprintClick : SshKey()
+        }
+
+        /**
+         * Represents actions specific to the Identity type.
+         */
+        sealed class Identity : VaultItemAction() {
+            /**
+             * The user has clicked the copy button for the identity name.
+             */
+            data object CopyIdentityNameClick : Identity()
+            /**
+             * The user has clicked the copy button for the username.
+             */
+            data object CopyUsernameClick : Identity()
+            /**
+             * The user has clicked the copy button for the company.
+             */
+            data object CopyCompanyClick : Identity()
+            /**
+             * The user has clicked the copy button for the SSN.
+             */
+            data object CopySsnClick : Identity()
+            /**
+             * The user has clicked the copy button for the passport number.
+             */
+            data object CopyPassportNumberClick : Identity()
+            /**
+             * The user has clicked the copy button for the license number.
+             */
+            data object CopyLicenseNumberClick : Identity()
+            /**
+             * The user has clicked the copy button for the email.
+             */
+            data object CopyEmailClick : Identity()
+            /**
+             * The user has clicked the copy button for the phone number.
+             */
+            data object CopyPhoneClick : Identity()
+            /**
+             * The user has clicked the copy button for the address.
+             */
+            data object CopyAddressClick : Identity()
         }
     }
 
