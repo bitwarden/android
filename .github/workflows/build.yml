@@ -464,10 +464,17 @@ jobs:
       - name: Increment version
         run: |
           DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
+          versionCode:$VERSION_CODE \
           versionName:${{ inputs.version-name || '' }}
 
+          regex='versionName = "([^"]+)"'
+          if [[ "$(cat app/build.gradle.kts)" =~ $regex ]]; then
+            VERSION_NAME="${BASH_REMATCH[1]}"
+          fi
+          echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
       - name: Generate F-Droid artifacts
         env:
           FDROID_STORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
@@ -528,11 +535,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ inputs.distribute_to_firebase || github.event_name == 'push' }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release F-Droid artifacts to Firebase
-        if: ${{ inputs.distribute_to_firebase || github.event_name == 'push' }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
