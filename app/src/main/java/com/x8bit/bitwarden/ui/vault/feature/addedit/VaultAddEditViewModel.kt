@@ -53,6 +53,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
+import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
+import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -1579,27 +1581,13 @@ class VaultAddEditViewModel @Inject constructor(
                     vaultAddEditType = vaultAddEditType,
                 ) { currentAccount, cipherView ->
 
-                    // Deletion is not allowed when the item is in a collection that the user
-                    // does not have "manage" permission for.
-                    val canDelete = vaultData.collectionViewList
-                        .none {
-                            val isItemInCollection = cipherView
-                                ?.collectionIds
-                                ?.contains(it.id) == true
+                    val canDelete = vaultData
+                        .collectionViewList
+                        .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
 
-                            isItemInCollection && !it.manage
-                        }
-
-                    // Assigning to a collection is not allowed when the item is in a collection
-                    // that the user does not have "manage" and "edit" permission for.
-                    val canAssignToCollections = vaultData.collectionViewList
-                        .none {
-                            val isItemInCollection = cipherView
-                                ?.collectionIds
-                                ?.contains(it.id) == true
-
-                            isItemInCollection && (!it.manage || it.readOnly)
-                        }
+                    val canAssignToCollections = vaultData
+                        .collectionViewList
+                        .canAssignToCollections(cipherView?.collectionIds)
 
                     // Derive the view state from the current Cipher for Edit mode
                     // or use the current state for Add
