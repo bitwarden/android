@@ -195,8 +195,8 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick -> {
                 handleConfirmCloneClick()
             }
-
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
+            is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
         }
     }
 
@@ -518,6 +518,21 @@ class VaultItemViewModel @Inject constructor(
                         )
                     }
                 }
+        }
+    }
+
+    private fun handleCopyNotesClick() {
+        onContent { content ->
+            val notes = requireNotNull(content.common.notes)
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = notes),
+                    ),
+                )
+                return@onContent
+            }
+            clipboardManager.setText(text = notes)
         }
     }
 
@@ -1906,6 +1921,11 @@ sealed class VaultItemAction {
          * The user confirmed cloning a cipher without its FIDO 2 credentials.
          */
         data object ConfirmCloneWithoutFido2CredentialClick : Common()
+
+        /**
+         * The user has clicked the copy button for notes text field.
+         */
+        data object CopyNotesClick : Common()
     }
 
     /**

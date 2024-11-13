@@ -178,7 +178,7 @@ fun VaultItemIdentityContent(
                     contentDescription = stringResource(id = R.string.copy_notes),
                     textFieldTestTag = "CipherNotesLabel",
                     copyActionTestTag = "CipherNotesCopyButton",
-                    onCopyClick = { vaultCommonItemTypeHandlers.onCopyNotesClick(notes) },
+                    onCopyClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
                 )
             }
         }

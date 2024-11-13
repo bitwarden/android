@@ -21,7 +21,8 @@ data class VaultCommonItemTypeHandlers(
         Boolean,
     ) -> Unit,
     val onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
-) {
+    val onCopyNotesClick: () -> Unit,
+    ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
         /**
@@ -51,6 +52,9 @@ data class VaultCommonItemTypeHandlers(
                 },
                 onAttachmentDownloadClick = {
                     viewModel.trySendAction(VaultItemAction.Common.AttachmentDownloadClick(it))
+                },
+                onCopyNotesClick = {
+                    viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
                 },
             )
     }

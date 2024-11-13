@@ -1258,6 +1258,114 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
     }
+
+    @Test
+    fun `on login copy notes field click should send CopyNotesClick`() {
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE,
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Lots of notes")
+        composeTestRule
+            .onNodeWithTag("CipherNotesCopyButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+        }
+    }
+
+    @Test
+    fun `on identity copy notes field click should send CopyNotesClick`() {
+        // Adding a custom field so that we can scroll to it
+        // So we can see the Copy notes button but not have it covered by the FAB
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            name = "text",
+            value = "value",
+            isCopyable = true,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            type = DEFAULT_IDENTITY,
+                            common = EMPTY_COMMON.copy(
+                                notes = "this is a note",
+                                customFields = listOf(textField),
+                            ),
+                        ),
+                    )
+                }
+
+                composeTestRule.onNodeWithTextAfterScroll(textField.name)
+                composeTestRule
+                    .onNodeWithTag("CipherNotesCopyButton")
+                    .performClick()
+
+                verify {
+                    viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+                }
+            }
+    }
+
+    @Test
+    fun `on card copy notes field click should send CopyNotesClick`() {
+        // Adding a custom field so that we can scroll to it
+        // So we can see the Copy notes button but not have it covered by the FAB
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            name = "text",
+            value = "value",
+            isCopyable = true,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            type = DEFAULT_IDENTITY,
+                            common = EMPTY_COMMON.copy(
+                                notes = "this is a note",
+                                customFields = listOf(textField),
+                            ),
+                        ),
+                    )
+                }
+            }
+
+        composeTestRule.onNodeWithTextAfterScroll(textField.name)
+
+        composeTestRule
+            .onNodeWithTag("CipherNotesCopyButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+        }
+    }
+
+    @Test
+    fun `on secure note copy notes field click should send CopyNotesClick`() {
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_SECURE_NOTE_VIEW_STATE,
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Lots of notes")
+
+        composeTestRule
+            .onNodeWithTag("CipherNotesCopyButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+        }
+    }
     //endregion common
 
     //region login
@@ -1944,6 +2052,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyIdentityNameClick)
         }
     }
+
     @Test
     fun `on copy username field click should send CopyUsernameClick`() {
         val username = "the username"
@@ -1963,7 +2072,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     fun `on copy company field click should send CopyCompanyClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
 
-        // Scroll so we can see the Copy company button but not have it covered by the FAB
+        // Scroll to ssn so we can see the Copy company button but not have it covered by the FAB
         composeTestRule.onNodeWithTextAfterScroll("the SSN")
 
         composeTestRule
