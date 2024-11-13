@@ -282,6 +282,23 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `BackClick with AutofillSelectionData should emit ExitApp`() = runTest {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
+            autofillSelectionData = AutofillSelectionData(
+                framework = AutofillSelectionData.Framework.ACCESSIBILITY,
+                type = AutofillSelectionData.Type.LOGIN,
+                uri = null,
+            ),
+            shouldFinishWhenComplete = false,
+        )
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultItemListingsAction.BackClick)
+            assertEquals(VaultItemListingEvent.ExitApp, awaitItem())
+        }
+    }
+
+    @Test
     fun `BackClick should emit NavigateBack`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {

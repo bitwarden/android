@@ -129,7 +129,6 @@ class BitwardenAccessibilityProcessorTest {
             every { source } returns node
         }
         every { powerManager.isInteractive } returns true
-        every { accessibilityAutofillManager.accessibilityAction = null } just runs
 
         bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { null }
 
@@ -137,7 +136,6 @@ class BitwardenAccessibilityProcessorTest {
             powerManager.isInteractive
             node.isSystemPackage
             node.shouldSkipPackage
-            accessibilityAutofillManager.accessibilityAction = null
         }
     }
 
@@ -154,7 +152,6 @@ class BitwardenAccessibilityProcessorTest {
         }
         every { launcherPackageNameManager.launcherPackages } returns listOf(testPackageName)
         every { powerManager.isInteractive } returns true
-        every { accessibilityAutofillManager.accessibilityAction = null } just runs
 
         bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { null }
 
@@ -163,7 +160,6 @@ class BitwardenAccessibilityProcessorTest {
             node.isSystemPackage
             node.shouldSkipPackage
             launcherPackageNameManager.launcherPackages
-            accessibilityAutofillManager.accessibilityAction = null
         }
     }
 
@@ -268,6 +264,59 @@ class BitwardenAccessibilityProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `processAccessibilityEvent with AttemptParseUri and a valid uri but no fields to fill display toast`() {
+        val testPackageName = "com.android.chrome"
+        val rootNode = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns testPackageName
+        }
+        val node = mockk<AccessibilityNodeInfo> {
+            every { isSystemPackage } returns false
+            every { shouldSkipPackage } returns false
+            every { packageName } returns testPackageName
+        }
+        val event = mockk<AccessibilityEvent> {
+            every { source } returns node
+            every { packageName } returns testPackageName
+        }
+        every { powerManager.isInteractive } returns true
+        every { launcherPackageNameManager.launcherPackages } returns emptyList()
+        every {
+            accessibilityAutofillManager.accessibilityAction
+        } returns AccessibilityAction.AttemptParseUri
+        every { accessibilityAutofillManager.accessibilityAction = null } just runs
+        every {
+            createAutofillSelectionIntent(
+                context = context,
+                framework = AutofillSelectionData.Framework.ACCESSIBILITY,
+                type = AutofillSelectionData.Type.LOGIN,
+                uri = any(),
+            )
+        } returns mockk()
+        val uri = mockk<Uri>()
+        every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns uri
+        every {
+            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
+        } returns mockk { every { hasFields } returns false }
+
+        bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
+
+        verify(exactly = 1) {
+            powerManager.isInteractive
+            node.isSystemPackage
+            node.shouldSkipPackage
+            launcherPackageNameManager.launcherPackages
+            accessibilityAutofillManager.accessibilityAction
+            accessibilityAutofillManager.accessibilityAction = null
+            accessibilityParser.parseForUriOrPackageName(rootNode = node)
+            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
+            Toast
+                .makeText(context, R.string.autofill_tile_uri_not_found, Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `processAccessibilityEvent with AttemptParseUri and a valid uri should start the main activity`() {
         val testPackageName = "com.android.chrome"
         val rootNode = mockk<AccessibilityNodeInfo> {
@@ -296,7 +345,11 @@ class BitwardenAccessibilityProcessorTest {
                 uri = any(),
             )
         } returns mockk()
-        every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns mockk()
+        val uri = mockk<Uri>()
+        every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns uri
+        every {
+            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
+        } returns mockk { every { hasFields } returns true }
 
         bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
 
@@ -308,6 +361,7 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager.accessibilityAction
             accessibilityAutofillManager.accessibilityAction = null
             accessibilityParser.parseForUriOrPackageName(rootNode = node)
+            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
             createAutofillSelectionIntent(
                 context = context,
                 framework = AutofillSelectionData.Framework.ACCESSIBILITY,
