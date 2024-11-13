@@ -81,7 +81,7 @@ fun WelcomeScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = BitwardenTheme.colorScheme.background.secondary,
         contentColor = BitwardenTheme.colorScheme.text.secondary,
-    ) { innerPadding ->
+    ) {
         WelcomeScreenContent(
             state = state,
             pagerState = pagerState,
@@ -97,9 +97,7 @@ fun WelcomeScreen(
             onLoginClick = remember(viewModel) {
                 { viewModel.trySendAction(WelcomeAction.LoginClick) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

@@ -124,13 +124,11 @@ fun FolderAddEditScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.viewState) {
             is FolderAddEditState.ViewState.Content -> {
                 Column(
-                    Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     BitwardenTextField(
                         label = stringResource(id = R.string.name),
@@ -148,17 +146,13 @@ fun FolderAddEditScreen(
             is FolderAddEditState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = viewState.message(),
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is FolderAddEditState.ViewState.Loading -> {
                 BitwardenLoadingContent(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }

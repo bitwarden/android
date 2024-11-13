@@ -125,9 +125,8 @@ fun PendingRequestsScreen(
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = Modifier.statusBarsPadding(),
-    ) { paddingValues, animatedOnDismiss ->
+    ) { animatedOnDismiss ->
         PendingRequestsBottomSheetContent(
-            modifier = Modifier.padding(paddingValues),
             permissionsManager = permissionsManager,
             onDismiss = animatedOnDismiss,
         )
@@ -150,13 +149,11 @@ fun PendingRequestsScreen(
             )
         },
         pullToRefreshState = pullToRefreshState,
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.viewState) {
             is PendingRequestsState.ViewState.Content -> {
                 PendingRequestsContent(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     state = viewState,
                     onDeclineAllRequestsConfirm = remember(viewModel) {
                         {
@@ -176,22 +173,16 @@ fun PendingRequestsScreen(
             }
 
             is PendingRequestsState.ViewState.Empty -> PendingRequestsEmpty(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             )
 
             PendingRequestsState.ViewState.Error -> BitwardenErrorContent(
                 message = stringResource(R.string.generic_error_message),
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             )
 
             PendingRequestsState.ViewState.Loading -> BitwardenLoadingContent(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

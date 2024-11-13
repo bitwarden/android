@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
@@ -134,14 +133,13 @@ fun SetupAutoFillScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         SetupAutoFillContent(
             state = state,
             onAutofillServiceChanged = { handler.onAutofillServiceChanged(it) },
             onContinueClick = handler.onContinueClick,
             onTurnOnLaterClick = handler.onTurnOnLaterClick,
             modifier = Modifier
-                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize(),
         )
