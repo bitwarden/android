@@ -464,8 +464,9 @@ jobs:
       - name: Increment version
         run: |
           DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
+          versionCode:$VERSION_CODE \
           versionName:${{ inputs.version-name || '' }}
 
           regex='versionName = "([^"]+)"'
@@ -473,7 +474,7 @@ jobs:
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
           echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
-          echo "Version Number: ${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}" >> $GITHUB_STEP_SUMMARY
+          echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
       - name: Generate F-Droid artifacts
         env:
           FDROID_STORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
