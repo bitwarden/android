@@ -25,14 +25,12 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRe
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -154,10 +152,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
-    }
-
-    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.SshKeyCipherItems) } returns false
     }
 
     @BeforeEach
@@ -3132,7 +3126,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 resourceManager = resourceManager,
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
-                featureFlagManager = featureFlagManager,
             )
         }
 
@@ -4362,7 +4355,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             resourceManager = bitwardenResourceManager,
             clock = clock,
             organizationEventManager = organizationEventManager,
-            featureFlagManager = featureFlagManager,
         )
 
     private fun createVaultData(
