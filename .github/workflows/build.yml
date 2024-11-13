@@ -528,11 +528,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ inputs.distribute_to_firebase || github.event_name == 'push' }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release F-Droid artifacts to Firebase
-        if: ${{ inputs.distribute_to_firebase || github.event_name == 'push' }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
