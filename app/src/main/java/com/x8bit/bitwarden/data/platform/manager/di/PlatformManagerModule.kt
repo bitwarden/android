@@ -6,6 +6,7 @@ import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -293,12 +294,14 @@ object PlatformManagerModule {
         vaultDiskSource: VaultDiskSource,
         dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
+        autofillEnabledManager: AutofillEnabledManager,
     ): FirstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
         vaultDiskSource = vaultDiskSource,
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
+        autofillEnabledManager = autofillEnabledManager,
     )
 
     @Provides
