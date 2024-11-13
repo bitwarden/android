@@ -1082,9 +1082,7 @@ class VaultAddEditViewModel @Inject constructor(
         updateLoginContent { loginType ->
             loginType.copy(
                 uriList = loginType.uriList + UriItem(
-                    id = UUID
-                        .randomUUID()
-                        .toString(),
+                    id = UUID.randomUUID().toString(),
                     uri = "",
                     match = null,
                     checksum = null,
@@ -2174,9 +2172,7 @@ data class VaultAddEditState(
                     val canEditItem: Boolean = true,
                     val uriList: List<UriItem> = listOf(
                         UriItem(
-                            id = UUID
-                                .randomUUID()
-                                .toString(),
+                            id = UUID.randomUUID().toString(),
                             uri = "",
                             match = null,
                             checksum = null,

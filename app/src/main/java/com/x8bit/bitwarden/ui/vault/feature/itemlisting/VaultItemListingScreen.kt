@@ -113,9 +113,7 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.text(resources), Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {

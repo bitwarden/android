@@ -517,9 +517,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update { DEFAULT_STATE }
 
         // There are 2 because of the pull-to-refresh
-        composeTestRule
-            .onAllNodes(isProgressBar)
-            .assertCountEquals(2)
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(
@@ -533,9 +531,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
 
         // Only pull-to-refresh remains
-        composeTestRule
-            .onAllNodes(isProgressBar)
-            .assertCountEquals(1)
+        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
     }
 
     @Test
@@ -1505,12 +1501,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 ),
             )
         }
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(message)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(message).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("Options")
@@ -1542,12 +1534,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `error dialog should be displayed according to state`() {
         val errorMessage = "Fail"
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(errorMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1567,12 +1555,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(loadingMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1592,12 +1576,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `fido2 master password prompt dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogTitle = "Master password confirmation"
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogTitle)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogTitle).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1655,12 +1635,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `fido2 master password error dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogMessage = "Invalid master password. Try again."
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1694,12 +1670,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `fido2 pin prompt dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogTitle = "Verify PIN"
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogTitle)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogTitle).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1757,12 +1729,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `fido2 pin error dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogMessage = "Invalid PIN. Try again."
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1796,12 +1764,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `fido2 pin set up dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogMessage = "Enter your PIN code"
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1844,12 +1808,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `fido2 pin set up error dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogMessage = "The PIN field is required."
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1877,12 +1837,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `fido2 error dialog should display and function according to state`() {
         val dialogMessage = "Passkey error message"
-        composeTestRule
-            .onNode(isDialog())
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText(dialogMessage)
-            .assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
