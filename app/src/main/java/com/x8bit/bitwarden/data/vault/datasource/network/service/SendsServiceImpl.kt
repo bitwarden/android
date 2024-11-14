@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SendsApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
@@ -34,7 +35,9 @@ class SendsServiceImpl(
     override suspend fun createTextSend(
         body: SendJsonRequest,
     ): Result<CreateSendJsonResponse> =
-        sendsApi.createTextSend(body = body)
+        sendsApi
+            .createTextSend(body = body)
+            .toResult()
             .map { CreateSendJsonResponse.Success(send = it) }
             .recoverCatching { throwable ->
                 throwable.toBitwardenError()
@@ -48,7 +51,9 @@ class SendsServiceImpl(
     override suspend fun createFileSend(
         body: SendJsonRequest,
     ): Result<CreateFileSendResponse> =
-        sendsApi.createFileSend(body = body)
+        sendsApi
+            .createFileSend(body = body)
+            .toResult()
             .map { CreateFileSendResponse.Success(it) }
             .recoverCatching { throwable ->
                 throwable.toBitwardenError()
@@ -68,6 +73,7 @@ class SendsServiceImpl(
                 sendId = sendId,
                 body = body,
             )
+            .toResult()
             .map { UpdateSendResponseJson.Success(send = it) }
             .recoverCatching { throwable ->
                 throwable
@@ -118,16 +124,20 @@ class SendsServiceImpl(
                 )
             }
         }
+            .toResult()
             .onFailure { sendsApi.deleteSend(send.id) }
             .map { send }
     }
 
     override suspend fun deleteSend(sendId: String): Result<Unit> =
-        sendsApi.deleteSend(sendId = sendId)
+        sendsApi
+            .deleteSend(sendId = sendId)
+            .toResult()
 
     override suspend fun removeSendPassword(sendId: String): Result<UpdateSendResponseJson> =
         sendsApi
             .removeSendPassword(sendId = sendId)
+            .toResult()
             .map { UpdateSendResponseJson.Success(send = it) }
             .recoverCatching { throwable ->
                 throwable
@@ -142,5 +152,7 @@ class SendsServiceImpl(
     override suspend fun getSend(
         sendId: String,
     ): Result<SyncResponseJson.Send> =
-        sendsApi.getSend(sendId = sendId)
+        sendsApi
+            .getSend(sendId = sendId)
+            .toResult()
 }

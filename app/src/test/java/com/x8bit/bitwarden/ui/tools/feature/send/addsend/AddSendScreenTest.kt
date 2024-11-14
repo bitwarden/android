@@ -409,7 +409,8 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `Text segmented button click should send TextTypeClick`() {
         composeTestRule
-            .onAllNodesWithText("Text")[0]
+            .onAllNodesWithText("Text")
+            .filterToOne(!isEditableText)
             // A bug prevents performClick from working here so we
             // have to perform the semantic action instead.
             .performSemanticsAction(SemanticsActions.OnClick)
@@ -469,9 +470,13 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `text input change should send TextChange`() {
         composeTestRule
-            .onAllNodesWithText("Text")[1]
+            .onAllNodesWithText("Text")
+            .filterToOne(isEditableText)
+            .performScrollTo()
             .performTextInput("input")
-        viewModel.trySendAction(AddSendAction.TextChange("input"))
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.TextChange("input"))
+        }
     }
 
     @Test

@@ -26,12 +26,16 @@ private const val ADD_ITEM_TYPE: String = "vault_add_item_type"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "vault_add_edit_item"
 private const val ADD_EDIT_ITEM_TYPE: String = "vault_add_edit_type"
+private const val ADD_SELECTED_FOLDER_ID: String = "vault_add_selected_folder_id"
+private const val ADD_SELECTED_COLLECTION_ID: String = "vault_add_selected_collection_id"
 
 private const val ADD_EDIT_ITEM_ROUTE: String =
     ADD_EDIT_ITEM_PREFIX +
         "/{$ADD_EDIT_ITEM_TYPE}" +
         "?$EDIT_ITEM_ID={$EDIT_ITEM_ID}" +
-        "?$ADD_ITEM_TYPE={$ADD_ITEM_TYPE}"
+        "?$ADD_ITEM_TYPE={$ADD_ITEM_TYPE}" +
+        "?$ADD_SELECTED_FOLDER_ID={$ADD_SELECTED_FOLDER_ID}" +
+        "?$ADD_SELECTED_COLLECTION_ID={$ADD_SELECTED_COLLECTION_ID}"
 
 /**
  * Class to retrieve vault add & edit arguments from the [SavedStateHandle].
@@ -39,6 +43,8 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
 @OmitFromCoverage
 data class VaultAddEditArgs(
     val vaultAddEditType: VaultAddEditType,
+    val selectedFolderId: String? = null,
+    val selectedCollectionId: String? = null,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         vaultAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
@@ -53,6 +59,8 @@ data class VaultAddEditArgs(
             CLONE_TYPE -> VaultAddEditType.CloneItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
             else -> throw IllegalStateException("Unknown VaultAddEditType.")
         },
+        selectedFolderId = savedStateHandle[ADD_SELECTED_FOLDER_ID],
+        selectedCollectionId = savedStateHandle[ADD_SELECTED_COLLECTION_ID],
     )
 }
 
@@ -72,6 +80,14 @@ fun NavGraphBuilder.vaultAddEditDestination(
         route = ADD_EDIT_ITEM_ROUTE,
         arguments = listOf(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
+            navArgument(ADD_SELECTED_FOLDER_ID) {
+                type = NavType.StringType
+                nullable = true
+            },
+            navArgument(ADD_SELECTED_COLLECTION_ID) {
+                type = NavType.StringType
+                nullable = true
+            },
         ),
     ) {
         VaultAddEditScreen(
@@ -90,12 +106,16 @@ fun NavGraphBuilder.vaultAddEditDestination(
  */
 fun NavController.navigateToVaultAddEdit(
     vaultAddEditType: VaultAddEditType,
+    selectedFolderId: String? = null,
+    selectedCollectionId: String? = null,
     navOptions: NavOptions? = null,
 ) {
     navigate(
         route = "$ADD_EDIT_ITEM_PREFIX/${vaultAddEditType.toTypeString()}" +
             "?$EDIT_ITEM_ID=${vaultAddEditType.toIdOrNull()}" +
-            "?$ADD_ITEM_TYPE=${vaultAddEditType.toVaultItemCipherTypeOrNull()}",
+            "?$ADD_ITEM_TYPE=${vaultAddEditType.toVaultItemCipherTypeOrNull()}" +
+            "?$ADD_SELECTED_FOLDER_ID=$selectedFolderId" +
+            "?$ADD_SELECTED_COLLECTION_ID=$selectedCollectionId",
         navOptions = navOptions,
     )
 }

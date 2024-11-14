@@ -121,9 +121,8 @@ fun ManualCodeEntryScreen(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
             )
         },
-    ) { paddingValues ->
-        Column(modifier = Modifier.padding(paddingValues)) {
-
+    ) {
+        Column {
             Text(
                 text = stringResource(id = R.string.enter_key_manually),
                 style = BitwardenTheme.typography.titleMedium,

@@ -100,10 +100,9 @@ fun VaultSettingsScreen(
                 bitwardenHostState = snackbarHostState,
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
-            Modifier
-                .padding(innerPadding)
+            modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {

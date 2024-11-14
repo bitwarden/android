@@ -162,12 +162,94 @@ class AuthRequestManagerTest {
                     assertEquals(
                         CreateAuthRequestResult.Success(
                             authRequest = authRequest.copy(requestApproved = true),
-                            authRequestResponse = authRequestResponse,
+                            privateKey = authRequestResponse.privateKey,
+                            accessCode = authRequestResponse.accessCode,
                         ),
                         awaitItem(),
                     )
                     awaitComplete()
                 }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates with a pending admin request Success and getAuthRequestUpdate with approval should emit Success`() =
+        runTest {
+            val email = "email@email.com"
+            val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val authRequestResponseJson = AuthRequestsResponseJson.AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE
+            fakeAuthDiskSource.storePendingAuthRequest(
+                userId = USER_ID,
+                pendingAuthRequest = PendingAuthRequestJson(
+                    requestId = authRequestResponseJson.id,
+                    requestPrivateKey = authRequestResponse.privateKey,
+                    requestAccessCode = authRequestResponse.accessCode,
+                    requestFingerprint = authRequestResponse.fingerprint,
+                ),
+            )
+            val updatedAuthRequestResponseJson = authRequestResponseJson.copy(
+                requestApproved = true,
+            )
+            val authRequest = AuthRequest(
+                id = authRequestResponseJson.id,
+                publicKey = authRequestResponseJson.publicKey,
+                platform = authRequestResponseJson.platform,
+                ipAddress = authRequestResponseJson.ipAddress,
+                key = authRequestResponseJson.key,
+                masterPasswordHash = authRequestResponseJson.masterPasswordHash,
+                creationDate = authRequestResponseJson.creationDate,
+                responseDate = authRequestResponseJson.responseDate,
+                requestApproved = authRequestResponseJson.requestApproved ?: false,
+                originUrl = authRequestResponseJson.originUrl,
+                fingerprint = authRequestResponse.fingerprint,
+            )
+            coEvery {
+                authRequestsService.getAuthRequest(
+                    requestId = authRequest.id,
+                )
+            } returns authRequestResponseJson.asSuccess()
+            coEvery {
+                newAuthRequestService.getAuthRequestUpdate(
+                    requestId = authRequest.id,
+                    accessCode = authRequestResponse.accessCode,
+                    isSso = true,
+                )
+            } returnsMany listOf(
+                authRequestResponseJson.asSuccess(),
+                updatedAuthRequestResponseJson.asSuccess(),
+            )
+
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.SSO_ADMIN_APPROVAL,
+                )
+                .test {
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(
+                        CreateAuthRequestResult.Success(
+                            authRequest = authRequest.copy(requestApproved = true),
+                            privateKey = authRequestResponse.privateKey,
+                            accessCode = authRequestResponse.accessCode,
+                        ),
+                        awaitItem(),
+                    )
+                    awaitComplete()
+                }
+            coVerify(exactly = 0) { authSdkSource.getNewAuthRequest(any()) }
         }
 
     @Suppress("MaxLineLength")
@@ -305,6 +387,8 @@ class AuthRequestManagerTest {
                         pendingAuthRequest = PendingAuthRequestJson(
                             requestId = authRequestResponseJson.id,
                             requestPrivateKey = authRequestResponse.privateKey,
+                            requestAccessCode = authRequestResponse.accessCode,
+                            requestFingerprint = authRequestResponse.fingerprint,
                         ),
                     )
                     assertEquals(CreateAuthRequestResult.Expired, awaitItem())

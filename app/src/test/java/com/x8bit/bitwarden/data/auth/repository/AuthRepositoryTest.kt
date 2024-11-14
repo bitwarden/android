@@ -3566,6 +3566,8 @@ class AuthRepositoryTest {
             val pendingAuthRequest = PendingAuthRequestJson(
                 requestId = "requestId",
                 requestPrivateKey = "requestPrivateKey",
+                requestFingerprint = "fingerprint",
+                requestAccessCode = "accessCode",
             )
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
                 key = null,
@@ -6105,6 +6107,29 @@ class AuthRepositoryTest {
         )
         assertEquals(
             SendVerificationEmailResult.Success(null),
+            result,
+        )
+    }
+
+    @Test
+    fun `sendVerificationEmail with empty name should use null and return success`() = runTest {
+        coEvery {
+            identityService.sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = EMAIL,
+                    name = null,
+                    receiveMarketingEmails = true,
+                ),
+            )
+        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
+
+        val result = repository.sendVerificationEmail(
+            email = EMAIL,
+            name = "",
+            receiveMarketingEmails = true,
+        )
+        assertEquals(
+            SendVerificationEmailResult.Success(EMAIL_VERIFICATION_TOKEN),
             result,
         )
     }

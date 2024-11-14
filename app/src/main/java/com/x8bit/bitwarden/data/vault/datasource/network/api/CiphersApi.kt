@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
@@ -26,7 +27,7 @@ interface CiphersApi {
      * Create a cipher.
      */
     @POST("ciphers")
-    suspend fun createCipher(@Body body: CipherJsonRequest): Result<SyncResponseJson.Cipher>
+    suspend fun createCipher(@Body body: CipherJsonRequest): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Create a cipher that belongs to an organization.
@@ -34,7 +35,7 @@ interface CiphersApi {
     @POST("ciphers/create")
     suspend fun createCipherInOrganization(
         @Body body: CreateCipherInOrganizationJsonRequest,
-    ): Result<SyncResponseJson.Cipher>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Associates an attachment with a cipher.
@@ -43,7 +44,7 @@ interface CiphersApi {
     suspend fun createAttachment(
         @Path("cipherId") cipherId: String,
         @Body body: AttachmentJsonRequest,
-    ): Result<AttachmentJsonResponse>
+    ): NetworkResult<AttachmentJsonResponse>
 
     /**
      * Uploads the attachment associated with a cipher.
@@ -53,7 +54,7 @@ interface CiphersApi {
         @Path("cipherId") cipherId: String,
         @Path("attachmentId") attachmentId: String,
         @Body body: MultipartBody,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Updates a cipher.
@@ -62,7 +63,7 @@ interface CiphersApi {
     suspend fun updateCipher(
         @Path("cipherId") cipherId: String,
         @Body body: CipherJsonRequest,
-    ): Result<SyncResponseJson.Cipher>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Shares a cipher.
@@ -71,7 +72,7 @@ interface CiphersApi {
     suspend fun shareCipher(
         @Path("cipherId") cipherId: String,
         @Body body: ShareCipherJsonRequest,
-    ): Result<SyncResponseJson.Cipher>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Shares an attachment.
@@ -82,7 +83,7 @@ interface CiphersApi {
         @Path("attachmentId") attachmentId: String,
         @Query("organizationId") organizationId: String?,
         @Body body: MultipartBody,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Updates a cipher's collections.
@@ -91,7 +92,7 @@ interface CiphersApi {
     suspend fun updateCipherCollections(
         @Path("cipherId") cipherId: String,
         @Body body: UpdateCipherCollectionsJsonRequest,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Hard deletes a cipher.
@@ -99,7 +100,7 @@ interface CiphersApi {
     @DELETE("ciphers/{cipherId}")
     suspend fun hardDeleteCipher(
         @Path("cipherId") cipherId: String,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Soft deletes a cipher.
@@ -107,7 +108,7 @@ interface CiphersApi {
     @PUT("ciphers/{cipherId}/delete")
     suspend fun softDeleteCipher(
         @Path("cipherId") cipherId: String,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Deletes an attachment from a cipher.
@@ -116,7 +117,7 @@ interface CiphersApi {
     suspend fun deleteCipherAttachment(
         @Path("cipherId") cipherId: String,
         @Path("attachmentId") attachmentId: String,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Restores a cipher.
@@ -124,7 +125,7 @@ interface CiphersApi {
     @PUT("ciphers/{cipherId}/restore")
     suspend fun restoreCipher(
         @Path("cipherId") cipherId: String,
-    ): Result<SyncResponseJson.Cipher>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Gets a cipher.
@@ -132,7 +133,7 @@ interface CiphersApi {
     @GET("ciphers/{cipherId}")
     suspend fun getCipher(
         @Path("cipherId") cipherId: String,
-    ): Result<SyncResponseJson.Cipher>
+    ): NetworkResult<SyncResponseJson.Cipher>
 
     /**
      * Gets a cipher attachment.
@@ -141,11 +142,11 @@ interface CiphersApi {
     suspend fun getCipherAttachment(
         @Path("cipherId") cipherId: String,
         @Path("attachmentId") attachmentId: String,
-    ): Result<SyncResponseJson.Cipher.Attachment>
+    ): NetworkResult<SyncResponseJson.Cipher.Attachment>
 
     /**
      * Indicates if the active user has unassigned ciphers.
      */
     @GET("ciphers/has-unassigned-ciphers")
-    suspend fun hasUnassignedCiphers(): Result<Boolean>
+    suspend fun hasUnassignedCiphers(): NetworkResult<Boolean>
 }

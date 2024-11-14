@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
+import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -30,6 +31,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultDiskSource: VaultDiskSource,
     private val featureFlagManager: FeatureFlagManager,
+    private val autofillEnabledManager: AutofillEnabledManager,
 ) : FirstTimeActionManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -78,7 +80,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .filterNotNull()
             .flatMapLatest {
                 // Can be expanded to support multiple autofill settings
-                settingsDiskSource.getShowAutoFillSettingBadgeFlow(userId = it)
+                getShowAutofillSettingBadgeFlowInternal(userId = it)
                     .map { showAutofillBadge ->
                         listOfNotNull(showAutofillBadge)
                     }
@@ -128,7 +130,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     listOf(
                         getShowImportLoginsFlowInternal(userId = activeUserId),
                         settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = activeUserId),
-                        settingsDiskSource.getShowAutoFillSettingBadgeFlow(userId = activeUserId),
+                        getShowAutofillSettingBadgeFlowInternal(userId = activeUserId),
                         getShowImportLoginsSettingBadgeFlowInternal(userId = activeUserId),
                     ),
                 ) {
@@ -165,7 +167,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     FirstTimeState(
                         showImportLoginsCard = authDiskSource.getShowImportLogins(it),
                         showSetupUnlockCard = settingsDiskSource.getShowUnlockSettingBadge(it),
-                        showSetupAutofillCard = settingsDiskSource.getShowAutoFillSettingBadge(it),
+                        showSetupAutofillCard = getShowAutofillSettingBadgeInternal(it),
                         showImportLoginsCardInSettings = settingsDiskSource
                             .getShowImportLoginsSettingBadge(it),
                     )
@@ -235,5 +237,24 @@ class FirstTimeActionManagerImpl @Inject constructor(
             ) { showImportLogins, ciphers ->
                 showImportLogins ?: false && ciphers.isEmpty()
             }
+    }
+
+    /**
+     * Internal implementation to get a flow of the showAutofill value which takes
+     * into account if autofill is already enabled globally.
+     */
+    private fun getShowAutofillSettingBadgeFlowInternal(userId: String): Flow<Boolean> {
+        return settingsDiskSource
+            .getShowAutoFillSettingBadgeFlow(userId)
+            .combine(
+                autofillEnabledManager.isAutofillEnabledStateFlow,
+            ) { showAutofill, autofillEnabled ->
+                showAutofill ?: false && !autofillEnabled
+            }
+    }
+
+    private fun getShowAutofillSettingBadgeInternal(userId: String): Boolean {
+        return settingsDiskSource.getShowAutoFillSettingBadge(userId) ?: false &&
+            !autofillEnabledManager.isAutofillEnabled
     }
 }

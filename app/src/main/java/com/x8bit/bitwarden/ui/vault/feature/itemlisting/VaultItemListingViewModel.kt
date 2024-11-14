@@ -534,6 +534,20 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleAddVaultItemClick() {
         val event = when (val itemListingType = state.itemListingType) {
+            is VaultItemListingState.ItemListingType.Vault.Folder -> {
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = itemListingType.toVaultItemCipherType(),
+                    selectedFolderId = itemListingType.folderId,
+                )
+            }
+
+            is VaultItemListingState.ItemListingType.Vault.Collection -> {
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = itemListingType.toVaultItemCipherType(),
+                    selectedCollectionId = itemListingType.collectionId,
+                )
+            }
+
             is VaultItemListingState.ItemListingType.Vault -> {
                 VaultItemListingEvent.NavigateToAddVaultItem(
                     vaultItemCipherType = itemListingType.toVaultItemCipherType(),
@@ -843,7 +857,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleBackClick() {
         sendEvent(
-            event = if (state.isTotp) {
+            event = if (state.isTotp || state.isAutofill) {
                 VaultItemListingEvent.ExitApp
             } else {
                 VaultItemListingEvent.NavigateBack
@@ -1733,6 +1747,13 @@ data class VaultItemListingState(
     val isRefreshing: Boolean,
 ) {
     /**
+     * Whether or not the add FAB should be shown.
+     */
+    val hasAddItemFabButton: Boolean
+        get() = itemListingType.hasFab &&
+            !(viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+
+    /**
      * Whether or not this represents a listing screen for autofill.
      */
     val isAutofill: Boolean
@@ -2089,7 +2110,7 @@ data class VaultItemListingState(
                     get() = folderId
                         ?.let { folderName.asText() }
                         ?: R.string.folder_none.asText()
-                override val hasFab: Boolean get() = false
+                override val hasFab: Boolean get() = true
             }
 
             /**
@@ -2104,7 +2125,7 @@ data class VaultItemListingState(
                 val collectionName: String = "",
             ) : Vault() {
                 override val titleText: Text get() = collectionName.asText()
-                override val hasFab: Boolean get() = false
+                override val hasFab: Boolean get() = true
             }
         }
 
@@ -2150,6 +2171,8 @@ sealed class VaultItemListingEvent {
      */
     data class NavigateToAddVaultItem(
         val vaultItemCipherType: VaultItemCipherType,
+        val selectedFolderId: String? = null,
+        val selectedCollectionId: String? = null,
     ) : VaultItemListingEvent()
 
     /**

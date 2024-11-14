@@ -1302,7 +1302,7 @@ class AuthRepositoryImpl(
             .sendVerificationEmail(
                 SendVerificationEmailRequestJson(
                     email = email,
-                    name = name,
+                    name = name.takeUnless { it.isBlank() },
                     receiveMarketingEmails = receiveMarketingEmails,
                 ),
             )

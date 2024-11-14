@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -312,7 +311,7 @@ fun VaultAddEditScreen(
                                 .takeUnless {
                                     state.isAddItemMode ||
                                         !state.isCipherInCollection ||
-                                            !state.canAssociateToCollections
+                                        !state.canAssociateToCollections
                                 },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
@@ -324,7 +323,7 @@ fun VaultAddEditScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.viewState) {
             is VaultAddEditState.ViewState.Content -> {
                 VaultAddEditContent(
@@ -342,7 +341,6 @@ fun VaultAddEditScreen(
                     sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
                     modifier = Modifier
                         .imePadding()
-                        .padding(innerPadding)
                         .fillMaxSize(),
                 )
             }
@@ -350,17 +348,13 @@ fun VaultAddEditScreen(
             is VaultAddEditState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = viewState.message(),
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             VaultAddEditState.ViewState.Loading -> {
                 BitwardenLoadingContent(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }

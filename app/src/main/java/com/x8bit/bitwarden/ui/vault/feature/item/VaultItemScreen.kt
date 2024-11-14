@@ -255,13 +255,12 @@ fun VaultItemScreen(
                 )
             }
         },
-    ) { innerPadding ->
+    ) {
         VaultItemContent(
             viewState = state.viewState,
             modifier = Modifier
                 .imePadding()
-                .fillMaxSize()
-                .padding(innerPadding),
+                .fillMaxSize(),
             vaultCommonItemTypeHandlers = remember(viewModel) {
                 VaultCommonItemTypeHandlers.create(viewModel = viewModel)
             },
