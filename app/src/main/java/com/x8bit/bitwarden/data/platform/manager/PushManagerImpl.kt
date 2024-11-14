@@ -20,18 +20,34 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
+
+/**
+ * The amount of time to delay before a subsequent attempts to expire the push token.
+ */
+private val PUSH_TOKEN_EXPIRE_INTERVAL: Duration = 1.minutes
+
+/**
+ * The amount of time to delay before expiring the push token.
+ */
+private val PUSH_TOKEN_EXPIRE_DELAY: Duration = 7.days
 
 /**
  * Primary implementation of [PushManager].
@@ -97,6 +113,8 @@ class PushManagerImpl @Inject constructor(
 
     private val activeUserId: String?
         get() = authDiskSource.userState?.activeUserId
+
+    private var registerPushTokenJob: Job = Job().apply { complete() }
 
     init {
         authDiskSource
@@ -279,10 +297,14 @@ class PushManagerImpl @Inject constructor(
         val userId = activeUserId ?: return
         if (!isLoggedIn(userId)) return
 
-        // If the last registered token is from less than a day before, skip this for now
-        val lastRegistration = pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toInstant()
-        val dayBefore = clock.instant().minus(1, ChronoUnit.DAYS)
-        if (lastRegistration?.isAfter(dayBefore) == true) return
+        // Periodically check if the token needs to be re-registered with Bitwarden Server
+        registerPushTokenJob.cancel()
+        registerPushTokenJob = ioScope.launch {
+            while (coroutineContext.isActive) {
+                delay(duration = PUSH_TOKEN_EXPIRE_INTERVAL)
+                registerStoredPushTokenIfNecessaryInternal(userId)
+            }
+        }
 
         ioScope.launch {
             pushDiskSource.registeredPushToken?.let {
@@ -296,19 +318,30 @@ class PushManagerImpl @Inject constructor(
 
     private suspend fun registerPushTokenIfNecessaryInternal(userId: String, token: String) {
         val currentToken = pushDiskSource.getCurrentPushToken(userId)
-
         if (token == currentToken) {
-            // Our token is up-to-date, so just update the last registration date
-            pushDiskSource.storeLastPushTokenRegistrationDate(
-                userId = userId,
-                registrationDate = ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC),
-            )
             return
         }
 
+        registerPushTokenInternal(userId, token)
+    }
+
+    private suspend fun registerStoredPushTokenIfNecessaryInternal(userId: String) {
+        if (!isLoggedIn(userId)) return
+
+        val lastRegistration =
+            pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toInstant() ?: return
+        val expiryTime = clock.instant().minus(PUSH_TOKEN_EXPIRE_DELAY.toJavaDuration())
+        if (lastRegistration.isAfter(expiryTime)) return
+
+        val currentToken = pushDiskSource.getCurrentPushToken(userId) ?: return
+
+        registerPushTokenInternal(userId, currentToken)
+    }
+
+    private suspend fun registerPushTokenInternal(userId: String, newToken: String) {
         pushService
             .putDeviceToken(
-                body = PushTokenRequest(token),
+                body = PushTokenRequest(newToken),
             )
             .fold(
                 onSuccess = {
@@ -318,7 +351,7 @@ class PushManagerImpl @Inject constructor(
                     )
                     pushDiskSource.storeCurrentPushToken(
                         userId = userId,
-                        pushToken = token,
+                        pushToken = newToken,
                     )
                 },
                 onFailure = {
