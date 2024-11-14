@@ -6112,6 +6112,29 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `sendVerificationEmail with empty name should use null and return success`() = runTest {
+        coEvery {
+            identityService.sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = EMAIL,
+                    name = null,
+                    receiveMarketingEmails = true,
+                ),
+            )
+        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
+
+        val result = repository.sendVerificationEmail(
+            email = EMAIL,
+            name = "",
+            receiveMarketingEmails = true,
+        )
+        assertEquals(
+            SendVerificationEmailResult.Success(EMAIL_VERIFICATION_TOKEN),
+            result,
+        )
+    }
+
+    @Test
     fun `sendVerificationEmail failure should return error`() = runTest {
         coEvery {
             identityService.sendVerificationEmail(

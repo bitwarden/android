@@ -160,7 +160,7 @@ fun TwoFactorLoginScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         TwoFactorLoginScreenContent(
             state = state,
             onCodeInputChange = remember(viewModel) {
@@ -175,9 +175,7 @@ fun TwoFactorLoginScreen(
             onResendEmailButtonClick = remember(viewModel) {
                 { viewModel.trySendAction(TwoFactorLoginAction.ResendEmailClick) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

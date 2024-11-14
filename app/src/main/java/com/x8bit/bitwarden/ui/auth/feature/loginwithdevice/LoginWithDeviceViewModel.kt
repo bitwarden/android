@@ -157,31 +157,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                 }
             }
 
-            CreateAuthRequestResult.Declined -> {
-                when (state.loginWithDeviceType) {
-                    LoginWithDeviceType.OTHER_DEVICE,
-                    LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> {
-                        mutableStateFlow.update {
-                            it.copy(
-                                viewState = LoginWithDeviceState.ViewState.Content(
-                                    loginWithDeviceType = it.loginWithDeviceType,
-                                    fingerprintPhrase = "",
-                                    isResendNotificationLoading = false,
-                                ),
-                                dialogState = LoginWithDeviceState.DialogState.Error(
-                                    title = null,
-                                    message = R.string.this_request_is_no_longer_valid.asText(),
-                                ),
-                            )
-                        }
-                    }
-
-                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> {
-                        // Do nothing, the user should not be informed of this state
-                    }
-                }
-            }
+            // Do nothing, the user should not be informed of this state
+            CreateAuthRequestResult.Declined -> Unit
 
             CreateAuthRequestResult.Expired -> {
                 mutableStateFlow.update {

@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -37,17 +38,24 @@ class FirstTimeActionManagerTest {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlow
     }
 
+    private val mutableAutofillEnabledFlow = MutableStateFlow(false)
+    private val autofillEnabledManager = mockk<AutofillEnabledManager> {
+        every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledFlow
+        every { isAutofillEnabled } returns false
+    }
+
     private val firstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultDiskSource = vaultDiskSource,
         featureFlagManager = featureFlagManager,
         dispatcherManager = FakeDispatcherManager(),
+        autofillEnabledManager = autofillEnabledManager,
     )
 
     @Suppress("MaxLineLength")
     @Test
-    fun `allAutoFillSettingsBadgeCountFlow should emit the value of flags set to true and update when changed`() =
+    fun `allAutoFillSettingsBadgeCountFlow should emit the value of flags set to true and update when saved value is changed or autofill enabled state changes`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             firstTimeActionManager.allAutofillSettingsBadgeCountFlow.test {
@@ -61,6 +69,13 @@ class FirstTimeActionManagerTest {
                     userId = USER_ID,
                     showBadge = false,
                 )
+                assertEquals(0, awaitItem())
+                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                    userId = USER_ID,
+                    showBadge = true,
+                )
+                assertEquals(1, awaitItem())
+                mutableAutofillEnabledFlow.update { true }
                 assertEquals(0, awaitItem())
             }
         }
@@ -239,6 +254,46 @@ class FirstTimeActionManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
         assertFalse(fakeSettingsDiskSource.getShowImportLoginsSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `show autofill badge when autofill is already enabled should be false`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every { autofillEnabledManager.isAutofillEnabled } returns true
+        assertFalse(firstTimeActionManager.currentOrDefaultUserFirstTimeState.showSetupAutofillCard)
+    }
+
+    @Test
+    fun `first time state flow should update when autofill is enabled`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        firstTimeActionManager.firstTimeStateFlow.test {
+            assertEquals(
+                FirstTimeState(
+                    showImportLoginsCard = true,
+                ),
+                awaitItem(),
+            )
+            fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                userId = MOCK_USER_STATE.activeUserId,
+                showBadge = true,
+            )
+            assertEquals(
+                FirstTimeState(
+                    showImportLoginsCard = true,
+                    showSetupAutofillCard = true,
+                ),
+                awaitItem(),
+            )
+            mutableAutofillEnabledFlow.update { true }
+            assertEquals(
+                FirstTimeState(
+                    showImportLoginsCard = true,
+                    showSetupAutofillCard = false,
+                ),
+                awaitItem(),
+            )
+        }
     }
 }
 

@@ -189,12 +189,7 @@ fun GeneratorScreen(
                 }
             }
         },
-        snackbarHost = {
-            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        utilityBar = {
             MainStateOptionsItem(
                 selectedType = state.selectedType,
                 passcodePolicyOverride = state.passcodePolicyOverride,
@@ -203,20 +198,25 @@ fun GeneratorScreen(
                 modifier = Modifier
                     .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
             )
-            ScrollContent(
-                state = state,
-                onRegenerateClick = onRegenerateClick,
-                onCopyClick = onCopyClick,
-                onUsernameSubStateOptionClicked = onUsernameOptionClicked,
-                passwordHandlers = passwordHandlers,
-                passphraseHandlers = passphraseHandlers,
-                usernameTypeHandlers = usernameTypeHandlers,
-                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-                catchAllEmailHandlers = catchAllEmailHandlers,
-                randomWordHandlers = randomWordHandlers,
-            )
-        }
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) {
+        ScrollContent(
+            state = state,
+            onRegenerateClick = onRegenerateClick,
+            onCopyClick = onCopyClick,
+            onUsernameSubStateOptionClicked = onUsernameOptionClicked,
+            passwordHandlers = passwordHandlers,
+            passphraseHandlers = passphraseHandlers,
+            usernameTypeHandlers = usernameTypeHandlers,
+            forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+            plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+            catchAllEmailHandlers = catchAllEmailHandlers,
+            randomWordHandlers = randomWordHandlers,
+        )
     }
 }
 

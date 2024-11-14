@@ -16,8 +16,9 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
-import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResult
+import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForNetworkResult
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
 
@@ -28,12 +29,15 @@ class IdentityServiceImpl(
 ) : IdentityService {
 
     override suspend fun preLogin(email: String): Result<PreLoginResponseJson> =
-        unauthenticatedIdentityApi.preLogin(PreLoginRequestJson(email = email))
+        unauthenticatedIdentityApi
+            .preLogin(PreLoginRequestJson(email = email))
+            .toResult()
 
     @Suppress("MagicNumber")
     override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
         unauthenticatedIdentityApi
             .register(body)
+            .toResult()
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
                 bitwardenError
@@ -75,6 +79,7 @@ class IdentityServiceImpl(
             captchaResponse = captchaToken,
             authRequestId = authModel.authRequestId,
         )
+        .toResult()
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
             bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
@@ -95,6 +100,7 @@ class IdentityServiceImpl(
         .prevalidateSso(
             organizationIdentifier = organizationIdentifier,
         )
+        .toResult()
 
     override fun refreshTokenSynchronously(
         refreshToken: String,
@@ -104,7 +110,8 @@ class IdentityServiceImpl(
             grantType = "refresh_token",
             refreshToken = refreshToken,
         )
-        .executeForResult()
+        .executeForNetworkResult()
+        .toResult()
 
     @Suppress("MagicNumber")
     override suspend fun registerFinish(
@@ -112,6 +119,7 @@ class IdentityServiceImpl(
     ): Result<RegisterResponseJson> =
         unauthenticatedIdentityApi
             .registerFinish(body)
+            .toResult()
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
                 bitwardenError
@@ -127,6 +135,7 @@ class IdentityServiceImpl(
     ): Result<String?> {
         return unauthenticatedIdentityApi
             .sendVerificationEmail(body = body)
+            .toResult()
             .map { it?.content }
     }
 
@@ -136,9 +145,8 @@ class IdentityServiceImpl(
         .verifyEmailToken(
             body = body,
         )
-        .map {
-            VerifyEmailTokenResponseJson.Valid
-        }
+        .toResult()
+        .map { VerifyEmailTokenResponseJson.Valid }
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
             bitwardenError

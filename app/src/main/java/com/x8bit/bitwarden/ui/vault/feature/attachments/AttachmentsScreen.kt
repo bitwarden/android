@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.attachments
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -98,24 +97,21 @@ fun AttachmentsScreen(
                 },
             )
         },
-    ) { innerPadding ->
-        val modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
+    ) {
         when (val viewState = state.viewState) {
             is AttachmentsState.ViewState.Content -> AttachmentsContent(
                 viewState = viewState,
                 attachmentsHandlers = attachmentsHandlers,
-                modifier = modifier,
+                modifier = Modifier.fillMaxSize(),
             )
 
             is AttachmentsState.ViewState.Error -> BitwardenErrorContent(
                 message = viewState.message(),
-                modifier = modifier,
+                modifier = Modifier.fillMaxSize(),
             )
 
             AttachmentsState.ViewState.Loading -> BitwardenLoadingContent(
-                modifier = modifier,
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

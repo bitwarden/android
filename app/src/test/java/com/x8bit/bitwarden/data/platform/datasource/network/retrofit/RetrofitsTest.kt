@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.Refres
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -39,7 +40,7 @@ class RetrofitsTest {
         }
     }
     private val headersInterceptors = mockk<HeadersInterceptor> {
-        mockIntercept { isheadersInterceptorCalled = true }
+        mockIntercept { isHeadersInterceptorCalled = true }
     }
     private val refreshAuthenticator = mockk<RefreshAuthenticator> {
         mockAuthenticate { isRefreshAuthenticatorCalled = true }
@@ -57,7 +58,7 @@ class RetrofitsTest {
 
     private var isAuthInterceptorCalled = false
     private var isApiInterceptorCalled = false
-    private var isheadersInterceptorCalled = false
+    private var isHeadersInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
     private var isEventsInterceptorCalled = false
     private var isRefreshAuthenticatorCalled = false
@@ -158,7 +159,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -176,7 +177,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertTrue(isEventsInterceptorCalled)
     }
@@ -194,7 +195,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -212,7 +213,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
-        assertTrue(isheadersInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
         assertTrue(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -231,7 +232,7 @@ class RetrofitsTest {
 
             assertTrue(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
-            assertTrue(isheadersInterceptorCalled)
+            assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
         }
@@ -250,7 +251,7 @@ class RetrofitsTest {
 
             assertFalse(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
-            assertTrue(isheadersInterceptorCalled)
+            assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
         }
@@ -264,7 +265,7 @@ class RetrofitsTest {
 
 interface TestApi {
     @GET("/test")
-    suspend fun test(): Result<JsonObject>
+    suspend fun test(): NetworkResult<JsonObject>
 }
 
 /**

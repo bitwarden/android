@@ -25,7 +25,7 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
  */
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultUnlockedNavBarDestination(
-    onNavigateToVaultAddItem: (VaultItemCipherType, String?) -> Unit,
+    onNavigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,

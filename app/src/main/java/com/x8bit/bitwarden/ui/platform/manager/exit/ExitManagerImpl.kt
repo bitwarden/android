@@ -8,9 +8,9 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
  */
 @OmitFromCoverage
 class ExitManagerImpl(
-    val activity: Activity,
+    private val activity: Activity,
 ) : ExitManager {
     override fun exitApplication() {
-        activity.finish()
+        activity.finishAndRemoveTask()
     }
 }

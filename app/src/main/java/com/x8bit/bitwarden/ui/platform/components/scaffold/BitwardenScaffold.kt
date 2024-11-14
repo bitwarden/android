@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.ui.platform.components.scaffold
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
@@ -22,17 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
  * still overridable if necessary.
+ *
+ * The [utilityBar] is a nonstandard [Composable] that is placed below the [topBar] and does not
+ * scroll.
+ * The [overlay] is a nonstandard [Composable] that is placed over top the `utilityBar` and
+ * `content`.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenScaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = { },
+    utilityBar: @Composable () -> Unit = { },
+    overlay: @Composable () -> Unit = { },
     bottomBar: @Composable () -> Unit = { },
     snackbarHost: @Composable () -> Unit = { },
     floatingActionButton: @Composable () -> Unit = { },
@@ -42,8 +52,9 @@ fun BitwardenScaffold(
     contentColor: Color = BitwardenTheme.colorScheme.text.primary,
     contentWindowInsets: WindowInsets = ScaffoldDefaults
         .contentWindowInsets
-        .exclude(WindowInsets.navigationBars),
-    content: @Composable (PaddingValues) -> Unit,
+        .union(WindowInsets.displayCutout)
+        .only(WindowInsetsSides.Horizontal),
+    content: @Composable () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier
@@ -52,36 +63,38 @@ fun BitwardenScaffold(
         topBar = topBar,
         bottomBar = bottomBar,
         snackbarHost = snackbarHost,
-        floatingActionButton = {
-            Box(modifier = Modifier.navigationBarsPadding()) {
-                floatingActionButton()
-            }
-        },
+        floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
         contentColor = contentColor,
-        contentWindowInsets = contentWindowInsets,
+        contentWindowInsets = WindowInsets(0.dp),
         content = { paddingValues ->
-            val internalPullToRefreshState = rememberPullToRefreshState()
-            Box(
-                modifier = Modifier.pullToRefresh(
-                    state = internalPullToRefreshState,
-                    isRefreshing = pullToRefreshState.isRefreshing,
-                    onRefresh = pullToRefreshState.onRefresh,
-                    enabled = pullToRefreshState.isEnabled,
-                ),
-            ) {
-                content(paddingValues)
-
-                PullToRefreshDefaults.Indicator(
+            Column(modifier = Modifier.padding(paddingValues = paddingValues)) {
+                utilityBar()
+                val internalPullToRefreshState = rememberPullToRefreshState()
+                Box(
                     modifier = Modifier
-                        .padding(paddingValues)
-                        .align(Alignment.TopCenter),
-                    isRefreshing = pullToRefreshState.isRefreshing,
-                    state = internalPullToRefreshState,
-                    containerColor = BitwardenTheme.colorScheme.background.secondary,
-                    color = BitwardenTheme.colorScheme.icon.secondary,
-                )
+                        .windowInsetsPadding(insets = contentWindowInsets)
+                        .pullToRefresh(
+                            state = internalPullToRefreshState,
+                            isRefreshing = pullToRefreshState.isRefreshing,
+                            onRefresh = pullToRefreshState.onRefresh,
+                            enabled = pullToRefreshState.isEnabled,
+                        ),
+                ) {
+                    content()
+
+                    PullToRefreshDefaults.Indicator(
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        isRefreshing = pullToRefreshState.isRefreshing,
+                        state = internalPullToRefreshState,
+                        containerColor = BitwardenTheme.colorScheme.background.secondary,
+                        color = BitwardenTheme.colorScheme.icon.secondary,
+                    )
+                }
+            }
+            Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
+                overlay()
             }
         },
     )

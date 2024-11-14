@@ -141,11 +141,9 @@ fun BlockAutoFillScreen(
                 )
             }
         },
-    ) { innerPadding ->
+    ) {
         LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             when (val viewState = state.viewState) {
                 is BlockAutoFillState.ViewState.Content -> {
@@ -191,9 +189,7 @@ fun BlockAutoFillScreen(
                             addItemClickAction = remember(viewModel) {
                                 { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
                             },
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxSize(),
+                            modifier = Modifier.fillMaxSize(),
                         )
                     }
                 }

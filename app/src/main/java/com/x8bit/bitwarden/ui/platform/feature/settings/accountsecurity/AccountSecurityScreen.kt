@@ -174,10 +174,9 @@ fun AccountSecurityScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {

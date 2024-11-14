@@ -218,13 +218,12 @@ private fun DeleteAccountConfirmationScaffold(
                 onNavigationIconClick = onCloseClick,
             )
         },
-    ) { innerPadding ->
+    ) {
         DeleteAccountConfirmationContent(
             state = state,
             onDeleteAccountClick = onDeleteAccountClick,
             onResendCodeClick = onResendCodeClick,
             onVerificationCodeTextChange = onVerificationCodeTextChange,
-            modifier = Modifier.padding(innerPadding),
         )
     }
 }

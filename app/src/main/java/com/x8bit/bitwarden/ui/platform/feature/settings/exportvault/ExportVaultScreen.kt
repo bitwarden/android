@@ -160,7 +160,7 @@ fun ExportVaultScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         ExportVaultScreenContent(
             state = state,
             onConfirmFilePasswordInputChanged = remember(viewModel) {
@@ -179,9 +179,7 @@ fun ExportVaultScreen(
                 { viewModel.trySendAction(ExportVaultAction.SendCodeClick) }
             },
             onExportVaultClick = { shouldShowConfirmationDialog = true },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

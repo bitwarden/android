@@ -2,16 +2,14 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
@@ -35,7 +34,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.navigation.BitwardenNavigationBarItem
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -64,7 +62,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
-    onNavigateToVaultAddItem: (VaultItemCipherType, String?) -> Unit,
+    onNavigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -158,7 +156,7 @@ private fun VaultUnlockedNavBarScaffold(
     sendTabClickedAction: () -> Unit,
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
-    navigateToVaultAddItem: (VaultItemCipherType, String?) -> Unit,
+    navigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -177,10 +175,9 @@ private fun VaultUnlockedNavBarScaffold(
     var shouldDimNavBar by remember { mutableStateOf(false) }
 
     // This scaffold will host screens that contain top bars while not hosting one itself.
-    // We need to ignore the status bar insets here and let the content screens handle
-    // it themselves.
+    // We need to ignore the all insets here and let the content screens handle it themselves.
     BitwardenScaffold(
-        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(WindowInsets.statusBars),
+        contentWindowInsets = WindowInsets(0.dp),
         bottomBar = {
             Box {
                 var appBarHeightPx by remember { mutableIntStateOf(0) }
@@ -208,17 +205,16 @@ private fun VaultUnlockedNavBarScaffold(
                 )
             }
         },
-    ) { innerPadding ->
+    ) {
         // Because this Scaffold has a bottom navigation bar, the NavHost will:
-        // - consume the navigation bar insets.
+        // - consume the vertical navigation bar insets.
         // - consume the IME insets.
         NavHost(
             navController = navController,
             startDestination = VAULT_GRAPH_ROUTE,
             modifier = Modifier
-                .consumeWindowInsets(WindowInsets.navigationBars)
-                .consumeWindowInsets(WindowInsets.ime)
-                .padding(innerPadding.max(WindowInsets.ime)),
+                .consumeWindowInsets(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
+                .consumeWindowInsets(WindowInsets.ime),
             enterTransition = RootTransitionProviders.Enter.fadeIn,
             exitTransition = RootTransitionProviders.Exit.fadeOut,
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,
