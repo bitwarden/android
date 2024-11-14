@@ -74,6 +74,7 @@ fun VaultItemListingScreen(
     onNavigateToVaultAddItemScreen: (
         vaultItemCipherType: VaultItemCipherType,
         selectedFolderId: String?,
+        selectedCollectionId: String?,
     ) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -118,6 +119,7 @@ fun VaultItemListingScreen(
                 onNavigateToVaultAddItemScreen(
                     event.vaultItemCipherType,
                     event.selectedFolderId,
+                    event.selectedCollectionId,
                 )
             }
 
@@ -446,7 +448,7 @@ private fun VaultItemListingScaffold(
             )
         },
         floatingActionButton = {
-            if (state.itemListingType.hasFab) {
+            if (state.hasAddItemFabButton) {
                 BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
                     painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
