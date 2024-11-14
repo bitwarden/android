@@ -75,6 +75,8 @@ class SettingsDiskSourceImpl(
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableLastDatabaseSchemeChangeInstantFlow = bufferedMutableSharedFlow<Instant?>()
+
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
@@ -158,7 +160,14 @@ class SettingsDiskSourceImpl(
 
     override var lastDatabaseSchemeChangeInstant: Instant?
         get() = getLong(LAST_SCHEME_CHANGE_INSTANT)?.let { Instant.ofEpochMilli(it) }
-        set(value) = putLong(LAST_SCHEME_CHANGE_INSTANT, value?.toEpochMilli())
+        set(value) {
+            putLong(LAST_SCHEME_CHANGE_INSTANT, value?.toEpochMilli())
+            mutableLastDatabaseSchemeChangeInstantFlow.tryEmit(value)
+        }
+
+    override val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
+        get() = mutableLastDatabaseSchemeChangeInstantFlow
+            .onSubscription { emit(lastDatabaseSchemeChangeInstant) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)

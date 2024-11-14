@@ -308,7 +308,9 @@ object PlatformManagerModule {
     @Singleton
     fun provideDatabaseSchemeManager(
         settingsDiskSource: SettingsDiskSource,
+        dispatcherManager: DispatcherManager,
     ): DatabaseSchemeManager = DatabaseSchemeManagerImpl(
         settingsDiskSource = settingsDiskSource,
+        dispatcherManager = dispatcherManager,
     )
 }
