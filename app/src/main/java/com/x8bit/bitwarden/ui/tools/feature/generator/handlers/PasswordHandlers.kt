@@ -82,7 +82,7 @@ data class PasswordHandlers(
             },
             onPasswordToggleAvoidAmbiguousCharsChange = { shouldAvoidAmbiguousChars ->
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                    GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange(
                         avoidAmbiguousChars = shouldAvoidAmbiguousChars,
                     ),
                 )
