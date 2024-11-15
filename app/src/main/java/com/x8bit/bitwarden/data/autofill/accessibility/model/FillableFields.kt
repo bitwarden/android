@@ -9,5 +9,5 @@ data class FillableFields(
     val usernameField: AccessibilityNodeInfo?,
     val passwordFields: List<AccessibilityNodeInfo>,
 ) {
-    val hasFields: Boolean = usernameField != null && passwordFields.isNotEmpty()
+    val hasFields: Boolean = usernameField != null || passwordFields.isNotEmpty()
 }

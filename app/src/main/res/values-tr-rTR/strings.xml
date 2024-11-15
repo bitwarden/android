@@ -1034,7 +1034,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="log_in_to_your_current_browser_or_password_manager_highlight">mevcut tarayıcınızı veya parola yöneticinizi açın.</string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Parolalarınızı dışa aktarın. Bu seçenek genellikle ayarlarınızda bulunur.</string>
   <string name="export_your_passwords_highlight">Parolalarınızı dışa aktarın.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done to finish syncing.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done below to finish syncing.</string>
   <string name="select_import_data_highlight">Select Import data</string>
   <string name="step_1_of_3">Step 1 of 3</string>
   <string name="export_your_saved_logins">Export your saved logins</string>
@@ -1085,4 +1085,5 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="log_in_quickly_and_easily_across_devices">Farklı cihazlarda hızlıca ve kolayca oturum açın</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Başka bir cihazdan yeni bir giriş isteği aldığınızda Bitwarden size bildirim gönderebilir.</string>
   <string name="skip_for_now">Şimdilik geç</string>
+  <string name="done_text">Tamam</string>
 </resources>

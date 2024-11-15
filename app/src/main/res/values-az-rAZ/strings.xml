@@ -70,7 +70,7 @@
   <string name="thank_you">Təşəkkür edirik</string>
   <string name="tools">Alətlər</string>
   <string name="uri">URI</string>
-  <string name="use_fingerprint_to_unlock">Kilidi barmaq izi ilə açın</string>
+  <string name="use_fingerprint_to_unlock">Kilidi barmaq izi ilə aç</string>
   <string name="username">İstifadəçi adı</string>
   <string name="validation_field_required">%1$s xanası lazımlıdır.</string>
   <string name="value_has_been_copied">%1$s kopyalandı</string>
@@ -104,7 +104,7 @@
   <string name="create_account">Hesab yarat</string>
   <string name="creating_account">Hesab yaradılır...</string>
   <string name="edit_item">Elementə düzəliş et</string>
-  <string name="enable_automatic_syncing">Avto-sinxr icazə ver</string>
+  <string name="enable_automatic_syncing">Avto-sinxrn icazə ver</string>
   <string name="enter_email_for_hint">Ana parol məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</string>
   <string name="exntesion_reenable">Tətbiq uzantısını təkrar aktivləşdir</string>
   <string name="extension_almost_done">Demək olar ki, hazırdır!</string>
@@ -183,7 +183,7 @@
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">İki mərhələli giriş</string>
   <string name="unlock_with">%1$s ilə kilidi aç</string>
-  <string name="unlock_with_pin">PIN kod ilə kilidi açın</string>
+  <string name="unlock_with_pin">Kilidi PIN kodla aç</string>
   <string name="validating">Doğrulanır</string>
   <string name="verification_code">Doğrulama kodu</string>
   <string name="view_item">Elementə bax</string>
@@ -334,7 +334,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
   <string name="autofill_accessibility_service">Avto-doldurma əlçatımlılıq xidməti</string>
   <string name="autofill_accessibility_summary">Digər tətbiqlərdə və vebdə istifadəçi adı və parol xanalarının doldurulmasına kömək edin.</string>
-  <string name="autofill_service_description">Bitwarden avto-doldurma xidməti, giriş məlumatlarının cihazınızdakı digər tətbiqlərdə doldurmasına kömək etməsi üçün Android Avto-doldurma Çərçivəsini istifadə edir.</string>
+  <string name="autofill_service_description">Bitwarden avto-doldurma xidməti, cihazınızdakı digər tətbiqlərə giriş məlumatlarını doldurmağa kömək edən Android Avto-doldurma Çərçivəsini istifadə edir.</string>
   <string name="bitwarden_autofill_service_description">Giriş məlumatlarını digər tətbiqlərdə doldurmaq üçün Bitwarden avto-doldurma xidmətini istifadə edin.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Avto-doldurma ayarlarını aç</string>
   <string name="face_id">Face ID</string>
@@ -477,7 +477,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="login_expired">Seansın müddəti bitdi.</string>
   <string name="biometrics_direction">Biometrik doğrulama</string>
   <string name="biometrics">Biometrik</string>
-  <string name="use_biometrics_to_unlock">Kilidi biometriklə aç</string>
+  <string name="use_biometrics_to_unlock">Kilidi açmaq üçün biometrik istifadə et</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden diqqətinizi tələb edir - Bitwarden ayarlarında \"Avto-doldurma əlçatımlılıq xidməti\"nə baxın</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Android tətbiq ayarlarında Bitwarden-i tapın və \"Digər tətbiqlərin üzərində göstər\" seçiminə (\"Qabaqcıl\" seçimin altında ola bilər) gedin və örtük dəstəyinə icazə vermək üçün açara toxunun.</string>
   <string name="overlay_permission">İcazə</string>
@@ -515,7 +515,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="do_you_really_want_to_soft_delete_cipher">Həqiqətən tullantı qutusuna göndərmək istəyirsiniz?</string>
   <string name="account_biometric_invalidated">Ana parolun doğrulanması gözlənildiyi üçün bu hesab üzrə biometrik kilid açma sıradan çıxarıldı.</string>
   <string name="account_biometric_invalidated_extension">Ana parolun doğrulanması gözlənildiyi üçün bu hesab üzrə avto-doldurma biometrik kilid açma sıradan çıxarıldı.</string>
-  <string name="enable_sync_on_refresh">Təzələmə zamanı sinxr icazə ver</string>
+  <string name="enable_sync_on_refresh">Təzələmə zamanı sinxrn icazə ver</string>
   <string name="enable_sync_on_refresh_description">Barmağınızla aşağı çəkdikdə seyfi sinxronlaşdır.</string>
   <string name="log_in_sso">Müəssisə üçün tək daxil olma</string>
   <string name="log_in_sso_summary">Təşkilatınızın tək daxil olma portalını istifadə edərək daha tez giriş edə bilərsiniz. Başlatmaq üçün lütfən təşkilatınızın identifikatorunu daxil edin.</string>
@@ -538,16 +538,16 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="terms_of_service">Xidmət Şərtləri</string>
   <string name="privacy_policy">Gizlilik Siyasəti</string>
   <string name="accessibility_draw_over_permission_alert">Bitwarden diqqətinizi tələb edir - Bitwarden Ayarlarında \"Avto-doldurma xidməti\"ndə \"Üzərindən göstər\"i işə salın</string>
-  <string name="passkey_management">Keçid açarının idarə edilməsi</string>
+  <string name="passkey_management">Keçid açarını idarəetmə</string>
   <string name="autofill_services">Avto-doldurma xidmətləri</string>
-  <string name="inline_autofill">Sətir daxili avto-doldurmanı istifadə edin</string>
-  <string name="inline_autofill_description">Seçdiyiniz IME (klaviatura) dəstəkləyirsə sətir daxili avto-doldurmanı istifadə edə bilərsiniz. Əgər konfiqurasiyanız dəstəkləmirsə (və ya bu seçim sıradan çıxarılıbsa) ilkin Avto-doldurma qutusu istifadə ediləcəkdir.</string>
+  <string name="inline_autofill">Sətirdaxili avto-doldurmanı istifadə et</string>
+  <string name="inline_autofill_description">Seçdiyiniz IME (klaviatura) dəstəkləyirsə sətirdaxili avto-doldurmanı istifadə edin. Əgər konfiqurasiyanız dəstəkləmirsə (və ya bu seçim söndürülübsə) ilkin Avto-doldurma örtüyü istifadə ediləcəkdir.</string>
   <string name="accessibility">Əlçatımlılığı istifadə et</string>
   <string name="accessibility_description">Saytda və vebdə giriş məlumatlarınızı avto-doldurmaq üçün Bitwarden Əlçatımlılıq Xidmətini istifadə edin. Qurulanda, giriş xanalarını seçərkən açılan pəncərə göstərəcəyik.</string>
   <string name="accessibility_description2">Saytda və vebdə giriş məlumatlarınızı avto-doldurmaq üçün Bitwarden Əlçatımlılıq Xidmətini istifadə edin. (\"Üzərində göstər\" seçimi açıq olmalıdır)</string>
-  <string name="accessibility_description3">Avto-doldurma cəld əməliyyat qutusunu istifadə etmək üçün Bitwarden əlçatımlılıq xidmətini istifadə edin və/və ya \"Üzərində göstər\"i (əgər fəaldırsa) istifadə edərək açılan bir pəncərə göstərə bilərsiniz.</string>
-  <string name="accessibility_description4">Avto-doldurma cəld əməliyyat qutusunu istifadə etmək və ya \"Üzərində göstər\"i (əgər fəaldırsa) istifadə edərək Avto-doldurma xidmətini təqlid etmək tələb olunur.</string>
-  <string name="accessibility_description5">Avto-doldurma Cəld Əməliyyat xanasını istifadə etmək tələb olunur.</string>
+  <string name="accessibility_description3">Avto-doldurma Cəld Əməliyyat Xanasını istifadə etmək üçün Bitwarden Əlçatımlılıq Xidmətini istifadə edin və/və ya \"Üzərində göstər\"i (əgər açıqdırsa) istifadə edərək açılan bir pəncərədə göstərin.</string>
+  <string name="accessibility_description4">Avto-doldurma Cəld Əməliyyat Xanasını istifadə etmək və ya \"Üzərində göstər\"i (əgər açıqdırsa) istifadə edərək Avto-doldurma xidmətini təqlid etmək üçün tələb olunur.</string>
+  <string name="accessibility_description5">Avto-doldurma Cəld Əməliyyat Xanasını istifadə etmək üçün tələb olunur.</string>
   <string name="draw_over">\"Üzərində göstər\"i istifadə edin</string>
   <string name="draw_over_description">Giriş xanalarını seçdikdə Bitwarden Əlçatımlılıq Xidmətinin açılan pəncərə göstərməsinə icazə verir.</string>
   <string name="draw_over_description2">İşə salındıqda Bitwarden Əlçatımlılıq Xidməti, giriş məlumatlarınızın avto-doldurmasına kömək etmək üçün giriş xanaları seçildikdə açılan pəncərə göstərəcək.</string>
@@ -767,7 +767,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="need_another_option">Başqa bir seçimə ehtiyacınız var?</string>
   <string name="view_all_login_options">Bütün giriş etmə seçimlərinə bax</string>
   <string name="this_request_is_no_longer_valid">Bu tələb artıq yararsızdır</string>
-  <string name="pending_log_in_requests">Giriş tələbləri gözlənilir</string>
+  <string name="pending_log_in_requests">Gözlənilən giriş tələbləri</string>
   <string name="decline_all_requests">Bütün tələbləri rədd et</string>
   <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Gözləyən bütün giriş tələblərini rədd etmək istədiyinizə əminsiniz?</string>
   <string name="requests_declined">Tələblər rədd edildi</string>
@@ -860,8 +860,8 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="x_hours_and_y_minutes">%1$s saat %2$s dəqiqə</string>
   <string name="x_hours">%1$s saat</string>
   <string name="passkey_management_explanation_long">Yeni keçid açarlarını saxlamaq və seyfinizdəki keçid açarları ilə giriş etmək üçün Bitwarden-i istifadə edin.</string>
-  <string name="autofill_services_explanation_long">Android Avto-doldurma Çərçivəsi, giriş məlumatlarını cihazınızdakı digər tətbiqlərə doldurmağa kömək etmək üçün istifadə olunur.</string>
-  <string name="use_inline_autofill_explanation_long">Seçdiyiniz klaviatura dəstəkləyirsə sətir daxili avto-doldurmanı istifadə edin. Əks halda, ilkin örtük istifadə edin.</string>
+  <string name="autofill_services_explanation_long">Android Avto-doldurma Çərçivəsi, cihazınızdakı digər tətbiqlərə giriş məlumatlarının doldurulmasına kömək etmək üçün istifadə olunur.</string>
+  <string name="use_inline_autofill_explanation_long">Seçdiyiniz klaviatura dəstəkləyirsə sətirdaxili avto-doldurmanı istifadə edin. Əks halda, ilkin örtük istifadə edin.</string>
   <string name="additional_options">Əlavə seçimlər</string>
   <string name="continue_to_web_app">Veb tətbiqlə davam edilsin?</string>
   <string name="continue_to_x">%1$s ilə davam edilsin?</string>
@@ -1000,7 +1000,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
   <string name="restart_registration">Qeydiyyatı yenidən başlat</string>
   <string name="authenticator_sync">Kimlik doğrulayıcı sinxrn</string>
-  <string name="allow_bitwarden_authenticator_syncing">Bitwarden Kimlik doğrulayıcı sinxronlaşdırmasına icazə ver</string>
+  <string name="allow_bitwarden_authenticator_syncing">Kimlik doğrulayıcını sinxrn icazə ver</string>
   <string name="there_was_an_issue_validating_the_registration_token">Qeydiyyat jetonu doğrulanarkən bir problem baş verdi.</string>
   <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
   <string name="use_autofill_to_log_into_your_accounts">Tək toxunuşda hesablarınıza giriş etmək üçün avto-doldurmanı istifadə edin.</string>
@@ -1085,4 +1085,5 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="log_in_quickly_and_easily_across_devices">Cihazlar arasında cəld və asan giriş et</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden, başqa bir cihazdan yeni bir giriş tələbi aldığınız hər dəfəsində sizi məlumatlandıracaq.</string>
   <string name="skip_for_now">İndilik ötür</string>
+  <string name="done_text">Bitdi</string>
 </resources>
