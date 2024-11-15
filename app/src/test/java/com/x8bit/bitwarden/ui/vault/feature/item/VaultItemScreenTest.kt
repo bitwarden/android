@@ -2038,7 +2038,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy identity name field click should send CopyIdentityNameClick`() {
+    fun `in identity state, on copy identity name field click should send CopyIdentityNameClick`() {
 
         val identityName = "the identity name"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
@@ -2054,7 +2054,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy username field click should send CopyUsernameClick`() {
+    fun `in identity state, on copy username field click should send CopyUsernameClick`() {
         val username = "the username"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(username)
@@ -2069,7 +2069,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy company field click should send CopyCompanyClick`() {
+    fun `in identity state, on copy company field click should send CopyCompanyClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
 
         // Scroll to ssn so we can see the Copy company button but not have it covered by the FAB
@@ -2085,7 +2085,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy SSN field click should send CopySsnClick`() {
+    fun `in identity state, on copy SSN field click should send CopySsnClick`() {
         val ssn = "the SSN"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(ssn)
@@ -2099,8 +2099,9 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on copy passport number field click should send CopyPassportNumberClick`() {
+    fun `in identity state, on copy passport number field click should send CopyPassportNumberClick`() {
         val passportNumber = "the passport number"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(passportNumber)
@@ -2114,8 +2115,9 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on copy license number field click should send CopyLicenseNumberClick`() {
+    fun `in identity state, on copy license number field click should send CopyLicenseNumberClick`() {
         val licenseNumber = "the license number"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(licenseNumber)
@@ -2130,7 +2132,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy email field click should send CopyEmailClick`() {
+    fun `in identity state, on copy email field click should send CopyEmailClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onFirstNodeWithTextAfterScroll("the address")
 
@@ -2144,7 +2146,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy phone field click should send CopyPhoneClick`() {
+    fun `in identity state, on copy phone field click should send CopyPhoneClick`() {
         val phone = "the phone number"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(phone)
@@ -2159,7 +2161,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on copy address field click should send CopyAddressClick`() {
+    fun `in identity state, on copy address field click should send CopyAddressClick`() {
         val address = "the address"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(address)
