@@ -1086,4 +1086,5 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="log_in_quickly_and_easily_across_devices">Đăng nhập nhanh và dễ dàng giữa các thiết bị</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden có thể thông báo cho bạn mỗi khi bạn nhận được yêu cầu đăng nhập mới từ thiết bị khác.</string>
   <string name="skip_for_now">Bỏ qua</string>
+  <string name="done_text">Xong</string>
 </resources>
