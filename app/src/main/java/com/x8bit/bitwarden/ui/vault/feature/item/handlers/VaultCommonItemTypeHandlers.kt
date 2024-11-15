@@ -22,7 +22,7 @@ data class VaultCommonItemTypeHandlers(
     ) -> Unit,
     val onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
     val onCopyNotesClick: () -> Unit,
-    ) {
+) {
     @Suppress("UndocumentedPublicClass")
     companion object {
         /**

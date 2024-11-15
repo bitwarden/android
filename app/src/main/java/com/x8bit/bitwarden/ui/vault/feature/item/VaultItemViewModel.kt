@@ -195,6 +195,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick -> {
                 handleConfirmCloneClick()
             }
+
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
             is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
         }
@@ -2038,34 +2039,42 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the identity name.
              */
             data object CopyIdentityNameClick : Identity()
+
             /**
              * The user has clicked the copy button for the username.
              */
             data object CopyUsernameClick : Identity()
+
             /**
              * The user has clicked the copy button for the company.
              */
             data object CopyCompanyClick : Identity()
+
             /**
              * The user has clicked the copy button for the SSN.
              */
             data object CopySsnClick : Identity()
+
             /**
              * The user has clicked the copy button for the passport number.
              */
             data object CopyPassportNumberClick : Identity()
+
             /**
              * The user has clicked the copy button for the license number.
              */
             data object CopyLicenseNumberClick : Identity()
+
             /**
              * The user has clicked the copy button for the email.
              */
             data object CopyEmailClick : Identity()
+
             /**
              * The user has clicked the copy button for the phone number.
              */
             data object CopyPhoneClick : Identity()
+
             /**
              * The user has clicked the copy button for the address.
              */

@@ -188,8 +188,8 @@ fun VaultItemCardContent(
                             modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
                         )
                     },
+                    textFieldTestTag = "CipherNotesLabel",
                     modifier = Modifier
-                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )

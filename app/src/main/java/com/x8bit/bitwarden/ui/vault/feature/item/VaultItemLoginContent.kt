@@ -160,7 +160,6 @@ fun VaultItemLoginContent(
                     notes = notes,
                     onCopyAction = vaultCommonItemTypeHandlers.onCopyNotesClick,
                     modifier = Modifier
-                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -291,6 +290,7 @@ private fun NotesField(
                 modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
             )
         },
+        textFieldTestTag = "CipherNotesLabel",
         modifier = modifier,
     )
 }

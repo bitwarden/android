@@ -79,11 +79,10 @@ fun VaultItemSecureNoteContent(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_notes),
                             onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
-                            modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
                         )
                     },
+                    textFieldTestTag = "CipherNotesLabel",
                     modifier = Modifier
-                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
