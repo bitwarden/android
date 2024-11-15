@@ -312,6 +312,7 @@ class PushManagerImpl @Inject constructor(
                     userId = userId,
                     token = it,
                 )
+                registerStoredPushTokenIfNecessaryInternal(userId)
             }
         }
     }
