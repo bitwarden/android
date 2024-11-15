@@ -15,7 +15,6 @@ import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityActivityManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
@@ -38,9 +37,6 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
-
-    @Inject
-    lateinit var accessibilityActivityManager: AccessibilityActivityManager
 
     @Inject
     lateinit var autofillActivityManager: AutofillActivityManager
