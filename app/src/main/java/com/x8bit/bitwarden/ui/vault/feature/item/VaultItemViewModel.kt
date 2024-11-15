@@ -525,14 +525,6 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCopyNotesClick() {
         onContent { content ->
             val notes = requireNotNull(content.common.notes)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = notes),
-                    ),
-                )
-                return@onContent
-            }
             clipboardManager.setText(text = notes)
         }
     }
@@ -859,136 +851,64 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleCopyIdentityNameClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val identityName = requireNotNull(identity.identityName)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = identityName),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = identityName)
         }
     }
 
     private fun handleCopyIdentityUsernameClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val username = requireNotNull(identity.username)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = username),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = username)
         }
     }
 
     private fun handleCopyCompanyClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val company = requireNotNull(identity.company)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = company),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = company)
         }
     }
 
     private fun handleCopySsnClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val ssn = requireNotNull(identity.ssn)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = ssn),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = ssn)
         }
     }
 
     private fun handleCopyPassportNumberClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val passportNumber = requireNotNull(identity.passportNumber)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = passportNumber),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = passportNumber)
         }
     }
 
     private fun handleCopyLicenseNumberClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val licenseNumber = requireNotNull(identity.licenseNumber)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = licenseNumber),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = licenseNumber)
         }
     }
 
     private fun handleCopyEmailClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val email = requireNotNull(identity.email)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = email),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = email)
         }
     }
 
     private fun handleCopyPhoneClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val phone = requireNotNull(identity.phone)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = phone),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = phone)
         }
     }
 
     private fun handleCopyAddressClick() {
-        onIdentityContent { content, identity ->
+        onIdentityContent { _, identity ->
             val address = requireNotNull(identity.address)
-            if (content.common.requiresReprompt) {
-                updateDialogState(
-                    VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.CopyClick(value = address),
-                    ),
-                )
-                return@onIdentityContent
-            }
             clipboardManager.setText(text = address)
         }
     }
