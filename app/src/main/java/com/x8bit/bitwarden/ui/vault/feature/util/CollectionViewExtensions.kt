@@ -88,3 +88,36 @@ fun String.toCollectionDisplayName(list: List<CollectionView>): String {
 
     return collectionName
 }
+
+/**
+ * Checks if the user has delete permission in at least one collection.
+ *
+ * Deletion is allowed when the item is in any collection that the user has "manage" permission for.
+ */
+fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(collectionIds: List<String>?) =
+    this
+        ?.takeUnless { it.isEmpty() }
+        ?.any {
+            collectionIds
+                ?.contains(it.id)
+                ?.let { isInCollection -> !isInCollection || it.manage }
+                ?: true
+        }
+        ?: true
+
+/**
+ * Checks if the user has permission to assign an item to a collection.
+ *
+ * Assigning to a collection is not allowed when the item is in a collection that the user does not
+ * have "manage" and "edit" permission for.
+ */
+fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<String>?) =
+    this
+        ?.none {
+            val itemIsInCollection = currentCollectionIds
+                ?.contains(it.id)
+                ?: false
+
+            itemIsInCollection && (!it.manage || it.readOnly)
+        }
+        ?: true
