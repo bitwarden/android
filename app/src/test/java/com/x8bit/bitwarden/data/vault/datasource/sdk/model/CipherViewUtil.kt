@@ -125,13 +125,14 @@ fun createMockSdkFido2CredentialList(
 fun createMockSdkFido2Credential(
     number: Int,
     clock: Clock = FIXED_CLOCK,
+    rpId: String = "mockRpId-$number",
 ): Fido2Credential = Fido2Credential(
     credentialId = "mockCredentialId-$number",
     keyType = "mockKeyType-$number",
     keyAlgorithm = "mockKeyAlgorithm-$number",
     keyCurve = "mockKeyCurve-$number",
     keyValue = "mockKeyValue-$number",
-    rpId = "mockRpId-$number",
+    rpId = rpId,
     userHandle = "mockUserHandle-$number",
     userName = "mockUserName-$number",
     counter = "mockCounter-$number",
@@ -147,11 +148,12 @@ fun createMockSdkFido2Credential(
 fun createMockFido2CredentialAutofillView(
     number: Int,
     cipherId: String? = null,
+    rpId: String = "mockRpId-$number",
 ): Fido2CredentialAutofillView =
     Fido2CredentialAutofillView(
         credentialId = "mockCredentialId-$number".encodeToByteArray(),
         cipherId = cipherId ?: "mockCipherId-$number",
-        rpId = "mockRpId-$number",
+        rpId = rpId,
         userNameForUi = "mockUserNameForUi-$number",
         userHandle = "mockUserHandle-$number".encodeToByteArray(),
     )

@@ -24,7 +24,7 @@ fun CallingAppInfo.getFido2RpIdOrNull(): String? =
  */
 @OptIn(ExperimentalStdlibApi::class)
 fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
-    return getAppSigningSignatureFingerprint()
+    return getAppSigningSignatureFingerprintOrNull()
         ?.joinToString(":") { b ->
             b.toHexString(HexFormat.UpperCase)
         }
@@ -62,7 +62,7 @@ fun CallingAppInfo.validatePrivilegedApp(allowList: String): Fido2ValidateOrigin
  * unprivileged application.
  */
 fun CallingAppInfo.getAppOrigin(): String {
-    val certHash = getAppSigningSignatureFingerprint()
+    val certHash = getAppSigningSignatureFingerprintOrNull()
     return "android:apk-key-hash:${Base64.encodeToString(certHash, ENCODING_FLAGS)}"
 }
 
@@ -70,7 +70,7 @@ fun CallingAppInfo.getAppOrigin(): String {
  * Returns a [ByteArray] containing the application's signing certificate signature hash. If
  * multiple signers are identified `null` is returned.
  */
-fun CallingAppInfo.getAppSigningSignatureFingerprint(): ByteArray? {
+fun CallingAppInfo.getAppSigningSignatureFingerprintOrNull(): ByteArray? {
     if (signingInfo.hasMultipleSigners()) return null
 
     val signature = signingInfo.apkContentsSigners.first()

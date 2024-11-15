@@ -1,14 +1,14 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
-import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 
 /**
  * Responsible for managing FIDO 2 credential registration and authentication.
@@ -27,26 +27,11 @@ interface Fido2CredentialManager {
     var authenticationAttempts: Int
 
     /**
-     * Attempt to validate the RP and origin of the provided [callingAppInfo] and [relyingPartyId].
-     */
-    suspend fun validateOrigin(
-        callingAppInfo: CallingAppInfo,
-        relyingPartyId: String,
-    ): Fido2ValidateOriginResult
-
-    /**
      * Attempt to extract FIDO 2 passkey attestation options from the system [requestJson], or null.
      */
     fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
     ): PasskeyAttestationOptions?
-
-    /**
-     * Attempt to extract FIDO 2 passkey assertion options from the system [requestJson], or null.
-     */
-    fun getPasskeyAssertionOptionsOrNull(
-        requestJson: String,
-    ): PasskeyAssertionOptions?
 
     /**
      * Register a new FIDO 2 credential to a users vault.
@@ -58,16 +43,49 @@ interface Fido2CredentialManager {
     ): Fido2RegisterCredentialResult
 
     /**
+     * Retrieve FIDO 2 credentials for a given relying party.
+     */
+    suspend fun getFido2CredentialsForRelyingParty(
+        fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
+    ): Fido2GetCredentialsResult
+
+    /**
      * Authenticate a FIDO credential against a cipher in the users vault.
      */
     suspend fun authenticateFido2Credential(
-        userId: String,
         request: Fido2CredentialAssertionRequest,
-        selectedCipherView: CipherView,
     ): Fido2CredentialAssertionResult
 
     /**
      * Whether or not the user has authentication attempts remaining.
      */
     fun hasAuthenticationAttemptsRemaining(): Boolean
+
+    /**
+     * Determines the user verification requirement for a given FIDO2 assertion request.
+     *
+     * @param request The FIDO2 credential assertion request.
+     * @param fallbackRequirement The fallback requirement to use if the request doesn't specify
+     * one.
+     * Defaults to [UserVerificationRequirement.REQUIRED].
+     * @return The user verification requirement for the request.
+     */
+    fun getUserVerificationRequirementForAssertion(
+        request: Fido2CredentialAssertionRequest,
+        fallbackRequirement: UserVerificationRequirement = UserVerificationRequirement.REQUIRED,
+    ): UserVerificationRequirement
+
+    /**
+     * Determines the user verification requirement for a given FIDO2 registration request.
+     *
+     * @param request The FIDO2 credential request.
+     * @param fallbackRequirement The fallback requirement to use if the request doesn't specify
+     * one.
+     * Defaults to [UserVerificationRequirement.REQUIRED].
+     * @return The user verification requirement for the request.
+     */
+    fun getUserVerificationRequirementForRegistration(
+        request: Fido2CreateCredentialRequest,
+        fallbackRequirement: UserVerificationRequirement = UserVerificationRequirement.REQUIRED,
+    ): UserVerificationRequirement
 }

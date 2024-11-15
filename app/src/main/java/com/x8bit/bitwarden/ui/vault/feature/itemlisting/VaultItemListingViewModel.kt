@@ -19,7 +19,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRes
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -33,7 +32,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -113,7 +112,7 @@ class VaultItemListingViewModel @Inject constructor(
         val activeAccountSummary = userState.toActiveAccountSummary()
         val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
-        val fido2CredentialRequest = specialCircumstance?.toFido2RequestOrNull()
+        val fido2CredentialRequest = specialCircumstance?.toFido2CreateRequestOrNull()
         VaultItemListingState(
             itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
                 .vaultItemListingType
@@ -158,26 +157,7 @@ class VaultItemListingViewModel @Inject constructor(
             .onEach { sendAction(VaultItemListingsAction.Internal.IconLoadingSettingReceive(it)) }
             .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            state
-                .fido2CreateCredentialRequest
-                ?.let { request ->
-                    sendAction(
-                        VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive(
-                            request = request,
-                        ),
-                    )
-                }
-                ?: state.fido2CredentialAssertionRequest
-                    ?.let { request ->
-                        sendAction(
-                            VaultItemListingsAction.Internal.Fido2AssertionDataReceive(
-                                data = request,
-                            ),
-                        )
-                    }
-                ?: observeVaultData()
-        }
+        observeVaultData()
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
@@ -660,13 +640,9 @@ class VaultItemListingViewModel @Inject constructor(
         credentialRequest: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
-        val attestationOptions = fido2CredentialManager
-            .getPasskeyAttestationOptionsOrNull(credentialRequest.requestJson)
-            ?: run {
-                showFido2ErrorDialog()
-                return
-            }
-        when (attestationOptions.authenticatorSelection.userVerification) {
+        val userVerificationRequirement = fido2CredentialManager
+            .getUserVerificationRequirementForRegistration(credentialRequest)
+        when (userVerificationRequirement) {
             UserVerificationRequirement.DISCOURAGED -> {
                 registerFido2CredentialToCipher(
                     request = credentialRequest,
@@ -716,39 +692,13 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun authenticateFido2Credential(
-        relyingPartyId: String,
-        request: Fido2CredentialAssertionRequest,
-        cipherView: CipherView,
-    ) {
-        val activeUserId = authRepository.activeUserId
-            ?: run {
-                showFido2ErrorDialog()
-                return
-            }
+    private fun authenticateFido2Credential(request: Fido2CredentialAssertionRequest) {
         viewModelScope.launch {
-            val validateOriginResult = fido2CredentialManager
-                .validateOrigin(
-                    callingAppInfo = request.callingAppInfo,
-                    relyingPartyId = relyingPartyId,
-                )
-            when (validateOriginResult) {
-                is Fido2ValidateOriginResult.Error -> {
-                    handleFido2OriginValidationFail(validateOriginResult)
-                }
-
-                Fido2ValidateOriginResult.Success -> {
-                    sendAction(
-                        VaultItemListingsAction.Internal.Fido2AssertionResultReceive(
-                            result = fido2CredentialManager.authenticateFido2Credential(
-                                userId = activeUserId,
-                                selectedCipherView = cipherView,
-                                request = request,
-                            ),
-                        ),
-                    )
-                }
-            }
+            sendAction(
+                VaultItemListingsAction.Internal.Fido2AssertionResultReceive(
+                    result = fido2CredentialManager.authenticateFido2Credential(request),
+                ),
+            )
         }
     }
 
@@ -989,10 +939,6 @@ class VaultItemListingViewModel @Inject constructor(
 
             is VaultItemListingsAction.Internal.PolicyUpdateReceive -> {
                 handlePolicyUpdateReceive(action)
-            }
-
-            is VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive -> {
-                handleFido2RegisterCredentialRequestReceive(action)
             }
 
             is VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive -> {
@@ -1263,7 +1209,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun continueFido2Operation(cipherView: CipherView) {
         specialCircumstanceManager
             .specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 registerFido2CredentialToCipher(
                     request = request,
@@ -1273,18 +1219,7 @@ class VaultItemListingViewModel @Inject constructor(
             ?: specialCircumstanceManager
                 .specialCircumstance
                 ?.toFido2AssertionRequestOrNull()
-                ?.let { request ->
-                    fido2CredentialManager
-                        .getPasskeyAssertionOptionsOrNull(request.requestJson)
-                        ?.relyingPartyId
-                        ?.let { relyingPartyId ->
-                            authenticateFido2Credential(
-                                relyingPartyId = relyingPartyId,
-                                request = request,
-                                cipherView = cipherView,
-                            )
-                        }
-                }
+                ?.let { authenticateFido2Credential(request = it) }
             ?: showFido2ErrorDialog()
     }
     //endregion VaultItemListing Handlers
@@ -1309,29 +1244,25 @@ class VaultItemListingViewModel @Inject constructor(
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
         state.fido2GetCredentialsRequest
             ?.let { fido2GetCredentialsRequest ->
-                val relyingPartyId = fido2CredentialManager
-                    .getPasskeyAssertionOptionsOrNull(
-                        requestJson = fido2GetCredentialsRequest.option.requestJson,
-                    )
-                    ?.relyingPartyId
-                    ?: run {
-                        showFido2ErrorDialog()
-                        return
-                    }
-                sendEvent(
-                    VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
-                        Fido2GetCredentialsResult.Success(
-                            userId = fido2GetCredentialsRequest.userId,
-                            options = fido2GetCredentialsRequest.option,
-                            credentials = vaultData
-                                .data
-                                .fido2CredentialAutofillViewList
-                                ?.filter { it.rpId == relyingPartyId }
-                                ?: emptyList(),
+                viewModelScope.launch {
+                    sendEvent(
+                        VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
+                            fido2CredentialManager.getFido2CredentialsForRelyingParty(
+                                fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                            ),
                         ),
-                    ),
-                )
+                    )
+                }
             }
+            // TODO: Move FIDO 2 authentication to vault unlock screen
+            ?: state.fido2CredentialAssertionRequest
+                ?.let { fido2AssertionRequest ->
+                    trySendAction(
+                        VaultItemListingsAction.Internal.Fido2AssertionDataReceive(
+                            fido2AssertionRequest,
+                        ),
+                    )
+                }
             ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
@@ -1374,33 +1305,6 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun handleFido2RegisterCredentialRequestReceive(
-        action: VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive,
-    ) {
-        viewModelScope.launch {
-            val options = fido2CredentialManager
-                .getPasskeyAttestationOptionsOrNull(requestJson = action.request.requestJson)
-                ?: run {
-                    showFido2ErrorDialog()
-                    return@launch
-                }
-            val validateOriginResult = fido2CredentialManager
-                .validateOrigin(
-                    callingAppInfo = action.request.callingAppInfo,
-                    relyingPartyId = options.relyingParty.id,
-                )
-            when (validateOriginResult) {
-                is Fido2ValidateOriginResult.Error -> {
-                    handleFido2OriginValidationFail(validateOriginResult)
-                }
-
-                Fido2ValidateOriginResult.Success -> {
-                    observeVaultData()
-                }
-            }
-        }
-    }
-
     private fun handleFido2RegisterCredentialResultReceive(
         action: VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
@@ -1419,46 +1323,6 @@ class VaultItemListingViewModel @Inject constructor(
             }
         }
         sendEvent(VaultItemListingEvent.CompleteFido2Registration(action.result))
-    }
-
-    private fun handleFido2OriginValidationFail(error: Fido2ValidateOriginResult.Error) {
-        val messageResId = when (error) {
-            Fido2ValidateOriginResult.Error.ApplicationNotFound -> {
-                R.string.passkey_operation_failed_because_app_not_found_in_asset_links
-            }
-
-            Fido2ValidateOriginResult.Error.ApplicationNotVerified -> {
-                R.string.passkey_operation_failed_because_app_could_not_be_verified
-            }
-
-            Fido2ValidateOriginResult.Error.AssetLinkNotFound -> {
-                R.string.passkey_operation_failed_because_of_missing_asset_links
-            }
-
-            Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed -> {
-                R.string.passkey_operation_failed_because_browser_is_not_privileged
-            }
-
-            Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp -> {
-                R.string.passkeys_not_supported_for_this_app
-            }
-
-            Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound -> {
-                R.string.passkey_operation_failed_because_browser_signature_does_not_match
-            }
-
-            Fido2ValidateOriginResult.Error.Unknown -> {
-                R.string.generic_error_message
-            }
-        }
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = VaultItemListingState.DialogState.Fido2OperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = messageResId.asText(),
-                ),
-            )
-        }
     }
 
     private fun handleFido2AssertionDataReceive(
@@ -1512,31 +1376,17 @@ class VaultItemListingViewModel @Inject constructor(
         request: Fido2CredentialAssertionRequest,
         selectedCipher: CipherView,
     ) {
-        val assertionOptions = fido2CredentialManager
-            .getPasskeyAssertionOptionsOrNull(request.requestJson)
-            ?: run {
-                showFido2ErrorDialog()
-                return
-            }
-
-        val relyingPartyId = assertionOptions.relyingPartyId
-            ?: run {
-                showFido2ErrorDialog()
-                return
-            }
-
         if (fido2CredentialManager.isUserVerified) {
-            authenticateFido2Credential(relyingPartyId, request, selectedCipher)
+            authenticateFido2Credential(request)
             return
         }
 
-        when (assertionOptions.userVerification) {
+        val userVerificationRequirement: UserVerificationRequirement = fido2CredentialManager
+            .getUserVerificationRequirementForAssertion(request)
+
+        when (userVerificationRequirement) {
             UserVerificationRequirement.DISCOURAGED -> {
-                authenticateFido2Credential(
-                    relyingPartyId,
-                    request,
-                    selectedCipher,
-                )
+                authenticateFido2Credential(request)
             }
 
             UserVerificationRequirement.PREFERRED -> {
@@ -2549,13 +2399,6 @@ sealed class VaultItemListingsAction {
          */
         data class PolicyUpdateReceive(
             val policyDisablesSend: Boolean,
-        ) : Internal()
-
-        /**
-         * Indicates that a FIDO 2 credential registration has been received.
-         */
-        data class Fido2RegisterCredentialRequestReceive(
-            val request: Fido2CreateCredentialRequest,
         ) : Internal()
 
         /**

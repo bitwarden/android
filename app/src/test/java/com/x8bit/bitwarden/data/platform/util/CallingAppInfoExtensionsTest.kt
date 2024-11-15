@@ -218,7 +218,7 @@ class CallingAppInfoExtensionsTest {
             }
         }
 
-        assertNull(mockAppInfo.getAppSigningSignatureFingerprint())
+        assertNull(mockAppInfo.getAppSigningSignatureFingerprintOrNull())
     }
 }
 

@@ -22,10 +22,9 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRes
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -64,7 +63,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
@@ -165,7 +163,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
     }
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
-        coEvery { validateOrigin(any(), any()) } returns Fido2ValidateOriginResult.Success
         every { isUserVerified } returns false
         every { isUserVerified = any() } just runs
         every { authenticationAttempts } returns 0
@@ -449,7 +446,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during FIDO 2 registration should show FIDO 2 error dialog when cipherView is null`() {
         val cipherView = createMockCipherView(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
         )
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
@@ -478,7 +475,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val cipherView = createMockCipherView(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
         )
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
@@ -513,7 +510,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -556,7 +553,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1, fido2Credentials = null)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -604,7 +601,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockFido2CredentialRequest,
             )
@@ -647,7 +644,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during FIDO 2 registration should skip user verification when user is verified`() {
         setupMockUri()
         val cipherView = createMockCipherView(number = 1)
-        val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+        val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = mockFido2CredentialRequest,
         )
@@ -1561,9 +1558,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
             } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Success
 
             mockFilteredCiphers = listOf(cipherView1)
 
@@ -1618,7 +1612,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
-                fido2CredentialManager.validateOrigin(any(), any())
             }
         }
 
@@ -1637,11 +1630,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
 
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-            )
             coEvery {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
@@ -2163,7 +2151,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         createVaultItemListingViewModel()
 
         coVerify(ordering = Ordering.ORDERED) {
-            fido2CredentialManager.validateOrigin(any(), any())
             vaultRepository.vaultDataStateFlow
         }
     }
@@ -2179,10 +2166,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = mock,
         )
-
-        coEvery {
-            fido2CredentialManager.validateOrigin(any(), any())
-        } returns Fido2ValidateOriginResult.Error.Unknown
 
         val viewModel = createVaultItemListingViewModel()
 
@@ -2211,10 +2194,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
 
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed
-
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
@@ -2241,10 +2220,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
-
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
 
             val viewModel = createVaultItemListingViewModel()
 
@@ -2273,10 +2248,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
 
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
-
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
@@ -2303,10 +2274,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
-
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.ApplicationNotFound
 
             val viewModel = createVaultItemListingViewModel()
 
@@ -2335,10 +2302,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
 
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.AssetLinkNotFound
-
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
@@ -2365,10 +2328,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
-
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.ApplicationNotVerified
 
             val viewModel = createVaultItemListingViewModel()
 
@@ -2461,7 +2420,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `DismissFido2ErrorDialogClick should clear the dialog state then complete FIDO 2 registration based on state`() =
         runTest {
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                createMockFido2CredentialRequest(number = 1),
+                createMockFido2CreateCredentialRequest(number = 1),
             )
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
@@ -2539,14 +2498,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 mockAssertionRequest,
             )
             every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.REQUIRED,
-            )
-            every {
                 vaultRepository
                     .ciphersStateFlow
                     .value
@@ -2590,14 +2541,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 mockAssertionRequest,
             )
             every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-            )
-            every {
                 vaultRepository
                     .ciphersStateFlow
                     .value
@@ -2633,22 +2576,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
                 .copy(cipherId = "mockId-1")
             val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
-            val mockCipherView = createMockCipherView(
-                number = 1,
-                fido2Credentials = mockFido2CredentialList,
-            )
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
                 mockAssertionRequest,
             )
             every { authRepository.activeUserId } returns "activeUserId"
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
-            )
             every {
                 vaultRepository
                     .ciphersStateFlow
@@ -2661,22 +2592,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             coEvery {
-                fido2CredentialManager.authenticateFido2Credential(
-                    userId = "activeUserId",
-                    request = mockAssertionRequest,
-                    selectedCipherView = mockCipherView,
-                )
+                fido2CredentialManager.authenticateFido2Credential(request = mockAssertionRequest)
             } returns Fido2CredentialAssertionResult.Success(responseJson = "responseJson")
 
             createVaultItemListingViewModel()
 
             coVerify {
                 fido2CredentialManager.isUserVerified
-                fido2CredentialManager.authenticateFido2Credential(
-                    userId = "activeUserId",
-                    request = mockAssertionRequest,
-                    selectedCipherView = mockCipherView,
-                )
+                fido2CredentialManager.authenticateFido2Credential(request = mockAssertionRequest)
             }
         }
 
@@ -2701,13 +2624,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     fido2Credentials = mockFido2CredentialList,
                 ),
             )
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns null
 
             val viewModel = createVaultItemListingViewModel()
+
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
@@ -2738,17 +2657,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = mockFido2CredentialList,
             ),
         )
-        every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
-            relyingPartyId = null,
-        )
 
         val viewModel = createVaultItemListingViewModel()
+
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
@@ -2765,10 +2676,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
                 .copy(cipherId = "mockId-1")
-            val mockAssertionOptions = createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
-            )
             val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
                 mockAssertionRequest,
@@ -2784,14 +2691,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     fido2Credentials = mockFido2CredentialList,
                 ),
             )
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    requestJson = mockAssertionRequest.requestJson,
-                )
-            } returns mockAssertionOptions
-            coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.Unknown
 
             val viewModel = createVaultItemListingViewModel()
 
@@ -2831,11 +2730,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingViewModel()
 
             verify { vaultRepository.vaultDataStateFlow }
-            verify(exactly = 0) {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    requestJson = mockAssertionRequest.requestJson,
-                )
-            }
         }
 
     @Test
@@ -2900,28 +2794,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
             .copy(cipherId = "mockId-1")
         val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
-        val mockCipherView = createMockCipherView(
-            number = 1,
-            fido2Credentials = mockFido2CredentialList,
-        )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
             mockAssertionRequest,
         )
         every { fido2CredentialManager.isUserVerified } returns true
-        every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-        )
         coEvery {
-            fido2CredentialManager.authenticateFido2Credential(
-                userId = "activeUserId",
-                request = mockAssertionRequest,
-                selectedCipherView = mockCipherView,
-            )
+            fido2CredentialManager.authenticateFido2Credential(request = mockAssertionRequest)
         } returns Fido2CredentialAssertionResult.Success(responseJson = "responseJson")
 
         every {
@@ -2935,22 +2813,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = mockFido2CredentialList,
             ),
         )
-        every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(number = 1)
         every { authRepository.activeUserId } returns "activeUserId"
 
         createVaultItemListingViewModel()
 
         coVerify {
             fido2CredentialManager.isUserVerified
-            fido2CredentialManager.authenticateFido2Credential(
-                userId = any(),
-                request = any(),
-                selectedCipherView = any(),
-            )
+            fido2CredentialManager.authenticateFido2Credential(request = any())
         }
     }
 
@@ -2964,14 +2833,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         every { fido2CredentialManager.isUserVerified } returns true
         every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-        )
-        every {
             vaultRepository
                 .ciphersStateFlow
                 .value
@@ -2982,21 +2843,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = mockFido2CredentialList,
             ),
         )
-        every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(number = 1)
         every { authRepository.activeUserId } returns null
 
         val viewModel = createVaultItemListingViewModel()
 
         coVerify(exactly = 0) {
-            fido2CredentialManager.authenticateFido2Credential(
-                userId = any(),
-                request = any(),
-                selectedCipherView = any(),
-            )
+            fido2CredentialManager.authenticateFido2Credential(request = any())
         }
 
         assertEquals(
@@ -3020,14 +2872,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         every { fido2CredentialManager.isUserVerified } returns true
         every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-        )
-        every {
             vaultRepository
                 .ciphersStateFlow
                 .value
@@ -3039,11 +2883,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 repromptType = CipherRepromptType.PASSWORD,
             ),
         )
-        every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                mockAssertionRequest.requestJson,
-            )
-        } returns createMockPasskeyAssertionOptions(number = 1)
         every { authRepository.activeUserId } returns null
 
         val viewModel = createVaultItemListingViewModel()
@@ -3088,40 +2927,19 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             every { fido2CredentialManager.isUserVerified } returns true
             every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-            )
-            every {
                 vaultRepository
                     .ciphersStateFlow
                     .value
                     .data
             } returns listOf(mockCipherView)
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(number = 1)
             coEvery {
-                fido2CredentialManager.authenticateFido2Credential(
-                    DEFAULT_USER_STATE.activeUserId,
-                    mockAssertionRequest,
-                    mockCipherView,
-                )
+                fido2CredentialManager.authenticateFido2Credential(mockAssertionRequest)
             } returns Fido2CredentialAssertionResult.Success("responseJson")
 
             createVaultItemListingViewModel()
 
             coVerify {
-                fido2CredentialManager.authenticateFido2Credential(
-                    userId = any(),
-                    request = any(),
-                    selectedCipherView = any(),
-                )
+                fido2CredentialManager.authenticateFido2Credential(request = any())
             }
         }
 
@@ -3250,7 +3068,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `UserVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
         every { authRepository.activeUserId } returns null
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
+            SpecialCircumstance.Fido2Save(createMockFido2CreateCredentialRequest(number = 1))
 
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(
@@ -3273,7 +3091,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential when verification result is received`() =
         runTest {
-            val mockRequest = createMockFido2CredentialRequest(number = 1)
+            val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockRequest,
             )
@@ -3326,20 +3144,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     fido2Credentials = mockFido2CredentialList,
                 ),
             )
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-            )
             coEvery {
-                fido2CredentialManager.authenticateFido2Credential(
-                    any(),
-                    any(),
-                    any(),
-                )
+                fido2CredentialManager.authenticateFido2Credential(any())
             } returns Fido2CredentialAssertionResult.Success(
                 responseJson = "mockResponse",
             )
@@ -3353,11 +3159,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             coVerify {
                 fido2CredentialManager.isUserVerified = true
-                fido2CredentialManager.authenticateFido2Credential(
-                    userId = DEFAULT_ACCOUNT.userId,
-                    request = mockAssertionRequest,
-                    selectedCipherView = any(),
-                )
+                fido2CredentialManager.authenticateFido2Credential(request = mockAssertionRequest)
             }
         }
 
@@ -3933,7 +3735,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -3967,7 +3769,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(

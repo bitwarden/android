@@ -16,12 +16,11 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
@@ -609,14 +608,10 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val fido2Intent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val fido2Intent =
+            createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
 
-        coEvery {
-            fido2CredentialManager.validateOrigin(
-                fido2CreateCredentialRequest.callingAppInfo,
-                fido2CreateCredentialRequest.requestJson,
-            )
-        } returns Fido2ValidateOriginResult.Success
+        every { intentManager.getShareDataFromIntent(fido2Intent) } returns null
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -636,7 +631,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with fido2 request data should set the user to unverified`() {
         val viewModel = createViewModel()
         val fido2Intent = createMockIntent(
-            mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            mockFido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
         )
 
         viewModel.trySendAction(
@@ -662,13 +657,10 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
-        coEvery {
-            fido2CredentialManager.validateOrigin(
-                fido2CreateCredentialRequest.callingAppInfo,
-                fido2CreateCredentialRequest.requestJson,
+        val mockIntent =
+            createMockIntent(
+                mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
             )
-        } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -690,13 +682,9 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
-        coEvery {
-            fido2CredentialManager.validateOrigin(
-                fido2CreateCredentialRequest.callingAppInfo,
-                fido2CreateCredentialRequest.requestJson,
-            )
-        } returns Fido2ValidateOriginResult.Success
+        val mockIntent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(

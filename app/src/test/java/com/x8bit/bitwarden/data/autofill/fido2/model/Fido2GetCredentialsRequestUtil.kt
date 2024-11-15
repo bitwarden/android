@@ -8,11 +8,12 @@ fun createMockFido2GetCredentialsRequest(
     userId: String = "mockUserId-$number",
     signingInfo: SigningInfo = SigningInfo(),
     origin: String? = null,
+    requestJson: String = "requestJson-$number",
 ): Fido2GetCredentialsRequest = Fido2GetCredentialsRequest(
     candidateQueryData = Bundle(),
     id = "mockId-$number",
     userId = userId,
-    requestJson = "requestJson-$number",
+    requestJson = requestJson,
     clientDataHash = null,
     packageName = "mockPackageName-$number",
     signingInfo = signingInfo,
