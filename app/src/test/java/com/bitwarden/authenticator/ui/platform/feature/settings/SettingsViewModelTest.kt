@@ -10,7 +10,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
@@ -60,7 +60,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(LocalFeatureFlag.PasswordManagerSync) } returns true
+        every { getFeatureFlag(FlagKey.PasswordManagerSync) } returns true
     }
 
     @BeforeEach
@@ -78,7 +78,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `initialState should be correct when saved state is null and password manager feature flag is off`() {
         every {
-            featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)
+            featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
         } returns false
         val viewModel = createViewModel(savedState = null)
         val expectedState = DEFAULT_STATE.copy(
@@ -115,7 +115,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
             authenticatorBridgeManager.accountSyncStateFlow
         } returns MutableStateFlow(AccountSyncState.Loading)
         every {
-            featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)
+            featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
         } returns true
         val viewModel = createViewModel(savedState = null)
         val expectedState = DEFAULT_STATE.copy(

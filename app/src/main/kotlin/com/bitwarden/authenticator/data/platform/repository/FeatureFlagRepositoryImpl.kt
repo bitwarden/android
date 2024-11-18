@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.platform.repository
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.FeatureFlagsConfiguration
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,8 +36,8 @@ class FeatureFlagRepositoryImpl(
     private fun initLocalFeatureFlagsConfiguration(): FeatureFlagsConfiguration {
         val config = FeatureFlagsConfiguration(
             mapOf(
-                LocalFeatureFlag.BitwardenAuthenticationEnabled.name to JsonPrimitive(
-                    LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue,
+                FlagKey.BitwardenAuthenticationEnabled.keyName to JsonPrimitive(
+                    FlagKey.BitwardenAuthenticationEnabled.defaultValue,
                 ),
             ),
         )

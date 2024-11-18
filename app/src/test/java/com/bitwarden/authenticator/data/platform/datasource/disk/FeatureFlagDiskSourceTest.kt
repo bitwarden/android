@@ -5,7 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.FeatureFlagsConfiguration
 import com.bitwarden.authenticator.data.platform.datasource.network.di.PlatformNetworkModule
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -66,6 +66,6 @@ private const val FEATURE_FLAGS_CONFIGURATION_JSON = """
 
 private val FEATURE_FLAGS_CONFIGURATION = FeatureFlagsConfiguration(
     featureFlags = mapOf(
-        LocalFeatureFlag.BitwardenAuthenticationEnabled.name to JsonPrimitive(true),
+        FlagKey.BitwardenAuthenticationEnabled.keyName to JsonPrimitive(true),
     ),
 )

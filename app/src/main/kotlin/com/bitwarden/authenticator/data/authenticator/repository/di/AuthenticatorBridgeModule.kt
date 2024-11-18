@@ -5,7 +5,7 @@ import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.repository.util.SymmetricKeyStorageProviderImpl
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticatorbridge.factory.AuthenticatorBridgeFactory
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
@@ -40,7 +40,7 @@ object AuthenticatorBridgeModule {
         symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
         featureFlagManager: FeatureFlagManager,
     ): AuthenticatorBridgeManager =
-        if (featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)) {
+        if (featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)) {
             factory.getAuthenticatorBridgeManager(
                 connectionType = BuildConfig.AUTHENTICATOR_BRIDGE_CONNECTION_TYPE,
                 symmetricKeyStorageProvider = symmetricKeyStorageProvider,

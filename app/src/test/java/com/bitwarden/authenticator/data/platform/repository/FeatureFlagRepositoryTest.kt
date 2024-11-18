@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.FeatureFlagsConfiguration
 import com.bitwarden.authenticator.data.platform.datasource.disk.util.FakeFeatureFlagDiskSource
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Test
@@ -47,7 +47,7 @@ class FeatureFlagRepositoryTest {
 private val FEATURE_FLAGS_CONFIG =
     FeatureFlagsConfiguration(
         featureFlags = mapOf(
-            LocalFeatureFlag.BitwardenAuthenticationEnabled.name to
-                JsonPrimitive(LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue),
+            FlagKey.BitwardenAuthenticationEnabled.keyName to
+                JsonPrimitive(FlagKey.BitwardenAuthenticationEnabled.defaultValue),
         ),
     )

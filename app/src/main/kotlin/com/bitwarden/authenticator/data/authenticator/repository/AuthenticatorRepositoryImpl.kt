@@ -21,7 +21,7 @@ import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
@@ -156,7 +156,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState> by lazy {
-        if (!featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)) {
+        if (!featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)) {
             MutableStateFlow(SharedVerificationCodesState.FeatureNotEnabled)
         } else {
             authenticatorBridgeManager

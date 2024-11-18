@@ -12,7 +12,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
@@ -59,7 +59,7 @@ class SettingsViewModel @Inject constructor(
             unlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled,
             isSubmitCrashLogsEnabled = settingsRepository.isCrashLoggingEnabled,
             isSyncWithBitwardenFeatureEnabled =
-            featureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync),
+            featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync),
             accountSyncState = authenticatorBridgeManager.accountSyncStateFlow.value,
             defaultSaveOption = settingsRepository.defaultSaveOption,
             sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,

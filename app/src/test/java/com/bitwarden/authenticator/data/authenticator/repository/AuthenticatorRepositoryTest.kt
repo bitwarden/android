@@ -12,7 +12,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenti
 import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
@@ -46,7 +46,7 @@ class AuthenticatorRepositoryTest {
     private val mockImportManager = mockk<ImportManager>()
     private val mockDispatcherManager = FakeDispatcherManager()
     private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(LocalFeatureFlag.PasswordManagerSync) } returns true
+        every { getFeatureFlag(FlagKey.PasswordManagerSync) } returns true
     }
     private val settingsRepository: SettingsRepository = mockk {
         every { previouslySyncedBitwardenAccountIds } returns emptySet()
@@ -86,7 +86,7 @@ class AuthenticatorRepositoryTest {
     @Test
     fun `sharedCodesStateFlow value should be FeatureNotEnabled when feature flag is off`() {
         every {
-            mockFeatureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)
+            mockFeatureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
         } returns false
         val repository = AuthenticatorRepositoryImpl(
             authenticatorDiskSource = fakeAuthenticatorDiskSource,
@@ -118,7 +118,7 @@ class AuthenticatorRepositoryTest {
     @Test
     fun `sharedCodesStateFlow should emit FeatureNotEnabled when feature flag is off`() = runTest {
         every {
-            mockFeatureFlagManager.getFeatureFlag(LocalFeatureFlag.PasswordManagerSync)
+            mockFeatureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
         } returns false
         val repository = AuthenticatorRepositoryImpl(
             authenticatorDiskSource = fakeAuthenticatorDiskSource,

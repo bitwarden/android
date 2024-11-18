@@ -6,6 +6,8 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSourc
 import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSourceImpl
+import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
+import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSourceImpl
 import dagger.Module
@@ -50,4 +52,12 @@ object PlatformDiskModule {
             sharedPreferences = sharedPreferences,
             json = json,
         )
+
+    @Provides
+    @Singleton
+    fun provideFeatureFlagOverrideDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+    ): FeatureFlagOverrideDiskSource = FeatureFlagOverrideDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
+    )
 }

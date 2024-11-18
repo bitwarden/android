@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.repository.util
 
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.FeatureFlagsConfiguration
-import com.bitwarden.authenticator.data.platform.manager.model.LocalFeatureFlag
+import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.FeatureFlagRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +32,7 @@ class FakeFeatureFlagRepository : FeatureFlagRepository {
 private val FEATURE_FLAGS_CONFIG =
     FeatureFlagsConfiguration(
         featureFlags = mapOf(
-            LocalFeatureFlag.BitwardenAuthenticationEnabled.name to
-                JsonPrimitive(LocalFeatureFlag.BitwardenAuthenticationEnabled.defaultValue),
+            FlagKey.BitwardenAuthenticationEnabled.keyName to
+                JsonPrimitive(FlagKey.BitwardenAuthenticationEnabled.defaultValue),
         ),
     )
