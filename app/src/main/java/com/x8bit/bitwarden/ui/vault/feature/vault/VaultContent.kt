@@ -22,6 +22,9 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+private const val TOTP_TYPES_COUNT: Int = 1
+private const val TRASH_TYPES_COUNT: Int = 1
+
 /**
  * Content view for the [VaultScreen].
  */
@@ -41,7 +44,7 @@ fun VaultContent(
             item {
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.totp),
-                    supportingLabel = "1",
+                    supportingLabel = TOTP_TYPES_COUNT.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -341,7 +344,7 @@ fun VaultContent(
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.trash),
-                supportingLabel = "1",
+                supportingLabel = TRASH_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
