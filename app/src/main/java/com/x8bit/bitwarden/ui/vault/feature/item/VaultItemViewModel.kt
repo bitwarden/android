@@ -512,7 +512,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleCopyNotesClick() {
         onContent { content ->
-            val notes = requireNotNull(content.common.notes)
+            val notes = content.common.notes.orEmpty()
             clipboardManager.setText(text = notes)
         }
     }
