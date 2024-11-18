@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.base.util
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -8,10 +9,13 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.bitwarden.authenticator.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.authenticator.ui.platform.util.isPortrait
 
 /**
  * This is a [Modifier] extension for drawing a divider at the bottom of the composable.
@@ -57,3 +61,17 @@ fun Modifier.mirrorIfRtl(): Modifier =
     } else {
         this
     }
+
+/**
+ * This is a [Modifier] extension for ensuring that the content uses the standard horizontal margin.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.standardHorizontalMargin(
+    portrait: Dp = 16.dp,
+    landscape: Dp = 48.dp,
+): Modifier {
+    val config = LocalConfiguration.current
+    return this.padding(horizontal = if (config.isPortrait) portrait else landscape)
+}

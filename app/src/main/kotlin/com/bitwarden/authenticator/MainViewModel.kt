@@ -3,6 +3,7 @@ package com.bitwarden.authenticator
 import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
+    configRepository: ServerConfigRepository,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
@@ -37,6 +40,9 @@ class MainViewModel @Inject constructor(
                 sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
             }
             .launchIn(viewModelScope)
+        viewModelScope.launch {
+            configRepository.getServerConfig(forceRefresh = false)
+        }
     }
 
     override fun handleAction(action: MainAction) {
@@ -44,7 +50,12 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ThemeUpdate -> handleThemeUpdated(action)
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
+            MainAction.OpenDebugMenu -> handleOpenDebugMenu()
         }
+    }
+
+    private fun handleOpenDebugMenu() {
+        sendEvent(MainEvent.NavigateToDebugMenu)
     }
 
     private fun handleThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
@@ -96,6 +107,11 @@ sealed class MainAction {
     data class ReceiveNewIntent(val intent: Intent) : MainAction()
 
     /**
+     * Receive event to open the debug menu.
+     */
+    data object OpenDebugMenu : MainAction()
+
+    /**
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : MainAction() {
@@ -113,6 +129,11 @@ sealed class MainAction {
  * Represents events that are emitted by the [MainViewModel].
  */
 sealed class MainEvent {
+
+    /**
+     * Navigate to the debug menu.
+     */
+    data object NavigateToDebugMenu : MainEvent()
 
     /**
      * Event indicating a change in the screen capture setting.

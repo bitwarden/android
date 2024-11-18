@@ -63,6 +63,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
             isMinifyEnabled = false
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "true")
         }
 
         release {
@@ -77,6 +78,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
         }
     }
     compileOptions {

@@ -19,6 +19,7 @@ import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AUTHENTICATOR_GRAPH_ROUTE
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
+import com.bitwarden.authenticator.ui.platform.feature.debugmenu.setupDebugMenuDestination
 import com.bitwarden.authenticator.ui.platform.feature.splash.SPLASH_ROUTE
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
@@ -78,6 +79,11 @@ fun RootNavScreen(
         unlockDestination(
             onUnlocked = {
                 viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
+            },
+        )
+        setupDebugMenuDestination(
+            onNavigateBack = {
+                navController.popBackStack()
             },
         )
         authenticatorGraph(
