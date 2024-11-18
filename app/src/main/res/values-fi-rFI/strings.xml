@@ -1082,9 +1082,9 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="ssh_keys">SSH-avaimet</string>
   <string name="copy_public_key">Kopioi julkinen avain</string>
   <string name="copy_fingerprint">Kopioi sormenjälki</string>
-  <string name="enable_notifications">Enable notifications</string>
+  <string name="enable_notifications">Ota ilmoitukset käyttöön</string>
   <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
-  <string name="skip_for_now">Skip for now</string>
-  <string name="done_text">Done</string>
+  <string name="skip_for_now">Ohita tällä kertaa</string>
+  <string name="done_text">Valmis</string>
 </resources>
