@@ -46,7 +46,7 @@ class ManualCodeEntryViewModel @Inject constructor(
     }
 
     private fun handleCodeSubmit() {
-        vaultRepository.emitTotpCodeResult(TotpCodeResult.Success(state.code))
+        vaultRepository.emitTotpCodeResult(TotpCodeResult.Success(state.code.trim()))
         sendEvent(ManualCodeEntryEvent.NavigateBack)
     }
 
