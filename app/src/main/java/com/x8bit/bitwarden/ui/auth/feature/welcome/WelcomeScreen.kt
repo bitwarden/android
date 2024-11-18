@@ -44,7 +44,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -164,8 +164,8 @@ private fun WelcomeScreenContent(
                 .fillMaxWidth(),
         )
 
-        BitwardenTextButton(
-            label = stringResource(id = R.string.log_in),
+        BitwardenOutlinedButton(
+            label = stringResource(id = R.string.log_in_verb),
             onClick = onLoginClick,
             modifier = Modifier
                 .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
@@ -189,7 +189,7 @@ private fun WelcomeCardLandscape(
         Image(
             painter = rememberVectorPainter(id = state.imageRes),
             contentDescription = null,
-            modifier = Modifier.size(132.dp),
+            modifier = Modifier.size(124.dp),
         )
 
         Column(
@@ -227,7 +227,7 @@ private fun WelcomeCardPortrait(
         Image(
             painter = rememberVectorPainter(id = state.imageRes),
             contentDescription = null,
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(124.dp),
         )
 
         Text(

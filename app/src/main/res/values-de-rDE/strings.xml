@@ -951,7 +951,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="or_log_in_you_may_already_have_an_account">Oder melde dich an, du hast möglicherweise bereits ein Konto.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Erhalte E-Mails von Bitwarden für Ankündigungen, Ratschläge und Marktforschungsumfragen. Melde dich jederzeit wieder ab.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Erhalte Ratschläge, Ankündigungen und Marktforschungsumfragen von Bitwarden in deinem Posteingang. Melde dich jederzeit wieder ab.</string>
-  <string name="privacy_prioritized">Datenschutz, priorisiert</string>
+  <string name="security_prioritized">Datenschutz, priorisiert</string>
   <string name="welcome_message_1">Speichere Zugangsdaten, Karten und Identitäten in deinem sicheren Tresor. Bitwarden verwendet Zero-Knowledge und Ende-zu-Ende-Verschlüsselung, um das zu schützen, was für dich wichtig ist.</string>
   <string name="welcome_message_2">Richte biometrisches Entsperren und Auto-Ausfüllen ein, um dich ohne einen einzigen Buchstaben einzugeben bei deinen Konten anzumelden.</string>
   <string name="quick_and_easy_login">Schnelle und einfache Anmeldung</string>

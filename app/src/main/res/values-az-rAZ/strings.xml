@@ -951,7 +951,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="or_log_in_you_may_already_have_an_account">Ya da bir hesabınız varsa giriş edin.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Gələn qutunuzda Bitwarden-dən məsləhət, elan və araşdırma imkanları ilə bağlı məktublar alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
-  <string name="privacy_prioritized">Məxfilik, prioritetdir</string>
+  <string name="security_prioritized">Məxfilik, prioritetdir</string>
   <string name="welcome_message_1">Girişləri, kart və kimlik məlumatlarınızı güvənli seyfinizdə saxlayın. Bitwarden, sizin üçün mühüm olanları qorumaq üçün zero-knowledge və ucdan-uca şifrələmə istifadə edir.</string>
   <string name="welcome_message_2">Tək bir hərf yazmadan hesablarınıza giriş etmək üçün biometrik kilid açma və avto-doldurma seçimlərini qurun.</string>
   <string name="quick_and_easy_login">Cəld və asan giriş</string>

@@ -952,7 +952,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="or_log_in_you_may_already_have_an_account">Alebo sa prihláste, možno už účet máte.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu. Odhlásiť dá môžete kedykoľvek.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Dostávajte do schránky rady, oznámenia a príležitosti na výskum od spoločnosti Bitwarden. Kedykoľvek sa môžete odhlásiť z odberu.</string>
-  <string name="privacy_prioritized">Súkromie na prvom mieste</string>
+  <string name="security_prioritized">Súkromie na prvom mieste</string>
   <string name="welcome_message_1">Ukladajte prihlasovacie údaje, karty a identity do zabezpečeného trezoru. Bitwarden používa šifrovanie s nulovou znalosťou od začiatku do konca na ochranu toho, čo je pre vás dôležité.</string>
   <string name="welcome_message_2">Nastavte si odomykanie biometrickými údajmi a automatické vypĺňanie na prihlasovanie do účtov bez zadávania jediného písmena.</string>
   <string name="quick_and_easy_login">Rýchle a jednoduché prihlásenie</string>

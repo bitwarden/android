@@ -952,7 +952,7 @@
   <string name="or_log_in_you_may_already_have_an_account">أو تسجيل الدخول، قد يكون لديك حساب بالفعل.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">الحصول على رسائل البريد الإلكتروني من Bitwarden للحصول على الإعلانات والنصائح وفرص البحث. إلغاء الاشتراك في أي وقت.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">احصل على المشورة والإعلانات وفرص البحث من Bitwarden في صندوق الوارد الخاص بك. قم بإلغاء الاشتراك في أي وقت.</string>
-  <string name="privacy_prioritized">الخصوصية، مرتبة حسب الأولوية</string>
+  <string name="security_prioritized">الخصوصية، مرتبة حسب الأولوية</string>
   <string name="welcome_message_1">حفظ تسجيلات الدخول والبطاقات والهويات إلى خزانتك الآمنة. يستخدم Bitwarden المعرفة الصفرية، التشفير من النهاية إلى النهاية لحماية ما هو مهم بالنسبة لك.</string>
   <string name="welcome_message_2">قم بإعداد فتح القفل الحيوي والتعبئة التلقائية لتسجيل الدخول إلى حساباتك دون كتابة حرف واحد.</string>
   <string name="quick_and_easy_login">تسجيل دخول سريع وسهل</string>
