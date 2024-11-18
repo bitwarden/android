@@ -94,16 +94,17 @@ fun String.toCollectionDisplayName(list: List<CollectionView>): String {
  *
  * Deletion is allowed when the item is in any collection that the user has "manage" permission for.
  */
-fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(collectionIds: List<String>?) =
-    this
-        ?.takeUnless { it.isEmpty() }
-        ?.any {
+fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(
+    collectionIds: List<String>?,
+): Boolean {
+    if (this.isNullOrEmpty() || collectionIds.isNullOrEmpty()) return true
+    return this
+        .any { collectionView ->
             collectionIds
-                ?.contains(it.id)
-                ?.let { isInCollection -> !isInCollection || it.manage }
-                ?: true
+                .contains(collectionView.id)
+                .let { isInCollection -> isInCollection && collectionView.manage }
         }
-        ?: true
+}
 
 /**
  * Checks if the user has permission to assign an item to a collection.
