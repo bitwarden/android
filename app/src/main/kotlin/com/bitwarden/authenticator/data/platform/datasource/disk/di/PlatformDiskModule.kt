@@ -2,6 +2,8 @@ package com.bitwarden.authenticator.data.platform.datasource.disk.di
 
 import android.content.SharedPreferences
 import com.bitwarden.authenticator.data.platform.datasource.di.UnencryptedPreferences
+import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSource
+import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
@@ -19,6 +21,17 @@ import javax.inject.Singleton
  * Provides persistence-related dependencies in the platform package.
  */
 object PlatformDiskModule {
+
+    @Provides
+    @Singleton
+    fun provideConfigDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        json: Json,
+    ): ConfigDiskSource =
+        ConfigDiskSourceImpl(
+            sharedPreferences = sharedPreferences,
+            json = json,
+        )
 
     @Provides
     @Singleton
