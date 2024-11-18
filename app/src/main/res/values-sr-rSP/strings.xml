@@ -1083,8 +1083,9 @@
   <string name="ssh_keys">SSH кључеве</string>
   <string name="copy_public_key">Копирај јавни кључ</string>
   <string name="copy_fingerprint">Копирати отисак</string>
-  <string name="enable_notifications">Enable notifications</string>
-  <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
-  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
-  <string name="skip_for_now">Skip for now</string>
+  <string name="enable_notifications">Омогући обавештења</string>
+  <string name="log_in_quickly_and_easily_across_devices">Пријавите се брзо и лако на више уређаја</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden може да вас обавести сваки пут када добијете нови захтев за пријаву са другог уређаја.</string>
+  <string name="skip_for_now">Прескочи за сада</string>
+  <string name="done_text">Готово</string>
 </resources>

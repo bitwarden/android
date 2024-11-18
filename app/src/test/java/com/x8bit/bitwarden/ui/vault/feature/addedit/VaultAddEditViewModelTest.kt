@@ -1259,6 +1259,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             manage = true,
                             readOnly = false,
                         ),
+                        createMockCollectionView(
+                            number = 2,
+                            manage = false,
+                            readOnly = true,
+                        ),
                     ),
                 ),
             )
