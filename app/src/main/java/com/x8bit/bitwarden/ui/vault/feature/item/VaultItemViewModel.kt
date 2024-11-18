@@ -835,15 +835,26 @@ class VaultItemViewModel @Inject constructor(
 
     //region Identity Type Handlers
 
-    @Suppress("MaxLineLength")
     private fun handleIdentityTypeActions(action: VaultItemAction.ItemType.Identity) {
         when (action) {
-            VaultItemAction.ItemType.Identity.CopyIdentityNameClick -> handleCopyIdentityNameClick()
-            VaultItemAction.ItemType.Identity.CopyUsernameClick -> handleCopyIdentityUsernameClick()
+            VaultItemAction.ItemType.Identity.CopyIdentityNameClick -> {
+                handleCopyIdentityNameClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyUsernameClick -> {
+                handleCopyIdentityUsernameClick()
+            }
+
             VaultItemAction.ItemType.Identity.CopyCompanyClick -> handleCopyCompanyClick()
             VaultItemAction.ItemType.Identity.CopySsnClick -> handleCopySsnClick()
-            VaultItemAction.ItemType.Identity.CopyPassportNumberClick -> handleCopyPassportNumberClick()
-            VaultItemAction.ItemType.Identity.CopyLicenseNumberClick -> handleCopyLicenseNumberClick()
+            VaultItemAction.ItemType.Identity.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick()
+            }
+
             VaultItemAction.ItemType.Identity.CopyEmailClick -> handleCopyEmailClick()
             VaultItemAction.ItemType.Identity.CopyPhoneClick -> handleCopyPhoneClick()
             VaultItemAction.ItemType.Identity.CopyAddressClick -> handleCopyAddressClick()
@@ -852,63 +863,63 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleCopyIdentityNameClick() {
         onIdentityContent { _, identity ->
-            val identityName = requireNotNull(identity.identityName)
+            val identityName = identity.identityName.orEmpty()
             clipboardManager.setText(text = identityName)
         }
     }
 
     private fun handleCopyIdentityUsernameClick() {
         onIdentityContent { _, identity ->
-            val username = requireNotNull(identity.username)
+            val username = identity.username.orEmpty()
             clipboardManager.setText(text = username)
         }
     }
 
     private fun handleCopyCompanyClick() {
         onIdentityContent { _, identity ->
-            val company = requireNotNull(identity.company)
+            val company = identity.company.orEmpty()
             clipboardManager.setText(text = company)
         }
     }
 
     private fun handleCopySsnClick() {
         onIdentityContent { _, identity ->
-            val ssn = requireNotNull(identity.ssn)
+            val ssn = identity.ssn.orEmpty()
             clipboardManager.setText(text = ssn)
         }
     }
 
     private fun handleCopyPassportNumberClick() {
         onIdentityContent { _, identity ->
-            val passportNumber = requireNotNull(identity.passportNumber)
+            val passportNumber = identity.passportNumber.orEmpty()
             clipboardManager.setText(text = passportNumber)
         }
     }
 
     private fun handleCopyLicenseNumberClick() {
         onIdentityContent { _, identity ->
-            val licenseNumber = requireNotNull(identity.licenseNumber)
+            val licenseNumber = identity.licenseNumber.orEmpty()
             clipboardManager.setText(text = licenseNumber)
         }
     }
 
     private fun handleCopyEmailClick() {
         onIdentityContent { _, identity ->
-            val email = requireNotNull(identity.email)
+            val email = identity.email.orEmpty()
             clipboardManager.setText(text = email)
         }
     }
 
     private fun handleCopyPhoneClick() {
         onIdentityContent { _, identity ->
-            val phone = requireNotNull(identity.phone)
+            val phone = identity.phone.orEmpty()
             clipboardManager.setText(text = phone)
         }
     }
 
     private fun handleCopyAddressClick() {
         onIdentityContent { _, identity ->
-            val address = requireNotNull(identity.address)
+            val address = identity.address.orEmpty()
             clipboardManager.setText(text = address)
         }
     }

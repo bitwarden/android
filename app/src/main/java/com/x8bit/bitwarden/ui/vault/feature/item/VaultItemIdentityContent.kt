@@ -208,6 +208,7 @@ fun VaultItemIdentityContent(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.notes),
                     value = notes,
