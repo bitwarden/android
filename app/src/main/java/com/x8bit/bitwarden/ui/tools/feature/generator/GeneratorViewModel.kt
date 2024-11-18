@@ -213,7 +213,7 @@ class GeneratorViewModel @Inject constructor(
                 handleUpdateGeneratedPassphraseResult(action)
             }
 
-            is GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult -> {
+            is GeneratorAction.Internal.UpdateGeneratedPlusAddressedUsernameResult -> {
                 handleUpdatePlusAddressedGeneratedUsernameResult(action)
             }
 
@@ -676,7 +676,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleUpdatePlusAddressedGeneratedUsernameResult(
-        action: GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult,
+        action: GeneratorAction.Internal.UpdateGeneratedPlusAddressedUsernameResult,
     ) {
         when (val result = action.result) {
             is GeneratedPlusAddressedUsernameResult.Success -> {
@@ -809,7 +809,7 @@ class GeneratorViewModel @Inject constructor(
                 handleMinSpecialChange(action)
             }
 
-            is GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange -> {
+            is GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange -> {
                 handleToggleAmbiguousChars(action)
             }
         }
@@ -895,7 +895,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleToggleAmbiguousChars(
-        action: GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange,
+        action: GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange,
     ) {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
@@ -1440,7 +1440,7 @@ class GeneratorViewModel @Inject constructor(
                 email = plusAddressedEmail.email,
             ),
         )
-        sendAction(GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult(result))
+        sendAction(GeneratorAction.Internal.UpdateGeneratedPlusAddressedUsernameResult(result))
     }
 
     private suspend fun generateCatchAllEmail(catchAllEmail: CatchAllEmail) {
@@ -2264,7 +2264,7 @@ sealed class GeneratorAction {
              * @property avoidAmbiguousChars Flag indicating whether ambiguous characters
              * should be avoided.
              */
-            data class ToggleAvoidAmbigousCharactersChange(
+            data class ToggleAvoidAmbiguousCharactersChange(
                 val avoidAmbiguousChars: Boolean,
             ) : Password()
         }
@@ -2519,7 +2519,7 @@ sealed class GeneratorAction {
         /**
          * Indicates a generated text update is received.
          */
-        data class UpdateGeneratedPlusAddessedUsernameResult(
+        data class UpdateGeneratedPlusAddressedUsernameResult(
             val result: GeneratedPlusAddressedUsernameResult,
         ) : Internal()
 

@@ -12,8 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
-import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
-import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManagerImpl
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.FakeAccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -55,8 +54,7 @@ class SettingsRepositoryTest {
         every { disableAutofillServices() } just runs
     }
     private val autofillEnabledManager: AutofillEnabledManager = AutofillEnabledManagerImpl()
-    private val accessibilityEnabledManager: AccessibilityEnabledManager =
-        AccessibilityEnabledManagerImpl()
+    private val fakeAccessibilityEnabledManager = FakeAccessibilityEnabledManager()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
@@ -75,7 +73,7 @@ class SettingsRepositoryTest {
         settingsDiskSource = fakeSettingsDiskSource,
         vaultSdkSource = vaultSdkSource,
         biometricsEncryptionManager = biometricsEncryptionManager,
-        accessibilityEnabledManager = accessibilityEnabledManager,
+        accessibilityEnabledManager = fakeAccessibilityEnabledManager,
         dispatcherManager = FakeDispatcherManager(),
         policyManager = policyManager,
     )
@@ -691,10 +689,10 @@ class SettingsRepositoryTest {
             settingsRepository.isAccessibilityEnabledStateFlow.test {
                 assertFalse(awaitItem())
 
-                accessibilityEnabledManager.isAccessibilityEnabled = true
+                fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
                 assertTrue(awaitItem())
 
-                accessibilityEnabledManager.isAccessibilityEnabled = false
+                fakeAccessibilityEnabledManager.isAccessibilityEnabled = false
                 assertFalse(awaitItem())
             }
         }

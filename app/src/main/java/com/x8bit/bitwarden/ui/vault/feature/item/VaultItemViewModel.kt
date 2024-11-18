@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
+import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -103,29 +105,15 @@ class VaultItemViewModel @Inject constructor(
                     // we map it to the appropriate value below.
                 }
                     .mapNullable {
-                        // Deletion is not allowed when the item is in a collection that the user
-                        // does not have "manage" permission for.
-                        val canDelete = collectionsState.data
-                            ?.none {
-                                val itemIsInCollection = cipherViewState.data
-                                    ?.collectionIds
-                                    ?.contains(it.id) == true
+                        val canDelete = collectionsState
+                            .data
+                            .hasDeletePermissionInAtLeastOneCollection(
+                                collectionIds = cipherViewState.data?.collectionIds,
+                            )
 
-                                itemIsInCollection && !it.manage
-                            }
-                            ?: true
-
-                        // Assigning to a collection is not allowed when the item is in a collection
-                        // that the user does not have "manage" and "edit" permission for.
-                        val canAssignToCollections = collectionsState.data
-                            ?.none {
-                                val itemIsInCollection = cipherViewState.data
-                                    ?.collectionIds
-                                    ?.contains(it.id) == true
-
-                                itemIsInCollection && !it.manage && it.readOnly
-                            }
-                            ?: true
+                        val canAssignToCollections = collectionsState
+                            .data
+                            .canAssignToCollections(cipherViewState.data?.collectionIds)
 
                         VaultItemStateData(
                             cipher = cipherViewState.data,

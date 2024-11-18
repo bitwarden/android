@@ -235,6 +235,30 @@ class VaultSdkSourceTest {
         }
 
     @Test
+    fun `validatePin should call SDK and return a Result with the correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val pin = "pin"
+            val pinProtectedUserKey = "pinProtectedUserKey"
+            val expectedResult = true
+            coEvery {
+                clientAuth.validatePin(pin = pin, pinProtectedUserKey = pinProtectedUserKey)
+            } returns expectedResult
+
+            val result = vaultSdkSource.validatePin(
+                userId = userId,
+                pin = pin,
+                pinProtectedUserKey = pinProtectedUserKey,
+            )
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                clientAuth.validatePin(pin = pin, pinProtectedUserKey = pinProtectedUserKey)
+                sdkClientManager.getOrCreateClient(userId = userId)
+            }
+        }
+
+    @Test
     fun `getAuthRequestKey should call SDK and return a Result with correct data`() =
         runBlocking {
             val publicKey = "key"

@@ -1035,7 +1035,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="log_in_to_your_current_browser_or_password_manager_highlight">log in to your current browser or password manager.</string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Export your passwords. This option is usually found in your settings.</string>
   <string name="export_your_passwords_highlight">Vie salasanasi.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done to finish syncing.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done below to finish syncing.</string>
   <string name="select_import_data_highlight">Valitse tuotavat tiedot</string>
   <string name="step_1_of_3">Vaihe 1/3</string>
   <string name="export_your_saved_logins">Vie tallennetut kirjautumistietosi</string>
@@ -1086,4 +1086,5 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Skip for now</string>
+  <string name="done_text">Done</string>
 </resources>

@@ -21,7 +21,7 @@
   <string name="email_address">E-mailadresse</string>
   <string name="email_us">E-mail os</string>
   <string name="email_us_description">Email os direkte for at få hjælp eller give feedback.</string>
-  <string name="enter_pin">Indtast din pinkode.</string>
+  <string name="enter_pin">Angiv PIN-koden.</string>
   <string name="favorites">Favoritter</string>
   <string name="file_bug_report">Indsend en fejlrapport</string>
   <string name="file_bug_report_description">Opret en problematik i vores GitHub-repo.</string>
@@ -87,15 +87,15 @@
   <string name="account_created_success">Din nye konto er oprettet!</string>
   <string name="add_an_item">Tilføj et emne</string>
   <string name="app_extension">App-udvidelse</string>
-  <string name="autofill_accessibility_description">Brug Bitwardens hjælpefunktion til autoudfyldning af dine logins på tværs af apps og nettet.</string>
+  <string name="autofill_accessibility_description">Brug Bitwardens hjælpefunktion til autoudfyldning af logins på tværs af apps og internet.</string>
   <string name="autofill_service">Autoudfyldningstjeneste</string>
   <string name="set_bitwarden_as_passkey_manager_description">Angiv Bitwarden som aktuel adgangsnøgleudbyder i enhedsindstillingerne.</string>
   <string name="avoid_ambiguous_characters">Undgå tvetydige tegn</string>
   <string name="bitwarden_app_extension">Bitwarden app-udvidelse</string>
   <string name="bitwarden_app_extension_alert2">Den letteste måde at tilføje nye logins til boksen er fra Bitwarden app-udvidelsen. Læs mere om brugen af Bitwarden app-udvidelsen ved at gå til skærmen \"Indstillinger\".</string>
-  <string name="bitwarden_app_extension_description">Benyt Bitwarden i Safari og andre apps til autoudfyldelse af dine logins.</string>
-  <string name="bitwarden_autofill_service">Bitwarden autoudfyldningstjeneste</string>
-  <string name="bitwarden_autofill_accessibility_service_description">Benyt Bitwardens hjælpefunktion til autoudfyldning af dine logins.</string>
+  <string name="bitwarden_app_extension_description">Benyt Bitwarden i Safari og andre apps til autoudfyldelse af logins.</string>
+  <string name="bitwarden_autofill_service">Bitwarden Autoudfyldningstjeneste</string>
+  <string name="bitwarden_autofill_accessibility_service_description">Benyt Bitwardens tilgængelighedstjeneste til autoudfyldning af logins.</string>
   <string name="change_email">Skift e-mail</string>
   <string name="change_email_confirmation">Man kan skifte sin e-mailadresse via bitwarden.com web-boksen. Besøg webstedet nu?</string>
   <string name="change_master_password">Skift hovedadgangskode</string>
@@ -197,8 +197,8 @@
   <string name="no_items_for_uri">Der er ingen emner i boksen til %1$s.</string>
   <string name="no_items_for_vault">Der er ingen emner i boksen matchende \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Søg efter eller tilføj et nyt login</string>
-  <string name="bitwarden_autofill_service_overlay">Når du vælger et inputfelt og ser en Bitwarden-autoudfyldningoverlejring, kan du trykke på den for at starte autoudfyldningstjenesten.</string>
-  <string name="bitwarden_autofill_service_notification_content">Tryk på denne notifikation for at autoudfylde med et element fra din boks.</string>
+  <string name="bitwarden_autofill_service_overlay">Når et inputfelt vælges, og en Bitwarden-autoudfyldningsoverlejring vises, kan man trykker på den for at starte autoudfyldningstjenesten.</string>
+  <string name="bitwarden_autofill_service_notification_content">Tryk på denne notifikation for at autoudfylde et emne fra boksen.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Åbn Tilgængelighedsindstillinger</string>
   <string name="bitwarden_autofill_service_step1">1. I Androids Tilgængelighedsindstillinger, tryk på \"Bitwarden\" under afsnittet Tjenester.</string>
   <string name="bitwarden_autofill_service_step2">2. Slå kontakten til og tryk på OK for at acceptere.</string>
@@ -207,10 +207,10 @@
   <string name="off" tools:override="true">Fra</string>
   <string name="on" tools:override="true">Til</string>
   <string name="status">Status</string>
-  <string name="bitwarden_autofill_service_alert2">Den letteste måde at tilføje nye logins til din boks er fra Bitwarden Autoudfyldningstjenesten. Få mere at vide om brugen af Bitwarden Autoudfyldningstjenesten ved at gå til skærmen \"Indstillinger\".</string>
+  <string name="bitwarden_autofill_service_alert2">Den letteste måde at føje nye logins til boksen er fra Bitwarden Autoudfyldningstjeneste. Læs mere om brugen af Bitwarden Autoudfyldningstjeneste ved at gå til skærmen \"Indstillinger\".</string>
   <string name="autofill">Autoudfyld</string>
-  <string name="autofill_or_view">Vil du autoudfylde eller se dette element?</string>
-  <string name="bitwarden_autofill_service_match_confirm">Sikker på, at dette emne skal autoudfyldes? Det er ikke et identisk match med \"%1$s\".</string>
+  <string name="autofill_or_view">Skal dette emne autoudfyldes eller vises?</string>
+  <string name="bitwarden_autofill_service_match_confirm">Sikker på, at dette emne skal autoudfyldes? Det matcher ikke \"%1$s\" fuldstændigt.</string>
   <string name="matching_items">Matchende emner</string>
   <string name="possible_matching_items">Mulige matchende emner</string>
   <string name="search">Søg</string>
@@ -376,13 +376,13 @@ Skanning vil ske automatisk.</string>
   <string name="autofill_setup">Logins kan nu nemt tilgås direkte fra tastaturet, når der logges ind på apps og websteder.</string>
   <string name="autofill_setup2">Vi anbefaler, at andre Autoudfyld-apps deaktiveres under Indstillinger, hvis det ikke er planen at bruge dem.</string>
   <string name="bitwarden_autofill_description">Få adgang til boksen direkte fra tastaturet for hurtigt at autoudfylde adgangskoder.</string>
-  <string name="autofill_turn_on">Følg disse instruktioner for at aktivere autoudfyldning af adgangskoder på din enhed:</string>
+  <string name="autofill_turn_on">Følg denne vejledning for at aktivere autoudfyldning af adgangskoder på enheden:</string>
   <string name="autofill_turn_on1">1. Gå til iOS-appen \"Indstillinger\"</string>
   <string name="autofill_turn_on2">2. Tryk på \"Adgangskoder\"</string>
   <string name="autofill_turn_on3">3. Tryk på \"Autoudfyld adgangskoder\"</string>
   <string name="autofill_turn_on4">4. Slå Autoudfyld til</string>
   <string name="autofill_turn_on5">5. Vælg \"Bitwarden\"</string>
-  <string name="password_autofill">Adgangskode autoudfyld</string>
+  <string name="password_autofill">Adgangskodeautoudfyldning</string>
   <string name="bitwarden_autofill_alert2">Den letteste måde at tilføje nye logins til boksen er ved at bruge Bitwardens Adgangskode Autoudfyldning-udvidelse. Læs mere om brugen af Bitwarden Adgangskode Autoudfyldnig-udvidelsen ved at gå til skærmbilledet \"Indstillinger\".</string>
   <string name="invalid_email">Ugyldig e-mailadresse.</string>
   <string name="cards">Kort</string>
@@ -478,7 +478,7 @@ Skanning vil ske automatisk.</string>
   <string name="biometrics_direction">Biometrisk bekræftelse</string>
   <string name="biometrics">Biometri</string>
   <string name="use_biometrics_to_unlock">Benyt biometri til oplåsning</string>
-  <string name="accessibility_overlay_permission_alert">Bitwarden har brug for opmærksomhed - se \"Autoudfyld hjælpefunktion\" i Bitwarden-indstillinger</string>
+  <string name="accessibility_overlay_permission_alert">Bitwarden kræver opmærksomhed - se \"Autoudfyld-tilgængelighedstjeneste\" i Bitwarden-indstillinger</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. På Android app-indstillingsskærmen for Bitwarden, gå til indstillingen \"Vis oven på andre apps\" (under Avanceret) og tryk på knappen for at aktivere overlejringsunderstøttelse.</string>
   <string name="overlay_permission">Tilladelse</string>
   <string name="bitwarden_autofill_service_open_overlay_permission_settings">Åbn Indstillinger for Overlejringstilladelse</string>
@@ -501,7 +501,7 @@ Skanning vil ske automatisk.</string>
   <string name="open">Åbn</string>
   <string name="unable_to_save_attachment">Et problem opstod med at gemme denne vedhæftning. Fortsætter problemet, gem den i stedet fra web-boksen.</string>
   <string name="save_attachment_success">Vedhæftning gemt</string>
-  <string name="autofill_tile_accessibility_required">Aktivér \"Autoudfyld Tilgængelighedstjeneste\" fra Bitwarden-indstillinger for at benytte flisen Autoudfyld.</string>
+  <string name="autofill_tile_accessibility_required">Aktivér \"Autoudfyld-tilgængelighedstjeneste\" fra Bitwarden-indstillinger for at benytte flisen Autoudfyld.</string>
   <string name="autofill_tile_uri_not_found">Ingen adgangskodefelter fundet</string>
   <string name="soft_deleting">Sender til papirkurven...</string>
   <string name="item_soft_deleted">Emne er sendt til papirkurven.</string>
@@ -589,7 +589,7 @@ Skanning vil ske automatisk.</string>
   <string name="notes_info">Private notater om denne Send.</string>
   <string name="disable_send">Deaktivér denne Send, så ingen kan tilgå den</string>
   <string name="no_sends">Kontoen har ingen Sends.</string>
-  <string name="add_a_send">Tilføj en Send</string>
+  <string name="add_a_send">Ny Send</string>
   <string name="copy_link">Kopiér link</string>
   <string name="share_link">Del link</string>
   <string name="send_link">Send link</string>
@@ -1008,7 +1008,7 @@ Skift til denne konto?</string>
   <string name="turn_on_later">Slå til senere</string>
   <string name="turn_on_autofill_later">Slå autofyld til senere?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Dette trin kan når som helst fuldføres via Indstillinger.</string>
-  <string name="what_bitwarden_has_to_offer">Man kan nu bruge autofyld til at logge ind på apps og websteder med sine gemte adgangskoder. Nu kan man tjekke alt andet, Bitwarden har at tilbyde.</string>
+  <string name="what_bitwarden_has_to_offer">Man kan nu tjekke alt det andet, Bitwarden har at tilbyde, og begynde at håndtere sine adgangskoder sikkert.</string>
   <string name="youre_all_set">Så er alt klar!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fejl under oprettelse af forbindelse til Duo-tjenesten. Brug en anden totrins-indlogningsmetode eller kontakt Duo for hjælp.</string>
   <string name="master_password_hint_not_specified">Hovedadgangskodetip</string>
@@ -1040,8 +1040,8 @@ Skift til denne konto?</string>
   <string name="step_1_of_3">Trin 1 af 3</string>
   <string name="export_your_saved_logins">Eksportere gemte logins</string>
   <string name="delete_this_file_after_import_is_complete">Slet denne fil, når importen er færdig.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Åbn en ny webbrowserfane på computeren, og gå til vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">gå til vault.bitwarden.com</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Åbn en ny webbrowserfane på computeren, og gå til %1$s</string>
+  <string name="go_to_vault_bitwarden_com_highlight">gå til %1$s</string>
   <string name="log_in_to_the_bitwarden_web_app">Log ind på Bitwardens web-app.</string>
   <string name="step_2_of_3">Trin 2 af 3</string>
   <string name="log_in_to_bitwarden">Log ind på Bitwarden</string>
@@ -1086,4 +1086,5 @@ Skift til denne konto?</string>
   <string name="log_in_quickly_and_easily_across_devices">Log ind hurtigt og nemt på tværs af enheder</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden kan give besked, hver gang man modtager en ny login-anmodning fra en anden enhed.</string>
   <string name="skip_for_now">Overspring for nu</string>
+  <string name="done_text">Færdig</string>
 </resources>
