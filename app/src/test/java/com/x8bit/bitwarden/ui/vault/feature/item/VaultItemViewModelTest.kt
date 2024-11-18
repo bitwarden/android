@@ -1673,17 +1673,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on CopyNotesFieldClick should call setText on ClipboardManager`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
-                    )
-                } returns createViewState(common = DEFAULT_COMMON)
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns DEFAULT_VIEW_STATE
 
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
@@ -2566,21 +2565,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewState = IDENTITY_VIEW_STATE,
                 ),
             )
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                        canDelete = true,
-                        canAssignToCollections = true,
-                    )
-                } returns createViewState(
-                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                    type = DEFAULT_IDENTITY_TYPE,
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
-            }
+            } returns IDENTITY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
