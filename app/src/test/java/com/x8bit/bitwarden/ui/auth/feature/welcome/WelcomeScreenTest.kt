@@ -41,13 +41,13 @@ class WelcomeScreenTest : BaseComposeTest() {
     @Test
     fun `pages should display and update according to state`() {
         composeTestRule
-            .onNodeWithText("Privacy, prioritized")
+            .onNodeWithText("Security, prioritized")
             .assertExists()
             .assertIsDisplayed()
 
         mutableEventFlow.tryEmit(WelcomeEvent.UpdatePager(index = 1))
         composeTestRule
-            .onNodeWithText("Privacy, prioritized")
+            .onNodeWithText("Security, prioritized")
             .assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Quick and easy login")
@@ -65,13 +65,13 @@ class WelcomeScreenTest : BaseComposeTest() {
     @Test
     fun `pages should display and update according to state in landscape mode`() {
         composeTestRule
-            .onNodeWithText("Privacy, prioritized")
+            .onNodeWithText("Security, prioritized")
             .assertExists()
             .assertIsDisplayed()
 
         mutableEventFlow.tryEmit(WelcomeEvent.UpdatePager(index = 1))
         composeTestRule
-            .onNodeWithText("Privacy, prioritized")
+            .onNodeWithText("Security, prioritized")
             .assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Quick and easy login")
@@ -111,7 +111,7 @@ class WelcomeScreenTest : BaseComposeTest() {
         // will be in view on the UI testing viewport.
         mutableStateFlow.update { it.copy(pages = emptyList()) }
         composeTestRule
-            .onNodeWithText("Log In")
+            .onNodeWithText("Log in")
             .performClick()
         verify { viewModel.trySendAction(WelcomeAction.LoginClick) }
     }

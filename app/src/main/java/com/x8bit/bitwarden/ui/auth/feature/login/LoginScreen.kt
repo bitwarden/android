@@ -272,7 +272,7 @@ private fun LoginScreenContent(
         if (state.shouldShowLoginWithDevice) {
             BitwardenOutlinedButton(
                 label = stringResource(id = R.string.log_in_with_device),
-                icon = rememberVectorPainter(id = R.drawable.ic_mobile),
+                icon = rememberVectorPainter(id = R.drawable.ic_mobile_small),
                 onClick = onLoginWithDeviceClick,
                 modifier = Modifier
                     .testTag("LogInWithAnotherDeviceButton")
@@ -285,7 +285,7 @@ private fun LoginScreenContent(
 
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.log_in_sso),
-            icon = rememberVectorPainter(id = R.drawable.ic_briefcase),
+            icon = rememberVectorPainter(id = R.drawable.ic_enterprise_small),
             onClick = onSingleSignOnClick,
             modifier = Modifier
                 .testTag("LogInWithSsoButton")
