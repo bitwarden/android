@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
@@ -6043,7 +6044,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
+        } returns SendVerificationEmailResponseJson.Success(EMAIL_VERIFICATION_TOKEN).asSuccess()
 
         val result = repository.sendVerificationEmail(
             email = EMAIL,
@@ -6052,6 +6053,32 @@ class AuthRepositoryTest {
         )
         assertEquals(
             SendVerificationEmailResult.Success(EMAIL_VERIFICATION_TOKEN),
+            result,
+        )
+    }
+
+    @Test
+    fun `sendVerificationEmail success with invalid email should return error`() = runTest {
+        val errorMessage = "Failure"
+        coEvery {
+            identityService.sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = EMAIL,
+                    name = NAME,
+                    receiveMarketingEmails = true,
+                ),
+            )
+        } returns SendVerificationEmailResponseJson
+            .Invalid(invalidMessage = errorMessage, validationErrors = null)
+            .asSuccess()
+
+        val result = repository.sendVerificationEmail(
+            email = EMAIL,
+            name = NAME,
+            receiveMarketingEmails = true,
+        )
+        assertEquals(
+            SendVerificationEmailResult.Error(errorMessage = errorMessage),
             result,
         )
     }
@@ -6066,7 +6093,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns null.asSuccess()
+        } returns SendVerificationEmailResponseJson.Success(null).asSuccess()
 
         val result = repository.sendVerificationEmail(
             email = EMAIL,
@@ -6089,7 +6116,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
+        } returns SendVerificationEmailResponseJson.Success(EMAIL_VERIFICATION_TOKEN).asSuccess()
 
         val result = repository.sendVerificationEmail(
             email = EMAIL,
