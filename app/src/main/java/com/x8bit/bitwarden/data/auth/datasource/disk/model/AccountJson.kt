@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.model
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * Represents the current account information for a given user.
@@ -45,6 +47,7 @@ data class AccountJson(
      * @property kdfParallelism The number of threads to use when calculating a password hash.
      * @property userDecryptionOptions The options available to a user for decryption.
      */
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializable
     data class Profile(
         @SerialName("userId")
@@ -86,7 +89,8 @@ data class AccountJson(
         @SerialName("kdfParallelism")
         val kdfParallelism: Int?,
 
-        @SerialName("accountDecryptionOptions")
+        @SerialName("userDecryptionOptions")
+        @JsonNames("accountDecryptionOptions")
         val userDecryptionOptions: UserDecryptionOptionsJson?,
     )
 
