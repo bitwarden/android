@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequ
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
@@ -370,14 +371,19 @@ class IdentityServiceTest : BaseServiceTest() {
         runTest {
             server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
             val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
-            assertEquals(JsonPrimitive(EMAIL_TOKEN).content.asSuccess(), result)
+            assertEquals(
+                SendVerificationEmailResponseJson
+                    .Success(JsonPrimitive(EMAIL_TOKEN).content)
+                    .asSuccess(),
+                result,
+            )
         }
 
     @Test
     fun `sendVerificationEmail should return null when response is empty success`() = runTest {
         server.enqueue(MockResponse().setResponseCode(204))
         val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
-        assertEquals(null.asSuccess(), result)
+        assertEquals(SendVerificationEmailResponseJson.Success(null).asSuccess(), result)
     }
 
     @Test
@@ -422,7 +428,6 @@ class IdentityServiceTest : BaseServiceTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `verifyEmailToken should return Invalid when response message is non expired error`() =
         runTest {
