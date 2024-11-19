@@ -185,6 +185,7 @@ class SettingsDiskSourceImpl(
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
+        storeVaultRegisteredForExport(userId = userId, isRegistered = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -450,7 +451,7 @@ class SettingsDiskSourceImpl(
     override fun getVaultRegisteredForExport(userId: String): Boolean? =
         getBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId))
 
-    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean) {
+    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?) {
         putBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId), isRegistered)
         getMutableVaultRegisteredForExportFlow(userId).tryEmit(isRegistered)
     }

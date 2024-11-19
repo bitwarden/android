@@ -330,7 +330,7 @@ interface SettingsDiskSource {
      * Stores the given value for whether or not the given [userId] has registered for export via
      * the credential exchange protocol.
      */
-    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean)
+    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?)
 
     /**
      * Emits updates that track [getVaultRegisteredForExport] for the given [userId].

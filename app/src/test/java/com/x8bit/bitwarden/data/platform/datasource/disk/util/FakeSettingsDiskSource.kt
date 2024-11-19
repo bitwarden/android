@@ -68,7 +68,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
     private var storedLastDatabaseSchemeChangeInstant: Instant? = null
-    private val vaultRegisteredForExport = mutableMapOf<String, Boolean>()
+    private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -80,7 +80,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableVaultRegisteredForExportFlowMap =
-        mutableMapOf<String, MutableSharedFlow<Boolean>>()
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -357,7 +357,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun getVaultRegisteredForExport(userId: String): Boolean =
         vaultRegisteredForExport[userId] ?: false
 
-    override fun storeVaultRegisteredForExport(userId: String, registered: Boolean) {
+    override fun storeVaultRegisteredForExport(userId: String, registered: Boolean?) {
         vaultRegisteredForExport[userId] = registered
         getMutableVaultRegisteredForExportFlow(userId = userId).tryEmit(registered)
     }
@@ -421,7 +421,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private fun getMutableVaultRegisteredForExportFlow(
         userId: String,
-    ): MutableSharedFlow<Boolean> =
+    ): MutableSharedFlow<Boolean?> =
         mutableVaultRegisteredForExportFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
