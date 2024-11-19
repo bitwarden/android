@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -320,6 +321,32 @@ class CiphersServiceTest : BaseServiceTest() {
         server.enqueue(MockResponse().setBody("true"))
         val result = ciphersService.hasUnassignedCiphers()
         assertTrue(result.getOrThrow())
+    }
+
+    @Test
+    fun `importCiphers should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(""))
+        val result = ciphersService.importCiphers(
+            request = ImportCiphersJsonRequest(
+                ciphers = listOf(createMockCipherJsonRequest(number = 1)),
+                folders = emptyList(),
+                folderRelationships = emptyMap(),
+            ),
+        )
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
+    fun `importCiphers should return an error when the response is an error`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400))
+        val result = ciphersService.importCiphers(
+            request = ImportCiphersJsonRequest(
+                ciphers = listOf(createMockCipherJsonRequest(number = 1)),
+                folders = emptyList(),
+                folderRelationships = emptyMap(),
+            ),
+        )
+        assertTrue(result.isFailure)
     }
 }
 
