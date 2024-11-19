@@ -7,7 +7,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 
 /**
@@ -51,7 +51,7 @@ fun BitwardenStepper(
         value = clampedValue?.toString() ?: ZERO_WIDTH_CHARACTER,
         actionsTestTag = stepperActionsTestTag,
         actions = {
-            BitwardenTonalIconButton(
+            BitwardenFilledIconButton(
                 vectorIconRes = R.drawable.ic_minus,
                 contentDescription = "\u2212",
                 onClick = {
@@ -63,7 +63,7 @@ fun BitwardenStepper(
                 isEnabled = isDecrementEnabled && !isAtRangeMinimum,
                 modifier = Modifier.testTag("DecrementValue"),
             )
-            BitwardenTonalIconButton(
+            BitwardenFilledIconButton(
                 vectorIconRes = R.drawable.ic_plus,
                 contentDescription = "+",
                 onClick = {
