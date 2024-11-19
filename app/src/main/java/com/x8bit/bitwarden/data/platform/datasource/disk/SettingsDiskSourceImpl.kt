@@ -82,7 +82,7 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableVaultRegisteredForExportFlow =
-        mutableMapOf<String, MutableSharedFlow<Boolean>>()
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
@@ -447,15 +447,15 @@ class SettingsDiskSourceImpl(
         getMutableShowImportLoginsSettingBadgeFlow(userId)
             .onSubscription { emit(getShowImportLoginsSettingBadge(userId)) }
 
-    override fun getVaultRegisteredForExport(userId: String): Boolean =
-        getBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId)) == true
+    override fun getVaultRegisteredForExport(userId: String): Boolean? =
+        getBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId))
 
     override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean) {
         putBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId), isRegistered)
         getMutableVaultRegisteredForExportFlow(userId).tryEmit(isRegistered)
     }
 
-    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean> =
+    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
         getMutableVaultRegisteredForExportFlow(userId)
             .onSubscription { emit(getVaultRegisteredForExport(userId)) }
 
@@ -512,7 +512,7 @@ class SettingsDiskSourceImpl(
 
     private fun getMutableVaultRegisteredForExportFlow(
         userId: String,
-    ): MutableSharedFlow<Boolean> = mutableVaultRegisteredForExportFlow.getOrPut(userId) {
+    ): MutableSharedFlow<Boolean?> = mutableVaultRegisteredForExportFlow.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
     }
 }

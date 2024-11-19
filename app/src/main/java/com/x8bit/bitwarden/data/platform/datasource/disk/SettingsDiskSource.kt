@@ -324,7 +324,7 @@ interface SettingsDiskSource {
      * Gets whether or not the given [userId] has registered for export via the credential exchange
      * protocol.
      */
-    fun getVaultRegisteredForExport(userId: String): Boolean
+    fun getVaultRegisteredForExport(userId: String): Boolean?
 
     /**
      * Stores the given value for whether or not the given [userId] has registered for export via
@@ -335,5 +335,5 @@ interface SettingsDiskSource {
     /**
      * Emits updates that track [getVaultRegisteredForExport] for the given [userId].
      */
-    fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean>
+    fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
 }

@@ -1217,7 +1217,7 @@ class SettingsDiskSourceTest {
         fakeSharedPreferences.edit {
             putBoolean(vaultRegisteredForExportKey, true)
         }
-        assertTrue(settingsDiskSource.getVaultRegisteredForExport(userId = mockUserId))
+        assertTrue(settingsDiskSource.getVaultRegisteredForExport(userId = mockUserId)!!)
     }
 
     @Test
@@ -1234,12 +1234,12 @@ class SettingsDiskSourceTest {
         val mockUserId = "mockUserId"
         settingsDiskSource.getVaultRegisteredForExportFlow(mockUserId).test {
             // The initial values of the Flow are in sync
-            assertFalse(awaitItem())
+            assertFalse(awaitItem() ?: false)
             settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
-            assertTrue(awaitItem())
+            assertTrue(awaitItem() ?: false)
             // Update the value to false
             settingsDiskSource.storeVaultRegisteredForExport(mockUserId, false)
-            assertFalse(awaitItem())
+            assertFalse(awaitItem() ?: true)
         }
     }
 }

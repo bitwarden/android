@@ -362,7 +362,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         getMutableVaultRegisteredForExportFlow(userId = userId).tryEmit(registered)
     }
 
-    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean> =
+    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
         getMutableVaultRegisteredForExportFlow(userId = userId).onSubscription {
             emit(getVaultRegisteredForExport(userId = userId))
         }
