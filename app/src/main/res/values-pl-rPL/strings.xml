@@ -952,7 +952,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="or_log_in_you_may_already_have_an_account">Lub zaloguj się, jeśli już posiadasz konto.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Otrzymuj wiadomości e-mail od Bitwarden z ogłoszeniami, poradami i możliwościami badawczymi. Możesz anulować subskrypcję w dowolnym momencie.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Otrzymuj porady, ogłoszenia i możliwości badawcze od Bitwarden w swojej skrzynce odbiorczej. Możesz anulować subskrypcję w dowolnym momencie.</string>
-  <string name="privacy_prioritized">Privacy, prioritized</string>
+  <string name="security_prioritized">Privacy, prioritized</string>
   <string name="welcome_message_1">Zapisz dane logowania, karty i tożsamości w bezpiecznym sejfie. Bitwarden używa szyfrowania end-to-end w celu ochrony tego, co jest dla Ciebie ważne.</string>
   <string name="welcome_message_2">Skonfiguruj odblokowanie i autouzupełnianie biometryczne, aby zalogować się na swoje konta bez wpisywania nawet pojedynczej litery.</string>
   <string name="quick_and_easy_login">Szybkie i łatwe logowanie</string>

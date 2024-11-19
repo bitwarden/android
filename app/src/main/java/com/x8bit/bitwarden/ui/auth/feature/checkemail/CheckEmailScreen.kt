@@ -297,7 +297,7 @@ private fun CheckEmailLegacyContent(
                 ),
                 highlights = listOf(
                     ClickableTextHighlight(
-                        textToHighlight = stringResource(id = R.string.log_in),
+                        textToHighlight = stringResource(id = R.string.log_in_verb),
                         onTextClick = onLoginClick,
                     ),
                 ),

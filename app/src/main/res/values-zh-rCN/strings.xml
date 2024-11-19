@@ -952,7 +952,7 @@
   <string name="or_log_in_you_may_already_have_an_account">或者登录，您可能已经有一个账户了。</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时退订。</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时退订。</string>
-  <string name="privacy_prioritized">隐私优先</string>
+  <string name="security_prioritized">隐私优先</string>
   <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
   <string name="welcome_message_2">设置生物识别解锁和自动填充，无需输入任何字符即可登录您的账户。</string>
   <string name="quick_and_easy_login">快速便捷的登录</string>
