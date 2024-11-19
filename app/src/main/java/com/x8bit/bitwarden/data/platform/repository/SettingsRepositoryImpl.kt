@@ -556,6 +556,24 @@ class SettingsRepositoryImpl(
         settingsDiskSource.storeUseHasLoggedInPreviously(userId)
     }
 
+    override fun isVaultRegisteredForExport(userId: String): Boolean {
+        return settingsDiskSource.getVaultRegisteredForExport(userId)
+    }
+
+    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean) {
+        settingsDiskSource.storeVaultRegisteredForExport(userId, isRegistered)
+    }
+
+    override fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean> {
+        return settingsDiskSource
+            .getVaultRegisteredForExportFlow(userId)
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource.getVaultRegisteredForExport(userId),
+            )
+    }
+
     /**
      * If there isn't already one generated, generate a symmetric sync key that would be used
      * for communicating via IPC.
