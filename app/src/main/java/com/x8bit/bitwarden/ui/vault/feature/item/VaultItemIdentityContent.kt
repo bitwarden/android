@@ -61,7 +61,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.identity_name),
                     value = identityName,
-                    contentDescription = stringResource(id = R.string.copy_identity_name),
+                    copyContentDescription = stringResource(id = R.string.copy_identity_name),
                     textFieldTestTag = "IdentityNameEntry",
                     copyActionTestTag = "IdentityCopyNameButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyIdentityNameClick,
@@ -77,7 +77,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.username),
                     value = username,
-                    contentDescription = stringResource(id = R.string.copy_username),
+                    copyContentDescription = stringResource(id = R.string.copy_username),
                     textFieldTestTag = "IdentityUsernameEntry",
                     copyActionTestTag = "IdentityCopyUsernameButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyUsernameClick,
@@ -93,7 +93,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.company),
                     value = company,
-                    contentDescription = stringResource(id = R.string.copy_company),
+                    copyContentDescription = stringResource(id = R.string.copy_company),
                     textFieldTestTag = "IdentityCompanyEntry",
                     copyActionTestTag = "IdentityCopyCompanyButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyCompanyClick,
@@ -109,7 +109,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.ssn),
                     value = ssn,
-                    contentDescription = stringResource(id = R.string.copy_ssn),
+                    copyContentDescription = stringResource(id = R.string.copy_ssn),
                     textFieldTestTag = "IdentitySsnEntry",
                     copyActionTestTag = "IdentityCopySsnButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopySsnClick,
@@ -125,7 +125,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.passport_number),
                     value = passportNumber,
-                    contentDescription = stringResource(id = R.string.copy_passport_number),
+                    copyContentDescription = stringResource(id = R.string.copy_passport_number),
                     textFieldTestTag = "IdentityPassportNumberEntry",
                     copyActionTestTag = "IdentityCopyPassportNumberButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyPassportNumberClick,
@@ -141,7 +141,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.license_number),
                     value = licenseNumber,
-                    contentDescription = stringResource(id = R.string.copy_license_number),
+                    copyContentDescription = stringResource(id = R.string.copy_license_number),
                     textFieldTestTag = "IdentityLicenseNumberEntry",
                     copyActionTestTag = "IdentityCopyLicenseNumberButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyLicenseNumberClick,
@@ -157,7 +157,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.email),
                     value = email,
-                    contentDescription = stringResource(id = R.string.copy_email),
+                    copyContentDescription = stringResource(id = R.string.copy_email),
                     textFieldTestTag = "IdentityEmailEntry",
                     copyActionTestTag = "IdentityCopyEmailButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyEmailClick,
@@ -173,7 +173,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.phone),
                     value = phone,
-                    contentDescription = stringResource(id = R.string.copy_phone),
+                    copyContentDescription = stringResource(id = R.string.copy_phone),
                     textFieldTestTag = "IdentityPhoneEntry",
                     copyActionTestTag = "IdentityCopyPhoneButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyPhoneClick,
@@ -189,7 +189,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.address),
                     value = address,
-                    contentDescription = stringResource(id = R.string.copy_address),
+                    copyContentDescription = stringResource(id = R.string.copy_address),
                     textFieldTestTag = "IdentityAddressEntry",
                     copyActionTestTag = "IdentityCopyAddressButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyAddressClick,
@@ -212,7 +212,7 @@ fun VaultItemIdentityContent(
                 IdentityCopyField(
                     label = stringResource(id = R.string.notes),
                     value = notes,
-                    contentDescription = stringResource(id = R.string.copy_notes),
+                    copyContentDescription = stringResource(id = R.string.copy_notes),
                     textFieldTestTag = "CipherNotesLabel",
                     copyActionTestTag = "CipherNotesCopyButton",
                     onCopyClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
@@ -292,7 +292,7 @@ fun VaultItemIdentityContent(
 private fun IdentityCopyField(
     label: String,
     value: String,
-    contentDescription: String,
+    copyContentDescription: String,
     textFieldTestTag: String,
     copyActionTestTag: String,
     onCopyClick: () -> Unit,
@@ -307,7 +307,7 @@ private fun IdentityCopyField(
         actions = {
             BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_copy,
-                contentDescription = contentDescription,
+                contentDescription = copyContentDescription,
                 onClick = onCopyClick,
                 modifier = Modifier.testTag(tag = copyActionTestTag),
             )
