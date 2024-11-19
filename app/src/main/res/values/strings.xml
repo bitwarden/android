@@ -1087,4 +1087,12 @@ Do you want to switch to this account?</string>
   <string name="skip_for_now">Skip for now</string>
   <string name="done_text">Done</string>
   <string name="page_number_x_of_y">%1$s of %2$s</string>
+  <string name="copy_identity_name">Copy identity name</string>
+  <string name="copy_company">Copy company</string>
+  <string name="copy_ssn">Copy social security number</string>
+  <string name="copy_passport_number">Copy passport number</string>
+  <string name="copy_license_number">Copy license number</string>
+  <string name="copy_email">Copy email</string>
+  <string name="copy_phone">Copy phone number</string>
+  <string name="copy_address">Copy address</string>
 </resources>
