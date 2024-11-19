@@ -591,7 +591,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange(
                     avoidAmbiguousChars = true,
                 ),
             )
@@ -646,7 +646,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             )
             viewModel.trySendAction(
-                GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange(
                     avoidAmbiguousChars = true,
                 ),
             )

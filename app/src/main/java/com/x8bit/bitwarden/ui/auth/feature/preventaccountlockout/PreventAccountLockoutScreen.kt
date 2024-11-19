@@ -74,10 +74,9 @@ fun PreventAccountLockoutScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxWidth()
                 .standardHorizontalMargin()
                 .verticalScroll(rememberScrollState()),

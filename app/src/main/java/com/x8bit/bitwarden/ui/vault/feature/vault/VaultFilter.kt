@@ -2,8 +2,15 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -37,6 +44,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @param topAppBarScrollBehavior Used to derive the background color of the content and keep it in
  * sync with the associated app bar.
  * @param modifier A [Modifier] for the composable.
+ * @param windowInsets The insets to be applied to this composable.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +54,9 @@ fun VaultFilter(
     onVaultFilterTypeSelect: (VaultFilterType) -> Unit,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = WindowInsets.displayCutout
+        .union(WindowInsets.navigationBars)
+        .only(WindowInsetsSides.Horizontal),
 ) {
     var shouldShowSelectionDialog by remember { mutableStateOf(false) }
 
@@ -73,7 +84,8 @@ fun VaultFilter(
             .scrolledContainerBottomDivider(topAppBarScrollBehavior = topAppBarScrollBehavior)
             .padding(vertical = 8.dp)
             .testTag("ActiveFilterRow")
-            .then(modifier),
+            .then(modifier)
+            .windowInsetsPadding(insets = windowInsets),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(

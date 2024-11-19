@@ -104,7 +104,7 @@ fun LoginApprovalScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.viewState) {
             is LoginApprovalState.ViewState.Content -> {
                 LoginApprovalContent(
@@ -115,26 +115,20 @@ fun LoginApprovalScreen(
                     onDeclineLoginClick = remember(viewModel) {
                         { viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick) }
                     },
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is LoginApprovalState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = stringResource(id = R.string.generic_error_message),
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is LoginApprovalState.ViewState.Loading -> {
                 BitwardenLoadingContent(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }

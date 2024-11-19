@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
@@ -166,7 +165,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
-                    CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                    CreateAuthRequestResult.Success(
+                        authRequest = AUTH_REQUEST,
+                        privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                        accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    ),
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
@@ -196,9 +199,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     requestId = AUTH_REQUEST.id,
-                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
-                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
                     captchaToken = null,
                 )
@@ -227,7 +230,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(initialState, awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
-                    CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                    CreateAuthRequestResult.Success(
+                        authRequest = AUTH_REQUEST,
+                        privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                        accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    ),
                 )
                 assertEquals(
                     initialState.copy(
@@ -279,7 +286,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
-                    CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                    CreateAuthRequestResult.Success(
+                        authRequest = AUTH_REQUEST,
+                        privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                        accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    ),
                 )
                 assertEquals(
                     LoginWithDeviceEvent.NavigateToTwoFactorLogin(emailAddress = EMAIL),
@@ -291,9 +302,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     requestId = AUTH_REQUEST.id,
-                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
-                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
                     captchaToken = null,
                 )
@@ -319,7 +330,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.test {
                     assertEquals(DEFAULT_STATE, awaitItem())
                     mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
-                        CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                        CreateAuthRequestResult.Success(
+                            authRequest = AUTH_REQUEST,
+                            privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                            accessCode = AUTH_REQUEST_ACCESS_CODE,
+                        ),
                     )
                     assertEquals(
                         DEFAULT_STATE.copy(
@@ -353,9 +368,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     requestId = AUTH_REQUEST.id,
-                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
-                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
                     captchaToken = null,
                 )
@@ -382,7 +397,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.test {
                     assertEquals(DEFAULT_STATE, awaitItem())
                     mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
-                        CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                        CreateAuthRequestResult.Success(
+                            authRequest = AUTH_REQUEST,
+                            privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                            accessCode = AUTH_REQUEST_ACCESS_CODE,
+                        ),
                     )
                     assertEquals(
                         DEFAULT_STATE.copy(
@@ -416,9 +435,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     requestId = AUTH_REQUEST.id,
-                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
-                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
                     captchaToken = null,
                 )
@@ -474,9 +493,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             authRepository.login(
                 email = EMAIL,
                 requestId = AUTH_REQUEST.id,
-                accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                accessCode = AUTH_REQUEST_ACCESS_CODE,
                 asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
-                requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                 masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
                 captchaToken = captchaToken,
             )
@@ -505,23 +524,17 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on createAuthRequestWithUpdates with OTHER_DEVICE, Declined received should show error dialog`() {
-        val viewModel = createViewModel()
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = "",
-                    isResendNotificationLoading = false,
-                ),
-                dialogState = LoginWithDeviceState.DialogState.Error(
-                    title = null,
-                    message = R.string.this_request_is_no_longer_valid.asText(),
-                ),
+    fun `on createAuthRequestWithUpdates with OTHER_DEVICE, Declined received should show unchanged content`() {
+        val initialState = DEFAULT_STATE.copy(
+            loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
+            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
             ),
-            viewModel.stateFlow.value,
         )
+        val viewModel = createViewModel(state = initialState)
+        assertEquals(initialState, viewModel.stateFlow.value)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
+        assertEquals(initialState, viewModel.stateFlow.value)
     }
 
     @Suppress("MaxLineLength")
@@ -603,12 +616,8 @@ private val AUTH_REQUEST = AuthRequest(
     fingerprint = FINGERPRINT,
 )
 
-private val AUTH_REQUEST_RESPONSE = AuthRequestResponse(
-    privateKey = "private_key",
-    publicKey = "public_key",
-    accessCode = "accessCode",
-    fingerprint = "fingerprint",
-)
+private const val AUTH_REQUEST_ACCESS_CODE = "accessCode"
+private const val AUTH_REQUEST_PRIVATE_KEY = "private_key"
 
 private val DEFAULT_LOGIN_DATA = LoginWithDeviceState.LoginData(
     accessCode = "accessCode",

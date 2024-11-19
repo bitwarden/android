@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.util.isSso
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequestTypeJson
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.currentCoroutineContext
@@ -65,7 +66,7 @@ class AuthRequestManagerImpl(
         email: String,
         authRequestType: AuthRequestType,
     ): Flow<CreateAuthRequestResult> = flow {
-        val initialResult = createNewAuthRequest(
+        val initialResult = createNewAuthRequestIfNecessary(
             email = email,
             authRequestType = authRequestType.toAuthRequestTypeJson(),
         )
@@ -74,7 +75,6 @@ class AuthRequestManagerImpl(
                 emit(CreateAuthRequestResult.Error)
                 return@flow
             }
-        val authRequestResponse = initialResult.authRequestResponse
         var authRequest = initialResult.authRequest
         emit(CreateAuthRequestResult.Update(authRequest))
 
@@ -84,7 +84,7 @@ class AuthRequestManagerImpl(
             newAuthRequestService
                 .getAuthRequestUpdate(
                     requestId = authRequest.id,
-                    accessCode = authRequestResponse.accessCode,
+                    accessCode = initialResult.accessCode,
                     isSso = authRequestType.isSso,
                 )
                 .map { request ->
@@ -112,7 +112,8 @@ class AuthRequestManagerImpl(
                                 emit(
                                     CreateAuthRequestResult.Success(
                                         authRequest = updateAuthRequest,
-                                        authRequestResponse = authRequestResponse,
+                                        privateKey = initialResult.privateKey,
+                                        accessCode = initialResult.accessCode,
                                     ),
                                 )
                             }
@@ -355,6 +356,52 @@ class AuthRequestManagerImpl(
     }
 
     /**
+     * Creates a new auth request for the given email and returns a [NewAuthRequestData].
+     * If the auth request type is [AuthRequestTypeJson.ADMIN_APPROVAL], check for a
+     * pending auth request and return it if it exists we should return that request.
+     */
+    private suspend fun createNewAuthRequestIfNecessary(
+        email: String,
+        authRequestType: AuthRequestTypeJson,
+    ): Result<NewAuthRequestData> {
+        return if (authRequestType == AuthRequestTypeJson.ADMIN_APPROVAL) {
+            authDiskSource
+                .getPendingAuthRequest(requireNotNull(activeUserId))
+                ?.let { pendingAuthRequest ->
+                    authRequestsService
+                        .getAuthRequest(pendingAuthRequest.requestId)
+                        .map {
+                            NewAuthRequestData(
+                                authRequest = AuthRequest(
+                                    id = it.id,
+                                    publicKey = it.publicKey,
+                                    platform = it.platform,
+                                    ipAddress = it.ipAddress,
+                                    key = it.key,
+                                    masterPasswordHash = it.masterPasswordHash,
+                                    creationDate = it.creationDate,
+                                    responseDate = it.responseDate,
+                                    requestApproved = it.requestApproved ?: false,
+                                    originUrl = it.originUrl,
+                                    fingerprint = pendingAuthRequest.requestFingerprint,
+                                ),
+                                privateKey = pendingAuthRequest.requestPrivateKey,
+                                accessCode = pendingAuthRequest.requestAccessCode,
+                            )
+                                .asSuccess()
+                        }
+                        .getOrNull()
+                }
+                ?: createNewAuthRequest(email = email, authRequestType = authRequestType)
+        } else {
+            createNewAuthRequest(
+                email = email,
+                authRequestType = authRequestType,
+            )
+        }
+    }
+
+    /**
      * Attempts to create a new auth request for the given email and returns a [NewAuthRequestData]
      * with the [AuthRequest] and [AuthRequestResponse].
      */
@@ -381,6 +428,8 @@ class AuthRequestManagerImpl(
                                 pendingAuthRequest = PendingAuthRequestJson(
                                     requestId = it.id,
                                     requestPrivateKey = authRequestResponse.privateKey,
+                                    requestAccessCode = authRequestResponse.accessCode,
+                                    requestFingerprint = authRequestResponse.fingerprint,
                                 ),
                             )
                         }
@@ -400,7 +449,13 @@ class AuthRequestManagerImpl(
                             fingerprint = authRequestResponse.fingerprint,
                         )
                     }
-                    .map { NewAuthRequestData(it, authRequestResponse) }
+                    .map {
+                        NewAuthRequestData(
+                            authRequest = it,
+                            privateKey = authRequestResponse.privateKey,
+                            accessCode = authRequestResponse.accessCode,
+                        )
+                    }
             }
 
     private suspend fun getFingerprintPhrase(
@@ -420,5 +475,6 @@ class AuthRequestManagerImpl(
  */
 private data class NewAuthRequestData(
     val authRequest: AuthRequest,
-    val authRequestResponse: AuthRequestResponse,
+    val privateKey: String,
+    val accessCode: String,
 )

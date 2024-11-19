@@ -1,6 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.components.appbar
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
@@ -50,6 +55,8 @@ fun BitwardenTopAppBar(
     navigationIconContentDescription: String,
     onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
+        .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = { },
 ) {
@@ -62,6 +69,7 @@ fun BitwardenTopAppBar(
             onNavigationIconClick = onNavigationIconClick,
         ),
         modifier = modifier,
+        windowInsets = windowInsets,
         dividerStyle = dividerStyle,
         actions = actions,
     )
@@ -87,6 +95,8 @@ fun BitwardenTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: NavigationIcon?,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
+        .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
     minimunHeight: Dp = 48.dp,
@@ -129,6 +139,7 @@ fun BitwardenTopAppBar(
 
     if (titleTextHasOverflow) {
         MediumTopAppBar(
+            windowInsets = windowInsets,
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
@@ -149,6 +160,7 @@ fun BitwardenTopAppBar(
         )
     } else {
         TopAppBar(
+            windowInsets = windowInsets,
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,

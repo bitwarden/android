@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -240,6 +239,24 @@ private fun VaultScreenScaffold(
                 },
             )
         },
+        utilityBar = {
+            state.vaultFilterDataWithFilter?.let {
+                VaultFilter(
+                    selectedVaultFilterType = it.selectedVaultFilterType,
+                    vaultFilterTypes = it.vaultFilterTypes.toImmutableList(),
+                    onVaultFilterTypeSelect = vaultHandlers.vaultFilterTypeSelect,
+                    topAppBarScrollBehavior = scrollBehavior,
+                    modifier = Modifier
+                        .padding(
+                            start = 16.dp,
+                            // There is some built-in padding to the menu button that makes up
+                            // the visual difference here.
+                            end = 12.dp,
+                        )
+                        .fillMaxWidth(),
+                )
+            }
+        },
         snackbarHost = {
             BitwardenSnackbarHost(
                 bitwardenHostState = snackbarHostState,
@@ -259,81 +276,7 @@ private fun VaultScreenScaffold(
                 )
             }
         },
-        pullToRefreshState = pullToRefreshState,
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { paddingValues ->
-        Box {
-            val innerModifier = Modifier
-                .fillMaxSize()
-            val outerModifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-            Column(modifier = outerModifier) {
-                state.vaultFilterDataWithFilter?.let {
-                    VaultFilter(
-                        selectedVaultFilterType = it.selectedVaultFilterType,
-                        vaultFilterTypes = it.vaultFilterTypes.toImmutableList(),
-                        onVaultFilterTypeSelect = vaultHandlers.vaultFilterTypeSelect,
-                        topAppBarScrollBehavior = scrollBehavior,
-                        modifier = Modifier
-                            .padding(
-                                start = 16.dp,
-                                // There is some built-in padding to the menu button that makes up
-                                // the visual difference here.
-                                end = 12.dp,
-                            )
-                            .fillMaxWidth(),
-                    )
-                }
-
-                when (val viewState = state.viewState) {
-                    is VaultState.ViewState.Content -> VaultContent(
-                        state = viewState,
-                        showSshKeys = state.showSshKeys,
-                        vaultHandlers = vaultHandlers,
-                        onOverflowOptionClick = { masterPasswordRepromptAction = it },
-                        modifier = innerModifier,
-                    )
-
-                    is VaultState.ViewState.Loading -> BitwardenLoadingContent(
-                        modifier = innerModifier,
-                    )
-
-                    is VaultState.ViewState.NoItems -> {
-                        AnimatedVisibility(
-                            visible = state.showImportActionCard,
-                            exit = actionCardExitAnimation(),
-                            label = "VaultNoItemsActionCard",
-                        ) {
-                            BitwardenActionCard(
-                                cardTitle = stringResource(R.string.import_saved_logins),
-                                cardSubtitle = stringResource(
-                                    R.string.use_a_computer_to_import_logins,
-                                ),
-                                actionText = stringResource(R.string.get_started),
-                                onActionClick = vaultHandlers.importActionCardClick,
-                                onDismissClick = vaultHandlers.dismissImportActionCard,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .standardHorizontalMargin()
-                                    .padding(top = 12.dp),
-                            )
-                        }
-                        VaultNoItems(
-                            modifier = innerModifier,
-                            policyDisablesSend = false,
-                            addItemClickAction = vaultHandlers.addItemClickAction,
-                        )
-                    }
-
-                    is VaultState.ViewState.Error -> BitwardenErrorContent(
-                        message = viewState.message(),
-                        onTryAgainClick = vaultHandlers.tryAgainClick,
-                        modifier = innerModifier,
-                    )
-                }
-            }
-
+        overlay = {
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
@@ -343,8 +286,61 @@ private fun VaultScreenScaffold(
                 onAddAccountClick = vaultHandlers.addAccountClickAction,
                 onDismissRequest = { updateAccountMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
-                modifier = outerModifier,
+                modifier = Modifier.fillMaxSize(),
             )
+        },
+        pullToRefreshState = pullToRefreshState,
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            when (val viewState = state.viewState) {
+                is VaultState.ViewState.Content -> VaultContent(
+                    state = viewState,
+                    showSshKeys = state.showSshKeys,
+                    vaultHandlers = vaultHandlers,
+                    onOverflowOptionClick = { masterPasswordRepromptAction = it },
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+                is VaultState.ViewState.Loading -> BitwardenLoadingContent(
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+                is VaultState.ViewState.NoItems -> {
+                    AnimatedVisibility(
+                        visible = state.showImportActionCard,
+                        exit = actionCardExitAnimation(),
+                        label = "VaultNoItemsActionCard",
+                    ) {
+                        BitwardenActionCard(
+                            cardTitle = stringResource(R.string.import_saved_logins),
+                            cardSubtitle = stringResource(
+                                R.string.use_a_computer_to_import_logins,
+                            ),
+                            actionText = stringResource(R.string.get_started),
+                            onActionClick = vaultHandlers.importActionCardClick,
+                            onDismissClick = vaultHandlers.dismissImportActionCard,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .standardHorizontalMargin()
+                                .padding(top = 12.dp),
+                        )
+                    }
+                    VaultNoItems(
+                        policyDisablesSend = false,
+                        addItemClickAction = vaultHandlers.addItemClickAction,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+
+                is VaultState.ViewState.Error -> BitwardenErrorContent(
+                    message = viewState.message(),
+                    onTryAgainClick = vaultHandlers.tryAgainClick,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }

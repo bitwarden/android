@@ -9,7 +9,7 @@
 ## Compatibility
 
 - **Minimum SDK**: 29
-- **Target SDK**: 34
+- **Target SDK**: 35
 - **Device Types Supported**: Phone and Tablet
 - **Orientations Supported**: Portrait and Landscape
 

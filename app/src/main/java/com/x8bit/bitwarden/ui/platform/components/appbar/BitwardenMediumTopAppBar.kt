@@ -1,6 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.components.appbar
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
@@ -32,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param title The text to be displayed as the title of the app bar.
  * @param scrollBehavior Defines the scrolling behavior of the app bar. It controls how the app bar
  * behaves in conjunction with scrolling content.
+ * @param windowInsets The insets to be applied to this composable.
  * @param dividerStyle Determines how the bottom divider should be displayed.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
@@ -43,10 +49,13 @@ fun BitwardenMediumTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
+        .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
+        windowInsets = windowInsets,
         colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         expandedHeight = 56.dp,

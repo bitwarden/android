@@ -98,7 +98,7 @@ fun FoldersScreen(
                     .navigationBarsPadding(),
             )
         },
-    ) { innerPadding ->
+    ) {
         when (val viewState = state.value.viewState) {
             is FoldersState.ViewState.Content -> {
                 FoldersContent(
@@ -106,26 +106,20 @@ fun FoldersScreen(
                     onItemClick = remember(viewModel) {
                         { viewModel.trySendAction(FoldersAction.FolderClick(it)) }
                     },
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is FoldersState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = viewState.message(),
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is FoldersState.ViewState.Loading -> {
                 BitwardenLoadingContent(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }

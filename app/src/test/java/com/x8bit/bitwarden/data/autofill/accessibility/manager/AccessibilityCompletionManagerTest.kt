@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test
 class AccessibilityCompletionManagerTest {
 
     private val activity: Activity = mockk {
-        every { finish() } just runs
+        every { finishAndRemoveTask() } just runs
     }
     private val accessibilityAutofillManager: AccessibilityAutofillManager = mockk()
     private val totpManager: AutofillTotpManager = mockk()
@@ -68,7 +68,7 @@ class AccessibilityCompletionManagerTest {
 
         verify(exactly = 1) {
             activity.intent
-            activity.finish()
+            activity.finishAndRemoveTask()
         }
     }
 
@@ -87,7 +87,7 @@ class AccessibilityCompletionManagerTest {
         verify(exactly = 1) {
             activity.intent
             mockIntent.getAutofillSelectionDataOrNull()
-            activity.finish()
+            activity.finishAndRemoveTask()
         }
     }
 
@@ -111,7 +111,7 @@ class AccessibilityCompletionManagerTest {
         verify(exactly = 1) {
             activity.intent
             mockIntent.getAutofillSelectionDataOrNull()
-            activity.finish()
+            activity.finishAndRemoveTask()
         }
     }
 
@@ -135,7 +135,7 @@ class AccessibilityCompletionManagerTest {
         verify(exactly = 1) {
             activity.intent
             mockIntent.getAutofillSelectionDataOrNull()
-            activity.finish()
+            activity.finishAndRemoveTask()
         }
     }
 
@@ -162,7 +162,7 @@ class AccessibilityCompletionManagerTest {
         verify(exactly = 1) {
             activity.intent
             mockIntent.getAutofillSelectionDataOrNull()
-            activity.finish()
+            activity.finishAndRemoveTask()
         }
     }
 
@@ -201,7 +201,7 @@ class AccessibilityCompletionManagerTest {
                 cipherView = cipherView,
                 uri = uri,
             )
-            activity.finish()
+            activity.finishAndRemoveTask()
         }
         coVerify(exactly = 1) {
             totpManager.tryCopyTotpToClipboard(cipherView = cipherView)

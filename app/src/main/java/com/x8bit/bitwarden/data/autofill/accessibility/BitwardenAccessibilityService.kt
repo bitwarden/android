@@ -22,8 +22,7 @@ class BitwardenAccessibilityService : AccessibilityService() {
     lateinit var processor: BitwardenAccessibilityProcessor
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        if (rootInActiveWindow?.packageName != event.packageName) return
-        processor.processAccessibilityEvent(rootAccessibilityNodeInfo = event.source)
+        processor.processAccessibilityEvent(event = event) { rootInActiveWindow }
     }
 
     override fun onInterrupt() = Unit

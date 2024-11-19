@@ -32,5 +32,5 @@ data class CollectionEntity(
     val isReadOnly: Boolean,
 
     @ColumnInfo(name = "manage")
-    val canManage: Boolean,
+    val canManage: Boolean?,
 )

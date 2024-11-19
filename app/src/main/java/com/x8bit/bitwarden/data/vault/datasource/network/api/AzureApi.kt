@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -21,5 +22,5 @@ interface AzureApi {
         @Header("x-ms-date") date: String,
         @Header("x-ms-version") version: String?,
         @Body body: RequestBody,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 }

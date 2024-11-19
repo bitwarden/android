@@ -35,6 +35,18 @@ class BaseEnumeratedIntSerializerTest {
             ),
         )
     }
+
+    @Test
+    fun `properly returns default value when unknown value is provided`() {
+        assertEquals(
+            TestEnum.UNKNOWN,
+            json.decodeFromString<TestEnum>(
+                """
+                -1
+                """,
+            ),
+        )
+    }
 }
 
 @Serializable(TestEnumSerializer::class)
@@ -44,7 +56,12 @@ private enum class TestEnum {
 
     @SerialName("2")
     CASE_2,
+
+    @SerialName("-1")
+    UNKNOWN,
 }
 
-private class TestEnumSerializer :
-    BaseEnumeratedIntSerializer<TestEnum>(values = TestEnum.entries.toTypedArray())
+private class TestEnumSerializer : BaseEnumeratedIntSerializer<TestEnum>(
+    values = TestEnum.entries.toTypedArray(),
+    default = TestEnum.UNKNOWN,
+)

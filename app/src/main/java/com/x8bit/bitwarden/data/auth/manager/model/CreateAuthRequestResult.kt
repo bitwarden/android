@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.data.auth.manager.model
 
-import com.bitwarden.core.AuthRequestResponse
-
 /**
  * Models result of creating a new login approval request.
  */
@@ -18,7 +16,8 @@ sealed class CreateAuthRequestResult {
      */
     data class Success(
         val authRequest: AuthRequest,
-        val authRequestResponse: AuthRequestResponse,
+        val privateKey: String,
+        val accessCode: String,
     ) : CreateAuthRequestResult()
 
     /**

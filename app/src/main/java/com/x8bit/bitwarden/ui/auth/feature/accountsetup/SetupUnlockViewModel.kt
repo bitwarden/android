@@ -76,6 +76,11 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleCloseClick() {
+        // If the user has enabled biometric or PIN lock, but then closes the screen we
+        // want to dismiss the action card.
+        if (state.isContinueButtonEnabled) {
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+        }
         sendEvent(SetupUnlockEvent.NavigateBack)
     }
 

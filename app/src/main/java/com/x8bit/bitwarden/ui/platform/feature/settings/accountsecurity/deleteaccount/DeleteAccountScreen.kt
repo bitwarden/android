@@ -118,12 +118,11 @@ fun DeleteAccountScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
                 .imePadding()
                 .fillMaxSize()
-                .padding(innerPadding)
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(8.dp))

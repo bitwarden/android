@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -21,7 +22,7 @@ interface UnauthenticatedAuthRequestsApi {
     suspend fun createAuthRequest(
         @Header("Device-Identifier") deviceIdentifier: String,
         @Body body: AuthRequestRequestJson,
-    ): Result<AuthRequestsResponseJson.AuthRequest>
+    ): NetworkResult<AuthRequestsResponseJson.AuthRequest>
 
     /**
      * Queries for updates to a given auth request.
@@ -30,5 +31,5 @@ interface UnauthenticatedAuthRequestsApi {
     suspend fun getAuthRequestUpdate(
         @Path("requestId") requestId: String,
         @Query("code") accessCode: String,
-    ): Result<AuthRequestsResponseJson.AuthRequest>
+    ): NetworkResult<AuthRequestsResponseJson.AuthRequest>
 }

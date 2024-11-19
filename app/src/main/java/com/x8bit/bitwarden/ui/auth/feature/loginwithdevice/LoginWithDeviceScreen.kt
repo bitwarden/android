@@ -102,10 +102,7 @@ fun LoginWithDeviceScreen(
                 },
             )
         },
-    ) { paddingValues ->
-        val modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
+    ) {
         when (val viewState = state.viewState) {
             is LoginWithDeviceState.ViewState.Content -> {
                 LoginWithDeviceScreenContent(
@@ -116,12 +113,12 @@ fun LoginWithDeviceScreen(
                     onViewAllLogInOptionsClick = remember(viewModel) {
                         { viewModel.trySendAction(LoginWithDeviceAction.ViewAllLogInOptionsClick) }
                     },
-                    modifier = modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             LoginWithDeviceState.ViewState.Loading -> BitwardenLoadingContent(
-                modifier = modifier,
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

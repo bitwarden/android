@@ -1,0 +1,127 @@
+name: Create GitHub Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-name:
+        description: 'Version Name - E.g. "2024.11.1"'
+        required: true
+        type: string
+      version-number:
+        description: 'Version Number - E.g. "123456"'
+        required: true
+        type: string
+      artifact_run_id:
+        description: 'GitHub Action Run ID containing artifacts'
+        required: true
+        type: string
+      draft:
+        description: 'Create as draft release'
+        type: boolean
+        default: true
+      prerelease:
+        description: 'Mark as pre-release'
+        type: boolean
+      make_latest:
+        description: 'Set as the latest release'
+        type: boolean
+      branch-protection-type:
+        description: 'Branch protection type'
+        type: choice
+        options:
+          - Branch Name
+          - GitHub API
+        default: Branch Name
+env:
+    ARTIFACTS_PATH: artifacts
+jobs:
+  create-release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: Get branch from workflow run
+        id: get_release_branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
+          BRANCH_PROTECTION_TYPE: ${{ inputs.branch-protection-type }}
+        run: |
+          release_branch=$(gh run view $ARTIFACT_RUN_ID --json headBranch -q .headBranch)
+
+          case "$BRANCH_PROTECTION_TYPE" in
+            "Branch Name")
+              if [[ "$release_branch" != "main" && ! "$release_branch" =~ ^release/ ]]; then
+                echo "::error::Branch '$release_branch' is not 'main' or a release branch starting with 'release/'. Releases must be created from protected branches."
+                exit 1
+              fi
+              ;;
+            "GitHub API")
+              #NOTE requires token with "administration:read" scope
+              if ! gh api "repos/${{ github.repository }}/branches/$release_branch/protection" | grep -q "required_status_checks"; then
+                echo "::error::Branch '$release_branch' is not protected. Releases must be created from protected branches. If that's not correct, confirm if the github token user has the 'administration:read' scope."
+                exit 1
+              fi
+              ;;
+            *)
+              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE"
+              exit 1
+              ;;
+          esac
+
+          echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
+        run: |
+          gh run download $ARTIFACT_RUN_ID -D $ARTIFACTS_PATH
+          file_count=$(find $ARTIFACTS_PATH -type f | wc -l)
+          echo "Downloaded $file_count file(s)."
+          if [ "$file_count" -gt 0 ]; then
+            echo "Downloaded files:"
+            find $ARTIFACTS_PATH -type f
+          fi
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
+        with:
+          tag_name: ${{ inputs.version-name }}
+          name: "v${{ inputs.version-name }} (${{ inputs.version-number }})"
+          prerelease: ${{ inputs.prerelease }}
+          draft: ${{ inputs.draft }}
+          make_latest: ${{ inputs.make_latest }}
+          target_commitish: ${{ steps.get_release_branch.outputs.release_branch }}
+          generate_release_notes: true
+          files: |
+            artifacts/**/*
+
+      - name: Update Release Description
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_ID: ${{ steps.create_release.outputs.id }}
+          RELEASE_URL: ${{ steps.create_release.outputs.url }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
+        run: |
+          # Get current release body
+          current_body=$(gh api /repos/${{ github.repository }}/releases/$RELEASE_ID --jq .body)
+
+          # Append build source to the end
+          updated_body="${current_body}
+          **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
+
+          # Update release
+          gh api --method PATCH /repos/${{ github.repository }}/releases/$RELEASE_ID \
+            -f body="$updated_body"
+
+          echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
+          echo "$RELEASE_URL" >> $GITHUB_STEP_SUMMARY

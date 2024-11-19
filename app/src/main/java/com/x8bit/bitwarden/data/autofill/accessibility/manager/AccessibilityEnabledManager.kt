@@ -7,15 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface AccessibilityEnabledManager {
     /**
-     * Whether or not the accessibility service should be considered enabled.
-     *
-     * Note that changing this does not enable or disable autofill; it is only an indicator that
-     * this has occurred elsewhere.
-     */
-    var isAccessibilityEnabled: Boolean
-
-    /**
-     * Emits updates that track [isAccessibilityEnabled] values.
+     * Emits updates that track whether the accessibility autofill service is enabled..
      */
     val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
 }

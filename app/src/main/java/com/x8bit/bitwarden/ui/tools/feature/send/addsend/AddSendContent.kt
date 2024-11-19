@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,22 +34,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
-import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Content view for the [AddSendScreen].
@@ -60,7 +55,6 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun AddSendContent(
     state: AddSendState.ViewState.Content,
-    scrollBehavior: TopAppBarScrollBehavior,
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
     isAddMode: Boolean,
@@ -72,201 +66,177 @@ fun AddSendContent(
     val chooseFileCameraPermissionLauncher = permissionsManager.getLauncher { isGranted ->
         addSendHandlers.onChooseFileClick(isGranted)
     }
-    Column(modifier = modifier) {
-        if (isAddMode && !isShared) {
-            BitwardenSegmentedButton(
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState()),
+    ) {
+        if (policyDisablesSend) {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenInfoCalloutCard(
+                text = stringResource(id = R.string.send_disabled_warning),
                 modifier = Modifier
-                    .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior)
-                    .fillMaxWidth(),
-                options = persistentListOf(
-                    SegmentedButtonState(
-                        text = stringResource(id = R.string.file),
-                        onClick = addSendHandlers.onFileTypeSelect,
-                        isChecked = state.isFileType,
-                        testTag = "SendFileButton",
-                    ),
-                    SegmentedButtonState(
-                        text = stringResource(id = R.string.text),
-                        onClick = addSendHandlers.onTextTypeSelect,
-                        isChecked = state.isTextType,
-                        testTag = "SendTextButton",
-                    ),
-                ),
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .testTag("SendPolicyInEffectLabel"),
             )
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
-        ) {
-            if (policyDisablesSend) {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenInfoCalloutCard(
-                    text = stringResource(id = R.string.send_disabled_warning),
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .testTag("SendPolicyInEffectLabel"),
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            if (policySendOptionsInEffect) {
-                BitwardenInfoCalloutCard(
-                    text = stringResource(id = R.string.send_options_policy_in_effect),
-                    modifier = Modifier
-                        .testTag(tag = "SendPolicyInEffectLabel")
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            BitwardenTextField(
+        if (policySendOptionsInEffect) {
+            BitwardenInfoCalloutCard(
+                text = stringResource(id = R.string.send_options_policy_in_effect),
                 modifier = Modifier
-                    .testTag(tag = "SendNameEntry")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                label = stringResource(id = R.string.name),
-                hint = stringResource(id = R.string.name_info),
-                readOnly = policyDisablesSend,
-                value = state.common.name,
-                onValueChange = addSendHandlers.onNamChange,
+                    .testTag(tag = "SendPolicyInEffectLabel")
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-            when (val type = state.selectedType) {
-                is AddSendState.ViewState.Content.SendType.File -> {
-                    BitwardenListHeaderText(
-                        label = stringResource(id = R.string.file),
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        BitwardenTextField(
+            modifier = Modifier
+                .testTag(tag = "SendNameEntry")
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            label = stringResource(id = R.string.name),
+            hint = stringResource(id = R.string.name_info),
+            readOnly = policyDisablesSend,
+            value = state.common.name,
+            onValueChange = addSendHandlers.onNamChange,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        when (val type = state.selectedType) {
+            is AddSendState.ViewState.Content.SendType.File -> {
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.file),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                if (isShared) {
+                    Text(
+                        text = type.name.orEmpty(),
+                        color = BitwardenTheme.colorScheme.text.primary,
+                        style = BitwardenTheme.typography.bodyMedium,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.max_file_size),
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        style = BitwardenTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                } else if (isAddMode) {
+                    Text(
+                        modifier = Modifier
+                            .testTag(tag = "SendCurrentFileNameLabel")
+                            .align(Alignment.CenterHorizontally),
+                        text = type.name ?: stringResource(id = R.string.no_file_chosen),
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        style = BitwardenTheme.typography.bodySmall,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    BitwardenOutlinedButton(
+                        label = stringResource(id = R.string.choose_file),
+                        onClick = {
+                            @Suppress("MaxLineLength")
+                            if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                                addSendHandlers.onChooseFileClick(true)
+                            } else {
+                                chooseFileCameraPermissionLauncher.launch(
+                                    Manifest.permission.CAMERA,
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .testTag(tag = "SendChooseFileButton")
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(id = R.string.max_file_size),
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        style = BitwardenTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 32.dp),
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
-                    if (isShared) {
+                    Text(
+                        text = stringResource(id = R.string.type_file_info),
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        style = BitwardenTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    ) {
                         Text(
                             text = type.name.orEmpty(),
                             color = BitwardenTheme.colorScheme.text.primary,
+                            style = BitwardenTheme.typography.bodyLarge,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = type.displaySize.orEmpty(),
+                            color = BitwardenTheme.colorScheme.text.primary,
                             style = BitwardenTheme.typography.bodyMedium,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.max_file_size),
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            style = BitwardenTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        )
-                    } else if (isAddMode) {
-                        Text(
-                            modifier = Modifier
-                                .testTag(tag = "SendCurrentFileNameLabel")
-                                .align(Alignment.CenterHorizontally),
-                            text = type.name ?: stringResource(id = R.string.no_file_chosen),
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            style = BitwardenTheme.typography.bodySmall,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        BitwardenOutlinedButton(
-                            label = stringResource(id = R.string.choose_file),
-                            onClick = {
-                                @Suppress("MaxLineLength")
-                                if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
-                                    addSendHandlers.onChooseFileClick(true)
-                                } else {
-                                    chooseFileCameraPermissionLauncher.launch(
-                                        Manifest.permission.CAMERA,
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .testTag(tag = "SendChooseFileButton")
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(id = R.string.max_file_size),
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            style = BitwardenTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 32.dp),
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = stringResource(id = R.string.type_file_info),
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            style = BitwardenTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        )
-                    } else {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        ) {
-                            Text(
-                                text = type.name.orEmpty(),
-                                color = BitwardenTheme.colorScheme.text.primary,
-                                style = BitwardenTheme.typography.bodyLarge,
-                                modifier = Modifier.weight(1f),
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = type.displaySize.orEmpty(),
-                                color = BitwardenTheme.colorScheme.text.primary,
-                                style = BitwardenTheme.typography.bodyMedium,
-                            )
-                        }
                     }
-                }
-
-                is AddSendState.ViewState.Content.SendType.Text -> {
-                    BitwardenTextField(
-                        modifier = Modifier
-                            .testTag(tag = "SendTextContentEntry")
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        label = stringResource(id = R.string.text),
-                        hint = stringResource(id = R.string.type_text_info),
-                        readOnly = policyDisablesSend,
-                        value = type.input,
-                        singleLine = false,
-                        onValueChange = addSendHandlers.onTextChange,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    BitwardenSwitch(
-                        modifier = Modifier
-                            .testTag(tag = "SendHideTextByDefaultToggle")
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        label = stringResource(id = R.string.hide_text_by_default),
-                        isChecked = type.isHideByDefaultChecked,
-                        onCheckedChange = addSendHandlers.onIsHideByDefaultToggle,
-                        readOnly = policyDisablesSend,
-                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            AddSendOptions(
-                state = state,
-                sendRestrictionPolicy = policyDisablesSend,
-                isAddMode = isAddMode,
-                addSendHandlers = addSendHandlers,
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-            Spacer(modifier = Modifier.navigationBarsPadding())
+            is AddSendState.ViewState.Content.SendType.Text -> {
+                BitwardenTextField(
+                    modifier = Modifier
+                        .testTag(tag = "SendTextContentEntry")
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    label = stringResource(id = R.string.text),
+                    hint = stringResource(id = R.string.type_text_info),
+                    readOnly = policyDisablesSend,
+                    value = type.input,
+                    singleLine = false,
+                    onValueChange = addSendHandlers.onTextChange,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                BitwardenSwitch(
+                    modifier = Modifier
+                        .testTag(tag = "SendHideTextByDefaultToggle")
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    label = stringResource(id = R.string.hide_text_by_default),
+                    isChecked = type.isHideByDefaultChecked,
+                    onCheckedChange = addSendHandlers.onIsHideByDefaultToggle,
+                    readOnly = policyDisablesSend,
+                )
+            }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        AddSendOptions(
+            state = state,
+            sendRestrictionPolicy = policyDisablesSend,
+            isAddMode = isAddMode,
+            addSendHandlers = addSendHandlers,
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 

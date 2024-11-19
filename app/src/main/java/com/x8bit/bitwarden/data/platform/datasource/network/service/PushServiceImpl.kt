@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.datasource.network.api.PushApi
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 
 class PushServiceImpl(
     private val pushApi: PushApi,
@@ -15,4 +16,5 @@ class PushServiceImpl(
                 appId = appId,
                 body = body,
             )
+            .toResult()
 }

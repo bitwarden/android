@@ -311,7 +311,7 @@ class CiphersServiceTest : BaseServiceTest() {
         )
         assertEquals(
             createMockAttachment(number = 1),
-            result.testGetOrThrow(),
+            result.getOrThrow(),
         )
     }
 
@@ -335,25 +335,6 @@ private fun setupMockUri(
     every { Uri.parse(url) } returns mockUri
     return mockUri
 }
-
-/**
- * A helper method to attempt validate that the the value is being boxed and causing test to
- * inconsistently fail.
- *
- * This was modified from the code found here:
- * * https://github.com/mockk/mockk/issues/485#issuecomment-1973170516
- */
-@Suppress("INVISIBLE_REFERENCE", "UNCHECKED_CAST")
-private fun <T> Result<T>.testGetOrThrow(): T =
-    when (val unboxed: Any? = value) {
-        is Result.Failure -> throw unboxed.exception
-        !is Result<*> -> unboxed as T
-        else -> {
-            // This means the result is boxed, we could make this recursive to address the issue.
-            println("Unboxed value = $unboxed")
-            unboxed as T
-        }
-    }
 
 private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
 {

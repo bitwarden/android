@@ -26,18 +26,18 @@ class AccessibilityCompletionManagerImpl(
             .intent
             ?.getAutofillSelectionDataOrNull()
             ?: run {
-                activity.finish()
+                activity.finishAndRemoveTask()
                 return
             }
         if (autofillSelectionData.framework != AutofillSelectionData.Framework.ACCESSIBILITY) {
-            activity.finish()
+            activity.finishAndRemoveTask()
             return
         }
         val uri = autofillSelectionData
             .uri
             ?.toUriOrNull()
             ?: run {
-                activity.finish()
+                activity.finishAndRemoveTask()
                 return
             }
 
@@ -47,7 +47,7 @@ class AccessibilityCompletionManagerImpl(
         )
         mainScope.launch {
             totpManager.tryCopyTotpToClipboard(cipherView = cipherView)
-            activity.finish()
         }
+        activity.finishAndRemoveTask()
     }
 }

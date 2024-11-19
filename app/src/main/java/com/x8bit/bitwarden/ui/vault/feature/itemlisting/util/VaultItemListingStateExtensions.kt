@@ -40,8 +40,8 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         is VaultItemListingState.ItemListingType.Vault.SshKey -> VaultItemCipherType.SSH_KEY
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
+        is VaultItemListingState.ItemListingType.Vault.Folder -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Trash,
-        is VaultItemListingState.ItemListingType.Vault.Folder,
             -> {
             throw IllegalStateException(
                 "Cannot create vault item from this VaultItemListingState!",

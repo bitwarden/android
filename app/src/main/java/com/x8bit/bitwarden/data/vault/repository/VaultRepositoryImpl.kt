@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
+import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -98,6 +99,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -222,7 +224,13 @@ class VaultRepositoryImpl(
         // Cancel any ongoing sync request and clear the vault data in memory every time
         // the user switches or the vault is locked for the active user.
         merge(
-            authDiskSource.userSwitchingChangesFlow,
+            authDiskSource
+                .userSwitchingChangesFlow
+                .onEach {
+                    // DomainState is not part of the locked data but should still be cleared
+                    // when the user changes
+                    mutableDomainsStateFlow.update { DataState.Loading }
+                },
             vaultLockManager
                 .vaultUnlockDataStateFlow
                 .filter { vaultUnlockDataList ->
@@ -238,31 +246,46 @@ class VaultRepositoryImpl(
 
         // Setup ciphers MutableStateFlow
         mutableCiphersStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                userStateFlow = authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskCiphers(activeUserId)
             }
             .launchIn(unconfinedScope)
+
         // Setup domains MutableStateFlow
         mutableDomainsStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndLoggedIn(
+                userStateFlow = authDiskSource.userStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskDomains(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup folders MutableStateFlow
         mutableFoldersStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                userStateFlow = authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskFolders(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup collections MutableStateFlow
         mutableCollectionsStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                userStateFlow = authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskCollections(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup sends MutableStateFlow
         mutableSendDataStateFlow
-            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+            .observeWhenSubscribedAndUnlocked(
+                authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
                 observeVaultDiskSends(activeUserId)
             }
             .launchIn(unconfinedScope)
@@ -301,11 +324,16 @@ class VaultRepositoryImpl(
             .syncFolderUpsertFlow
             .onEach(::syncFolderIfNecessary)
             .launchIn(ioScope)
+
+        databaseSchemeManager
+            .lastDatabaseSchemeChangeInstantFlow
+            .filterNotNull()
+            .onEach { sync() }
+            .launchIn(ioScope)
     }
 
     private fun clearUnlockedData() {
         mutableCiphersStateFlow.update { DataState.Loading }
-        mutableDomainsStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
         mutableCollectionsStateFlow.update { DataState.Loading }
         mutableSendDataStateFlow.update { DataState.Loading }

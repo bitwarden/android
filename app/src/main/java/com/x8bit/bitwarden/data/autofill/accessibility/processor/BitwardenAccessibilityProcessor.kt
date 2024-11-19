@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.processor
 
+import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 
 /**
@@ -7,7 +8,12 @@ import android.view.accessibility.AccessibilityNodeInfo
  */
 interface BitwardenAccessibilityProcessor {
     /**
-     * Processes the [AccessibilityNodeInfo] for autofill options.
+     * Processes the [AccessibilityEvent] for autofill options and grant access to the current
+     * [AccessibilityNodeInfo] via the [rootAccessibilityNodeInfoProvider] (note that calling the
+     * `rootAccessibilityNodeInfoProvider` is expensive).
      */
-    fun processAccessibilityEvent(rootAccessibilityNodeInfo: AccessibilityNodeInfo?)
+    fun processAccessibilityEvent(
+        event: AccessibilityEvent,
+        rootAccessibilityNodeInfoProvider: () -> AccessibilityNodeInfo?,
+    )
 }

@@ -177,10 +177,9 @@ fun StartRegistrationScreen(
                 onNavigationIconClick = handler.onBackClick,
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .imePadding()
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),

@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import kotlinx.serialization.json.JsonPrimitive
 import retrofit2.Call
 import retrofit2.http.Body
@@ -46,12 +47,12 @@ interface UnauthenticatedIdentityApi {
         @Field(value = "twoFactorProvider") twoFactorMethod: String?,
         @Field(value = "twoFactorRemember") twoFactorRemember: String?,
         @Field(value = "authRequest") authRequestId: String?,
-    ): Result<GetTokenResponseJson.Success>
+    ): NetworkResult<GetTokenResponseJson.Success>
 
     @GET("/sso/prevalidate")
     suspend fun prevalidateSso(
         @Query("domainHint") organizationIdentifier: String,
-    ): Result<PrevalidateSsoResponseJson>
+    ): NetworkResult<PrevalidateSsoResponseJson>
 
     /**
      * This call needs to be synchronous so we need it to return a [Call] directly. The identity
@@ -66,23 +67,25 @@ interface UnauthenticatedIdentityApi {
     ): Call<RefreshTokenResponseJson>
 
     @POST("/accounts/prelogin")
-    suspend fun preLogin(@Body body: PreLoginRequestJson): Result<PreLoginResponseJson>
+    suspend fun preLogin(@Body body: PreLoginRequestJson): NetworkResult<PreLoginResponseJson>
 
     @POST("/accounts/register")
-    suspend fun register(@Body body: RegisterRequestJson): Result<RegisterResponseJson.Success>
+    suspend fun register(
+        @Body body: RegisterRequestJson,
+    ): NetworkResult<RegisterResponseJson.Success>
 
     @POST("/accounts/register/finish")
     suspend fun registerFinish(
         @Body body: RegisterFinishRequestJson,
-    ): Result<RegisterResponseJson.Success>
+    ): NetworkResult<RegisterResponseJson.Success>
 
     @POST("/accounts/register/send-verification-email")
     suspend fun sendVerificationEmail(
         @Body body: SendVerificationEmailRequestJson,
-    ): Result<JsonPrimitive?>
+    ): NetworkResult<JsonPrimitive?>
 
     @POST("/accounts/register/verification-email-clicked")
     suspend fun verifyEmailToken(
         @Body body: VerifyEmailTokenRequestJson,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 }

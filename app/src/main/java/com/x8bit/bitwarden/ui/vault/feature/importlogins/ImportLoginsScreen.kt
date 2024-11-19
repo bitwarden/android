@@ -104,10 +104,9 @@ fun ImportLoginsScreen(
         onDismiss = handler.onSuccessfulSyncAcknowledged,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = Modifier.statusBarsPadding(),
-    ) { paddingValues, animatedOnDismiss ->
+    ) { animatedOnDismiss ->
         ImportLoginsSuccessBottomSheetContent(
             onCompleteImportLogins = animatedOnDismiss,
-            modifier = Modifier.padding(paddingValues),
         )
     }
 
@@ -132,13 +131,11 @@ fun ImportLoginsScreen(
                     scrollBehavior = scrollBehavior,
                 )
             },
-        ) { innerPadding ->
+        ) {
             Crossfade(
                 targetState = state.viewState,
                 label = "CrossfadeBetweenViewStates",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = innerPadding),
+                modifier = Modifier.fillMaxSize(),
             ) { viewState ->
                 when (viewState) {
                     ImportLoginsState.ViewState.InitialContent -> {
@@ -460,6 +457,7 @@ private fun ImportLoginsStepThreeContent(
             ),
         ),
         onBackClick = onBackClick,
+        ctaText = stringResource(R.string.done_text),
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
         modifier = modifier,

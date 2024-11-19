@@ -125,24 +125,21 @@ fun QrCodeScanScreen(
                     ),
                 )
             },
-        ) { innerPadding ->
+        ) {
             CameraPreview(
                 cameraErrorReceive = remember(viewModel) {
                     { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
                 },
                 qrCodeAnalyzer = qrCodeAnalyzer,
-                modifier = Modifier.padding(innerPadding),
             )
 
             if (LocalConfiguration.current.isPortrait) {
                 PortraitQRCodeContent(
                     onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                    modifier = Modifier.padding(innerPadding),
                 )
             } else {
                 LandscapeQRCodeContent(
                     onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                    modifier = Modifier.padding(innerPadding),
                 )
             }
         }

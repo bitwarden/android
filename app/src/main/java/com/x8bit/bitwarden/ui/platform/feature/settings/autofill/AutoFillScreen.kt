@@ -126,10 +126,9 @@ fun AutoFillScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
-            Modifier
-                .padding(innerPadding)
+            modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {

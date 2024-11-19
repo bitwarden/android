@@ -80,12 +80,11 @@ fun MasterPasswordGuidanceScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(innerPadding)
                 .standardHorizontalMargin(),
         ) {
             Column(

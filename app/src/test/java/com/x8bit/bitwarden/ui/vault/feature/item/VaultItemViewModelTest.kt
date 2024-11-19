@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -59,6 +60,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mutableAuthCodeItemFlow =
         MutableStateFlow<DataState<VerificationCodeItem?>>(DataState.Loading)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val mutableCollectionsStateFlow =
+        MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
 
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val authRepo: AuthRepository = mockk {
@@ -67,12 +70,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val vaultRepo: VaultRepository = mockk {
         every { getAuthCodeFlow(VAULT_ITEM_ID) } returns mutableAuthCodeItemFlow
         every { getVaultItemStateFlow(VAULT_ITEM_ID) } returns mutableVaultItemFlow
+        every { collectionsStateFlow } returns mutableCollectionsStateFlow
     }
 
     private val mockFileManager: FileManager = mockk()
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
+    }
+    private val mockCipherView = mockk<CipherView> {
+        every { collectionIds } returns emptyList()
     }
 
     @BeforeEach
@@ -155,18 +162,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `DeleteClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
@@ -185,6 +193,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -196,17 +206,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     common = DEFAULT_COMMON
                         .copy(requiresReprompt = false),
                 )
-
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginState
 
                 val expected = DEFAULT_STATE.copy(
                     viewState = DEFAULT_VIEW_STATE.copy(
@@ -221,6 +230,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
                 assertEquals(expected, viewModel.stateFlow.value)
@@ -240,16 +250,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         ),
                 )
 
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginState
 
                 val expected = DEFAULT_STATE.copy(
                     viewState = loginState,
@@ -260,6 +270,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
                 assertEquals(expected, viewModel.stateFlow.value)
@@ -272,19 +283,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -315,18 +327,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -361,19 +374,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                                 ?.copy(deletedDate = Instant.MIN),
                         ),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -399,18 +413,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on RestoreItemClick should prompt for master password when required`() = runTest {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = any(),
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = createTotpCodeData(),
-                    )
-                } returns DEFAULT_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
             val viewModel = createViewModel(state = loginState)
             assertEquals(loginState, viewModel.stateFlow.value)
@@ -432,19 +447,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             runTest {
                 val viewState =
                     DEFAULT_VIEW_STATE.copy(common = DEFAULT_COMMON.copy(requiresReprompt = false))
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns viewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns viewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = viewState)
                 val viewModel = createViewModel(state = loginState)
                 assertEquals(loginState, viewModel.stateFlow.value)
@@ -469,20 +485,21 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         fun `ConfirmRestoreClick with RestoreCipherResult Success should should ShowToast and NavigateBack`() =
             runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(
                     data = createVerificationCodeItem(),
                 )
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -509,18 +526,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         @Suppress("MaxLineLength")
         fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = createTotpCodeData(),
-                    )
-                } returns DEFAULT_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             val viewModel = createViewModel(state = DEFAULT_STATE)
             coEvery {
@@ -558,18 +576,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on EditClick should prompt for master password when required`() = runTest {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = any(),
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = createTotpCodeData(),
-                    )
-                } returns DEFAULT_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
             val viewModel = createViewModel(state = loginState)
             assertEquals(loginState, viewModel.stateFlow.value)
@@ -590,18 +609,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val loginViewState = createViewState(
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
             )
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = any(),
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns loginViewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
             val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
             val viewModel = createViewModel(state = loginState)
 
@@ -613,6 +633,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
                 assertEquals(
@@ -632,22 +654,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns loginViewState
+
                 val password = "password"
                 coEvery {
                     authRepo.validatePassword(password)
                 } returns ValidatePasswordResult.Success(isValid = true)
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
@@ -693,22 +716,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns loginViewState
+
                 val password = "password"
                 coEvery {
                     authRepo.validatePassword(password)
                 } returns ValidatePasswordResult.Success(isValid = false)
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
@@ -746,22 +770,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns loginViewState
+
                 val password = "password"
                 coEvery {
                     authRepo.validatePassword(password)
                 } returns ValidatePasswordResult.Error
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
@@ -810,18 +835,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CopyCustomHiddenFieldClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.CopyCustomHiddenFieldClick("field"))
@@ -839,7 +864,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
-                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -848,20 +874,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on CopyCustomHiddenFieldClick should call setText on ClipboardManager when re-prompt is not required`() {
             val field = "field"
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
+                )
+            } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             every { clipboardManager.setText(text = field) } just runs
 
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.Common.CopyCustomHiddenFieldClick(field))
 
@@ -871,7 +897,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
-                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedHiddenField(
@@ -904,18 +931,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isCopyable = true,
                     isVisible = false,
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -941,7 +968,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
-                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -950,12 +978,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on HiddenFieldVisibilityClicked should update hidden field visibility when re-prompt is not required`() =
             runTest {
-                val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
-                    name = "hidden",
-                    value = "value",
-                    isCopyable = true,
-                    isVisible = false,
-                )
+                val hiddenField =
+                    VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                        name = "hidden",
+                        value = "value",
+                        isCopyable = true,
+                        isVisible = false,
+                    )
                 val loginViewState = VaultItemState.ViewState.Content(
                     common = createCommonContent(
                         isEmpty = true,
@@ -967,18 +996,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     type = createLoginContent(isEmpty = true),
                 )
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -1004,7 +1034,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
-                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
@@ -1018,18 +1049,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on AttachmentsClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.AttachmentsClick)
@@ -1047,7 +1078,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
-                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -1060,18 +1092,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1094,18 +1126,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
             )
             val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns loginViewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
+                )
+            } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1125,7 +1157,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
-                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
                 )
             }
         }
@@ -1142,18 +1175,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val loginState = DEFAULT_STATE.copy(
                 viewState = loginViewState,
             )
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns loginViewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
+                )
+            } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(loginState, viewModel.stateFlow.value)
             viewModel.trySendAction(VaultItemAction.Common.CloneClick)
@@ -1190,18 +1223,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on CloneClick should show password dialog when re-prompt is required`() = runTest {
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns DEFAULT_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
+                )
+            } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(loginState, viewModel.stateFlow.value)
             viewModel.trySendAction(VaultItemAction.Common.CloneClick)
@@ -1219,7 +1252,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
-                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true, totpCodeItemData = null,
                 )
             }
         }
@@ -1232,18 +1266,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1263,18 +1297,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on MoveToOrganizationClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.MoveToOrganizationClick)
@@ -1292,7 +1326,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
-                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true, totpCodeItemData = null,
                     )
                 }
             }
@@ -1305,18 +1340,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        totpCodeItemData = null,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1347,18 +1383,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = true),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        totpCodeItemData = null,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
@@ -1403,18 +1440,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        totpCodeItemData = null,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
@@ -1468,18 +1506,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = any(),
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        totpCodeItemData = null,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
@@ -1646,19 +1685,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on CheckForBreachClick should process a password`() = runTest {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = createTotpCodeData(),
-                    )
-                } returns DEFAULT_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    totpCodeItemData = createTotpCodeData(),
+                )
+            } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value =
-                DataState.Loaded(data = createVerificationCodeItem())
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
             val breachCount = 5
@@ -1692,6 +1731,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1704,19 +1745,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CopyPasswordClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        totpCodeItemData = createTotpCodeData(),
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
@@ -1736,6 +1778,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1744,19 +1788,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `on CopyPasswordClick should call setText on the ClipboardManager when re-prompt is not required`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = createTotpCodeData(),
-                    )
-                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    totpCodeItemData = createTotpCodeData(),
+                )
+            } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value =
                 DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             every { clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD) } just runs
 
@@ -1768,6 +1813,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1782,6 +1829,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             mutableAuthCodeItemFlow.value = DataState.Loaded(
                 data = createVerificationCodeItem(),
             )
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
 
@@ -1802,19 +1850,21 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on CopyUsernameClick should call setText on ClipboardManager`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = createTotpCodeData(),
-                    )
-                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    totpCodeItemData = createTotpCodeData(),
+                )
+            } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             every { clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME) } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+            mutableAuthCodeItemFlow.value =
+                DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUsernameClick)
 
@@ -1825,6 +1875,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -1842,19 +1894,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on PasswordHistoryClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
@@ -1873,6 +1926,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -1881,24 +1936,25 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on PasswordHistoryClick should emit NavigateToPasswordHistory when re-prompt is not required`() =
             runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    }
-                        .returns(
-                            createViewState(
-                                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                            ),
-                        )
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
                 }
+                    .returns(
+                        createViewState(
+                            common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                        ),
+                    )
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.eventFlow.test {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
@@ -1914,6 +1970,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -1923,19 +1981,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on PasswordVisibilityClicked should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -1958,6 +2017,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -1970,19 +2031,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns loginViewState
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2008,6 +2070,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledPasswordVisible(
@@ -2035,18 +2099,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CopyNumberClick should show password dialog when re-prompt is required`() =
             runTest {
                 val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns CARD_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
@@ -2067,6 +2132,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2074,22 +2141,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `on CopyNumberClick should call setText on the ClipboardManager when re-prompt is not required`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns createViewState(
-                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                    type = DEFAULT_CARD_TYPE,
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
-            }
+            } returns createViewState(
+                common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                type = DEFAULT_CARD_TYPE,
+            )
             every { clipboardManager.setText(text = "12345436") } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
 
@@ -2100,6 +2168,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2108,18 +2178,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on NumberVisibilityClick should show password dialog when re-prompt is required`() =
             runTest {
                 val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns CARD_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2140,6 +2211,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2147,22 +2220,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `on NumberVisibilityClick should call trackEvent on the OrganizationEventManager and update the ViewState when re-prompt is not required`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns createViewState(
-                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                    type = DEFAULT_CARD_TYPE,
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
-            }
+            } returns createViewState(
+                common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                type = DEFAULT_CARD_TYPE,
+            )
             every { clipboardManager.setText(text = "12345436") } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(
                 VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
@@ -2179,6 +2253,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2187,18 +2263,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CopySecurityCodeClick should show password dialog when re-prompt is required`() =
             runTest {
                 val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns CARD_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
@@ -2219,6 +2296,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2226,22 +2305,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `on CopySecurityCodeClick should call setText on the ClipboardManager when re-prompt is not required`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns createViewState(
-                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                    type = DEFAULT_CARD_TYPE,
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
-            }
+            } returns createViewState(
+                common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                type = DEFAULT_CARD_TYPE,
+            )
             every { clipboardManager.setText(text = "987") } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
 
@@ -2252,6 +2332,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2260,18 +2342,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CodeVisibilityClick should show password dialog when re-prompt is required`() =
             runTest {
                 val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns CARD_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2292,6 +2375,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
                     )
                 }
             }
@@ -2299,21 +2384,22 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `on CodeVisibilityClick should call trackEvent on the OrganizationEventManager and update the ViewState when re-prompt is not required`() {
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns createViewState(
-                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                    type = DEFAULT_CARD_TYPE,
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
-            }
+            } returns createViewState(
+                common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                type = DEFAULT_CARD_TYPE,
+            )
             every { clipboardManager.setText(text = "987") } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
 
             viewModel.trySendAction(
@@ -2331,6 +2417,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -2352,18 +2440,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on CopyPublicKeyClick should copy public key to clipboard`() = runTest {
             every { clipboardManager.setText("mockPublicKey") } just runs
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns SSH_KEY_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
 
@@ -2380,18 +2469,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 )
                 val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            previousState = null,
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = null,
-                        )
-                    } returns SSH_KEY_VIEW_STATE
-                }
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns SSH_KEY_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(sshKeyState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2415,18 +2505,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on CopyFingerprintClick should copy fingerprint to clipboard`() = runTest {
             every { clipboardManager.setText("mockFingerprint") } just runs
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns SSH_KEY_VIEW_STATE
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
 
@@ -2459,21 +2550,25 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on VaultDataReceive with Loaded and nonnull data should update the ViewState`() {
             val viewState = mockk<VaultItemState.ViewState>()
-            val cipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns viewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns viewState
             val viewModel = createViewModel(state = null)
 
-            mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
-            assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = viewState),
+                viewModel.stateFlow.value,
+            )
         }
 
         @Test
@@ -2481,6 +2576,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = null)
 
             mutableVaultItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -2495,19 +2591,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on VaultDataReceive with Pending and nonnull data should update the ViewState`() {
             val viewState = mockk<VaultItemState.ViewState>()
-            val cipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns viewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns viewState
             val viewModel = createViewModel(state = null)
 
-            mutableVaultItemFlow.value = DataState.Pending(data = cipherView)
+            mutableVaultItemFlow.value = DataState.Pending(data = mockCipherView)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
         }
@@ -2518,6 +2615,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = null)
 
             mutableVaultItemFlow.value = DataState.Pending(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -2532,19 +2630,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on VaultDataReceive with Error and nonnull data should update the ViewState`() {
             val viewState = mockk<VaultItemState.ViewState>()
-            val cipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns viewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns viewState
             val viewModel = createViewModel(state = null)
 
-            mutableVaultItemFlow.value = DataState.Error(error = Throwable(), data = cipherView)
+            mutableVaultItemFlow.value = DataState.Error(error = Throwable(), data = mockCipherView)
 
             assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
         }
@@ -2568,19 +2666,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on VaultDataReceive with NoNetwork and nonnull data should update the ViewState`() {
             val viewState = mockk<VaultItemState.ViewState>()
-            val cipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        previousState = null,
-                        isPremiumUser = true,
-                        hasMasterPassword = true,
-                        totpCodeItemData = null,
-                    )
-                } returns viewState
-            }
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns viewState
             val viewModel = createViewModel(state = null)
 
-            mutableVaultItemFlow.value = DataState.NoNetwork(data = cipherView)
+            mutableVaultItemFlow.value = DataState.NoNetwork(data = mockCipherView)
 
             assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
         }
@@ -2605,6 +2703,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value,
             )
+        }
+    }
+
+    @Nested
+    inner class CollectionsFlow {
+        @BeforeEach
+        fun setup() {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
         }
     }
 
@@ -2780,6 +2887,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         title = "test.mp4",
                     ),
                 ),
+                canDelete = true,
+                canAssignToCollections = true,
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

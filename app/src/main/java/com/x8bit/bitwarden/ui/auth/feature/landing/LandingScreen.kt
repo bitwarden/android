@@ -148,7 +148,29 @@ fun LandingScreen(
                 )
             }
         },
-    ) { innerPadding ->
+        overlay = {
+            BitwardenAccountSwitcher(
+                isVisible = isAccountMenuVisible,
+                accountSummaries = state.accountSummaries.toImmutableList(),
+                onSwitchAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
+                },
+                onLockAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.LockAccountClick(it)) }
+                },
+                onLogoutAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.LogoutAccountClick(it)) }
+                },
+                onAddAccountClick = {
+                    // Not available
+                },
+                onDismissRequest = { isAccountMenuVisible = false },
+                isAddAccountAvailable = false,
+                topAppBarScrollBehavior = scrollBehavior,
+                modifier = Modifier.fillMaxSize(),
+            )
+        },
+    ) {
         LandingScreenContent(
             state = state,
             isAppBarVisible = isAppBarVisible,
@@ -167,32 +189,7 @@ fun LandingScreen(
             onCreateAccountClick = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.CreateAccountClick) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-        )
-
-        BitwardenAccountSwitcher(
-            isVisible = isAccountMenuVisible,
-            accountSummaries = state.accountSummaries.toImmutableList(),
-            onSwitchAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
-            },
-            onLockAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.LockAccountClick(it)) }
-            },
-            onLogoutAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.LogoutAccountClick(it)) }
-            },
-            onAddAccountClick = {
-                // Not available
-            },
-            onDismissRequest = { isAccountMenuVisible = false },
-            isAddAccountAvailable = false,
-            topAppBarScrollBehavior = scrollBehavior,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

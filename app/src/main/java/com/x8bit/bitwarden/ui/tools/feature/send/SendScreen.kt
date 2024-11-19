@@ -6,7 +6,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -161,11 +160,10 @@ fun SendScreen(
             }
         },
         pullToRefreshState = pullToRefreshState,
-    ) { padding ->
+    ) {
         val modifier = Modifier
             .imePadding()
             .fillMaxSize()
-            .padding(padding)
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
                 policyDisablesSend = state.policyDisablesSend,

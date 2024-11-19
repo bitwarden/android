@@ -352,7 +352,22 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+        verify(exactly = 0) {
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+        }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CloseClick action should update the first time state to false if continue button is enabled`() =
+        runTest {
+            val viewModel =
+                createViewModel(state = DEFAULT_STATE.copy(isUnlockWithPinEnabled = true))
+            viewModel.trySendAction(SetupUnlockAction.CloseClick)
+            verify {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+            }
+        }
 
     private fun createViewModel(
         state: SetupUnlockState? = null,

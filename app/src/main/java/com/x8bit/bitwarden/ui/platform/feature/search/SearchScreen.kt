@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.search
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -91,14 +90,7 @@ fun SearchScreen(
                 ),
             )
         },
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
+        utilityBar = {
             val vaultFilterData = state.vaultFilterData
             if (state.viewState.hasVaultFilter && vaultFilterData != null) {
                 VaultFilter(
@@ -116,32 +108,39 @@ fun SearchScreen(
                         .fillMaxWidth(),
                 )
             }
+        },
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) {
+        when (val viewState = state.viewState) {
+            is SearchState.ViewState.Content -> SearchContent(
+                viewState = viewState,
+                searchHandlers = searchHandlers,
+                searchType = state.searchType,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
+            )
 
-            val innerModifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-            when (val viewState = state.viewState) {
-                is SearchState.ViewState.Content -> SearchContent(
-                    viewState = viewState,
-                    searchHandlers = searchHandlers,
-                    searchType = state.searchType,
-                    modifier = innerModifier,
-                )
+            is SearchState.ViewState.Empty -> SearchEmptyContent(
+                viewState = viewState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
+            )
 
-                is SearchState.ViewState.Empty -> SearchEmptyContent(
-                    viewState = viewState,
-                    modifier = innerModifier,
-                )
+            is SearchState.ViewState.Error -> BitwardenErrorContent(
+                message = viewState.message(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
+            )
 
-                is SearchState.ViewState.Error -> BitwardenErrorContent(
-                    message = viewState.message(),
-                    modifier = innerModifier,
-                )
-
-                SearchState.ViewState.Loading -> BitwardenLoadingContent(
-                    modifier = innerModifier,
-                )
-            }
+            SearchState.ViewState.Loading -> BitwardenLoadingContent(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
+            )
         }
     }
 }

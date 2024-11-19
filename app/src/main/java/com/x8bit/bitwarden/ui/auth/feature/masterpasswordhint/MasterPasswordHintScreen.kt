@@ -111,11 +111,9 @@ fun MasterPasswordHintScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             BitwardenTextField(
                 modifier = Modifier

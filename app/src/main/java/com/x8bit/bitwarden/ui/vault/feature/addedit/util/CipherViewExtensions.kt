@@ -35,13 +35,15 @@ private const val PASSKEY_CREATION_TIME_PATTERN: String = "hh:mm a"
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 fun CipherView.toViewState(
     isClone: Boolean,
     isIndividualVaultDisabled: Boolean,
     totpData: TotpData?,
     resourceManager: ResourceManager,
     clock: Clock,
+    canDelete: Boolean,
+    canAssignToCollections: Boolean,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
@@ -108,6 +110,8 @@ fun CipherView.toViewState(
             availableOwners = emptyList(),
             hasOrganizations = false,
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
+            canDelete = canDelete,
+            canAssignToCollections = canAssignToCollections,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
@@ -127,17 +131,21 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
             common = currentContentState.common.copy(
                 selectedFolderId = folderViewList.toSelectedFolderId(
                     cipherView = currentContentState.common.originalCipher,
-                ),
+                )
+                    ?: currentContentState.common.selectedFolderId,
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),
-                selectedOwnerId = activeAccount.toSelectedOwnerId(
-                    cipherView = currentContentState.common.originalCipher,
-                ),
+                selectedOwnerId = activeAccount
+                    .toSelectedOwnerId(cipherView = currentContentState.common.originalCipher)
+                    ?: collectionViewList
+                        .firstOrNull { it.id == currentContentState.common.selectedCollectionId }
+                        ?.organizationId,
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
+                    selectedCollectionId = currentContentState.common.selectedCollectionId,
                 ),
                 isUnlockWithPasswordEnabled = activeAccount.hasMasterPassword,
                 hasOrganizations = activeAccount.organizations.isNotEmpty(),
@@ -192,13 +200,15 @@ private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
+    selectedCollectionId: String? = null,
 ): List<VaultAddEditState.Owner> =
     listOfNotNull(
-        VaultAddEditState.Owner(
-            name = email,
-            id = null,
-            collections = emptyList(),
-        )
+        VaultAddEditState
+            .Owner(
+                name = email,
+                id = null,
+                collections = emptyList(),
+            )
             .takeUnless { isIndividualVaultDisabled },
         *organizations
             .map {
@@ -214,9 +224,11 @@ private fun UserState.Account.toAvailableOwners(
                             VaultCollection(
                                 id = collection.id.orEmpty(),
                                 name = collection.name,
-                                isSelected = cipherView
+                                isSelected = (cipherView
                                     ?.collectionIds
-                                    ?.contains(collection.id) == true,
+                                    ?.contains(collection.id))
+                                    ?: (selectedCollectionId != null &&
+                                        collection.id == selectedCollectionId),
                             )
                         },
                 )

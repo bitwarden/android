@@ -84,7 +84,7 @@ fun SetPasswordScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         SetPasswordScreenContent(
             state = state,
             onPasswordInputChanged = remember(viewModel) {
@@ -97,7 +97,6 @@ fun SetPasswordScreen(
                 { viewModel.trySendAction(SetPasswordAction.PasswordHintInputChanged(it)) }
             },
             modifier = Modifier
-                .padding(innerPadding)
                 .imePadding()
                 .fillMaxSize(),
         )

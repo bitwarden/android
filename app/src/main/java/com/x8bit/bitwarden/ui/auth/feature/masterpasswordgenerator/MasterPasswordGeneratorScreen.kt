@@ -98,12 +98,11 @@ fun MasterPasswordGeneratorScreen(
         snackbarHost = {
             BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(innerPadding),
+                .verticalScroll(rememberScrollState()),
         ) {
             MasterPasswordGeneratorContent(
                 generatedPassword = state.generatedPassword,

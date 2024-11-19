@@ -95,6 +95,15 @@ interface VaultSdkSource {
     ): Result<String>
 
     /**
+     * Validate the user pin using the [pinProtectedUserKey].
+     */
+    suspend fun validatePin(
+        userId: String,
+        pin: String,
+        pinProtectedUserKey: String,
+    ): Result<Boolean>
+
+    /**
      * Gets the key for an auth request that is required to approve or decline it.
      */
     suspend fun getAuthRequestKey(

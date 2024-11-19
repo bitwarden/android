@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
 import androidx.annotation.Keep
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -22,13 +23,15 @@ interface SendsApi {
      * Create a text send.
      */
     @POST("sends")
-    suspend fun createTextSend(@Body body: SendJsonRequest): Result<SyncResponseJson.Send>
+    suspend fun createTextSend(@Body body: SendJsonRequest): NetworkResult<SyncResponseJson.Send>
 
     /**
      * Create a file send.
      */
     @POST("sends/file/v2")
-    suspend fun createFileSend(@Body body: SendJsonRequest): Result<CreateFileSendResponseJson>
+    suspend fun createFileSend(
+        @Body body: SendJsonRequest,
+    ): NetworkResult<CreateFileSendResponseJson>
 
     /**
      * Updates a send.
@@ -37,7 +40,7 @@ interface SendsApi {
     suspend fun updateSend(
         @Path("sendId") sendId: String,
         @Body body: SendJsonRequest,
-    ): Result<SyncResponseJson.Send>
+    ): NetworkResult<SyncResponseJson.Send>
 
     /**
      * Uploads the file associated with a send.
@@ -47,23 +50,25 @@ interface SendsApi {
         @Path("sendId") sendId: String,
         @Path("fileId") fileId: String,
         @Body body: MultipartBody,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Deletes a send.
      */
     @DELETE("sends/{sendId}")
-    suspend fun deleteSend(@Path("sendId") sendId: String): Result<Unit>
+    suspend fun deleteSend(@Path("sendId") sendId: String): NetworkResult<Unit>
 
     /**
      * Deletes a send.
      */
     @PUT("sends/{sendId}/remove-password")
-    suspend fun removeSendPassword(@Path("sendId") sendId: String): Result<SyncResponseJson.Send>
+    suspend fun removeSendPassword(
+        @Path("sendId") sendId: String,
+    ): NetworkResult<SyncResponseJson.Send>
 
     /**
      * Gets a send.
      */
     @GET("sends/{sendId}")
-    suspend fun getSend(@Path("sendId") sendId: String): Result<SyncResponseJson.Send>
+    suspend fun getSend(@Path("sendId") sendId: String): NetworkResult<SyncResponseJson.Send>
 }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import retrofit2.http.Body
@@ -18,7 +19,7 @@ interface FoldersApi {
      * Create a folder.
      */
     @POST("folders")
-    suspend fun createFolder(@Body body: FolderJsonRequest): Result<SyncResponseJson.Folder>
+    suspend fun createFolder(@Body body: FolderJsonRequest): NetworkResult<SyncResponseJson.Folder>
 
     /**
      * Gets a folder.
@@ -26,7 +27,7 @@ interface FoldersApi {
     @GET("folders/{folderId}")
     suspend fun getFolder(
         @Path("folderId") folderId: String,
-    ): Result<SyncResponseJson.Folder>
+    ): NetworkResult<SyncResponseJson.Folder>
 
     /**
      * Updates a folder.
@@ -35,11 +36,11 @@ interface FoldersApi {
     suspend fun updateFolder(
         @Path("folderId") folderId: String,
         @Body body: FolderJsonRequest,
-    ): Result<SyncResponseJson.Folder>
+    ): NetworkResult<SyncResponseJson.Folder>
 
     /**
      * Deletes a folder.
      */
     @DELETE("folders/{folderId}")
-    suspend fun deleteFolder(@Path("folderId") folderId: String): Result<Unit>
+    suspend fun deleteFolder(@Path("folderId") folderId: String): NetworkResult<Unit>
 }

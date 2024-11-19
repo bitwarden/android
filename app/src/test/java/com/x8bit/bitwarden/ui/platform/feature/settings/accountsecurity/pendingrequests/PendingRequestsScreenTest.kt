@@ -46,7 +46,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
     }
     private val permissionsManager = FakePermissionManager().apply {
         checkPermissionResult = false
-        shouldShowRequestRationale = true
+        shouldShowRequestRationale = false
     }
 
     @Before

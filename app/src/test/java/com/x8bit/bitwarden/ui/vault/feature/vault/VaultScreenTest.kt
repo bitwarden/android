@@ -1207,6 +1207,19 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `when snackbar is displayed clicking on it should dismiss`() {
+        val data = BitwardenSnackbarData("message".asText())
+        mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
+        composeTestRule
+            .onNodeWithText("message")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("message")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
     fun `SSH key group header should display correctly based on state`() {
         val count = 1
         // Verify SSH key group is displayed when showSshKeys is true

@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAuthR
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.platform.util.asFailure
 
 /**
@@ -24,17 +25,19 @@ class NewAuthRequestServiceImpl(
     ): Result<AuthRequestsResponseJson.AuthRequest> =
         when (authRequestType) {
             AuthRequestTypeJson.LOGIN_WITH_DEVICE -> {
-                unauthenticatedAuthRequestsApi.createAuthRequest(
-                    deviceIdentifier = deviceId,
-                    body = AuthRequestRequestJson(
-                        email = email,
-                        publicKey = publicKey,
-                        deviceId = deviceId,
-                        accessCode = accessCode,
-                        fingerprint = fingerprint,
-                        type = authRequestType,
-                    ),
-                )
+                unauthenticatedAuthRequestsApi
+                    .createAuthRequest(
+                        deviceIdentifier = deviceId,
+                        body = AuthRequestRequestJson(
+                            email = email,
+                            publicKey = publicKey,
+                            deviceId = deviceId,
+                            accessCode = accessCode,
+                            fingerprint = fingerprint,
+                            type = authRequestType,
+                        ),
+                    )
+                    .toResult()
             }
 
             AuthRequestTypeJson.UNLOCK -> {
@@ -43,17 +46,19 @@ class NewAuthRequestServiceImpl(
             }
 
             AuthRequestTypeJson.ADMIN_APPROVAL -> {
-                authenticatedAuthRequestsApi.createAdminAuthRequest(
-                    deviceIdentifier = deviceId,
-                    body = AuthRequestRequestJson(
-                        email = email,
-                        publicKey = publicKey,
-                        deviceId = deviceId,
-                        accessCode = accessCode,
-                        fingerprint = fingerprint,
-                        type = authRequestType,
-                    ),
-                )
+                authenticatedAuthRequestsApi
+                    .createAdminAuthRequest(
+                        deviceIdentifier = deviceId,
+                        body = AuthRequestRequestJson(
+                            email = email,
+                            publicKey = publicKey,
+                            deviceId = deviceId,
+                            accessCode = accessCode,
+                            fingerprint = fingerprint,
+                            type = authRequestType,
+                        ),
+                    )
+                    .toResult()
             }
         }
 
@@ -63,11 +68,15 @@ class NewAuthRequestServiceImpl(
         isSso: Boolean,
     ): Result<AuthRequestsResponseJson.AuthRequest> =
         if (isSso) {
-            authenticatedAuthRequestsApi.getAuthRequest(requestId)
+            authenticatedAuthRequestsApi
+                .getAuthRequest(requestId = requestId)
+                .toResult()
         } else {
-            unauthenticatedAuthRequestsApi.getAuthRequestUpdate(
-                requestId = requestId,
-                accessCode = accessCode,
-            )
+            unauthenticatedAuthRequestsApi
+                .getAuthRequestUpdate(
+                    requestId = requestId,
+                    accessCode = accessCode,
+                )
+                .toResult()
         }
 }

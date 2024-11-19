@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components.snackbar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * Custom snackbar for Bitwarden.
  * Shows a message with an optional actions and title.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenSnackbar(
     bitwardenSnackbarData: BitwardenSnackbarData,
@@ -44,6 +46,12 @@ fun BitwardenSnackbar(
                 .background(
                     color = BitwardenTheme.colorScheme.background.alert,
                     shape = BitwardenTheme.shapes.snackbar,
+                )
+                // I there is no explicit dismiss action, the Snackbar can be dismissed by clicking
+                // anywhere on the Snackbar.
+                .clickable(
+                    enabled = !bitwardenSnackbarData.withDismissAction,
+                    onClick = onDismiss,
                 )
                 .padding(16.dp),
         ) {

@@ -121,12 +121,12 @@ class VaultDiskSourceImpl(
                 },
         )
 
-    override fun getDomains(userId: String): Flow<SyncResponseJson.Domains> =
+    override fun getDomains(userId: String): Flow<SyncResponseJson.Domains?> =
         domainsDao
             .getDomains(userId)
             .map { entity ->
                 withContext(dispatcherManager.default) {
-                    json.decodeFromString<SyncResponseJson.Domains>(entity.domainsJson)
+                    entity?.domainsJson?.let { json.decodeFromString<SyncResponseJson.Domains>(it) }
                 }
             }
 
@@ -240,7 +240,7 @@ class VaultDiskSourceImpl(
                 domainsDao.insertDomains(
                     domains = DomainsEntity(
                         userId = userId,
-                        domainsJson = json.encodeToString(vault.domains),
+                        domainsJson = vault.domains?.let { json.encodeToString(it) },
                     ),
                 )
             }

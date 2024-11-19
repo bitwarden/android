@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetPasswordEnrollRequestJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -20,7 +21,7 @@ interface AuthenticatedOrganizationApi {
         @Path("orgId") organizationId: String,
         @Path("userId") userId: String,
         @Body body: OrganizationResetPasswordEnrollRequestJson,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     /**
      * Checks whether this organization auto enrolls users in password reset.
@@ -28,7 +29,7 @@ interface AuthenticatedOrganizationApi {
     @GET("/organizations/{identifier}/auto-enroll-status")
     suspend fun getOrganizationAutoEnrollResponse(
         @Path("identifier") organizationIdentifier: String,
-    ): Result<OrganizationAutoEnrollStatusResponseJson>
+    ): NetworkResult<OrganizationAutoEnrollStatusResponseJson>
 
     /**
      * Gets the public and private keys for this organization.
@@ -36,5 +37,5 @@ interface AuthenticatedOrganizationApi {
     @GET("/organizations/{id}/keys")
     suspend fun getOrganizationKeys(
         @Path("id") organizationId: String,
-    ): Result<OrganizationKeysResponseJson>
+    ): NetworkResult<OrganizationKeysResponseJson>
 }

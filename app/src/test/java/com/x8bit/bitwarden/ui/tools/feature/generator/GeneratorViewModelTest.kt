@@ -1325,7 +1325,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 val avoidAmbiguousChars = true
 
                 viewModel.trySendAction(
-                    GeneratorAction.MainType.Password.ToggleAvoidAmbigousCharactersChange(
+                    GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange(
                         avoidAmbiguousChars = avoidAmbiguousChars,
                     ),
                 )

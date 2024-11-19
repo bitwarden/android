@@ -98,10 +98,9 @@ fun EnvironmentScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
-            Modifier
-                .padding(innerPadding)
+            modifier = Modifier
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState()),

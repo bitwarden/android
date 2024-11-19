@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.di
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.PowerManager
+import android.view.accessibility.AccessibilityManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
@@ -55,8 +56,12 @@ object AccessibilityModule {
 
     @Singleton
     @Provides
-    fun providesAccessibilityEnabledManager(): AccessibilityEnabledManager =
-        AccessibilityEnabledManagerImpl()
+    fun providesAccessibilityEnabledManager(
+        accessibilityManager: AccessibilityManager,
+    ): AccessibilityEnabledManager =
+        AccessibilityEnabledManagerImpl(
+            accessibilityManager = accessibilityManager,
+        )
 
     @Singleton
     @Provides
@@ -109,6 +114,12 @@ object AccessibilityModule {
     fun providesPackageManager(
         @ApplicationContext context: Context,
     ): PackageManager = context.packageManager
+
+    @Singleton
+    @Provides
+    fun provideAccessibilityManager(
+        @ApplicationContext context: Context,
+    ): AccessibilityManager = context.getSystemService(AccessibilityManager::class.java)
 
     @Singleton
     @Provides

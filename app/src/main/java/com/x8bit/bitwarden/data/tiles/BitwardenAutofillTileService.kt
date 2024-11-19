@@ -44,7 +44,7 @@ class BitwardenAutofillTileService : TileService() {
         }
         accessibilityAutofillManager.accessibilityAction = AccessibilityAction.AttemptParseUri
         val intent = Intent(applicationContext, AccessibilityActivity::class.java)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             @Suppress("DEPRECATION")
             startActivityAndCollapse(intent)

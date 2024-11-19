@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,5 +15,5 @@ interface HaveIBeenPwnedApi {
     suspend fun fetchBreachedPasswords(
         @Path("hashPrefix")
         hashPrefix: String,
-    ): Result<ResponseBody>
+    ): NetworkResult<ResponseBody>
 }

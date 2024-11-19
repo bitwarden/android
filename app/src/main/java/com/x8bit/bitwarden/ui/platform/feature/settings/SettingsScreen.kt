@@ -80,10 +80,9 @@ fun SettingsScreen(
             )
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(state = rememberScrollState()),
         ) {

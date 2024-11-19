@@ -1,11 +1,17 @@
 package com.x8bit.bitwarden.ui.platform.components.appbar
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +48,8 @@ fun BitwardenSearchTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: NavigationIcon?,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
+        .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     autoFocus: Boolean = true,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -49,6 +57,7 @@ fun BitwardenSearchTopAppBar(
         modifier = modifier
             .testTag(tag = "HeaderBarComponent")
             .bottomDivider(),
+        windowInsets = windowInsets,
         colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {

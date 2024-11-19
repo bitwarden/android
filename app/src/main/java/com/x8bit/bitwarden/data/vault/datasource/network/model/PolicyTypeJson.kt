@@ -81,8 +81,19 @@ enum class PolicyTypeJson {
      */
     @SerialName("11")
     ACTIVATE_AUTOFILL,
+
+    /**
+     * Represents an unknown policy type.
+     *
+     * This is used for forward compatibility to handle new policy types that the client doesn't yet
+     * understand.
+     */
+    @SerialName("-1")
+    UNKNOWN,
 }
 
 @Keep
-private class PolicyTypeSerializer :
-    BaseEnumeratedIntSerializer<PolicyTypeJson>(PolicyTypeJson.entries.toTypedArray())
+private class PolicyTypeSerializer : BaseEnumeratedIntSerializer<PolicyTypeJson>(
+    values = PolicyTypeJson.entries.toTypedArray(),
+    default = PolicyTypeJson.UNKNOWN,
+)

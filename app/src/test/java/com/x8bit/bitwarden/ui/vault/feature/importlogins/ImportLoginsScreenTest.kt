@@ -332,7 +332,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
             .performClick()
         verifyActionSent(ImportLoginsAction.MoveToStepTwo)
         composeTestRule
-            .onNodeWithText("Continue")
+            .onNodeWithText("Done")
             .performClick()
         verifyActionSent(ImportLoginsAction.MoveToSyncInProgress)
     }

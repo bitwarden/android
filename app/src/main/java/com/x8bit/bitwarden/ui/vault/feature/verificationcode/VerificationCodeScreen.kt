@@ -106,18 +106,14 @@ fun VerificationCodeScreen(
             )
         },
         pullToRefreshState = pullToRefreshState,
-    ) { paddingValues ->
-        val modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-
+    ) {
         when (val viewState = state.viewState) {
             is VerificationCodeState.ViewState.Content -> {
                 VerificationCodeContent(
                     items = viewState.verificationCodeDisplayItems.toImmutableList(),
                     onCopyClick = verificationCodeHandler.copyClick,
                     itemClick = verificationCodeHandler.itemClick,
-                    modifier = modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
@@ -125,12 +121,12 @@ fun VerificationCodeScreen(
                 BitwardenErrorContent(
                     message = viewState.message.invoke(),
                     onTryAgainClick = verificationCodeHandler.refreshClick,
-                    modifier = modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is VerificationCodeState.ViewState.Loading -> {
-                BitwardenLoadingContent(modifier = modifier)
+                BitwardenLoadingContent(modifier = Modifier.fillMaxSize())
             }
         }
     }

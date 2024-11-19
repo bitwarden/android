@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 import androidx.annotation.Keep
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,11 +21,11 @@ interface UnauthenticatedKeyConnectorApi {
         @Url url: String,
         @Header(HEADER_KEY_AUTHORIZATION) bearerToken: String,
         @Body body: KeyConnectorMasterKeyRequestJson,
-    ): Result<Unit>
+    ): NetworkResult<Unit>
 
     @GET
     suspend fun getMasterKeyFromKeyConnector(
         @Url url: String,
         @Header(HEADER_KEY_AUTHORIZATION) bearerToken: String,
-    ): Result<KeyConnectorMasterKeyResponseJson>
+    ): NetworkResult<KeyConnectorMasterKeyResponseJson>
 }
