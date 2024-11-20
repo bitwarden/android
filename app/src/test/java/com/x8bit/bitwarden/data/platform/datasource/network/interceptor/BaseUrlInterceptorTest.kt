@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 
 class BaseUrlInterceptorTest {
-    private val baseUrlInterceptor = BaseUrlInterceptor()
+    private var baseUrl: String? = null
+    private val baseUrlInterceptor = BaseUrlInterceptor { baseUrl }
 
     @Test
     fun `intercept with a null base URL should proceed with the original request`() {
@@ -22,7 +23,7 @@ class BaseUrlInterceptorTest {
 
     @Test
     fun `intercept with a non-null base URL should update the base URL used by the request`() {
-        baseUrlInterceptor.baseUrl = "https://api.bitwarden.com"
+        baseUrl = "https://api.bitwarden.com"
 
         val request = Request.Builder().url("http://www.fake.com/").build()
         val chain = FakeInterceptorChain(request)

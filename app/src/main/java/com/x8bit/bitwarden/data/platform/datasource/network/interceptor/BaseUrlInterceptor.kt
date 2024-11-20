@@ -6,37 +6,27 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 /**
- * A [Interceptor] that optionally takes the current base URL of a request and replaces it with
- * the currently set [baseUrl]
+ * An [Interceptor] that optionally takes the current base URL of a request and replaces it with
+ * the currently set base URL from the [baseUrlProvider].
  */
-class BaseUrlInterceptor : Interceptor {
+class BaseUrlInterceptor(
+    private val baseUrlProvider: () -> String?,
+) : Interceptor {
 
-    /**
-     * The base URL to use as an override, or `null` if no override should be performed.
-     */
-    var baseUrl: String? = null
-        set(value) {
-            field = value
-            baseHttpUrl = baseUrl?.let { requireNotNull(it.toHttpUrlOrNull()) }
-        }
-
-    private var baseHttpUrl: HttpUrl? = null
+    private val baseHttpUrl: HttpUrl?
+        get() = baseUrlProvider()?.let { requireNotNull(it.toHttpUrlOrNull()) }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
         // If no base URL is set, we can simply skip
-        val base = baseHttpUrl ?: return chain.proceed(request)
+        val base = baseHttpUrl ?: return chain.proceed(request = request)
 
         // Update the base URL used.
         return chain.proceed(
-            request
+            request = request
                 .newBuilder()
-                .url(
-                    request
-                        .url
-                        .replaceBaseUrlWith(base),
-                )
+                .url(url = request.url.replaceBaseUrlWith(baseUrl = base))
                 .build(),
         )
     }
