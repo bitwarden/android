@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -116,7 +117,20 @@ class ExportVaultViewModel @Inject constructor(
             is ExportVaultAction.Internal.ReceiveVerifyOneTimePasscodeResult -> {
                 handleReceiveVerifyOneTimePasscodeResult(action)
             }
+
+            is ExportVaultAction.Internal.OtpCodeResult -> handleOtpCodeResult(action)
         }
+    }
+
+    private fun handleOtpCodeResult(action: ExportVaultAction.Internal.OtpCodeResult) {
+        mutableStateFlow.update {
+            it.copy(dialogState = null)
+        }
+        val toastMessage = when (action.result) {
+            is RequestOtpResult.Error -> R.string.generic_error_message.asText()
+            RequestOtpResult.Success -> R.string.code_sent.asText()
+        }
+        sendEvent(ExportVaultEvent.ShowToast(message = toastMessage))
     }
 
     /**
@@ -267,8 +281,19 @@ class ExportVaultViewModel @Inject constructor(
     }
 
     private fun handleSendCodeClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = ExportVaultState.DialogState.Loading(
+                    R.string.sending.asText(),
+                ),
+            )
+        }
         viewModelScope.launch {
-            authRepository.requestOneTimePasscode()
+            sendAction(
+                ExportVaultAction.Internal.OtpCodeResult(
+                    result = authRepository.requestOneTimePasscode(),
+                ),
+            )
         }
     }
 
@@ -572,5 +597,10 @@ sealed class ExportVaultAction {
         data class ReceiveVerifyOneTimePasscodeResult(
             val result: VerifyOtpResult,
         ) : Internal()
+
+        /**
+         * Indicates that a result for requesting the one-time passcode has been received.
+         */
+        data class OtpCodeResult(val result: RequestOtpResult) : Internal()
     }
 }
