@@ -952,7 +952,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="or_log_in_you_may_already_have_an_account">Lub zaloguj się, jeśli już posiadasz konto.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Otrzymuj wiadomości e-mail od Bitwarden z ogłoszeniami, poradami i możliwościami badawczymi. Możesz anulować subskrypcję w dowolnym momencie.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Otrzymuj porady, ogłoszenia i możliwości badawcze od Bitwarden w swojej skrzynce odbiorczej. Możesz anulować subskrypcję w dowolnym momencie.</string>
-  <string name="privacy_prioritized">Privacy, prioritized</string>
+  <string name="security_prioritized">Privacy, prioritized</string>
   <string name="welcome_message_1">Zapisz dane logowania, karty i tożsamości w bezpiecznym sejfie. Bitwarden używa szyfrowania end-to-end w celu ochrony tego, co jest dla Ciebie ważne.</string>
   <string name="welcome_message_2">Skonfiguruj odblokowanie i autouzupełnianie biometryczne, aby zalogować się na swoje konta bez wpisywania nawet pojedynczej litery.</string>
   <string name="quick_and_easy_login">Szybkie i łatwe logowanie</string>
@@ -1035,7 +1035,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="log_in_to_your_current_browser_or_password_manager_highlight">log in to your current browser or password manager.</string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Export your passwords. This option is usually found in your settings.</string>
   <string name="export_your_passwords_highlight">Export your passwords.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done to finish syncing.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done below to finish syncing.</string>
   <string name="select_import_data_highlight">Select Import data</string>
   <string name="step_1_of_3">Step 1 of 3</string>
   <string name="export_your_saved_logins">Export your saved logins</string>
@@ -1086,4 +1086,5 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Skip for now</string>
+  <string name="done_text">Done</string>
 </resources>

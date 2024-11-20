@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonObject
 import java.time.ZonedDateTime
 
@@ -21,6 +23,7 @@ private const val DEFAULT_FIDO_2_KEY_CURVE = "P-256"
  * @property domains A domains object associated with the vault data.
  * @property sends A list of send objects associated with the vault data (nullable).
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class SyncResponseJson(
     @SerialName("folders")
@@ -30,6 +33,7 @@ data class SyncResponseJson(
     val collections: List<Collection>?,
 
     @SerialName("profile")
+    @JsonNames("Profile")
     val profile: Profile,
 
     @SerialName("ciphers")
@@ -39,6 +43,7 @@ data class SyncResponseJson(
     val policies: List<Policy>?,
 
     @SerialName("domains")
+    @JsonNames("Domains")
     val domains: Domains?,
 
     @SerialName("sends")
@@ -971,6 +976,6 @@ data class SyncResponseJson(
         val id: String,
 
         @SerialName("manage")
-        val canManage: Boolean,
+        val canManage: Boolean?,
     )
 }

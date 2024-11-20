@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +14,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -38,8 +33,6 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.toggleableState
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -70,7 +63,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -177,10 +170,9 @@ fun StartRegistrationScreen(
                 onNavigationIconClick = handler.onBackClick,
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .imePadding()
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
@@ -278,7 +270,9 @@ private fun StartRegistrationContent(
                 isChecked = isReceiveMarketingEmailsToggled,
                 onCheckedChange = handler.onReceiveMarketingEmailsToggle,
                 onUnsubscribeClick = handler.onUnsubscribeMarketingEmailsClick,
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -362,7 +356,6 @@ private fun TermsAndPrivacyText(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun ReceiveMarketingEmailsSwitch(
     isChecked: Boolean,
@@ -374,7 +367,9 @@ private fun ReceiveMarketingEmailsSwitch(
 
     @Suppress("MaxLineLength")
     val annotatedLinkString = createClickableAnnotatedString(
-        mainString = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time),
+        mainString = stringResource(
+            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
+        ),
         highlights = listOf(
             ClickableTextHighlight(
                 textToHighlight = unsubscribeString,
@@ -382,13 +377,9 @@ private fun ReceiveMarketingEmailsSwitch(
             ),
         ),
     )
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
+    BitwardenSwitch(
         modifier = modifier
             .semantics(mergeDescendants = true) {
-                testTag = "ReceiveMarketingEmailsToggle"
-                toggleableState = ToggleableState(isChecked)
                 customActions = listOf(
                     CustomAccessibilityAction(
                         label = unsubscribeString,
@@ -398,30 +389,12 @@ private fun ReceiveMarketingEmailsSwitch(
                         },
                     ),
                 )
-            }
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
-                onClick = { onCheckedChange.invoke(!isChecked) },
-            )
-            .fillMaxWidth(),
-    ) {
-        Switch(
-            modifier = Modifier
-                .height(32.dp)
-                .width(52.dp),
-            checked = isChecked,
-            onCheckedChange = null,
-            colors = bitwardenSwitchColors(),
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = annotatedLinkString,
-            style = BitwardenTheme.typography.bodyMedium,
-        )
-    }
+            },
+        label = annotatedLinkString,
+        isChecked = isChecked,
+        onCheckedChange = onCheckedChange,
+        contentDescription = "ReceiveMarketingEmailsToggle",
+    )
 }
 
 @PreviewScreenSizes

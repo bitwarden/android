@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import kotlinx.collections.immutable.toImmutableList
 
+private const val SEND_TYPES_COUNT: Int = 2
+
 /**
  * Content view for the [SendScreen].
  */
@@ -48,6 +50,7 @@ fun SendContent(
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.types),
+                supportingLabel = SEND_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),

@@ -117,7 +117,7 @@ fun EnterpriseSignOnScreen(
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.log_in),
+                        label = stringResource(id = R.string.log_in_verb),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) }
                         },
@@ -126,15 +126,13 @@ fun EnterpriseSignOnScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         EnterpriseSignOnScreenContent(
             state = state,
             onOrgIdentifierInputChange = remember(viewModel) {
                 { viewModel.trySendAction(EnterpriseSignOnAction.OrgIdentifierInputChange(it)) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

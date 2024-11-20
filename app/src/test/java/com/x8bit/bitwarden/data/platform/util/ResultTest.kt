@@ -60,6 +60,14 @@ class ResultTest {
     }
 
     @Test
+    fun `asSuccess returns a success Result with the correct content that is not double-wrapped`() {
+        assertEquals(
+            Result.success("Test"),
+            "Test".asSuccess().asSuccess(),
+        )
+    }
+
+    @Test
     fun `asFailure returns a failure Result with the correct content`() {
         val throwable = IllegalStateException("Test")
         assertEquals(

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
+import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import retrofit2.http.GET
 
@@ -13,8 +14,8 @@ interface SyncApi {
      * @return A [SyncResponseJson] containing the vault response model.
      */
     @GET("sync")
-    suspend fun sync(): Result<SyncResponseJson>
+    suspend fun sync(): NetworkResult<SyncResponseJson>
 
     @GET("/accounts/revision-date")
-    suspend fun getAccountRevisionDateMillis(): Result<Long>
+    suspend fun getAccountRevisionDateMillis(): NetworkResult<Long>
 }

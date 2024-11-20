@@ -9,6 +9,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -42,6 +43,7 @@ fun BitwardenBasicDialogRow(
                 vertical = 16.dp,
                 horizontal = 24.dp,
             )
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .testTag("AlertSelectionOption"),
     )
 }

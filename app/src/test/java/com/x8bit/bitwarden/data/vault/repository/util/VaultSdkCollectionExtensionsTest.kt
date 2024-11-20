@@ -32,6 +32,31 @@ class VaultSdkCollectionExtensionsTest {
         )
     }
 
+    @Test
+    fun `toEncryptedSdkCollection should default manage to !isReadOnly if canManage is null`() {
+        assertEquals(
+            Collection(
+                organizationId = "organizationId",
+                hidePasswords = true,
+                name = "name",
+                externalId = "externalId",
+                readOnly = false,
+                id = "id",
+                manage = true,
+            ),
+            SyncResponseJson.Collection(
+                organizationId = "organizationId",
+                shouldHidePasswords = true,
+                name = "name",
+                externalId = "externalId",
+                isReadOnly = false,
+                id = "id",
+                canManage = null,
+            )
+                .toEncryptedSdkCollection(),
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `toEncryptedSdkCollectionList should convert a list of network Collections to a list of SDK Collections`() {

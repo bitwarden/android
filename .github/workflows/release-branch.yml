@@ -1,0 +1,56 @@
+name: Cut Release Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release Type'
+        required: true
+        type: choice
+        options:
+          - RC
+          - Hotfix
+      rc_prefix_date:
+        description: 'RC - Prefix with date. E.g. 2024.11-rc1'
+        type: boolean
+        default: true
+
+jobs:
+  create-release-branch:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: Create RC Branch
+        if: inputs.release_type == 'RC'
+        env:
+          RC_PREFIX_DATE: ${{ inputs.rc_prefix_date }}
+        run: |
+          if [ "$RC_PREFIX_DATE" = "true" ]; then
+            current_date=$(date +'%Y.%m')
+            branch_name="release/${current_date}-rc${{ github.run_number }}"
+          else
+            branch_name="release/rc${{ github.run_number }}"
+          fi
+          git switch main
+          git switch -c $branch_name
+          git push origin $branch_name
+          echo "# :cherry_blossom: RC branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create Hotfix Branch
+        if: inputs.release_type == 'Hotfix'
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0)
+          if [ -z "$latest_tag" ]; then
+            echo "::error::No tags found in the repository"
+            exit 1
+          fi
+          branch_name="release/hotfix-${latest_tag}"
+          git switch -c $branch_name $latest_tag
+          git push origin $branch_name
+          echo "# :fire: Hotfix branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY

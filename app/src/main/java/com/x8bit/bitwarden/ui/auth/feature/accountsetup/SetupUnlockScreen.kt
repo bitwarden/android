@@ -128,15 +128,13 @@ fun SetupUnlockScreen(
                 },
             )
         },
-    ) { innerPadding ->
+    ) {
         SetupUnlockScreenContent(
             state = state,
             showBiometricsPrompt = showBiometricsPrompt,
             handler = handler,
             biometricsManager = biometricsManager,
-            modifier = Modifier
-                .padding(paddingValues = innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

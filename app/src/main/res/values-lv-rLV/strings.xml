@@ -952,7 +952,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="or_log_in_you_may_already_have_an_account">Vai jāmēģina pieteikties, varbūt Tev jau ir konts.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Saņemt e-pasta ziņojumus no Bitwarden par paziņojumiem, padomiem un izpētes iespējām. Abonēšanu atteikt var jebkurā brīdī.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Iegūt savā iesūtnē padomus, paziņojumus un izpētes iespējas no Bitwarden. Atrakstīties var jebkurā brīdī.</string>
-  <string name="privacy_prioritized">Privātums pirmajā vietā</string>
+  <string name="security_prioritized">Privātums pirmajā vietā</string>
   <string name="welcome_message_1">Pieteikšanās vienumu, karšu un identitāšu glabāšana savā drošajā glabātavā. Bitwarden izmanto nulles zināšanu pilnīgu šifrēšanu, lai aizsargātu to, kas Tev ir svarīgs.</string>
   <string name="welcome_message_2">Iestati biometrisko atslēgšanu un automātiski aizpildi, lai pieteiktos savos kontos bez neviena burta ievadīšanas.</string>
   <string name="quick_and_easy_login">Ātra un vienkārša pieteikšanās</string>
@@ -1086,4 +1086,5 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="log_in_quickly_and_easily_across_devices">Ātra un viegla pieteikšanās dažādās ierīcēs</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden var paziņot par katru reizi, kad tiek saņemts jauns pieteikšanās pieprasījums no citas ierīces.</string>
   <string name="skip_for_now">Pagaidām izlaist</string>
+  <string name="done_text">Darīts</string>
 </resources>

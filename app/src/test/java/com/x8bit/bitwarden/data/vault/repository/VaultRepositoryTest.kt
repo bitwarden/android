@@ -193,8 +193,14 @@ class VaultRepositoryTest {
             mutableUnlockedUserIdsStateFlow.first { userId in it }
         }
     }
+    private val mutableLastDatabaseSchemeChangeInstantFlow = MutableStateFlow<Instant?>(null)
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
-        every { lastDatabaseSchemeChangeInstant } returns null
+        every {
+            lastDatabaseSchemeChangeInstant
+        } returns mutableLastDatabaseSchemeChangeInstantFlow.value
+        every {
+            lastDatabaseSchemeChangeInstantFlow
+        } returns mutableLastDatabaseSchemeChangeInstantFlow
     }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
@@ -779,6 +785,36 @@ class VaultRepositoryTest {
             vaultDiskSource.deleteVaultData(userId)
         }
     }
+
+    @Test
+    fun `lastDatabaseSchemeChangeInstantFlow should trigger sync when new value is not null`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            every {
+                databaseSchemeManager.lastDatabaseSchemeChangeInstant
+            } returns mutableLastDatabaseSchemeChangeInstantFlow.value
+            coEvery { syncService.sync() } just awaits
+
+            mutableLastDatabaseSchemeChangeInstantFlow.value = clock.instant()
+
+            coVerify(exactly = 1) { syncService.sync() }
+        }
+
+    @Test
+    fun `lastDatabaseSchemeChangeInstantFlow should not sync when new value is null`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            every {
+                databaseSchemeManager.lastDatabaseSchemeChangeInstant
+            } returns mutableLastDatabaseSchemeChangeInstantFlow.value
+
+            coEvery { syncService.sync() } just awaits
+
+            mutableLastDatabaseSchemeChangeInstantFlow.value = null
+
+            coVerify(exactly = 0) { syncService.sync() }
+        }
 
     @Suppress("MaxLineLength")
     @Test

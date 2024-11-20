@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -72,7 +71,11 @@ fun VaultItemListingScreen(
     onNavigateToVaultItem: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
+    onNavigateToVaultAddItemScreen: (
+        vaultItemCipherType: VaultItemCipherType,
+        selectedFolderId: String?,
+        selectedCollectionId: String?,
+    ) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
@@ -113,7 +116,11 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
-                onNavigateToVaultAddItemScreen(event.vaultItemCipherType)
+                onNavigateToVaultAddItemScreen(
+                    event.vaultItemCipherType,
+                    event.selectedFolderId,
+                    event.selectedCollectionId,
+                )
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {
@@ -441,7 +448,7 @@ private fun VaultItemListingScaffold(
             )
         },
         floatingActionButton = {
-            if (state.itemListingType.hasFab) {
+            if (state.hasAddItemFabButton) {
                 BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
                     painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
@@ -450,12 +457,24 @@ private fun VaultItemListingScaffold(
                 )
             }
         },
+        overlay = {
+            BitwardenAccountSwitcher(
+                isVisible = isAccountMenuVisible,
+                accountSummaries = state.accountSummaries.toImmutableList(),
+                onSwitchAccountClick = vaultItemListingHandlers.switchAccountClick,
+                onLockAccountClick = vaultItemListingHandlers.lockAccountClick,
+                onLogoutAccountClick = vaultItemListingHandlers.logoutAccountClick,
+                onAddAccountClick = {
+                    // Not available
+                },
+                onDismissRequest = { isAccountMenuVisible = false },
+                isAddAccountAvailable = false,
+                topAppBarScrollBehavior = scrollBehavior,
+                modifier = Modifier.fillMaxSize(),
+            )
+        },
         pullToRefreshState = pullToRefreshState,
-    ) { paddingValues ->
-        val modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-
+    ) {
         when (state.viewState) {
             is VaultItemListingState.ViewState.Content -> {
                 VaultItemListingContent(
@@ -469,7 +488,7 @@ private fun VaultItemListingScaffold(
                     masterPasswordRepromptSubmit =
                     vaultItemListingHandlers.masterPasswordRepromptSubmit,
                     onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
-                    modifier = modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
@@ -479,7 +498,7 @@ private fun VaultItemListingScaffold(
                     policyDisablesSend = state.policyDisablesSend &&
                         state.itemListingType is VaultItemListingState.ItemListingType.Send,
                     addItemClickAction = vaultItemListingHandlers.addVaultItemClick,
-                    modifier = modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
@@ -487,28 +506,13 @@ private fun VaultItemListingScaffold(
                 BitwardenErrorContent(
                     message = state.viewState.message(),
                     onTryAgainClick = vaultItemListingHandlers.refreshClick,
-                    modifier = modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             is VaultItemListingState.ViewState.Loading -> {
-                BitwardenLoadingContent(modifier = modifier)
+                BitwardenLoadingContent(modifier = Modifier.fillMaxSize())
             }
         }
-
-        BitwardenAccountSwitcher(
-            isVisible = isAccountMenuVisible,
-            accountSummaries = state.accountSummaries.toImmutableList(),
-            onSwitchAccountClick = vaultItemListingHandlers.switchAccountClick,
-            onLockAccountClick = vaultItemListingHandlers.lockAccountClick,
-            onLogoutAccountClick = vaultItemListingHandlers.logoutAccountClick,
-            onAddAccountClick = {
-                // Not available
-            },
-            onDismissRequest = { isAccountMenuVisible = false },
-            isAddAccountAvailable = false,
-            topAppBarScrollBehavior = scrollBehavior,
-            modifier = modifier,
-        )
     }
 }

@@ -114,10 +114,9 @@ private fun TrustedDeviceScaffold(
                 ),
             )
         },
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {

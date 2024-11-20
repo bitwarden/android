@@ -244,6 +244,8 @@ class AuthDiskSourceTest {
         val pendingAuthRequestJson = PendingAuthRequestJson(
             requestId = "12345",
             requestPrivateKey = "67890",
+            requestFingerprint = "fingerprint",
+            requestAccessCode = "accessCode",
         )
         authDiskSource.storePendingAuthRequest(
             userId = userId,
@@ -594,15 +596,22 @@ class AuthDiskSourceTest {
                 pendingAdminAuthRequestKey,
                 """
                 {
-                  "Id": "12345",
-                  "PrivateKey": "67890"
+                  "id": "12345",
+                  "privateKey": "67890",
+                  "fingerprint": "fingerprint",
+                  "accessCode": "accessCode"
                 }
                 """,
             )
         }
         val actual = authDiskSource.getPendingAuthRequest(userId = mockUserId)
         assertEquals(
-            PendingAuthRequestJson(requestId = "12345", requestPrivateKey = "67890"),
+            PendingAuthRequestJson(
+                requestId = "12345",
+                requestPrivateKey = "67890",
+                requestFingerprint = "fingerprint",
+                requestAccessCode = "accessCode",
+            ),
             actual,
         )
     }
@@ -615,6 +624,8 @@ class AuthDiskSourceTest {
         val pendingAdminAuthRequest = PendingAuthRequestJson(
             requestId = "12345",
             requestPrivateKey = "67890",
+            requestFingerprint = "fingerprint",
+            requestAccessCode = "accessCode",
         )
         authDiskSource.storePendingAuthRequest(
             userId = mockUserId,
@@ -628,8 +639,10 @@ class AuthDiskSourceTest {
             json.parseToJsonElement(
                 """
                 {
-                  "Id": "12345",
-                  "PrivateKey": "67890"
+                  "id": "12345",
+                  "privateKey": "67890",
+                  "fingerprint": "fingerprint",
+                  "accessCode": "accessCode"
                 }
                 """
                     .trimIndent(),

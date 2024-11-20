@@ -75,8 +75,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultItemListingDestinationAsRoot(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultItemScreen = { navController.navigateToVaultItem(vaultItemId = it) },
-            onNavigateToVaultAddItemScreen = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem(it))
+            onNavigateToVaultAddItemScreen = { cipherType, selectedFolderId, collectionId ->
+                navController.navigateToVaultAddEdit(
+                    VaultAddEditType.AddItem(cipherType),
+                    selectedFolderId,
+                    collectionId,
+                )
             },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
             onNavigateToVaultEditItemScreen = {
@@ -86,8 +90,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultUnlockedNavBarDestination(
             onNavigateToExportVault = { navController.navigateToExportVault() },
             onNavigateToFolders = { navController.navigateToFolders() },
-            onNavigateToVaultAddItem = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem(it))
+            onNavigateToVaultAddItem = { cipherType, selectedFolderId, collectionId ->
+                navController.navigateToVaultAddEdit(
+                    VaultAddEditType.AddItem(cipherType),
+                    selectedFolderId,
+                    collectionId,
+                )
             },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
             onNavigateToVaultEditItem = {

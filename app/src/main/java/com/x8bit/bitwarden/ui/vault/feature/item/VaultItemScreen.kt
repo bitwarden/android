@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 
@@ -254,13 +255,12 @@ fun VaultItemScreen(
                 )
             }
         },
-    ) { innerPadding ->
+    ) {
         VaultItemContent(
             viewState = state.viewState,
             modifier = Modifier
                 .imePadding()
-                .fillMaxSize()
-                .padding(innerPadding),
+                .fillMaxSize(),
             vaultCommonItemTypeHandlers = remember(viewModel) {
                 VaultCommonItemTypeHandlers.create(viewModel = viewModel)
             },
@@ -272,6 +272,9 @@ fun VaultItemScreen(
             },
             vaultSshKeyItemTypeHandlers = remember(viewModel) {
                 VaultSshKeyItemTypeHandlers.create(viewModel = viewModel)
+            },
+            vaultIdentityItemTypeHandlers = remember(viewModel) {
+                VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
             },
         )
     }
@@ -351,6 +354,7 @@ private fun VaultItemContent(
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
+    vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -387,6 +391,7 @@ private fun VaultItemContent(
                         commonState = viewState.common,
                         identityState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultIdentityItemTypeHandlers = vaultIdentityItemTypeHandlers,
                         modifier = modifier,
                     )
                 }

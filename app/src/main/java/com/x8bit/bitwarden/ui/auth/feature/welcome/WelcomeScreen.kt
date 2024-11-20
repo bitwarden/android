@@ -32,6 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -41,7 +44,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -81,7 +84,7 @@ fun WelcomeScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = BitwardenTheme.colorScheme.background.secondary,
         contentColor = BitwardenTheme.colorScheme.text.secondary,
-    ) { innerPadding ->
+    ) {
         WelcomeScreenContent(
             state = state,
             pagerState = pagerState,
@@ -97,9 +100,7 @@ fun WelcomeScreen(
             onLoginClick = remember(viewModel) {
                 { viewModel.trySendAction(WelcomeAction.LoginClick) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -125,15 +126,20 @@ private fun WelcomeScreenContent(
         Spacer(modifier = Modifier.weight(1f))
 
         HorizontalPager(state = pagerState) { index ->
+            val pageNumberContentDescription =
+                stringResource(R.string.page_number_x_of_y, index + 1, state.pages.size)
+            val pagerSemanticsModifier = Modifier.semantics(mergeDescendants = true) {
+                contentDescription = pageNumberContentDescription
+            }
             if (LocalConfiguration.current.isPortrait) {
                 WelcomeCardPortrait(
                     state = state.pages[index],
-                    modifier = Modifier.standardHorizontalMargin(),
+                    modifier = pagerSemanticsModifier.standardHorizontalMargin(),
                 )
             } else {
                 WelcomeCardLandscape(
                     state = state.pages[index],
-                    modifier = Modifier
+                    modifier = pagerSemanticsModifier
                         .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN),
                 )
             }
@@ -158,8 +164,8 @@ private fun WelcomeScreenContent(
                 .fillMaxWidth(),
         )
 
-        BitwardenTextButton(
-            label = stringResource(id = R.string.log_in),
+        BitwardenOutlinedButton(
+            label = stringResource(id = R.string.log_in_verb),
             onClick = onLoginClick,
             modifier = Modifier
                 .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
@@ -178,12 +184,12 @@ private fun WelcomeCardLandscape(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
+        modifier = modifier.semantics(mergeDescendants = true) {},
     ) {
         Image(
             painter = rememberVectorPainter(id = state.imageRes),
             contentDescription = null,
-            modifier = Modifier.size(132.dp),
+            modifier = Modifier.size(124.dp),
         )
 
         Column(
@@ -215,12 +221,13 @@ private fun WelcomeCardPortrait(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
+            .semantics(mergeDescendants = true) {},
     ) {
         Image(
             painter = rememberVectorPainter(id = state.imageRes),
             contentDescription = null,
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(124.dp),
         )
 
         Text(
@@ -266,6 +273,9 @@ private fun IndicatorDots(
 
             Box(
                 modifier = Modifier
+                    .clearAndSetSemantics {
+                        // clear semantics so indicator dots are skipped by screen reader
+                    }
                     .size(8.dp)
                     .clip(CircleShape)
                     .background(color.value)

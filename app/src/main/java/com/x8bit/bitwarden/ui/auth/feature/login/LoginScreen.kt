@@ -145,7 +145,28 @@ fun LoginScreen(
                 },
             )
         },
-    ) { innerPadding ->
+        overlay = {
+            BitwardenAccountSwitcher(
+                isVisible = isAccountMenuVisible,
+                accountSummaries = state.accountSummaries.toImmutableList(),
+                onSwitchAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LoginAction.SwitchAccountClick(it)) }
+                },
+                onLockAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LoginAction.LockAccountClick(it)) }
+                },
+                onLogoutAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LoginAction.LogoutAccountClick(it)) }
+                },
+                onAddAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(LoginAction.AddAccountClick) }
+                },
+                onDismissRequest = { isAccountMenuVisible = false },
+                topAppBarScrollBehavior = scrollBehavior,
+                modifier = Modifier.fillMaxSize(),
+            )
+        },
+    ) {
         LoginScreenContent(
             state = state,
             onPasswordInputChanged = remember(viewModel) {
@@ -169,31 +190,7 @@ fun LoginScreen(
             onNotYouButtonClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.NotYouButtonClick) }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-        )
-
-        BitwardenAccountSwitcher(
-            isVisible = isAccountMenuVisible,
-            accountSummaries = state.accountSummaries.toImmutableList(),
-            onSwitchAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.SwitchAccountClick(it)) }
-            },
-            onLockAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.LockAccountClick(it)) }
-            },
-            onLogoutAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.LogoutAccountClick(it)) }
-            },
-            onAddAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.AddAccountClick) }
-            },
-            onDismissRequest = { isAccountMenuVisible = false },
-            topAppBarScrollBehavior = scrollBehavior,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -275,7 +272,7 @@ private fun LoginScreenContent(
         if (state.shouldShowLoginWithDevice) {
             BitwardenOutlinedButton(
                 label = stringResource(id = R.string.log_in_with_device),
-                icon = rememberVectorPainter(id = R.drawable.ic_mobile),
+                icon = rememberVectorPainter(id = R.drawable.ic_mobile_small),
                 onClick = onLoginWithDeviceClick,
                 modifier = Modifier
                     .testTag("LogInWithAnotherDeviceButton")
@@ -288,7 +285,7 @@ private fun LoginScreenContent(
 
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.log_in_sso),
-            icon = rememberVectorPainter(id = R.drawable.ic_briefcase),
+            icon = rememberVectorPainter(id = R.drawable.ic_enterprise_small),
             onClick = onSingleSignOnClick,
             modifier = Modifier
                 .testTag("LogInWithSsoButton")

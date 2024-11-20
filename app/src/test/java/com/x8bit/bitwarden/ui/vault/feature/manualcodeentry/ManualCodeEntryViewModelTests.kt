@@ -36,8 +36,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
 
     @Test
     fun `CodeSubmit should emit new code and NavigateBack`() = runTest {
-        val viewModel =
-            createViewModel(initialState = ManualCodeEntryState("TestCode"))
+        val viewModel = createViewModel(initialState = ManualCodeEntryState("   TestCode   "))
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)

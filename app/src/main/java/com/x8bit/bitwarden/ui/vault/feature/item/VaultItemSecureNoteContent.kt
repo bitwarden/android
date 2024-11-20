@@ -16,7 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -66,14 +68,22 @@ fun VaultItemSecureNoteContent(
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextField(
+                BitwardenTextFieldWithActions(
                     label = stringResource(id = R.string.notes),
                     value = notes,
                     onValueChange = { },
                     readOnly = true,
                     singleLine = false,
+                    actions = {
+                        BitwardenTonalIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_notes),
+                            onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
+                            modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
+                        )
+                    },
+                    textFieldTestTag = "CipherNotesLabel",
                     modifier = Modifier
-                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )

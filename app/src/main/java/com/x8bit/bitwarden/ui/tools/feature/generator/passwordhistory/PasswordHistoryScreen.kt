@@ -97,30 +97,24 @@ fun PasswordHistoryScreen(
                 },
             )
         },
-        content = { innerPadding ->
+        content = {
             when (val viewState = state.viewState) {
                 is PasswordHistoryState.ViewState.Loading -> {
                     PasswordHistoryLoading(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
 
                 is PasswordHistoryState.ViewState.Error -> {
                     PasswordHistoryError(
                         state = viewState,
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
 
                 is PasswordHistoryState.ViewState.Empty -> {
                     PasswordHistoryEmpty(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
 
@@ -129,8 +123,7 @@ fun PasswordHistoryScreen(
                         state = viewState,
                         modifier = Modifier
                             .fillMaxSize()
-                            .imePadding()
-                            .padding(innerPadding),
+                            .imePadding(),
                         onPasswordCopyClick = { password ->
                             viewModel.trySendAction(
                                 PasswordHistoryAction.PasswordCopyClick(password),

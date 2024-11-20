@@ -952,7 +952,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Или се впишете – може вече да имате регистрация.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания. Можете да се отпишете по всяко време.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Получавайте съвети, обявления и предложения за участия в проучвания от Битоурден в е-пощата си. Можете да се отпишете по всяко време.</string>
-  <string name="privacy_prioritized">Поверителността е от първостепенна важност</string>
+  <string name="security_prioritized">Поверителността е от първостепенна важност</string>
   <string name="welcome_message_1">Съхранявайте данни за вписване, карти и самоличности в своя защитен трезор. Битуорден използва шифроване от край до край за да пази това, което е важно за Вас.</string>
   <string name="welcome_message_2">Настройте отключването чрез биометрични данни и автоматичното попълване, за да се вписвате в регистрациите си без да натискате и един клавиш.</string>
   <string name="quick_and_easy_login">Бързо и лесно вписване</string>
@@ -1086,4 +1086,5 @@
   <string name="log_in_quickly_and_easily_across_devices">Вписввайте се бързо и лесно на всяко устройство</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Битуорден може да Ви известява всеки път, когато получите нова заявка за вписване от друго устройство.</string>
   <string name="skip_for_now">Пропускане засега</string>
+  <string name="done_text">Готово</string>
 </resources>
