@@ -1,47 +1,44 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseApiUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseEventsUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseIdentityUrl
+import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
  * An overall container for various [BaseUrlInterceptor] implementations for different API groups.
  */
+@OmitFromCoverage
 @Singleton
-class BaseUrlInterceptors @Inject constructor() {
-    var environment: Environment = Environment.Us
-        set(value) {
-            field = value
-            updateBaseUrls(environment = value)
-        }
+class BaseUrlInterceptors @Inject constructor(
+    private val environmentDiskSource: EnvironmentDiskSource,
+) {
+    private val environment: Environment
+        get() = environmentDiskSource.preAuthEnvironmentUrlData.toEnvironmentUrlsOrDefault()
 
     /**
      * An interceptor for "/api" calls.
      */
-    val apiInterceptor: BaseUrlInterceptor = BaseUrlInterceptor()
+    val apiInterceptor: BaseUrlInterceptor = BaseUrlInterceptor {
+        environment.environmentUrlData.baseApiUrl
+    }
 
     /**
      * An interceptor for "/identity" calls.
      */
-    val identityInterceptor: BaseUrlInterceptor = BaseUrlInterceptor()
+    val identityInterceptor: BaseUrlInterceptor = BaseUrlInterceptor {
+        environment.environmentUrlData.baseIdentityUrl
+    }
 
     /**
      * An interceptor for "/events" calls.
      */
-    val eventsInterceptor: BaseUrlInterceptor = BaseUrlInterceptor()
-
-    init {
-        // Ensure all interceptors begin with a default value
-        environment = Environment.Us
-    }
-
-    private fun updateBaseUrls(environment: Environment) {
-        val environmentUrlData = environment.environmentUrlData
-        apiInterceptor.baseUrl = environmentUrlData.baseApiUrl
-        identityInterceptor.baseUrl = environmentUrlData.baseIdentityUrl
-        eventsInterceptor.baseUrl = environmentUrlData.baseEventsUrl
+    val eventsInterceptor: BaseUrlInterceptor = BaseUrlInterceptor {
+        environment.environmentUrlData.baseEventsUrl
     }
 }
