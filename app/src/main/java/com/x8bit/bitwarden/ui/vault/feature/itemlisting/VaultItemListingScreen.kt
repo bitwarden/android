@@ -306,10 +306,8 @@ private fun VaultItemListingDialogs(
         )
 
         is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title(),
+            message = dialogState.message(),
             onDismissRequest = onDismissFido2ErrorDialog,
         )
 
@@ -334,10 +332,8 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2MasterPasswordError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = {
                     onRetryFido2PasswordVerification(dialogState.selectedCipherId)
                 },
@@ -358,10 +354,8 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2PinError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = {
                     onRetryFido2PinVerification(dialogState.selectedCipherId)
                 },
@@ -380,10 +374,8 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2PinSetUpError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = {
                     onRetryPinSetUpFido2Verification(dialogState.selectedCipherId)
                 },

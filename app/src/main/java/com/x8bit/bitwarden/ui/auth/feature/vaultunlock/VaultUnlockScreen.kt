@@ -55,7 +55,6 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflo
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
@@ -142,10 +141,8 @@ fun VaultUnlockScreen(
     // Dynamic dialogs
     when (val dialog = state.dialog) {
         is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialog.title,
-                message = dialog.message,
-            ),
+            title = dialog.title(),
+            message = dialog.message(),
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
             },
@@ -157,10 +154,8 @@ fun VaultUnlockScreen(
 
         VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = R.string.biometrics_no_longer_supported_title.asText(),
-                    message = R.string.biometrics_no_longer_supported.asText(),
-                ),
+                title = stringResource(id = R.string.biometrics_no_longer_supported_title),
+                message = stringResource(id = R.string.biometrics_no_longer_supported),
                 onDismissRequest = remember {
                     {
                         viewModel.trySendAction(
