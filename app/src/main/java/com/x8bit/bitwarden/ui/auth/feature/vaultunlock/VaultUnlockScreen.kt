@@ -38,13 +38,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenKeyboardType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.credential.manager.CredentialCompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
@@ -62,7 +64,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialCompletionManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
@@ -79,7 +81,7 @@ fun VaultUnlockScreen(
     viewModel: VaultUnlockViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
+    credentialCompletionManager: CredentialCompletionManager = LocalCredentialCompletionManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -113,14 +115,28 @@ fun VaultUnlockScreen(
             }
 
             VaultUnlockEvent.Fido2CredentialAssertionError -> {
-                fido2CompletionManager.completeFido2Assertion(
+                credentialCompletionManager.completeFido2Assertion(
                     result = Fido2CredentialAssertionResult.Error,
                 )
             }
 
             VaultUnlockEvent.Fido2GetCredentialsError -> {
-                fido2CompletionManager.completeFido2GetCredentialRequest(
-                    result = Fido2GetCredentialsResult.Error,
+                credentialCompletionManager.completeGetCredentialRequest(
+                    fido2Result = Fido2GetCredentialsResult.Error,
+                    passwordResult = null,
+                )
+            }
+
+            VaultUnlockEvent.PasswordCredentialAssertionError -> {
+                credentialCompletionManager.completePasswordAssertion(
+                    result = PasswordCredentialAssertionResult.Error,
+                )
+            }
+
+            VaultUnlockEvent.PasswordGetCredentialsError -> {
+                credentialCompletionManager.completeGetCredentialRequest(
+                    fido2Result = null,
+                    passwordResult = PasswordGetCredentialsResult.Error,
                 )
             }
         }

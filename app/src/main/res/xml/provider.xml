@@ -2,5 +2,6 @@
 <credential-provider>
     <capabilities>
         <capability name="androidx.credentials.TYPE_PUBLIC_KEY_CREDENTIAL" />
+        <capability name="android.credentials.TYPE_PASSWORD_CREDENTIAL" />
     </capabilities>
 </credential-provider>
