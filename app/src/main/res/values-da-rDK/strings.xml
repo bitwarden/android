@@ -952,7 +952,7 @@ Skift til denne konto?</string>
   <string name="or_log_in_you_may_already_have_an_account">Eller log ind, da en konto muligvis allerede eksisterer.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Få e-mails fra Bitwarden vedr. bekendtgørelser, råd og forskningsmuligheder. Afmeld når som helst.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Få råd, bekendtgørelser og forskningsmuligheder fra Bitwarden i indbakken. Afmeld til enhver tid.</string>
-  <string name="privacy_prioritized">Fortrolighed, prioriteret</string>
+  <string name="security_prioritized">Fortrolighed, prioriteret</string>
   <string name="welcome_message_1">Gem logins, kort og identiteter i den sikre boks. Bitwarden bruger nul-viden, ende-til-ende kryptering til at beskytte brugerens vigtigt ting.</string>
   <string name="welcome_message_2">Opsæt biometrisk oplåsning og autofyld for at logge ind på konti uden at skrive ét enkelt bogstav.</string>
   <string name="quick_and_easy_login">Hurtig og nem indlogning</string>

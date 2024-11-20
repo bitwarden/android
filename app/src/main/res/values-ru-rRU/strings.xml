@@ -954,7 +954,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Или авторизуйтесь, возможно, у вас уже есть аккаунт.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований. Отписаться можно в любое время.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Получайте советы, объявления и исследования от Bitwarden в свой почтовый ящик. Отписаться можно в любое время.</string>
-  <string name="privacy_prioritized">Конфиденциальность, приоритет</string>
+  <string name="security_prioritized">Конфиденциальность, приоритет</string>
   <string name="welcome_message_1">Сохраняйте логины, карты и личные данные в своем защищенном хранилище. Bitwarden использует сквозное шифрование, чтобы защитить то, что для вас важно.</string>
   <string name="welcome_message_2">Настройте биометрическую разблокировку и автозаполнение, чтобы входить в свои аккаунты, не набирая ни одной буквы.</string>
   <string name="quick_and_easy_login">Быстрая и простая авторизация</string>

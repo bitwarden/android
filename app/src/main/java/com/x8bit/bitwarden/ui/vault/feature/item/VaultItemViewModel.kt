@@ -133,6 +133,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
+            is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -184,6 +185,7 @@ class VaultItemViewModel @Inject constructor(
             }
 
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
+            is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
         }
     }
 
@@ -508,6 +510,13 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleCopyNotesClick() {
+        onContent { content ->
+            val notes = content.common.notes.orEmpty()
+            clipboardManager.setText(text = notes)
+        }
+    }
+
     //endregion Common Handlers
 
     //region Login Type Handlers
@@ -811,6 +820,99 @@ class VaultItemViewModel @Inject constructor(
     }
 
     //endregion SSH Key Type Handlers
+
+    //region Identity Type Handlers
+
+    private fun handleIdentityTypeActions(action: VaultItemAction.ItemType.Identity) {
+        when (action) {
+            VaultItemAction.ItemType.Identity.CopyIdentityNameClick -> {
+                handleCopyIdentityNameClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyUsernameClick -> {
+                handleCopyIdentityUsernameClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyCompanyClick -> handleCopyCompanyClick()
+            VaultItemAction.ItemType.Identity.CopySsnClick -> handleCopySsnClick()
+            VaultItemAction.ItemType.Identity.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyEmailClick -> handleCopyEmailClick()
+            VaultItemAction.ItemType.Identity.CopyPhoneClick -> handleCopyPhoneClick()
+            VaultItemAction.ItemType.Identity.CopyAddressClick -> handleCopyAddressClick()
+        }
+    }
+
+    private fun handleCopyIdentityNameClick() {
+        onIdentityContent { _, identity ->
+            val identityName = identity.identityName.orEmpty()
+            clipboardManager.setText(text = identityName)
+        }
+    }
+
+    private fun handleCopyIdentityUsernameClick() {
+        onIdentityContent { _, identity ->
+            val username = identity.username.orEmpty()
+            clipboardManager.setText(text = username)
+        }
+    }
+
+    private fun handleCopyCompanyClick() {
+        onIdentityContent { _, identity ->
+            val company = identity.company.orEmpty()
+            clipboardManager.setText(text = company)
+        }
+    }
+
+    private fun handleCopySsnClick() {
+        onIdentityContent { _, identity ->
+            val ssn = identity.ssn.orEmpty()
+            clipboardManager.setText(text = ssn)
+        }
+    }
+
+    private fun handleCopyPassportNumberClick() {
+        onIdentityContent { _, identity ->
+            val passportNumber = identity.passportNumber.orEmpty()
+            clipboardManager.setText(text = passportNumber)
+        }
+    }
+
+    private fun handleCopyLicenseNumberClick() {
+        onIdentityContent { _, identity ->
+            val licenseNumber = identity.licenseNumber.orEmpty()
+            clipboardManager.setText(text = licenseNumber)
+        }
+    }
+
+    private fun handleCopyEmailClick() {
+        onIdentityContent { _, identity ->
+            val email = identity.email.orEmpty()
+            clipboardManager.setText(text = email)
+        }
+    }
+
+    private fun handleCopyPhoneClick() {
+        onIdentityContent { _, identity ->
+            val phone = identity.phone.orEmpty()
+            clipboardManager.setText(text = phone)
+        }
+    }
+
+    private fun handleCopyAddressClick() {
+        onIdentityContent { _, identity ->
+            val address = identity.address.orEmpty()
+            clipboardManager.setText(text = address)
+        }
+    }
+
+    //endregion Identity Type Handlers
 
     //region Internal Type Handlers
 
@@ -1130,6 +1232,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.SshKey)
                     ?.let { sshKeyContent ->
                         block(content, sshKeyContent)
+                    }
+            }
+    }
+
+    private inline fun onIdentityContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Identity,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Identity)
+                    ?.let { identityContent ->
+                        block(content, identityContent)
                     }
             }
     }
@@ -1724,6 +1841,11 @@ sealed class VaultItemAction {
          * The user confirmed cloning a cipher without its FIDO 2 credentials.
          */
         data object ConfirmCloneWithoutFido2CredentialClick : Common()
+
+        /**
+         * The user has clicked the copy button for notes text field.
+         */
+        data object CopyNotesClick : Common()
     }
 
     /**
@@ -1826,6 +1948,56 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the fingerprint.
              */
             data object CopyFingerprintClick : SshKey()
+        }
+
+        /**
+         * Represents actions specific to the Identity type.
+         */
+        sealed class Identity : VaultItemAction() {
+            /**
+             * The user has clicked the copy button for the identity name.
+             */
+            data object CopyIdentityNameClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the username.
+             */
+            data object CopyUsernameClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the company.
+             */
+            data object CopyCompanyClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the SSN.
+             */
+            data object CopySsnClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the passport number.
+             */
+            data object CopyPassportNumberClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the license number.
+             */
+            data object CopyLicenseNumberClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the email.
+             */
+            data object CopyEmailClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the phone number.
+             */
+            data object CopyPhoneClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the address.
+             */
+            data object CopyAddressClick : Identity()
         }
     }
 

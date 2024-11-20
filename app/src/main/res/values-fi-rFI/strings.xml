@@ -952,7 +952,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="or_log_in_you_may_already_have_an_account">Tai kirjaudu sisään. Sinulla saattaa jo olla tili.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Vastaanota Bitwardenilta uutiskirjeitä julkaisuista, tukiresursseista ja tutkimusmahdollisuuksista. Lopeta tilaus milloin tahansa.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Vastaanota Bitwardenilta postilaatikkoosi vinkkejä, uutisia ja tutkimusmahdollisuuksia. Lopeta tilaus milloin tahansa.</string>
-  <string name="privacy_prioritized">Yksityisyys etusijalla</string>
+  <string name="security_prioritized">Yksityisyys etusijalla</string>
   <string name="welcome_message_1">Tallenna kirjautumistiedot, kortit and henkilöllisyydet suojattuun holviisi. Bitwarden suojaa tärkeät tietosi nollatietoisella päästä pähän -salauksella.</string>
   <string name="welcome_message_2">Määritä biometrinen avaus ja automaattitäyttö kirjautuaksesi tileillesi kirjoittamatta yhtään kirjainta.</string>
   <string name="quick_and_easy_login">Nopea ja helppo kirjautuminen</string>

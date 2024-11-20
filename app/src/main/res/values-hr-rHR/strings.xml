@@ -950,7 +950,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Ili se prijavi, ako već imaš račun.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Primaj e-poštu od Bitwardena s najavamam savjetima i mogućnostima istraživanja. Otkaži pretplatu u bilo kojem trenutku.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Primaj savjete, najave i mogućnosti istraživanja od Bitwardena u svoju Ulaznu poštu. Otkaži pretplatu u bilo kojem trenutku.</string>
-  <string name="privacy_prioritized">Privatnost na prvom mjestu</string>
+  <string name="security_prioritized">Privatnost na prvom mjestu</string>
   <string name="welcome_message_1">Spremi prijave, kartice i identitete u svoj sigurni trezor. Bitwarden koristi end-to-end enkripciju bez znanja kako bi zaštitio ono što ti je važno.</string>
   <string name="welcome_message_2">Uključi biometrijsko otključavanje i auto-ispunu za prijavu bez utipkavanja ijednog slova.</string>
   <string name="quick_and_easy_login">Brza i jednostavna prijava</string>

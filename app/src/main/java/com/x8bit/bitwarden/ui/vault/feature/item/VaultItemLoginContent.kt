@@ -158,8 +158,8 @@ fun VaultItemLoginContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 NotesField(
                     notes = notes,
+                    onCopyAction = vaultCommonItemTypeHandlers.onCopyNotesClick,
                     modifier = Modifier
-                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -273,14 +273,24 @@ private fun Fido2CredentialField(
 @Composable
 private fun NotesField(
     notes: String,
+    onCopyAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextField(
+    BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.notes),
         value = notes,
         onValueChange = { },
         readOnly = true,
         singleLine = false,
+        actions = {
+            BitwardenTonalIconButton(
+                vectorIconRes = R.drawable.ic_copy,
+                contentDescription = stringResource(id = R.string.copy_notes),
+                onClick = onCopyAction,
+                modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
+            )
+        },
+        textFieldTestTag = "CipherNotesLabel",
         modifier = modifier,
     )
 }

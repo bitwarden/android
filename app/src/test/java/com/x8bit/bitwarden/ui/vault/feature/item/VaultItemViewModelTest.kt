@@ -1670,6 +1670,33 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             coVerify { mockFileManager.delete(file) }
         }
+
+        @Test
+        fun `on CopyNotesFieldClick should call setText on ClipboardManager`() {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns DEFAULT_VIEW_STATE
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+
+            val notes = "Lots of notes"
+            every { clipboardManager.setText(text = notes) } just runs
+
+            viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = notes)
+            }
+        }
     }
 
     @Nested
@@ -2528,6 +2555,143 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class IdentityActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    viewState = IDENTITY_VIEW_STATE,
+                ),
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns IDENTITY_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        @Test
+        fun `on CopyIdentityNameClick should copy fingerprint to clipboard`() =
+            runTest {
+                val username = "the username"
+                every { clipboardManager.setText(text = username) } just runs
+
+                viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyUsernameClick)
+
+                verify(exactly = 1) {
+                    clipboardManager.setText(text = username)
+                }
+            }
+
+        @Test
+        fun `on CopyUsernameClick should copy fingerprint to clipboard`() =
+            runTest {
+                val identityName = "the identity name"
+                every { clipboardManager.setText(text = identityName) } just runs
+
+                viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyIdentityNameClick)
+
+                verify(exactly = 1) {
+                    clipboardManager.setText(text = identityName)
+                }
+            }
+
+        @Test
+        fun `on CopyCompanyClick should copy company to clipboard`() = runTest {
+            val company = "the company name"
+            every { clipboardManager.setText(text = company) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyCompanyClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = company)
+            }
+        }
+
+        @Test
+        fun `on CopySsnClick should copy SSN to clipboard`() = runTest {
+            val ssn = "the SSN"
+            every { clipboardManager.setText(text = ssn) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopySsnClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = ssn)
+            }
+        }
+
+        @Test
+        fun `on CopyPassportNumberClick should copy passport number to clipboard`() = runTest {
+            val passportNumber = "the passport number"
+            every { clipboardManager.setText(text = passportNumber) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyPassportNumberClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = passportNumber)
+            }
+        }
+
+        @Test
+        fun `on CopyLicenseNumberClick should copy license number to clipboard`() = runTest {
+            val licenseNumber = "the license number"
+            every { clipboardManager.setText(text = licenseNumber) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyLicenseNumberClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = licenseNumber)
+            }
+        }
+
+        @Test
+        fun `on CopyEmailClick should copy email to clipboard`() = runTest {
+            val email = "the email address"
+            every { clipboardManager.setText(text = email) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyEmailClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = email)
+            }
+        }
+
+        @Test
+        fun `on CopyPhoneClick should copy phone to clipboard`() = runTest {
+            val phone = "the phone number"
+            every { clipboardManager.setText(text = phone) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyPhoneClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = phone)
+            }
+        }
+
+        @Test
+        fun `on CopyAddressClick should copy address to clipboard`() = runTest {
+            val address = "the address"
+            every { clipboardManager.setText(text = address) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyAddressClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = address)
+            }
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -2844,6 +3008,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 showPrivateKey = false,
             )
 
+        private val DEFAULT_IDENTITY_TYPE: VaultItemState.ViewState.Content.ItemType.Identity =
+            VaultItemState.ViewState.Content.ItemType.Identity(
+                username = "the username",
+                identityName = "the identity name",
+                company = "the company name",
+                ssn = "the SSN",
+                passportNumber = "the passport number",
+                licenseNumber = "the license number",
+                email = "the email address",
+                phone = "the phone number",
+                address = "the address",
+            )
+
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common(
                 name = "login cipher",
@@ -2907,6 +3084,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_SSH_KEY_TYPE,
+            )
+
+        private val IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_IDENTITY_TYPE,
             )
     }
 }

@@ -524,6 +524,8 @@ private fun ImportLoginsSuccessBottomSheetContent(
                     iconVectorResource = R.drawable.ic_shield,
                 ),
             ),
+            bottomDividerPaddingStart = 48.dp,
+            showBottomDivider = true,
             modifier = Modifier.standardHorizontalMargin(),
         ) { contentData ->
             BitwardenContentBlock(

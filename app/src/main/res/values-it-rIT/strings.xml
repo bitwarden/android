@@ -951,7 +951,7 @@ Vuoi passare a questo account?</string>
   <string name="or_log_in_you_may_already_have_an_account">Oppure effettua l\'accesso se potresti avere già un account.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Ricevi email da Bitwarden per annunci, consigli e opportunità di ricerca. Disiscriviti in qualsiasi momento.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Ottieni consigli, annunci e opportunità di ricerca da Bitwarden nella tua casella di posta. Disiscriviti in qualsiasi momento.</string>
-  <string name="privacy_prioritized">Privacy, al primo posto</string>
+  <string name="security_prioritized">Privacy, al primo posto</string>
   <string name="welcome_message_1">Salva login, carte e identità nella tua cassaforte sicura. Bitwarden usa la crittografia end-to-end e zero-knowledge per proteggere ciò che è importante.</string>
   <string name="welcome_message_2">Imposta lo sblocco biometrico e il riempimento automatico per accedere ai tuoi account senza digitare una sola lettera.</string>
   <string name="quick_and_easy_login">Accesso facile e veloce</string>

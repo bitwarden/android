@@ -60,7 +60,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
 
     @Test
     fun `app bar log in click should send LogInClick action`() {
-        composeTestRule.onNodeWithText("Log In").performClick()
+        composeTestRule.onNodeWithText("Log in").performClick()
         verify { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) }
     }
 

@@ -952,7 +952,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Або увійдіть, якщо вже маєте обліковий запис.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості. Відписатися можна будь-коли.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Отримуйте поради, оголошення та інформацію щодо можливості участі в дослідженнях від Bitwarden у вашій поштовій скриньці. Відпишіться коли завгодно.</string>
-  <string name="privacy_prioritized">Приватність понад усе</string>
+  <string name="security_prioritized">Приватність понад усе</string>
   <string name="welcome_message_1">Зберігайте записи входу, картки та посвідчення в захищеному сховищі. Для захисту ваших даних Bitwarden використовує наскрізне шифрування з нульовим рівнем доступу.</string>
   <string name="welcome_message_2">Налаштуйте біометричне розблокування та автозаповнення, щоб миттєво входити в облікові записи.</string>
   <string name="quick_and_easy_login">Швидкий і легкий вхід</string>

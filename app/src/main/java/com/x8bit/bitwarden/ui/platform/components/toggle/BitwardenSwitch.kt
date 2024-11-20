@@ -22,15 +22,17 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * A wide custom switch composable
+ * A custom switch composable
  *
  * @param label The descriptive text label to be displayed adjacent to the switch.
  * @param isChecked The current state of the switch (either checked or unchecked).
@@ -45,7 +47,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
  */
-@Suppress("LongMethod")
 @Composable
 fun BitwardenSwitch(
     label: String,
@@ -57,6 +58,154 @@ fun BitwardenSwitch(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     actions: (@Composable RowScope.() -> Unit)? = null,
+) {
+    BitwardenSwitch(
+        modifier = modifier,
+        label = label.toAnnotatedString(),
+        isChecked = isChecked,
+        onCheckedChange = onCheckedChange,
+        contentDescription = contentDescription,
+        readOnly = readOnly,
+        enabled = enabled,
+        actions = actions,
+        subContent = {
+            description?.let {
+                Text(
+                    text = it,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = if (enabled) {
+                        BitwardenTheme.colorScheme.text.secondary
+                    } else {
+                        BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                    },
+                )
+            }
+        },
+    )
+}
+
+/**
+ * A custom switch composable
+ *
+ * @param label The descriptive text label to be displayed adjacent to the switch.
+ * @param isChecked The current state of the switch (either checked or unchecked).
+ * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param description An optional description label to be displayed below the [label].
+ * @param contentDescription A description of the switch's UI for accessibility purposes.
+ * @param readOnly Disables the click functionality without modifying the other UI characteristics.
+ * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * comes with some additional visual changes.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
+ */
+@Composable
+fun BitwardenSwitch(
+    label: AnnotatedString,
+    isChecked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)?,
+    modifier: Modifier = Modifier,
+    description: String? = null,
+    contentDescription: String? = null,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    actions: (@Composable RowScope.() -> Unit)? = null,
+) {
+    BitwardenSwitch(
+        modifier = modifier,
+        label = label,
+        isChecked = isChecked,
+        onCheckedChange = onCheckedChange,
+        contentDescription = contentDescription,
+        readOnly = readOnly,
+        enabled = enabled,
+        actions = actions,
+        subContent = {
+            description?.let {
+                Text(
+                    text = it,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = if (enabled) {
+                        BitwardenTheme.colorScheme.text.secondary
+                    } else {
+                        BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                    },
+                )
+            }
+        },
+    )
+}
+
+/**
+ * A custom switch composable
+ *
+ * @param label The descriptive text label to be displayed adjacent to the switch.
+ * @param isChecked The current state of the switch (either checked or unchecked).
+ * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param contentDescription A description of the switch's UI for accessibility purposes.
+ * @param readOnly Disables the click functionality without modifying the other UI characteristics.
+ * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * comes with some additional visual changes.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
+ * @param subContent A lambda containing content directly below the label.
+ */
+@Composable
+fun BitwardenSwitch(
+    label: String,
+    isChecked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)?,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    actions: (@Composable RowScope.() -> Unit)? = null,
+    subContent: @Composable () -> Unit,
+) {
+    BitwardenSwitch(
+        modifier = modifier,
+        label = label.toAnnotatedString(),
+        isChecked = isChecked,
+        onCheckedChange = onCheckedChange,
+        contentDescription = contentDescription,
+        readOnly = readOnly,
+        enabled = enabled,
+        actions = actions,
+        subContent = subContent,
+    )
+}
+
+/**
+ * A custom switch composable
+ *
+ * @param label The descriptive text label to be displayed adjacent to the switch.
+ * @param isChecked The current state of the switch (either checked or unchecked).
+ * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param contentDescription A description of the switch's UI for accessibility purposes.
+ * @param readOnly Disables the click functionality without modifying the other UI characteristics.
+ * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * comes with some additional visual changes.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
+ * @param subContent A lambda containing content directly below the label.
+ */
+@Suppress("LongMethod")
+@Composable
+fun BitwardenSwitch(
+    label: AnnotatedString,
+    isChecked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)?,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    actions: (@Composable RowScope.() -> Unit)? = null,
+    subContent: @Composable () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -95,17 +244,7 @@ fun BitwardenSwitch(
                     },
                     modifier = Modifier.testTag(tag = "SwitchText"),
                 )
-                description?.let {
-                    Text(
-                        text = it,
-                        style = BitwardenTheme.typography.bodyMedium,
-                        color = if (enabled) {
-                            BitwardenTheme.colorScheme.text.secondary
-                        } else {
-                            BitwardenTheme.colorScheme.filledButton.foregroundDisabled
-                        },
-                    )
-                }
+                subContent()
             }
 
             actions
@@ -131,6 +270,7 @@ private fun BitwardenSwitch_preview() {
     Column {
         BitwardenSwitch(
             label = "Label",
+            description = "description",
             isChecked = true,
             onCheckedChange = {},
         )
@@ -141,6 +281,7 @@ private fun BitwardenSwitch_preview() {
         )
         BitwardenSwitch(
             label = "Label",
+            description = "description",
             isChecked = true,
             onCheckedChange = {},
             actions = {

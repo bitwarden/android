@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
@@ -35,10 +36,8 @@ fun <T> BitwardenContentCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(
-                color = BitwardenTheme.colorScheme.background.secondary,
-                shape = BitwardenTheme.shapes.content,
-            ),
+            .clip(shape = BitwardenTheme.shapes.content)
+            .background(color = BitwardenTheme.colorScheme.background.secondary),
     ) {
         contentItems.forEachIndexed { index, item ->
             Box(

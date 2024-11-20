@@ -952,7 +952,7 @@ Você deseja mudar para esta conta?</string>
   <string name="or_log_in_you_may_already_have_an_account">Ou faça o login, você pode já ter uma conta.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Obtenha e-mails do Bitwarden para anúncios, conselhos e oportunidades de pesquisa. Cancele a inscrição a qualquer momento.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Receba conselhos, anúncios e oportunidades de pesquisa da Bitwarden na sua caixa de entrada. Cancele a assinatura a qualquer momento.</string>
-  <string name="privacy_prioritized">Privacidade, priorizado</string>
+  <string name="security_prioritized">Privacidade, priorizado</string>
   <string name="welcome_message_1">Salve suas credenciais, cartões e identidades no seu cofre seguro. O Bitwarden usa criptografia de zero conhecimento, de ponta a ponta para proteger o que é importante para você.</string>
   <string name="welcome_message_2">Configure o desbloqueio biométrico e preenchimento automático para acessar suas contas sem digitar uma única letra.</string>
   <string name="quick_and_easy_login">Login rápido e fácil</string>

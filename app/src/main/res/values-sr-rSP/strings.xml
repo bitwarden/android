@@ -953,7 +953,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Или пријавите се, можда већ имате налог.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Добијајте имјл од Bitwarden-а за најаве, савете и могућности истраживања. Откажите претплату у било ком тренутку.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Добијајте савете, најаве и могућности истраживања од Bitwarden-а у пријемном сандучету. Откажите претплату у било ком тренутку.</string>
-  <string name="privacy_prioritized">Приватност, приоритет</string>
+  <string name="security_prioritized">Приватност, приоритет</string>
   <string name="welcome_message_1">Сачувајте пријаве, картице и идентитете у свој безбедни сеф. Bitwarden користи шифровање од почетка-до-краја да заштити оно што вам је важно.</string>
   <string name="welcome_message_2">Подесите биометријско откључавање и аутоматско попуњавање да бисте се пријавили на своје налоге без уноса ниједног слова.</string>
   <string name="quick_and_easy_login">Брза и лака пријава</string>

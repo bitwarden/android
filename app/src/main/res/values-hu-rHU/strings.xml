@@ -691,7 +691,7 @@
   <string name="enter_key_manually">Kód megadása manuálisan</string>
   <string name="add_totp">TOTP hozzáadása</string>
   <string name="setup_totp">TOTP beállítása</string>
-  <string name="once_the_key_is_successfully_entered">A kulcs sikeres megadása után válasszuk ki a 
+  <string name="once_the_key_is_successfully_entered">A kulcs sikeres megadása után válasszuk ki a
 TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
   <string name="never_lock_warning">Ha a zárolási lehetőségeket \"Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</string>
   <string name="environment_page_urls_error">A beírt webcímek közül egy vagy több érvénytelen. Vizsgáljuk át és próbáljuk meg újra elmenteni.</string>
@@ -951,7 +951,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="or_log_in_you_may_already_have_an_account">Vagy Bejelentkezés, ha már van fiók.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről. Bármikor leiratkozhatunk.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Tanácsokat, bejelentéseket és kutatási lehetőségeket kaphatunk a Bitwardentől a postaládába. Bármikor leiratkozhatunk.</string>
-  <string name="privacy_prioritized">Adatvédelem, prioritás</string>
+  <string name="security_prioritized">Adatvédelem, prioritás</string>
   <string name="welcome_message_1">Mentsük el a bejelentkezési adatokat, kártyákat és azonosításokat a biztonságos széfbe. A Bitwarden tudás nélküli, végpontok közötti titkosítást használ a felhasználók számára fontos dolgok védelmére.</string>
   <string name="welcome_message_2">Állítsuk be a biometrikus feloldást és az automatikus kitöltést, hogy egyetlen betű beírása nélkül jelentkezzünk be a fiókokba.</string>
   <string name="quick_and_easy_login">Gyors és könnyű bejelentkezés</string>

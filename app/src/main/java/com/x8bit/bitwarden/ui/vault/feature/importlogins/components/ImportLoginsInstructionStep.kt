@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -68,8 +67,6 @@ fun ImportLoginsInstructionStep(
         ) { instructionStep ->
             InstructionRowItem(
                 instructionStep = instructionStep,
-                modifier = modifier
-                    .padding(all = 12.dp),
             )
         }
         Spacer(Modifier.height(24.dp))
