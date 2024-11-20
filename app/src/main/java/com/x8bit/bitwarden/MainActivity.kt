@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -93,6 +94,13 @@ class MainActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT,
                             )
                             .show()
+                    }
+
+                    is MainEvent.NavigateToLoginApproval -> {
+                        navController.navigateToLoginApproval(
+                            fingerprint = "",
+                            requestId = event.requestId,
+                        )
                     }
                 }
             }

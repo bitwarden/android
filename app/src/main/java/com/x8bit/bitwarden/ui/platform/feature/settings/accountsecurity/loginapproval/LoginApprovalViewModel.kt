@@ -48,7 +48,7 @@ class LoginApprovalViewModel @Inject constructor(
                     ?: requireNotNull(LoginApprovalArgs(savedStateHandle).fingerprint),
                 masterPasswordHash = null,
                 publicKey = "",
-                requestId = "",
+                requestId = LoginApprovalArgs(savedStateHandle).requestId.orEmpty(),
                 viewState = LoginApprovalState.ViewState.Loading,
                 dialogState = null,
             )
@@ -86,11 +86,19 @@ class LoginApprovalViewModel @Inject constructor(
                 }
             }
             ?: run {
-                authRepository
-                    .getAuthRequestByFingerprintFlow(state.fingerprint)
-                    .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
-                    .onEach(::sendAction)
-                    .launchIn(viewModelScope)
+                if (state.requestId.isNotEmpty()) {
+                    authRepository
+                        .getAuthRequestByIdFlow(state.requestId)
+                        .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
+                        .onEach(::sendAction)
+                        .launchIn(viewModelScope)
+                } else {
+                    authRepository
+                        .getAuthRequestByIdFlow(state.fingerprint)
+                        .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
+                        .onEach(::sendAction)
+                        .launchIn(viewModelScope)
+                }
             }
     }
 
