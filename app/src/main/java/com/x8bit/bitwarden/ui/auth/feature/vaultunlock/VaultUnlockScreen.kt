@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,6 +86,12 @@ fun VaultUnlockScreen(
     val context = LocalContext.current
     val resources = context.resources
 
+    LaunchedEffect(state.requiresBiometricsLogin) {
+        if (state.requiresBiometricsLogin && !biometricsManager.isBiometricsSupported) {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsNoLongerSupported)
+        }
+    }
+
     val onBiometricsUnlockSuccess: (cipher: Cipher?) -> Unit = remember(viewModel) {
         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
     }
@@ -147,6 +154,22 @@ fun VaultUnlockScreen(
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
         )
+
+        VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = R.string.biometrics_no_longer_supported_title.asText(),
+                    message = R.string.biometrics_no_longer_supported.asText(),
+                ),
+                onDismissRequest = remember {
+                    {
+                        viewModel.trySendAction(
+                            VaultUnlockAction.DismissBiometricsNoLongerSupportedDialog,
+                        )
+                    }
+                },
+            )
+        }
 
         null -> Unit
     }
