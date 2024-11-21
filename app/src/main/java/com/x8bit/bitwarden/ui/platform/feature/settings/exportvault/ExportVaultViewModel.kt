@@ -126,8 +126,10 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = null)
         }
-        val toastMessage = when (action.result) {
-            is RequestOtpResult.Error -> R.string.generic_error_message.asText()
+        val toastMessage = when (val result = action.result) {
+            is RequestOtpResult.Error -> {
+                result.message?.asText() ?: R.string.generic_error_message.asText()
+            }
             RequestOtpResult.Success -> R.string.code_sent.asText()
         }
         sendEvent(ExportVaultEvent.ShowToast(message = toastMessage))
@@ -284,7 +286,7 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ExportVaultState.DialogState.Loading(
-                    R.string.sending.asText(),
+                    message = R.string.sending.asText(),
                 ),
             )
         }
