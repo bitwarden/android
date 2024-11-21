@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 @Immutable
 data class ContentBlockData(
     val headerText: AnnotatedString,
-    val subtitleText: String? = null,
+    val subtitleText: AnnotatedString? = null,
     @DrawableRes val iconVectorResource: Int? = null,
 ) {
     /**
@@ -25,7 +25,7 @@ data class ContentBlockData(
         @DrawableRes iconVectorResource: Int? = null,
     ) : this(
         headerText = AnnotatedString(headerText),
-        subtitleText = subtitleText,
+        subtitleText = subtitleText?.let { AnnotatedString(it) },
         iconVectorResource = iconVectorResource,
     )
 }

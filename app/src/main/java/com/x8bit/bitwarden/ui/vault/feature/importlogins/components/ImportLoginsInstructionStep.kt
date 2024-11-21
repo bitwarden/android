@@ -26,8 +26,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
+import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -40,7 +40,7 @@ fun ImportLoginsInstructionStep(
     stepText: String,
     stepTitle: String,
     ctaText: String = stringResource(R.string.continue_text),
-    instructions: ImmutableList<InstructionStep>,
+    instructions: ImmutableList<ContentBlockData>,
     onBackClick: () -> Unit,
     onContinueClick: () -> Unit,
     onHelpClick: () -> Unit,
@@ -60,15 +60,11 @@ fun ImportLoginsInstructionStep(
         Spacer(Modifier.height(24.dp))
         BitwardenContentCard(
             contentItems = instructions,
-            bottomDividerPaddingStart = 48.dp,
             modifier = Modifier
-                .fillMaxWidth()
                 .standardHorizontalMargin(),
-        ) { instructionStep ->
-            InstructionRowItem(
-                instructionStep = instructionStep,
-            )
-        }
+            contentHeaderTextStyle = BitwardenTheme.typography.bodyMedium,
+            contentSubtitleTextStyle = BitwardenTheme.typography.labelSmall,
+        )
         Spacer(Modifier.height(24.dp))
         Text(
             text = createClickableAnnotatedString(
@@ -113,9 +109,9 @@ private fun ImportLoginsInstructionStep_preview() {
                 stepText = "Step text",
                 stepTitle = "Step title",
                 instructions = persistentListOf(
-                    InstructionStep(
-                        stepNumber = 1,
-                        instructionText = buildAnnotatedString {
+                    ContentBlockData(
+                        iconVectorResource = R.drawable.ic_number1,
+                        headerText = buildAnnotatedString {
                             append("Step text 1")
                             withStyle(
                                 SpanStyle(
@@ -126,18 +122,18 @@ private fun ImportLoginsInstructionStep_preview() {
                                 append(" with bold text")
                             }
                         },
-                        additionalText = null,
+                        subtitleText = null,
                     ),
-                    InstructionStep(
-                        stepNumber = 2,
-                        instructionText = buildAnnotatedString {
+                    ContentBlockData(
+                        iconVectorResource = R.drawable.ic_number2,
+                        headerText = buildAnnotatedString {
                             append("Step text 2")
                         },
-                        additionalText = "Added deets",
+                        subtitleText = "Added deets",
                     ),
-                    InstructionStep(
-                        stepNumber = 3,
-                        instructionText = buildAnnotatedString {
+                    ContentBlockData(
+                        iconVectorResource = R.drawable.ic_number3,
+                        headerText = buildAnnotatedString {
                             append("Step text 3")
                         },
                     ),
