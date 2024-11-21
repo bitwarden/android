@@ -113,7 +113,7 @@ private fun NeverLoseAccessContent(modifier: Modifier) {
                 ContentBlockData(
                     headerText = stringResource(R.string.write_your_password_down),
                     subtitleText = stringResource(R.string.keep_it_secret_keep_it_safe),
-                    iconVectorResource = R.drawable.ic_pencil
+                    iconVectorResource = R.drawable.ic_pencil,
                 ),
             ),
         )
