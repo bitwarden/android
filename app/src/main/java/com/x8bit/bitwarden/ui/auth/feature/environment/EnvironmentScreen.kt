@@ -28,10 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -59,20 +57,15 @@ fun EnvironmentScreen(
         }
     }
 
-    BitwardenBasicDialog(
-        visibilityState = if (state.shouldShowErrorDialog) {
-            BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.environment_page_urls_error.asText(),
-            )
-        } else {
-            BasicDialogState.Hidden
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
-        },
-    )
-
+    if (state.shouldShowErrorDialog) {
+        BitwardenBasicDialog(
+            title = stringResource(id = R.string.an_error_has_occurred),
+            message = stringResource(id = R.string.environment_page_urls_error),
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+            },
+        )
+    }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier

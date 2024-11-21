@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
@@ -74,20 +73,16 @@ fun DeleteAccountScreen(
 
     when (val dialog = state.dialog) {
         DeleteAccountState.DeleteAccountDialog.DeleteSuccess -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = null,
-                message = R.string.your_account_has_been_permanently_deleted.asText(),
-            ),
+            title = null,
+            message = stringResource(id = R.string.your_account_has_been_permanently_deleted),
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm) }
             },
         )
 
         is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = dialog.message,
-            ),
+            title = stringResource(id = R.string.an_error_has_occurred),
+            message = dialog.message(),
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(DeleteAccountAction.DismissDialog) }
             },
