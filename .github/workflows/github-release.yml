@@ -97,7 +97,7 @@ jobs:
         uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
         with:
           tag_name: "v${{ inputs.version-name }}"
-          name: "v${{ inputs.version-name }} (${{ inputs.version-number }})"
+          name: "${{ inputs.version-name }} (${{ inputs.version-number }})"
           prerelease: ${{ inputs.prerelease }}
           draft: ${{ inputs.draft }}
           make_latest: ${{ inputs.make-latest }}
