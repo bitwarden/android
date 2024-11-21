@@ -79,6 +79,7 @@ fun BitwardenUnlockWithPinSwitch(
                     onUnlockWithPinToggleAction(UnlockWithPinState.Disabled)
                     pin = ""
                 },
+                isPinCreation = true,
             )
         }
 
