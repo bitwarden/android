@@ -13,8 +13,7 @@ class BaseUrlInterceptor(
     private val baseUrlProvider: () -> String?,
 ) : Interceptor {
 
-    private val baseHttpUrl: HttpUrl?
-        get() = baseUrlProvider()?.let { requireNotNull(it.toHttpUrlOrNull()) }
+    private val baseHttpUrl: HttpUrl? get() = baseUrlProvider()?.toHttpUrlOrNull()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
