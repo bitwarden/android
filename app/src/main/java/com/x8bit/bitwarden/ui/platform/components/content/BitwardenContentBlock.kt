@@ -159,7 +159,7 @@ private fun BitwardenContentBlock_preview() {
             BitwardenContentBlock(
                 data = ContentBlockData(
                     headerText = "Header",
-                    subtitleText = "Subtitle that is very very long and it should hit the very end of the line",
+                    subtitleText = "Subtitle",
                     iconVectorResource = null,
                 ),
             )
