@@ -8,7 +8,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -792,7 +792,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = Fido2CredentialRequest(
+                fido2CreationData = Fido2CreateCredentialRequest(
                     userId = "",
                     requestJson = "",
                     packageName = "",

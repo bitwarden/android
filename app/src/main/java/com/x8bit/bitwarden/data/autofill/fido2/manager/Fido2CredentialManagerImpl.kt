@@ -10,7 +10,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalA
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
@@ -53,31 +53,31 @@ class Fido2CredentialManagerImpl(
 
     override suspend fun registerFido2Credential(
         userId: String,
-        fido2CredentialRequest: Fido2CredentialRequest,
+        fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult {
-        val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
-            fido2CredentialRequest
+        val clientData = if (fido2CreateCredentialRequest.callingAppInfo.isOriginPopulated()) {
+            fido2CreateCredentialRequest
                 .callingAppInfo
                 .getAppSigningSignatureFingerprint()
                 ?.let { ClientData.DefaultWithCustomHash(hash = it) }
                 ?: return Fido2RegisterCredentialResult.Error
         } else {
             ClientData.DefaultWithExtraData(
-                androidPackageName = fido2CredentialRequest
+                androidPackageName = fido2CreateCredentialRequest
                     .callingAppInfo
                     .packageName,
             )
         }
-        val assetLinkUrl = fido2CredentialRequest
+        val assetLinkUrl = fido2CreateCredentialRequest
             .origin
-            ?: getOriginUrlFromAttestationOptionsOrNull(fido2CredentialRequest.requestJson)
+            ?: getOriginUrlFromAttestationOptionsOrNull(fido2CreateCredentialRequest.requestJson)
             ?: return Fido2RegisterCredentialResult.Error
 
         val origin = Origin.Android(
             UnverifiedAssetLink(
-                packageName = fido2CredentialRequest.packageName,
-                sha256CertFingerprint = fido2CredentialRequest
+                packageName = fido2CreateCredentialRequest.packageName,
+                sha256CertFingerprint = fido2CreateCredentialRequest
                     .callingAppInfo
                     .getSignatureFingerprintAsHexString()
                     ?: return Fido2RegisterCredentialResult.Error,
@@ -91,7 +91,7 @@ class Fido2CredentialManagerImpl(
                 request = RegisterFido2CredentialRequest(
                     userId = userId,
                     origin = origin,
-                    requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
+                    requestJson = """{"publicKey": ${fido2CreateCredentialRequest.requestJson}}""",
                     clientData = clientData,
                     selectedCipherView = selectedCipherView,
                     // User verification is handled prior to engaging the SDK. We always respond

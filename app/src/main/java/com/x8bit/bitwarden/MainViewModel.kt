@@ -325,7 +325,7 @@ class MainViewModel @Inject constructor(
                 fido2CredentialManager.isUserVerified = false
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
-                        fido2CredentialRequest = fido2CredentialRequestData,
+                        fido2CreateCredentialRequest = fido2CredentialRequestData,
                     )
 
                 // Switch accounts if the selected user is not the active user.
