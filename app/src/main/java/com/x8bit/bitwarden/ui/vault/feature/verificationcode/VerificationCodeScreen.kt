@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItem
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
@@ -138,7 +137,7 @@ private fun VerificationCodeDialogs(
 ) {
     when (dialogState) {
         is VerificationCodeState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(dialogState.message),
+            text = dialogState.message(),
         )
 
         null -> Unit
