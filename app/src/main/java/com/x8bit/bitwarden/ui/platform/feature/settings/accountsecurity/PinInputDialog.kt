@@ -107,7 +107,11 @@ fun PinInputDialog(
                     label = stringResource(id = R.string.pin),
                     value = pin,
                     autoFocus = true,
-                    onValueChange = { pin = it },
+                    onValueChange = { newValue ->
+                        if (newValue.all { it.isDigit() }) {
+                            pin = newValue
+                        }
+                    },
                     keyboardType = KeyboardType.Number,
                     modifier = Modifier
                         .testTag(tag = "AlertInputField")
