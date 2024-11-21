@@ -68,7 +68,7 @@ fun PreventAccountLockoutScreen(
             )
         },
     ) {
-        NeverLoseAccessContent(
+        PreventAccountLockoutContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -78,7 +78,7 @@ fun PreventAccountLockoutScreen(
 }
 
 @Composable
-private fun NeverLoseAccessContent(modifier: Modifier) {
+private fun PreventAccountLockoutContent(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
