@@ -75,13 +75,14 @@ private fun BitwardenContentBlock(
     val localDensity = LocalDensity.current
 
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
             .bottomDivider(
                 enabled = showDivider,
                 paddingStart = dividerStartPadding,
-            ),
+            )
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
