@@ -98,7 +98,7 @@ private fun NeverLoseAccessContent(modifier: Modifier) {
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier.padding(horizontal = 12.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenContentCard(
