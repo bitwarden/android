@@ -33,7 +33,6 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -164,9 +163,7 @@ private fun FolderAddEditItemDialogs(
 ) {
     when (dialogState) {
         is FolderAddEditState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(dialogState.label),
-            )
+            BitwardenLoadingDialog(text = dialogState.label())
         }
 
         is FolderAddEditState.DialogState.Error -> BitwardenBasicDialog(

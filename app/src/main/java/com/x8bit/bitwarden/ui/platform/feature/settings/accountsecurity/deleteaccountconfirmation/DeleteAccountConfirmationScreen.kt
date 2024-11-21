@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorBut
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -117,9 +116,7 @@ private fun DeleteAccountConfirmationDialogs(
         }
 
         is DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(dialogState.title),
-            )
+            BitwardenLoadingDialog(text = dialogState.title())
         }
 
         null -> Unit

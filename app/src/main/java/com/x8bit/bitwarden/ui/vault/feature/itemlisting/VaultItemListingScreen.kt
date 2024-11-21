@@ -38,7 +38,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -302,7 +301,7 @@ private fun VaultItemListingDialogs(
         )
 
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(dialogState.message),
+            text = dialogState.message(),
         )
 
         is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(

@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -63,11 +62,7 @@ fun ResetPasswordScreen(
         }
 
         is ResetPasswordState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message,
-                ),
-            )
+            BitwardenLoadingDialog(text = dialog.message())
         }
 
         null -> Unit
