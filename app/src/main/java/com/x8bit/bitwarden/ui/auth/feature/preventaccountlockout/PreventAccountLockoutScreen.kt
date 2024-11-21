@@ -71,64 +71,60 @@ fun PreventAccountLockoutScreen(
             )
         },
     ) {
-        Column(
+        NeverLoseAccessContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
                 .verticalScroll(rememberScrollState()),
-        ) {
-            NeverLoseAccessContent()
-            Spacer(modifier = Modifier.navigationBarsPadding())
-        }
+        )
     }
 }
 
 @Composable
-private fun NeverLoseAccessContent() {
-    Spacer(modifier = Modifier.height(24.dp))
-    Text(
-        text = stringResource(R.string.never_lose_access_to_your_vault),
-        textAlign = TextAlign.Center,
-        style = BitwardenTheme.typography.titleMedium,
-        color = BitwardenTheme.colorScheme.text.primary,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(
-        text = stringResource(
-            R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
-        ),
-        textAlign = TextAlign.Center,
-        style = BitwardenTheme.typography.bodyMedium,
-        color = BitwardenTheme.colorScheme.text.primary,
-        modifier = Modifier.padding(horizontal = 12.dp)
-    )
-    Spacer(modifier = Modifier.height(24.dp))
-    BitwardenContentCard(
-        contentItems = persistentListOf(
-            ContentBlockData(
-                headerText = stringResource(R.string.create_a_hint),
-                subtitleText = stringResource(
-                    R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
-                ),
-                iconVectorResource = R.drawable.ic_light_bulb
-            ),
-            ContentBlockData(
-                headerText = stringResource(R.string.write_your_password_down),
-                subtitleText = stringResource(R.string.keep_it_secret_keep_it_safe),
-                iconVectorResource = R.drawable.ic_pencil
-            )
-        ),
-        bottomDividerPaddingStart = 48.dp
-    ) { contentData ->
-        BitwardenContentBlock(
-            data = contentData,
+private fun NeverLoseAccessContent(modifier: Modifier) {
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.never_lose_access_to_your_vault),
+            textAlign = TextAlign.Center,
+            style = BitwardenTheme.typography.titleMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .clip(RoundedCornerShape(size = 8.dp))
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(
+                R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
+            ),
+            textAlign = TextAlign.Center,
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        BitwardenContentCard(
+            contentItems = persistentListOf(
+                ContentBlockData(
+                    headerText = stringResource(R.string.create_a_hint),
+                    subtitleText = stringResource(
+                        R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
+                    ),
+                    iconVectorResource = R.drawable.ic_light_bulb
+                ),
+                ContentBlockData(
+                    headerText = stringResource(R.string.write_your_password_down),
+                    subtitleText = stringResource(R.string.keep_it_secret_keep_it_safe),
+                    iconVectorResource = R.drawable.ic_pencil
+                )
+            ),
+            bottomDividerPaddingStart = 48.dp
+        ) { contentData ->
+            BitwardenContentBlock(data = contentData)
+        }
     }
+    Spacer(modifier = Modifier.navigationBarsPadding())
 }
 
 @Preview
