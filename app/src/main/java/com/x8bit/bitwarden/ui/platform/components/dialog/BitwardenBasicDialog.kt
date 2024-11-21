@@ -20,13 +20,64 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.parcelize.Parcelize
 
 /**
+ * Represents a Bitwarden-styled dialog.
+ *
+ * @param title The optional title to be displayed by the dialog.
+ * @param message The message to be displayed under the [title] by the dialog.
+ * @param onDismissRequest A lambda that is invoked when the user has requested to dismiss the
+ * dialog, whether by tapping "OK", tapping outside the dialog, or pressing the back button.
+ */
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun BitwardenBasicDialog(
+    title: String?,
+    message: String,
+    onDismissRequest: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            BitwardenTextButton(
+                label = stringResource(id = R.string.ok),
+                onClick = onDismissRequest,
+                modifier = Modifier.testTag(tag = "AcceptAlertButton"),
+            )
+        },
+        title = title?.let {
+            {
+                Text(
+                    text = it,
+                    style = BitwardenTheme.typography.headlineSmall,
+                    modifier = Modifier.testTag(tag = "AlertTitleText"),
+                )
+            }
+        },
+        text = {
+            Text(
+                text = message,
+                style = BitwardenTheme.typography.bodyMedium,
+                modifier = Modifier.testTag(tag = "AlertContentText"),
+            )
+        },
+        shape = BitwardenTheme.shapes.dialog,
+        containerColor = BitwardenTheme.colorScheme.background.primary,
+        iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
+        titleContentColor = BitwardenTheme.colorScheme.text.primary,
+        textContentColor = BitwardenTheme.colorScheme.text.primary,
+        modifier = Modifier.semantics {
+            testTagsAsResourceId = true
+            testTag = "AlertPopup"
+        },
+    )
+}
+
+/**
  * Represents a Bitwarden-styled dialog that is hidden or shown based on [visibilityState].
  *
  * @param visibilityState the [BasicDialogState] used to populate the dialog.
  * @param onDismissRequest called when the user has requested to dismiss the dialog, whether by
  * tapping "OK", tapping outside the dialog, or pressing the back button.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenBasicDialog(
     visibilityState: BasicDialogState,
@@ -34,40 +85,10 @@ fun BitwardenBasicDialog(
 ): Unit = when (visibilityState) {
     BasicDialogState.Hidden -> Unit
     is BasicDialogState.Shown -> {
-        AlertDialog(
+        BitwardenBasicDialog(
+            title = visibilityState.title?.invoke(),
+            message = visibilityState.message(),
             onDismissRequest = onDismissRequest,
-            confirmButton = {
-                BitwardenTextButton(
-                    label = stringResource(id = R.string.ok),
-                    onClick = onDismissRequest,
-                    modifier = Modifier.testTag("AcceptAlertButton"),
-                )
-            },
-            title = visibilityState.title?.let {
-                {
-                    Text(
-                        text = it(),
-                        style = BitwardenTheme.typography.headlineSmall,
-                        modifier = Modifier.testTag("AlertTitleText"),
-                    )
-                }
-            },
-            text = {
-                Text(
-                    text = visibilityState.message(),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    modifier = Modifier.testTag("AlertContentText"),
-                )
-            },
-            shape = BitwardenTheme.shapes.dialog,
-            containerColor = BitwardenTheme.colorScheme.background.primary,
-            iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
-            titleContentColor = BitwardenTheme.colorScheme.text.primary,
-            textContentColor = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.semantics {
-                testTagsAsResourceId = true
-                testTag = "AlertPopup"
-            },
         )
     }
 }

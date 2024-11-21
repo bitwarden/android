@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +55,6 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflo
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
@@ -84,6 +84,12 @@ fun VaultUnlockScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
+
+    LaunchedEffect(state.requiresBiometricsLogin) {
+        if (state.requiresBiometricsLogin && !biometricsManager.isBiometricsSupported) {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsNoLongerSupported)
+        }
+    }
 
     val onBiometricsUnlockSuccess: (cipher: Cipher?) -> Unit = remember(viewModel) {
         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
@@ -135,10 +141,8 @@ fun VaultUnlockScreen(
     // Dynamic dialogs
     when (val dialog = state.dialog) {
         is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialog.title,
-                message = dialog.message,
-            ),
+            title = dialog.title(),
+            message = dialog.message(),
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
             },
@@ -147,6 +151,20 @@ fun VaultUnlockScreen(
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
         )
+
+        VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported -> {
+            BitwardenBasicDialog(
+                title = stringResource(id = R.string.biometrics_no_longer_supported_title),
+                message = stringResource(id = R.string.biometrics_no_longer_supported),
+                onDismissRequest = remember {
+                    {
+                        viewModel.trySendAction(
+                            VaultUnlockAction.DismissBiometricsNoLongerSupportedDialog,
+                        )
+                    }
+                },
+            )
+        }
 
         null -> Unit
     }

@@ -541,6 +541,51 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             .assertDoesNotExist()
         composeTestRule.onNodeWithText("Unlock").assertDoesNotExist()
     }
+
+    @Test
+    fun `biometrics not supported dialog shows correctly`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported)
+        }
+        composeTestRule
+            .onNodeWithText("Biometrics are no longer supported on this device")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `DismissBiometricsNoLongerSupportedDialog should be sent when dialog is dismissed`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported)
+        }
+        composeTestRule
+            .onNodeWithText("Biometrics are no longer supported on this device")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultUnlockAction.DismissBiometricsNoLongerSupportedDialog)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when biometric is needed but no longer supported BiometricsNoLongerSupported action is sent`() {
+        every { biometricsManager.isBiometricsSupported } returns false
+        mutableStateFlow.update {
+            it.copy(
+                isBiometricEnabled = true,
+                hasMasterPassword = false,
+                vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+            )
+        }
+        composeTestRule.waitForIdle()
+        verify {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsNoLongerSupported)
+        }
+    }
 }
 
 private const val DEFAULT_ENVIRONMENT_URL: String = "vault.bitwarden.com"
@@ -588,4 +633,5 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     showBiometricInvalidatedMessage = false,
     userId = ACTIVE_ACCOUNT_SUMMARY.userId,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+    hasMasterPassword = true,
 )

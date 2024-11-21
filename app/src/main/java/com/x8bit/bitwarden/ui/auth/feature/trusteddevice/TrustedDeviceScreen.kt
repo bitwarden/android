@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -215,10 +214,8 @@ private fun TrustedDeviceDialogs(
 ) {
     when (dialogState) {
         is TrustedDeviceState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title?.invoke(),
+            message = dialogState.message(),
             onDismissRequest = handlers.onDismissDialog,
         )
 

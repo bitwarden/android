@@ -4,7 +4,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
@@ -17,7 +16,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -42,7 +40,6 @@ class NetworkConfigManagerTest {
     }
 
     private val refreshAuthenticator = RefreshAuthenticator()
-    private val baseUrlInterceptors = BaseUrlInterceptors()
 
     private lateinit var networkConfigManager: NetworkConfigManager
 
@@ -52,25 +49,15 @@ class NetworkConfigManagerTest {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
-            baseUrlInterceptors = baseUrlInterceptors,
             refreshAuthenticator = refreshAuthenticator,
             dispatcherManager = dispatcherManager,
         )
     }
 
     @Test
-    fun `changes in the Environment should update the BaseUrlInterceptors`() {
+    fun `changes in the Environment should call getServerConfig after debounce period`() {
         mutableEnvironmentStateFlow.value = Environment.Us
-        assertEquals(
-            Environment.Us,
-            baseUrlInterceptors.environment,
-        )
-
         mutableEnvironmentStateFlow.value = Environment.Eu
-        assertEquals(
-            Environment.Eu,
-            baseUrlInterceptors.environment,
-        )
         testDispatcher.advanceTimeByAndRunCurrent(delayTimeMillis = 500L)
         coVerify(exactly = 1) {
             serverConfigRepository.getServerConfig(forceRefresh = true)

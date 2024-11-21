@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -124,10 +123,8 @@ private fun AttachmentsDialogs(
 ) {
     when (dialogState) {
         is AttachmentsState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title?.invoke(),
+            message = dialogState.message(),
             onDismissRequest = onDismissRequest,
         )
 

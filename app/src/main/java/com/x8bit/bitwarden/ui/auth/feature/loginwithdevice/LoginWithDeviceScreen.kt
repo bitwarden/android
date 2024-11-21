@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -62,6 +61,7 @@ fun LoginWithDeviceScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginWithDeviceEvent.NavigateBack -> onNavigateBack()
@@ -74,7 +74,7 @@ fun LoginWithDeviceScreen(
             }
 
             is LoginWithDeviceEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -257,10 +257,8 @@ private fun LoginWithDeviceDialogs(
         )
 
         is LoginWithDeviceState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = state.title,
-                message = state.message,
-            ),
+            title = state.title?.invoke(),
+            message = state.message(),
             onDismissRequest = onDismissDialog,
         )
 

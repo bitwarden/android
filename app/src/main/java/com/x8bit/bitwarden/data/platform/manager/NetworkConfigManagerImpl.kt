@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
@@ -20,7 +19,6 @@ class NetworkConfigManagerImpl(
     authRepository: AuthRepository,
     environmentRepository: EnvironmentRepository,
     serverConfigRepository: ServerConfigRepository,
-    private val baseUrlInterceptors: BaseUrlInterceptors,
     refreshAuthenticator: RefreshAuthenticator,
     dispatcherManager: DispatcherManager,
 ) : NetworkConfigManager {
@@ -31,9 +29,6 @@ class NetworkConfigManagerImpl(
         @Suppress("OPT_IN_USAGE")
         environmentRepository
             .environmentStateFlow
-            .onEach { environment ->
-                baseUrlInterceptors.environment = environment
-            }
             .debounce(timeoutMillis = ENVIRONMENT_DEBOUNCE_TIMEOUT_MS)
             .onEach { _ ->
                 // This updates the stored service configuration by performing a network request.
