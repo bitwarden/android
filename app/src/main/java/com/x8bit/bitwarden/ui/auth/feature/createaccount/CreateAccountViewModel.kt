@@ -28,7 +28,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -143,10 +142,8 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.Error(
-                            BasicDialogState.Shown(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.captcha_failed.asText(),
-                            ),
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.captcha_failed.asText(),
                         ),
                     )
                 }
@@ -180,11 +177,9 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.Error(
-                            BasicDialogState.Shown(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = registerAccountResult.errorMessage?.asText()
-                                    ?: R.string.generic_error_message.asText(),
-                            ),
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = registerAccountResult.errorMessage?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -293,46 +288,63 @@ class CreateAccountViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(confirmPasswordInput = action.input) }
     }
 
+    @Suppress("LongMethod")
     private fun handleSubmitClick() = when {
         state.emailInput.isBlank() -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
-            )
-            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = CreateAccountDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required
+                            .asText(R.string.email_address.asText()),
+                    ),
+                )
+            }
         }
 
         !state.emailInput.isValidEmail() -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.invalid_email.asText(),
-            )
-            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = CreateAccountDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.invalid_email.asText(),
+                    ),
+                )
+            }
         }
 
         state.passwordInput.length < MIN_PASSWORD_LENGTH -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
-            )
-            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = CreateAccountDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.master_password_length_val_message_x
+                            .asText(MIN_PASSWORD_LENGTH),
+                    ),
+                )
+            }
         }
 
         state.passwordInput != state.confirmPasswordInput -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_confirmation_val_message.asText(),
-            )
-            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = CreateAccountDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.master_password_confirmation_val_message.asText(),
+                    ),
+                )
+            }
         }
 
         !state.isAcceptPoliciesToggled -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.accept_policies_error.asText(),
-            )
-            mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = CreateAccountDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.accept_policies_error.asText(),
+                    ),
+                )
+            }
         }
 
         else -> {
@@ -449,7 +461,10 @@ sealed class CreateAccountDialog : Parcelable {
      * General error dialog with an OK button.
      */
     @Parcelize
-    data class Error(val state: BasicDialogState.Shown) : CreateAccountDialog()
+    data class Error(
+        val title: Text?,
+        val message: Text,
+    ) : CreateAccountDialog()
 }
 
 /**

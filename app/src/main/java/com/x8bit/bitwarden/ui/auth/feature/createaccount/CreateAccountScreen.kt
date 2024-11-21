@@ -114,7 +114,8 @@ fun CreateAccountScreen(
     when (val dialog = state.dialog) {
         is CreateAccountDialog.Error -> {
             BitwardenBasicDialog(
-                visibilityState = dialog.state,
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(ErrorDialogDismiss) }
                 },
