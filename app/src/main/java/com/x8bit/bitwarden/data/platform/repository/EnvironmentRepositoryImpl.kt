@@ -33,15 +33,14 @@ class EnvironmentRepositoryImpl(
             environmentDiskSource.preAuthEnvironmentUrlData = value.environmentUrlData
         }
 
-    override val environmentStateFlow: StateFlow<Environment>
-        get() = environmentDiskSource
-            .preAuthEnvironmentUrlDataFlow
-            .map { it.toEnvironmentUrlsOrDefault() }
-            .stateIn(
-                scope = scope,
-                started = SharingStarted.Lazily,
-                initialValue = Environment.Us,
-            )
+    override val environmentStateFlow: StateFlow<Environment> = environmentDiskSource
+        .preAuthEnvironmentUrlDataFlow
+        .map { it.toEnvironmentUrlsOrDefault() }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Lazily,
+            initialValue = environment,
+        )
 
     init {
         authDiskSource

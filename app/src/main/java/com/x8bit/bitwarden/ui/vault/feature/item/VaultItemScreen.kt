@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -296,7 +295,7 @@ private fun VaultItemDialogs(
         )
 
         is VaultItemState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(text = dialog.message),
+            text = dialog.message(),
         )
 
         is VaultItemState.DialogState.MasterPasswordDialog -> {

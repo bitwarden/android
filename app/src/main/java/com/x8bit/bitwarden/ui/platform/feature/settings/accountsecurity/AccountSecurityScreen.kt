@@ -49,7 +49,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirma
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
@@ -418,7 +417,7 @@ private fun AccountSecurityDialogs(
         )
 
         is AccountSecurityDialog.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(text = dialogState.message),
+            text = dialogState.message(),
         )
 
         is AccountSecurityDialog.Error -> BitwardenBasicDialog(
