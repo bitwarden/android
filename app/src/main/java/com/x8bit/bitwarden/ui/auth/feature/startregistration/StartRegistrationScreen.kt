@@ -70,11 +70,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * Constant string to be used in string annotation tag field
- */
-private const val TAG_URL = "URL"
-
-/**
  * Top level composable for the start registration screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
