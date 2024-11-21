@@ -32,7 +32,6 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchA
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
@@ -293,10 +292,8 @@ private fun VaultItemListingDialogs(
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title?.invoke(),
+            message = dialogState.message(),
             onDismissRequest = onDismissRequest,
         )
 

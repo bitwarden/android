@@ -103,7 +103,8 @@ fun CompleteRegistrationScreen(
     when (val dialog = state.dialog) {
         is CompleteRegistrationDialog.Error -> {
             BitwardenBasicDialog(
-                visibilityState = dialog.state,
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
                 onDismissRequest = handler.onDismissErrorDialog,
             )
         }

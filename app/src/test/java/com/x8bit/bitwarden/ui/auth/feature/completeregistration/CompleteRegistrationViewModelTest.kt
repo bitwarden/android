@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -193,10 +192,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        BasicDialogState.Shown(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = "mock_error".asText(),
-                        ),
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = "mock_error".asText(),
                     ),
                 ),
                 awaitItem(),
@@ -595,10 +592,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val expectedState = DEFAULT_STATE.copy(
                 passwordInput = input,
                 dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_length_val_message_x.asText(12),
-                    ),
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.master_password_length_val_message_x.asText(12),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -619,10 +614,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 userEmail = EMAIL,
                 passwordInput = PASSWORD,
                 dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_confirmation_val_message.asText(),
-                    ),
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.master_password_confirmation_val_message.asText(),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -644,11 +637,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             userEmail = "",
             passwordInput = PASSWORD,
             dialog = CompleteRegistrationDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.email_address.asText(),
-                    ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required.asText(
+                    R.string.email_address.asText(),
                 ),
             ),
         )

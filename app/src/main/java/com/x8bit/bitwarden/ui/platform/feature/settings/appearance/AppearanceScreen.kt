@@ -25,9 +25,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
@@ -121,16 +120,16 @@ private fun LanguageSelectionRow(
     onLanguageSelection: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var languageChangedDialogState: BasicDialogState by rememberSaveable {
-        mutableStateOf(BasicDialogState.Hidden)
+    var languageChangedDialogOption: Text? by rememberSaveable { mutableStateOf(value = null) }
+    var shouldShowLanguageSelectionDialog by rememberSaveable { mutableStateOf(value = false) }
+
+    languageChangedDialogOption?.let {
+        BitwardenBasicDialog(
+            title = stringResource(id = R.string.language),
+            message = stringResource(id = R.string.language_change_x_description, it),
+            onDismissRequest = { languageChangedDialogOption = null },
+        )
     }
-    var shouldShowLanguageSelectionDialog by rememberSaveable { mutableStateOf(false) }
-
-    BitwardenBasicDialog(
-        visibilityState = languageChangedDialogState,
-        onDismissRequest = { languageChangedDialogState = BasicDialogState.Hidden },
-    )
-
     BitwardenTextRow(
         text = stringResource(id = R.string.language),
         onClick = { shouldShowLanguageSelectionDialog = true },
@@ -155,10 +154,7 @@ private fun LanguageSelectionRow(
                     onClick = {
                         shouldShowLanguageSelectionDialog = false
                         onLanguageSelection(option)
-                        languageChangedDialogState = BasicDialogState.Shown(
-                            title = R.string.language.asText(),
-                            message = R.string.language_change_x_description.asText(option.text),
-                        )
+                        languageChangedDialogOption = option.text
                     },
                 )
             }
