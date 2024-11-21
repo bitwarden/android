@@ -43,13 +43,13 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
 import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenFullScreenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
@@ -62,7 +62,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLoginsInstructionStep
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
-import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 import kotlinx.collections.immutable.persistentListOf
 
 private const val IMPORT_HELP_URL = "https://bitwarden.com/help/import-data/"
@@ -315,20 +314,21 @@ private fun ImportLoginsStepOneContent(
         stepText = stringResource(R.string.step_1_of_3),
         stepTitle = stringResource(R.string.export_your_saved_logins),
         instructions = persistentListOf(
-            InstructionStep(
-                stepNumber = 1,
-                instructionText = instruction1,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number1,
+                headerText = instruction1,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 2,
-                instructionText = instruction2,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number2,
+                headerText = instruction2,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 3,
-                instructionText = instruction3,
-                additionalText = stringResource(R.string.delete_this_file_after_import_is_complete),
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number3,
+                headerText = instruction3,
+                subtitleText = stringResource(R.string.delete_this_file_after_import_is_complete)
+                    .toAnnotatedString(),
             ),
         ),
         onBackClick = onBackClick,
@@ -369,15 +369,15 @@ private fun ImportLoginsStepTwoContent(
         stepText = stringResource(R.string.step_2_of_3),
         stepTitle = stringResource(R.string.log_in_to_bitwarden),
         instructions = persistentListOf(
-            InstructionStep(
-                stepNumber = 1,
-                instructionText = instruction1,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number1,
+                headerText = instruction1,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 2,
-                instructionText = instruction2,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number2,
+                headerText = instruction2,
+                subtitleText = null,
             ),
         ),
         onBackClick = onBackClick,
@@ -435,25 +435,25 @@ private fun ImportLoginsStepThreeContent(
         stepText = stringResource(R.string.step_3_of_3),
         stepTitle = stringResource(R.string.import_logins_to_bitwarden),
         instructions = persistentListOf(
-            InstructionStep(
-                stepNumber = 1,
-                instructionText = instruction1,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number1,
+                headerText = instruction1,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 2,
-                instructionText = instruction2,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number2,
+                headerText = instruction2,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 3,
-                instructionText = instruction3,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number3,
+                headerText = instruction3,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 4,
-                instructionText = instruction4,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number4,
+                headerText = instruction4,
+                subtitleText = null,
             ),
         ),
         onBackClick = onBackClick,
@@ -524,15 +524,9 @@ private fun ImportLoginsSuccessBottomSheetContent(
                     iconVectorResource = R.drawable.ic_shield,
                 ),
             ),
-            bottomDividerPaddingStart = 48.dp,
-            showBottomDivider = true,
             modifier = Modifier.standardHorizontalMargin(),
-        ) { contentData ->
-            BitwardenContentBlock(
-                data = contentData,
-                subtitleTextStyle = BitwardenTheme.typography.bodySmall,
-            )
-        }
+            contentSubtitleTextStyle = BitwardenTheme.typography.bodySmall,
+        )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.got_it),
