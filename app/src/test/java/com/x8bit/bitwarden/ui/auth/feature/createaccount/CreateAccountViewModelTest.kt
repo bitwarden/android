@@ -23,7 +23,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -101,10 +100,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
             dialog = CreateAccountDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.invalid_email.asText(),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.invalid_email.asText(),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -124,11 +121,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
             dialog = CreateAccountDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required
-                        .asText(R.string.email_address.asText()),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required
+                    .asText(R.string.email_address.asText()),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -153,10 +148,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = EMAIL,
             passwordInput = input,
             dialog = CreateAccountDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_length_val_message_x.asText(12),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_length_val_message_x.asText(12),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -181,10 +174,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = "test@test.com",
             passwordInput = input,
             dialog = CreateAccountDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.master_password_confirmation_val_message.asText(),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -211,10 +202,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordInput = password,
             confirmPasswordInput = password,
             dialog = CreateAccountDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.accept_policies_error.asText(),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.accept_policies_error.asText(),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -290,10 +279,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = CreateAccountDialog.Error(
-                        BasicDialogState.Shown(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = "mock_error".asText(),
-                        ),
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = "mock_error".asText(),
                     ),
                 ),
                 awaitItem(),
