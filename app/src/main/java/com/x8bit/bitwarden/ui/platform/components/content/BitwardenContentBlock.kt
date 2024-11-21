@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
@@ -107,7 +108,7 @@ private fun BitwardenContentBlock(
                 ?: Spacer(Modifier.width(16.dp))
         }
 
-        Column {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Spacer(Modifier.height(12.dp))
             Text(
                 text = headerText,
@@ -159,7 +160,7 @@ private fun BitwardenContentBlock_preview() {
             BitwardenContentBlock(
                 data = ContentBlockData(
                     headerText = "Header",
-                    subtitleText = "Subtitle",
+                    subtitleText = "Subtitle that is very very long and it should hit the very end of line",
                     iconVectorResource = null,
                 ),
             )

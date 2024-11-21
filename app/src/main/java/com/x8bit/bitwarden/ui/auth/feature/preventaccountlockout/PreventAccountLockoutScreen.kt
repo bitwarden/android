@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -17,7 +16,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -119,10 +116,7 @@ private fun NeverLoseAccessContent(modifier: Modifier) {
                     iconVectorResource = R.drawable.ic_pencil
                 )
             ),
-            bottomDividerPaddingStart = 48.dp
-        ) { contentData ->
-            BitwardenContentBlock(data = contentData)
-        }
+        )
     }
     Spacer(modifier = Modifier.navigationBarsPadding())
 }
