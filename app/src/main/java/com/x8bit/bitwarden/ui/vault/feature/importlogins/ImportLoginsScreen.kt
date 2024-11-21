@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
 import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
@@ -326,7 +327,8 @@ private fun ImportLoginsStepOneContent(
             ContentBlockData(
                 iconVectorResource = R.drawable.ic_number3,
                 headerText = instruction3,
-                subtitleText = stringResource(R.string.delete_this_file_after_import_is_complete),
+                subtitleText = stringResource(R.string.delete_this_file_after_import_is_complete)
+                    .toAnnotatedString(),
             ),
         ),
         onBackClick = onBackClick,

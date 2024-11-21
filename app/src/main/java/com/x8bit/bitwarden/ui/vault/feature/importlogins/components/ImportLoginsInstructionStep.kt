@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
 import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
@@ -129,7 +130,7 @@ private fun ImportLoginsInstructionStep_preview() {
                         headerText = buildAnnotatedString {
                             append("Step text 2")
                         },
-                        subtitleText = "Added deets",
+                        subtitleText = "Added deets".toAnnotatedString(),
                     ),
                     ContentBlockData(
                         iconVectorResource = R.drawable.ic_number3,

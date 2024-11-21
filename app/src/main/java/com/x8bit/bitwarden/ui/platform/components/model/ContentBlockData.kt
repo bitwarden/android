@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.components.model
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 
 /**
@@ -24,8 +25,8 @@ data class ContentBlockData(
         subtitleText: String? = null,
         @DrawableRes iconVectorResource: Int? = null,
     ) : this(
-        headerText = AnnotatedString(headerText),
-        subtitleText = subtitleText?.let { AnnotatedString(it) },
+        headerText = headerText.toAnnotatedString(),
+        subtitleText = subtitleText?.toAnnotatedString(),
         iconVectorResource = iconVectorResource,
     )
 }

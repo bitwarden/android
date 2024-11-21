@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
@@ -27,7 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -66,7 +65,7 @@ private fun BitwardenContentBlock(
     headerText: AnnotatedString,
     modifier: Modifier = Modifier,
     headerTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
-    subtitleText: String? = null,
+    subtitleText: AnnotatedString? = null,
     subtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
     showDivider: Boolean = true,
     @DrawableRes iconVectorResource: Int? = null,
@@ -74,56 +73,56 @@ private fun BitwardenContentBlock(
 ) {
     var dividerStartPadding by remember { mutableStateOf(0.dp) }
     val localDensity = LocalDensity.current
-    Column {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(backgroundColor),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Row(
-                modifier = Modifier
-                    .onGloballyPositioned {
-                        dividerStartPadding = with(localDensity) {
-                            it.size.width.toDp()
-                        }
-                    },
-            ) {
-                iconVectorResource
-                    ?.let {
-                        Spacer(Modifier.width(12.dp))
-                        Icon(
-                            painter = rememberVectorPainter(it),
-                            contentDescription = null,
-                            tint = BitwardenTheme.colorScheme.icon.secondary,
-                            modifier = Modifier.size(24.dp),
-                        )
-                        Spacer(Modifier.width(12.dp))
-                    }
-                    ?: Spacer(Modifier.width(16.dp))
-            }
 
-            Column {
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = headerText,
-                    style = headerTextStyle,
-                )
-                subtitleText?.let {
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = it,
-                        style = subtitleTextStyle,
-                        color = BitwardenTheme.colorScheme.text.secondary,
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+            .bottomDivider(
+                enabled = showDivider,
+                paddingStart = dividerStartPadding,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row(
+            modifier = Modifier
+                .onGloballyPositioned {
+                    dividerStartPadding = with(localDensity) {
+                        it.size.width.toDp()
+                    }
+                },
+        ) {
+            iconVectorResource
+                ?.let {
+                    Spacer(Modifier.width(12.dp))
+                    Icon(
+                        painter = rememberVectorPainter(it),
+                        contentDescription = null,
+                        tint = BitwardenTheme.colorScheme.icon.secondary,
+                        modifier = Modifier.size(24.dp),
                     )
+                    Spacer(Modifier.width(12.dp))
                 }
-                Spacer(Modifier.height(12.dp))
+                ?: Spacer(Modifier.width(16.dp))
+        }
+
+        Column {
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = headerText,
+                style = headerTextStyle,
+            )
+            subtitleText?.let {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = it,
+                    style = subtitleTextStyle,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                )
             }
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.height(12.dp))
         }
-        if (showDivider) {
-            BitwardenHorizontalDivider(modifier = Modifier.padding(start = dividerStartPadding))
-        }
+        Spacer(Modifier.width(12.dp))
     }
 }
 
