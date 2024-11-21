@@ -162,8 +162,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 )
             } returns LoginResult.Success
             val viewModel = createViewModel()
-            viewModel.stateFlow.test {
-                assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
                     CreateAuthRequestResult.Success(
                         authRequest = AUTH_REQUEST,
@@ -181,7 +181,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             message = R.string.logging_in.asText(),
                         ),
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
@@ -191,7 +191,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()),
+                    eventFlow.awaitItem(),
                 )
             }
 
@@ -227,8 +231,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             )
             val viewModel = createViewModel(initialState)
 
-            viewModel.stateFlow.test {
-                assertEquals(initialState, awaitItem())
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(initialState, stateFlow.awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
                     CreateAuthRequestResult.Success(
                         authRequest = AUTH_REQUEST,
@@ -246,7 +250,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         ),
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
                 )
                 assertEquals(
                     initialState.copy(
@@ -256,7 +260,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    awaitItem(),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()),
+                    eventFlow.awaitItem(),
                 )
             }
 

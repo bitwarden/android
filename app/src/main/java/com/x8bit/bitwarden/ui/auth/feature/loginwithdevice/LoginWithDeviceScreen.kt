@@ -61,6 +61,7 @@ fun LoginWithDeviceScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginWithDeviceEvent.NavigateBack -> onNavigateBack()
@@ -73,7 +74,7 @@ fun LoginWithDeviceScreen(
             }
 
             is LoginWithDeviceEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
