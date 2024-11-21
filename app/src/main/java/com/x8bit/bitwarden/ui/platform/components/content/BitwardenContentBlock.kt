@@ -108,7 +108,7 @@ private fun BitwardenContentBlock(
                 ?: Spacer(Modifier.width(16.dp))
         }
 
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(end = 16.dp)) {
             Spacer(Modifier.height(12.dp))
             Text(
                 text = headerText,
@@ -124,7 +124,6 @@ private fun BitwardenContentBlock(
             }
             Spacer(Modifier.height(12.dp))
         }
-        Spacer(Modifier.width(12.dp))
     }
 }
 
@@ -160,7 +159,7 @@ private fun BitwardenContentBlock_preview() {
             BitwardenContentBlock(
                 data = ContentBlockData(
                     headerText = "Header",
-                    subtitleText = "Subtitle that is very very long and it should hit the very end of line",
+                    subtitleText = "Subtitle that is very very long and it should hit the very end of the line",
                     iconVectorResource = null,
                 ),
             )
