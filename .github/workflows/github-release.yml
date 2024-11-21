@@ -11,7 +11,7 @@ on:
         description: 'Version Number - E.g. "123456"'
         required: true
         type: string
-      artifact_run_id:
+      artifact-run-id:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
@@ -22,7 +22,8 @@ on:
       prerelease:
         description: 'Mark as pre-release'
         type: boolean
-      make_latest:
+        default: true
+      make-latest:
         description: 'Set as the latest release'
         type: boolean
       branch-protection-type:
@@ -51,7 +52,7 @@ jobs:
         id: get_release_branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           BRANCH_PROTECTION_TYPE: ${{ inputs.branch-protection-type }}
         run: |
           release_branch=$(gh run view $ARTIFACT_RUN_ID --json headBranch -q .headBranch)
@@ -81,7 +82,7 @@ jobs:
       - name: Download artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
         run: |
           gh run download $ARTIFACT_RUN_ID -D $ARTIFACTS_PATH
           file_count=$(find $ARTIFACTS_PATH -type f | wc -l)
@@ -99,7 +100,7 @@ jobs:
           name: "v${{ inputs.version-name }} (${{ inputs.version-number }})"
           prerelease: ${{ inputs.prerelease }}
           draft: ${{ inputs.draft }}
-          make_latest: ${{ inputs.make_latest }}
+          make_latest: ${{ inputs.make-latest }}
           target_commitish: ${{ steps.get_release_branch.outputs.release_branch }}
           generate_release_notes: true
           files: |
@@ -110,7 +111,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_ID: ${{ steps.create_release.outputs.id }}
           RELEASE_URL: ${{ steps.create_release.outputs.url }}
-          ARTIFACT_RUN_ID: ${{ inputs.artifact_run_id }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
         run: |
           # Get current release body
           current_body=$(gh api /repos/${{ github.repository }}/releases/$RELEASE_ID --jq .body)
