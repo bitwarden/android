@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Senha mestra inválida. Tente novamente.</string>
   <string name="invalid_pin">PIN inválido. Tente novamente.</string>
   <string name="launch">Abrir</string>
-  <string name="log_in">Iniciar Sessão</string>
   <string name="log_in_verb">Iniciar sessão</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Encerrar sessão</string>
@@ -952,7 +951,7 @@ Você deseja mudar para esta conta?</string>
   <string name="or_log_in_you_may_already_have_an_account">Ou faça o login, você pode já ter uma conta.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Obtenha e-mails do Bitwarden para anúncios, conselhos e oportunidades de pesquisa. Cancele a inscrição a qualquer momento.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Receba conselhos, anúncios e oportunidades de pesquisa da Bitwarden na sua caixa de entrada. Cancele a assinatura a qualquer momento.</string>
-  <string name="security_prioritized">Privacidade, priorizado</string>
+  <string name="security_prioritized">Security, prioritized</string>
   <string name="welcome_message_1">Salve suas credenciais, cartões e identidades no seu cofre seguro. O Bitwarden usa criptografia de zero conhecimento, de ponta a ponta para proteger o que é importante para você.</string>
   <string name="welcome_message_2">Configure o desbloqueio biométrico e preenchimento automático para acessar suas contas sem digitar uma única letra.</string>
   <string name="quick_and_easy_login">Login rápido e fácil</string>
@@ -1087,4 +1086,15 @@ Você deseja mudar para esta conta?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">O Bitwarden pode notificá-lo toda vez que receber uma nova solicitação de login de outro dispositivo.</string>
   <string name="skip_for_now">Pular por enquanto</string>
   <string name="done_text">Concluído</string>
+  <string name="page_number_x_of_y">%1$s de %2$s</string>
+  <string name="copy_identity_name">Copy identity name</string>
+  <string name="copy_company">Copy company</string>
+  <string name="copy_ssn">Copy social security number</string>
+  <string name="copy_passport_number">Copy passport number</string>
+  <string name="copy_license_number">Copy license number</string>
+  <string name="copy_email">Copy email</string>
+  <string name="copy_phone">Copy phone number</string>
+  <string name="copy_address">Copy address</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>

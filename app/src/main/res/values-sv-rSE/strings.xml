@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Ogiltigt huvudlösenord. Försök igen.</string>
   <string name="invalid_pin">Ogiltig PIN-kod. Försök igen.</string>
   <string name="launch">Öppna</string>
-  <string name="log_in">Logga in</string>
   <string name="log_in_verb">Logga in</string>
   <string name="log_in_noun">Inloggning</string>
   <string name="log_out">Logga ut</string>
@@ -221,7 +220,7 @@
   <string name="enter_verification_code_app">Ange den 6-siffriga verifieringskoden från din autentiseringsapp.</string>
   <string name="enter_verification_code_email">Ange den 6-siffriga verifieringskoden som skickades till %1$s.</string>
   <string name="login_unavailable">Inloggning ej tillgänglig</string>
-  <string name="no_two_step_available">Detta konto har tvåstegsverifiering aktiverat, men ingen av de konfigurerade metoderna stöds av den här enheten.
+  <string name="no_two_step_available">Detta konto har tvåstegsverifiering aktiverat, men ingen av de konfigurerade metoderna stöds av den här enheten. 
 Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har bättre stöd bland enheter (t.ex. en autentiseringsapp).</string>
   <string name="recovery_code_title">Återställningskod</string>
   <string name="remember_me">Kom ihåg mig</string>
@@ -953,7 +952,7 @@ Vill du byta till detta konto?</string>
   <string name="or_log_in_you_may_already_have_an_account">Eller logga in, du kanske redan har ett konto.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
-  <string name="security_prioritized">Privacy, prioritized</string>
+  <string name="security_prioritized">Säkerhet, prioriterat</string>
   <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
   <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>
   <string name="quick_and_easy_login">Quick and easy login</string>
@@ -1088,4 +1087,15 @@ Vill du byta till detta konto?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Skip for now</string>
   <string name="done_text">Klar</string>
+  <string name="page_number_x_of_y">%1$s av %2$s</string>
+  <string name="copy_identity_name">Copy identity name</string>
+  <string name="copy_company">Kopiera företag</string>
+  <string name="copy_ssn">Kopiera personnummer</string>
+  <string name="copy_passport_number">Kopiera passnummer</string>
+  <string name="copy_license_number">Copy license number</string>
+  <string name="copy_email">Kopiera e-postadress</string>
+  <string name="copy_phone">Kopiera telefonnummer</string>
+  <string name="copy_address">Kopiera adress</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>

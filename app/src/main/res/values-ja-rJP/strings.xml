@@ -40,7 +40,6 @@
   <string name="invalid_master_password">マスターパスワードが間違っています。入力し直してください。</string>
   <string name="invalid_pin">PIN が間違っています。入力し直してください。</string>
   <string name="launch">開く</string>
-  <string name="log_in">ログイン</string>
   <string name="log_in_verb">ログイン</string>
   <string name="log_in_noun">ログイン</string>
   <string name="log_out">ログアウト</string>
@@ -952,7 +951,7 @@
   <string name="or_log_in_you_may_already_have_an_account">またはログインしてください。すでにアカウントを持っている可能性があります。</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Bitwarden からメールでお知らせやアドバイス、アンケートを受け取ります。配信停止はいつでもできます。</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Bitwarden からメールでアドバイスや告知、アンケートを受け取りましょう。配信停止はいつでもできます。</string>
-  <string name="security_prioritized">プライバシーが最優先</string>
+  <string name="security_prioritized">Security, prioritized</string>
   <string name="welcome_message_1">ログイン情報、カード、ID を安全な保管庫に保存します。Bitwarden はゼロ知識、エンドツーエンドの暗号化を使用して、あなたにとって重要なものを保護します。</string>
   <string name="welcome_message_2">生体認証のロック解除と自動入力を設定して、文字を何も入力せずにアカウントにログインします。</string>
   <string name="quick_and_easy_login">すばやく簡単にログイン</string>
@@ -1087,4 +1086,15 @@
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Skip for now</string>
   <string name="done_text">Done</string>
+  <string name="page_number_x_of_y">%1$s of %2$s</string>
+  <string name="copy_identity_name">Copy identity name</string>
+  <string name="copy_company">Copy company</string>
+  <string name="copy_ssn">Copy social security number</string>
+  <string name="copy_passport_number">Copy passport number</string>
+  <string name="copy_license_number">Copy license number</string>
+  <string name="copy_email">Copy email</string>
+  <string name="copy_phone">Copy phone number</string>
+  <string name="copy_address">Copy address</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>

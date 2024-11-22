@@ -40,7 +40,6 @@
   <string name="invalid_master_password">无效的主密码，请重试。</string>
   <string name="invalid_pin">无效的 PIN 码，请重试。</string>
   <string name="launch">前往</string>
-  <string name="log_in">登录</string>
   <string name="log_in_verb">登录</string>
   <string name="log_in_noun">登录</string>
   <string name="log_out">注销</string>
@@ -677,7 +676,7 @@
   <string name="tap_to_go_back">点击以返回</string>
   <string name="password_is_visible_tap_to_hide">密码可见，点击以隐藏。</string>
   <string name="password_is_not_visible_tap_to_show">密码不可见，点击以显示。</string>
-  <string name="filter_by_vault">按密码库过滤项目</string>
+  <string name="filter_by_vault">按密码库筛选项目</string>
   <string name="all_vaults">所有密码库</string>
   <string name="vaults">密码库</string>
   <string name="vault_filter_description">密码库：%1$s</string>
@@ -952,7 +951,7 @@
   <string name="or_log_in_you_may_already_have_an_account">或者登录，您可能已经有一个账户了。</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时退订。</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时退订。</string>
-  <string name="security_prioritized">隐私优先</string>
+  <string name="security_prioritized">Security, prioritized</string>
   <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
   <string name="welcome_message_2">设置生物识别解锁和自动填充，无需输入任何字符即可登录您的账户。</string>
   <string name="quick_and_easy_login">快速便捷的登录</string>
@@ -1087,4 +1086,15 @@
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden 可以在每次收到来自其他设备的新登录请求时通知您。</string>
   <string name="skip_for_now">暂时跳过</string>
   <string name="done_text">完成</string>
+  <string name="page_number_x_of_y">%1$s / %2$s</string>
+  <string name="copy_identity_name">复制身份名称</string>
+  <string name="copy_company">复制公司信息</string>
+  <string name="copy_ssn">复制社会保障号码</string>
+  <string name="copy_passport_number">复制护照号码</string>
+  <string name="copy_license_number">复制许可证号码</string>
+  <string name="copy_email">复制电子邮件地址</string>
+  <string name="copy_phone">复制电话号码</string>
+  <string name="copy_address">复制地址</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>

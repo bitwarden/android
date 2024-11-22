@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Μη έγκυρος κύριος κωδικός. Δοκιμάστε ξανά.</string>
   <string name="invalid_pin">Μη έγκυρο PIN. Προσπάθηστε ξανά.</string>
   <string name="launch">Εκκίνηση</string>
-  <string name="log_in">Σύνδεση</string>
   <string name="log_in_verb">Σύνδεση</string>
   <string name="log_in_noun">Σύνδεση</string>
   <string name="log_out">Αποσύνδεση</string>
@@ -241,7 +240,7 @@
   <string name="verification_code_totp">Κωδικός επαλήθευσης (TOTP)</string>
   <string name="authenticator_key_added">Το κλειδί επαλήθευσης προστέθηκε.</string>
   <string name="authenticator_key_read_error">Αδυναμία ανάγνωσης κλειδιού επαλήθευσης.</string>
-  <string name="point_your_camera_at_the_qr_code">Σημαδέψτε με την κάμερα σας τον κωδικό QR.
+  <string name="point_your_camera_at_the_qr_code">Σημαδέψτε με την κάμερα σας τον κωδικό QR. 
 Η σάρωση θα γίνει αυτόματα.</string>
   <string name="scan_qr_title">Σάρωση κώδικα QR</string>
   <string name="camera">Κάμερα</string>
@@ -952,7 +951,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Ή συνδεθείτε, μπορεί να έχετε ήδη λογαριασμό.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Λάβετε μηνύματα ηλ. ταχυδρομείου από το Bitwarden για ανακοινώσεις, συμβουλές και ερευνητικές ευκαιρίες. Ακυρώστε τη συνδρομή σας ανα πάσα στιγμή.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Λάβετε συμβουλές, ανακοινώσεις και ευκαιρίες έρευνας από το Bitwarden στα εισερχόμενά σας. Μπορείτε να απεγγραφείτε ανα πάσα στιγμή.</string>
-  <string name="security_prioritized">Προταιρεότητα, η ιδιωτικότητα</string>
+  <string name="security_prioritized">Security, prioritized</string>
   <string name="welcome_message_1">Αποθηκεύστε συνδέσεις, κάρτες και ταυτότητες στο ασφαλές θησαυ/κιό σας. Το Bitwarden χρησιμοποιεί κρυπτογράφηση από άκρο σε άκρο και μηδενικής γνώσης για να προστατεύσει ό,τι είναι σημαντικό για εσάς.</string>
   <string name="welcome_message_2">Ρυθμίστε το βιομετρικό ξεκλείδωμα και την αυτόματη συμπλήρωση για σύνδεση στους λογαριασμούς σας χωρίς να πληκτρολογήσετε ούτε ένα γράμμα.</string>
   <string name="quick_and_easy_login">Γρήγορη και εύκολη σύνδεση</string>
@@ -1087,4 +1086,15 @@
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Skip for now</string>
   <string name="done_text">Done</string>
+  <string name="page_number_x_of_y">%1$s of %2$s</string>
+  <string name="copy_identity_name">Copy identity name</string>
+  <string name="copy_company">Copy company</string>
+  <string name="copy_ssn">Copy social security number</string>
+  <string name="copy_passport_number">Copy passport number</string>
+  <string name="copy_license_number">Copy license number</string>
+  <string name="copy_email">Copy email</string>
+  <string name="copy_phone">Copy phone number</string>
+  <string name="copy_address">Copy address</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>
