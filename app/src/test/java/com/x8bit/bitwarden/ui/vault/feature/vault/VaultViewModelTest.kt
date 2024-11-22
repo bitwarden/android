@@ -120,7 +120,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         mockk {
             every { vaultFilterType = any() } just runs
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-            every { sync() } just runs
+            every { sync(forced = any()) } just runs
             every { syncIfNecessary() } just runs
             every { lockVaultForCurrentUser() } just runs
             every { lockVault(any()) } just runs
@@ -478,7 +478,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify {
-            vaultRepository.sync()
+            vaultRepository.sync(forced = true)
         }
     }
 
@@ -1323,7 +1323,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.TryAgainClick)
 
-        verify { vaultRepository.sync() }
+        verify { vaultRepository.sync(forced = true) }
     }
 
     @Test
@@ -1365,7 +1365,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepository.sync()
+            vaultRepository.sync(forced = true)
         }
     }
 
@@ -1830,6 +1830,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
             }
         }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,

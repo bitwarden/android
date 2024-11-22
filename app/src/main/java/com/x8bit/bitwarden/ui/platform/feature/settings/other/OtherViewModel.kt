@@ -99,7 +99,7 @@ class OtherViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = OtherState.DialogState.Loading(R.string.syncing.asText()))
         }
-        vaultRepo.sync()
+        vaultRepo.sync(forced = true)
     }
 
     private fun handleInternalAction(action: OtherAction.Internal) {
