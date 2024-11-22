@@ -37,7 +37,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -74,7 +73,6 @@ object PlatformDiskModule {
     fun provideEventDatabase(
         app: Application,
         databaseSchemeManager: DatabaseSchemeManager,
-        clock: Clock,
     ): PlatformDatabase =
         Room
             .databaseBuilder(
@@ -84,12 +82,7 @@ object PlatformDiskModule {
             )
             .fallbackToDestructiveMigration()
             .addTypeConverter(ZonedDateTimeTypeConverter())
-            .addCallback(
-                DatabaseSchemeCallback(
-                    databaseSchemeManager = databaseSchemeManager,
-                    clock = clock,
-                ),
-            )
+            .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .build()
 
     @Provides

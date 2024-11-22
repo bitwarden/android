@@ -1,34 +1,27 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
-import java.time.Instant
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 /**
  * Primary implementation of [DatabaseSchemeManager].
  */
 class DatabaseSchemeManagerImpl(
+    val authDiskSource: AuthDiskSource,
     val settingsDiskSource: SettingsDiskSource,
-    val dispatcherManager: DispatcherManager,
 ) : DatabaseSchemeManager {
+    private val mutableSharedFlow: MutableSharedFlow<Unit> = bufferedMutableSharedFlow()
 
-    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
-
-    override var lastDatabaseSchemeChangeInstant: Instant?
-        get() = settingsDiskSource.lastDatabaseSchemeChangeInstant
-        set(value) {
-            settingsDiskSource.lastDatabaseSchemeChangeInstant = value
+    override fun clearSyncState() {
+        authDiskSource.userState?.accounts?.forEach { (userId, _) ->
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
         }
+        mutableSharedFlow.tryEmit(Unit)
+    }
 
-    override val lastDatabaseSchemeChangeInstantFlow =
-        settingsDiskSource
-            .lastDatabaseSchemeChangeInstantFlow
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource.lastDatabaseSchemeChangeInstant,
-            )
+    override val databaseSchemeChangeFlow: Flow<Unit> = mutableSharedFlow.asSharedFlow()
 }
