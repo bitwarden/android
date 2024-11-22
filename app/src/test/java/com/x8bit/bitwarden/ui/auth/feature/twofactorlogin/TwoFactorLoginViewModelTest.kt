@@ -48,12 +48,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     private val mutableDuoTokenResultFlow = bufferedMutableSharedFlow<DuoCallbackTokenResult>()
     private val mutableYubiKeyResultFlow = bufferedMutableSharedFlow<YubiKeyResult>()
     private val mutableWebAuthResultFlow = bufferedMutableSharedFlow<WebAuthResult>()
-    private val authRepository: AuthRepository = mockk(relaxed = true) {
+    private val authRepository: AuthRepository = mockk {
         every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
+        coEvery { login(any(), any(), any(), any(), any()) } returns LoginResult.Success
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -98,8 +99,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `yubiKeyResultFlow update should populate the input field`() {
-        val initialState = DEFAULT_STATE
+    fun `yubiKeyResultFlow update should populate the input field and attempt login`() {
+        val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.YUBI_KEY)
         val token = "token"
         val viewModel = createViewModel(initialState)
         mutableYubiKeyResultFlow.tryEmit(YubiKeyResult(token))
@@ -110,6 +111,19 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        coVerify(exactly = 1) {
+            authRepository.login(
+                email = DEFAULT_STATE.email,
+                password = DEFAULT_STATE.password,
+                twoFactorData = TwoFactorDataModel(
+                    code = token,
+                    method = TwoFactorAuthMethod.YUBI_KEY.value.toString(),
+                    remember = DEFAULT_STATE.isRememberMeEnabled,
+                ),
+                captchaToken = DEFAULT_STATE.captchaToken,
+                orgIdentifier = DEFAULT_STATE.orgIdentifier,
+            )
+        }
     }
 
     @Test
