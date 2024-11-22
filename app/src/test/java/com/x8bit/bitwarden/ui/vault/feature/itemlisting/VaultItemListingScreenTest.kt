@@ -1788,7 +1788,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "PIN")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performTextInput("PIN")
+            .performTextInput("1234")
         composeTestRule
             .onAllNodesWithText(text = "Submit")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -1797,7 +1797,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultItemListingsAction.PinFido2SetUpSubmit(
-                    pin = "PIN",
+                    pin = "1234",
                     selectedCipherId = selectedCipherId,
                 ),
             )
