@@ -149,7 +149,7 @@ class OtherViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SyncNowButtonClick should sync repo`() = runTest {
-        every { vaultRepository.sync() } just runs
+        every { vaultRepository.sync(forced = true) } just runs
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
@@ -163,7 +163,7 @@ class OtherViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
-        verify { vaultRepository.sync() }
+        verify { vaultRepository.sync(forced = true) }
     }
 
     @Test

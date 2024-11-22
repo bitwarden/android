@@ -105,12 +105,12 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `RefreshClick should call sync`() {
         val viewModel = createViewModel()
-        every { vaultRepo.sync() } just runs
+        every { vaultRepo.sync(forced = true) } just runs
 
         viewModel.trySendAction(SendAction.RefreshClick)
 
         verify {
-            vaultRepo.sync()
+            vaultRepo.sync(forced = true)
         }
     }
 
@@ -223,7 +223,7 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `SyncClick should call sync`() {
         val viewModel = createViewModel()
-        every { vaultRepo.sync() } just runs
+        every { vaultRepo.sync(forced = true) } just runs
 
         viewModel.trySendAction(SendAction.SyncClick)
 
@@ -234,7 +234,7 @@ class SendViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify {
-            vaultRepo.sync()
+            vaultRepo.sync(forced = true)
         }
     }
 
@@ -419,13 +419,13 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `RefreshPull should call vault repository sync`() {
-        every { vaultRepo.sync() } just runs
+        every { vaultRepo.sync(forced = true) } just runs
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SendAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepo.sync()
+            vaultRepo.sync(forced = true)
         }
     }
 

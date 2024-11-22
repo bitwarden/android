@@ -109,7 +109,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * Unlike [syncIfNecessary], this will always perform the requested sync and should only be
      * utilized in cases where the user specifically requested the action.
      */
-    fun sync()
+    fun sync(forced: Boolean = false)
 
     /**
      * Checks if conditions have been met to perform a sync request and, if so, syncs the vault

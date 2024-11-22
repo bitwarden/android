@@ -135,7 +135,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
         every { lockVault(any()) } just runs
-        every { sync() } just runs
+        every { sync(forced = true) } just runs
         coEvery {
             getDecryptedFido2CredentialAutofillViews(any())
         } returns DecryptFido2CredentialAutofillViewResult.Error
@@ -351,7 +351,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
-            vaultRepository.sync()
+            vaultRepository.sync(forced = true)
         }
     }
 
@@ -1029,7 +1029,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `RefreshClick should sync`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.RefreshClick)
-        verify { vaultRepository.sync() }
+        verify { vaultRepository.sync(forced = true) }
     }
 
     @Test
@@ -2127,7 +2127,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepository.sync()
+            vaultRepository.sync(forced = true)
         }
     }
 

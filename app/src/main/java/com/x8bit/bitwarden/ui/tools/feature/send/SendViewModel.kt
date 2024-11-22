@@ -255,7 +255,7 @@ class SendViewModel @Inject constructor(
 
     private fun handleRefreshClick() {
         // No need to update the view state, the vault repo will emit a new state during this time.
-        vaultRepo.sync()
+        vaultRepo.sync(forced = true)
     }
 
     private fun handleSearchClick() {
@@ -266,7 +266,7 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = SendState.DialogState.Loading(R.string.syncing.asText()))
         }
-        vaultRepo.sync()
+        vaultRepo.sync(forced = true)
     }
 
     private fun handleCopyClick(action: SendAction.CopyClick) {
@@ -321,7 +321,7 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepo.sync()
+        vaultRepo.sync(forced = true)
     }
 }
 
