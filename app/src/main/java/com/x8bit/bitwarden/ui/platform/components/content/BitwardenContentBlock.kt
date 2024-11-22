@@ -108,7 +108,7 @@ private fun BitwardenContentBlock(
                 ?: Spacer(Modifier.width(16.dp))
         }
 
-        Column(modifier = Modifier.padding(end = 16.dp)) {
+        Column(modifier = Modifier.weight(weight = 1f, fill = false)) {
             Spacer(Modifier.height(12.dp))
             Text(
                 text = headerText,
@@ -124,6 +124,7 @@ private fun BitwardenContentBlock(
             }
             Spacer(Modifier.height(12.dp))
         }
+        Spacer(Modifier.width(16.dp))
     }
 }
 
