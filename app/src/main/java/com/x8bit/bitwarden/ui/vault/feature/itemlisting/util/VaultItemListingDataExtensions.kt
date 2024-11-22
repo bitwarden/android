@@ -200,6 +200,7 @@ fun VaultData.toViewState(
         val shouldShowAddButton = when (itemListingType) {
             is VaultItemListingState.ItemListingType.Vault.Folder,
             VaultItemListingState.ItemListingType.Vault.Trash,
+            VaultItemListingState.ItemListingType.Vault.SshKey,
                 -> false
 
             else -> true

@@ -2084,7 +2084,7 @@ data class VaultItemListingState(
              */
             data object SshKey : Vault() {
                 override val titleText: Text get() = R.string.ssh_keys.asText()
-                override val hasFab: Boolean get() = true
+                override val hasFab: Boolean get() = false
             }
 
             /**
