@@ -245,7 +245,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleRefreshClick() {
         // No need to update the view state, the vault repo will emit a new state during this time
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleCopyCustomHiddenFieldClick(

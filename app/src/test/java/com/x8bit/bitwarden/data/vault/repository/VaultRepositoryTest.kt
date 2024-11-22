@@ -816,6 +816,21 @@ class VaultRepositoryTest {
             coVerify(exactly = 0) { syncService.sync() }
         }
 
+    @Test
+    fun `sync with forced should skip checks and call the syncService sync`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } returns Throwable("failure").asFailure()
+
+        vaultRepository.sync(forced = true)
+
+        coVerify(exactly = 0) {
+            syncService.getAccountRevisionDateMillis()
+        }
+        coVerify(exactly = 1) {
+            syncService.sync()
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `sync with syncService Success should unlock the vault for orgs if necessary and update AuthDiskSource and VaultDiskSource`() =

@@ -820,13 +820,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on RefreshClick should sync`() = runTest {
-            every { vaultRepo.sync() } just runs
+            every { vaultRepo.sync(forced = true) } just runs
             val viewModel = createViewModel(state = DEFAULT_STATE)
 
             viewModel.trySendAction(VaultItemAction.Common.RefreshClick)
 
             verify(exactly = 1) {
-                vaultRepo.sync()
+                vaultRepo.sync(forced = true)
             }
         }
 
