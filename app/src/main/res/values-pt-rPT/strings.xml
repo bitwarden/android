@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Palavra-passe mestra inválida. Tente novamente.</string>
   <string name="invalid_pin">PIN inválido. Tente novamente.</string>
   <string name="launch">Iniciar</string>
-  <string name="log_in">Iniciar sessão</string>
   <string name="log_in_verb">Iniciar sessão</string>
   <string name="log_in_noun">Credencial</string>
   <string name="log_out">Terminar sessão</string>
@@ -952,7 +951,7 @@ Pretende mudar para esta conta?</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Receba e-mails do Bitwarden com anúncios, conselhos e oportunidades de investigação.
 Anule a subscrição em qualquer altura.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Receba conselhos, anúncios e oportunidades de investigação do Bitwarden na sua caixa de entrada. Anule a subscrição a qualquer altura.</string>
-  <string name="security_prioritized">Privacidade, priorizada</string>
+  <string name="security_prioritized">Segurança, com prioridade</string>
   <string name="welcome_message_1">Guarde credenciais, cartões e identidades no seu cofre seguro. O Bitwarden utiliza encriptação de conhecimento zero e de ponto a ponto para proteger o que é importante para si.</string>
   <string name="welcome_message_2">Configure o desbloqueio biométrico e o preenchimento automático para iniciar sessão nas suas contas sem escrever uma única letra.</string>
   <string name="quick_and_easy_login">Início de sessão rápido e fácil</string>
@@ -1087,4 +1086,15 @@ Anule a subscrição em qualquer altura.</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">O Bitwarden pode notificá-lo sempre que receber um novo pedido de início de sessão de outro dispositivo.</string>
   <string name="skip_for_now">Saltar por agora</string>
   <string name="done_text">Concluído</string>
+  <string name="page_number_x_of_y">%1$s de %2$s</string>
+  <string name="copy_identity_name">Copiar nome de identidade</string>
+  <string name="copy_company">Copiar empresa</string>
+  <string name="copy_ssn">Copiar número de segurança social</string>
+  <string name="copy_passport_number">Copiar número do passaporte</string>
+  <string name="copy_license_number">Copiar número da carta de condução</string>
+  <string name="copy_email">Copiar e-mail</string>
+  <string name="copy_phone">Copiar número de telefone</string>
+  <string name="copy_address">Copiar endereço</string>
+  <string name="biometrics_no_longer_supported_title">A biometria já não é suportada neste dispositivo</string>
+  <string name="biometrics_no_longer_supported">A sua sessão foi terminada porque os dados biométricos do seu dispositivo não cumprem os requisitos de segurança mais recentes. Para atualizar as definições, inicie sessão novamente ou contacte o seu administrador para obter acesso.</string>
 </resources>

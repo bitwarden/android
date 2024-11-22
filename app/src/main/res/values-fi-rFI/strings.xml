@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Virheellinen pääsalasana. Yritä uudelleen.</string>
   <string name="invalid_pin">Virheellinen PIN-koodi. Yritä uudelleen.</string>
   <string name="launch">Avaa</string>
-  <string name="log_in">Kirjaudu</string>
   <string name="log_in_verb">Kirjaudu</string>
   <string name="log_in_noun">Kirjautumistieto</string>
   <string name="log_out">Kirjaudu ulos</string>
@@ -952,7 +951,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="or_log_in_you_may_already_have_an_account">Tai kirjaudu sisään. Sinulla saattaa jo olla tili.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Vastaanota Bitwardenilta uutiskirjeitä julkaisuista, tukiresursseista ja tutkimusmahdollisuuksista. Lopeta tilaus milloin tahansa.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Vastaanota Bitwardenilta postilaatikkoosi vinkkejä, uutisia ja tutkimusmahdollisuuksia. Lopeta tilaus milloin tahansa.</string>
-  <string name="security_prioritized">Yksityisyys etusijalla</string>
+  <string name="security_prioritized">Security, prioritized</string>
   <string name="welcome_message_1">Tallenna kirjautumistiedot, kortit and henkilöllisyydet suojattuun holviisi. Bitwarden suojaa tärkeät tietosi nollatietoisella päästä pähän -salauksella.</string>
   <string name="welcome_message_2">Määritä biometrinen avaus ja automaattitäyttö kirjautuaksesi tileillesi kirjoittamatta yhtään kirjainta.</string>
   <string name="quick_and_easy_login">Nopea ja helppo kirjautuminen</string>
@@ -1087,4 +1086,15 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Ohita tällä kertaa</string>
   <string name="done_text">Valmis</string>
+  <string name="page_number_x_of_y">%1$s of %2$s</string>
+  <string name="copy_identity_name">Kopioi identiteetin nimi</string>
+  <string name="copy_company">Kopioi yritys</string>
+  <string name="copy_ssn">Kopioi henkilötunnus</string>
+  <string name="copy_passport_number">Kopioi passin numero</string>
+  <string name="copy_license_number">Kopioi ajokortin numero</string>
+  <string name="copy_email">Kopioi sähköpostiosoite</string>
+  <string name="copy_phone">Kopioi puhelinnumero</string>
+  <string name="copy_address">Kopioi osoite</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>

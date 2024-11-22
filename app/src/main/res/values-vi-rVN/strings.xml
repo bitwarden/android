@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Mật khẩu chính không đúng. Thử lại.</string>
   <string name="invalid_pin">Mã PIN không đúng. Thử lại.</string>
   <string name="launch">Khởi chạy</string>
-  <string name="log_in">Đăng Nhập</string>
   <string name="log_in_verb">Đăng nhập</string>
   <string name="log_in_noun">Đăng nhập</string>
   <string name="log_out">Đăng xuất</string>
@@ -952,7 +951,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="or_log_in_you_may_already_have_an_account">Hoặc đăng nhập, nếu bạn đã có tài khoản.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Nhận email từ Bitwarden để nhận thông báo, đề xuất và cơ hội nghiên cứu. Hủy đăng ký bất cứ lúc nào.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Nhận đề xuất, thông báo và cơ hội nghiên cứu từ Bitwarden trong hộp thư đến của bạn. Hủy đăng ký bất cứ lúc nào.</string>
-  <string name="security_prioritized">Bảo mật, riêng tư</string>
+  <string name="security_prioritized">Ưu tiên bảo mật</string>
   <string name="welcome_message_1">Lưu thông tin đăng nhập, thẻ tín dụng và danh tính vào kho lưu trữ an toàn của bạn. Bitwarden sử dụng mã hóa đầu cuối không cần kiến ​​thức để bảo vệ những gì quan trọng với bạn.</string>
   <string name="welcome_message_2">Thiết lập mở khóa sinh trắc học và tự động điền để đăng nhập vào tài khoản của bạn mà không cần nhập tay.</string>
   <string name="quick_and_easy_login">Đăng nhập nhanh và dễ dàng</string>
@@ -1087,4 +1086,15 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden có thể thông báo cho bạn mỗi khi bạn nhận được yêu cầu đăng nhập mới từ thiết bị khác.</string>
   <string name="skip_for_now">Bỏ qua</string>
   <string name="done_text">Xong</string>
+  <string name="page_number_x_of_y">%1$s trên %2$s</string>
+  <string name="copy_identity_name">Sao chép tên danh tính</string>
+  <string name="copy_company">Sao chép công ty</string>
+  <string name="copy_ssn">Sao chép số an sinh xã hội</string>
+  <string name="copy_passport_number">Sao chép số hộ chiếu</string>
+  <string name="copy_license_number">Sao chép số giấy phép</string>
+  <string name="copy_email">Sao chép email</string>
+  <string name="copy_phone">Sao chép số điện thoại</string>
+  <string name="copy_address">Sao chép địa chỉ</string>
+  <string name="biometrics_no_longer_supported_title">Thiết bị này không còn hỗ trợ sinh trắc học nữa</string>
+  <string name="biometrics_no_longer_supported">Bạn đã bị đăng xuất vì dữ liệu sinh trắc học của thiết bị không đáp ứng các yêu cầu bảo mật mới nhất. Để cập nhật cài đặt, hãy đăng nhập lại hoặc liên hệ với quản trị viên để được cấp quyền truy cập.</string>
 </resources>

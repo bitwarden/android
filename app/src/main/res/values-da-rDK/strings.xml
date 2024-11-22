@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Ugyldig hovedadgangskode. Prøv igen.</string>
   <string name="invalid_pin">Ugyldig PIN-kode. Prøv igen.</string>
   <string name="launch">Start</string>
-  <string name="log_in">Log ind</string>
   <string name="log_in_verb">Log ind</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Log ud</string>
@@ -952,7 +951,7 @@ Skift til denne konto?</string>
   <string name="or_log_in_you_may_already_have_an_account">Eller log ind, da en konto muligvis allerede eksisterer.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Få e-mails fra Bitwarden vedr. bekendtgørelser, råd og forskningsmuligheder. Afmeld når som helst.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Få råd, bekendtgørelser og forskningsmuligheder fra Bitwarden i indbakken. Afmeld til enhver tid.</string>
-  <string name="security_prioritized">Fortrolighed, prioriteret</string>
+  <string name="security_prioritized">Sikkerhed, prioriteret</string>
   <string name="welcome_message_1">Gem logins, kort og identiteter i den sikre boks. Bitwarden bruger nul-viden, ende-til-ende kryptering til at beskytte brugerens vigtigt ting.</string>
   <string name="welcome_message_2">Opsæt biometrisk oplåsning og autofyld for at logge ind på konti uden at skrive ét enkelt bogstav.</string>
   <string name="quick_and_easy_login">Hurtig og nem indlogning</string>
@@ -1087,4 +1086,15 @@ Skift til denne konto?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden kan give besked, hver gang man modtager en ny login-anmodning fra en anden enhed.</string>
   <string name="skip_for_now">Overspring for nu</string>
   <string name="done_text">Færdig</string>
+  <string name="page_number_x_of_y">%1$s af %2$s</string>
+  <string name="copy_identity_name">Kopiér identitetsnavn</string>
+  <string name="copy_company">Kopiér firma</string>
+  <string name="copy_ssn">Kopiér personnummer</string>
+  <string name="copy_passport_number">Kopiér pasnummer</string>
+  <string name="copy_license_number">Copy license number</string>
+  <string name="copy_email">Kopiér e-mail</string>
+  <string name="copy_phone">Kopiér telefonnummer</string>
+  <string name="copy_address">Kopiér adresse</string>
+  <string name="biometrics_no_longer_supported_title">Biometri på denne enhed understøttes ikke længere</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>
