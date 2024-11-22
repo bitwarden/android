@@ -17,7 +17,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
@@ -602,19 +602,19 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with fido2 request data should set the special circumstance to Fido2Save`() {
         val viewModel = createViewModel()
-        val fido2CredentialRequest = Fido2CredentialRequest(
+        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = DEFAULT_USER_STATE.activeUserId,
             requestJson = """{"mockRequestJson":1}""",
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val fido2Intent = createMockIntent(mockFido2CredentialRequest = fido2CredentialRequest)
+        val fido2Intent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
 
         coEvery {
             fido2CredentialManager.validateOrigin(
-                fido2CredentialRequest.callingAppInfo,
-                fido2CredentialRequest.requestJson,
+                fido2CreateCredentialRequest.callingAppInfo,
+                fido2CreateCredentialRequest.requestJson,
             )
         } returns Fido2ValidateOriginResult.Success
 
@@ -626,7 +626,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             SpecialCircumstance.Fido2Save(
-                fido2CredentialRequest = fido2CredentialRequest,
+                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             ),
             specialCircumstanceManager.specialCircumstance,
         )
@@ -636,7 +636,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with fido2 request data should set the user to unverified`() {
         val viewModel = createViewModel()
         val fido2Intent = createMockIntent(
-            mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+            mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
         )
 
         viewModel.trySendAction(
@@ -655,18 +655,18 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with fido2 request data should switch users if active user is not selected`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE
         val viewModel = createViewModel()
-        val fido2CredentialRequest = Fido2CredentialRequest(
+        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "selectedUserId",
             requestJson = """{"mockRequestJson":1}""",
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CredentialRequest = fido2CredentialRequest)
+        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
         coEvery {
             fido2CredentialManager.validateOrigin(
-                fido2CredentialRequest.callingAppInfo,
-                fido2CredentialRequest.requestJson,
+                fido2CreateCredentialRequest.callingAppInfo,
+                fido2CreateCredentialRequest.requestJson,
             )
         } returns Fido2ValidateOriginResult.Success
 
@@ -676,25 +676,25 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        verify(exactly = 1) { authRepository.switchAccount(fido2CredentialRequest.userId) }
+        verify(exactly = 1) { authRepository.switchAccount(fido2CreateCredentialRequest.userId) }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `on ReceiveFirstIntent with fido2 request data should not switch users if active user is selected`() {
         val viewModel = createViewModel()
-        val fido2CredentialRequest = Fido2CredentialRequest(
+        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = DEFAULT_USER_STATE.activeUserId,
             requestJson = """{"mockRequestJson":1}""",
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CredentialRequest = fido2CredentialRequest)
+        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
         coEvery {
             fido2CredentialManager.validateOrigin(
-                fido2CredentialRequest.callingAppInfo,
-                fido2CredentialRequest.requestJson,
+                fido2CreateCredentialRequest.callingAppInfo,
+                fido2CreateCredentialRequest.requestJson,
             )
         } returns Fido2ValidateOriginResult.Success
 
@@ -704,7 +704,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        verify(exactly = 0) { authRepository.switchAccount(fido2CredentialRequest.userId) }
+        verify(exactly = 0) { authRepository.switchAccount(fido2CreateCredentialRequest.userId) }
     }
 
     @Suppress("MaxLineLength")
@@ -1078,7 +1078,7 @@ private fun createMockIntent(
     mockAutofillSelectionData: AutofillSelectionData? = null,
     mockCompleteRegistrationData: CompleteRegistrationData? = null,
     mockFido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
-    mockFido2CredentialRequest: Fido2CredentialRequest? = null,
+    mockFido2CreateCredentialRequest: Fido2CreateCredentialRequest? = null,
     mockFido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     mockIsMyVaultShortcut: Boolean = false,
     mockIsPasswordGeneratorShortcut: Boolean = false,
@@ -1091,7 +1091,7 @@ private fun createMockIntent(
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
     every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
-    every { getFido2CredentialRequestOrNull() } returns mockFido2CredentialRequest
+    every { getFido2CredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
     every { getFido2GetCredentialsRequestOrNull() } returns mockFido2GetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut

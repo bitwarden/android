@@ -198,7 +198,7 @@ class RootNavScreenTest : BaseComposeTest() {
         rootNavStateFlow.value =
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
-                fido2CredentialRequest = mockk(),
+                fido2CreateCredentialRequest = mockk(),
             )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
