@@ -345,7 +345,7 @@ class VaultRepositoryImpl(
         }
     }
 
-    override fun sync() {
+    override fun sync(forced: Boolean) {
         val userId = activeUserId ?: return
         if (!syncJob.isCompleted) return
         mutableCiphersStateFlow.updateToPendingOrLoading()
@@ -353,7 +353,7 @@ class VaultRepositoryImpl(
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
         mutableSendDataStateFlow.updateToPendingOrLoading()
-        syncJob = ioScope.launch { syncInternal(userId) }
+        syncJob = ioScope.launch { syncInternal(userId = userId, forced = forced) }
     }
 
     @Suppress("MagicNumber")
@@ -374,10 +374,9 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun syncForResult(): SyncVaultDataResult {
-        val userId = activeUserId
-            ?: return SyncVaultDataResult.Error(throwable = null)
+        val userId = activeUserId ?: return SyncVaultDataResult.Error(throwable = null)
         syncJob = ioScope
-            .async { syncInternal(userId) }
+            .async { syncInternal(userId = userId, forced = false) }
             .also {
                 return try {
                     it.await()
@@ -1339,51 +1338,53 @@ class VaultRepositoryImpl(
     //endregion Push Notification helpers
 
     @Suppress("LongMethod")
-    private suspend fun syncInternal(userId: String): SyncVaultDataResult {
-        val lastSyncInstant = settingsDiskSource
-            .getLastSyncTime(userId = userId)
-            ?.toEpochMilli()
-            ?: 0
+    private suspend fun syncInternal(
+        userId: String,
+        forced: Boolean,
+    ): SyncVaultDataResult {
+        if (!forced) {
+            // Skip this check if we are forcing the request.
+            val lastSyncInstant = settingsDiskSource
+                .getLastSyncTime(userId = userId)
+                ?.toEpochMilli()
+                ?: 0
+            val lastDatabaseSchemeChangeInstant = databaseSchemeManager
+                .lastDatabaseSchemeChangeInstant
+                ?.toEpochMilli()
+                ?: 0
+            syncService
+                .getAccountRevisionDateMillis()
+                .fold(
+                    onSuccess = { serverRevisionDate ->
+                        if (serverRevisionDate < lastSyncInstant &&
+                            lastDatabaseSchemeChangeInstant < lastSyncInstant
+                        ) {
+                            // We can skip the actual sync call if there is no new data or database
+                            // scheme changes since the last sync.
+                            vaultDiskSource.resyncVaultData(userId = userId)
+                            settingsDiskSource.storeLastSyncTime(
+                                userId = userId,
+                                lastSyncTime = clock.instant(),
+                            )
+                            val itemsAvailable = vaultDiskSource
+                                .getCiphers(userId)
+                                .firstOrNull()
+                                ?.isNotEmpty() == true
+                            return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
+                        }
+                    },
+                    onFailure = {
+                        updateVaultStateFlowsToError(throwable = it)
+                        return SyncVaultDataResult.Error(throwable = it)
+                    },
+                )
+        }
 
-        val lastDatabaseSchemeChangeInstant = databaseSchemeManager
-            .lastDatabaseSchemeChangeInstant
-            ?.toEpochMilli()
-            ?: 0
-
-        syncService
-            .getAccountRevisionDateMillis()
-            .fold(
-                onSuccess = { serverRevisionDate ->
-                    if (serverRevisionDate < lastSyncInstant &&
-                        lastDatabaseSchemeChangeInstant < lastSyncInstant
-                    ) {
-                        // We can skip the actual sync call if there is no new data or database
-                        // scheme changes since the last sync.
-                        vaultDiskSource.resyncVaultData(userId)
-                        settingsDiskSource.storeLastSyncTime(
-                            userId = userId,
-                            lastSyncTime = clock.instant(),
-                        )
-                        val itemsAvailable = vaultDiskSource
-                            .getCiphers(userId)
-                            .firstOrNull()
-                            ?.isNotEmpty()
-                            ?: false
-                        return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
-                    }
-                },
-                onFailure = {
-                    updateVaultStateFlowsToError(it)
-                    return SyncVaultDataResult.Error(it)
-                },
-            )
-
-        syncService
+        return syncService
             .sync()
             .fold(
                 onSuccess = { syncResponse ->
-                    val localSecurityStamp =
-                        authDiskSource.userState?.activeAccount?.profile?.stamp
+                    val localSecurityStamp = authDiskSource.userState?.activeAccount?.profile?.stamp
                     val serverSecurityStamp = syncResponse.profile.securityStamp
 
                     // Log the user out if the stamps do not match
@@ -1395,11 +1396,9 @@ class VaultRepositoryImpl(
                     }
 
                     // Update user information with additional information from sync response
-                    authDiskSource.userState = authDiskSource
-                        .userState
-                        ?.toUpdatedUserStateJson(
-                            syncResponse = syncResponse,
-                        )
+                    authDiskSource.userState = authDiskSource.userState?.toUpdatedUserStateJson(
+                        syncResponse = syncResponse,
+                    )
 
                     unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                     storeProfileData(syncResponse = syncResponse)
@@ -1414,12 +1413,12 @@ class VaultRepositoryImpl(
                         lastSyncTime = clock.instant(),
                     )
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-                    val itemsAvailable = syncResponse.ciphers?.isNotEmpty() ?: false
-                    return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
+                    val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
+                    SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 },
                 onFailure = { throwable ->
-                    updateVaultStateFlowsToError(throwable)
-                    return SyncVaultDataResult.Error(throwable)
+                    updateVaultStateFlowsToError(throwable = throwable)
+                    SyncVaultDataResult.Error(throwable = throwable)
                 },
             )
     }

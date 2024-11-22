@@ -120,14 +120,14 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun handleRefreshClick() {
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleSearchIconClick() {
@@ -144,7 +144,7 @@ class VerificationCodeViewModel @Inject constructor(
                 ),
             )
         }
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleInternalAction(action: VerificationCodeAction.Internal) {
