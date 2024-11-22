@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
@@ -377,9 +376,7 @@ private fun VaultAddEditItemDialogs(
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(dialogState.label),
-            )
+            BitwardenLoadingDialog(text = dialogState.label())
         }
 
         is VaultAddEditState.DialogState.Generic -> {

@@ -24,7 +24,6 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -90,11 +89,7 @@ private fun VaultMoveToOrganizationScaffold(
         }
 
         is VaultMoveToOrganizationState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message,
-                ),
-            )
+            BitwardenLoadingDialog(text = dialog.message())
         }
 
         null -> Unit

@@ -51,7 +51,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegis
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
 import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -59,7 +58,6 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -68,11 +66,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-
-/**
- * Constant string to be used in string annotation tag field
- */
-private const val TAG_URL = "URL"
 
 /**
  * Top level composable for the start registration screen.
@@ -140,7 +133,8 @@ fun StartRegistrationScreen(
     when (val dialog = state.dialog) {
         is StartRegistrationDialog.Error -> {
             BitwardenBasicDialog(
-                visibilityState = dialog.state,
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(ErrorDialogDismiss) }
                 },
@@ -148,9 +142,7 @@ fun StartRegistrationScreen(
         }
 
         StartRegistrationDialog.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(R.string.create_account.asText()),
-            )
+            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
         }
 
         null -> Unit

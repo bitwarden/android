@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Yararsız ana parol. Yenidən sınayın.</string>
   <string name="invalid_pin">Yararsız PIN. Yenidən sınayın.</string>
   <string name="launch">Başlat</string>
-  <string name="log_in">Giriş et</string>
   <string name="log_in_verb">Giriş et</string>
   <string name="log_in_noun">Giriş</string>
   <string name="log_out">Çıxış</string>
@@ -951,7 +950,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="or_log_in_you_may_already_have_an_account">Ya da bir hesabınız varsa giriş edin.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Gələn qutunuzda Bitwarden-dən məsləhət, elan və araşdırma imkanları ilə bağlı məktublar alın. İstənilən vaxt abunəlikdən çıxa bilərsiniz.</string>
-  <string name="security_prioritized">Məxfilik, prioritetdir</string>
+  <string name="security_prioritized">Təhlükəsizlik, prioritet</string>
   <string name="welcome_message_1">Girişləri, kart və kimlik məlumatlarınızı güvənli seyfinizdə saxlayın. Bitwarden, sizin üçün mühüm olanları qorumaq üçün zero-knowledge və ucdan-uca şifrələmə istifadə edir.</string>
   <string name="welcome_message_2">Tək bir hərf yazmadan hesablarınıza giriş etmək üçün biometrik kilid açma və avto-doldurma seçimlərini qurun.</string>
   <string name="quick_and_easy_login">Cəld və asan giriş</string>
@@ -1086,4 +1085,15 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden, başqa bir cihazdan yeni bir giriş tələbi aldığınız hər dəfəsində sizi məlumatlandıracaq.</string>
   <string name="skip_for_now">İndilik ötür</string>
   <string name="done_text">Bitdi</string>
+  <string name="page_number_x_of_y">%1$s/%2$s</string>
+  <string name="copy_identity_name">Kimlik adını kopyala</string>
+  <string name="copy_company">Şirkəti kopyala</string>
+  <string name="copy_ssn">Sosial güvənlik nömrəsini kopyala</string>
+  <string name="copy_passport_number">Pasport nömrəsini kopyala</string>
+  <string name="copy_license_number">Lisenziya nömrəsini kopyala</string>
+  <string name="copy_email">E-poçtu kopyala</string>
+  <string name="copy_phone">Telefon nömrəsini kopyala</string>
+  <string name="copy_address">Ünvanı kopyala</string>
+  <string name="biometrics_no_longer_supported_title">Biometriklər artıq bu cihazda dəstəklənmir</string>
+  <string name="biometrics_no_longer_supported">Hesabınızdan çıxış edildi, çünki cihazınızın biometrikləri son güvənlik tələblərinə cavab vermir. Ayarları güncəlləmək üçün təkrar giriş edin və ya müraciət üçün inzibatçınızla əlaqə saxlayın.</string>
 </resources>

@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Ongeldig hoofdwachtwoord. Probeer het opnieuw.</string>
   <string name="invalid_pin">Ongeldige PIN-code. Probeer het opnieuw.</string>
   <string name="launch">Starten</string>
-  <string name="log_in">Inloggen</string>
   <string name="log_in_verb">Inloggen</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Uitloggen</string>
@@ -952,7 +951,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="or_log_in_you_may_already_have_an_account">Of ga naar inloggen, je hebt mogelijk al een account.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Ontvang e-mailberichten van Bitwarden voor aankondigingen, advies en onderzoeksmogelijkheden. Afmelden kan op ieder moment.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Ontvang advies, aankondigingen en onderzoeksmogelijkheden van Bitwarden in je inbox. Je kunt je op ieder moment uitschrijven.</string>
-  <string name="security_prioritized">Privacy, geprioriteerd</string>
+  <string name="security_prioritized">Security, geprioriteerd</string>
   <string name="welcome_message_1">Logins, kaarten en identiteiten in je beveiligde kluis opslaan. Bitwarden gebruikt zero-knowledge, end-to-end versleuteling om te beschermen wat belangrijk voor jou is.</string>
   <string name="welcome_message_2">Biometrische ontgrendelen en automatisch invullen instellen zodat je kunt inloggen op je accounts zonder één letter te typen.</string>
   <string name="quick_and_easy_login">Snel en eenvoudig inloggen</string>
@@ -1087,4 +1086,15 @@ Wilt u naar dit account wisselen?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden kan je iedere keer dat je een nieuw inlogverzoek ontvangt van een ander apparaat laten weten.</string>
   <string name="skip_for_now">Voorlopig overslaan</string>
   <string name="done_text">Klaar</string>
+  <string name="page_number_x_of_y">%1$s van %2$s</string>
+  <string name="copy_identity_name">Identiteitsnaam kopiëren</string>
+  <string name="copy_company">Bedrijf kopiëren</string>
+  <string name="copy_ssn">Burgerservicenummer kopiëren</string>
+  <string name="copy_passport_number">Paspoortnummer kopiëren</string>
+  <string name="copy_license_number">Kenteken kopiëren</string>
+  <string name="copy_email">E-mail kopiëren</string>
+  <string name="copy_phone">Telefoonnummer kopiëren</string>
+  <string name="copy_address">Adres kopiëren</string>
+  <string name="biometrics_no_longer_supported_title">Biometrie wordt niet langer ondersteund op dit apparaat</string>
+  <string name="biometrics_no_longer_supported">Je bent uitgelogd omdat de biometrische gegevens van je apparaat niet voldoen aan de laatste beveiligingseisen. Log opnieuw in om instellingen bij te werken of neem contact op met je beheerder voor toegang.</string>
 </resources>

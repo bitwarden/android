@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -220,7 +219,7 @@ private fun TrustedDeviceDialogs(
         )
 
         is TrustedDeviceState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(dialogState.message),
+            text = dialogState.message(),
         )
 
         null -> Unit

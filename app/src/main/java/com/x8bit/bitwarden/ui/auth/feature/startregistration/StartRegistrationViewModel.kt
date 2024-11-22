@@ -27,9 +27,9 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAc
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -197,20 +197,26 @@ class StartRegistrationViewModel @Inject constructor(
 
     private fun handleContinueClick() = when {
         state.emailInput.isBlank() -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
-            )
-            mutableStateFlow.update { it.copy(dialog = StartRegistrationDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = StartRegistrationDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required
+                            .asText(R.string.email_address.asText()),
+                    ),
+                )
+            }
         }
 
         !state.emailInput.isValidEmail() -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.invalid_email.asText(),
-            )
-            mutableStateFlow.update { it.copy(dialog = StartRegistrationDialog.Error(dialog)) }
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = StartRegistrationDialog.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.invalid_email.asText(),
+                    ),
+                )
+            }
         }
 
         else -> {
@@ -245,13 +251,11 @@ class StartRegistrationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = StartRegistrationDialog.Error(
-                            BasicDialogState.Shown(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = sendVerificationEmailResult
-                                    .errorMessage
-                                    ?.asText()
-                                    ?: R.string.generic_error_message.asText(),
-                            ),
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = sendVerificationEmailResult
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -307,7 +311,10 @@ sealed class StartRegistrationDialog : Parcelable {
      * General error dialog with an OK button.
      */
     @Parcelize
-    data class Error(val state: BasicDialogState.Shown) : StartRegistrationDialog()
+    data class Error(
+        val title: Text?,
+        val message: Text,
+    ) : StartRegistrationDialog()
 }
 
 /**
