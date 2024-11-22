@@ -651,6 +651,16 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Add item")
             .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Add item")
+            .assertDoesNotExist()
     }
 
     @Test
