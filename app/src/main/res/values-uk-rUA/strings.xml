@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Недійсний головний пароль. Спробуйте знову.</string>
   <string name="invalid_pin">Недійсний PIN. Спробуйте знову.</string>
   <string name="launch">Перейти</string>
-  <string name="log_in">Увійти</string>
   <string name="log_in_verb">Увійти</string>
   <string name="log_in_noun">Вхід</string>
   <string name="log_out">Вийти</string>
@@ -952,7 +951,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Або увійдіть, якщо вже маєте обліковий запис.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості. Відписатися можна будь-коли.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Отримуйте поради, оголошення та інформацію щодо можливості участі в дослідженнях від Bitwarden у вашій поштовій скриньці. Відпишіться коли завгодно.</string>
-  <string name="security_prioritized">Приватність понад усе</string>
+  <string name="security_prioritized">Безпека понад усе</string>
   <string name="welcome_message_1">Зберігайте записи входу, картки та посвідчення в захищеному сховищі. Для захисту ваших даних Bitwarden використовує наскрізне шифрування з нульовим рівнем доступу.</string>
   <string name="welcome_message_2">Налаштуйте біометричне розблокування та автозаповнення, щоб миттєво входити в облікові записи.</string>
   <string name="quick_and_easy_login">Швидкий і легкий вхід</string>
@@ -1087,4 +1086,15 @@
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden може сповіщати вас щоразу, коли ви отримуєте новий запит на вхід з іншого пристрою.</string>
   <string name="skip_for_now">Наразі пропустити</string>
   <string name="done_text">Виконано</string>
+  <string name="page_number_x_of_y">%1$s з %2$s</string>
+  <string name="copy_identity_name">Копіювати ім\'я посвідчення</string>
+  <string name="copy_company">Копіювати компанію</string>
+  <string name="copy_ssn">Копіювати номер соціального страхування</string>
+  <string name="copy_passport_number">Копіювати номер паспорта</string>
+  <string name="copy_license_number">Копіювати номер ліцензії</string>
+  <string name="copy_email">Копіювати е-пошту</string>
+  <string name="copy_phone">Копіювати номер телефону</string>
+  <string name="copy_address">Копіювати адресу</string>
+  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
 </resources>
