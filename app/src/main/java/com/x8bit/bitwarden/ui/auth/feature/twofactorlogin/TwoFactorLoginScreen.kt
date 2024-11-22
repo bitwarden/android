@@ -252,12 +252,12 @@ private fun TwoFactorLoginScreenContent(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
                 autoFocus = true,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
                 keyboardActions = KeyboardActions(
                     onDone = { onContinueButtonClick() },
                 ),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
