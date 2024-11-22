@@ -257,7 +257,7 @@ private fun TwoFactorLoginScreenContent(
                     .fillMaxWidth(),
                 keyboardActions = KeyboardActions(
                     onDone = { onContinueButtonClick() },
-                )
+                ),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
