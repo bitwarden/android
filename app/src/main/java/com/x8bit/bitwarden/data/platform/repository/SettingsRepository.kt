@@ -264,4 +264,21 @@ interface SettingsRepository {
      * Record that a user has logged in on this device.
      */
     fun storeUserHasLoggedInValue(userId: String)
+
+    /**
+     * Returns true if the given [userId] has previously registered for export via the credential
+     * exchange protocol.
+     */
+    fun isVaultRegisteredForExport(userId: String): Boolean
+
+    /**
+     * Stores that the given [userId] has previously registered for export via the credential
+     * exchange protocol.
+     */
+    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean)
+
+    /**
+     * Gets updates for the [isVaultRegisteredForExport] value for the given [userId].
+     */
+    fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean>
 }
