@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRes
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
@@ -155,5 +154,5 @@ interface CiphersApi {
     @POST("ciphers/import")
     suspend fun importCiphers(
         @Body body: ImportCiphersJsonRequest,
-    ): NetworkResult<ImportCiphersResponseJson>
+    ): NetworkResult<Unit>
 }

@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -325,7 +326,7 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `importCiphers should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(""))
+        server.enqueue(MockResponse().setResponseCode(200))
         val result = ciphersService.importCiphers(
             request = ImportCiphersJsonRequest(
                 ciphers = listOf(createMockCipherJsonRequest(number = 1)),
@@ -333,7 +334,7 @@ class CiphersServiceTest : BaseServiceTest() {
                 folderRelationships = emptyMap(),
             ),
         )
-        assertEquals(Unit, result.getOrThrow())
+        assertEquals(ImportCiphersResponseJson.Success, result.getOrThrow())
     }
 
     @Test
