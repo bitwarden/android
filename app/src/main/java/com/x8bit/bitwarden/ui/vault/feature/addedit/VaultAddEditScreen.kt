@@ -23,7 +23,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -31,14 +30,12 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItem
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
@@ -379,37 +376,29 @@ private fun VaultAddEditItemDialogs(
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(dialogState.label),
-            )
+            BitwardenLoadingDialog(text = dialogState.label())
         }
 
         is VaultAddEditState.DialogState.Generic -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = onDismissRequest,
             )
         }
 
         is VaultAddEditState.DialogState.InitialAutofillPrompt -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = R.string.bitwarden_autofill_service.asText(),
-                    message = R.string.bitwarden_autofill_service_alert2.asText(),
-                ),
+                title = stringResource(id = R.string.bitwarden_autofill_service),
+                message = stringResource(id = R.string.bitwarden_autofill_service_alert2),
                 onDismissRequest = onAutofillDismissRequest,
             )
         }
 
         is VaultAddEditState.DialogState.Fido2Error -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = dialogState.message,
-                ),
+                title = stringResource(id = R.string.an_error_has_occurred),
+                message = dialogState.message(),
                 onDismissRequest = onFido2ErrorDismiss,
             )
         }
@@ -430,10 +419,8 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.Fido2MasterPasswordError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = null,
-                    message = R.string.invalid_master_password.asText(),
-                ),
+                title = null,
+                message = stringResource(id = R.string.invalid_master_password),
                 onDismissRequest = onRetryFido2PasswordVerification,
             )
         }
@@ -447,10 +434,8 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.Fido2PinError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = null,
-                    message = R.string.invalid_pin.asText(),
-                ),
+                title = null,
+                message = stringResource(id = R.string.invalid_pin),
                 onDismissRequest = onRetryFido2PinVerification,
             )
         }
@@ -465,9 +450,10 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.Fido2PinSetUpError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = null,
-                    message = R.string.validation_field_required.asText(R.string.pin.asText()),
+                title = null,
+                message = stringResource(
+                    id = R.string.validation_field_required,
+                    stringResource(id = R.string.pin),
                 ),
                 onDismissRequest = onRetryPinSetUpFido2Verification,
             )

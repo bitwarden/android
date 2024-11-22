@@ -27,13 +27,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -80,10 +77,11 @@ fun EnterpriseSignOnScreen(
     when (val dialog = state.dialogState) {
         is EnterpriseSignOnState.DialogState.Error -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialog.title ?: R.string.an_error_has_occurred.asText(),
-                    message = dialog.message,
-                ),
+                title = dialog
+                    .title
+                    ?.invoke()
+                    ?: stringResource(id = R.string.an_error_has_occurred),
+                message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
                 },
@@ -91,11 +89,7 @@ fun EnterpriseSignOnScreen(
         }
 
         is EnterpriseSignOnState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message,
-                ),
-            )
+            BitwardenLoadingDialog(text = dialog.message())
         }
 
         null -> Unit

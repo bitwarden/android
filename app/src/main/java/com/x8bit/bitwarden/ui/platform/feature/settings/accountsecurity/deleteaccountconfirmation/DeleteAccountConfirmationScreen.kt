@@ -33,10 +33,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -103,28 +101,22 @@ private fun DeleteAccountConfirmationDialogs(
     when (dialogState) {
         is DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = null,
-                    message = dialogState.message,
-                ),
+                title = null,
+                message = dialogState.message(),
                 onDismissRequest = onDeleteAccountAcknowledge,
             )
         }
 
         is DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title(),
+                message = dialogState.message(),
                 onDismissRequest = onDismissDialog,
             )
         }
 
         is DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(dialogState.title),
-            )
+            BitwardenLoadingDialog(text = dialogState.title())
         }
 
         null -> Unit

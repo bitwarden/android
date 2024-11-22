@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
@@ -1282,7 +1283,15 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = {
-                    SendVerificationEmailResult.Success(it)
+                    when (it) {
+                        is SendVerificationEmailResponseJson.Invalid -> {
+                            SendVerificationEmailResult.Error(it.message)
+                        }
+
+                        is SendVerificationEmailResponseJson.Success -> {
+                            SendVerificationEmailResult.Success(it.emailVerificationToken)
+                        }
+                    }
                 },
                 onFailure = {
                     SendVerificationEmailResult.Error(null)

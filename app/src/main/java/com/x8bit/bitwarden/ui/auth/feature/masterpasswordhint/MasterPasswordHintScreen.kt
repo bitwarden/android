@@ -21,13 +21,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -53,10 +50,8 @@ fun MasterPasswordHintScreen(
     when (val dialogState = state.dialog) {
         is MasterPasswordHintState.DialogState.PasswordHintSent -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = R.string.password_hint.asText(),
-                    message = R.string.password_hint_alert.asText(),
-                ),
+                title = stringResource(id = R.string.password_hint),
+                message = stringResource(id = R.string.password_hint_alert),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
                 },
@@ -64,19 +59,16 @@ fun MasterPasswordHintScreen(
         }
 
         is MasterPasswordHintState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialogState.message,
-                ),
-            )
+            BitwardenLoadingDialog(text = dialogState.message())
         }
 
         is MasterPasswordHintState.DialogState.Error -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title ?: R.string.an_error_has_occurred.asText(),
-                    message = dialogState.message,
-                ),
+                title = dialogState
+                    .title
+                    ?.invoke()
+                    ?: stringResource(id = R.string.an_error_has_occurred),
+                message = dialogState.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
                 },

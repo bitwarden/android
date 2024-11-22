@@ -31,13 +31,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -102,10 +100,8 @@ fun AutoFillScreen(
 
     if (shouldShowAutofillFallbackDialog) {
         BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = null,
-                message = R.string.bitwarden_autofill_go_to_settings.asText(),
-            ),
+            title = null,
+            message = stringResource(id = R.string.bitwarden_autofill_go_to_settings),
             onDismissRequest = { shouldShowAutofillFallbackDialog = false },
         )
     }

@@ -1,37 +1,34 @@
 package com.x8bit.bitwarden.ui.platform.components.card
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
+import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 
 /**
- * Reusable card for displaying content for a list of items with a generic type [T].
- * Items will be displayed in [Column] in the order they are provided with an optional divider
- * below them, besides the last item in the list.
+ * Reusable card for displaying content block components in a vertical column with the card
+ * shape. Content is drawn with a [BitwardenContentBlock].
  *
- * @param contentItems list of items to display.
- * @param content composable to render each item to the UI.
- * @param showBottomDivider whether to show a divider below each item.
- * @param bottomDividerPaddingStart padding to apply to the start of the divider.
- * @param bottomDividerPaddingEnd padding to apply to the end of the divider.
+ * @param contentItems list of [ContentBlockData] items to display.
+ * @param contentHeaderTextStyle the text style to use for the header text of the content.
+ * @param contentSubtitleTextStyle the text style to use for the subtitle text of the content.
+ * @param contentBackgroundColor the background color to use for the content.
  */
 @Composable
-fun <T> BitwardenContentCard(
-    contentItems: ImmutableList<T>,
+fun BitwardenContentCard(
+    contentItems: ImmutableList<ContentBlockData>,
     modifier: Modifier = Modifier,
-    showBottomDivider: Boolean = true,
-    bottomDividerPaddingStart: Dp = 0.dp,
-    bottomDividerPaddingEnd: Dp = 0.dp,
-    content: @Composable (T) -> Unit,
+    contentHeaderTextStyle: TextStyle = BitwardenTheme.typography.titleSmall,
+    contentSubtitleTextStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
+    contentBackgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
 ) {
     Column(
         modifier = modifier
@@ -40,17 +37,13 @@ fun <T> BitwardenContentCard(
             .background(color = BitwardenTheme.colorScheme.background.secondary),
     ) {
         contentItems.forEachIndexed { index, item ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .bottomDivider(
-                        enabled = index != contentItems.lastIndex && showBottomDivider,
-                        paddingStart = bottomDividerPaddingStart,
-                        paddingEnd = bottomDividerPaddingEnd,
-                    ),
-            ) {
-                content(item)
-            }
+            BitwardenContentBlock(
+                data = item,
+                showDivider = index != contentItems.lastIndex,
+                headerTextStyle = contentHeaderTextStyle,
+                subtitleTextStyle = contentSubtitleTextStyle,
+                backgroundColor = contentBackgroundColor,
+            )
         }
     }
 }
