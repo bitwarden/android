@@ -182,6 +182,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
         mutableLastSyncCallFlowMap.remove(userId)
+        mutableVaultRegisteredForExportFlowMap.remove(userId)
     }
 
     override fun getLastSyncTime(userId: String): Instant? = storedLastSyncTime[userId]
