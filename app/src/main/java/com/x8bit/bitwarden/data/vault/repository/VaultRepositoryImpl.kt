@@ -99,7 +99,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -326,9 +325,8 @@ class VaultRepositoryImpl(
             .launchIn(ioScope)
 
         databaseSchemeManager
-            .lastDatabaseSchemeChangeInstantFlow
-            .filterNotNull()
-            .onEach { sync() }
+            .databaseSchemeChangeFlow
+            .onEach { sync(forced = true) }
             .launchIn(ioScope)
     }
 
@@ -361,13 +359,11 @@ class VaultRepositoryImpl(
         val userId = activeUserId ?: return
         val currentInstant = clock.instant()
         val lastSyncInstant = settingsDiskSource.getLastSyncTime(userId = userId)
-        val lastDatabaseSchemeChangeInstant = databaseSchemeManager.lastDatabaseSchemeChangeInstant
 
         // Sync if we have never done so, the last time was at last 30 minutes ago, or the database
         // scheme changed since the last sync.
         if (lastSyncInstant == null ||
-            currentInstant.isAfter(lastSyncInstant.plus(30, ChronoUnit.MINUTES)) ||
-            lastDatabaseSchemeChangeInstant?.isAfter(lastSyncInstant) == true
+            currentInstant.isAfter(lastSyncInstant.plus(30, ChronoUnit.MINUTES))
         ) {
             sync()
         }
@@ -1347,37 +1343,33 @@ class VaultRepositoryImpl(
             val lastSyncInstant = settingsDiskSource
                 .getLastSyncTime(userId = userId)
                 ?.toEpochMilli()
-                ?: 0
-            val lastDatabaseSchemeChangeInstant = databaseSchemeManager
-                .lastDatabaseSchemeChangeInstant
-                ?.toEpochMilli()
-                ?: 0
-            syncService
-                .getAccountRevisionDateMillis()
-                .fold(
-                    onSuccess = { serverRevisionDate ->
-                        if (serverRevisionDate < lastSyncInstant &&
-                            lastDatabaseSchemeChangeInstant < lastSyncInstant
-                        ) {
-                            // We can skip the actual sync call if there is no new data or database
-                            // scheme changes since the last sync.
-                            vaultDiskSource.resyncVaultData(userId = userId)
-                            settingsDiskSource.storeLastSyncTime(
-                                userId = userId,
-                                lastSyncTime = clock.instant(),
-                            )
-                            val itemsAvailable = vaultDiskSource
-                                .getCiphers(userId)
-                                .firstOrNull()
-                                ?.isNotEmpty() == true
-                            return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
-                        }
-                    },
-                    onFailure = {
-                        updateVaultStateFlowsToError(throwable = it)
-                        return SyncVaultDataResult.Error(throwable = it)
-                    },
-                )
+            lastSyncInstant?.let { lastSyncTimeMs ->
+                // If the lasSyncState is null we just sync, no checks required.
+                syncService
+                    .getAccountRevisionDateMillis()
+                    .fold(
+                        onSuccess = { serverRevisionDate ->
+                            if (serverRevisionDate < lastSyncTimeMs) {
+                                // We can skip the actual sync call if there is no new data or
+                                // database scheme changes since the last sync.
+                                vaultDiskSource.resyncVaultData(userId = userId)
+                                settingsDiskSource.storeLastSyncTime(
+                                    userId = userId,
+                                    lastSyncTime = clock.instant(),
+                                )
+                                val itemsAvailable = vaultDiskSource
+                                    .getCiphers(userId)
+                                    .firstOrNull()
+                                    ?.isNotEmpty() == true
+                                return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
+                            }
+                        },
+                        onFailure = {
+                            updateVaultStateFlowsToError(throwable = it)
+                            return SyncVaultDataResult.Error(throwable = it)
+                        },
+                    )
+            }
         }
 
         return syncService
