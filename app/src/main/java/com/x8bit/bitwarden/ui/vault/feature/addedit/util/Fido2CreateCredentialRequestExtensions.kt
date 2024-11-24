@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
@@ -12,7 +12,7 @@ import java.util.UUID
  * Returns pre-filled content that may be used for an "add" type
  * [VaultAddEditState.ViewState.Content] during FIDO 2 credential creation.
  */
-fun Fido2CredentialRequest.toDefaultAddTypeContent(
+fun Fido2CreateCredentialRequest.toDefaultAddTypeContent(
     attestationOptions: PasskeyAttestationOptions?,
     isIndividualVaultDisabled: Boolean,
 ): VaultAddEditState.ViewState.Content {

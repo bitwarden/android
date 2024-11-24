@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
@@ -449,7 +449,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleFido2RequestSpecialCircumstance(
-        request: Fido2CredentialRequest,
+        request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
         if (cipherView.isActiveWithFido2Credentials) {
@@ -462,7 +462,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun registerFido2Credential(
-        request: Fido2CredentialRequest,
+        request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
 
@@ -494,7 +494,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun registerFido2CredentialToCipher(
-        request: Fido2CredentialRequest,
+        request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
         viewModelScope.launch {
@@ -506,7 +506,7 @@ class VaultAddEditViewModel @Inject constructor(
             val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
                     userId = userId,
-                    fido2CredentialRequest = request,
+                    fido2CreateCredentialRequest = request,
                     selectedCipherView = cipherView,
                 )
             sendAction(

@@ -5,6 +5,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonReq
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
@@ -118,4 +120,9 @@ interface CiphersService {
      * Returns a boolean indicating if the active user has unassigned ciphers.
      */
     suspend fun hasUnassignedCiphers(): Result<Boolean>
+
+    /**
+     * Attempt to import ciphers.
+     */
+    suspend fun importCiphers(request: ImportCiphersJsonRequest): Result<ImportCiphersResponseJson>
 }

@@ -100,7 +100,6 @@ class SearchViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-        every { sync() } just runs
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {

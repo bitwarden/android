@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -251,6 +252,9 @@ private fun TwoFactorLoginScreenContent(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
                 autoFocus = true,
+                keyboardActions = KeyboardActions(
+                    onDone = { onContinueButtonClick() },
+                ),
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),

@@ -367,6 +367,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 isContinueButtonEnabled = true,
             )
         }
+        initiateLogin()
     }
 
     /**
