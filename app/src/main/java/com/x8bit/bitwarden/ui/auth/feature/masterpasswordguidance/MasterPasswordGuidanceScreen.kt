@@ -94,6 +94,24 @@ private fun MasterPasswordGuidanceContent(
     viewModel: MasterPasswordGuidanceViewModel,
 ) {
     Column(modifier = modifier) {
+        MasterPasswordGuidanceHeader()
+        MasterPasswordGuidanceContentBlocks()
+        NeedSomeInspirationCard(
+            onActionClicked = remember(viewModel) {
+                {
+                    viewModel.trySendAction(
+                        MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
+                    )
+                }
+            },
+        )
+        Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Composable
+private fun MasterPasswordGuidanceHeader(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.a_secure_memorable_password),
@@ -107,15 +125,22 @@ private fun MasterPasswordGuidanceContent(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(
-                R.string.one_of_the_best_ways_to_create_a_secure_and_memorable_password_is_to_use_a_passphrase,
+                R.string.one_of_the_best_ways_to_create_a_secure_and_memorable_password,
             ),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
+    }
+}
 
+@Composable
+private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         BitwardenContentCard(
             contentItems = persistentListOf(
                 ContentBlockData(
@@ -123,10 +148,12 @@ private fun MasterPasswordGuidanceContent(
                         .toAnnotatedString(),
                     subtitleText = createAnnotatedString(
                         mainString = stringResource(
-                            R.string.pick_three_or_four_random_unrelated_words_that_you_can_easily_remember,
+                            R.string.pick_three_or_four_random_unrelated_words,
                         ),
                         highlights = listOf(
-                            stringResource(R.string.pick_three_or_four_random_unrelated_words_highlight),
+                            stringResource(
+                                R.string.pick_three_or_four_random_unrelated_words_highlight,
+                            ),
                         ),
                         highlightStyle = bitwardenBoldSpanStyle,
                     ),
@@ -137,37 +164,34 @@ private fun MasterPasswordGuidanceContent(
                         .toAnnotatedString(),
                     subtitleText = createAnnotatedString(
                         mainString = stringResource(
-                            R.string.put_the_words_together_in_any_order_to_form_your_passphrase_use_hyphens_spaces_or_leave_them_as_one_long_word_your_choice,
+                            R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
                         ),
-                        highlights = listOf(stringResource(R.string.use_hyphens_spaces_or_leave_them_as_one_long_word_choice_highlight)),
+                        highlights = listOf(
+                            stringResource(
+                                R.string.use_hyphens_spaces_or_leave_them_as_long_word_highlight,
+                            ),
+                        ),
                         highlightStyle = bitwardenBoldSpanStyle,
                     ),
                     iconVectorResource = R.drawable.ic_number2,
                 ),
                 ContentBlockData(
-                    headerText = stringResource(R.string.make_it_yours)
-                        .toAnnotatedString(),
+                    headerText = stringResource(R.string.make_it_yours).toAnnotatedString(),
                     subtitleText = createAnnotatedString(
-                        mainString = stringResource(R.string.add_a_number_or_symbol_to_make_it_even_stronger_now_you_have_a_unique_secure_and_memorable_passphrase),
-                        highlights = listOf(stringResource(R.string.add_a_number_or_symbol_highlight)),
+                        mainString = stringResource(
+                            R.string.add_a_number_or_symbol_to_make_it_even_stronger,
+                        ),
+                        highlights = listOf(
+                            stringResource(R.string.add_a_number_or_symbol_highlight),
+                        ),
                         highlightStyle = bitwardenBoldSpanStyle,
                     ),
                     iconVectorResource = R.drawable.ic_number3,
                 ),
             ),
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        NeedSomeInspirationCard(
-            onActionClicked = remember(viewModel) {
-                {
-                    viewModel.trySendAction(
-                        MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
-                    )
-                }
-            },
-        )
-        Spacer(modifier = Modifier.navigationBarsPadding())
     }
+    Spacer(modifier = Modifier.height(24.dp))
 }
 
 @Composable

@@ -213,7 +213,9 @@ private fun CompleteRegistrationContent(
                 actionText = stringResource(id = R.string.what_makes_a_password_strong),
                 callToActionText = stringResource(id = R.string.learn_more),
                 callToActionTextColor = BitwardenTheme.colorScheme.text.interaction,
-                colors = bitwardenCardColors(containerColor = BitwardenTheme.colorScheme.background.primary),
+                colors = bitwardenCardColors(
+                    containerColor = BitwardenTheme.colorScheme.background.primary,
+                ),
                 onCardClicked = handler.onMakeStrongPassword,
                 modifier = Modifier
                     .fillMaxWidth()
