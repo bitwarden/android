@@ -37,6 +37,7 @@ env:
     ARTIFACTS_PATH: artifacts
 jobs:
   create-release:
+    name: Create GitHub Release
     runs-on: ubuntu-24.04
     permissions:
       contents: write
