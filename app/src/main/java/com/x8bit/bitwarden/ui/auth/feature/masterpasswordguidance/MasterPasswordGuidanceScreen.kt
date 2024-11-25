@@ -200,10 +200,11 @@ private fun NeedSomeInspirationCard(
     modifier: Modifier = Modifier,
 ) {
     BitwardenActionCard(
-        cardTitle = "Need some inspiration?",
-        actionText = "Check out the passphrase generator",
+        cardTitle = stringResource(R.string.need_some_inspiration),
+        actionText = stringResource(R.string.check_out_the_passphrase_generator),
         onActionClick = onActionClicked,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
     )
 }
 

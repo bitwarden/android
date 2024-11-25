@@ -1110,4 +1110,6 @@ Do you want to switch to this account?</string>
   <string name="make_it_yours">Make it yours</string>
   <string name="add_a_number_or_symbol_to_make_it_even_stronger">Add a number or symbol to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
   <string name="add_a_number_or_symbol_highlight">Add a number or symbol</string>
+  <string name="need_some_inspiration">"Need some inspiration?"</string>
+  <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
 </resources>
