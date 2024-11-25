@@ -1352,11 +1352,11 @@ class VaultRepositoryImpl(
                             if (serverRevisionDate < lastSyncTimeMs) {
                                 // We can skip the actual sync call if there is no new data or
                                 // database scheme changes since the last sync.
-                                vaultDiskSource.resyncVaultData(userId = userId)
                                 settingsDiskSource.storeLastSyncTime(
                                     userId = userId,
                                     lastSyncTime = clock.instant(),
                                 )
+                                vaultDiskSource.resyncVaultData(userId = userId)
                                 val itemsAvailable = vaultDiskSource
                                     .getCiphers(userId)
                                     .firstOrNull()
