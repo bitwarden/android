@@ -57,6 +57,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     private val mockUserAccount: UserState.Account = mockk {
         every { isPremium } returns true
+        every { organizations } returns emptyList()
     }
 
     private val mockUserState: UserState = mockk {
