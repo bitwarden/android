@@ -419,13 +419,13 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `RefreshPull should call vault repository sync`() {
-        every { vaultRepo.sync(forced = true) } just runs
+        every { vaultRepo.sync(forced = false) } just runs
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SendAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepo.sync(forced = true)
+            vaultRepo.sync(forced = false)
         }
     }
 
