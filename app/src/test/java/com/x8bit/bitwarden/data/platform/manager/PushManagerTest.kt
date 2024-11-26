@@ -652,7 +652,7 @@ class PushManagerTest {
 
             @Nested
             inner class MatchingToken {
-                private val newToken = existingToken;
+                private val newToken = existingToken
 
                 @Suppress("MaxLineLength")
                 @Test
@@ -708,7 +708,7 @@ class PushManagerTest {
                     )
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
-                        lastRegistration
+                        lastRegistration,
                     )
                     pushManager.registerPushTokenIfNecessary(newToken)
 
@@ -732,7 +732,7 @@ class PushManagerTest {
                     )
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
-                        lastRegistration
+                        lastRegistration,
                     )
                     pushDiskSource.registeredPushToken = newToken
                     pushManager.registerStoredPushTokenIfNecessary()
