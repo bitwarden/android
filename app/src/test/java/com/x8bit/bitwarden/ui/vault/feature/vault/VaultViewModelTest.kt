@@ -1365,7 +1365,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepository.sync(forced = true)
+            vaultRepository.sync(forced = false)
         }
     }
 
