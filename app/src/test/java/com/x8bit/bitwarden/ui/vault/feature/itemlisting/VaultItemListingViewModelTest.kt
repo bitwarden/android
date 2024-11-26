@@ -135,7 +135,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
         every { lockVault(any()) } just runs
-        every { sync(forced = true) } just runs
+        every { sync(forced = any()) } just runs
         coEvery {
             getDecryptedFido2CredentialAutofillViews(any())
         } returns DecryptFido2CredentialAutofillViewResult.Error
@@ -2127,7 +2127,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepository.sync(forced = true)
+            vaultRepository.sync(forced = false)
         }
     }
 
