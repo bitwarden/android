@@ -51,7 +51,9 @@ class PushManagerTest {
 
     private val pushDiskSource: PushDiskSource = PushDiskSourceImpl(FakeSharedPreferences())
 
-    private val pushService: PushService = mockk()
+    private val pushService: PushService = mockk {
+        coEvery { putDeviceToken(any()) } returns Unit.asSuccess()
+    }
 
     private lateinit var pushManager: PushManager
 
@@ -716,7 +718,7 @@ class PushManagerTest {
                         pushService.putDeviceToken(PushTokenRequest(newToken))
                     }
                     assertEquals(
-                        lastRegistration.toEpochSecond(),
+                        clock.instant().epochSecond,
                         pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
                     )
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
@@ -741,7 +743,7 @@ class PushManagerTest {
                         pushService.putDeviceToken(PushTokenRequest(newToken))
                     }
                     assertEquals(
-                        lastRegistration.toEpochSecond(),
+                        clock.instant().epochSecond,
                         pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
                     )
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
