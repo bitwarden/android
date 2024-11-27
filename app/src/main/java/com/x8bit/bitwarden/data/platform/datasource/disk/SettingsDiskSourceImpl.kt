@@ -36,7 +36,6 @@ private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedI
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
 private const val SHOW_IMPORT_LOGINS_SETTING_BADGE = "showImportLoginsSettingBadge"
-private const val LAST_SCHEME_CHANGE_INSTANT = "lastDatabaseSchemeChangeInstant"
 private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 
 /**
@@ -75,8 +74,6 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
-
-    private val mutableLastDatabaseSchemeChangeInstantFlow = bufferedMutableSharedFlow<Instant?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -161,17 +158,6 @@ class SettingsDiskSourceImpl(
     override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
         get() = mutableHasUserLoggedInOrCreatedAccountFlow
             .onSubscription { emit(getBoolean(HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)) }
-
-    override var lastDatabaseSchemeChangeInstant: Instant?
-        get() = getLong(LAST_SCHEME_CHANGE_INSTANT)?.let { Instant.ofEpochMilli(it) }
-        set(value) {
-            putLong(LAST_SCHEME_CHANGE_INSTANT, value?.toEpochMilli())
-            mutableLastDatabaseSchemeChangeInstantFlow.tryEmit(value)
-        }
-
-    override val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
-        get() = mutableLastDatabaseSchemeChangeInstantFlow
-            .onSubscription { emit(lastDatabaseSchemeChangeInstant) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)

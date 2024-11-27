@@ -69,17 +69,6 @@ interface SettingsDiskSource {
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
 
     /**
-     * The instant when the last database scheme change was applied. `null` if no scheme changes
-     * have been applied yet.
-     */
-    var lastDatabaseSchemeChangeInstant: Instant?
-
-    /**
-     * Emits updates that track [lastDatabaseSchemeChangeInstant].
-     */
-    val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
-
-    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
