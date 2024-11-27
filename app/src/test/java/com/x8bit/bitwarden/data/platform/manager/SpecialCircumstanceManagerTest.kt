@@ -12,8 +12,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.util.UUID
 
 class SpecialCircumstanceManagerTest {
+    private val mockUserId = UUID.randomUUID().toString()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true) {
         every { userStateFlow } returns mutableUserStateFlow
@@ -57,9 +59,11 @@ class SpecialCircumstanceManagerTest {
                 assertEquals(preLoginSpecialCircumstance, awaitItem())
                 val mockUserAccount = mockk<UserState.Account>() {
                     every { isLoggedIn } returns true
+                    every { userId } returns mockUserId
                 }
                 val mockUserState = mockk<UserState> {
                     every { activeAccount } returns mockUserAccount
+                    every { activeUserId } returns mockUserAccount.userId
                 }
                 mutableUserStateFlow.value = mockUserState
 
@@ -78,9 +82,11 @@ class SpecialCircumstanceManagerTest {
                 assertEquals(SpecialCircumstance.VaultShortcut, awaitItem())
                 val mockUserAccount = mockk<UserState.Account>() {
                     every { isLoggedIn } returns true
+                    every { userId } returns mockUserId
                 }
                 val mockUserState = mockk<UserState> {
                     every { activeAccount } returns mockUserAccount
+                    every { activeUserId } returns mockUserAccount.userId
                 }
                 mutableUserStateFlow.value = mockUserState
                 expectNoEvents()
