@@ -1097,4 +1097,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="copy_address">Adres kopiëren</string>
   <string name="biometrics_no_longer_supported_title">Biometrie wordt niet langer ondersteund op dit apparaat</string>
   <string name="biometrics_no_longer_supported">Je bent uitgelogd omdat de biometrische gegevens van je apparaat niet voldoen aan de laatste beveiligingseisen. Log opnieuw in om instellingen bij te werken of neem contact op met je beheerder voor toegang.</string>
+  <string name="cxp_import">CXP-import</string>
+  <string name="cxp_export">CXP-export</string>
 </resources>

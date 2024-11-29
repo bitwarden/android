@@ -1097,4 +1097,6 @@
   <string name="copy_address">Копиране на адреса</string>
   <string name="biometrics_no_longer_supported_title">На това устройство вече не се поддържат биометрични данни</string>
   <string name="biometrics_no_longer_supported">Бяхте отписан(а), тъй като средствата за проверка на биометрични данни на устройството не отговарят на последните изисквания за сигурност. Ако искате да промените настройките си, впишете се отново или се свържете с администратона си за помощ с достъпа.</string>
+  <string name="cxp_import">Внасяне на CXP</string>
+  <string name="cxp_export">Изнасяне на CXP</string>
 </resources>
