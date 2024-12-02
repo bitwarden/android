@@ -1103,4 +1103,8 @@ Do you want to switch to this account?</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
   <string name="cxp_import">CXP Import</string>
   <string name="cxp_export">CXP Export</string>
+  <string name="set_up_two_step_login">Set up two-step login</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">You can set up two-step login as an alternative way to protect your account or change your email to one you can access.</string>
+  <string name="turn_on_two_step_login">Turn on two-step login.</string>
+  <string name="change_account_email">Change account email.</string>
 </resources>
