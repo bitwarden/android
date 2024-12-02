@@ -82,6 +82,7 @@ class UserStateExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -109,6 +110,7 @@ class UserStateExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -140,6 +142,7 @@ class UserStateExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -171,6 +174,7 @@ class UserStateExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -217,6 +221,7 @@ class UserStateExtensionsTest {
                         shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
+                        shouldUsersGetPremium = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -261,6 +266,7 @@ class UserStateExtensionsTest {
                         shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
+                        shouldUsersGetPremium = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -309,6 +315,7 @@ class UserStateExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -387,6 +394,7 @@ class UserStateExtensionsTest {
                         shouldUseKeyConnector = false,
                         shouldManageResetPassword = false,
                         role = OrganizationType.ADMIN,
+                        shouldUsersGetPremium = false,
                     ),
                     Organization(
                         id = "organizationId-A",
@@ -394,6 +402,7 @@ class UserStateExtensionsTest {
                         shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
+                        shouldUsersGetPremium = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -445,6 +454,7 @@ class UserStateExtensionsTest {
                         shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
+                        shouldUsersGetPremium = false,
                     ),
                     Organization(
                         id = "organizationId-A",
@@ -452,6 +462,7 @@ class UserStateExtensionsTest {
                         shouldManageResetPassword = false,
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
+                        shouldUsersGetPremium = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -463,6 +474,53 @@ class UserStateExtensionsTest {
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,
                 ),
+        )
+    }
+
+    @Test
+    fun `getOrganizationPremiumStatusMap should map organizations to correct status`() {
+        val actualMap = UserState.Account(
+            userId = "userId",
+            name = "name",
+            email = "email",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = true,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            needsMasterPassword = false,
+            organizations = listOf(
+                Organization(
+                    id = "1",
+                    name = "organizationName",
+                    shouldManageResetPassword = false,
+                    shouldUseKeyConnector = false,
+                    role = OrganizationType.ADMIN,
+                    shouldUsersGetPremium = false,
+                ), Organization(
+                    id = "2",
+                    name = "organizationName",
+                    shouldManageResetPassword = false,
+                    shouldUseKeyConnector = false,
+                    role = OrganizationType.ADMIN,
+                    shouldUsersGetPremium = true,
+                ),
+            ),
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
+        ).getOrganizationPremiumStatusMap()
+
+        assertEquals(
+            mapOf(
+                "1" to false,
+                "2" to true,
+            ),
+            actualMap,
         )
     }
 }

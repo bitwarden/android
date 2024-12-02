@@ -1329,6 +1329,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     isRefreshing = false,
     showImportActionCard = false,
     showSshKeys = false,
+    organizationPremiumStatusMap = emptyMap(),
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
