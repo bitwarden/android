@@ -320,7 +320,7 @@ class VerificationCodeViewModel @Inject constructor(
         authCodes: List<VerificationCodeItem>,
         userAccount: UserState.Account?,
     ): DataState<List<VerificationCodeItem>> {
-        val orgPremiumStatusMap = userAccount?.getOrganizationPremiumStatusMap() ?: emptyMap()
+        val orgPremiumStatusMap = userAccount?.getOrganizationPremiumStatusMap().orEmpty()
         val filteredAuthCodes = authCodes.mapNotNull { authCode ->
             val premiumStatus =
                 (authCode.orgId?.let { orgPremiumStatusMap[it] } ?: userAccount?.isPremium) == true

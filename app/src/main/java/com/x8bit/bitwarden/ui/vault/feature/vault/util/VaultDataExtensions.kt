@@ -80,14 +80,12 @@ fun VaultData.toViewState(
         val userOwnedTotpItems = totpItemsGroupedByOwnership[false]
             ?.filter {
                 it.login?.totp != null && isPremium
-            }
-            ?: emptyList()
+            }.orEmpty()
         val organizationOwnedTotpItems = totpItemsGroupedByOwnership[true]
             ?.filter {
-            it.login?.totp != null &&
-                (organizationPremiumStatusMap[it.id] == true || it.organizationUseTotp)
-            }
-            ?: emptyList()
+                it.login?.totp != null &&
+                    (organizationPremiumStatusMap[it.id] == true || it.organizationUseTotp)
+            }.orEmpty()
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = userOwnedTotpItems.count() +

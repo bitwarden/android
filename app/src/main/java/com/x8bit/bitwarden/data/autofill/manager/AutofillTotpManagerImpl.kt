@@ -30,7 +30,7 @@ class AutofillTotpManagerImpl(
             .value
             ?.activeAccount
             ?.getOrganizationPremiumStatusMap()
-            ?: emptyMap()
+            .orEmpty()
         val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
         val premiumStatus = organizationPremiumStatusMap[cipherView.organizationId] ?: isPremium
         if (!premiumStatus && !cipherView.organizationUseTotp) return
