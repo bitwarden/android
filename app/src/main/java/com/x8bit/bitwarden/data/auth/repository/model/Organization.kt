@@ -18,4 +18,5 @@ data class Organization(
     val shouldManageResetPassword: Boolean,
     val shouldUseKeyConnector: Boolean,
     val role: OrganizationType,
+    val shouldUsersGetPremium: Boolean,
 )
