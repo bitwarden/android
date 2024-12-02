@@ -87,6 +87,7 @@ private fun NewDeviceNoticeEmailAccessContent(
             .verticalScroll(state = rememberScrollState()),
     ) {
         HeaderContent()
+        Spacer(modifier = Modifier.height(24.dp))
         MainContent(
             email = email,
             isEmailAccessEnabled = isEmailAccessEnabled,
@@ -113,15 +114,15 @@ private fun NewDeviceNoticeEmailAccessContent(
 private fun HeaderContent(
     modifier: Modifier = Modifier,
 ) {
-    Image(
-        painter = rememberVectorPainter(id = R.drawable.warning),
-        contentDescription = null,
-        modifier = modifier.size(120.dp),
-    )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(horizontal = 24.dp),
     ) {
+        Image(
+            painter = rememberVectorPainter(id = R.drawable.warning),
+            contentDescription = null,
+            modifier = Modifier.size(120.dp),
+        )
         Text(
             text = stringResource(R.string.important_notice),
             style = BitwardenTheme.typography.headlineMedium,
@@ -150,7 +151,6 @@ private fun MainContent(
     onEmailAccessToggleChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = modifier.height(24.dp))
     Column(
         modifier = modifier
             .padding(horizontal = 22.dp)
