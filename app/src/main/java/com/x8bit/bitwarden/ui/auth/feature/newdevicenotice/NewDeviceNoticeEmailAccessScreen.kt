@@ -15,17 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -47,8 +43,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * The top level composable for the new device notice email access screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun NewDeviceNoticeEmailAccessScreen(
     onNavigateToTwoFactorOptions: () -> Unit,
@@ -61,11 +55,9 @@ fun NewDeviceNoticeEmailAccessScreen(
         }
     }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .fillMaxSize(),
     ) {
         NewDeviceNoticeEmailAccessContent(
             email = state.email,
@@ -118,15 +110,17 @@ private fun NewDeviceNoticeEmailAccessContent(
 
 @Suppress("MaxLineLength")
 @Composable
-private fun HeaderContent() {
+private fun HeaderContent(
+    modifier: Modifier = Modifier,
+) {
     Image(
         painter = rememberVectorPainter(id = R.drawable.warning),
         contentDescription = null,
-        modifier = Modifier.size(120.dp),
+        modifier = modifier.size(120.dp),
     )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 24.dp),
+        modifier = modifier.padding(horizontal = 24.dp),
     ) {
         Text(
             text = stringResource(R.string.important_notice),
@@ -152,12 +146,13 @@ private fun HeaderContent() {
 @Composable
 private fun MainContent(
     email: String,
-    isEmailAccessEnabled: Boolean = false,
-    onEmailAccessToggleChanged: (Boolean) -> Unit = {},
+    isEmailAccessEnabled: Boolean,
+    onEmailAccessToggleChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.size(24.dp))
+    Spacer(modifier = modifier.height(24.dp))
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 22.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(size = 4.dp))
