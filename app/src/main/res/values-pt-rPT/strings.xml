@@ -1097,4 +1097,6 @@ Anule a subscrição em qualquer altura.</string>
   <string name="copy_address">Copiar endereço</string>
   <string name="biometrics_no_longer_supported_title">A biometria já não é suportada neste dispositivo</string>
   <string name="biometrics_no_longer_supported">A sua sessão foi terminada porque os dados biométricos do seu dispositivo não cumprem os requisitos de segurança mais recentes. Para atualizar as definições, inicie sessão novamente ou contacte o seu administrador para obter acesso.</string>
+  <string name="cxp_import">Importar CXP</string>
+  <string name="cxp_export">Exportar CXP</string>
 </resources>

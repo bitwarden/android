@@ -1097,4 +1097,6 @@ Chcete prepnúť na tento účet?</string>
   <string name="copy_address">Kopírovať adresu</string>
   <string name="biometrics_no_longer_supported_title">Biometrické údaje už nie sú v tomto zariadení podporované</string>
   <string name="biometrics_no_longer_supported">Boli ste odhlásení, pretože biometrické údaje vášho zariadenia nespĺňajú najnovšie bezpečnostné požiadavky. Pre aktualizáciu nastavenia sa prihláste ešte raz alebo sa obráťte na správcu, ktorý vám umožní prístup.</string>
+  <string name="cxp_import">Import CXP</string>
+  <string name="cxp_export">Export CXP</string>
 </resources>
