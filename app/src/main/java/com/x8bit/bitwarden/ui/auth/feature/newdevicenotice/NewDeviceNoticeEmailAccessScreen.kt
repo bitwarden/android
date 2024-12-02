@@ -2,12 +2,14 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -43,7 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * The top level composable for the Login with Device screen.
+ * The top level composable for the new device notice email access screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
@@ -67,13 +69,13 @@ fun NewDeviceNoticeEmailAccessScreen(
     ) {
         NewDeviceNoticeEmailAccessContent(
             email = state.email,
-            onContinueClick = { viewModel.trySendAction(ContinueClick) },
+            isEmailAccessEnabled = state.isEmailAccessEnabled,
             onEmailAccessToggleChanged = remember(viewModel) {
                 { newState ->
                     viewModel.trySendAction(EmailAccessToggle(newState = newState))
                 }
             },
-            isEmailAccessEnabled = state.isEmailAccessEnabled,
+            onContinueClick = { viewModel.trySendAction(ContinueClick) },
         )
     }
 }
@@ -81,12 +83,13 @@ fun NewDeviceNoticeEmailAccessScreen(
 @Composable
 private fun NewDeviceNoticeEmailAccessContent(
     email: String,
+    isEmailAccessEnabled: Boolean,
     onEmailAccessToggleChanged: (Boolean) -> Unit = {},
     onContinueClick: () -> Unit = {},
-    isEmailAccessEnabled: Boolean,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
@@ -94,8 +97,8 @@ private fun NewDeviceNoticeEmailAccessContent(
         HeaderContent()
         MainContent(
             email = email,
-            onEmailAccessToggleChanged = onEmailAccessToggleChanged,
             isEmailAccessEnabled = isEmailAccessEnabled,
+            onEmailAccessToggleChanged = onEmailAccessToggleChanged,
         )
         BitwardenFilledButton(
             label = stringResource(R.string.continue_text),
@@ -105,17 +108,17 @@ private fun NewDeviceNoticeEmailAccessContent(
                 .fillMaxWidth()
                 .imePadding(),
         )
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
 /**
- * Header content ordered with the image "first" and the text "second" which can be placed in a
+ * Header content containing the warning icon and title.
  */
 
 @Suppress("MaxLineLength")
 @Composable
 private fun HeaderContent() {
-    Spacer(modifier = Modifier.height(48.dp))
     Image(
         painter = rememberVectorPainter(id = R.drawable.warning),
         contentDescription = null,
@@ -149,8 +152,8 @@ private fun HeaderContent() {
 @Composable
 private fun MainContent(
     email: String,
-    onEmailAccessToggleChanged: (Boolean) -> Unit = {},
     isEmailAccessEnabled: Boolean = false,
+    onEmailAccessToggleChanged: (Boolean) -> Unit = {},
 ) {
     Spacer(modifier = Modifier.size(24.dp))
     Column(

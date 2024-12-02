@@ -25,20 +25,20 @@ data class NewDeviceNoticeEmailAccessArgs(val emailAddress: String) {
 }
 
 /**
- * Navigate to the New Device Notice Email Access screen.
+ * Navigate to the new device notice email access screen.
  */
 fun NavController.navigateToNewDeviceNoticeEmailAccess(
     emailAddress: String,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = "$NEW_DEVICE_NOTICE_PREFIX/{$emailAddress}",
+        route = "$NEW_DEVICE_NOTICE_PREFIX/$emailAddress",
         navOptions = navOptions,
     )
 }
 
 /**
- * Add the New Device Notice Email Access screen to the nav graph.
+ * Add the new device notice email access screen to the nav graph.
  */
 fun NavGraphBuilder.newDeviceNoticeEmailAccessDestination(
     onNavigateToTwoFactorOptions: () -> Unit,
