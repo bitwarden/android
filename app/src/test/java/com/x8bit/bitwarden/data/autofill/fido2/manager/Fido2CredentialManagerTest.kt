@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.Digita
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2PublicKeyCredential
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
@@ -85,7 +85,7 @@ class Fido2CredentialManagerTest {
         every { isOriginPopulated() } returns true
         every { getOrigin(any()) } returns DEFAULT_PACKAGE_NAME
     }
-    private val mockPrivilegedAppRequest = mockk<Fido2CredentialRequest> {
+    private val mockPrivilegedAppRequest = mockk<Fido2CreateCredentialRequest> {
         every { callingAppInfo } returns mockPrivilegedCallingAppInfo
         every { requestJson } returns "{}"
     }
@@ -98,7 +98,7 @@ class Fido2CredentialManagerTest {
         signingInfo = mockSigningInfo,
         origin = null,
     )
-    private val mockUnprivilegedAppRequest = mockk<Fido2CredentialRequest> {
+    private val mockUnprivilegedAppRequest = mockk<Fido2CreateCredentialRequest> {
         every { callingAppInfo } returns mockUnprivilegedCallingAppInfo
         every { requestJson } returns "{}"
     }
@@ -419,7 +419,7 @@ class Fido2CredentialManagerTest {
 
             fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CreateCredentialRequest,
                 selectedCipherView = mockCipherView,
             )
 
@@ -457,7 +457,7 @@ class Fido2CredentialManagerTest {
 
             fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2Request,
+                fido2CreateCredentialRequest = mockFido2Request,
                 selectedCipherView = createMockCipherView(1),
             )
         }
@@ -492,7 +492,7 @@ class Fido2CredentialManagerTest {
 
             fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CreateCredentialRequest,
                 selectedCipherView = mockCipherView,
             )
 
@@ -532,7 +532,7 @@ class Fido2CredentialManagerTest {
 
             fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CreateCredentialRequest,
                 selectedCipherView = mockCipherView,
             )
 
@@ -562,7 +562,7 @@ class Fido2CredentialManagerTest {
 
             val result = fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CredentialRequest,
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
@@ -586,7 +586,7 @@ class Fido2CredentialManagerTest {
 
             val result = fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CredentialRequest,
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
@@ -611,7 +611,7 @@ class Fido2CredentialManagerTest {
 
             val result = fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CredentialRequest,
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
@@ -654,7 +654,7 @@ class Fido2CredentialManagerTest {
 
             val result = fido2CredentialManager.registerFido2Credential(
                 userId = "mockUserId",
-                fido2CredentialRequest = mockFido2CredentialRequest,
+                fido2CreateCredentialRequest = mockFido2CredentialRequest,
                 selectedCipherView = createMockCipherView(number = 1),
             )
 
@@ -680,7 +680,7 @@ class Fido2CredentialManagerTest {
 
         val result = fido2CredentialManager.registerFido2Credential(
             userId = "activeUserId",
-            fido2CredentialRequest = mockAssertionRequest,
+            fido2CreateCredentialRequest = mockAssertionRequest,
             selectedCipherView = mockSelectedCipher,
         )
 

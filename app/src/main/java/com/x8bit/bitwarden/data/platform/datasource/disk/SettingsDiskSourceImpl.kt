@@ -36,7 +36,7 @@ private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedI
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
 private const val SHOW_IMPORT_LOGINS_SETTING_BADGE = "showImportLoginsSettingBadge"
-private const val LAST_SCHEME_CHANGE_INSTANT = "lastDatabaseSchemeChangeInstant"
+private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -75,9 +75,10 @@ class SettingsDiskSourceImpl(
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableLastDatabaseSchemeChangeInstantFlow = bufferedMutableSharedFlow<Instant?>()
-
     private val mutableScreenCaptureAllowedFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableVaultRegisteredForExportFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
@@ -158,17 +159,6 @@ class SettingsDiskSourceImpl(
         get() = mutableHasUserLoggedInOrCreatedAccountFlow
             .onSubscription { emit(getBoolean(HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)) }
 
-    override var lastDatabaseSchemeChangeInstant: Instant?
-        get() = getLong(LAST_SCHEME_CHANGE_INSTANT)?.let { Instant.ofEpochMilli(it) }
-        set(value) {
-            putLong(LAST_SCHEME_CHANGE_INSTANT, value?.toEpochMilli())
-            mutableLastDatabaseSchemeChangeInstantFlow.tryEmit(value)
-        }
-
-    override val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
-        get() = mutableLastDatabaseSchemeChangeInstantFlow
-            .onSubscription { emit(lastDatabaseSchemeChangeInstant) }
-
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
         storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = null)
@@ -181,6 +171,7 @@ class SettingsDiskSourceImpl(
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
+        storeVaultRegisteredForExport(userId = userId, isRegistered = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -443,6 +434,18 @@ class SettingsDiskSourceImpl(
         getMutableShowImportLoginsSettingBadgeFlow(userId)
             .onSubscription { emit(getShowImportLoginsSettingBadge(userId)) }
 
+    override fun getVaultRegisteredForExport(userId: String): Boolean? =
+        getBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId))
+
+    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?) {
+        putBoolean(IS_VAULT_REGISTERED_FOR_EXPORT.appendIdentifier(userId), isRegistered)
+        getMutableVaultRegisteredForExportFlow(userId).tryEmit(isRegistered)
+    }
+
+    override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
+        getMutableVaultRegisteredForExportFlow(userId)
+            .onSubscription { emit(getVaultRegisteredForExport(userId)) }
+
     private fun getMutableLastSyncFlow(
         userId: String,
     ): MutableSharedFlow<Instant?> =
@@ -493,4 +496,10 @@ class SettingsDiskSourceImpl(
         mutableShowImportLoginsSettingBadgeFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
+    private fun getMutableVaultRegisteredForExportFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> = mutableVaultRegisteredForExportFlow.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
+    }
 }

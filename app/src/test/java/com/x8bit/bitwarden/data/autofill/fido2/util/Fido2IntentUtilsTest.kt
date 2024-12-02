@@ -15,7 +15,7 @@ import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
@@ -77,7 +77,7 @@ class Fido2IntentUtilsTest {
 
         val createRequest = intent.getFido2CredentialRequestOrNull()
         assertEquals(
-            Fido2CredentialRequest(
+            Fido2CreateCredentialRequest(
                 userId = "mockUserId",
                 requestJson = mockCallingRequest.requestJson,
                 packageName = mockCallingAppInfo.packageName,

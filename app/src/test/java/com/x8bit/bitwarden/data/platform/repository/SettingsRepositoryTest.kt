@@ -1184,18 +1184,59 @@ class SettingsRepositoryTest {
             assertFalse(awaitItem())
         }
     }
+
+    @Test
+    fun `isVaultRegisteredForExport should return false if no value exists`() {
+        assertFalse(settingsRepository.isVaultRegisteredForExport(userId = "userId"))
+    }
+
+    @Test
+    fun `isVaultRegisteredForExport should return true if it exists`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeVaultRegisteredForExport(userId = userId, registered = true)
+        assertTrue(settingsRepository.isVaultRegisteredForExport(userId = userId))
+    }
+
+    @Test
+    fun `storeVaultRegisteredForExport should store value of true to disk`() {
+        val userId = "userId"
+        settingsRepository.storeVaultRegisteredForExport(userId = userId, isRegistered = true)
+        assertTrue(fakeSettingsDiskSource.getVaultRegisteredForExport(userId = userId))
+    }
+
+    @Test
+    fun `getVaultRegisteredForExportFlow should react to changes in SettingsDiskSource`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository
+                .getVaultRegisteredForExportFlow(userId = USER_ID)
+                .test {
+                    assertFalse(awaitItem())
+                    fakeSettingsDiskSource.storeVaultRegisteredForExport(
+                        userId = USER_ID,
+                        registered = true,
+                    )
+                    assertTrue(awaitItem())
+                    fakeSettingsDiskSource.storeVaultRegisteredForExport(
+                        userId = USER_ID,
+                        registered = false,
+                    )
+                    assertFalse(awaitItem())
+                }
+        }
 }
 
 private const val USER_ID: String = "userId"
 private const val AUTHENTICATION_SYNC_KEY = "authSyncKey"
 
-private val MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS = TrustedDeviceUserDecryptionOptionsJson(
-    encryptedPrivateKey = null,
-    encryptedUserKey = null,
-    hasAdminApproval = false,
-    hasLoginApprovingDevice = false,
-    hasManageResetPasswordPermission = false,
-)
+private val MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS =
+    TrustedDeviceUserDecryptionOptionsJson(
+        encryptedPrivateKey = null,
+        encryptedUserKey = null,
+        hasAdminApproval = false,
+        hasLoginApprovingDevice = false,
+        hasManageResetPasswordPermission = false,
+    )
 
 private val MOCK_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryptionOptionsJson(
     hasMasterPassword = false,

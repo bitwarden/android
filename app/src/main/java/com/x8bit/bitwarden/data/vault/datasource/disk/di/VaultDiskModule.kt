@@ -19,7 +19,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -34,7 +33,6 @@ class VaultDiskModule {
     fun provideVaultDatabase(
         app: Application,
         databaseSchemeManager: DatabaseSchemeManager,
-        clock: Clock,
     ): VaultDatabase =
         Room
             .databaseBuilder(
@@ -43,7 +41,7 @@ class VaultDiskModule {
                 name = "vault_database",
             )
             .fallbackToDestructiveMigration()
-            .addCallback(DatabaseSchemeCallback(databaseSchemeManager, clock))
+            .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()
 

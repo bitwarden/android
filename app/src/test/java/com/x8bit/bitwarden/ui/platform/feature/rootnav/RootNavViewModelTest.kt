@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -662,7 +662,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
-        val fido2CredentialRequest = Fido2CredentialRequest(
+        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "activeUserId",
             requestJson = "{}",
             packageName = "com.x8bit.bitwarden",
@@ -670,7 +670,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
             origin = "mockOrigin",
         )
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.Fido2Save(fido2CredentialRequest)
+            SpecialCircumstance.Fido2Save(fido2CreateCredentialRequest)
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -703,7 +703,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         assertEquals(
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
-                fido2CredentialRequest = fido2CredentialRequest,
+                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             ),
             viewModel.stateFlow.value,
         )

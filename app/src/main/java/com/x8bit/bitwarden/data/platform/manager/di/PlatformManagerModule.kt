@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
@@ -198,7 +197,6 @@ object PlatformManagerModule {
         authRepository: AuthRepository,
         environmentRepository: EnvironmentRepository,
         serverConfigRepository: ServerConfigRepository,
-        baseUrlInterceptors: BaseUrlInterceptors,
         refreshAuthenticator: RefreshAuthenticator,
         dispatcherManager: DispatcherManager,
     ): NetworkConfigManager =
@@ -206,7 +204,6 @@ object PlatformManagerModule {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
-            baseUrlInterceptors = baseUrlInterceptors,
             refreshAuthenticator = refreshAuthenticator,
             dispatcherManager = dispatcherManager,
         )
@@ -307,10 +304,10 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideDatabaseSchemeManager(
+        authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
-        dispatcherManager: DispatcherManager,
     ): DatabaseSchemeManager = DatabaseSchemeManagerImpl(
+        authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
-        dispatcherManager = dispatcherManager,
     )
 }

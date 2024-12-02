@@ -14,7 +14,7 @@ import kotlinx.parcelize.Parcelize
  * @property callingAppInfo Information about the application that initiated the request.
  */
 @Parcelize
-data class Fido2CredentialRequest(
+data class Fido2CreateCredentialRequest(
     val userId: String,
     val requestJson: String,
     val packageName: String,

@@ -299,7 +299,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = VaultState.DialogState.Syncing)
         }
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleLockClick() {
@@ -346,7 +346,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleTryAgainClick() {
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleDialogDismiss() {
@@ -359,7 +359,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepository.sync()
+        vaultRepository.sync(forced = false)
     }
 
     private fun handleOverflowOptionClick(action: VaultAction.OverflowOptionClick) {

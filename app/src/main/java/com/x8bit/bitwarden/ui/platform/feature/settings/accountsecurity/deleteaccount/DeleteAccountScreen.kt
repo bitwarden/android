@@ -31,15 +31,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -74,29 +71,23 @@ fun DeleteAccountScreen(
 
     when (val dialog = state.dialog) {
         DeleteAccountState.DeleteAccountDialog.DeleteSuccess -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = null,
-                message = R.string.your_account_has_been_permanently_deleted.asText(),
-            ),
+            title = null,
+            message = stringResource(id = R.string.your_account_has_been_permanently_deleted),
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm) }
             },
         )
 
         is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = dialog.message,
-            ),
+            title = stringResource(id = R.string.an_error_has_occurred),
+            message = dialog.message(),
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(DeleteAccountAction.DismissDialog) }
             },
         )
 
-        DeleteAccountState.DeleteAccountDialog.Loading,
-
-            -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
+        DeleteAccountState.DeleteAccountDialog.Loading -> BitwardenLoadingDialog(
+            text = stringResource(id = R.string.loading),
         )
 
         null -> Unit

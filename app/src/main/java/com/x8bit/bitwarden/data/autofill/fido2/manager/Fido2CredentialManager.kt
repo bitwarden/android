@@ -4,7 +4,7 @@ import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
@@ -53,7 +53,7 @@ interface Fido2CredentialManager {
      */
     suspend fun registerFido2Credential(
         userId: String,
-        fido2CredentialRequest: Fido2CredentialRequest,
+        fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult
 

@@ -29,6 +29,8 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.ImportLoginsFlow,
     FlagKey.SshKeyCipherItems,
     FlagKey.VerifiedSsoDomainEndpoint,
+    FlagKey.CredentialExchangeProtocolImport,
+    FlagKey.CredentialExchangeProtocolExport,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -73,4 +75,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
     FlagKey.SshKeyCipherItems -> stringResource(R.string.ssh_key_cipher_item_types)
     FlagKey.VerifiedSsoDomainEndpoint -> stringResource(R.string.verified_sso_domain_verified)
+    FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
+    FlagKey.CredentialExchangeProtocolExport -> stringResource(R.string.cxp_export)
 }

@@ -193,14 +193,9 @@ class VaultRepositoryTest {
             mutableUnlockedUserIdsStateFlow.first { userId in it }
         }
     }
-    private val mutableLastDatabaseSchemeChangeInstantFlow = MutableStateFlow<Instant?>(null)
+    private val mutableDatabaseSchemeChangeFlow = bufferedMutableSharedFlow<Unit>()
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
-        every {
-            lastDatabaseSchemeChangeInstant
-        } returns mutableLastDatabaseSchemeChangeInstantFlow.value
-        every {
-            lastDatabaseSchemeChangeInstantFlow
-        } returns mutableLastDatabaseSchemeChangeInstantFlow
+        every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
@@ -787,34 +782,29 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `lastDatabaseSchemeChangeInstantFlow should trigger sync when new value is not null`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            every {
-                databaseSchemeManager.lastDatabaseSchemeChangeInstant
-            } returns mutableLastDatabaseSchemeChangeInstantFlow.value
-            coEvery { syncService.sync() } just awaits
+    fun `databaseSchemeChangeFlow should trigger sync on emission`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } just awaits
 
-            mutableLastDatabaseSchemeChangeInstantFlow.value = clock.instant()
+        mutableDatabaseSchemeChangeFlow.tryEmit(Unit)
 
-            coVerify(exactly = 1) { syncService.sync() }
-        }
+        coVerify(exactly = 1) { syncService.sync() }
+    }
 
     @Test
-    fun `lastDatabaseSchemeChangeInstantFlow should not sync when new value is null`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+    fun `sync with forced should skip checks and call the syncService sync`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } returns Throwable("failure").asFailure()
 
-            every {
-                databaseSchemeManager.lastDatabaseSchemeChangeInstant
-            } returns mutableLastDatabaseSchemeChangeInstantFlow.value
+        vaultRepository.sync(forced = true)
 
-            coEvery { syncService.sync() } just awaits
-
-            mutableLastDatabaseSchemeChangeInstantFlow.value = null
-
-            coVerify(exactly = 0) { syncService.sync() }
+        coVerify(exactly = 0) {
+            syncService.getAccountRevisionDateMillis()
         }
+        coVerify(exactly = 1) {
+            syncService.sync()
+        }
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1106,60 +1096,6 @@ class VaultRepositoryTest {
         vaultRepository.syncIfNecessary()
 
         coVerify(exactly = 0) { syncService.sync() }
-    }
-
-    @Test
-    fun `syncIfNecessary when there is no last scheme change should not sync the vault`() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId)
-        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
-        every {
-            databaseSchemeManager.lastDatabaseSchemeChangeInstant
-        } returns null
-        coEvery { syncService.sync() } just awaits
-
-        vaultRepository.syncIfNecessary()
-
-        coVerify(exactly = 0) { syncService.sync() }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncIfNecessary when the last scheme change is before the last sync time should not sync the vault`() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId)
-        } returns clock.instant().plus(1, ChronoUnit.MINUTES)
-        every {
-            databaseSchemeManager.lastDatabaseSchemeChangeInstant
-        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
-
-        coEvery { syncService.sync() } just awaits
-
-        vaultRepository.syncIfNecessary()
-
-        coVerify(exactly = 0) { syncService.sync() }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncIfNecessary when the last scheme change is after the last sync time should sync the vault`() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId)
-        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
-        every {
-            databaseSchemeManager.lastDatabaseSchemeChangeInstant
-        } returns clock.instant().plus(1, ChronoUnit.MINUTES)
-        coEvery { syncService.sync() } just awaits
-
-        vaultRepository.syncIfNecessary()
-
-        coVerify { syncService.sync() }
     }
 
     @Test

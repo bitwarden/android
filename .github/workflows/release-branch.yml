@@ -17,6 +17,7 @@ on:
 
 jobs:
   create-release-branch:
+    name: Create Release Branch
     runs-on: ubuntu-24.04
     permissions:
       contents: write

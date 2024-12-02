@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -133,7 +133,7 @@ class RootNavViewModel @Inject constructor(
                     is SpecialCircumstance.Fido2Save -> {
                         RootNavState.VaultUnlockedForFido2Save(
                             activeUserId = userState.activeUserId,
-                            fido2CredentialRequest = specialCircumstance.fido2CredentialRequest,
+                            fido2CreateCredentialRequest = specialCircumstance.fido2CreateCredentialRequest,
                         )
                     }
 
@@ -286,12 +286,12 @@ sealed class RootNavState : Parcelable {
      *
      * @param activeUserId ID of the active user. Indirectly used to notify [RootNavViewModel] the
      * active user has changed.
-     * @param fido2CredentialRequest System request containing FIDO credential data.
+     * @param fido2CreateCredentialRequest System request containing FIDO credential data.
      */
     @Parcelize
     data class VaultUnlockedForFido2Save(
         val activeUserId: String,
-        val fido2CredentialRequest: Fido2CredentialRequest,
+        val fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
     ) : RootNavState()
 
     /**

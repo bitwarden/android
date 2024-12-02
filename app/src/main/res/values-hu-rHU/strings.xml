@@ -40,7 +40,6 @@
   <string name="invalid_master_password">A mesterjelszó érvénytelen. Próbáljuk újra.</string>
   <string name="invalid_pin">A pinkód érvénytelen. Próbáljuk újra.</string>
   <string name="launch">Indítás</string>
-  <string name="log_in">Bejelentkezés</string>
   <string name="log_in_verb">Bejelentkezés</string>
   <string name="log_in_noun">Bejelentkezés</string>
   <string name="log_out">Kijelentkezés</string>
@@ -691,7 +690,7 @@
   <string name="enter_key_manually">Kód megadása manuálisan</string>
   <string name="add_totp">TOTP hozzáadása</string>
   <string name="setup_totp">TOTP beállítása</string>
-  <string name="once_the_key_is_successfully_entered">A kulcs sikeres megadása után válasszuk ki a
+  <string name="once_the_key_is_successfully_entered">A kulcs sikeres megadása után válasszuk ki a 
 TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
   <string name="never_lock_warning">Ha a zárolási lehetőségeket \"Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</string>
   <string name="environment_page_urls_error">A beírt webcímek közül egy vagy több érvénytelen. Vizsgáljuk át és próbáljuk meg újra elmenteni.</string>
@@ -951,7 +950,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="or_log_in_you_may_already_have_an_account">Vagy Bejelentkezés, ha már van fiók.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről. Bármikor leiratkozhatunk.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Tanácsokat, bejelentéseket és kutatási lehetőségeket kaphatunk a Bitwardentől a postaládába. Bármikor leiratkozhatunk.</string>
-  <string name="security_prioritized">Adatvédelem, prioritás</string>
+  <string name="security_prioritized">Biztonság, prioritásos</string>
   <string name="welcome_message_1">Mentsük el a bejelentkezési adatokat, kártyákat és azonosításokat a biztonságos széfbe. A Bitwarden tudás nélküli, végpontok közötti titkosítást használ a felhasználók számára fontos dolgok védelmére.</string>
   <string name="welcome_message_2">Állítsuk be a biometrikus feloldást és az automatikus kitöltést, hogy egyetlen betű beírása nélkül jelentkezzünk be a fiókokba.</string>
   <string name="quick_and_easy_login">Gyors és könnyű bejelentkezés</string>
@@ -1086,4 +1085,15 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">A Bitwarden minden alkalommal értesíthetést küld, amikor új bejelentkezési kérelem érkezik egy másik eszközről.</string>
   <string name="skip_for_now">Kihagyás most</string>
   <string name="done_text">Kész</string>
+  <string name="page_number_x_of_y">%1$s / %2$s</string>
+  <string name="copy_identity_name">Az azonosító név másolása</string>
+  <string name="copy_company">Cég másolása</string>
+  <string name="copy_ssn">Társadalombiztosítási szám másolása</string>
+  <string name="copy_passport_number">Útlevélszám másolása</string>
+  <string name="copy_license_number">Vezetői engedély szám másolása</string>
+  <string name="copy_email">Email cím másolása</string>
+  <string name="copy_phone">Telefonszám másolása</string>
+  <string name="copy_address">Postai cím másolása</string>
+  <string name="biometrics_no_longer_supported_title">A biometrikus adatok már nem támogatottak ezen az eszközön.</string>
+  <string name="biometrics_no_longer_supported">Kijelentkeztetés történt, mert az eszköz biometrikus adatai nem felelnek meg a legújabb biztonsági követelményeknek. A beállítások frissítéséhez jelentkezzünk be még egyszer vagy lépjünk kapcsolatba az adminisztrátorral.</string>
 </resources>

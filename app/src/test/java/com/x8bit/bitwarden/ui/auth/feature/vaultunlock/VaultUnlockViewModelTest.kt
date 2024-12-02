@@ -1227,6 +1227,35 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         verify { fido2CredentialManager.isUserVerified = false }
     }
 
+    @Test
+    fun `on BiometricsNoLongerSupported should show correct dialog state`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultUnlockAction.BiometricsNoLongerSupported)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on DismissBiometricsNoLongerSupportedDialog should dismiss dialog state and log the user out`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultUnlockAction.DismissBiometricsNoLongerSupportedDialog)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = null,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            authRepository.logout()
+            authRepository.hasPendingAccountAddition = true
+        }
+    }
+
     private fun createViewModel(
         state: VaultUnlockState? = null,
         unlockType: UnlockType = UnlockType.STANDARD,
@@ -1275,6 +1304,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     showBiometricInvalidatedMessage = false,
     userId = USER_ID,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+    hasMasterPassword = true,
 )
 
 private val TRUSTED_DEVICE: UserState.TrustedDevice = UserState.TrustedDevice(

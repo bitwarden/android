@@ -17,7 +17,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -51,7 +50,6 @@ object GeneratorDiskModule {
     fun providePasswordHistoryDatabase(
         app: Application,
         databaseSchemeManager: DatabaseSchemeManager,
-        clock: Clock,
     ): PasswordHistoryDatabase {
         return Room
             .databaseBuilder(
@@ -59,12 +57,7 @@ object GeneratorDiskModule {
                 klass = PasswordHistoryDatabase::class.java,
                 name = "passcode_history_database",
             )
-            .addCallback(
-                DatabaseSchemeCallback(
-                    databaseSchemeManager = databaseSchemeManager,
-                    clock = clock,
-                ),
-            )
+            .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .build()
     }
 

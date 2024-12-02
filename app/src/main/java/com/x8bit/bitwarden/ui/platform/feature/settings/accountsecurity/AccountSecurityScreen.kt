@@ -43,14 +43,12 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
@@ -419,14 +417,12 @@ private fun AccountSecurityDialogs(
         )
 
         is AccountSecurityDialog.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(text = dialogState.message),
+            text = dialogState.message(),
         )
 
         is AccountSecurityDialog.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title(),
+            message = dialogState.message(),
             onDismissRequest = onDismissRequest,
         )
 
@@ -593,10 +589,8 @@ private fun SessionCustomTimeoutRow(
 
     if (shouldShowViolatesPoliciesDialog) {
         BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = R.string.warning.asText(),
-                message = R.string.vault_timeout_to_large.asText(),
-            ),
+            title = stringResource(id = R.string.warning),
+            message = stringResource(id = R.string.vault_timeout_to_large),
             onDismissRequest = {
                 shouldShowViolatesPoliciesDialog = false
                 vaultTimeoutPolicyMinutes?.let {

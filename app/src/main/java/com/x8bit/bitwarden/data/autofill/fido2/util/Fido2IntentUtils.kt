@@ -7,7 +7,7 @@ import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
@@ -15,10 +15,10 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
 
 /**
- * Checks if this [Intent] contains a [Fido2CredentialRequest] related to an ongoing FIDO 2
+ * Checks if this [Intent] contains a [Fido2CreateCredentialRequest] related to an ongoing FIDO 2
  * credential creation process.
  */
-fun Intent.getFido2CredentialRequestOrNull(): Fido2CredentialRequest? {
+fun Intent.getFido2CredentialRequestOrNull(): Fido2CreateCredentialRequest? {
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
@@ -33,7 +33,7 @@ fun Intent.getFido2CredentialRequestOrNull(): Fido2CredentialRequest? {
     val userId = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
-    return Fido2CredentialRequest(
+    return Fido2CreateCredentialRequest(
         userId = userId,
         requestJson = createPublicKeyRequest.requestJson,
         packageName = systemRequest.callingAppInfo.packageName,
