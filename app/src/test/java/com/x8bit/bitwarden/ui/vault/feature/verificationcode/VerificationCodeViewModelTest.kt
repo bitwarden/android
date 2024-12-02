@@ -47,7 +47,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { getAuthCodesFlow() } returns mutableAuthCodeFlow.asStateFlow()
-        every { sync(forced = true) } just runs
+        every { sync(forced = any()) } just runs
     }
 
     private val environmentRepository: EnvironmentRepository = mockk {
@@ -456,7 +456,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VerificationCodeAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepository.sync(forced = true)
+            vaultRepository.sync(forced = false)
         }
     }
 

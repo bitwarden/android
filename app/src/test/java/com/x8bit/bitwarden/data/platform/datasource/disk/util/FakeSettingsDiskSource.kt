@@ -42,9 +42,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
-    private val mutableLastDatabaseSchemeChangeInstant =
-        bufferedMutableSharedFlow<Instant?>()
-
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
@@ -67,7 +64,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
-    private var storedLastDatabaseSchemeChangeInstant: Instant? = null
     private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
@@ -142,17 +138,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
-        }
-
-    override var lastDatabaseSchemeChangeInstant: Instant?
-        get() = storedLastDatabaseSchemeChangeInstant
-        set(value) {
-            storedLastDatabaseSchemeChangeInstant = value
-        }
-
-    override val lastDatabaseSchemeChangeInstantFlow: Flow<Instant?>
-        get() = mutableLastDatabaseSchemeChangeInstant.onSubscription {
-            emit(lastDatabaseSchemeChangeInstant)
         }
 
     override fun getAccountBiometricIntegrityValidity(

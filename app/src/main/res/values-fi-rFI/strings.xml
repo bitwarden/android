@@ -900,14 +900,14 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">Toiminto vaatii lisävahvistuksen. Jatka asettamalla lukituksen avaustapa Bitwardenin asetuksista.</string>
   <string name="error_creating_passkey">Virhe luotaessa pääsyavainta</string>
   <string name="error_reading_passkey">Virhe luettaessa pääsyavainta</string>
-  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Virhe luotaessa pääsyavainta osoitteelle %1$s. Yritä myöhemmin uudelleen.</string>
-  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Virhe luettaessa osoitteen %1$s pääsyavainta. Yritä myöhemmin uudelleen.</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Virhe luotaessa pääsyavainta kohteeseen %1$s. Yritä myöhemmin uudelleen.</string>
+  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Virhe luettaessa kohteen %1$s pääsyavainta. Yritä myöhemmin uudelleen.</string>
   <string name="verifying_identity_ellipsis">Vahvistetaan henkilöllisyyttä...</string>
   <string name="passwords">Salasanat</string>
   <string name="unknown_account">Tuntematon tili</string>
   <string name="set_up_autofill">Määritä automaattitäyttö</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Tavoita salasanasi ja pääsyavaimesi välittömästi!</string>
-  <string name="set_up_auto_fill_description_long">Määrittääksesi salasanojen automaattitäytön ja pääsyavainten hallinnan, aseta Bitwarden iOS-laitteesi asetuksista näiden oletusratkaisuksi.</string>
+  <string name="set_up_auto_fill_description_long">Määrittääksesi salasanojen automaattitäytön ja pääsyavainten hallinnan, aseta Bitwarden iOS-laitteesi asetuksista näiden oletuspalveluksi.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Avaa laitteesi Asetukset &gt; Salasanat &gt; Salasanavalinnat</string>
   <string name="second_dot_turn_on_auto_fill">4. Kytke automaattitäyttö käyttöön</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Valitse \"Bitwarden\" käyttääksesi sitä salasanoille ja pääsyavaimille</string>
@@ -1097,4 +1097,6 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="copy_address">Kopioi osoite</string>
   <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
+  <string name="cxp_import">CXP Import</string>
+  <string name="cxp_export">CXP Export</string>
 </resources>

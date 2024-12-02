@@ -1096,4 +1096,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="copy_address">Ünvanı kopyala</string>
   <string name="biometrics_no_longer_supported_title">Biometriklər artıq bu cihazda dəstəklənmir</string>
   <string name="biometrics_no_longer_supported">Hesabınızdan çıxış edildi, çünki cihazınızın biometrikləri son güvənlik tələblərinə cavab vermir. Ayarları güncəlləmək üçün təkrar giriş edin və ya müraciət üçün inzibatçınızla əlaqə saxlayın.</string>
+  <string name="cxp_import">CXP daxilə köçürmə</string>
+  <string name="cxp_export">CXP xaricə köçürmə</string>
 </resources>
