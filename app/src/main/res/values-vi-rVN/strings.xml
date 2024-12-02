@@ -1097,4 +1097,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="copy_address">Sao chép địa chỉ</string>
   <string name="biometrics_no_longer_supported_title">Thiết bị này không còn hỗ trợ sinh trắc học nữa</string>
   <string name="biometrics_no_longer_supported">Bạn đã bị đăng xuất vì dữ liệu sinh trắc học của thiết bị không đáp ứng các yêu cầu bảo mật mới nhất. Để cập nhật cài đặt, hãy đăng nhập lại hoặc liên hệ với quản trị viên để được cấp quyền truy cập.</string>
+  <string name="cxp_import">Nhập CXP</string>
+  <string name="cxp_export">Xuất CXP</string>
 </resources>

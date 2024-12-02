@@ -1091,9 +1091,11 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="copy_ssn">Sozialversicherungsnummer kopieren</string>
   <string name="copy_passport_number">Reisepassnummer kopieren</string>
   <string name="copy_license_number">Lizenznummer kopieren</string>
-  <string name="copy_email">Copy email</string>
+  <string name="copy_email">E-Mail-Adresse kopieren</string>
   <string name="copy_phone">Telefonnummer kopieren</string>
   <string name="copy_address">Adresse kopieren</string>
-  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
-  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
+  <string name="biometrics_no_longer_supported_title">Biometrie wird auf diesem Gerät nicht mehr unterstützt</string>
+  <string name="biometrics_no_longer_supported">Du wurdest abgemeldet, weil die biometrischen Daten deines Geräts nicht den neuesten Sicherheitsanforderungen entsprechen. Um die Einstellungen zu aktualisieren, melde dich erneut an oder kontaktiere deinen Administrator für den Zugriff.</string>
+  <string name="cxp_import">CXP-Import</string>
+  <string name="cxp_export">CXP-Export</string>
 </resources>

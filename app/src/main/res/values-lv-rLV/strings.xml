@@ -1097,4 +1097,6 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="copy_address">Ievietot adresi starpliktuvē</string>
   <string name="biometrics_no_longer_supported_title">Biometrija šajā ierīcē vairs netiek nodrošināta</string>
   <string name="biometrics_no_longer_supported">Notika atteikšanāš, jo ierīces biometrija neatbilst jaunākajām drošības prasībām. Lai atjauninātu iestatījumus, vēlreiz jāpiesakās vai jāsazinās ar pāŗvaldītāju, lai iegūtu piekļuvi.</string>
+  <string name="cxp_import">CXP ievietošana</string>
+  <string name="cxp_export">CXP izgūšana</string>
 </resources>

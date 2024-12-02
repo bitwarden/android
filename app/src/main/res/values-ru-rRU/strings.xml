@@ -21,7 +21,7 @@
   <string name="email_address">Адрес email</string>
   <string name="email_us">Написать нам</string>
   <string name="email_us_description">Чтобы получить помощь или оставить отзыв, отправьте нам письмо.</string>
-  <string name="enter_pin">Введите PIN-код.</string>
+  <string name="enter_pin">Введите PIN-код</string>
   <string name="favorites">Избранные</string>
   <string name="file_bug_report">Сообщить об ошибке</string>
   <string name="file_bug_report_description">Откройте проблему в нашем репозитории на GitHub.</string>
@@ -477,7 +477,7 @@
   <string name="biometrics_direction">Биометрическая верификация.</string>
   <string name="biometrics">биометрией</string>
   <string name="use_biometrics_to_unlock">Использовать биометрию</string>
-  <string name="accessibility_overlay_permission_alert">Bitwarden требует внимания - см. раздел \"Служба специальных возможностей автозаполнения\" в настройках программы.</string>
+  <string name="accessibility_overlay_permission_alert">Bitwarden требует внимания - см. раздел \"Служба специальных возможностей автозаполнения\" в настройках программы</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. На экране настроек приложений Android для Bitwarden перейдите в раздел \"Отображение поверх других приложений\" (в разделе \"Дополнительно\") и коснитесь переключателя, чтобы включить поддержку наложения.</string>
   <string name="overlay_permission">Разрешение</string>
   <string name="bitwarden_autofill_service_open_overlay_permission_settings">Открыть настройки разрешения наложения</string>
@@ -536,7 +536,7 @@
   <string name="accept_policies_error">Условия предоставления услуг и Политика конфиденциальности не были подтверждены.</string>
   <string name="terms_of_service">Условия предоставления услуг</string>
   <string name="privacy_policy">Политика конфиденциальности</string>
-  <string name="accessibility_draw_over_permission_alert">Bitwarden требует внимания - включите \'Поверх других приложений\' в \'Службах автозаполнения\' из настроек Bitwarden.</string>
+  <string name="accessibility_draw_over_permission_alert">Bitwarden требует внимания - включите \'Поверх других приложений\' в \'Службах автозаполнения\' из настроек Bitwarden</string>
   <string name="passkey_management">Управление passkeys</string>
   <string name="autofill_services">Службы автозаполнения</string>
   <string name="inline_autofill">Встроенное в клавиатуру автозаполнение</string>
@@ -588,7 +588,7 @@
   <string name="notes_info">Личные заметки об этой Send.</string>
   <string name="disable_send">Отключить эту Send, чтобы никто не мог получить к ней доступ</string>
   <string name="no_sends">В вашем хранилище нет Send.</string>
-  <string name="add_a_send">Добавить Send</string>
+  <string name="add_a_send">Новая Send</string>
   <string name="copy_link">Скопировать ссылку</string>
   <string name="share_link">Поделиться ссылкой</string>
   <string name="send_link">Ссылка на Send</string>
@@ -801,7 +801,7 @@
   <string name="region">Регион</string>
   <string name="update_weak_master_password_warning">Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа.</string>
   <string name="current_master_password">Текущий мастер-пароль</string>
-  <string name="logged_in">Вход выполнен!</string>
+  <string name="logged_in">Выполнен вход!</string>
   <string name="approve_with_my_other_device">Одобрить с другим устройством</string>
   <string name="request_admin_approval">Запросить одобрение администратора</string>
   <string name="approve_with_master_password">Одобрить с мастер-паролем</string>
@@ -1002,14 +1002,14 @@
   <string name="please_restart_registration_or_try_logging_in">Пожалуйста, повторите регистрацию или попробуйте авторизоваться. Возможно, у вас уже есть аккаунт.</string>
   <string name="restart_registration">Перезапустить регистрацию</string>
   <string name="authenticator_sync">Синхронизация Bitwarden Authenticator</string>
-  <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию Bitwarden Authenticator</string>
+  <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию аутентификатора</string>
   <string name="there_was_an_issue_validating_the_registration_token">Возникла проблема при проверке токена регистрации.</string>
   <string name="turn_on_autofill">Включить автозаполнение</string>
   <string name="use_autofill_to_log_into_your_accounts">Используйте автозаполнение для авторизации в ваших аккаунтах одним нажатием.</string>
   <string name="turn_on_later">Включить позже</string>
   <string name="turn_on_autofill_later">Включить автозаполнение позже?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Вы можете вернуться к выполнению этого шага в любое время в Настройках.</string>
-  <string name="what_bitwarden_has_to_offer">Теперь вы можете использовать автозаполнение для авторизации в приложениях и на веб-сайтах, используя сохраненные пароли. Познакомьтесь со всем, что может предложить Bitwarden.</string>
+  <string name="what_bitwarden_has_to_offer">Теперь вы можете изучить все возможности Bitwarden и начать безопасно управлять своими паролями.</string>
   <string name="youre_all_set">Все готово!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo.</string>
   <string name="master_password_hint_not_specified">Подсказка к мастер-паролю</string>
@@ -1041,8 +1041,8 @@
   <string name="step_1_of_3">Шаг 1 из 3</string>
   <string name="export_your_saved_logins">Экспортировать сохраненные логины</string>
   <string name="delete_this_file_after_import_is_complete">Вы удалите этот файл после завершения импорта.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">На вашем компьютере откройте новую вкладку браузера и перейдите к на vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">перейдите на vault.bitwarden.com</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">На вашем компьютере откройте новую вкладку браузера и перейдите на %1$s</string>
+  <string name="go_to_vault_bitwarden_com_highlight">перейдите на %1$s</string>
   <string name="log_in_to_the_bitwarden_web_app">Войдите в веб-приложение Bitwarden.</string>
   <string name="step_2_of_3">Шаг 2 из 3</string>
   <string name="log_in_to_bitwarden">Войдите на Bitwarden</string>
@@ -1099,4 +1099,6 @@
   <string name="copy_address">Скопировать адрес</string>
   <string name="biometrics_no_longer_supported_title">Биометрия больше не поддерживается на этом устройстве</string>
   <string name="biometrics_no_longer_supported">Вы были деавторизованы, поскольку биометрические данные вашего устройства не соответствуют последним требованиям безопасности. Чтобы обновить настройки, авторизуйтесь еще раз или обратитесь к администратору для получения доступа.</string>
+  <string name="cxp_import">Импорт CXP</string>
+  <string name="cxp_export">Экспорт CXP</string>
 </resources>
