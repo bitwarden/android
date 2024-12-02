@@ -44,8 +44,8 @@ fun BitwardenActionCard(
     cardTitle: String,
     actionText: String,
     onActionClick: () -> Unit,
-    onDismissClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
+    onDismissClick: (() -> Unit)? = null,
     cardSubtitle: String? = null,
     leadingContent: @Composable (() -> Unit)? = null,
 ) {

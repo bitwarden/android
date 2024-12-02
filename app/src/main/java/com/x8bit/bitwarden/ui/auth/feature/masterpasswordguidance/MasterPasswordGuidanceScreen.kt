@@ -37,13 +37,10 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 
-private const val BULLET_TWO_TAB = "\u2022\t\t"
-
 /**
  * The top level composable for the Master Password Guidance screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun MasterPasswordGuidanceScreen(
     onNavigateBack: () -> Unit,
@@ -83,7 +80,11 @@ fun MasterPasswordGuidanceScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .standardHorizontalMargin(),
-            viewModel = viewModel,
+            onTryPasswordGeneratorAction = {
+                viewModel.trySendAction(
+                    MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
+                )
+            },
         )
     }
 }
@@ -91,26 +92,8 @@ fun MasterPasswordGuidanceScreen(
 @Composable
 private fun MasterPasswordGuidanceContent(
     modifier: Modifier = Modifier,
-    viewModel: MasterPasswordGuidanceViewModel,
+    onTryPasswordGeneratorAction: () -> Unit,
 ) {
-    Column(modifier = modifier) {
-        MasterPasswordGuidanceHeader()
-        MasterPasswordGuidanceContentBlocks()
-        NeedSomeInspirationCard(
-            onActionClicked = remember(viewModel) {
-                {
-                    viewModel.trySendAction(
-                        MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
-                    )
-                }
-            },
-        )
-        Spacer(modifier = Modifier.navigationBarsPadding())
-    }
-}
-
-@Composable
-private fun MasterPasswordGuidanceHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -135,6 +118,13 @@ private fun MasterPasswordGuidanceHeader(modifier: Modifier = Modifier) {
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
+        MasterPasswordGuidanceContentBlocks()
+        NeedSomeInspirationCard(
+            onActionClicked = {
+                onTryPasswordGeneratorAction()
+            },
+        )
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
@@ -203,8 +193,7 @@ private fun NeedSomeInspirationCard(
         cardTitle = stringResource(R.string.need_some_inspiration),
         actionText = stringResource(R.string.check_out_the_passphrase_generator),
         onActionClick = onActionClicked,
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     )
 }
 
