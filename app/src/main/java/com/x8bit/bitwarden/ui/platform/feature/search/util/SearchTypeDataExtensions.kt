@@ -152,6 +152,7 @@ fun List<CipherView>.toViewState(
     isAutofill: Boolean,
     isTotp: Boolean,
     isPremiumUser: Boolean,
+    organizationPremiumStatusMap: Map<String, Boolean>,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -164,6 +165,7 @@ fun List<CipherView>.toViewState(
                     isAutofill = isAutofill,
                     isTotp = isTotp,
                     isPremiumUser = isPremiumUser,
+                    organizationPremiumStatusMap = organizationPremiumStatusMap,
                 )
                     .sortAlphabetically(),
             )
@@ -184,15 +186,17 @@ private fun List<CipherView>.toDisplayItemList(
     isAutofill: Boolean,
     isTotp: Boolean,
     isPremiumUser: Boolean,
+    organizationPremiumStatusMap: Map<String, Boolean>,
 ): List<SearchState.DisplayItem> =
     this.map {
+        val premiumStatus = organizationPremiumStatusMap[it.organizationId] ?: isPremiumUser
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isTotp = isTotp,
-            isPremiumUser = isPremiumUser,
+            isPremiumUser = premiumStatus,
         )
     }
 

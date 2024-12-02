@@ -6,6 +6,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -94,8 +95,10 @@ class AutofillTotpManagerTest {
         runTest {
             every { settingsRepository.isAutoCopyTotpDisabled } returns false
             every { cipherView.organizationUseTotp } returns false
+            every { cipherView.organizationId } returns null
             mutableUserStateFlow.value = mockk {
                 every { activeAccount.isPremium } returns false
+                every { activeAccount.organizations } returns emptyList()
             }
 
             autofillTotpManager.tryCopyTotpToClipboard(cipherView = cipherView)
@@ -115,8 +118,10 @@ class AutofillTotpManagerTest {
         runTest {
             every { settingsRepository.isAutoCopyTotpDisabled } returns false
             every { cipherView.organizationUseTotp } returns true
+            every { cipherView.organizationId } returns null
             mutableUserStateFlow.value = mockk {
                 every { activeAccount.isPremium } returns true
+                every { activeAccount.organizations } returns emptyList()
             }
             every { loginView.totp } returns null
 
@@ -141,8 +146,10 @@ class AutofillTotpManagerTest {
             )
             every { settingsRepository.isAutoCopyTotpDisabled } returns false
             every { cipherView.organizationUseTotp } returns true
+            every { cipherView.organizationId } returns null
             mutableUserStateFlow.value = mockk {
                 every { activeAccount.isPremium } returns true
+                every { activeAccount.organizations } returns emptyList()
             }
             every { loginView.totp } returns TOTP_CODE
             coEvery {
@@ -157,6 +164,34 @@ class AutofillTotpManagerTest {
                 toast.show()
             }
             coVerify(exactly = 1) {
+                vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), totpCode = TOTP_CODE)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, user has premium but item belongs to an org that doesn't should do nothing`() =
+        runTest {
+            val orgId = "orgId"
+            val mockOrganization = mockk<Organization>(relaxed = true) {
+                every { id } returns orgId
+                every { shouldUsersGetPremium } returns false
+            }
+            every { settingsRepository.isAutoCopyTotpDisabled } returns false
+            every { cipherView.organizationUseTotp } returns false
+            every { cipherView.organizationId } returns orgId
+            mutableUserStateFlow.value = mockk {
+                every { activeAccount.isPremium } returns true
+                every { activeAccount.organizations } returns listOf(mockOrganization)
+            }
+
+            autofillTotpManager.tryCopyTotpToClipboard(cipherView = cipherView)
+
+            verify(exactly = 0) {
+                clipboardManager.setText(text = TOTP_RESULT_VALUE)
+                toast.show()
+            }
+            coVerify(exactly = 0) {
                 vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), totpCode = TOTP_CODE)
             }
         }
