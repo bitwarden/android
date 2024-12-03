@@ -35,4 +35,9 @@ class FlagKeyTest {
     fun `SshKeyCipherItems default value should be false`() {
         assertFalse(FlagKey.SshKeyCipherItems.defaultValue)
     }
+
+    @Test
+    fun `AppReviewPrompt default value should be false`() {
+        assertFalse(FlagKey.AppReviewPrompt.defaultValue)
+    }
 }
