@@ -14,26 +14,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateBack
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -45,17 +42,14 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * The top level composable for the new device notice email access screen.
+ * The top level composable for the new device notice two factor screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun NewDeviceNoticeTwoFactorScreen(
     onNavigateBack: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: NewDeviceNoticeTwoFactorViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is NavigateToTurnOnTwoFactor -> {
@@ -70,34 +64,43 @@ fun NewDeviceNoticeTwoFactorScreen(
         }
     }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .fillMaxSize(),
     ) {
         NewDeviceNoticeTwoFactorContent(
-            onTurnOnTwoFactorClick = {},
-            onChangeAccountEmailClick = {},
-            onRemindMeLaterClick = {},
+            onTurnOnTwoFactorClick = {
+                viewModel.trySendAction(TurnOnTwoFactorClick)
+            },
+            onChangeAccountEmailClick = {
+                viewModel.trySendAction(ChangeAccountEmailClick)
+            },
+            onRemindMeLaterClick = {
+                viewModel.trySendAction(RemindMeLaterClick)
+            },
         )
     }
 }
 
+/**
+ * The content of the screen.
+ */
 @Composable
 private fun NewDeviceNoticeTwoFactorContent(
-    onTurnOnTwoFactorClick: () -> Unit = {},
-    onChangeAccountEmailClick: () -> Unit = {},
-    onRemindMeLaterClick: () -> Unit = {},
+    onTurnOnTwoFactorClick: () -> Unit,
+    onChangeAccountEmailClick: () -> Unit,
+    onRemindMeLaterClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
     ) {
         HeaderContent()
+        Spacer(modifier = Modifier.height(24.dp))
         MainContent(
             onTurnOnTwoFactorClick = onTurnOnTwoFactorClick,
             onChangeAccountEmailClick = onChangeAccountEmailClick,
@@ -108,21 +111,22 @@ private fun NewDeviceNoticeTwoFactorContent(
 }
 
 /**
- * Header content containing the warning icon and title.
+ * Header content containing the user lock icon and title.
  */
-
 @Suppress("MaxLineLength")
 @Composable
-private fun HeaderContent() {
-    Image(
-        painter = rememberVectorPainter(id = R.drawable.user_lock),
-        contentDescription = null,
-        modifier = Modifier.size(120.dp),
-    )
+private fun HeaderContent(
+    modifier: Modifier = Modifier,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 24.dp),
+        modifier = modifier.padding(horizontal = 24.dp),
     ) {
+        Image(
+            painter = rememberVectorPainter(id = R.drawable.user_lock),
+            contentDescription = null,
+            modifier = Modifier.size(120.dp),
+        )
         Text(
             text = stringResource(R.string.set_up_two_step_login),
             style = BitwardenTheme.typography.headlineMedium,
@@ -142,18 +146,18 @@ private fun HeaderContent() {
 }
 
 /**
- * The main content of the screen.
+ * The content containing the external links and remind me buttons.
  */
 @Composable
 private fun MainContent(
-    onTurnOnTwoFactorClick: () -> Unit = {},
-    onChangeAccountEmailClick: () -> Unit = {},
-    onRemindMeLaterClick: () -> Unit = {},
+    onTurnOnTwoFactorClick: () -> Unit,
+    onChangeAccountEmailClick: () -> Unit,
+    onRemindMeLaterClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.size(24.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 22.dp)
             .fillMaxWidth(),
     ) {
@@ -188,6 +192,10 @@ private fun MainContent(
 @Composable
 private fun NewDeviceNoticeTwoFactorScreen_preview() {
     BitwardenTheme {
-        NewDeviceNoticeTwoFactorContent()
+        NewDeviceNoticeTwoFactorContent(
+            onTurnOnTwoFactorClick = {},
+            onChangeAccountEmailClick = {},
+            onRemindMeLaterClick = {},
+        )
     }
 }
