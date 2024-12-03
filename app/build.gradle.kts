@@ -162,7 +162,6 @@ dependencies {
     ksp(libs.google.hilt.compiler)
     implementation(libs.google.guava)
     implementation(libs.google.protobuf.javalite)
-    implementation(libs.jakewharton.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)

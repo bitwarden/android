@@ -4,11 +4,11 @@ import com.bitwarden.authenticator.data.platform.datasource.network.core.ResultC
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.HeadersInterceptor
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 /**
  * Primary implementation of [Retrofits].

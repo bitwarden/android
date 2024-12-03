@@ -48,9 +48,7 @@ kotlinxKover = "0.8.3"
 ksp = "2.0.21-1.0.27"
 mockk = "1.13.13"
 okhttp = "4.12.0"
-retrofit = "2.11.0"
 retrofitBom = "2.11.0"
-retrofitKotlinxSerialization = "1.0.0"
 roboelectric = "4.13"
 sonarqube = "5.1.0.4882" 
 turbine = "1.2.0"
@@ -107,7 +105,6 @@ google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", ver
 google-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "googleProtoBufJava" }
 # Included so that Renovate tracks updates since protoc is not referenced directly in `dependency {}` blocks.
 google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "googleProtoBufJava" }
-jakewharton-retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerialization" }
 junit-junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
 junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
@@ -120,7 +117,7 @@ robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref 
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 square-okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 square-okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
-square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+square-retrofit = { module = "com.squareup.retrofit2:retrofit" }
 square-retrofit-bom = { module = "com.squareup.retrofit2:retrofit-bom", version.ref = "retrofitBom" }
 square-retrofit-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization" }
 square-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
