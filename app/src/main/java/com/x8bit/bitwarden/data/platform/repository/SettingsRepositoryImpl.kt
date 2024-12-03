@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.x8bit.bitwarden.ui.platform.util.orZero
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -39,6 +40,9 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
+private const val ADD_ACTION_REQUIREMENT = 3
+private const val COPY_ACTION_REQUIREMENT = 3
+private const val CREATE_ACTION_REQUIREMENT = 3
 
 /**
  * Primary implementation of [SettingsRepository].
@@ -577,6 +581,50 @@ class SettingsRepositoryImpl(
             )
     }
 
+    override fun incrementAddActionCount() {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        if (isMinimumAddActionsMet(activeUserId)) return
+        val currentValue = settingsDiskSource.getAddActionCount(activeUserId) ?: 0
+        settingsDiskSource.storeAddActionCount(
+            userId = activeUserId,
+            count = currentValue + 1,
+        )
+    }
+
+    override fun incrementCopyActionCount() {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        if (isMinimumCopyActionsMet(activeUserId)) return
+        val currentValue = settingsDiskSource.getCopyActionCount(activeUserId) ?: 0
+        settingsDiskSource.storeCopyActionCount(
+            userId = activeUserId,
+            count = currentValue + 1,
+        )
+    }
+
+    override fun incrementCreateActionCount() {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        if (isMinimumCreateActionsMet(activeUserId)) return
+        val currentValue = settingsDiskSource.getCreateActionCount(activeUserId) ?: 0
+        settingsDiskSource.storeCreateActionCount(
+            userId = activeUserId,
+            count = currentValue + 1,
+        )
+    }
+
+    override fun shouldPromptForAppReview(): Boolean {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return false
+        val promptHasNotBeenShown =
+            settingsDiskSource.getUserHasBeenPromptedForReview(activeUserId) != true
+        val autofillEnabled = isAutofillEnabledStateFlow.value
+        val accessibilityEnabled = isAccessibilityEnabledStateFlow.value
+        val minAddActionsMet = isMinimumAddActionsMet(activeUserId)
+        val minCopyActionsMet = isMinimumCopyActionsMet(activeUserId)
+        val minCreateActionsMet = isMinimumCreateActionsMet(activeUserId)
+        return (autofillEnabled || accessibilityEnabled) &&
+            (minAddActionsMet || minCopyActionsMet || minCreateActionsMet) &&
+            promptHasNotBeenShown
+    }
+
     /**
      * If there isn't already one generated, generate a symmetric sync key that would be used
      * for communicating via IPC.
@@ -619,6 +667,18 @@ class SettingsRepositoryImpl(
                 VaultTimeoutAction.LOGOUT
             }
         }
+    }
+
+    private fun isMinimumAddActionsMet(userId: String): Boolean {
+        return settingsDiskSource.getAddActionCount(userId).orZero() >= ADD_ACTION_REQUIREMENT
+    }
+
+    private fun isMinimumCopyActionsMet(userId: String): Boolean {
+        return settingsDiskSource.getCopyActionCount(userId).orZero() >= COPY_ACTION_REQUIREMENT
+    }
+
+    private fun isMinimumCreateActionsMet(userId: String): Boolean {
+        return settingsDiskSource.getCreateActionCount(userId).orZero() >= CREATE_ACTION_REQUIREMENT
     }
 }
 

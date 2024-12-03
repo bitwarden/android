@@ -37,6 +37,10 @@ private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
 private const val SHOW_IMPORT_LOGINS_SETTING_BADGE = "showImportLoginsSettingBadge"
 private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
+private const val ADD_ACTION_COUNT = "addActionCount"
+private const val COPY_ACTION_COUNT = "copyActionCount"
+private const val CREATE_ACTION_COUNT = "createActionCount"
+private const val HAS_BEEN_PROMPTED_FOR_REVIEW = "hasBeenPromptedForReview"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -172,6 +176,10 @@ class SettingsDiskSourceImpl(
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
         storeVaultRegisteredForExport(userId = userId, isRegistered = null)
+        storeAddActionCount(userId = userId, count = null)
+        storeCopyActionCount(userId = userId, count = null)
+        storeCreateActionCount(userId = userId, count = null)
+        storeUserHasBeenPromptedForReview(userId = userId, value = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -445,6 +453,49 @@ class SettingsDiskSourceImpl(
     override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
         getMutableVaultRegisteredForExportFlow(userId)
             .onSubscription { emit(getVaultRegisteredForExport(userId)) }
+
+    override fun getAddActionCount(userId: String): Int? = getInt(
+        key = ADD_ACTION_COUNT.appendIdentifier(userId),
+    )
+
+    override fun storeAddActionCount(userId: String, count: Int?) {
+        putInt(
+            key = ADD_ACTION_COUNT.appendIdentifier(userId),
+            value = count,
+        )
+    }
+
+    override fun getCopyActionCount(userId: String): Int? = getInt(
+        key = COPY_ACTION_COUNT.appendIdentifier(userId),
+    )
+
+    override fun storeCopyActionCount(userId: String, count: Int?) {
+        putInt(
+            key = COPY_ACTION_COUNT.appendIdentifier(userId),
+            value = count,
+        )
+    }
+
+    override fun getCreateActionCount(userId: String): Int? = getInt(
+        key = CREATE_ACTION_COUNT.appendIdentifier(userId),
+    )
+
+    override fun storeCreateActionCount(userId: String, count: Int?) {
+        putInt(
+            key = CREATE_ACTION_COUNT.appendIdentifier(userId),
+            value = count,
+        )
+    }
+
+    override fun getUserHasBeenPromptedForReview(userId: String): Boolean? =
+        getBoolean(key = HAS_BEEN_PROMPTED_FOR_REVIEW.appendIdentifier(userId))
+
+    override fun storeUserHasBeenPromptedForReview(userId: String, value: Boolean?) {
+        putBoolean(
+            key = HAS_BEEN_PROMPTED_FOR_REVIEW.appendIdentifier(userId),
+            value = value,
+        )
+    }
 
     private fun getMutableLastSyncFlow(
         userId: String,

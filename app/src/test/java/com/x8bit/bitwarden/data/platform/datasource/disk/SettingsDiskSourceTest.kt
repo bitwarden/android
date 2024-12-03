@@ -1193,4 +1193,76 @@ class SettingsDiskSourceTest {
             assertFalse(awaitItem() ?: true)
         }
     }
+
+    @Test
+    fun `getAddActionCount should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val addActionCountKey = "bwPreferencesStorage:addActionCount_$mockUserId"
+        fakeSharedPreferences.edit { putInt(addActionCountKey, 1) }
+        assertEquals(
+            1, settingsDiskSource.getAddActionCount(mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeAddActionCount should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val addActionCountKey = "bwPreferencesStorage:addActionCount_$mockUserId"
+        settingsDiskSource.storeAddActionCount(mockUserId, 1)
+        assertEquals(1, fakeSharedPreferences.getInt(addActionCountKey, 0))
+    }
+
+    @Test
+    fun `getCopyActionCount should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val copyActionCountKey = "bwPreferencesStorage:copyActionCount_$mockUserId"
+        fakeSharedPreferences.edit { putInt(copyActionCountKey, 1) }
+        assertEquals(
+            1, settingsDiskSource.getCopyActionCount(mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeCopyActionCount should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val copyActionCountKey = "bwPreferencesStorage:copyActionCount_$mockUserId"
+        settingsDiskSource.storeCopyActionCount(mockUserId, 1)
+        assertEquals(1, fakeSharedPreferences.getInt(copyActionCountKey, 0))
+    }
+
+    @Test
+    fun `getCreateActionCount should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val createActionCountKey = "bwPreferencesStorage:createActionCount_$mockUserId"
+        fakeSharedPreferences.edit { putInt(createActionCountKey, 1) }
+        assertEquals(1, settingsDiskSource.getCreateActionCount(mockUserId))
+    }
+
+    @Test
+    fun `storeCreateActionCount should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val createActionCountKey = "bwPreferencesStorage:createActionCount_$mockUserId"
+        settingsDiskSource.storeCreateActionCount(mockUserId, 1)
+        assertEquals(1, fakeSharedPreferences.getInt(createActionCountKey, 0))
+    }
+
+    @Test
+    fun `getUserHasBeenPromptedForReview should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val hasUserBeenPromptedToReviewKey =
+            "bwPreferencesStorage:hasBeenPromptedForReview_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(hasUserBeenPromptedToReviewKey, true) }
+        assertTrue(settingsDiskSource.getUserHasBeenPromptedForReview(mockUserId)!!)
+    }
+
+    @Test
+    fun `storeUserHasBeenPromptedForReview should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val hasUserBeenPromptedToReviewKey =
+            "bwPreferencesStorage:hasBeenPromptedForReview_$mockUserId"
+        settingsDiskSource.storeUserHasBeenPromptedForReview(mockUserId, true)
+        assertTrue(
+            fakeSharedPreferences.getBoolean(hasUserBeenPromptedToReviewKey, false),
+        )
+    }
 }

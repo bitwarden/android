@@ -325,4 +325,44 @@ interface SettingsDiskSource {
      * Emits updates that track [getVaultRegisteredForExport] for the given [userId].
      */
     fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets the number of qualifying add actions for the given [userId].
+     */
+    fun getAddActionCount(userId: String): Int?
+
+    /**
+     * Stores the given [count] completed "add" actions for the given [userId].
+     */
+    fun storeAddActionCount(userId: String, count: Int?)
+
+    /**
+     * Gets the number of qualifying copy actions for the given [userId].
+     */
+    fun getCopyActionCount(userId: String): Int?
+
+    /**
+     * Stores the given [count] completed "copy" actions for the given [userId].
+     */
+    fun storeCopyActionCount(userId: String, count: Int?)
+
+    /**
+     * Gets the number of qualifying create actions for the given [userId].
+     */
+    fun getCreateActionCount(userId: String): Int?
+
+    /**
+     * Stores the given [count] completed "create" actions for the given [userId].
+     */
+    fun storeCreateActionCount(userId: String, count: Int?)
+
+    /**
+     * Gets whether the given [userId] has been prompted for an app review.
+     */
+    fun getUserHasBeenPromptedForReview(userId: String): Boolean?
+
+    /**
+     * Stores whether the given [userId] has been prompted for an app review.
+     */
+    fun storeUserHasBeenPromptedForReview(userId: String, value: Boolean?)
 }

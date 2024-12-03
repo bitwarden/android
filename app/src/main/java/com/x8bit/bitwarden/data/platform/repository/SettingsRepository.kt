@@ -281,4 +281,25 @@ interface SettingsRepository {
      * Gets updates for the [isVaultRegisteredForExport] value for the given [userId].
      */
     fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean>
+
+    /**
+     * Increments the add action count for the active user.
+     */
+    fun incrementAddActionCount()
+
+    /**
+     * Increments the copy action count for the active user.
+     */
+    fun incrementCopyActionCount()
+
+    /**
+     * Increments the create action count for the active user.
+     */
+    fun incrementCreateActionCount()
+
+    /**
+     * Returns a boolean value indicating whether or not the user should be prompted to
+     * review the app.
+     */
+    fun shouldPromptForAppReview(): Boolean
 }

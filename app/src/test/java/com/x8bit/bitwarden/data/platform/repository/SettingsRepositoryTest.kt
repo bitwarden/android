@@ -1224,6 +1224,155 @@ class SettingsRepositoryTest {
                     assertFalse(awaitItem())
                 }
         }
+
+    @Test
+    fun `incrementAddActionCount increments stored value as expected`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.incrementAddActionCount()
+        assertEquals(
+            1,
+            fakeSettingsDiskSource.getAddActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementAddActionCount()
+        assertEquals(
+            2,
+            fakeSettingsDiskSource.getAddActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementAddActionCount()
+        assertEquals(
+            3,
+            fakeSettingsDiskSource.getAddActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementAddActionCount()
+        // Should not increment over 3.
+        assertEquals(
+            3,
+            fakeSettingsDiskSource.getAddActionCount(
+                userId = USER_ID,
+            ),
+        )
+    }
+
+    @Test
+    fun `incrementCopyActionCount increments stored value as expected`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.incrementCopyActionCount()
+        assertEquals(
+            1,
+            fakeSettingsDiskSource.getCopyActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementCopyActionCount()
+        assertEquals(
+            2,
+            fakeSettingsDiskSource.getCopyActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementCopyActionCount()
+        assertEquals(
+            3,
+            fakeSettingsDiskSource.getCopyActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementCopyActionCount()
+        assertEquals(
+            3,
+            fakeSettingsDiskSource.getCopyActionCount(
+                userId = USER_ID,
+            ),
+        )
+    }
+
+    @Test
+    fun `incrementCreateActionCount increments stored value as expected`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.incrementCreateActionCount()
+        assertEquals(
+            1,
+            fakeSettingsDiskSource.getCreateActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementCreateActionCount()
+        assertEquals(
+            2,
+            fakeSettingsDiskSource.getCreateActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementCreateActionCount()
+        assertEquals(
+            3,
+            fakeSettingsDiskSource.getCreateActionCount(
+                userId = USER_ID,
+            ),
+        )
+        settingsRepository.incrementCreateActionCount()
+        assertEquals(
+            3,
+            fakeSettingsDiskSource.getCreateActionCount(
+                userId = USER_ID,
+            ),
+        )
+    }
+
+    @Test
+    fun `shouldPromptForAppReview should default to false if no active user`() {
+        assertFalse(settingsRepository.shouldPromptForAppReview())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldPromptForAppReview should return true if one auto fill service is enabled and one actions requirement is met`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+        autofillEnabledManager.isAutofillEnabled = false
+        fakeSettingsDiskSource.storeCopyActionCount(USER_ID, 0)
+        fakeSettingsDiskSource.storeCreateActionCount(USER_ID, 0)
+        fakeSettingsDiskSource.storeAddActionCount(USER_ID, 4)
+        assertTrue(settingsRepository.shouldPromptForAppReview())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldPromptForAppReview should return false if prompt has been shown but other criteria is met`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+        fakeSettingsDiskSource.storeUserHasBeenPromptedForReview(USER_ID, true)
+        fakeSettingsDiskSource.storeAddActionCount(USER_ID, 4)
+        assertFalse(settingsRepository.shouldPromptForAppReview())
+    }
+
+    @Test
+    fun `shouldPromptForAppReview should return false if no auto fill service is enabled`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAccessibilityEnabledManager.isAccessibilityEnabled = false
+        autofillEnabledManager.isAutofillEnabled = false
+        fakeSettingsDiskSource.storeCopyActionCount(USER_ID, 0)
+        fakeSettingsDiskSource.storeCreateActionCount(USER_ID, 0)
+        fakeSettingsDiskSource.storeAddActionCount(USER_ID, 4)
+        assertFalse(settingsRepository.shouldPromptForAppReview())
+    }
+
+    @Test
+    fun `shouldPromptForAppReview should return false if no action count is met`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+        autofillEnabledManager.isAutofillEnabled = true
+        fakeSettingsDiskSource.storeCopyActionCount(USER_ID, 1)
+        fakeSettingsDiskSource.storeCreateActionCount(USER_ID, 0)
+        fakeSettingsDiskSource.storeAddActionCount(USER_ID, 2)
+        assertFalse(settingsRepository.shouldPromptForAppReview())
+    }
 }
 
 private const val USER_ID: String = "userId"
