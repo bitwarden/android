@@ -51,7 +51,10 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
                 ),
             )
 
-            RemindMeLaterClick -> NewDeviceNoticeTwoFactorEvent.NavigateBack
+            RemindMeLaterClick -> {
+                // TODO PM-8217: Add logic to remind me later
+                sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBack)
+            }
         }
     }
 }
