@@ -76,23 +76,25 @@ fun MasterPasswordGuidanceScreen(
         },
     ) {
         MasterPasswordGuidanceContent(
+            onTryPasswordGeneratorAction = remember(viewModel) {
+                {
+                    viewModel.trySendAction(
+                        MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
+                    )
+                }
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .standardHorizontalMargin(),
-            onTryPasswordGeneratorAction = {
-                viewModel.trySendAction(
-                    MasterPasswordGuidanceAction.TryPasswordGeneratorAction,
-                )
-            },
         )
     }
 }
 
 @Composable
 private fun MasterPasswordGuidanceContent(
-    modifier: Modifier = Modifier,
     onTryPasswordGeneratorAction: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(24.dp))
