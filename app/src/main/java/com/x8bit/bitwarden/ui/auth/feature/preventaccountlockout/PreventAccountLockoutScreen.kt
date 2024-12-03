@@ -93,7 +93,7 @@ private fun PreventAccountLockoutContent(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(
-                R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
+                R.string.the_best_way_to_make_sure_you_can_always_access_your_vault,
             ),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,

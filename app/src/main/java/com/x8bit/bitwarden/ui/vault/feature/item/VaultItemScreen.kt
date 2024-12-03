@@ -404,6 +404,7 @@ private fun VaultItemContent(
                     VaultItemSshKeyContent(
                         commonState = viewState.common,
                         sshKeyItemState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
                         modifier = modifier,
                     )

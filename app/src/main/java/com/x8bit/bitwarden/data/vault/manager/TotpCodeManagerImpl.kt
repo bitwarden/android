@@ -122,6 +122,7 @@ class TotpCodeManagerImpl(
                                         CipherRepromptType.NONE -> false
                                     },
                                     orgUsesTotp = cipher.organizationUseTotp,
+                                    orgId = cipher.organizationId,
                                 )
                             }
                             .onFailure {

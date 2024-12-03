@@ -1097,4 +1097,6 @@ Skift til denne konto?</string>
   <string name="copy_address">Kopiér adresse</string>
   <string name="biometrics_no_longer_supported_title">Biometri på denne enhed understøttes ikke længere</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
+  <string name="cxp_import">CXP-import</string>
+  <string name="cxp_export">CXP-eksport</string>
 </resources>
