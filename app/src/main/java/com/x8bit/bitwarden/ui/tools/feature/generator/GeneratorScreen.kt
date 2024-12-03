@@ -102,7 +102,6 @@ fun GeneratorScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = rememberBitwardenSnackbarHostState()
-
     LivecycleEventEffect { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
