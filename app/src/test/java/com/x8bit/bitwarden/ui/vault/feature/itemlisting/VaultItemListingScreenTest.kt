@@ -2159,6 +2159,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     hasMasterPassword = true,
     isPremium = false,
     isRefreshing = false,
+    organizationPremiumStatusMap = emptyMap(),
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(

@@ -1096,4 +1096,6 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="copy_address">Adresi kopyala</string>
   <string name="biometrics_no_longer_supported_title">Artık bu cihazda biyometri desteklenmiyor</string>
   <string name="biometrics_no_longer_supported">Cihazınızın biyometrisi en son güvenlik gereksinimlerini karşılamadığı için oturumunuz kapatıldı. Ayarları güncellemek için yeniden oturum açın veya erişim için yöneticinize başvurun.</string>
+  <string name="cxp_import">CXP Import</string>
+  <string name="cxp_export">CXP Export</string>
 </resources>

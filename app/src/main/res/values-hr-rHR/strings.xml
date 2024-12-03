@@ -1095,4 +1095,6 @@
   <string name="copy_address">Copy address</string>
   <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
+  <string name="cxp_import">CXP Import</string>
+  <string name="cxp_export">CXP Export</string>
 </resources>
