@@ -65,6 +65,10 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
     private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
+    private val addActionCount = mutableMapOf<String, Int?>()
+    private val copyActionCount = mutableMapOf<String, Int?>()
+    private val createActionCount = mutableMapOf<String, Int?>()
+    private val userHasBeenPromptedForReview = mutableMapOf<String, Boolean?>()
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -352,6 +356,38 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         getMutableVaultRegisteredForExportFlow(userId = userId).onSubscription {
             emit(getVaultRegisteredForExport(userId = userId))
         }
+
+    override fun getAddCipherActionCount(userId: String): Int? {
+        return addActionCount[userId]
+    }
+
+    override fun storeAddCipherActionCount(userId: String, count: Int?) {
+        addActionCount[userId] = count
+    }
+
+    override fun getCopyGeneratedResultActionCount(userId: String): Int? {
+        return copyActionCount[userId]
+    }
+
+    override fun storeCopyGeneratedResultActionCount(userId: String, count: Int?) {
+        copyActionCount[userId] = count
+    }
+
+    override fun getCreateSendActionCount(userId: String): Int? {
+        return createActionCount[userId]
+    }
+
+    override fun storeCreateSendActionCount(userId: String, count: Int?) {
+        createActionCount[userId] = count
+    }
+
+    override fun getUserHasBeenPromptedForReview(userId: String): Boolean? {
+        return userHasBeenPromptedForReview[userId]
+    }
+
+    override fun storeUserHasBeenPromptedForReview(userId: String, value: Boolean?) {
+        userHasBeenPromptedForReview[userId] = value
+    }
 
     //region Private helper functions
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
