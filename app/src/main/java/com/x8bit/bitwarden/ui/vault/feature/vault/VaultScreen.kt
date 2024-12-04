@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,9 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -52,22 +55,28 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val APP_REVIEW_DELAY = 3000L
 
 /**
  * The vault screen for the application.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
@@ -81,6 +90,7 @@ fun VaultScreen(
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
+    appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -92,6 +102,24 @@ fun VaultScreen(
         },
     )
     val snackbarHostState = rememberBitwardenSnackbarHostState()
+    LivecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+            }
+
+            else -> Unit
+        }
+    }
+    val scope = rememberCoroutineScope()
+    val launchPrompt = remember {
+        {
+            scope.launch {
+                delay(APP_REVIEW_DELAY)
+                appReviewManager.promptForReview()
+            }
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
@@ -124,6 +152,9 @@ fun VaultScreen(
             }
 
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+            VaultEvent.PromptForAppReview -> {
+                launchPrompt.invoke()
+            }
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }

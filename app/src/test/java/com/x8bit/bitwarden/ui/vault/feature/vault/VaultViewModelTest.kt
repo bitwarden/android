@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -143,6 +144,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             getFeatureFlag(FlagKey.SshKeyCipherItems)
         } returns mutableSshKeyVaultItemsEnabledFlow.value
     }
+    private val reviewPromptManager: ReviewPromptManager = mockk()
 
     @Test
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
@@ -1843,6 +1845,45 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LifecycleResumed action is handled, PromptForAppReview is sent if flag is enabled and criteria is met`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns true
+            every { reviewPromptManager.shouldPromptForAppReview() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                assertEquals(VaultEvent.PromptForAppReview, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LifecycleResumed action is handled, PromptForAppReview is not sent if flag is disabled`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns false
+            every { reviewPromptManager.shouldPromptForAppReview() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                expectNoEvents()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LifecycleResumed action is handled, PromptForAppReview is not sent if criteria is not met`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns true
+            every { reviewPromptManager.shouldPromptForAppReview() } returns false
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                expectNoEvents()
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1855,6 +1896,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             featureFlagManager = featureFlagManager,
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
+            reviewPromptManager = reviewPromptManager,
         )
 }
 
