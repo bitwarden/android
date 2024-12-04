@@ -60,7 +60,7 @@ class CipherManagerImpl(
             .fold(
                 onFailure = { CreateCipherResult.Error },
                 onSuccess = {
-                    reviewPromptManager.incrementAddCipherActionCount()
+                    reviewPromptManager.registerAddCipherActionCount()
                     CreateCipherResult.Success
                 },
             )
@@ -93,7 +93,7 @@ class CipherManagerImpl(
             .fold(
                 onFailure = { CreateCipherResult.Error },
                 onSuccess = {
-                    reviewPromptManager.incrementAddCipherActionCount()
+                    reviewPromptManager.registerAddCipherActionCount()
                     CreateCipherResult.Success
                 },
             )

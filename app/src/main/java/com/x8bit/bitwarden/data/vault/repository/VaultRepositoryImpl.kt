@@ -635,7 +635,7 @@ class VaultRepositoryImpl(
             .fold(
                 onFailure = { CreateSendResult.Error(message = null) },
                 onSuccess = {
-                    reviewPromptManager.incrementCreateSendActionCount()
+                    reviewPromptManager.registerCreateSendActionCount()
                     CreateSendResult.Success(it)
                 },
             )

@@ -5,19 +5,19 @@ package com.x8bit.bitwarden.data.platform.manager
  */
 interface ReviewPromptManager {
     /**
-     * Increments the add cipher item action count for the active user.
+     * Register an add cipher item action.
      */
-    fun incrementAddCipherActionCount()
+    fun registerAddCipherActionCount()
 
     /**
-     * Increments the copied generated result action count for the active user.
+     * Register a generated result action.
      */
-    fun incrementCopyGeneratedResultActionCount()
+    fun registerGeneratedResultActionCount()
 
     /**
-     * Increments the created send action count for the active user.
+     * Register a create send action.
      */
-    fun incrementCreateSendActionCount()
+    fun registerCreateSendActionCount()
 
     /**
      * Returns a boolean value indicating whether or not the user should be prompted to

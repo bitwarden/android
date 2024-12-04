@@ -30,100 +30,76 @@ class ReviewPromptManagerTest {
     @Test
     fun `incrementAddCipherActionCount increments stored value as expected`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        reviewPromptManager.incrementAddCipherActionCount()
+        reviewPromptManager.registerAddCipherActionCount()
         assertEquals(
             1,
-            fakeSettingsDiskSource.getAddCipherActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getAddCipherActionCount(),
         )
-        reviewPromptManager.incrementAddCipherActionCount()
+        reviewPromptManager.registerAddCipherActionCount()
         assertEquals(
             2,
-            fakeSettingsDiskSource.getAddCipherActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getAddCipherActionCount(),
         )
-        reviewPromptManager.incrementAddCipherActionCount()
+        reviewPromptManager.registerAddCipherActionCount()
         assertEquals(
             3,
-            fakeSettingsDiskSource.getAddCipherActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getAddCipherActionCount(),
         )
-        reviewPromptManager.incrementAddCipherActionCount()
+        reviewPromptManager.registerAddCipherActionCount()
         // Should not increment over 3.
         assertEquals(
             3,
-            fakeSettingsDiskSource.getAddCipherActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getAddCipherActionCount(),
         )
     }
 
     @Test
     fun `incrementCopyGeneratedResultActionCount increments stored value as expected`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        reviewPromptManager.incrementCopyGeneratedResultActionCount()
+        reviewPromptManager.registerGeneratedResultActionCount()
         assertEquals(
             1,
-            fakeSettingsDiskSource.getCopyGeneratedResultActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getGeneratedResultActionCount(),
         )
-        reviewPromptManager.incrementCopyGeneratedResultActionCount()
+        reviewPromptManager.registerGeneratedResultActionCount()
         assertEquals(
             2,
-            fakeSettingsDiskSource.getCopyGeneratedResultActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getGeneratedResultActionCount(),
         )
-        reviewPromptManager.incrementCopyGeneratedResultActionCount()
+        reviewPromptManager.registerGeneratedResultActionCount()
         assertEquals(
             3,
-            fakeSettingsDiskSource.getCopyGeneratedResultActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getGeneratedResultActionCount(),
         )
-        reviewPromptManager.incrementCopyGeneratedResultActionCount()
+        reviewPromptManager.registerGeneratedResultActionCount()
         assertEquals(
             3,
-            fakeSettingsDiskSource.getCopyGeneratedResultActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getGeneratedResultActionCount(),
         )
     }
 
     @Test
     fun `incrementCreateSendActionCount increments stored value as expected`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        reviewPromptManager.incrementCreateSendActionCount()
+        reviewPromptManager.registerCreateSendActionCount()
         assertEquals(
             1,
-            fakeSettingsDiskSource.getCreateSendActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getCreateSendActionCount(),
         )
-        reviewPromptManager.incrementCreateSendActionCount()
+        reviewPromptManager.registerCreateSendActionCount()
         assertEquals(
             2,
-            fakeSettingsDiskSource.getCreateSendActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getCreateSendActionCount(),
         )
-        reviewPromptManager.incrementCreateSendActionCount()
+        reviewPromptManager.registerCreateSendActionCount()
         assertEquals(
             3,
-            fakeSettingsDiskSource.getCreateSendActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getCreateSendActionCount(),
         )
-        reviewPromptManager.incrementCreateSendActionCount()
+        reviewPromptManager.registerCreateSendActionCount()
         assertEquals(
             3,
-            fakeSettingsDiskSource.getCreateSendActionCount(
-                userId = USER_ID,
-            ),
+            fakeSettingsDiskSource.getCreateSendActionCount(),
         )
     }
 
@@ -138,20 +114,10 @@ class ReviewPromptManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
         autofillEnabledManager.isAutofillEnabled = false
-        fakeSettingsDiskSource.storeCopyGeneratedResultActionCount(USER_ID, 0)
-        fakeSettingsDiskSource.storeCreateSendActionCount(USER_ID, 0)
-        fakeSettingsDiskSource.storeAddCipherActionCount(USER_ID, 4)
+        fakeSettingsDiskSource.storeGeneratedResultActionCount(count = 0)
+        fakeSettingsDiskSource.storeCreateSendActionCount(count = 0)
+        fakeSettingsDiskSource.storeAddCipherActionCount(count = 4)
         assertTrue(reviewPromptManager.shouldPromptForAppReview())
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `shouldPromptForAppReview should return false if prompt has been shown but other criteria is met`() {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
-        fakeSettingsDiskSource.storeUserHasBeenPromptedForReview(USER_ID, true)
-        fakeSettingsDiskSource.storeAddCipherActionCount(USER_ID, 4)
-        assertFalse(reviewPromptManager.shouldPromptForAppReview())
     }
 
     @Test
@@ -159,9 +125,9 @@ class ReviewPromptManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeAccessibilityEnabledManager.isAccessibilityEnabled = false
         autofillEnabledManager.isAutofillEnabled = false
-        fakeSettingsDiskSource.storeCopyGeneratedResultActionCount(USER_ID, 0)
-        fakeSettingsDiskSource.storeCreateSendActionCount(USER_ID, 0)
-        fakeSettingsDiskSource.storeAddCipherActionCount(USER_ID, 4)
+        fakeSettingsDiskSource.storeGeneratedResultActionCount(count = 0)
+        fakeSettingsDiskSource.storeCreateSendActionCount(count = 0)
+        fakeSettingsDiskSource.storeAddCipherActionCount(count = 4)
         assertFalse(reviewPromptManager.shouldPromptForAppReview())
     }
 
@@ -170,9 +136,9 @@ class ReviewPromptManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
         autofillEnabledManager.isAutofillEnabled = true
-        fakeSettingsDiskSource.storeCopyGeneratedResultActionCount(USER_ID, 1)
-        fakeSettingsDiskSource.storeCreateSendActionCount(USER_ID, 0)
-        fakeSettingsDiskSource.storeAddCipherActionCount(USER_ID, 2)
+        fakeSettingsDiskSource.storeGeneratedResultActionCount(count = 1)
+        fakeSettingsDiskSource.storeCreateSendActionCount(count = 0)
+        fakeSettingsDiskSource.storeAddCipherActionCount(count = 2)
         assertFalse(reviewPromptManager.shouldPromptForAppReview())
     }
 }

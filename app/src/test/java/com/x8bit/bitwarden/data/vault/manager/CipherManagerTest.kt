@@ -76,7 +76,7 @@ class CipherManagerTest {
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val reviewPromptManager: ReviewPromptManager = mockk {
-        every { incrementAddCipherActionCount() } just runs
+        every { registerAddCipherActionCount() } just runs
     }
 
     private val cipherManager: CipherManager = CipherManagerImpl(
@@ -175,7 +175,7 @@ class CipherManagerTest {
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
             assertEquals(CreateCipherResult.Success, result)
-            verify(exactly = 1) { reviewPromptManager.incrementAddCipherActionCount() }
+            verify(exactly = 1) { reviewPromptManager.registerAddCipherActionCount() }
         }
 
     @Test
@@ -278,7 +278,7 @@ class CipherManagerTest {
             )
 
             assertEquals(CreateCipherResult.Success, result)
-            verify(exactly = 1) { reviewPromptManager.incrementAddCipherActionCount() }
+            verify(exactly = 1) { reviewPromptManager.registerAddCipherActionCount() }
         }
 
     @Test

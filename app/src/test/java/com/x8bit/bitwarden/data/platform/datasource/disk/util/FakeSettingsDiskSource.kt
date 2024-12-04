@@ -65,10 +65,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
     private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
-    private val addActionCount = mutableMapOf<String, Int?>()
-    private val copyActionCount = mutableMapOf<String, Int?>()
-    private val createActionCount = mutableMapOf<String, Int?>()
-    private val userHasBeenPromptedForReview = mutableMapOf<String, Boolean?>()
+    private var addCipherActionCount: Int? = null
+    private var generatedActionCount: Int? = null
+    private var createSendActionCount: Int? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -357,36 +356,28 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(getVaultRegisteredForExport(userId = userId))
         }
 
-    override fun getAddCipherActionCount(userId: String): Int? {
-        return addActionCount[userId]
+    override fun getAddCipherActionCount(): Int? {
+        return addCipherActionCount
     }
 
-    override fun storeAddCipherActionCount(userId: String, count: Int?) {
-        addActionCount[userId] = count
+    override fun storeAddCipherActionCount(count: Int?) {
+        addCipherActionCount = count
     }
 
-    override fun getCopyGeneratedResultActionCount(userId: String): Int? {
-        return copyActionCount[userId]
+    override fun getGeneratedResultActionCount(): Int? {
+        return generatedActionCount
     }
 
-    override fun storeCopyGeneratedResultActionCount(userId: String, count: Int?) {
-        copyActionCount[userId] = count
+    override fun storeGeneratedResultActionCount(count: Int?) {
+        generatedActionCount = count
     }
 
-    override fun getCreateSendActionCount(userId: String): Int? {
-        return createActionCount[userId]
+    override fun getCreateSendActionCount(): Int? {
+        return createSendActionCount
     }
 
-    override fun storeCreateSendActionCount(userId: String, count: Int?) {
-        createActionCount[userId] = count
-    }
-
-    override fun getUserHasBeenPromptedForReview(userId: String): Boolean? {
-        return userHasBeenPromptedForReview[userId]
-    }
-
-    override fun storeUserHasBeenPromptedForReview(userId: String, value: Boolean?) {
-        userHasBeenPromptedForReview[userId] = value
+    override fun storeCreateSendActionCount(count: Int?) {
+        createSendActionCount = count
     }
 
     //region Private helper functions

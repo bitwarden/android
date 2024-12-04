@@ -199,7 +199,7 @@ class VaultRepositoryTest {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
     private val reviewPromptManager: ReviewPromptManager = mockk {
-        every { incrementCreateSendActionCount() } just runs
+        every { registerCreateSendActionCount() } just runs
     }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
@@ -2078,7 +2078,7 @@ class VaultRepositoryTest {
 
             assertEquals(CreateSendResult.Success(mockSendViewResult), result)
 
-            verify(exactly = 1) { reviewPromptManager.incrementCreateSendActionCount() }
+            verify(exactly = 1) { reviewPromptManager.registerCreateSendActionCount() }
         }
 
     @Test

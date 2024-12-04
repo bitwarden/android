@@ -327,42 +327,33 @@ interface SettingsDiskSource {
     fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets the number of qualifying add actions for the given [userId].
+     * Gets the number of qualifying add cipher actions for the device.
      */
-    fun getAddCipherActionCount(userId: String): Int?
+    fun getAddCipherActionCount(): Int?
 
     /**
-     * Stores the given [count] completed "add" actions for the given [userId].
+     * Stores the given [count] completed "add" cipher actions taken place on the device.
      */
-    fun storeAddCipherActionCount(userId: String, count: Int?)
+    fun storeAddCipherActionCount(count: Int?)
 
     /**
-     * Gets the number of qualifying copy actions for the given [userId].
+     * Gets the number of qualifying generated result actions for the device.
      */
-    fun getCopyGeneratedResultActionCount(userId: String): Int?
+    fun getGeneratedResultActionCount(): Int?
 
     /**
-     * Stores the given [count] completed "copy" actions for the given [userId].
+     * Stores the given [count] completed generated password or username result actions taken
+     * for the device.
      */
-    fun storeCopyGeneratedResultActionCount(userId: String, count: Int?)
+    fun storeGeneratedResultActionCount(count: Int?)
 
     /**
-     * Gets the number of qualifying create actions for the given [userId].
+     * Gets the number of qualifying create send actions for the device.
      */
-    fun getCreateSendActionCount(userId: String): Int?
+    fun getCreateSendActionCount(): Int?
 
     /**
-     * Stores the given [count] completed "create" actions for the given [userId].
+     * Stores the given [count] completed create send actions for the device.
      */
-    fun storeCreateSendActionCount(userId: String, count: Int?)
-
-    /**
-     * Gets whether the given [userId] has been prompted for an app review.
-     */
-    fun getUserHasBeenPromptedForReview(userId: String): Boolean?
-
-    /**
-     * Stores whether the given [userId] has been prompted for an app review.
-     */
-    fun storeUserHasBeenPromptedForReview(userId: String, value: Boolean?)
+    fun storeCreateSendActionCount(count: Int?)
 }

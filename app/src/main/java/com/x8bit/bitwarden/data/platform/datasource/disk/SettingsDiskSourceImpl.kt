@@ -40,7 +40,6 @@ private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 private const val ADD_ACTION_COUNT = "addActionCount"
 private const val COPY_ACTION_COUNT = "copyActionCount"
 private const val CREATE_ACTION_COUNT = "createActionCount"
-private const val HAS_BEEN_PROMPTED_FOR_REVIEW = "hasBeenPromptedForReview"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -176,10 +175,6 @@ class SettingsDiskSourceImpl(
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
         storeVaultRegisteredForExport(userId = userId, isRegistered = null)
-        storeAddCipherActionCount(userId = userId, count = null)
-        storeCopyGeneratedResultActionCount(userId = userId, count = null)
-        storeCreateSendActionCount(userId = userId, count = null)
-        storeUserHasBeenPromptedForReview(userId = userId, value = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -454,46 +449,36 @@ class SettingsDiskSourceImpl(
         getMutableVaultRegisteredForExportFlow(userId)
             .onSubscription { emit(getVaultRegisteredForExport(userId)) }
 
-    override fun getAddCipherActionCount(userId: String): Int? = getInt(
-        key = ADD_ACTION_COUNT.appendIdentifier(userId),
+    override fun getAddCipherActionCount(): Int? = getInt(
+        key = ADD_ACTION_COUNT,
     )
 
-    override fun storeAddCipherActionCount(userId: String, count: Int?) {
+    override fun storeAddCipherActionCount(count: Int?) {
         putInt(
-            key = ADD_ACTION_COUNT.appendIdentifier(userId),
+            key = ADD_ACTION_COUNT,
             value = count,
         )
     }
 
-    override fun getCopyGeneratedResultActionCount(userId: String): Int? = getInt(
-        key = COPY_ACTION_COUNT.appendIdentifier(userId),
+    override fun getGeneratedResultActionCount(): Int? = getInt(
+        key = COPY_ACTION_COUNT,
     )
 
-    override fun storeCopyGeneratedResultActionCount(userId: String, count: Int?) {
+    override fun storeGeneratedResultActionCount(count: Int?) {
         putInt(
-            key = COPY_ACTION_COUNT.appendIdentifier(userId),
+            key = COPY_ACTION_COUNT,
             value = count,
         )
     }
 
-    override fun getCreateSendActionCount(userId: String): Int? = getInt(
-        key = CREATE_ACTION_COUNT.appendIdentifier(userId),
+    override fun getCreateSendActionCount(): Int? = getInt(
+        key = CREATE_ACTION_COUNT,
     )
 
-    override fun storeCreateSendActionCount(userId: String, count: Int?) {
+    override fun storeCreateSendActionCount(count: Int?) {
         putInt(
-            key = CREATE_ACTION_COUNT.appendIdentifier(userId),
+            key = CREATE_ACTION_COUNT,
             value = count,
-        )
-    }
-
-    override fun getUserHasBeenPromptedForReview(userId: String): Boolean? =
-        getBoolean(key = HAS_BEEN_PROMPTED_FOR_REVIEW.appendIdentifier(userId))
-
-    override fun storeUserHasBeenPromptedForReview(userId: String, value: Boolean?) {
-        putBoolean(
-            key = HAS_BEEN_PROMPTED_FOR_REVIEW.appendIdentifier(userId),
-            value = value,
         )
     }
 

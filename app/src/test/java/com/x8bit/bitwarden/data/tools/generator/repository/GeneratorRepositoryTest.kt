@@ -73,7 +73,7 @@ class GeneratorRepositoryTest {
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val dispatcherManager = FakeDispatcherManager()
     private val reviewPromptManager: ReviewPromptManager = mockk {
-        every { incrementCopyGeneratedResultActionCount() } just runs
+        every { registerGeneratedResultActionCount() } just runs
     }
 
     private val repository = GeneratorRepositoryImpl(
@@ -753,7 +753,7 @@ class GeneratorRepositoryTest {
                 repository.emitGeneratorResult(GeneratorResult.Password("foo"))
                 assertEquals(GeneratorResult.Password("foo"), awaitItem())
             }
-            verify(exactly = 1) { reviewPromptManager.incrementCopyGeneratedResultActionCount() }
+            verify(exactly = 1) { reviewPromptManager.registerGeneratedResultActionCount() }
         }
 }
 

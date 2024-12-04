@@ -71,7 +71,7 @@ class GeneratorRepositoryImpl(
     override val generatorResultFlow: Flow<GeneratorResult>
         get() = generatorResultChannel
             .receiveAsFlow()
-            .onEach { reviewPromptManager.incrementCopyGeneratedResultActionCount() }
+            .onEach { reviewPromptManager.registerGeneratedResultActionCount() }
 
     init {
         mutablePasswordHistoryStateFlow

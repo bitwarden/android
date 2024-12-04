@@ -20,60 +20,54 @@ class ReviewPromptManagerImpl(
     private val accessibilityEnabledManager: AccessibilityEnabledManager,
 ) : ReviewPromptManager {
 
-    override fun incrementAddCipherActionCount() {
-        val activeUserId = authDiskSource.userState?.activeUserId ?: return
-        if (isMinimumAddActionsMet(activeUserId)) return
-        val currentValue = settingsDiskSource.getAddCipherActionCount(activeUserId).orZero()
+    override fun registerAddCipherActionCount() {
+        authDiskSource.userState?.activeUserId ?: return
+        if (isMinimumAddActionsMet()) return
+        val currentValue = settingsDiskSource.getAddCipherActionCount().orZero()
         settingsDiskSource.storeAddCipherActionCount(
-            userId = activeUserId,
             count = currentValue + 1,
         )
     }
 
-    override fun incrementCopyGeneratedResultActionCount() {
-        val activeUserId = authDiskSource.userState?.activeUserId ?: return
-        if (isMinimumCopyActionsMet(activeUserId)) return
+    override fun registerGeneratedResultActionCount() {
+        authDiskSource.userState?.activeUserId ?: return
+        if (isMinimumCopyActionsMet()) return
         val currentValue = settingsDiskSource
-            .getCopyGeneratedResultActionCount(activeUserId)
+            .getGeneratedResultActionCount()
             .orZero()
-        settingsDiskSource.storeCopyGeneratedResultActionCount(
-            userId = activeUserId,
+        settingsDiskSource.storeGeneratedResultActionCount(
             count = currentValue + 1,
         )
     }
 
-    override fun incrementCreateSendActionCount() {
-        val activeUserId = authDiskSource.userState?.activeUserId ?: return
-        if (isMinimumCreateActionsMet(activeUserId)) return
-        val currentValue = settingsDiskSource.getCreateSendActionCount(activeUserId).orZero()
+    override fun registerCreateSendActionCount() {
+        authDiskSource.userState?.activeUserId ?: return
+        if (isMinimumCreateActionsMet()) return
+        val currentValue = settingsDiskSource.getCreateSendActionCount().orZero()
         settingsDiskSource.storeCreateSendActionCount(
-            userId = activeUserId,
             count = currentValue + 1,
         )
     }
 
     override fun shouldPromptForAppReview(): Boolean {
-        val activeUserId = authDiskSource.userState?.activeUserId ?: return false
-        val promptHasNotBeenShown =
-            settingsDiskSource.getUserHasBeenPromptedForReview(activeUserId) != true
+        authDiskSource.userState?.activeUserId ?: return false
         val autofillEnabled = autofillEnabledManager.isAutofillEnabledStateFlow.value
         val accessibilityEnabled = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
-        val minAddActionsMet = isMinimumAddActionsMet(activeUserId)
-        val minCopyActionsMet = isMinimumCopyActionsMet(activeUserId)
-        val minCreateActionsMet = isMinimumCreateActionsMet(activeUserId)
+        val minAddActionsMet = isMinimumAddActionsMet()
+        val minCopyActionsMet = isMinimumCopyActionsMet()
+        val minCreateActionsMet = isMinimumCreateActionsMet()
         return (autofillEnabled || accessibilityEnabled) &&
-            (minAddActionsMet || minCopyActionsMet || minCreateActionsMet) &&
-            promptHasNotBeenShown
+            (minAddActionsMet || minCopyActionsMet || minCreateActionsMet)
     }
 
-    private fun isMinimumAddActionsMet(userId: String): Boolean =
-        settingsDiskSource.getAddCipherActionCount(userId).orZero() >= ADD_ACTION_REQUIREMENT
+    private fun isMinimumAddActionsMet(): Boolean =
+        settingsDiskSource.getAddCipherActionCount().orZero() >= ADD_ACTION_REQUIREMENT
 
-    private fun isMinimumCopyActionsMet(userId: String): Boolean =
+    private fun isMinimumCopyActionsMet(): Boolean =
         settingsDiskSource
-            .getCopyGeneratedResultActionCount(userId)
+            .getGeneratedResultActionCount()
             .orZero() >= COPY_ACTION_REQUIREMENT
 
-    private fun isMinimumCreateActionsMet(userId: String): Boolean =
-        settingsDiskSource.getCreateSendActionCount(userId).orZero() >= CREATE_ACTION_REQUIREMENT
+    private fun isMinimumCreateActionsMet(): Boolean =
+        settingsDiskSource.getCreateSendActionCount().orZero() >= CREATE_ACTION_REQUIREMENT
 }
