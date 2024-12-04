@@ -23,12 +23,14 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
@@ -50,7 +52,9 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,7 +77,9 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToSearchScreen = false
     private val exitManager = mockk<ExitManager>(relaxed = true)
     private val intentManager = mockk<IntentManager>(relaxed = true)
-
+    private val appReviewManager: AppReviewManager = mockk {
+        every { promptForReview() } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultViewModel>(relaxed = true) {
@@ -99,6 +105,7 @@ class VaultScreenTest : BaseComposeTest() {
                 },
                 exitManager = exitManager,
                 intentManager = intentManager,
+                appReviewManager = appReviewManager,
             )
         }
     }
@@ -1273,6 +1280,18 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("mockSshKey")
             .isNotDisplayed()
+    }
+
+    @Test
+    fun `LifecycleResumed action is sent when the screen is resumed`() {
+        verify { viewModel.trySendAction(VaultAction.LifecycleResumed) }
+    }
+
+    @Test
+    fun `PromptForAppReview triggers app review manager`() {
+        mutableEventFlow.tryEmit(VaultEvent.PromptForAppReview)
+        dispatcher.advanceTimeByAndRunCurrent(4000L)
+        verify(exactly = 1) { appReviewManager.promptForReview() }
     }
 }
 
