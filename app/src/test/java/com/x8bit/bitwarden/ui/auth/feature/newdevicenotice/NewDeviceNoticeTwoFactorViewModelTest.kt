@@ -17,7 +17,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick)
             assertEquals(
                 NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail(
-                    url = "https://vault.bitwarden.com/#/settings/account"
+                    url = "https://vault.bitwarden.com/#/settings/account",
                 ),
                 awaitItem(),
             )
@@ -31,7 +31,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick)
             assertEquals(
                 NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor(
-                    url = "https://vault.bitwarden.com/#/settings/security/two-factor"
+                    url = "https://vault.bitwarden.com/#/settings/security/two-factor",
                 ),
                 awaitItem(),
             )
@@ -52,7 +52,6 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): NewDeviceNoticeTwoFactorViewModel =
         NewDeviceNoticeTwoFactorViewModel(
-            environmentRepository = environmentRepository
+            environmentRepository = environmentRepository,
         )
-
 }

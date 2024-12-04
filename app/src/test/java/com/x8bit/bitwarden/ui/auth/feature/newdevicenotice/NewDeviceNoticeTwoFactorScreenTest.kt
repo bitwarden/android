@@ -43,7 +43,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
+                NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick,
             )
         }
     }
@@ -55,7 +55,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
+                NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick,
             )
         }
     }
@@ -67,7 +67,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
+                NewDeviceNoticeTwoFactorAction.RemindMeLaterClick,
             )
         }
     }
@@ -76,8 +76,8 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun `on NavigateToTurnOnTwoFactor should call launchUri on IntentManager`() {
         mutableEventFlow.tryEmit(
             NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor(
-                url = "https://bitwarden.com/#/settings/security/two-factor"
-            )
+                url = "https://bitwarden.com/#/settings/security/two-factor",
+            ),
         )
         verify {
             intentManager.launchUri("https://bitwarden.com/#/settings/security/two-factor".toUri())
@@ -88,8 +88,8 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun `ChangeAccountEmailClick should call OnNavigateBack`() {
         mutableEventFlow.tryEmit(
             NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail(
-                url = "https://vault.bitwarden.com/#/settings/account"
-            )
+                url = "https://vault.bitwarden.com/#/settings/account",
+            ),
         )
         verify {
             intentManager.launchUri("https://vault.bitwarden.com/#/settings/account".toUri())
@@ -102,4 +102,3 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
         assertTrue(onNavigateBackCalled)
     }
 }
-
