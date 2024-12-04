@@ -1,19 +1,15 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +29,7 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailA
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -55,10 +51,7 @@ fun NewDeviceNoticeEmailAccessScreen(
         }
     }
 
-    BitwardenScaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
+    BitwardenScaffold {
         NewDeviceNoticeEmailAccessContent(
             email = state.email,
             isEmailAccessEnabled = state.isEmailAccessEnabled,
@@ -68,6 +61,7 @@ fun NewDeviceNoticeEmailAccessScreen(
                 }
             },
             onContinueClick = { viewModel.trySendAction(ContinueClick) },
+            modifier = Modifier,
         )
     }
 }
@@ -76,13 +70,15 @@ fun NewDeviceNoticeEmailAccessScreen(
 private fun NewDeviceNoticeEmailAccessContent(
     email: String,
     isEmailAccessEnabled: Boolean,
-    onEmailAccessToggleChanged: (Boolean) -> Unit = {},
-    onContinueClick: () -> Unit = {},
+    onEmailAccessToggleChanged: (Boolean) -> Unit,
+    onContinueClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
+        modifier = modifier
+            .standardHorizontalMargin()
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
     ) {
@@ -92,13 +88,14 @@ private fun NewDeviceNoticeEmailAccessContent(
             email = email,
             isEmailAccessEnabled = isEmailAccessEnabled,
             onEmailAccessToggleChanged = onEmailAccessToggleChanged,
+            modifier = Modifier,
         )
+        Spacer(modifier = Modifier.height(24.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.continue_text),
             onClick = onContinueClick,
             modifier = Modifier
-                .padding(24.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .imePadding(),
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
@@ -116,13 +113,14 @@ private fun HeaderContent(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(horizontal = 24.dp),
+        modifier = modifier,
     ) {
         Image(
             painter = rememberVectorPainter(id = R.drawable.warning),
             contentDescription = null,
             modifier = Modifier.size(120.dp),
         )
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.important_notice),
             style = BitwardenTheme.typography.headlineMedium,
@@ -152,13 +150,8 @@ private fun MainContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .padding(horizontal = 22.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(size = 4.dp))
-            .background(BitwardenTheme.colorScheme.background.secondary),
+        modifier = modifier,
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(
                 R.string.do_you_have_reliable_access_to_your_email,
@@ -166,19 +159,16 @@ private fun MainContent(
             ),
             style = BitwardenTheme.typography.labelLarge,
             color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
         )
-        BitwardenSwitch(
-            label = stringResource(id = R.string.yes_i_can_reliably_access_my_email),
-            isChecked = isEmailAccessEnabled,
-            onCheckedChange = onEmailAccessToggleChanged,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .testTag("EmailAccessToggle")
-                .fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        Column {
+            BitwardenSwitch(
+                label = stringResource(id = R.string.yes_i_can_reliably_access_my_email),
+                isChecked = isEmailAccessEnabled,
+                onCheckedChange = onEmailAccessToggleChanged,
+                modifier = Modifier
+                    .testTag("EmailAccessToggle"),
+            )
+        }
     }
 }
 
@@ -189,6 +179,8 @@ private fun NewDeviceNoticeEmailAccessScreen_preview() {
         NewDeviceNoticeEmailAccessContent(
             email = "test@bitwarden.com",
             isEmailAccessEnabled = true,
+            onEmailAccessToggleChanged = {},
+            onContinueClick = {},
         )
     }
 }
