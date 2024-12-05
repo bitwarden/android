@@ -65,6 +65,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
     private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
+    private var addCipherActionCount: Int? = null
+    private var generatedActionCount: Int? = null
+    private var createSendActionCount: Int? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -352,6 +355,30 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         getMutableVaultRegisteredForExportFlow(userId = userId).onSubscription {
             emit(getVaultRegisteredForExport(userId = userId))
         }
+
+    override fun getAddCipherActionCount(): Int? {
+        return addCipherActionCount
+    }
+
+    override fun storeAddCipherActionCount(count: Int?) {
+        addCipherActionCount = count
+    }
+
+    override fun getGeneratedResultActionCount(): Int? {
+        return generatedActionCount
+    }
+
+    override fun storeGeneratedResultActionCount(count: Int?) {
+        generatedActionCount = count
+    }
+
+    override fun getCreateSendActionCount(): Int? {
+        return createSendActionCount
+    }
+
+    override fun storeCreateSendActionCount(count: Int?) {
+        createSendActionCount = count
+    }
 
     //region Private helper functions
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {

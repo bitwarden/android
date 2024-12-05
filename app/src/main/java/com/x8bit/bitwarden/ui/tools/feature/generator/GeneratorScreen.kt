@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.ClipboardDataEffect
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -101,7 +102,14 @@ fun GeneratorScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = rememberBitwardenSnackbarHostState()
-
+    val onTextCopiedToClipboard: (String) -> Unit = remember(viewModel) {
+        {
+            if (it == state.generatedText) {
+                viewModel.trySendAction(GeneratorAction.GeneratorTextFieldCopied)
+            }
+        }
+    }
+    ClipboardDataEffect(onClipboardDataUpdated = onTextCopiedToClipboard)
     LivecycleEventEffect { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
