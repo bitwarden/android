@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.processor
 
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
@@ -46,6 +47,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkConstructor
@@ -477,6 +479,9 @@ class Fido2ProviderProcessorTest {
         every {
             anyConstructed<PublicKeyCredentialEntry.Builder>().build()
         } returns mockPublicKeyCredentialEntry
+
+        mockkStatic(Icon::class)
+        every { Icon.createWithResource(context, any()) } returns mockk<Icon>()
 
         fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
 
