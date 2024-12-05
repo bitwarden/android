@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -121,7 +121,7 @@ class VaultAddEditViewModel @Inject constructor(
             // Check for totp data to pre-populate
             val totpData = specialCircumstance?.toTotpDataOrNull()
             // Check for Fido2 data to pre-populate
-            val fido2CreationRequest = specialCircumstance?.toFido2RequestOrNull()
+            val fido2CreationRequest = specialCircumstance?.toFido2CreateRequestOrNull()
             val fido2AttestationOptions = fido2CreationRequest?.let { request ->
                 fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request.requestJson)
             }
@@ -419,7 +419,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
 
         specialCircumstanceManager.specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 handleFido2RequestSpecialCircumstance(request, content.toCipherView())
                 return@onContent
@@ -583,7 +583,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleConfirmOverwriteExistingPasskeyClick() {
         specialCircumstanceManager
             .specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 onContent { content ->
                     registerFido2Credential(request, content.toCipherView())
@@ -605,7 +605,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun getRequestAndRegisterCredential() =
         specialCircumstanceManager
             .specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 onContent { content ->
                     registerFido2CredentialToCipher(
