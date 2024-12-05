@@ -93,6 +93,7 @@ class Fido2CompletionManagerTest {
             fido2CompletionManager = Fido2CompletionManagerImpl(mockActivity, mockIntentManager)
             mockkConstructor(Intent::class)
             mockkObject(PendingIntentHandler.Companion)
+            mockkStatic(Icon::class)
             every {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
             } just runs
@@ -106,6 +107,7 @@ class Fido2CompletionManagerTest {
             unmockkConstructor(Intent::class, PublicKeyCredentialEntry.Builder::class)
             unmockkObject(PendingIntentHandler.Companion)
             unmockkStatic(PendingIntent::class)
+            unmockkStatic(Icon::class)
         }
 
         @Suppress("MaxLineLength")
@@ -189,7 +191,6 @@ class Fido2CompletionManagerTest {
         fun `completeFido2GetCredentials should create a PublicKeyCredentialEntry and clear authentication actions when result is Success`() {
             mockkConstructor(PublicKeyCredentialEntry.Builder::class)
             mockkStatic(PendingIntent::class)
-            mockkStatic(Icon::class)
 
             val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
@@ -241,7 +242,6 @@ class Fido2CompletionManagerTest {
         fun `completeFido2GetCredentials should set username to default value when userNameForUi is null`() {
             mockkConstructor(PublicKeyCredentialEntry.Builder::class)
             mockkStatic(PendingIntent::class)
-            mockkStatic(Icon::class)
             val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
                 .copy(userNameForUi = null)

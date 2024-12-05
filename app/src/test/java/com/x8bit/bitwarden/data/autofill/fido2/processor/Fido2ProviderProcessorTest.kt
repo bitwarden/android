@@ -51,9 +51,11 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkConstructor
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.encodeToString
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -101,6 +103,13 @@ class Fido2ProviderProcessorTest {
             clock,
             dispatcherManager,
         )
+
+        mockkStatic(Icon::class)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Icon::class)
     }
 
     @Test
@@ -479,8 +488,6 @@ class Fido2ProviderProcessorTest {
         every {
             anyConstructed<PublicKeyCredentialEntry.Builder>().build()
         } returns mockPublicKeyCredentialEntry
-
-        mockkStatic(Icon::class)
         every { Icon.createWithResource(context, any()) } returns mockk<Icon>()
 
         fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
