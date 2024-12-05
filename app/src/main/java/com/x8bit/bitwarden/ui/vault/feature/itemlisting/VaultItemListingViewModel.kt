@@ -33,7 +33,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -113,7 +113,7 @@ class VaultItemListingViewModel @Inject constructor(
         val activeAccountSummary = userState.toActiveAccountSummary()
         val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
-        val fido2CredentialRequest = specialCircumstance?.toFido2RequestOrNull()
+        val fido2CredentialRequest = specialCircumstance?.toFido2CreateRequestOrNull()
         VaultItemListingState(
             itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
                 .vaultItemListingType
@@ -1263,7 +1263,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun continueFido2Operation(cipherView: CipherView) {
         specialCircumstanceManager
             .specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 registerFido2CredentialToCipher(
                     request = request,
