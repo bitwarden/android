@@ -15,3 +15,5 @@ contact_links:
   - name: Security Issues
     url: https://hackerone.com/bitwarden
     about: We use HackerOne to manage security disclosures.
+  - name: Report mobile autofill failure
+    url: https://docs.google.com/forms/d/e/1FAIpQLScMopHyN7KGJs8hW562VTzbIGL4KcFnx0wJcsW0GYE1BnPiGA/viewform
