@@ -123,7 +123,8 @@ class Fido2CompletionManagerImpl(
                                     .createWithResource(
                                         activity,
                                         R.drawable.ic_bw_passkey,
-                                    ))
+                                    ),
+                            )
                             .build()
                     }
                 PendingIntentHandler
