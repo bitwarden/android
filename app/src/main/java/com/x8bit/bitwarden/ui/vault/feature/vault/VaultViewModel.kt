@@ -576,7 +576,10 @@ class VaultViewModel @Inject constructor(
             )
 
             is DataState.Loading -> vaultLoadingReceive()
-            is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData = vaultData)
+            is DataState.NoNetwork -> vaultNoNetworkReceive(
+                vaultData = vaultData,
+                showSshKeys = showSshKeys,
+            )
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
         }
     }
@@ -603,9 +606,16 @@ class VaultViewModel @Inject constructor(
                 ),
             )
         }
+        updateVaultState(vaultData.data, showSshKeys)
+    }
+
+    private fun updateVaultState(
+        vaultData: VaultData,
+        showSshKeys: Boolean,
+    ) {
         mutableStateFlow.update {
             it.copy(
-                viewState = vaultData.data.toViewState(
+                viewState = vaultData.toViewState(
                     baseIconUrl = state.baseIconUrl,
                     isIconLoadingDisabled = state.isIconLoadingDisabled,
                     isPremium = state.isPremium,
@@ -625,17 +635,19 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
     }
 
-    private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
-        mutableStateFlow.updateToErrorStateOrDialog(
-            baseIconUrl = state.baseIconUrl,
-            vaultData = vaultData.data,
-            vaultFilterType = vaultFilterTypeOrDefault,
-            isPremium = state.isPremium,
-            errorTitle = R.string.internet_connection_required_title.asText(),
-            isIconLoadingDisabled = state.isIconLoadingDisabled,
-            hasMasterPassword = state.hasMasterPassword,
-            errorMessage = R.string.internet_connection_required_message.asText(),
-            isRefreshing = false,
+    private fun vaultNoNetworkReceive(
+        vaultData: DataState.NoNetwork<VaultData>,
+        showSshKeys: Boolean,
+    ) {
+        val data = vaultData.data ?: VaultData(
+            cipherViewList = emptyList(),
+            collectionViewList = emptyList(),
+            folderViewList = emptyList(),
+            sendViewList = emptyList(),
+        )
+        updateVaultState(
+            vaultData = data,
+            showSshKeys = showSshKeys,
         )
     }
 
