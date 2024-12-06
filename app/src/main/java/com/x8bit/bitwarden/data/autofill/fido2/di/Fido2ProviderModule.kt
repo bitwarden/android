@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManagerImpl
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManager
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -58,17 +60,26 @@ object Fido2ProviderModule {
     @Provides
     @Singleton
     fun provideFido2CredentialManager(
-        assetManager: AssetManager,
-        digitalAssetLinkService: DigitalAssetLinkService,
         vaultSdkSource: VaultSdkSource,
         fido2CredentialStore: Fido2CredentialStore,
+        fido2OriginManager: Fido2OriginManager,
         json: Json,
     ): Fido2CredentialManager =
         Fido2CredentialManagerImpl(
-            assetManager = assetManager,
-            digitalAssetLinkService = digitalAssetLinkService,
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
+            fido2OriginManager = fido2OriginManager,
             json = json,
+        )
+
+    @Provides
+    @Singleton
+    fun provideFido2OriginManager(
+        assetManager: AssetManager,
+        digitalAssetLinkService: DigitalAssetLinkService,
+    ): Fido2OriginManager =
+        Fido2OriginManagerImpl(
+            assetManager = assetManager,
+            digitalAssetLinkService = digitalAssetLinkService,
         )
 }

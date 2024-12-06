@@ -41,16 +41,17 @@ fun CallingAppInfo.validatePrivilegedApp(allowList: String): Fido2ValidateOrigin
     }
 
     return try {
-        if (getOrigin(allowList) != null) {
-            Fido2ValidateOriginResult.Success
-        } else {
+        val origin = getOrigin(allowList)
+        if (origin.isNullOrEmpty()) {
             Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
+        } else {
+            Fido2ValidateOriginResult.Success(origin)
         }
-    } catch (e: IllegalStateException) {
+    } catch (_: IllegalStateException) {
         // We know the package name is in the allow list so we can infer that this exception is
         // thrown because no matching signature is found.
         Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         // The allow list is not formatted correctly so we notify the user passkeys are not
         // supported for this application
         Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
