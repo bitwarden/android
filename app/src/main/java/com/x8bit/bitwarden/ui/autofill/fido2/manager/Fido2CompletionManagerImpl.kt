@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.credentials.CreatePublicKeyCredentialResponse
@@ -116,6 +117,13 @@ class Fido2CompletionManagerImpl(
                                     ?: activity.getString(R.string.no_username),
                                 pendingIntent = pendingIntent,
                                 beginGetPublicKeyCredentialOption = result.options,
+                            )
+                            .setIcon(
+                                Icon
+                                    .createWithResource(
+                                        activity,
+                                        R.drawable.ic_bw_passkey,
+                                    ),
                             )
                             .build()
                     }

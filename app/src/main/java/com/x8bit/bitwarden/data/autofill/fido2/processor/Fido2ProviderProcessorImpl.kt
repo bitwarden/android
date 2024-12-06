@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.fido2.processor
 
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
@@ -265,6 +266,13 @@ class Fido2ProviderProcessorImpl(
                                 requestCode = requestCode.getAndIncrement(),
                             ),
                         beginGetPublicKeyCredentialOption = option,
+                    )
+                    .setIcon(
+                        Icon
+                            .createWithResource(
+                                context,
+                                R.drawable.ic_bw_passkey,
+                            ),
                     )
                     .build()
             }
