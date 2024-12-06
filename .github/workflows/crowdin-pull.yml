@@ -28,10 +28,17 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "github-gpg-private-key, github-gpg-private-key-passphrase"
 
+      - name: Generate GH App token
+        uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.BW_GHAPP_ID }}
+          private-key: ${{ secrets.BW_GHAPP_KEY }}
+
       - name: Download translations
         uses: crowdin/github-action@a9ffb7d5ac46eca1bb1f06656bf888b39462f161 # v2.4.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
         with:
           config: crowdin.yml
