@@ -184,7 +184,6 @@ class SendViewModel @Inject constructor(
                 -> {
                 val data = dataState
                     .data
-                    .takeUnless { it == null }
                     ?: SendData(sendViewList = emptyList())
                 mutableStateFlow.update {
                     it.copy(

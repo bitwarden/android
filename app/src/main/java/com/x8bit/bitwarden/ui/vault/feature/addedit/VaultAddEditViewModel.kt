@@ -1574,7 +1574,6 @@ class VaultAddEditViewModel @Inject constructor(
         userData: UserState?,
     ): VaultAddEditState {
         val internalVaultData = vaultData
-            .takeUnless { it == null }
             ?: VaultData(
                 cipherViewList = emptyList(),
                 collectionViewList = emptyList(),
