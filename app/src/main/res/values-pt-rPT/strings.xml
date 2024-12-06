@@ -962,6 +962,7 @@ Anule a subscrição em qualquer altura.</string>
   <string name="remove_passkey">Remover chave de acesso</string>
   <string name="passkey_removed">Chave de acesso removida</string>
   <string name="what_makes_a_password_strong">O que torna uma palavra-passe forte?</string>
+  <string name="a_secure_memorable_password">Uma palavra-passe segura e memorizável</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Quanto mais longa for a sua palavra-passe, mais difícil será hackeá-la. O mínimo para a criação de uma conta é de 12 caracteres, mas se tiver 14 caracteres, o tempo para descobrir a sua palavra-passe seria de séculos!</string>
   <string name="the_strongest_passwords_are_usually">As palavras-passe mais fortes são normalmente:</string>
   <string name="twelve_or_more_characters">de 12 ou mais caracteres</string>
@@ -977,7 +978,8 @@ Anule a subscrição em qualquer altura.</string>
   <string name="confirm">Confirmar</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Configure a biometria ou escolha um código PIN para aceder rapidamente ao seu cofre e preencher automaticamente as suas credenciais.</string>
   <string name="never_lose_access_to_your_vault">Nunca perca o acesso ao seu cofre</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">A melhor forma de garantir que pode sempre aceder à sua conta é definir salvaguardas desde o início.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">A melhor forma de garantir que pode sempre aceder ao seu cofre é definir salvaguardas desde o início.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Uma das melhores formas de criar uma palavra-passe segura e memorizável é utilizar uma frase de acesso. \nAqui está como:</string>
   <string name="create_a_hint">Criar uma dica</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">A sua dica ser-lhe-á enviada por e-mail quando a solicitar.</string>
   <string name="write_your_password_down">Anote a sua palavra-passe</string>
@@ -1099,4 +1101,16 @@ Anule a subscrição em qualquer altura.</string>
   <string name="biometrics_no_longer_supported">A sua sessão foi terminada porque os dados biométricos do seu dispositivo não cumprem os requisitos de segurança mais recentes. Para atualizar as definições, inicie sessão novamente ou contacte o seu administrador para obter acesso.</string>
   <string name="cxp_import">Importar CXP</string>
   <string name="cxp_export">Exportar CXP</string>
+  <string name="choose_three_or_four_random_words">Escolha três ou quatro palavras ao acaso</string>
+  <string name="pick_three_or_four_random_unrelated_words">Escolha três ou quatro palavras ao acaso, não relacionadas, de que se possa lembrar facilmente. Pense em objetos, lugares ou coisas de que gosta.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">objetos, lugares ou coisas</string>
+  <string name="combine_those_words_together">Combine estas palavras</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Junte as palavras em qualquer ordem para formar a sua frase de acesso. Utilize hífenes, espaços ou deixe-as como uma palavra longa — a escolha é sua!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Utilize hífenes, espaços ou deixe-as como uma palavra longa</string>
+  <string name="make_it_yours">Torne-a sua</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Acrescente um número ou símbolo para a tornar ainda mais forte. Agora tem uma frase de acesso única, segura e memorizável!</string>
+  <string name="add_a_number_or_symbol_highlight">Acrescente um número ou símbolo</string>
+  <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
+  <string name="check_out_the_passphrase_generator">"Dê uma vista de olhos no gerador de frases de acesso"</string>
+  <string name="copied_to_clipboard">Copiado para a área de transferência.</string>
 </resources>

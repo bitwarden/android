@@ -951,7 +951,7 @@
   <string name="or_log_in_you_may_already_have_an_account">或者登录，您可能已经有一个账户了。</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时退订。</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时退订。</string>
-  <string name="security_prioritized">Security, prioritized</string>
+  <string name="security_prioritized">安全优先</string>
   <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
   <string name="welcome_message_2">设置生物识别解锁和自动填充，无需输入任何字符即可登录您的账户。</string>
   <string name="quick_and_easy_login">快速便捷的登录</string>
@@ -962,6 +962,7 @@
   <string name="remove_passkey">移除通行密钥</string>
   <string name="passkey_removed">通行密钥已移除</string>
   <string name="what_makes_a_password_strong">一个强密码的特点是什么？</string>
+  <string name="a_secure_memorable_password">安全、难忘的密码</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">密码越长，破解起来就越困难。账户创建时要求的最小密码长度是 12 个字符，但如果使用 14 个字符，破解密码的时间将长达几个世纪！</string>
   <string name="the_strongest_passwords_are_usually">最强的密码通常具有以下特点：</string>
   <string name="twelve_or_more_characters">至少 12 个字符</string>
@@ -977,7 +978,8 @@
   <string name="confirm">确认</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">设置生物识别或选择一个 PIN 码，以快速访问您的密码库并自动填充您的登录信息。</string>
   <string name="never_lose_access_to_your_vault">千万不要失去对您的密码库的访问权限</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">要确保您始终能够访问自己的账户，最好的办法是从一开始就设置好安全保障措施。</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">确保您始终可以访问密码库的最佳方法是从一开始就设置好保护措施。</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">创建安全且难忘的密码的最佳方法之一是使用密码短语。\n具体方法如下：</string>
   <string name="create_a_hint">创建提示</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">当您请求时，提示将通过电子邮件发送给您。</string>
   <string name="write_your_password_down">写下您的密码</string>
@@ -1027,7 +1029,7 @@
   <string name="the_following_instructions_will_guide_you_through_importing_logins">以下说明将指导您从台式电脑或笔记本电脑导入登录信息</string>
   <string name="import_logins">导入登录信息</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">按照以下说明，从您的电脑上导出您的浏览器或其他密码管理器保存的密码。然后安全地导入到 Bitwarden。</string>
-  <string name="give_your_vault_a_head_start">Give your vault a head start</string>
+  <string name="give_your_vault_a_head_start">让您的密码库先行一步</string>
   <string name="class_3_biometrics_description">使用生物识别解锁需要强大的生物识别身份验证，其可能与本设备上的所有生物识别选项不兼容。</string>
   <string name="class_2_biometrics_description">使用生物识别解锁需要强大的生物识别身份验证，其与本设备上提供的生物识别选项不兼容。</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">在您的计算机上，登录到当前浏览器或密码管理器。</string>
@@ -1095,8 +1097,20 @@
   <string name="copy_email">复制电子邮件地址</string>
   <string name="copy_phone">复制电话号码</string>
   <string name="copy_address">复制地址</string>
-  <string name="biometrics_no_longer_supported_title">该设备上的生物识别不再支持</string>
-  <string name="biometrics_no_longer_supported">由于您设备的生物识别不符合最新的安全要求，您已被注销。要更新设置，请重新登录或联系您的管理员获取访问权限。</string>
+  <string name="biometrics_no_longer_supported_title">该设备不再支持生物识别</string>
+  <string name="biometrics_no_longer_supported">由于您设备的生物识别不符合最新的安全要求，您已被注销。要更新设置，请重新登录或联系管理员获取访问权限。</string>
   <string name="cxp_import">CXP 导入</string>
   <string name="cxp_export">CXP 导出</string>
+  <string name="choose_three_or_four_random_words">选择三到四个随机单词</string>
+  <string name="pick_three_or_four_random_unrelated_words">挑选三到四个您容易记住的随机的、不相关的单词。想想您喜欢的物品、地点或事物。</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">物品、地点或事物</string>
+  <string name="combine_those_words_together">将这些单词组合在一起</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">将这些单词按任意顺序组合在一起以形成您的密码短语。可以使用连字符、空格或将它们保留为一个长单词 - 由您选择！</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">使用连字符、空格或将它们保留为一个长单词</string>
+  <string name="make_it_yours">使其成为您的</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">添加数字或符号使其更加强大。现在您就拥有一个唯一、安全且难忘的密码了！</string>
+  <string name="add_a_number_or_symbol_highlight">添加数字或符号</string>
+  <string name="need_some_inspiration">"需要一些灵感吗？"</string>
+  <string name="check_out_the_passphrase_generator">"查看密码短语生成器"</string>
+  <string name="copied_to_clipboard">Copied to clipboard.</string>
 </resources>
