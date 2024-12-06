@@ -962,6 +962,7 @@
   <string name="remove_passkey">Вилучити ключ доступу</string>
   <string name="passkey_removed">Ключ доступу вилучено</string>
   <string name="what_makes_a_password_strong">Який пароль вважається надійним?</string>
+  <string name="a_secure_memorable_password">Надійний пароль, який легко запам\'ятати</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Чим довший пароль, тим складніше його зламати. Надійний пароль складається принаймні з 12 символів, а якщо ви створите з 14, то щоб його зламати знадобляться століття!</string>
   <string name="the_strongest_passwords_are_usually">Найнадійніші паролі зазвичай:</string>
   <string name="twelve_or_more_characters">Складаються не менш як із 12 символів</string>
@@ -977,7 +978,8 @@
   <string name="confirm">Підтвердити</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Налаштуйте біометрію або PIN-код, щоб швидко відкривати сховище й автоматично заповнювати дані.</string>
   <string name="never_lose_access_to_your_vault">Ніколи не втрачайте доступ до свого сховища</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Для гарантованої безперебійної роботи з обліковим записом варто налаштувати способи відновлення доступу.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Для гарантованої безперебійної роботи зі сховищем варто налаштувати способи відновлення доступу.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Найкращим способом створення надійного пароля, який легко запам\'ятати, є використання парольної фрази. \nОсь, як це зробити:</string>
   <string name="create_a_hint">Створіть підказку</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Вашу підказку буде надіслано електронною поштою, коли вона вам знадобиться.</string>
   <string name="write_your_password_down">Запишіть свій головний пароль</string>
@@ -1095,8 +1097,20 @@
   <string name="copy_email">Копіювати е-пошту</string>
   <string name="copy_phone">Копіювати номер телефону</string>
   <string name="copy_address">Копіювати адресу</string>
-  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
-  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-  <string name="cxp_import">CXP Import</string>
-  <string name="cxp_export">CXP Export</string>
+  <string name="biometrics_no_longer_supported_title">Цей пристрій більше не підтримує біометрію</string>
+  <string name="biometrics_no_longer_supported">Ви вийшли з системи, оскільки біометрія вашого пристрою не відповідає найновішим вимогам щодо безпеки. Щоб оновити налаштування, увійдіть знову або зверніться до свого адміністратора.</string>
+  <string name="cxp_import">Імпорт CXP</string>
+  <string name="cxp_export">Експорт CXP</string>
+  <string name="choose_three_or_four_random_words">Оберіть три або чотири випадкові слова</string>
+  <string name="pick_three_or_four_random_unrelated_words">Вигадайте три або чотири випадкові, не пов\'язані між собою слова, які ви легко запам\'ятаєте. Подумайте про об\'єкти, місця або улюблені речі.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">об\'єкти, місця або речі</string>
+  <string name="combine_those_words_together">Об\'єднайте ці слова разом</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Складіть слова разом у будь-якій послідовності, щоб сформувати парольну фразу. Використовуйте дефіси чи пробіли для відокремлення слів, або просто об\'єднайте їх в єдиний довгий текст.</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Використовуйте дефіси, пробіли, або залиште їх як єдиний довгий текст</string>
+  <string name="make_it_yours">Вдоскональте</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Додайте число або символ, щоб зробити її ще надійнішою. Тепер у вас є унікальна, безпечна парольна фраза, яку ви легко запам\'ятаєте!</string>
+  <string name="add_a_number_or_symbol_highlight">Додайте число або символ</string>
+  <string name="need_some_inspiration">"Потрібне натхнення?"</string>
+  <string name="check_out_the_passphrase_generator">"Скористайтеся генератором парольної фрази"</string>
+  <string name="copied_to_clipboard">Скопійовано в буфер обміну.</string>
 </resources>

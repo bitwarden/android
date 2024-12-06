@@ -962,6 +962,7 @@
   <string name="remove_passkey">Премахване на секретния ключ</string>
   <string name="passkey_removed">Секретният ключ е премахнат</string>
   <string name="what_makes_a_password_strong">Какво прави една парола сложна?</string>
+  <string name="a_secure_memorable_password">Сигурна и лесна за помнене парола</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Колкото по-дълга е една парола, толкова по-трудно е тя да бъде отгатната. Минималният брой знаци за създаване на регистрация е 12, но ако въведете 14, времето за хакване на паролата може да бъде дори векове!</string>
   <string name="the_strongest_passwords_are_usually">Най-сложните пароли обикновено:</string>
   <string name="twelve_or_more_characters">Се състоят от 12 или повече знака</string>
@@ -977,7 +978,8 @@
   <string name="confirm">Потвърждаване</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Настройте достъп чрез биометрични данни или изберете ПИН код, с който лесно да отключвате трезора си и да попълвате автоматично данните си за вписване.</string>
   <string name="never_lose_access_to_your_vault">Никога не губете достъп до трезора си</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Най-добрият начин да имате увереност, че винаги можете да достъпите данните си, е да настроите предпазните мерки още в началото.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Най-добрият начин да имате увереност, че винаги можете да достъпите трезора си, е да настроите предпазните мерки още в началото.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Един от най-добрите начини да създадете сигурна и лесна за помнене парола е да използвате парола-фраза. \nЕто как:</string>
   <string name="create_a_hint">Създайте подсказка</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Подсказката Ви ще бъде изпратена по е-поща когато я поискате.</string>
   <string name="write_your_password_down">Запишете паролата си</string>
@@ -1099,4 +1101,16 @@
   <string name="biometrics_no_longer_supported">Бяхте отписан(а), тъй като средствата за проверка на биометрични данни на устройството не отговарят на последните изисквания за сигурност. Ако искате да промените настройките си, впишете се отново или се свържете с администратона си за помощ с достъпа.</string>
   <string name="cxp_import">Внасяне на CXP</string>
   <string name="cxp_export">Изнасяне на CXP</string>
+  <string name="choose_three_or_four_random_words">Изберете три или четири произволни думи</string>
+  <string name="pick_three_or_four_random_unrelated_words">Изберете три или четири произволни думи, които можете лесно да запомните. Това може да са обекти, места или неща, които харесвате.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">обекти, места или неща</string>
+  <string name="combine_those_words_together">Комбинирайте думите</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Подредете думите в някакъв ред, за да създадете своята парола-фраза. Използвайте тирета и интервали за разделение, или пък ги слепете като една дълга дума – изборът е Ваш!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Използвайте тирета и интервали, или пък ги слепете в една дълга дума</string>
+  <string name="make_it_yours">Добавете нещо от себе си</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Добавете число или знак, за да я направите още по-сигурна. Вече имате уникална, сигурна и лесна за помнене парола-фраза!</string>
+  <string name="add_a_number_or_symbol_highlight">Добавете число или знак</string>
+  <string name="need_some_inspiration">"Имате ли нужда от вдъхновение?"</string>
+  <string name="check_out_the_passphrase_generator">"Изпробвайте генератора на пароли-фрази"</string>
+  <string name="copied_to_clipboard">Copied to clipboard.</string>
 </resources>
