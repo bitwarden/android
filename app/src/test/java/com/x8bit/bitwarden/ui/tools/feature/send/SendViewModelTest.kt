@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.coEvery
 import io.mockk.every
@@ -372,8 +371,10 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `VaultRepository SendData NoNetwork should update view state to Error`() = runTest {
+    fun `VaultRepository SendData NoNetwork should update view state to Empty when there is no data`() =
+        runTest {
         val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
@@ -383,14 +384,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = SendState.ViewState.Error(
-                    message = R.string.internet_connection_required_title
-                        .asText()
-                        .concat(
-                            " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
-                        ),
-                ),
+                viewState = SendState.ViewState.Empty,
                 dialogState = null,
                 isRefreshing = false,
             ),
