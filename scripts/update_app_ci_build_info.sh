@@ -9,7 +9,7 @@
 
 if [ $# -ne 4 ]; then
     echo "Usage: $0 <repository> <branch> <commit_hash> <ci_run_url>"
-    echo "E.g: $0 bitwarden/mobile main abc123 https://github.com/bitwarden/android/actions/runs/123"
+    echo "E.g: $0 bitwarden/android main abc123 https://github.com/bitwarden/android/actions/runs/123"
     exit 1
 fi
 
