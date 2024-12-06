@@ -122,3 +122,20 @@ fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<Stri
             itemIsInCollection && (!it.manage || it.readOnly)
         }
         ?: true
+
+/**
+ * Checks if the user has edit permission in at least one collection.
+ *
+ * Editing is allowed when the item is in any collection that isn't read-only.
+ */
+fun List<CollectionView>?.hasEditPermissionInAtLeastOneCollection(
+    collectionIds: List<String>?,
+): Boolean {
+    if (this.isNullOrEmpty() || collectionIds.isNullOrEmpty()) return true
+    return this
+        .any { collectionView ->
+            collectionIds
+                .contains(collectionView.id)
+                .let { isInCollection -> isInCollection && !collectionView.readOnly }
+        }
+}

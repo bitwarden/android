@@ -166,4 +166,66 @@ class CollectionViewExtensionsTest {
         )
         assertTrue(collectionList.canAssignToCollections(null))
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasEditPermissionInAtLeastOneCollection should return true if the item is in at least one non-readOnly collection`() {
+        val collectionList: List<CollectionView> = listOf(
+            createMockCollectionView(number = 1, readOnly = true),
+            createMockCollectionView(number = 2, readOnly = false),
+        )
+
+        val collectionIds = listOf("mockId-1", "mockId-2")
+
+        assertTrue(collectionList.hasEditPermissionInAtLeastOneCollection(collectionIds))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasEditPermissionInAtLeastOneCollection should return false if the item isn't in at least one non-readOnly collection`() {
+        val collectionList: List<CollectionView> = listOf(
+            createMockCollectionView(number = 1, readOnly = true),
+            createMockCollectionView(number = 2, readOnly = true),
+        )
+        val collectionIds = listOf("mockId-1", "mockId-2")
+        assertFalse(collectionList.hasEditPermissionInAtLeastOneCollection(collectionIds))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasEditPermissionInAtLeastOneCollection should return true if the collectionView list is null`() {
+        val collectionIds = listOf("mockId-1", "mockId-2")
+        assertTrue(null.hasEditPermissionInAtLeastOneCollection(collectionIds))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasEditPermissionInAtLeastOneCollection should return true if the collectionIds list is null`() {
+        val collectionList: List<CollectionView> = listOf(
+            createMockCollectionView(number = 1, readOnly = true),
+            createMockCollectionView(number = 2, readOnly = false),
+        )
+        assertTrue(collectionList.hasEditPermissionInAtLeastOneCollection(null))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasEditPermissionInAtLeastOneCollection should return true if the collectionIds list is empty`() {
+        val collectionList: List<CollectionView> = listOf(
+            createMockCollectionView(number = 1, readOnly = true),
+            createMockCollectionView(number = 2, readOnly = false),
+        )
+        assertTrue(collectionList.hasEditPermissionInAtLeastOneCollection(emptyList()))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasEditPermissionInAtLeastOneCollection should return true if the collectionView list is empty`() {
+        val collectionIds = listOf("mockId-1", "mockId-2")
+        assertTrue(
+            emptyList<CollectionView>().hasEditPermissionInAtLeastOneCollection(
+                collectionIds,
+            ),
+        )
+    }
 }

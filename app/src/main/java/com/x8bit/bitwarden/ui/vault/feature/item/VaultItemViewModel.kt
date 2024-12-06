@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
+import com.x8bit.bitwarden.ui.vault.feature.util.hasEditPermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -116,11 +117,18 @@ class VaultItemViewModel @Inject constructor(
                             .data
                             .canAssignToCollections(cipherViewState.data?.collectionIds)
 
+                        val canEdit = collectionsState
+                            .data
+                            .hasEditPermissionInAtLeastOneCollection(
+                                cipherViewState.data?.collectionIds,
+                            )
+
                         VaultItemStateData(
                             cipher = cipherViewState.data,
                             totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
+                            canEdit = canEdit,
                         )
                     },
             )
@@ -1040,6 +1048,7 @@ class VaultItemViewModel @Inject constructor(
                 totpCodeItemData = this.data?.totpCodeItemData,
                 canDelete = this.data?.canDelete == true,
                 canAssignToCollections = this.data?.canAssociateToCollections == true,
+                canEdit = this.data?.canEdit == true,
             )
         }
         ?: VaultItemState.ViewState.Error(message = errorText)
@@ -1277,11 +1286,16 @@ data class VaultItemState(
             ?.currentCipher
             ?.deletedDate != null
 
+    private val isCipherEditable: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canEdit == true
+
     /**
      * Whether or not the fab is visible.
      */
     val isFabVisible: Boolean
-        get() = viewState is ViewState.Content && !isCipherDeleted
+        get() = viewState is ViewState.Content && !isCipherDeleted && isCipherEditable
 
     /**
      * Whether or not the cipher is in a collection.
@@ -1377,6 +1391,7 @@ data class VaultItemState(
                 val attachments: List<AttachmentItem>?,
                 val canDelete: Boolean,
                 val canAssignToCollections: Boolean,
+                val canEdit: Boolean,
             ) : Parcelable {
 
                 /**
