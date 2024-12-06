@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.manager
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -12,8 +13,10 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.util.createPasswordlessRequestDataIntent
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +29,7 @@ import kotlinx.coroutines.flow.onEach
 class AuthRequestNotificationManagerImpl(
     private val context: Context,
     private val authDiskSource: AuthDiskSource,
+    private val appStateManager: AppStateManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRequestNotificationManager {
@@ -40,6 +44,14 @@ class AuthRequestNotificationManagerImpl(
 
     @SuppressLint("MissingPermission")
     private fun handlePasswordlessRequestData(data: PasswordlessRequestData) {
+        if (appStateManager.appForegroundStateFlow.value == AppForegroundState.FOREGROUNDED &&
+            data.userId == authDiskSource.userState?.activeUserId
+        ) {
+            context.startActivity(
+                createPasswordlessRequestDataIntent(context, data)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+        }
         val notificationManager = NotificationManagerCompat.from(context)
         // Construct the channel, calling this more than once is safe
         notificationManager.createNotificationChannel(
