@@ -959,7 +959,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `vaultDataStateFlow NoNetwork without data should update state to Error`() = runTest {
+    fun `vaultDataStateFlow NoNetwork without data should update state to NoItems`() = runTest {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.NoNetwork(),
         )
@@ -968,9 +968,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             createMockVaultState(
-                viewState = VaultState.ViewState.Error(
-                    message = R.string.internet_connection_required_message.asText(),
-                ),
+                viewState = VaultState.ViewState.NoItems,
             ),
             viewModel.stateFlow.value,
         )
@@ -978,7 +976,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow NoNetwork with items should update state to Content and show an error dialog`() =
+    fun `vaultDataStateFlow NoNetwork with items should update state to Content`() =
         runTest {
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.NoNetwork(
@@ -1026,37 +1024,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 4,
                         sshKeyItemsCount = 0,
                     ),
-                    dialog = VaultState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `vaultDataStateFlow NoNetwork with empty items should update state to NoItems and show an error dialog`() =
-        runTest {
-            mutableVaultDataStateFlow.tryEmit(
-                value = DataState.NoNetwork(
-                    data = VaultData(
-                        cipherViewList = emptyList(),
-                        collectionViewList = emptyList(),
-                        folderViewList = emptyList(),
-                        sendViewList = emptyList(),
-                    ),
-                ),
-            )
-            val viewModel = createViewModel()
-            assertEquals(
-                createMockVaultState(
-                    viewState = VaultState.ViewState.NoItems,
-                    dialog = VaultState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
-                    ),
+                    dialog = null,
                 ),
                 viewModel.stateFlow.value,
             )
@@ -1340,9 +1308,9 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `DialogDismiss should clear the active dialog`() {
-        // Show the No Network error dialog
-        val viewModel = createViewModel()
-        mutableVaultDataStateFlow.value = DataState.NoNetwork(
+
+        mutableVaultDataStateFlow.value = DataState.Error(
+            error = IllegalStateException(),
             data = VaultData(
                 cipherViewList = emptyList(),
                 collectionViewList = emptyList(),
@@ -1350,11 +1318,12 @@ class VaultViewModelTest : BaseViewModelTest() {
                 sendViewList = emptyList(),
             ),
         )
+        val viewModel = createViewModel()
         val initialState = DEFAULT_STATE.copy(
             viewState = VaultState.ViewState.NoItems,
             dialog = VaultState.DialogState.Error(
-                title = R.string.internet_connection_required_title.asText(),
-                message = R.string.internet_connection_required_message.asText(),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.generic_error_message.asText(),
             ),
         )
         assertEquals(
