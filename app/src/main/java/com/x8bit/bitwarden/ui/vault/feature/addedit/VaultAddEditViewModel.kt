@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -41,7 +42,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
@@ -101,6 +101,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -404,6 +405,14 @@ class VaultAddEditViewModel @Inject constructor(
         ) {
             showGenericErrorDialog(
                 message = R.string.select_one_collection.asText(),
+            )
+            return@onContent
+        } else if (
+            !networkConnectionManager.isNetworkConnected
+        ) {
+            showErrorDialog(
+                title = R.string.internet_connection_required_title.asText(),
+                message = R.string.internet_connection_required_message.asText(),
             )
             return@onContent
         }
@@ -1539,16 +1548,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.NoNetwork -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = VaultAddEditState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
-                                .asText()
-                                .concat(
-                                    " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
-                                ),
-                        ),
+                mutableStateFlow.update { currentState ->
+                    currentState.determineContentState(
+                        vaultData = vaultDataState.data,
+                        userData = action.userData,
                     )
                 }
             }
@@ -1565,14 +1568,22 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun VaultAddEditState.determineContentState(
-        vaultData: VaultData,
+        vaultData: VaultData?,
         userData: UserState?,
     ): VaultAddEditState {
+        val internalVaultData = vaultData
+            ?: VaultData(
+                cipherViewList = emptyList(),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+                fido2CredentialAutofillViewList = null,
+            )
         val isIndividualVaultDisabled = policyManager
             .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any()
         return copy(
-            viewState = vaultData.cipherViewList
+            viewState = internalVaultData.cipherViewList
                 .find { it.id == vaultAddEditType.vaultItemId }
                 .validateCipherOrReturnErrorState(
                     currentAccount = userData?.activeAccount,
@@ -1581,7 +1592,8 @@ class VaultAddEditViewModel @Inject constructor(
 
                     // Deletion is not allowed when the item is in a collection that the user
                     // does not have "manage" permission for.
-                    val canDelete = vaultData.collectionViewList
+                    val canDelete = internalVaultData
+                        .collectionViewList
                         .none {
                             val isItemInCollection = cipherView
                                 ?.collectionIds
@@ -1592,7 +1604,8 @@ class VaultAddEditViewModel @Inject constructor(
 
                     // Assigning to a collection is not allowed when the item is in a collection
                     // that the user does not have "manage" and "edit" permission for.
-                    val canAssignToCollections = vaultData.collectionViewList
+                    val canAssignToCollections = internalVaultData
+                        .collectionViewList
                         .none {
                             val isItemInCollection = cipherView
                                 ?.collectionIds
@@ -1615,8 +1628,8 @@ class VaultAddEditViewModel @Inject constructor(
                         )
                         ?: viewState)
                         .appendFolderAndOwnerData(
-                            folderViewList = vaultData.folderViewList,
-                            collectionViewList = vaultData
+                            folderViewList = internalVaultData.folderViewList,
+                            collectionViewList = internalVaultData
                                 .collectionViewList
                                 .filter { !it.readOnly },
                             activeAccount = currentAccount,
