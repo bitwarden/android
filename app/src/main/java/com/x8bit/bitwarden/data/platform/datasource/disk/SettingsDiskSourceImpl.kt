@@ -37,6 +37,9 @@ private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
 private const val SHOW_IMPORT_LOGINS_SETTING_BADGE = "showImportLoginsSettingBadge"
 private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
+private const val ADD_ACTION_COUNT = "addActionCount"
+private const val COPY_ACTION_COUNT = "copyActionCount"
+private const val CREATE_ACTION_COUNT = "createActionCount"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -445,6 +448,39 @@ class SettingsDiskSourceImpl(
     override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =
         getMutableVaultRegisteredForExportFlow(userId)
             .onSubscription { emit(getVaultRegisteredForExport(userId)) }
+
+    override fun getAddCipherActionCount(): Int? = getInt(
+        key = ADD_ACTION_COUNT,
+    )
+
+    override fun storeAddCipherActionCount(count: Int?) {
+        putInt(
+            key = ADD_ACTION_COUNT,
+            value = count,
+        )
+    }
+
+    override fun getGeneratedResultActionCount(): Int? = getInt(
+        key = COPY_ACTION_COUNT,
+    )
+
+    override fun storeGeneratedResultActionCount(count: Int?) {
+        putInt(
+            key = COPY_ACTION_COUNT,
+            value = count,
+        )
+    }
+
+    override fun getCreateSendActionCount(): Int? = getInt(
+        key = CREATE_ACTION_COUNT,
+    )
+
+    override fun storeCreateSendActionCount(count: Int?) {
+        putInt(
+            key = CREATE_ACTION_COUNT,
+            value = count,
+        )
+    }
 
     private fun getMutableLastSyncFlow(
         userId: String,
