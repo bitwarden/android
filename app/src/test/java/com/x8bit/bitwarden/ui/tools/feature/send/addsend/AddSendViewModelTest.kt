@@ -1054,7 +1054,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 dialogState = AddSendState.DialogState.Error(
                     title = R.string.internet_connection_required_title.asText(),
                     message = R.string.internet_connection_required_message.asText(),
-                )),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
 

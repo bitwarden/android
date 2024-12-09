@@ -375,22 +375,22 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `VaultRepository SendData NoNetwork should update view state to Empty when there is no data`() =
         runTest {
-        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
-        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+            val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
-        viewModel.eventFlow.test {
-            mutableSendDataFlow.value = DataState.NoNetwork()
+            viewModel.eventFlow.test {
+                mutableSendDataFlow.value = DataState.NoNetwork()
+            }
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = SendState.ViewState.Empty,
+                    dialogState = null,
+                    isRefreshing = false,
+                ),
+                viewModel.stateFlow.value,
+            )
         }
-
-        assertEquals(
-            DEFAULT_STATE.copy(
-                viewState = SendState.ViewState.Empty,
-                dialogState = null,
-                isRefreshing = false,
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
 
     @Test
     fun `VaultRepository SendData Pending should update view state`() {

@@ -181,7 +181,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val updatedUserId = "lockedUserId"
         viewModel.trySendAction(
             VaultAction.SwitchAccountClick(
-                accountSummary = mockk() {
+                accountSummary = mockk {
                     every { userId } returns updatedUserId
                 },
             ),
@@ -1040,7 +1040,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val updatedUserId = "lockedUserId"
         viewModel.trySendAction(
             VaultAction.SwitchAccountClick(
-                accountSummary = mockk() {
+                accountSummary = mockk {
                     every { userId } returns updatedUserId
                 },
             ),
@@ -1802,7 +1802,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             switchAccountResult = SwitchAccountResult.AccountSwitched
             viewModel.trySendAction(
                 VaultAction.SwitchAccountClick(
-                    accountSummary = mockk() {
+                    accountSummary = mockk {
                         every { userId } returns "updatedUserId"
                     },
                 ),

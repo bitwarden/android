@@ -580,6 +580,7 @@ class VaultViewModel @Inject constructor(
                 vaultData = vaultData,
                 showSshKeys = showSshKeys,
             )
+
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
         }
     }
