@@ -419,7 +419,10 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     ImportLoginsState(
-                        dialogState = ImportLoginsState.DialogState.Error(R.string.no_logins_were_imported.asText()),
+                        dialogState = ImportLoginsState.DialogState.Error(
+                            message = R.string.no_logins_were_imported.asText(),
+                            title = R.string.import_error.asText(),
+                        ),
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = false,
                         showBottomSheet = false,
