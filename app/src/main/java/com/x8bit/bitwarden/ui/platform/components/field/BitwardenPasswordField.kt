@@ -5,7 +5,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,18 +16,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
+import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
+import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -51,7 +60,9 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * the password field.
  * @param imeAction the preferred IME action for the keyboard to have.
  * @param keyboardActions the callbacks of keyboard actions.
+ * @param textToolbarType The type of [TextToolbar] to use on the text field.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenPasswordField(
     label: String,
@@ -68,52 +79,82 @@ fun BitwardenPasswordField(
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
 ) {
     val focusRequester = remember { FocusRequester() }
-    OutlinedTextField(
-        modifier = modifier
-            .tabNavigation()
-            .focusRequester(focusRequester),
-        colors = bitwardenTextFieldColors(),
-        textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-        label = { Text(text = label) },
-        value = value,
-        onValueChange = onValueChange,
-        visualTransformation = when {
-            !showPassword -> PasswordVisualTransformation()
-            readOnly -> nonLetterColorVisualTransformation()
-            else -> VisualTransformation.None
-        },
-        singleLine = singleLine,
-        readOnly = readOnly,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType,
-            imeAction = imeAction,
-        ),
-        keyboardActions = keyboardActions,
-        supportingText = hint?.let {
-            {
-                Text(
-                    text = hint,
-                    style = BitwardenTheme.typography.bodySmall,
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
+    val textFieldValue = textFieldValueState.copy(text = value)
+    SideEffect {
+        if (textFieldValue.selection != textFieldValueState.selection ||
+            textFieldValue.composition != textFieldValueState.composition
+        ) {
+            textFieldValueState = textFieldValue
+        }
+    }
+    val textToolbar = when (textToolbarType) {
+        TextToolbarType.DEFAULT -> BitwardenCutCopyTextToolbar(
+            value = textFieldValue,
+            onValueChange = onValueChange,
+            defaultTextToolbar = LocalTextToolbar.current,
+            clipboardManager = LocalClipboardManager.current.nativeClipboard,
+        )
+
+        TextToolbarType.NONE -> BitwardenEmptyTextToolbar
+    }
+    var lastTextValue by remember(value) { mutableStateOf(value = value) }
+    CompositionLocalProvider(value = LocalTextToolbar provides textToolbar) {
+        OutlinedTextField(
+            modifier = modifier
+                .tabNavigation()
+                .focusRequester(focusRequester),
+            colors = bitwardenTextFieldColors(),
+            textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+            label = { Text(text = label) },
+            value = textFieldValue,
+            onValueChange = {
+                textFieldValueState = it
+                val stringChangedSinceLastInvocation = lastTextValue != it.text
+                lastTextValue = it.text
+                if (stringChangedSinceLastInvocation) {
+                    onValueChange(it.text)
+                }
+            },
+            visualTransformation = when {
+                !showPassword -> PasswordVisualTransformation()
+                readOnly -> nonLetterColorVisualTransformation()
+                else -> VisualTransformation.None
+            },
+            singleLine = singleLine,
+            readOnly = readOnly,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = imeAction,
+            ),
+            keyboardActions = keyboardActions,
+            supportingText = hint?.let {
+                {
+                    Text(
+                        text = hint,
+                        style = BitwardenTheme.typography.bodySmall,
+                    )
+                }
+            },
+            trailingIcon = {
+                BitwardenStandardIconButton(
+                    modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
+                    vectorIconRes = if (showPassword) {
+                        R.drawable.ic_eye_slash
+                    } else {
+                        R.drawable.ic_eye
+                    },
+                    contentDescription = stringResource(
+                        id = if (showPassword) R.string.hide else R.string.show,
+                    ),
+                    onClick = { showPasswordChange.invoke(!showPassword) },
                 )
-            }
-        },
-        trailingIcon = {
-            BitwardenStandardIconButton(
-                modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
-                vectorIconRes = if (showPassword) {
-                    R.drawable.ic_eye_slash
-                } else {
-                    R.drawable.ic_eye
-                },
-                contentDescription = stringResource(
-                    id = if (showPassword) R.string.hide else R.string.show,
-                ),
-                onClick = { showPasswordChange.invoke(!showPassword) },
-            )
-        },
-    )
+            },
+        )
+    }
     if (autoFocus) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }
