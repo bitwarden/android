@@ -37,7 +37,7 @@ jobs:
         uses: gradle/actions/wrapper-validation@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4.2.1
 
       - name: Cache Gradle files
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: |
             ~/.gradle/caches
@@ -47,7 +47,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -56,7 +56,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+        uses: ruby/setup-ruby@2a18b06812b0e15bb916e1df298d3e740422c47e # v1.203.0
         with:
           bundler-cache: true
 
@@ -77,7 +77,7 @@ jobs:
           bundle exec fastlane check
 
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5.0.7
+        uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5.1.1
         with:
           file: app/build/reports/kover/reportDebug.xml
         env:
