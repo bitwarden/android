@@ -32,8 +32,8 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository

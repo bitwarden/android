@@ -55,5 +55,5 @@ class TrustedDeviceManagerImpl(
             authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
         }
         .also { authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = null) }
-        .map { Unit }
+        .map { }
 }

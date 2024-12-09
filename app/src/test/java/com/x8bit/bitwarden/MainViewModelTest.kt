@@ -16,8 +16,8 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
@@ -609,7 +609,9 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val fido2Intent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val fido2Intent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
 
         coEvery {
             fido2CredentialManager.validateOrigin(
@@ -662,7 +664,9 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val mockIntent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
         coEvery {
             fido2CredentialManager.validateOrigin(
                 fido2CreateCredentialRequest.callingAppInfo,
@@ -690,7 +694,9 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val mockIntent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
         coEvery {
             fido2CredentialManager.validateOrigin(
                 fido2CreateCredentialRequest.callingAppInfo,
