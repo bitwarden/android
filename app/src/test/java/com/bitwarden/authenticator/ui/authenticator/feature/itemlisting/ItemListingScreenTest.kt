@@ -202,7 +202,7 @@ class ItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking Move to Bitwarden should send MoveToBitwardenClick`() {
+    fun `clicking Copy to Bitwarden should send MoveToBitwardenClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
@@ -216,7 +216,7 @@ class ItemListingScreenTest : BaseComposeTest() {
             .performTouchInput { longClick() }
 
         composeTestRule
-            .onNodeWithText("Move to Bitwarden")
+            .onNodeWithText("Copy to Bitwarden")
             .performClick()
 
         verify { viewModel.trySendAction(ItemListingAction.MoveToBitwardenClick("1")) }
