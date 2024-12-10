@@ -20,19 +20,20 @@ branch=$2
 commit_hash=$3
 ci_run_url=$4
 
-ci_build_info_file="UPDATEME"
-branch=$(git branch --show-current)
-commit_hash=$(git rev-parse --verify HEAD)
+ci_build_info_file="../app/src/main/java/com/x8bit/bitwarden/ui/platform/feature/settings/about/utils/CIBuildInfo.kt"
+git_source="${repository}/${branch}@${commit_hash}"
 
 echo "🧱 Updating app CI Build info..."
 echo "🧱 CI run url: ${ci_run_url}"
 
 
 cat << EOF > ${ci_build_info_file}
-UPDATEME
-        ":seedling:": "${repository}/${branch}@${commit_hash}",
-        ":octocat:": "${ci_run_url}",
-UPDATEME
+object CIBuildInfo {
+    val info: List<Pair<String, String>> = listOf(
+        ":seedling:" to "${git_source}",
+        ":octocat:" to "${ci_run_url}",
+    )
+}
 EOF
 
 echo "✅ CI Build info updated successfully."

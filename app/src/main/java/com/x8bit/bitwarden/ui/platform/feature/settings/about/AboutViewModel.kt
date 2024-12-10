@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
+import CIBuildInfo
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -92,7 +94,15 @@ class AboutViewModel @Inject constructor(
 
     private fun handleVersionClick() {
         clipboardManager.setText(
-            text = state.copyrightInfo.concat("\n\n".asText()).concat(state.version),
+            text = state.copyrightInfo.concat("\n\n".asText()).concat(state.version)
+                .concat("\n\n".asText()).concat(state.deviceInfo)
+                .let { text ->
+                    if (state.buildInfo.isEmpty()) {
+                        text
+                    } else {
+                        text.concat("\n\n".asText()).concat(state.buildInfo.asText())
+                    }
+                },
         )
     }
 
@@ -112,6 +122,12 @@ class AboutViewModel @Inject constructor(
         fun createInitialState(clock: Clock, isCrashLoggingEnabled: Boolean): AboutState {
             val currentYear = Year.now(clock).value
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
+            val deviceBrandModel = ":phone: ${Build.BRAND} ${Build.MODEL}"
+            val osInfo = ":robot: ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
+            val deviceInfo = "$deviceBrandModel, $osInfo".asText()
+            val buildInfoString = CIBuildInfo.info.joinToString(separator = "\n") { (key, value) ->
+                "$key: $value"
+            }
 
             return AboutState(
                 version = R.string.version
@@ -120,6 +136,8 @@ class AboutViewModel @Inject constructor(
                 isSubmitCrashLogsEnabled = isCrashLoggingEnabled,
                 shouldShowCrashLogsButton = !isFdroid,
                 copyrightInfo = copyrightInfo,
+                deviceInfo,
+                buildInfoString,
             )
         }
     }
@@ -134,6 +152,8 @@ data class AboutState(
     val isSubmitCrashLogsEnabled: Boolean,
     val shouldShowCrashLogsButton: Boolean,
     val copyrightInfo: Text,
+    val deviceInfo: Text,
+    val buildInfo: String,
 ) : Parcelable
 
 /**
