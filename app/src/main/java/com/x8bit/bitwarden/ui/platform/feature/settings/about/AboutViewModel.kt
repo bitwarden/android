@@ -122,11 +122,11 @@ class AboutViewModel @Inject constructor(
         fun createInitialState(clock: Clock, isCrashLoggingEnabled: Boolean): AboutState {
             val currentYear = Year.now(clock).value
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
-            val deviceBrandModel = ":phone: ${Build.BRAND} ${Build.MODEL}"
-            val osInfo = ":robot: ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
-            val deviceInfo = "$deviceBrandModel, $osInfo".asText()
+            val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
+            val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
+            val deviceInfo = "$deviceBrandModel $osInfo".asText()
             val buildInfoString = CIBuildInfo.info.joinToString(separator = "\n") { (key, value) ->
-                "$key: $value"
+                "$key $value"
             }
 
             return AboutState(
