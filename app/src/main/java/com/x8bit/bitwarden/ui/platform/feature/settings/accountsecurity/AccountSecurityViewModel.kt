@@ -172,8 +172,12 @@ class AccountSecurityViewModel @Inject constructor(
         is AccountSecurityAction.CustomVaultTimeoutSelect -> handleCustomVaultTimeoutSelect(action)
         is AccountSecurityAction.VaultTimeoutActionSelect -> handleVaultTimeoutActionSelect(action)
         AccountSecurityAction.TwoStepLoginClick -> handleTwoStepLoginClick()
-        is AccountSecurityAction.UnlockWithBiometricToggle -> {
-            handleUnlockWithBiometricToggle(action)
+        AccountSecurityAction.UnlockWithBiometricToggleDisabled -> {
+            handleUnlockWithBiometricToggleDisabled()
+        }
+
+        is AccountSecurityAction.UnlockWithBiometricToggleEnabled -> {
+            handleUnlockWithBiometricToggleEnabled(action)
         }
 
         is AccountSecurityAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
@@ -313,24 +317,24 @@ class AccountSecurityViewModel @Inject constructor(
         sendEvent(AccountSecurityEvent.NavigateToTwoStepLogin(webSettingsUrl))
     }
 
-    private fun handleUnlockWithBiometricToggle(
-        action: AccountSecurityAction.UnlockWithBiometricToggle,
+    private fun handleUnlockWithBiometricToggleDisabled() {
+        settingsRepository.clearBiometricsKey()
+        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+        validateVaultTimeoutAction()
+    }
+
+    private fun handleUnlockWithBiometricToggleEnabled(
+        action: AccountSecurityAction.UnlockWithBiometricToggleEnabled,
     ) {
-        if (action.enabled) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
-                    isUnlockWithBiometricsEnabled = true,
-                )
-            }
-            viewModelScope.launch {
-                val result = settingsRepository.setupBiometricsKey()
-                sendAction(AccountSecurityAction.Internal.BiometricsKeyResultReceive(result))
-            }
-        } else {
-            settingsRepository.clearBiometricsKey()
-            mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
-            validateVaultTimeoutAction()
+        mutableStateFlow.update {
+            it.copy(
+                dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                isUnlockWithBiometricsEnabled = true,
+            )
+        }
+        viewModelScope.launch {
+            val result = settingsRepository.setupBiometricsKey(cipher = action.cipher)
+            sendAction(AccountSecurityAction.Internal.BiometricsKeyResultReceive(result = result))
         }
     }
 
@@ -717,10 +721,15 @@ sealed class AccountSecurityAction {
     data object TwoStepLoginClick : AccountSecurityAction()
 
     /**
-     * User toggled the unlock with biometrics switch.
+     * User toggled the unlock with biometrics switch to off.
      */
-    data class UnlockWithBiometricToggle(
-        val enabled: Boolean,
+    data object UnlockWithBiometricToggleDisabled : AccountSecurityAction()
+
+    /**
+     * User toggled the unlock with biometrics switch to on.
+     */
+    data class UnlockWithBiometricToggleEnabled(
+        val cipher: Cipher,
     ) : AccountSecurityAction()
 
     /**

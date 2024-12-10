@@ -260,6 +260,7 @@ class AuthDiskSourceTest {
         authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
         val deviceKey = "deviceKey"
         authDiskSource.storeDeviceKey(userId = userId, deviceKey = deviceKey)
+        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = byteArrayOf())
         authDiskSource.storeUserBiometricUnlockKey(
             userId = userId,
             biometricsKey = "1234-9876-0192",
@@ -321,6 +322,7 @@ class AuthDiskSourceTest {
         )
 
         // These should be cleared
+        assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
@@ -662,6 +664,33 @@ class AuthDiskSourceTest {
         }
         val actual = authDiskSource.getUserBiometricUnlockKey(userId = mockUserId)
         assertEquals(biometricsKey, actual)
+    }
+
+    @Test
+    fun `storeUserBiometricInitVector for non-null values should update SharedPreferences`() {
+        val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
+        val mockUserId = "mockUserId"
+        val biometricsInitVectorKey = "${biometricsInitVectorBaseKey}_$mockUserId"
+        val initVector = byteArrayOf(1, 2)
+        authDiskSource.storeUserBiometricInitVector(userId = mockUserId, iv = initVector)
+        val actual = fakeEncryptedSharedPreferences.getString(
+            key = biometricsInitVectorKey,
+            defaultValue = null,
+        )
+        assertEquals(initVector.toString(Charsets.ISO_8859_1), actual)
+    }
+
+    @Test
+    fun `storeUserBiometricInitVector for null values should clear SharedPreferences`() {
+        val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
+        val mockUserId = "mockUserId"
+        val biometricsInitVectorKey = "${biometricsInitVectorBaseKey}_$mockUserId"
+        val initVector = "1234"
+        fakeEncryptedSharedPreferences.edit {
+            putString(biometricsInitVectorKey, initVector)
+        }
+        authDiskSource.storeUserBiometricInitVector(userId = mockUserId, iv = null)
+        assertFalse(fakeEncryptedSharedPreferences.contains(biometricsInitVectorKey))
     }
 
     @Test

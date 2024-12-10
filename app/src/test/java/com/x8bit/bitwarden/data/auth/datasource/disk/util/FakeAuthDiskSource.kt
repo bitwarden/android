@@ -54,6 +54,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedAccountTokens = mutableMapOf<String, AccountTokensJson?>()
     private val storedDeviceKey = mutableMapOf<String, String?>()
     private val storedPendingAuthRequests = mutableMapOf<String, PendingAuthRequestJson?>()
+    private val storedBiometricInitVectors = mutableMapOf<String, ByteArray?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedAuthenticationSyncKeys = mutableMapOf<String, String?>()
@@ -81,6 +82,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
+        storedBiometricInitVectors.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
 
@@ -219,6 +221,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         pendingAuthRequest: PendingAuthRequestJson?,
     ) {
         storedPendingAuthRequests[userId] = pendingAuthRequest
+    }
+
+    override fun getUserBiometricInitVector(userId: String): ByteArray? =
+        storedBiometricInitVectors[userId]
+
+    override fun storeUserBiometricInitVector(userId: String, iv: ByteArray?) {
+        storedBiometricInitVectors[userId] = iv
     }
 
     override fun getUserBiometricUnlockKey(userId: String): String? =
@@ -405,6 +414,13 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertPendingAuthRequest(userId: String, pendingAuthRequest: PendingAuthRequestJson?) {
         assertEquals(pendingAuthRequest, storedPendingAuthRequests[userId])
+    }
+
+    /**
+     * Assert that the [iv] was stored successfully using the [userId].
+     */
+    fun assertBiometricInitVector(userId: String, iv: ByteArray?) {
+        assertEquals(iv, storedBiometricInitVectors[userId])
     }
 
     /**

@@ -4,6 +4,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import com.x8bit.bitwarden.BuildConfig
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import java.io.IOException
@@ -21,6 +22,7 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
 /**
  * Default implementation of [BiometricsEncryptionManager] for managing Android keystore encryption
@@ -28,6 +30,7 @@ import javax.crypto.SecretKey
  */
 @OmitFromCoverage
 class BiometricsEncryptionManagerImpl(
+    private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
 ) : BiometricsEncryptionManager {
     private val keystore = KeyStore
@@ -47,7 +50,8 @@ class BiometricsEncryptionManagerImpl(
             .build()
 
     override fun createCipherOrNull(userId: String): Cipher? {
-        val secretKey: SecretKey = generateKeyOrNull()
+        val secretKey: SecretKey = getSecretKeyOrNull()
+            ?: generateKeyOrNull()
             ?: run {
                 // user removed all biometrics from the device
                 settingsDiskSource.systemBiometricIntegritySource = null
@@ -61,9 +65,8 @@ class BiometricsEncryptionManagerImpl(
             return null
         }
         // This should never fail to initialize / return false because the cipher is newly generated
-        initializeCipher(
+        cipher.initializeCipher(
             userId = userId,
-            cipher = cipher,
             secretKey = secretKey,
         )
         return cipher
@@ -79,9 +82,8 @@ class BiometricsEncryptionManagerImpl(
             }
 
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
-        val isCipherInitialized = initializeCipher(
+        val isCipherInitialized = cipher.initializeCipher(
             userId = userId,
-            cipher = cipher,
             secretKey = secretKey,
         )
         return cipher?.takeIf { isCipherInitialized }
@@ -157,7 +159,9 @@ class BiometricsEncryptionManagerImpl(
         }
 
         return try {
-            keystore.getKey(ENCRYPTION_KEY_NAME, null) as? SecretKey
+            keystore
+                .getKey(ENCRYPTION_KEY_NAME, null)
+                ?.let { it as SecretKey }
         } catch (_: KeyStoreException) {
             // keystore was not loaded
             null
@@ -173,13 +177,15 @@ class BiometricsEncryptionManagerImpl(
     /**
      * Initialize a [Cipher] and return a boolean indicating whether it is valid.
      */
-    private fun initializeCipher(
+    private fun Cipher.initializeCipher(
         userId: String,
-        cipher: Cipher,
         secretKey: SecretKey,
     ): Boolean =
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+            authDiskSource
+                .getUserBiometricInitVector(userId = userId)
+                ?.let { init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(it)) }
+                ?: init(Cipher.ENCRYPT_MODE, secretKey)
             true
         } catch (_: KeyPermanentlyInvalidatedException) {
             // Biometric has changed
@@ -201,11 +207,7 @@ class BiometricsEncryptionManagerImpl(
     private fun isSystemBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean {
         val secretKey = getSecretKeyOrNull()
         return if (cipher != null && secretKey != null) {
-            initializeCipher(
-                userId = userId,
-                cipher = cipher,
-                secretKey = secretKey,
-            )
+            cipher.initializeCipher(userId = userId, secretKey = secretKey)
         } else {
             false
         }
