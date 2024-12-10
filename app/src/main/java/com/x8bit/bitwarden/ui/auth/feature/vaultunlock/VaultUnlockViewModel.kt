@@ -231,13 +231,9 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleBiometricsUnlockSuccess(action: VaultUnlockAction.BiometricsUnlockSuccess) {
         val activeUserId = authRepository.activeUserId ?: return
-        if (!biometricsEncryptionManager.isBiometricIntegrityValid(activeUserId, action.cipher)) {
-            mutableStateFlow.update { it.copy(isBiometricsValid = false) }
-            return
-        }
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
-            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics()
+            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics(cipher = action.cipher)
             sendAction(
                 VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
                     userId = activeUserId,
@@ -345,9 +341,6 @@ class VaultUnlockViewModel @Inject constructor(
 
             VaultUnlockResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                if (state.isBiometricEnabled && !state.isBiometricsValid) {
-                    biometricsEncryptionManager.setupBiometrics(action.userId)
-                }
                 // Don't do anything, we'll navigate to the right place.
             }
         }
@@ -586,7 +579,7 @@ sealed class VaultUnlockAction {
      * The user has received a successful response from the biometrics call.
      */
     data class BiometricsUnlockSuccess(
-        val cipher: Cipher?,
+        val cipher: Cipher,
     ) : VaultUnlockAction()
 
     /**

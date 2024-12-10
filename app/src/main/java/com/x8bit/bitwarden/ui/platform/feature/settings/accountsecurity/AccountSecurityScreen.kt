@@ -67,6 +67,7 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.LocalTime
+import javax.crypto.Cipher
 
 private const val MINUTES_PER_HOUR = 60
 
@@ -89,12 +90,10 @@ fun AccountSecurityScreen(
     val context = LocalContext.current
     val resources = context.resources
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
-    val unlockWithBiometricToggle: () -> Unit = remember(viewModel) {
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
         {
             viewModel.trySendAction(
-                action = AccountSecurityAction.UnlockWithBiometricToggle(
-                    enabled = true,
-                ),
+                action = AccountSecurityAction.UnlockWithBiometricToggleEnabled(cipher = it),
             )
         }
     }
@@ -126,7 +125,7 @@ fun AccountSecurityScreen(
                 showBiometricsPrompt = true
                 biometricsManager.promptBiometrics(
                     onSuccess = {
-                        unlockWithBiometricToggle()
+                        unlockWithBiometricToggle(it)
                         showBiometricsPrompt = false
                     },
                     onCancel = { showBiometricsPrompt = false },
@@ -234,9 +233,7 @@ fun AccountSecurityScreen(
                 onDisableBiometrics = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            AccountSecurityAction.UnlockWithBiometricToggle(
-                                enabled = false,
-                            ),
+                            AccountSecurityAction.UnlockWithBiometricToggleDisabled,
                         )
                     }
                 },
