@@ -194,6 +194,17 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     ),
                 )
             }
+
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_were_unable_to_verify_the_server_certificate.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 

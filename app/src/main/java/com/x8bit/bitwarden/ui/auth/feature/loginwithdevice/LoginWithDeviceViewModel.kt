@@ -256,6 +256,17 @@ class LoginWithDeviceViewModel @Inject constructor(
                 sendEvent(LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()))
                 mutableStateFlow.update { it.copy(dialogState = null) }
             }
+
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_were_unable_to_verify_the_server_certificate.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -452,7 +463,7 @@ data class LoginWithDeviceState(
          */
         @Parcelize
         data class Error(
-            val title: Text?,
+            val title: Text? = null,
             val message: Text,
         ) : DialogState()
     }
