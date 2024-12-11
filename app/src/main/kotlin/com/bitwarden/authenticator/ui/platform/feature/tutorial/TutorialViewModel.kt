@@ -3,8 +3,6 @@ package com.bitwarden.authenticator.ui.platform.feature.tutorial
 import android.os.Parcelable
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -16,43 +14,40 @@ import javax.inject.Inject
 @HiltViewModel
 class TutorialViewModel @Inject constructor() :
     BaseViewModel<TutorialState, TutorialEvent, TutorialAction>(
-        initialState = TutorialState.IntroSlide,
+        initialState = TutorialState(
+            index = 0,
+            pages = listOf(
+                TutorialState.TutorialSlide.IntroSlide,
+                TutorialState.TutorialSlide.QrScannerSlide,
+                TutorialState.TutorialSlide.UniqueCodesSlide,
+            ),
+        ),
     ) {
-
     override fun handleAction(action: TutorialAction) {
         when (action) {
-            TutorialAction.ContinueClick -> {
-                handleContinueClick()
-            }
-
-            TutorialAction.SkipClick -> {
-                handleSkipClick()
-            }
-
-            is TutorialAction.TutorialPageChange -> {
-                handleTutorialPageChange(action.targetPage)
-            }
+            is TutorialAction.PagerSwipe -> handlePagerSwipe(action)
+            is TutorialAction.DotClick -> handleDotClick(action)
+            is TutorialAction.ContinueClick -> handleContinueClick(action)
+            TutorialAction.SkipClick -> handleSkipClick()
         }
     }
 
-    private fun handleTutorialPageChange(page: Int) {
-        when (page) {
-            0 -> mutableStateFlow.update { TutorialState.IntroSlide }
-            1 -> mutableStateFlow.update { TutorialState.QrScannerSlide }
-            2 -> mutableStateFlow.update { TutorialState.UniqueCodesSlide }
-        }
+    private fun handlePagerSwipe(action: TutorialAction.PagerSwipe) {
+        mutableStateFlow.update { it.copy(index = action.index) }
     }
 
-    private fun handleContinueClick() {
-        val currentPage = mutableStateFlow.value
-        val event = when (currentPage) {
-            TutorialState.IntroSlide -> TutorialEvent.NavigateToQrScannerSlide
-            TutorialState.QrScannerSlide -> TutorialEvent.NavigateToUniqueCodesSlide
-            TutorialState.UniqueCodesSlide -> {
-                TutorialEvent.NavigateToAuthenticator
-            }
+    private fun handleDotClick(action: TutorialAction.DotClick) {
+        mutableStateFlow.update { it.copy(index = action.index) }
+        sendEvent(TutorialEvent.UpdatePager(index = action.index))
+    }
+
+    private fun handleContinueClick(action: TutorialAction.ContinueClick) {
+        if (mutableStateFlow.value.isLastPage) {
+            sendEvent(TutorialEvent.NavigateToAuthenticator)
+        } else {
+            mutableStateFlow.update { it.copy(index = action.index + 1) }
+            sendEvent(TutorialEvent.UpdatePager(index = action.index + 1))
         }
-        sendEvent(event)
     }
 
     private fun handleSkipClick() {
@@ -64,37 +59,63 @@ class TutorialViewModel @Inject constructor() :
  * Models state for the Tutorial screen.
  */
 @Parcelize
-sealed class TutorialState(
-    val continueButtonText: Text,
-    val isLastPage: Boolean,
+data class TutorialState(
+    val index: Int,
+    val pages: List<TutorialSlide>,
 ) : Parcelable {
+    /**
+     * Provides the text for the action button based on the current page index.
+     * - Displays "Continue" if the user is not on the last page.
+     * - Displays "Get Started" if the user is on the last page.
+     */
+    val actionButtonText: String
+        get() = if (index != pages.lastIndex) "Continue" else "Get Started"
 
     /**
-     * Tutorial should display the introduction slide.
+     * Indicates whether the current slide is the last in the pages array.
      */
-    @Parcelize
-    data object IntroSlide : TutorialState(
-        continueButtonText = R.string.continue_button.asText(),
-        isLastPage = false,
-    )
+    val isLastPage: Boolean
+        get() = index == pages.lastIndex
 
     /**
-     * Tutorial should display the QR code scanner description slide.
+     * A sealed class to represent the different slides the user can view on the tutorial screen.
      */
-    @Parcelize
-    data object QrScannerSlide : TutorialState(
-        continueButtonText = R.string.continue_button.asText(),
-        isLastPage = false,
-    )
+    @Suppress("MaxLineLength")
+    sealed class TutorialSlide : Parcelable {
+        abstract val image: Int
+        abstract val title: Int
+        abstract val message: Int
 
-    /**
-     * Tutorial should display the 2FA code description slide.
-     */
-    @Parcelize
-    data object UniqueCodesSlide : TutorialState(
-        continueButtonText = R.string.get_started.asText(),
-        isLastPage = true,
-    )
+        /**
+         * Tutorial should display the introduction slide.
+         */
+        @Parcelize
+        data object IntroSlide : TutorialSlide() {
+            override val image: Int get() = R.drawable.ic_tutorial_verification_codes
+            override val title: Int get() = R.string.secure_your_accounts_with_bitwarden_authenticator
+            override val message: Int get() = R.string.get_verification_codes_for_all_your_accounts
+        }
+
+        /**
+         * Tutorial should display the QR code scanner description slide.
+         */
+        @Parcelize
+        data object QrScannerSlide : TutorialSlide() {
+            override val image: Int get() = R.drawable.ic_tutorial_qr_scanner
+            override val title: Int get() = R.string.use_your_device_camera_to_scan_codes
+            override val message: Int get() = R.string.scan_the_qr_code_in_your_2_step_verification_settings_for_any_account
+        }
+
+        /**
+         * Tutorial should display the 2FA code description slide.
+         */
+        @Parcelize
+        data object UniqueCodesSlide : TutorialSlide() {
+            override val image: Int get() = R.drawable.ic_tutorial_2fa
+            override val title: Int get() = R.string.sign_in_using_unique_codes
+            override val message: Int get() = R.string.when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app
+        }
+    }
 }
 
 /**
@@ -102,19 +123,14 @@ sealed class TutorialState(
  */
 sealed class TutorialEvent {
     /**
+     * Updates the current index of the pager.
+     */
+    data class UpdatePager(val index: Int) : TutorialEvent()
+
+    /**
      * Navigate to the authenticator tutorial slide.
      */
     data object NavigateToAuthenticator : TutorialEvent()
-
-    /**
-     * Navigate to the QR Code scanner tutorial slide.
-     */
-    data object NavigateToQrScannerSlide : TutorialEvent()
-
-    /**
-     * Navigate to the unique codes tutorial slide.
-     */
-    data object NavigateToUniqueCodesSlide : TutorialEvent()
 }
 
 /**
@@ -122,16 +138,19 @@ sealed class TutorialEvent {
  */
 sealed class TutorialAction {
     /**
-     * The user has manually changed the tutorial page by swiping.
+     * Swipe the pager to the given [index].
      */
-    data class TutorialPageChange(
-        val targetPage: Int,
-    ) : TutorialAction()
+    data class PagerSwipe(val index: Int) : TutorialAction()
 
     /**
-     * The user clicked the continue button on the introduction slide.
+     * Click one of the page indicator dots at the given [index].
      */
-    data object ContinueClick : TutorialAction()
+    data class DotClick(val index: Int) : TutorialAction()
+
+    /**
+     * The user clicked the continue button at the given [index].
+     */
+    data class ContinueClick(val index: Int) : TutorialAction()
 
     /**
      * The user clicked the skip button on one of the tutorial slides.
