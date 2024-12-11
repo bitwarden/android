@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
@@ -197,6 +198,9 @@ class VaultRepositoryTest {
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
+    private val reviewPromptManager: ReviewPromptManager = mockk {
+        every { registerCreateSendAction() } just runs
+    }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
     private val mutableSyncCipherDeleteFlow = bufferedMutableSharedFlow<SyncCipherDeleteData>()
@@ -233,6 +237,7 @@ class VaultRepositoryTest {
         clock = clock,
         userLogoutManager = userLogoutManager,
         databaseSchemeManager = databaseSchemeManager,
+        reviewPromptManager = reviewPromptManager,
     )
 
     @BeforeEach
@@ -2046,7 +2051,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `createSend with TEXT and sendsService createTextSend success should return CreateSendResult success`() =
+    fun `createSend with TEXT and sendsService createTextSend success should return CreateSendResult success and increment send action count`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -2072,6 +2077,8 @@ class VaultRepositoryTest {
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
 
             assertEquals(CreateSendResult.Success(mockSendViewResult), result)
+
+            verify(exactly = 1) { reviewPromptManager.registerCreateSendAction() }
         }
 
     @Test
