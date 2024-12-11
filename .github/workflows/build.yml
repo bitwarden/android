@@ -462,8 +462,7 @@ jobs:
 
       - name: Update app CI Build info
         run: |
-          ./Scripts/update_app_ci_build_info.sh $GITHUB_REPOSITORY $GITHUB_REF_NAME $GITHUB_SHA $GITHUB_ACTION_RUN_URL
-
+          ./Scripts/update_app_ci_build_info.sh $GITHUB_REPOSITORY $GITHUB_REF_NAME $GITHUB_SHA $GITHUB_RUN_ID $GITHUB_RUN_ATTEMPT
 
       # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
