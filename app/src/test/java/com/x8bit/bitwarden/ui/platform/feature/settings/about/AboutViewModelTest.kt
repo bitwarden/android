@@ -136,6 +136,29 @@ class AboutViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on VersionClick should call setText on the ClipboardManager without buildInfo`() {
+        val versionName = BuildConfig.VERSION_NAME
+        val versionCode = BuildConfig.VERSION_CODE
+
+        val expectedText = "© Bitwarden Inc. 2015-"
+            .asText()
+            .concat(Year.now(fixedClock).value.toString().asText())
+            .concat("\n\n".asText())
+            .concat("Version: $versionName ($versionCode)".asText())
+            .concat("\n\n".asText())
+            .concat(":phone: Android Phone :robot: 15@34".asText())
+
+        every { clipboardManager.setText(expectedText, true, null) } just runs
+
+        val viewModel = createViewModel(DEFAULT_ABOUT_STATE.copy(buildInfo = ""))
+        viewModel.trySendAction(AboutAction.VersionClick)
+
+        verify(exactly = 1) {
+            clipboardManager.setText(expectedText, ofType(Boolean::class), isNull())
+        }
+    }
+
+    @Test
     fun `on WebVaultClick should emit NavigateToWebVault`() = runTest {
         val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
         viewModel.eventFlow.test {
