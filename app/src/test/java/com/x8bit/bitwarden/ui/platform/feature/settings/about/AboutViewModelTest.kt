@@ -111,13 +111,19 @@ class AboutViewModelTest : BaseViewModelTest() {
     fun `on VersionClick should call setText on the ClipboardManager with specific Text`() {
         val versionName = BuildConfig.VERSION_NAME
         val versionCode = BuildConfig.VERSION_CODE
+        val commitInfo = "commit: bitwarden/android/main@abc123"
+        val buildSourceInfoPrefix = ":computer: build source:"
+        val buildSourceInfo = "bitwarden/android/actions/runs/123/attempts/123"
+
         val expectedText = "© Bitwarden Inc. 2015-"
             .asText()
             .concat(Year.now(fixedClock).value.toString().asText())
             .concat("\n\n".asText())
-            .concat(
-                "Version: $versionName ($versionCode)".asText(),
-            )
+            .concat("Version: $versionName ($versionCode)".asText())
+            .concat("\n\n".asText())
+            .concat(":phone: Android Phone :robot: 15@34".asText())
+            .concat("\n\n".asText())
+            .concat(("$commitInfo\n$buildSourceInfoPrefix $buildSourceInfo").asText())
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
 
@@ -125,7 +131,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(AboutAction.VersionClick)
 
         verify(exactly = 1) {
-            clipboardManager.setText(expectedText, true, null)
+            clipboardManager.setText(expectedText, ofType(Boolean::class), isNull())
         }
     }
 
@@ -168,4 +174,7 @@ private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
         .asText()
         .concat(Year.now(fixedClock).value.toString().asText()),
     shouldShowCrashLogsButton = true,
+    deviceInfo = ":phone: Android Phone :robot: 15@34".asText(),
+    buildInfo = "commit: bitwarden/android/main@abc123\n" +
+        ":computer: build source: bitwarden/android/actions/runs/123/attempts/123",
 )
