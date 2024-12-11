@@ -124,12 +124,19 @@ class AboutViewModel @Inject constructor(
                 "standard" -> ""
                 else -> "-${BuildConfig.FLAVOR}"
             }
-            val buildVariant = "\uD83D\uDCE6 ${BuildConfig.BUILD_TYPE}$buildFlavour"
+            val buildVariant = when (BuildConfig.BUILD_TYPE) {
+                "debug" -> "dev"
+                "release" -> "prod"
+                else -> BuildConfig.BUILD_TYPE
+            }
+
+            val buildInfo = "\uD83D\uDCE6 $buildVariant$buildFlavour"
+
             val currentYear = Year.now(clock).value
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
             val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
             val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
-            val deviceInfo = "$deviceBrandModel $osInfo $buildVariant".asText()
+            val deviceInfo = "$deviceBrandModel $osInfo $buildInfo".asText()
             val buildInfoString = CIBuildInfo.info.joinToString(separator = "\n") { (key, value) ->
                 "$key $value"
             }
