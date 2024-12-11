@@ -116,6 +116,7 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.VerifiedSsoDomainEndpoint to true,
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
+    FlagKey.AppReviewPrompt to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -128,6 +129,7 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.VerifiedSsoDomainEndpoint to false,
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
+    FlagKey.AppReviewPrompt to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

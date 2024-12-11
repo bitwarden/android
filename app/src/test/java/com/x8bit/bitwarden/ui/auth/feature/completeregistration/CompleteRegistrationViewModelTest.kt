@@ -55,7 +55,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
      * after the user has entered all valid inputs.
      */
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
-    private val mockAuthRepository = mockk<AuthRepository>() {
+    private val mockAuthRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
         coEvery {
             login(

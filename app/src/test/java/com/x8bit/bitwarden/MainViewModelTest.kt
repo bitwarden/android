@@ -16,8 +16,9 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
@@ -120,6 +121,9 @@ class MainViewModelTest : BaseViewModelTest() {
     private val fido2CredentialManager = mockk<Fido2CredentialManager> {
         every { isUserVerified } returns true
         every { isUserVerified = any() } just runs
+    }
+    private val fido2OriginManager = mockk<Fido2OriginManager> {
+        coEvery { validateOrigin(any(), any()) } returns Fido2ValidateOriginResult.Success(null)
     }
     private val savedStateHandle = SavedStateHandle()
 
@@ -609,14 +613,16 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val fido2Intent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val fido2Intent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
 
         coEvery {
-            fido2CredentialManager.validateOrigin(
+            fido2OriginManager.validateOrigin(
                 fido2CreateCredentialRequest.callingAppInfo,
                 fido2CreateCredentialRequest.requestJson,
             )
-        } returns Fido2ValidateOriginResult.Success
+        } returns Fido2ValidateOriginResult.Success(null)
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -662,13 +668,15 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val mockIntent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
         coEvery {
-            fido2CredentialManager.validateOrigin(
+            fido2OriginManager.validateOrigin(
                 fido2CreateCredentialRequest.callingAppInfo,
                 fido2CreateCredentialRequest.requestJson,
             )
-        } returns Fido2ValidateOriginResult.Success
+        } returns Fido2ValidateOriginResult.Success(null)
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -690,13 +698,15 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
+        val mockIntent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
         coEvery {
-            fido2CredentialManager.validateOrigin(
+            fido2OriginManager.validateOrigin(
                 fido2CreateCredentialRequest.callingAppInfo,
                 fido2CreateCredentialRequest.requestJson,
             )
-        } returns Fido2ValidateOriginResult.Success
+        } returns Fido2ValidateOriginResult.Success(null)
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(

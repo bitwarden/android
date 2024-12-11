@@ -962,6 +962,7 @@ Skift til denne konto?</string>
   <string name="remove_passkey">Fjern adgangsnøgle</string>
   <string name="passkey_removed">Adgangsnøgle fjernet</string>
   <string name="what_makes_a_password_strong">Hvad gør en adgangskode stærk?</string>
+  <string name="a_secure_memorable_password">En sikker adgangskode, der kan huskes</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Jo længere en adgangskode, jo sværere er den at bryde. Minimum til kontooprettelse er 12 tegn, men bruges 14 tegn, ville det tage århundreder at knække adgangskoden!</string>
   <string name="the_strongest_passwords_are_usually">De stærkeste adgangskoder er sædvanligvis:</string>
   <string name="twelve_or_more_characters">På 12 eller flere tegn</string>
@@ -977,7 +978,8 @@ Skift til denne konto?</string>
   <string name="confirm">Bekræft</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Opsæt biometri eller vælg en PIN-kode for hurtigt at tilgå boksen og Autoudfyld logins.</string>
   <string name="never_lose_access_to_your_vault">Mist aldrig adgang til boksen</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Den bedste måde at sikre, at man altid kan tilgå sin konto, er at etablere sikkerhedstiltag fra starten.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Den bedste måde at sikre, at man altid kan tilgå sin konto, er at etablere sikkerhedstiltag fra starten.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">En af de bedste måder at oprette en sikker adgangskode, der kan huskes, er at bruge en adgangssætning.\nGør således:</string>
   <string name="create_a_hint">Opret et tip</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Når man anmoder om det, vil man få sit tip tilsendt via e-mail.</string>
   <string name="write_your_password_down">Nedskriv adgangskoden</string>
@@ -1097,4 +1099,18 @@ Skift til denne konto?</string>
   <string name="copy_address">Kopiér adresse</string>
   <string name="biometrics_no_longer_supported_title">Biometri på denne enhed understøttes ikke længere</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
+  <string name="cxp_import">CXP-import</string>
+  <string name="cxp_export">CXP-eksport</string>
+  <string name="choose_three_or_four_random_words">Vælg tre eller fire tilfældige ord</string>
+  <string name="pick_three_or_four_random_unrelated_words">Vælg tre eller fire tilfældige, urelaterede ord, som nemt kan huskes. Tænk på genstande, steder eller ting, man kan lide.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">genstande, steder eller ting</string>
+  <string name="combine_those_words_together">Kombinér disse ord sammen</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Sæt ordene sammen i en hvilken som helst rækkefølge for at danne adgangskoden. Brug bindestreger, mellemrum, eller lad dem være som ét langt ord – man vælger selv!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Brug bindestreger, mellemrum eller lad dem være som ét langt ord</string>
+  <string name="make_it_yours">Gør det til ens eget</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Tilføj et tal eller symbol for at gøre den endnu stærkere. Nu har man en unik og sikker adgangssætning, der kan huskes!</string>
+  <string name="add_a_number_or_symbol_highlight">Tilføj et tal eller symbol</string>
+  <string name="need_some_inspiration">"Brug for inspiration?"</string>
+  <string name="check_out_the_passphrase_generator">"Tjek adgangssætningsgeneratoren ud"</string>
+  <string name="copied_to_clipboard">Kopieret til udklipsholderen.</string>
 </resources>

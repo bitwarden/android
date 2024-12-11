@@ -18,8 +18,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
@@ -165,13 +166,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
     }
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
-        coEvery { validateOrigin(any(), any()) } returns Fido2ValidateOriginResult.Success
         every { isUserVerified } returns false
         every { isUserVerified = any() } just runs
         every { authenticationAttempts } returns 0
         every { authenticationAttempts = any() } just runs
         every { hasAuthenticationAttemptsRemaining() } returns true
         every { getPasskeyAttestationOptionsOrNull(any()) } returns mockk(relaxed = true)
+    }
+    private val fido2OriginManager: Fido2OriginManager = mockk {
+        coEvery { validateOrigin(any(), any()) } returns Fido2ValidateOriginResult.Success(null)
     }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -1562,8 +1565,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Success
+                fido2OriginManager.validateOrigin(any(), any())
+            } returns Fido2ValidateOriginResult.Success("")
 
             mockFilteredCiphers = listOf(cipherView1)
 
@@ -1618,7 +1621,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             }
         }
 
@@ -2163,7 +2166,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         createVaultItemListingViewModel()
 
         coVerify(ordering = Ordering.ORDERED) {
-            fido2CredentialManager.validateOrigin(any(), any())
+            fido2OriginManager.validateOrigin(any(), any())
             vaultRepository.vaultDataStateFlow
         }
     }
@@ -2181,7 +2184,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         coEvery {
-            fido2CredentialManager.validateOrigin(any(), any())
+            fido2OriginManager.validateOrigin(any(), any())
         } returns Fido2ValidateOriginResult.Error.Unknown
 
         val viewModel = createVaultItemListingViewModel()
@@ -2212,7 +2215,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             } returns Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed
 
             val viewModel = createVaultItemListingViewModel()
@@ -2243,7 +2246,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             } returns Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
 
             val viewModel = createVaultItemListingViewModel()
@@ -2274,7 +2277,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             } returns Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
 
             val viewModel = createVaultItemListingViewModel()
@@ -2305,7 +2308,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             } returns Fido2ValidateOriginResult.Error.ApplicationNotFound
 
             val viewModel = createVaultItemListingViewModel()
@@ -2336,7 +2339,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             } returns Fido2ValidateOriginResult.Error.AssetLinkNotFound
 
             val viewModel = createVaultItemListingViewModel()
@@ -2367,8 +2370,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.ApplicationNotVerified
+                fido2OriginManager.validateOrigin(any(), any())
+            } returns Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified
 
             val viewModel = createVaultItemListingViewModel()
 
@@ -2790,7 +2793,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             } returns mockAssertionOptions
             coEvery {
-                fido2CredentialManager.validateOrigin(any(), any())
+                fido2OriginManager.validateOrigin(any(), any())
             } returns Fido2ValidateOriginResult.Error.Unknown
 
             val viewModel = createVaultItemListingViewModel()
@@ -4054,6 +4057,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             policyManager = policyManager,
             fido2CredentialManager = fido2CredentialManager,
             organizationEventManager = organizationEventManager,
+            fido2OriginManager = fido2OriginManager,
         )
 
     @Suppress("MaxLineLength")
@@ -4079,6 +4083,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             fido2CreateCredentialRequest = null,
             isPremium = true,
             isRefreshing = false,
+            organizationPremiumStatusMap = emptyMap(),
         )
 }
 

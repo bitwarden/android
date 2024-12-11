@@ -961,6 +961,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="remove_passkey">Belépőkulcs eltávolítása</string>
   <string name="passkey_removed">A belépőlulcs eltávolításra került.</string>
   <string name="what_makes_a_password_strong">Mitől erős egy jelszó?</string>
+  <string name="a_secure_memorable_password">Biztonságos, megjegyezhető jelszó</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Minél hosszabb a jelszó, annál nehezebb feltörni. A fiók létrehozásához minimuma 12 karakter kell, de ha 14 karaktert használunk, akkor a jelszó feltörésének ideje évszázadok lehetnek!</string>
   <string name="the_strongest_passwords_are_usually">A legerősebb jelszavak általában a következők:</string>
   <string name="twelve_or_more_characters">12 vagy több karakter</string>
@@ -976,7 +977,8 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="confirm">Megerősítés</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Állítsunk be biometrikus adatokat vagy válasszunk egy PIN kódot a széf gyors eléréséhez és a bejelentkezések automatikus kitöltéséhez.</string>
   <string name="never_lose_access_to_your_vault">Soha ne veszítsük el a hozzáférést a széfhez.</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">A legjobb módja annak, hogy mindig hozzáférhessünk a fiókhoz, ha a kezdetektől fogva biztosítékokat állítunk be.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">A legjobb módja annak, hogy mindig hozzáférhessünk a fiókhoz, ha a kezdetektől fogva biztosítékokat állítunk be.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">A biztonságos és megjegyezhető jelszó létrehozásának egyik legjobb módja a jelmondat használata. \nItt van, hogy hogyan:</string>
   <string name="create_a_hint">Tipp létrehozása</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">A tipp emailben kerül elküldére kérelemre.</string>
   <string name="write_your_password_down">Írjuk le a jelszót.</string>
@@ -1096,4 +1098,18 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="copy_address">Postai cím másolása</string>
   <string name="biometrics_no_longer_supported_title">A biometrikus adatok már nem támogatottak ezen az eszközön.</string>
   <string name="biometrics_no_longer_supported">Kijelentkeztetés történt, mert az eszköz biometrikus adatai nem felelnek meg a legújabb biztonsági követelményeknek. A beállítások frissítéséhez jelentkezzünk be még egyszer vagy lépjünk kapcsolatba az adminisztrátorral.</string>
+  <string name="cxp_import">CXP Importálás</string>
+  <string name="cxp_export">CXP Exportálás</string>
+  <string name="choose_three_or_four_random_words">Válasszunk három vagy négy véletlenszerű szót</string>
+  <string name="pick_three_or_four_random_unrelated_words">Válasszunk három vagy négy véletlenszerű, egymáshoz nem kapcsolódó szót, amelyeket könnyen megjegyezhetünk. Gondoljunk olyan tárgyakra, helyekre vagy dolgokra, amelyeket szeretünk.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">tárgyak, helyek vagy dolgok</string>
+  <string name="combine_those_words_together">Kombináljuk ezeket a szavakat</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Állítsuk össze a szavakat tetszőleges sorrendben a jelmondat kialakításához. Használjunk kötőjeleket, szóközöket, vagy hagyjuk azokat egyetlen hosszú szóként – ez saját választás!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Használjunk kötőjeleket, szóközöket, vagy hagyjuk azokat egyetlen hosszú szóként</string>
+  <string name="make_it_yours">Tegyük sajátunkká</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Adjunk hozzá egy számot vagy szimbólumot, hogy még erősebb legyen. Most egyedi, biztonságos és emlékezetes jelmondattal rendelkezünk!</string>
+  <string name="add_a_number_or_symbol_highlight">Adjunk hozzá egy számot vagy szimbólumot</string>
+  <string name="need_some_inspiration">"Szükség van egy kis inspirációra?"</string>
+  <string name="check_out_the_passphrase_generator">"Nézzük meg a jelszógenerátort"</string>
+  <string name="copied_to_clipboard">Megtörtént a vágólapra másolás.</string>
 </resources>

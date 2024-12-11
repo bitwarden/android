@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -101,7 +102,6 @@ fun GeneratorScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = rememberBitwardenSnackbarHostState()
-
     LivecycleEventEffect { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
@@ -394,6 +394,7 @@ private fun GeneratedStringItem(
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
         modifier = modifier.padding(horizontal = 16.dp),
+        textToolbarType = TextToolbarType.NONE,
     )
 }
 

@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
@@ -53,7 +54,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
-import kotlin.collections.filter
 import kotlin.math.max
 
 private const val KEY_STATE = "state"
@@ -76,6 +76,7 @@ class GeneratorViewModel @Inject constructor(
     private val generatorRepository: GeneratorRepository,
     private val authRepository: AuthRepository,
     private val policyManager: PolicyManager,
+    private val reviewPromptManager: ReviewPromptManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = GeneratorArgs(savedStateHandle).type
@@ -636,6 +637,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleCopyClick() {
+        reviewPromptManager.registerGeneratedResultAction()
         clipboardManager.setText(text = state.generatedText)
     }
 

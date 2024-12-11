@@ -35,6 +35,7 @@ sealed class FlagKey<out T : Any> {
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
+                AppReviewPrompt,
             )
         }
     }
@@ -45,7 +46,7 @@ sealed class FlagKey<out T : Any> {
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-authenticator-sync-android"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -118,6 +119,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
         override val keyName: String = "cxp-export-mobile"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the App Review Prompt feature.
+     */
+    data object AppReviewPrompt : FlagKey<Boolean>() {
+        override val keyName: String = "app-review-prompt"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }

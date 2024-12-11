@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -83,6 +84,9 @@ class AddSendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS) } returns emptyList()
+    }
+    private val networkConnectionManager = mockk<NetworkConnectionManager> {
+        every { isNetworkConnected } returns true
     }
 
     @BeforeEach
@@ -1022,6 +1026,46 @@ class AddSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `If there is no network connection, show dialog and do not attempt add send`() = runTest {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(name = "input"),
+        )
+        val initialState = DEFAULT_STATE.copy(
+            shouldFinishOnComplete = true,
+            isShared = true,
+            viewState = viewState,
+        )
+        val mockSendView = mockk<SendView>()
+        every { viewState.toSendView(clock) } returns mockSendView
+        val sendUrl = "www.test.com/send/test"
+        val resultSendView = mockk<SendView> {
+            every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
+        }
+        coEvery {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        } returns CreateSendResult.Success(sendView = resultSendView)
+        val viewModel = createViewModel(initialState)
+        every { networkConnectionManager.isNetworkConnected } returns false
+
+        viewModel.trySendAction(AddSendAction.SaveClick)
+        assertEquals(
+            initialState.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = R.string.internet_connection_required_title.asText(),
+                    message = R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify(
+            exactly = 0,
+        ) {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        }
+    }
+
     private fun createViewModel(
         state: AddSendState? = null,
         addSendType: AddSendType = AddSendType.AddItem,
@@ -1046,6 +1090,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         clipboardManager = clipboardManager,
         vaultRepo = vaultRepository,
         policyManager = policyManager,
+        networkConnectionManager = networkConnectionManager,
     )
 
     companion object {

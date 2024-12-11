@@ -962,6 +962,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="remove_passkey">Xóa mã khoá</string>
   <string name="passkey_removed">Đã xóa mã khoá</string>
   <string name="what_makes_a_password_strong">Làm sao để mật khẩu mạnh?</string>
+  <string name="a_secure_memorable_password">Một mật khẩu an toàn và dễ nhớ</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Mật khẩu càng dài thì càng khó bị hack. Tối thiểu là 12 ký tự nhưng nếu bạn tạo 14 ký tự, thời gian để bẻ khoá mật khẩu của bạn sẽ là hàng thế kỷ!</string>
   <string name="the_strongest_passwords_are_usually">Một mật khẩu mạnh thường:</string>
   <string name="twelve_or_more_characters">12 ký tự trở lên</string>
@@ -977,7 +978,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="confirm">Xác nhận</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Thiết lập sinh trắc học hoặc mã PIN để truy cập nhanh vào kho và Tự động điền thông tin đăng nhập của bạn.</string>
   <string name="never_lose_access_to_your_vault">Không lo mất quyền truy cập kho</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Cách tốt nhất để đảm bảo bạn luôn có thể truy cập vào tài khoản của mình là thiết lập biện pháp bảo vệ ngay từ đầu.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Cách tốt nhất để đảm bảo bạn luôn có thể truy cập vào kho mật khẩu của mình là thiết lập biện pháp bảo vệ ngay từ đầu.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Một trong những cách tốt nhất để tạo mật khẩu an toàn và dễ nhớ là sử dụng cụm mật khẩu. \nĐây là cách:</string>
   <string name="create_a_hint">Tạo gợi ý</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Gợi ý của bạn sẽ được gửi qua email khi bạn yêu cầu.</string>
   <string name="write_your_password_down">Viết mật khẩu ra</string>
@@ -1097,4 +1099,18 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="copy_address">Sao chép địa chỉ</string>
   <string name="biometrics_no_longer_supported_title">Thiết bị này không còn hỗ trợ sinh trắc học nữa</string>
   <string name="biometrics_no_longer_supported">Bạn đã bị đăng xuất vì dữ liệu sinh trắc học của thiết bị không đáp ứng các yêu cầu bảo mật mới nhất. Để cập nhật cài đặt, hãy đăng nhập lại hoặc liên hệ với quản trị viên để được cấp quyền truy cập.</string>
+  <string name="cxp_import">Nhập CXP</string>
+  <string name="cxp_export">Xuất CXP</string>
+  <string name="choose_three_or_four_random_words">Chọn ba hoặc bốn từ ngẫu nhiên</string>
+  <string name="pick_three_or_four_random_unrelated_words">Chọn ba hoặc bốn từ ngẫu nhiên, không liên quan mà bạn có thể dễ dàng nhớ được. Nghĩ về các đồ vật, địa điểm hoặc những thứ bạn thích.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">đồ vật, địa điểm hoặc mọi thứ</string>
+  <string name="combine_those_words_together">Gom những từ này lại cùng nhau</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Ghép từ lại với nhau theo bất kỳ thứ tự nào để tạo thành cụm mật khẩu của bạn. Sử dụng dấu gạch nối, khoảng trắng hoặc để chúng thành một từ dài—tùy bạn chọn!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Sử dụng dấu gạch nối, khoảng cách hoặc để chúng thành một từ dài</string>
+  <string name="make_it_yours">Tùy bạn thích</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Thêm số hoặc ký hiệu để làm cho mật khẩu mạnh hơn. Bây giờ bạn có một mật khẩu độc đáo, an toàn và dễ nhớ!</string>
+  <string name="add_a_number_or_symbol_highlight">Thêm số hoặc ký tự</string>
+  <string name="need_some_inspiration">"Cần cảm hứng?"</string>
+  <string name="check_out_the_passphrase_generator">"Tham khảo trình tạo cụm mật khẩu"</string>
+  <string name="copied_to_clipboard">Copied to clipboard.</string>
 </resources>

@@ -130,6 +130,7 @@ class ExportVaultViewModel @Inject constructor(
             is RequestOtpResult.Error -> {
                 result.message?.asText() ?: R.string.generic_error_message.asText()
             }
+
             RequestOtpResult.Success -> R.string.code_sent.asText()
         }
         sendEvent(ExportVaultEvent.ShowToast(message = toastMessage))

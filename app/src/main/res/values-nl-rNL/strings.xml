@@ -962,6 +962,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="remove_passkey">Passkey verwijderen</string>
   <string name="passkey_removed">Passkey verwijderd</string>
   <string name="what_makes_a_password_strong">Wat is een sterk wachtwoord?</string>
+  <string name="a_secure_memorable_password">Een veilig, onthoudbaar wachtwoord</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Hoe langer je wachtwoord, hoe moeilijker het is om te hacken. Het minimum voor het aanmaken van een account is 12 tekens, maar als je 14 tekens hebt, kost het eeuwen om je wachtwoord te kraken!</string>
   <string name="the_strongest_passwords_are_usually">De sterkste wachtwoorden zijn meestal:</string>
   <string name="twelve_or_more_characters">12 tekens of meer</string>
@@ -977,7 +978,8 @@ Wilt u naar dit account wisselen?</string>
   <string name="confirm">Bevestigen</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Biometrie instellen of een pincode kiezen om snel toegang tot je kluis te krijgen en je inloggegevens automatisch in te vullen.</string>
   <string name="never_lose_access_to_your_vault">Nooit de toegang tot je kluis verliezen</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">De beste manier om ervoor te zorgen dat je altijd toegang tot je account hebt, is het direct instellen van vangnetten.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">De beste manier om ervoor te zorgen dat je altijd toegang tot je kluis hebt, is het direct instellen van vangnetten.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Een van de beste manieren om een veilig en onthoudbaar wachtwoord te maken is door een wachtwoordzin te gebruiken. \nZo werkt het:</string>
   <string name="create_a_hint">Hint aanmaken</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Je ontvangt je hint via e-mail als je erom vraagt.</string>
   <string name="write_your_password_down">Schrijf je wachtwoord op</string>
@@ -1097,4 +1099,18 @@ Wilt u naar dit account wisselen?</string>
   <string name="copy_address">Adres kopiëren</string>
   <string name="biometrics_no_longer_supported_title">Biometrie wordt niet langer ondersteund op dit apparaat</string>
   <string name="biometrics_no_longer_supported">Je bent uitgelogd omdat de biometrische gegevens van je apparaat niet voldoen aan de laatste beveiligingseisen. Log opnieuw in om instellingen bij te werken of neem contact op met je beheerder voor toegang.</string>
+  <string name="cxp_import">CXP-import</string>
+  <string name="cxp_export">CXP-export</string>
+  <string name="choose_three_or_four_random_words">Kies drie of vier willekeurige woorden</string>
+  <string name="pick_three_or_four_random_unrelated_words">Kies drie of vier willekeurige, niet-gerelateerde woorden die je makkelijk kunt onthouden. Denk aan voorwerpen, plaatsen of dingen die je leuk vindt.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">voorwerpen, plaatsen of dingen</string>
+  <string name="combine_those_words_together">Combineer deze woorden</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Zet de woorden samen in een willekeurige volgorde om je wachtwoordzin te vormen. Gebruik koppeltekens, spaties of maak er één lang woord van — jouw keuze!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Gebruik koppeltekens, spaties of maak er één lang woord van</string>
+  <string name="make_it_yours">Maak het je eigen</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Voeg een nummer of symbool toe om het nog sterker te maken. Nu heb je een uniek, veilig en onthoudbare wachtwoordzin!</string>
+  <string name="add_a_number_or_symbol_highlight">Voeg een nummer of symbool toe</string>
+  <string name="need_some_inspiration">"Wat inspiratie nodig?"</string>
+  <string name="check_out_the_passphrase_generator">"Bekijk de wachtwoordzingenerator"</string>
+  <string name="copied_to_clipboard">Naar klembord gekopieerd.</string>
 </resources>

@@ -169,7 +169,7 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
                 ?: throw AssertionError(
                     """
                     No action with label $label
-                    
+
                     Available actions: $customActions
                     in
                     $tree

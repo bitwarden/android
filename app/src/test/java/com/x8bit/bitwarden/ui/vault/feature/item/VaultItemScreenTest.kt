@@ -1366,6 +1366,42 @@ class VaultItemScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
         }
     }
+
+    @Test
+    fun `on ssh key copy notes field click should send CopyNotesClick`() {
+        // Adding a custom field so that we can scroll to it
+        // So we can see the Copy notes button but not have it covered by the FAB
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            name = "text",
+            value = "value",
+            isCopyable = true,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            type = DEFAULT_SSH_KEY,
+                            common = EMPTY_COMMON.copy(
+                                notes = "this is a note",
+                                customFields = listOf(textField),
+                            ),
+                        ),
+                    )
+                }
+            }
+
+        composeTestRule.onNodeWithTextAfterScroll(textField.name)
+
+        composeTestRule
+            .onNodeWithTag("CipherNotesCopyButton")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+        }
+    }
     //endregion common
 
     //region login
@@ -2602,29 +2638,6 @@ private fun updateCardType(
     return currentState.copy(viewState = updatedType)
 }
 
-private fun updateSshKeyType(
-    currentState: VaultItemState,
-    transform: VaultItemState.ViewState.Content.ItemType.SshKey.() ->
-    VaultItemState.ViewState.Content.ItemType.SshKey,
-): VaultItemState {
-    val updatedType = when (val viewState = currentState.viewState) {
-        is VaultItemState.ViewState.Content -> {
-            when (val type = viewState.type) {
-                is VaultItemState.ViewState.Content.ItemType.SshKey -> {
-                    viewState.copy(
-                        type = type.transform(),
-                    )
-                }
-
-                else -> viewState
-            }
-        }
-
-        else -> viewState
-    }
-    return currentState.copy(viewState = updatedType)
-}
-
 private fun updateCommonContent(
     currentState: VaultItemState,
     transform: VaultItemState.ViewState.Content.Common.()
@@ -2811,6 +2824,15 @@ private val EMPTY_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
         ),
     )
 
+private val EMPTY_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
+    VaultItemState.ViewState.Content.ItemType.SshKey(
+        name = "",
+        publicKey = "",
+        privateKey = "",
+        fingerprint = "",
+        showPrivateKey = false,
+    )
+
 private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = EMPTY_COMMON,
@@ -2833,6 +2855,12 @@ private val EMPTY_SECURE_NOTE_VIEW_STATE =
     VaultItemState.ViewState.Content(
         common = EMPTY_COMMON,
         type = VaultItemState.ViewState.Content.ItemType.SecureNote,
+    )
+
+private val EMPTY_SSH_KEY_VIEW_STATE =
+    VaultItemState.ViewState.Content(
+        common = EMPTY_COMMON,
+        type = EMPTY_SSH_KEY_TYPE,
     )
 
 private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
@@ -2869,10 +2897,12 @@ private val EMPTY_VIEW_STATES = listOf(
     EMPTY_LOGIN_VIEW_STATE,
     EMPTY_IDENTITY_VIEW_STATE,
     EMPTY_SECURE_NOTE_VIEW_STATE,
+    EMPTY_SSH_KEY_VIEW_STATE,
 )
 
 private val DEFAULT_VIEW_STATES = listOf(
     DEFAULT_LOGIN_VIEW_STATE,
     DEFAULT_IDENTITY_VIEW_STATE,
     DEFAULT_SECURE_NOTE_VIEW_STATE,
+    DEFAULT_SSH_KEY_VIEW_STATE,
 )

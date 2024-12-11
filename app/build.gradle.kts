@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
@@ -113,6 +114,18 @@ android {
         create("fdroid") {
             dimension = "mode"
         }
+    }
+
+    applicationVariants.all {
+        outputs
+            .mapNotNull { it as? BaseVariantOutputImpl }
+            .forEach { output ->
+                output.outputFileName = when (flavorName) {
+                    "fdroid" -> "$applicationId-$flavorName.apk"
+                    "standard" -> "$applicationId.apk"
+                    else -> output.outputFileName
+                }
+            }
     }
 
     compileOptions {

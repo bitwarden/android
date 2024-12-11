@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -42,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * providing flexibility in the layout definition.
  * @param actionsTestTag The test tag to use for the row of actions, or null if there is none.
  * @param textFieldTestTag The test tag to be used on the text field.
+ * @param textToolbarType The type of [TextToolbar] to use on the text field.
  */
 @Composable
 fun BitwardenTextFieldWithActions(
@@ -59,6 +62,7 @@ fun BitwardenTextFieldWithActions(
     actions: @Composable RowScope.() -> Unit = {},
     actionsTestTag: String? = null,
     textFieldTestTag: String? = null,
+    textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
 ) {
     Row(
         modifier = modifier
@@ -80,6 +84,7 @@ fun BitwardenTextFieldWithActions(
             textStyle = textStyle,
             shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
             visualTransformation = visualTransformation,
+            textToolbarType = textToolbarType,
         )
         BitwardenRowOfActions(
             modifier = Modifier.run { actionsTestTag?.let { testTag(it) } ?: this },

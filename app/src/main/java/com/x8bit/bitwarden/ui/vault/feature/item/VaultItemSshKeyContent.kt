@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 
 /**
@@ -29,6 +31,7 @@ fun VaultItemSshKeyContent(
     commonState: VaultItemState.ViewState.Content.Common,
     sshKeyItemState: VaultItemState.ViewState.Content.ItemType.SshKey,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
+    vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
@@ -118,6 +121,85 @@ fun VaultItemSshKeyContent(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+        }
+
+        commonState.notes?.let { notes ->
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.notes),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenTextFieldWithActions(
+                    label = stringResource(id = R.string.notes),
+                    value = notes,
+                    onValueChange = { },
+                    readOnly = true,
+                    singleLine = false,
+                    actions = {
+                        BitwardenTonalIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_notes),
+                            onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
+                            modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
+                        )
+                    },
+                    textFieldTestTag = "CipherNotesLabel",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+        }
+
+        commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.custom_fields),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+            items(customFields) { customField ->
+                Spacer(modifier = Modifier.height(8.dp))
+                CustomField(
+                    customField = customField,
+                    onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
+                    onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
+                    onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+        }
+
+        commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.attachments),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+            items(attachments) { attachmentItem ->
+                AttachmentItemContent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
+                    attachmentItem = attachmentItem,
+                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                        .onAttachmentDownloadClick,
+                )
+            }
+            item { Spacer(modifier = Modifier.height(8.dp)) }
         }
 
         item {
