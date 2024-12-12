@@ -152,6 +152,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
+import javax.net.ssl.SSLHandshakeException
 
 @Suppress("LargeClass")
 class AuthRepositoryTest {
@@ -1506,6 +1507,43 @@ class AuthRepositoryTest {
             } returns RuntimeException().asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
             assertEquals(LoginResult.UnofficialServerError, result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify { identityService.preLogin(email = EMAIL) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `login get token fails should return CertificateError when SSLHandshakeException is thrown`() =
+        runTest {
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns SSLHandshakeException("error").asFailure()
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(LoginResult.CertificateError, result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify { identityService.preLogin(email = EMAIL) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `prelogin fails should return CertificateError when SSLHandshakeException is thrown`() =
+        runTest {
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns SSLHandshakeException("error").asFailure()
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(LoginResult.CertificateError, result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
         }
