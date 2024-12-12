@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -47,12 +48,14 @@ object AuthManagerModule {
     fun provideAuthRequestNotificationManager(
         @ApplicationContext context: Context,
         authDiskSource: AuthDiskSource,
+        appStateManager: AppStateManager,
         pushManager: PushManager,
         dispatcherManager: DispatcherManager,
     ): AuthRequestNotificationManager =
         AuthRequestNotificationManagerImpl(
             context = context,
             authDiskSource = authDiskSource,
+            appStateManager = appStateManager,
             pushManager = pushManager,
             dispatcherManager = dispatcherManager,
         )
