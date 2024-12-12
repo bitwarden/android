@@ -2530,6 +2530,33 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
 
         @Test
+        fun `onPrivateKeyCopyClick should copy private key to clipboard`() = runTest {
+            every { clipboardManager.setText("mockPrivateKey") } just runs
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns createViewState(
+                common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                type = DEFAULT_SSH_KEY_TYPE,
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+
+            viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.privateKey)
+            }
+        }
+
+        @Test
         fun `on CopyFingerprintClick should copy fingerprint to clipboard`() = runTest {
             every { clipboardManager.setText("mockFingerprint") } just runs
             every {
