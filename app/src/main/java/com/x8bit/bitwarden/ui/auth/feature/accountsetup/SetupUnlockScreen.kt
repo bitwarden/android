@@ -75,7 +75,7 @@ fun SetupUnlockScreen(
                 showBiometricsPrompt = true
                 biometricsManager.promptBiometrics(
                     onSuccess = {
-                        handler.unlockWithBiometricToggle()
+                        handler.unlockWithBiometricToggle(it)
                         showBiometricsPrompt = false
                     },
                     onCancel = { showBiometricsPrompt = false },

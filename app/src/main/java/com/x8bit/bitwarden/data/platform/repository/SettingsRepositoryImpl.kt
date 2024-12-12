@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
+import javax.crypto.Cipher
 
 private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 
@@ -482,13 +483,19 @@ class SettingsRepositoryImpl(
         }
     }
 
-    override suspend fun setupBiometricsKey(): BiometricsKeyResult {
+    override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult {
         val userId = activeUserId ?: return BiometricsKeyResult.Error
-        biometricsEncryptionManager.setupBiometrics(userId)
+        biometricsEncryptionManager.setupBiometrics(userId = userId)
         return vaultSdkSource
             .getUserEncryptionKey(userId = userId)
             .onSuccess {
-                authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = it)
+                authDiskSource.storeUserBiometricUnlockKey(
+                    userId = userId,
+                    biometricsKey = cipher
+                        .doFinal(it.encodeToByteArray())
+                        .toString(Charsets.ISO_8859_1),
+                )
+                authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
             }
             .fold(
                 onSuccess = { BiometricsKeyResult.Success },
@@ -498,6 +505,7 @@ class SettingsRepositoryImpl(
 
     override fun clearBiometricsKey() {
         val userId = activeUserId ?: return
+        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = null)
         authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
     }
 
