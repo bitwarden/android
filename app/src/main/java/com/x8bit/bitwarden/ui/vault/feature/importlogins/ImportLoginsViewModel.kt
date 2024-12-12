@@ -132,7 +132,8 @@ class ImportLoginsViewModel @Inject constructor(
                         it.copy(
                             isVaultSyncing = false,
                             dialogState = ImportLoginsState.DialogState.Error(
-                                R.string.no_logins_were_imported.asText(),
+                                message = R.string.no_logins_were_imported.asText(),
+                                title = R.string.import_error.asText(),
                             ),
                         )
                     }
@@ -259,9 +260,8 @@ data class ImportLoginsState(
          */
         data class Error(
             override val message: Text = R.string.generic_error_message.asText(),
-        ) : DialogState() {
-            override val title: Text? = null
-        }
+            override val title: Text? = null,
+        ) : DialogState()
     }
 
     /**

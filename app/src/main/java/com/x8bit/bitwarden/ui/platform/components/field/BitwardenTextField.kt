@@ -5,24 +5,34 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.toPx
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
+import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -46,7 +56,9 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
+ * @param textToolbarType The type of [TextToolbar] to use on the text field.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenTextField(
     label: String,
@@ -66,6 +78,7 @@ fun BitwardenTextField(
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
 ) {
     var widthPx by remember { mutableIntStateOf(0) }
     val focusRequester = remember { FocusRequester() }
@@ -78,48 +91,76 @@ fun BitwardenTextField(
     } else {
         value
     }
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = formattedText)) }
+    val textFieldValue = textFieldValueState.copy(text = value)
+    SideEffect {
+        if (textFieldValue.selection != textFieldValueState.selection ||
+            textFieldValue.composition != textFieldValueState.composition
+        ) {
+            textFieldValueState = textFieldValue
+        }
+    }
+    val textToolbar = when (textToolbarType) {
+        TextToolbarType.DEFAULT -> BitwardenCutCopyTextToolbar(
+            value = textFieldValue,
+            onValueChange = onValueChange,
+            defaultTextToolbar = LocalTextToolbar.current,
+            clipboardManager = LocalClipboardManager.current.nativeClipboard,
+        )
 
-    OutlinedTextField(
-        colors = bitwardenTextFieldColors(),
-        modifier = modifier
-            .onGloballyPositioned { widthPx = it.size.width }
-            .focusRequester(focusRequester),
-        enabled = enabled,
-        label = { Text(text = label) },
-        value = formattedText,
-        leadingIcon = leadingIconResource?.let { iconResource ->
-            {
-                Icon(
-                    painter = iconResource.iconPainter,
-                    contentDescription = iconResource.contentDescription,
-                )
-            }
-        },
-        trailingIcon = trailingIconContent,
-        placeholder = placeholder?.let {
-            {
-                Text(
-                    text = it,
-                    style = textStyle,
-                )
-            }
-        },
-        supportingText = hint?.let {
-            {
-                Text(
-                    text = hint,
-                    style = BitwardenTheme.typography.bodySmall,
-                )
-            }
-        },
-        onValueChange = onValueChange,
-        singleLine = singleLine,
-        readOnly = readOnly,
-        textStyle = textStyle,
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-        isError = isError,
-        visualTransformation = visualTransformation,
-    )
+        TextToolbarType.NONE -> BitwardenEmptyTextToolbar
+    }
+    var lastTextValue by remember(value) { mutableStateOf(value = value) }
+    CompositionLocalProvider(value = LocalTextToolbar provides textToolbar) {
+        OutlinedTextField(
+            colors = bitwardenTextFieldColors(),
+            modifier = modifier
+                .onGloballyPositioned { widthPx = it.size.width }
+                .focusRequester(focusRequester),
+            enabled = enabled,
+            label = { Text(text = label) },
+            value = textFieldValue,
+            leadingIcon = leadingIconResource?.let { iconResource ->
+                {
+                    Icon(
+                        painter = iconResource.iconPainter,
+                        contentDescription = iconResource.contentDescription,
+                    )
+                }
+            },
+            trailingIcon = trailingIconContent,
+            placeholder = placeholder?.let {
+                {
+                    Text(
+                        text = it,
+                        style = textStyle,
+                    )
+                }
+            },
+            supportingText = hint?.let {
+                {
+                    Text(
+                        text = hint,
+                        style = BitwardenTheme.typography.bodySmall,
+                    )
+                }
+            },
+            onValueChange = {
+                textFieldValueState = it
+                val stringChangedSinceLastInvocation = lastTextValue != it.text
+                lastTextValue = it.text
+                if (stringChangedSinceLastInvocation) {
+                    onValueChange(it.text)
+                }
+            },
+            singleLine = singleLine,
+            readOnly = readOnly,
+            textStyle = textStyle,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+            isError = isError,
+            visualTransformation = visualTransformation,
+        )
+    }
     if (autoFocus) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }

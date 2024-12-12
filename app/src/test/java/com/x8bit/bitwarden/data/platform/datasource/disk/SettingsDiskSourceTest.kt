@@ -1193,4 +1193,50 @@ class SettingsDiskSourceTest {
             assertFalse(awaitItem() ?: true)
         }
     }
+
+    @Test
+    fun `getAddCipherActionCount should pull from SharedPreferences`() {
+        val addActionCountKey = "bwPreferencesStorage:addActionCount"
+        fakeSharedPreferences.edit { putInt(addActionCountKey, 1) }
+        assertEquals(
+            1, settingsDiskSource.getAddCipherActionCount(),
+        )
+    }
+
+    @Test
+    fun `storeAddCipherActionCount should update SharedPreferences`() {
+        val addActionCountKey = "bwPreferencesStorage:addActionCount"
+        settingsDiskSource.storeAddCipherActionCount(count = 1)
+        assertEquals(1, fakeSharedPreferences.getInt(addActionCountKey, 0))
+    }
+
+    @Test
+    fun `getCopyGeneratedResultActionCount should pull from SharedPreferences`() {
+        val copyActionCountKey = "bwPreferencesStorage:copyActionCount"
+        fakeSharedPreferences.edit { putInt(copyActionCountKey, 1) }
+        assertEquals(
+            1, settingsDiskSource.getGeneratedResultActionCount(),
+        )
+    }
+
+    @Test
+    fun `storeCopyGeneratedResultCount should update SharedPreferences`() {
+        val copyActionCountKey = "bwPreferencesStorage:copyActionCount"
+        settingsDiskSource.storeGeneratedResultActionCount(count = 1)
+        assertEquals(1, fakeSharedPreferences.getInt(copyActionCountKey, 0))
+    }
+
+    @Test
+    fun `getCreateSendActionCount should pull from SharedPreferences`() {
+        val createActionCountKey = "bwPreferencesStorage:createActionCount"
+        fakeSharedPreferences.edit { putInt(createActionCountKey, 1) }
+        assertEquals(1, settingsDiskSource.getCreateSendActionCount())
+    }
+
+    @Test
+    fun `storeCreateSendActionCount should update SharedPreferences`() {
+        val createActionCountKey = "bwPreferencesStorage:createActionCount"
+        settingsDiskSource.storeCreateSendActionCount(count = 1)
+        assertEquals(1, fakeSharedPreferences.getInt(createActionCountKey, 0))
+    }
 }

@@ -499,7 +499,8 @@ class UserStateExtensionsTest {
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                     shouldUsersGetPremium = false,
-                ), Organization(
+                ),
+                Organization(
                     id = "2",
                     name = "organizationName",
                     shouldManageResetPassword = false,

@@ -1266,7 +1266,7 @@ private const val USER_STATE_JSON = """
             "kdfIterations": 600000,
             "kdfMemory": 16,
             "kdfParallelism": 4,
-            "userDecryptionOptions": { 
+            "userDecryptionOptions": {
               "hasMasterPassword": true,
               "trustedDeviceOption": {
                 "encryptedPrivateKey": "encryptedPrivateKey",
