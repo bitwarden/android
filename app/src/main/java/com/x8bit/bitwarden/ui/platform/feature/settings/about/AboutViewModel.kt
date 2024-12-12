@@ -100,7 +100,7 @@ class AboutViewModel @Inject constructor(
                     if (state.buildInfo.isEmpty()) {
                         text
                     } else {
-                        text.concat("\n\n".asText()).concat(state.buildInfo.asText())
+                        text.concat("\n".asText()).concat(state.buildInfo.asText())
                     }
                 },
         )

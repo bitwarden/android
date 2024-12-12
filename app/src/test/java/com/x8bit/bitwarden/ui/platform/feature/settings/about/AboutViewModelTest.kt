@@ -122,7 +122,7 @@ class AboutViewModelTest : BaseViewModelTest() {
             .concat("Version: $versionName ($versionCode)".asText())
             .concat("\n\n".asText())
             .concat(":phone: Android Phone :robot: 15@34".asText())
-            .concat("\n\n".asText())
+            .concat("\n".asText())
             .concat(("$commitInfo\n$buildSourceInfoPrefix $buildSourceInfo").asText())
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
