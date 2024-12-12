@@ -94,8 +94,11 @@ class AboutViewModel @Inject constructor(
 
     private fun handleVersionClick() {
         clipboardManager.setText(
-            text = state.copyrightInfo.concat("\n\n".asText()).concat(state.version)
-                .concat("\n\n".asText()).concat(state.deviceInfo)
+            text = state.copyrightInfo
+                .concat("\n\n".asText())
+                .concat(state.version)
+                .concat("\n\n".asText())
+                .concat(state.deviceInfo)
                 .let { text ->
                     if (state.buildInfo.isEmpty()) {
                         text
