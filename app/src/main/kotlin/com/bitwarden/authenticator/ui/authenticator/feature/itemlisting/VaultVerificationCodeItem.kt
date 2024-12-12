@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.authenticator.ui.platform.components.model.IconData
@@ -46,8 +47,12 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
  * @param secondaryLabel The supporting label for the item. Represents the OTP account name.
  * @param periodSeconds The times span where the code is valid.
  * @param timeLeftSeconds The seconds remaining until a new code is needed.
+ * @param alertThresholdSeconds The time threshold in seconds to display an expiration warning.
  * @param startIcon The leading icon for the item.
  * @param onItemClick The lambda function to be invoked when the item is clicked.
+ * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
+ * @param allowLongPress Whether long-press interactions are enabled for the item.
+ * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
  * @param modifier The modifier for the item.
  */
 @OptIn(ExperimentalFoundationApi::class)
@@ -62,9 +67,7 @@ fun VaultVerificationCodeItem(
     alertThresholdSeconds: Int,
     startIcon: IconData,
     onItemClick: () -> Unit,
-    onEditItemClick: () -> Unit,
-    onDeleteItemClick: () -> Unit,
-    onMoveToBitwardenClick: () -> Unit,
+    onDropdownMenuClick: (VaultDropdownMenuAction) -> Unit,
     allowLongPress: Boolean,
     showMoveToBitwarden: Boolean,
     modifier: Modifier = Modifier,
@@ -157,11 +160,27 @@ fun VaultVerificationCodeItem(
         ) {
             DropdownMenuItem(
                 text = {
+                    Text(text = stringResource(id = R.string.copy))
+                },
+                onClick = {
+                    shouldShowDropdownMenu = false
+                    onDropdownMenuClick(VaultDropdownMenuAction.COPY)
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_copy),
+                        contentDescription = stringResource(id = R.string.copy),
+                    )
+                },
+            )
+            HorizontalDivider()
+            DropdownMenuItem(
+                text = {
                     Text(text = stringResource(id = R.string.edit_item))
                 },
                 onClick = {
                     shouldShowDropdownMenu = false
-                    onEditItemClick()
+                    onDropdownMenuClick(VaultDropdownMenuAction.EDIT)
                 },
                 leadingIcon = {
                     Icon(
@@ -174,16 +193,16 @@ fun VaultVerificationCodeItem(
                 HorizontalDivider()
                 DropdownMenuItem(
                     text = {
-                        Text(text = stringResource(id = R.string.copy_to_bitwarden))
+                        Text(text = stringResource(id = R.string.move_to_bitwarden))
                     },
                     onClick = {
                         shouldShowDropdownMenu = false
-                        onMoveToBitwardenClick()
+                        onDropdownMenuClick(VaultDropdownMenuAction.MOVE)
                     },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = stringResource(id = R.string.copy_to_bitwarden),
+                            contentDescription = stringResource(id = R.string.move_to_bitwarden),
                         )
                     },
                 )
@@ -195,7 +214,7 @@ fun VaultVerificationCodeItem(
                 },
                 onClick = {
                     shouldShowDropdownMenu = false
-                    onDeleteItemClick()
+                    onDropdownMenuClick(VaultDropdownMenuAction.DELETE)
                 },
                 leadingIcon = {
                     Icon(
@@ -222,9 +241,7 @@ private fun VerificationCodeItem_preview() {
             alertThresholdSeconds = 7,
             startIcon = IconData.Local(R.drawable.ic_login_item),
             onItemClick = {},
-            onEditItemClick = {},
-            onDeleteItemClick = {},
-            onMoveToBitwardenClick = {},
+            onDropdownMenuClick = {},
             allowLongPress = true,
             modifier = Modifier.padding(horizontal = 16.dp),
             showMoveToBitwarden = true,

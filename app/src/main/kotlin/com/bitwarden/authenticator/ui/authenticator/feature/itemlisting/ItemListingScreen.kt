@@ -53,6 +53,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
@@ -211,17 +213,13 @@ fun ItemListingScreen(
                         )
                     }
                 },
-                onEditItemClick = remember(viewModel) {
-                    {
+                onDropdownMenuClick = remember(viewModel) {
+                    { action, item ->
                         viewModel.trySendAction(
-                            ItemListingAction.EditItemClick(it),
-                        )
-                    }
-                },
-                onDeleteItemClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            ItemListingAction.DeleteItemClick(it),
+                            ItemListingAction.DropdownMenuClick(
+                                menuAction = action,
+                                item = item,
+                            ),
                         )
                     }
                 },
@@ -243,11 +241,6 @@ fun ItemListingScreen(
                 onDismissSyncWithBitwardenClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
-                    }
-                },
-                onMoveToBitwardenClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(ItemListingAction.MoveToBitwardenClick(it))
                     }
                 },
             )
@@ -354,9 +347,7 @@ private fun ItemListingContent(
     onScanQrCodeClick: () -> Unit,
     onEnterSetupKeyClick: () -> Unit,
     onItemClick: (String) -> Unit,
-    onEditItemClick: (String) -> Unit,
-    onDeleteItemClick: (String) -> Unit,
-    onMoveToBitwardenClick: (String) -> Unit,
+    onDropdownMenuClick: (VaultDropdownMenuAction, VerificationCodeDisplayItem) -> Unit,
     onDownloadBitwardenClick: () -> Unit,
     onDismissDownloadBitwardenClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
@@ -467,9 +458,9 @@ private fun ItemListingContent(
                             alertThresholdSeconds = it.alertThresholdSeconds,
                             startIcon = it.startIcon,
                             onItemClick = { onItemClick(it.authCode) },
-                            onEditItemClick = { onEditItemClick(it.id) },
-                            onDeleteItemClick = { onDeleteItemClick(it.id) },
-                            onMoveToBitwardenClick = { onMoveToBitwardenClick(it.id) },
+                            onDropdownMenuClick = { action ->
+                                onDropdownMenuClick(action, it)
+                            },
                             showMoveToBitwarden = it.showMoveToBitwarden,
                             allowLongPress = it.allowLongPressActions,
                             modifier = Modifier.fillMaxWidth(),
@@ -508,9 +499,9 @@ private fun ItemListingContent(
                         alertThresholdSeconds = it.alertThresholdSeconds,
                         startIcon = it.startIcon,
                         onItemClick = { onItemClick(it.authCode) },
-                        onEditItemClick = { onEditItemClick(it.id) },
-                        onDeleteItemClick = { onDeleteItemClick(it.id) },
-                        onMoveToBitwardenClick = { onMoveToBitwardenClick(it.id) },
+                        onDropdownMenuClick = { action ->
+                            onDropdownMenuClick(action, it)
+                        },
                         showMoveToBitwarden = it.showMoveToBitwarden,
                         allowLongPress = it.allowLongPressActions,
                         modifier = Modifier.fillMaxWidth(),
@@ -544,9 +535,9 @@ private fun ItemListingContent(
                                     alertThresholdSeconds = it.alertThresholdSeconds,
                                     startIcon = it.startIcon,
                                     onItemClick = { onItemClick(it.authCode) },
-                                    onEditItemClick = { },
-                                    onDeleteItemClick = { },
-                                    onMoveToBitwardenClick = { },
+                                    onDropdownMenuClick = { action ->
+                                        onDropdownMenuClick(action, it)
+                                    },
                                     showMoveToBitwarden = it.showMoveToBitwarden,
                                     allowLongPress = it.allowLongPressActions,
                                     modifier = Modifier.fillMaxWidth(),
