@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Дозвольте синхронізацію програми Authenticator у налаштуваннях, щоб бачити тут свої коди підтвердження.</string>
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="please_try_again">Повторіть спробу</string>
-    <string name="move_to_bitwarden">Перемістити до Bitwarden</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">Типовий параметр збереження</string>
     <string name="save_to_bitwarden">Зберегти в Bitwarden</string>
     <string name="save_here">Зберегти тут</string>

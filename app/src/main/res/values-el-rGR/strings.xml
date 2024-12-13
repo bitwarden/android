@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Επιτρέψτε τον συγχρονισμό του Authenticator στις ρυθμίσεις για να βλέπετε όλους τους κωδικούς επαλήθευσής σας εδώ.</string>
     <string name="something_went_wrong">Κάτι πήγε στραβά</string>
     <string name="please_try_again">Δοκιμάστε ξανά</string>
-    <string name="move_to_bitwarden">Μετακίνηση στο Bitwarden</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">Προεπιλεγμένη επιλογή αποθήκευσης</string>
     <string name="save_to_bitwarden">Αποθήκευση στο Bitwarden</string>
     <string name="save_here">Αποθήκευση εδώ</string>

@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Tillad Authenticator-app synkning i Indstillinger for at se alle bekræftelseskoderne her.</string>
     <string name="something_went_wrong">Noget gik galt</string>
     <string name="please_try_again">Forsøg igen</string>
-    <string name="move_to_bitwarden">Flyt til Bitwarden</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">Standard gem-valg</string>
     <string name="save_to_bitwarden">Gem i Bitwarden</string>
     <string name="save_here">Gem her</string>

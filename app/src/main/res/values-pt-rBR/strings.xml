@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Permitir a sincronização do app Autenticador em configurações para ver todos os seus códigos de verificação aqui.</string>
     <string name="something_went_wrong">Algo deu errado</string>
     <string name="please_try_again">Por favor, tente novamente</string>
-    <string name="move_to_bitwarden">Mover para o Bitwarden</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">Opção padrão de salvar</string>
     <string name="save_to_bitwarden">Salvar no Bitwarden</string>
     <string name="save_here">Salvar aqui</string>

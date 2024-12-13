@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Bütün doğrulama kodlarınıza burada baxmaq üçün ayarlarda Authenticator tətbiqinin sinxronlaşdırmasına icazə verin.</string>
     <string name="something_went_wrong">Nəsə səhv getdi</string>
     <string name="please_try_again">Lütfən yenidən sınayın</string>
-    <string name="move_to_bitwarden">\"Bitwarden\"ə daşı</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">İlkin saxlama seçimi</string>
     <string name="save_to_bitwarden">\"Bitwarden\"də saxla</string>
     <string name="save_here">Burada saxla</string>

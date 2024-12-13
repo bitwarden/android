@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Allow Authenticator app syncing in settings to view all of your verification codes here.</string>
     <string name="something_went_wrong">Något gick fel</string>
     <string name="please_try_again">Försök igen</string>
-    <string name="move_to_bitwarden">Flytta till Bitwarden</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">Default save option</string>
     <string name="save_to_bitwarden">Spara på Bitwarden</string>
     <string name="save_here">Spara här</string>

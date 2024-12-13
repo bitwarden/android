@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Дозволите синхронизацију апликације Authenticator у подешавањима да бисте видели све своје верификационе кôдове овде.</string>
     <string name="something_went_wrong">Нешто није у реду</string>
     <string name="please_try_again">Покушајте поново</string>
-    <string name="move_to_bitwarden">Пречи на Bitwarden</string>
+    <string name="move_to_bitwarden">Move to Bitwarden</string>
     <string name="default_save_option">Подразумевана опција чувања</string>
     <string name="save_to_bitwarden">Сачувај у Bitwarden</string>
     <string name="save_here">Сачувај овде</string>
