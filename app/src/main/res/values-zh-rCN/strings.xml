@@ -1074,6 +1074,7 @@
   <string name="bitwarden_tools">Bitwarden 工具</string>
   <string name="got_it">知道了</string>
   <string name="no_logins_were_imported">未导入任何登录信息</string>
+  <string name="import_error">导入错误</string>
   <string name="verified_sso_domain_verified">已验证的 SSO 域端点</string>
   <string name="logins_imported">登录信息已导入</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">记得从电脑中删除已导入的密码文件</string>
@@ -1112,5 +1113,5 @@
   <string name="add_a_number_or_symbol_highlight">添加数字或符号</string>
   <string name="need_some_inspiration">"需要一些灵感吗？"</string>
   <string name="check_out_the_passphrase_generator">"查看密码短语生成器"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="copied_to_clipboard">已复制到剪贴板。</string>
 </resources>
