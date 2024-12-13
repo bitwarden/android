@@ -138,6 +138,22 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name authenticator_play_firebase-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json --output none
 
+      - name: Download Play Store credentials
+        if: ${{ inputs.publish-to-play-store }}
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+
+      - name: Verify Play Store credentials
+        if: ${{ inputs.publish-to-play-store }}
+        run: |
+          bundle exec fastlane run validate_play_store_json_key
+
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4.2.1
 
@@ -167,14 +183,19 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Increment version
-        env:
-          FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
           DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
+          VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
           bundle exec fastlane setBuildVersionInfo \
-          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }} \
-          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
-          versionName:${{ inputs.version-name }}
+          versionCode:$VERSION_CODE \
+          versionName:${{ inputs.version-name || '' }}
+
+          regex='versionName = "([^"]+)"'
+          if [[ "$(cat app/build.gradle.kts)" =~ $regex ]]; then
+            VERSION_NAME="${BASH_REMATCH[1]}"
+          fi
+          echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'aab' }}
@@ -255,7 +276,7 @@ jobs:
       - name: Publish release bundle to Google Play Store
         if: ${{ inputs.publish-to-play-store && matrix.variant == 'aab' }}
         env:
-          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
+          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
         run: |
           bundle exec fastlane publishReleaseToGooglePlayStore \
           serviceCredentialsFile:${{ env.PLAY_STORE_CREDS_FILE }} \

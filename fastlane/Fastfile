@@ -32,20 +32,37 @@ platform :android do
     buildConfigText = buildConfigFile.read
     buildConfigFile.close
 
+    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
+    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
+
     if options[:versionName].nil? or options[:versionName].to_s.empty?
-        # Use the latest version name in Firebase as the default version name.
-        latestRelease = firebase_app_distribution_get_latest_release(
-          app: "1:867301491091:android:50b626dba42a361651e866",
-          service_credentials_file:options[:serviceCredentialsFile]
-        )
-        nextVersionName = latestRelease[:displayVersion]
+        puts "Fetching latest tags from origin..."
+        `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
+        puts "Getting latest version name from previous git tag..."
+        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
+        puts "Using tag #{latestTag} to calculate version name..."
+        latestTag.slice!(0)
+        puts "Current version name resolved to #{latestTag}."
+
+        versionParts = latestTag.split(".")
+        currentMajor = versionParts[0]
+        currentMinor = versionParts[1]
+        currentRevision = versionParts[2]
+
+        currentDate = Time.new
+        major = currentDate.year.to_s
+        minor = currentDate.strftime "%-m"
+
+        revision = 0
+        if currentMajor == major and currentMinor == minor
+            revision = currentRevision.to_i + 1
+        end
+        nextVersionName = "#{major}.#{minor}.#{revision}"
     else
         nextVersionName = options[:versionName].to_s
     end
 
     # Replace version information.
-    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
-    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
     puts "Setting version code to #{options[:versionCode]}."
     buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
     puts "Setting version name to #{nextVersionName}."

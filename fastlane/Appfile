@@ -1,1 +1,2 @@
+json_key_file("secrets/authenticator_play_store-creds.json")
 package_name("com.bitwarden.authenticator")
