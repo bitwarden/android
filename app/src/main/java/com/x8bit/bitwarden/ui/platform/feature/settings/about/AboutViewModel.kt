@@ -93,17 +93,36 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleVersionClick() {
+        val buildFlavour = when (BuildConfig.FLAVOR) {
+            "standard" -> ""
+            else -> "-${BuildConfig.FLAVOR}"
+        }
+
+        val buildVariant = when (BuildConfig.BUILD_TYPE) {
+            "debug" -> "dev"
+            "release" -> "prod"
+            else -> BuildConfig.BUILD_TYPE
+        }
+
+        val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
+        val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
+        val buildInfo = "\uD83D\uDCE6 $buildVariant$buildFlavour"
+
+        val ciBuildInfoString = CIBuildInfo.info.joinToString(separator = "\n") { (key, value) ->
+            "$key $value"
+        }
+
         clipboardManager.setText(
             text = state.copyrightInfo
                 .concat("\n\n".asText())
                 .concat(state.version)
                 .concat("\n\n".asText())
-                .concat(state.deviceInfo)
+                .concat("$deviceBrandModel $osInfo $buildInfo".asText())
                 .let { text ->
-                    if (state.buildInfo.isEmpty()) {
+                    if (ciBuildInfoString.isEmpty()) {
                         text
                     } else {
-                        text.concat("\n".asText()).concat(state.buildInfo.asText())
+                        text.concat("\n".asText()).concat(ciBuildInfoString.asText())
                     }
                 },
         )
@@ -123,26 +142,8 @@ class AboutViewModel @Inject constructor(
          * Create initial state for the About View model.
          */
         fun createInitialState(clock: Clock, isCrashLoggingEnabled: Boolean): AboutState {
-            val buildFlavour = when (BuildConfig.FLAVOR) {
-                "standard" -> ""
-                else -> "-${BuildConfig.FLAVOR}"
-            }
-            val buildVariant = when (BuildConfig.BUILD_TYPE) {
-                "debug" -> "dev"
-                "release" -> "prod"
-                else -> BuildConfig.BUILD_TYPE
-            }
-
-            val buildInfo = "\uD83D\uDCE6 $buildVariant$buildFlavour"
-
             val currentYear = Year.now(clock).value
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
-            val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
-            val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
-            val deviceInfo = "$deviceBrandModel $osInfo $buildInfo".asText()
-            val buildInfoString = CIBuildInfo.info.joinToString(separator = "\n") { (key, value) ->
-                "$key $value"
-            }
 
             return AboutState(
                 version = R.string.version
@@ -151,8 +152,6 @@ class AboutViewModel @Inject constructor(
                 isSubmitCrashLogsEnabled = isCrashLoggingEnabled,
                 shouldShowCrashLogsButton = !isFdroid,
                 copyrightInfo = copyrightInfo,
-                deviceInfo,
-                buildInfoString,
             )
         }
     }
@@ -167,8 +166,6 @@ data class AboutState(
     val isSubmitCrashLogsEnabled: Boolean,
     val shouldShowCrashLogsButton: Boolean,
     val copyrightInfo: Text,
-    val deviceInfo: Text,
-    val buildInfo: String,
 ) : Parcelable
 
 /**

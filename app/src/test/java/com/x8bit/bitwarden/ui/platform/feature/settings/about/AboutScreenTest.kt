@@ -42,9 +42,6 @@ class AboutScreenTest : BaseComposeTest() {
             isSubmitCrashLogsEnabled = false,
             copyrightInfo = "".asText(),
             shouldShowCrashLogsButton = true,
-            deviceInfo = ":phone: Android phone :robot: 15@34".asText(),
-            buildInfo = "commit: bitwarden/android/main@abc123\n" +
-                ":computer: build source: bitwarden/android/actions/runs/123/attempts/123",
         ),
     )
     private val mutableEventFlow = bufferedMutableSharedFlow<AboutEvent>()

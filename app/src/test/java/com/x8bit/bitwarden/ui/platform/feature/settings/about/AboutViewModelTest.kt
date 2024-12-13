@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
+import CIBuildInfo
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.BuildConfig
@@ -14,6 +16,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -111,9 +114,13 @@ class AboutViewModelTest : BaseViewModelTest() {
     fun `on VersionClick should call setText on the ClipboardManager with specific Text`() {
         val versionName = BuildConfig.VERSION_NAME
         val versionCode = BuildConfig.VERSION_CODE
-        val commitInfo = "commit: bitwarden/android/main@abc123"
-        val buildSourceInfoPrefix = ":computer: build source:"
-        val buildSourceInfo = "bitwarden/android/actions/runs/123/attempts/123"
+        val commitInfo = "\uD83E\uDDF1 commit: bitwarden/android/main@abc123"
+        val buildSourceInfoPrefix = "\uD83D\uDCBB build source:"
+        val buildSourceInfo = "bitwarden/android/actions/runs/123/attempts/1"
+
+        val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
+        val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
+        val buildInfo = "\uD83D\uDCE6 dev"
 
         val expectedText = "© Bitwarden Inc. 2015-"
             .asText()
@@ -121,11 +128,17 @@ class AboutViewModelTest : BaseViewModelTest() {
             .concat("\n\n".asText())
             .concat("Version: $versionName ($versionCode)".asText())
             .concat("\n\n".asText())
-            .concat(":phone: Android Phone :robot: 15@34".asText())
+            .concat("$deviceBrandModel $osInfo $buildInfo".asText())
             .concat("\n".asText())
             .concat(("$commitInfo\n$buildSourceInfoPrefix $buildSourceInfo").asText())
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
+
+        mockkObject(CIBuildInfo)
+        every { CIBuildInfo.info } returns listOf(
+            "🧱 commit:" to "bitwarden/android/main@abc123",
+            "💻 build source:" to "bitwarden/android/actions/runs/123/attempts/1",
+        )
 
         val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
         viewModel.trySendAction(AboutAction.VersionClick)
@@ -140,17 +153,24 @@ class AboutViewModelTest : BaseViewModelTest() {
         val versionName = BuildConfig.VERSION_NAME
         val versionCode = BuildConfig.VERSION_CODE
 
+        val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
+        val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
+        val buildInfo = "\uD83D\uDCE6 dev"
+
         val expectedText = "© Bitwarden Inc. 2015-"
             .asText()
             .concat(Year.now(fixedClock).value.toString().asText())
             .concat("\n\n".asText())
             .concat("Version: $versionName ($versionCode)".asText())
             .concat("\n\n".asText())
-            .concat(":phone: Android Phone :robot: 15@34".asText())
+            .concat("$deviceBrandModel $osInfo $buildInfo".asText())
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
 
-        val viewModel = createViewModel(DEFAULT_ABOUT_STATE.copy(buildInfo = ""))
+        mockkObject(CIBuildInfo)
+        every { CIBuildInfo.info } returns emptyList()
+
+        val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
         viewModel.trySendAction(AboutAction.VersionClick)
 
         verify(exactly = 1) {
@@ -197,7 +217,4 @@ private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
         .asText()
         .concat(Year.now(fixedClock).value.toString().asText()),
     shouldShowCrashLogsButton = true,
-    deviceInfo = ":phone: Android Phone :robot: 15@34".asText(),
-    buildInfo = "commit: bitwarden/android/main@abc123\n" +
-        ":computer: build source: bitwarden/android/actions/runs/123/attempts/123",
 )
