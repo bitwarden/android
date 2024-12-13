@@ -33,6 +33,16 @@ val userProperties = Properties().apply {
     }
 }
 
+/**
+ * Loads CI-specific build properties that are not checked into source control.
+ */
+val ciProperties = Properties().apply {
+    val ciPropsFile = File(rootDir, "ci.properties")
+    if (ciPropsFile.exists()) {
+        FileInputStream(ciPropsFile).use { load(it) }
+    }
+}
+
 android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -52,6 +62,12 @@ android {
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            type ="String",
+            name = "CI_INFO",
+            value = "\"${ciProperties.getOrDefault("ci.info", "local")}\""
+        )
     }
 
     androidResources {
