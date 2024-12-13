@@ -1074,6 +1074,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="bitwarden_tools">Bitwarden rīki</string>
   <string name="got_it">Sapratu</string>
   <string name="no_logins_were_imported">Netika ievietots neviens pieteikšanās vienums</string>
+  <string name="import_error">Ievietošanas kļūda</string>
   <string name="verified_sso_domain_verified">Apliecināts SSO domēna galamērķis</string>
   <string name="logins_imported">Pieteikšanās vienumi ievietoti</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Jāatceras datorā izdzēst savu ievietoto paroļu datni</string>
@@ -1112,5 +1113,5 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="add_a_number_or_symbol_highlight">Pievienot skaitli vai īpašu rakstzīmi</string>
   <string name="need_some_inspiration">"Nepieciešama iedvesma?"</string>
   <string name="check_out_the_passphrase_generator">"Ir vērts ieskatīties paroles vārdkopu veidotājā"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="copied_to_clipboard">Ievietots starpliktuvē.</string>
 </resources>

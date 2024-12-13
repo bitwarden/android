@@ -1073,6 +1073,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="bitwarden_tools">Nástroje Bitwarden</string>
   <string name="got_it">Rozumím</string>
   <string name="no_logins_were_imported">Nebyla importována žádná přihlášení</string>
+  <string name="import_error">Chyba importu</string>
   <string name="verified_sso_domain_verified">Ověřený koncový bod domény SSO</string>
   <string name="logins_imported">Přihlášení byla importována</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Nezapomeňte smazat soubor importovaných hesel z Vašeho počítače</string>
