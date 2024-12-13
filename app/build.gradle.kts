@@ -311,6 +311,10 @@ tasks {
         dependsOn("detekt")
     }
 
+    getByName("sonar") {
+        dependsOn("check")
+    }
+
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         jvmTarget = libs.versions.jvmTarget.get()
     }
@@ -328,12 +332,48 @@ tasks {
 
 afterEvaluate {
     // Disable Fdroid-specific tasks that we want to exclude
-    val tasks = tasks.withType<GoogleServicesTask>() +
+    val fdroidTasksToDisable = tasks.withType<GoogleServicesTask>() +
         tasks.withType<InjectMappingFileIdTask>() +
         tasks.withType<UploadMappingFileTask>()
-    tasks
+    fdroidTasksToDisable
         .filter { it.name.contains("Fdroid") }
         .forEach { it.enabled = false }
+
+    tasks.named("bundle") {
+        finalizedBy("renameAabFiles")
+    }
+    tasks.register("renameAabFiles") {
+        group = "build"
+        doLast {
+            val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
+            println("bundlesDir: $bundlesDir")
+            renameFile(
+                "$bundlesDir/standardDebug/com.x8bit.bitwarden-standard-debug.aab",
+                "com.x8bit.bitwarden.dev.aab"
+            )
+            renameFile(
+                "$bundlesDir/standardBeta/com.x8bit.bitwarden-standard-beta.aab",
+                "com.x8bit.bitwarden.beta.aab"
+            )
+            renameFile(
+                "$bundlesDir/standardRelease/com.x8bit.bitwarden-standard-release.aab",
+                "com.x8bit.bitwarden.aab"
+            )
+
+            renameFile(
+                "$bundlesDir/fdroidDebug/com.x8bit.bitwarden-fdroid-debug.aab",
+                "com.x8bit.bitwarden.dev-fdroid.aab"
+            )
+            renameFile(
+                "$bundlesDir/fdroidBeta/com.x8bit.bitwarden-fdroid-beta.aab",
+                "com.x8bit.bitwarden.beta-fdroid.aab"
+            )
+            renameFile(
+                "$bundlesDir/fdroidRelease/com.x8bit.bitwarden-fdroid-release.aab",
+                "com.x8bit.bitwarden-fdroid.aab"
+            )
+        }
+    }
 }
 
 sonar {
@@ -348,8 +388,17 @@ sonar {
     }
 }
 
-tasks {
-    getByName("sonar") {
-        dependsOn("check")
+private fun renameFile(path: String, newName: String) {
+    val originalFile = File(path)
+    if (!originalFile.exists()) {
+        println("File $originalFile does not exist!")
+        return
+    }
+
+    val newFile = File(originalFile.parentFile, newName)
+    if (originalFile.renameTo(newFile)) {
+        println("Renamed $originalFile to $newFile")
+    } else {
+        throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }
