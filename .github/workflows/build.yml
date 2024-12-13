@@ -127,8 +127,8 @@ jobs:
           CONTAINER_NAME: mobile
         run: |
           mkdir -p ${{ github.workspace }}/secrets
-          mkdir -p ${{ github.workspace }}/app/src/standard/beta
-          mkdir -p ${{ github.workspace }}/app/src/standard/release
+          mkdir -p ${{ github.workspace }}/app/src/standardBeta
+          mkdir -p ${{ github.workspace }}/app/src/standardRelease
 
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
@@ -141,9 +141,9 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name google-services.json --file ${{ github.workspace }}/app/src/standard/release/google-services.json --output none
+          --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name google-services.json --file ${{ github.workspace }}/app/src/standard/beta/google-services.json --output none
+          --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
       - name: Download Firebase credentials
         if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
@@ -247,7 +247,7 @@ jobs:
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: com.x8bit.bitwarden.aab
-          path: app/build/outputs/bundle/standard/release/com.x8bit.bitwarden.aab
+          path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab
           if-no-files-found: error
 
       - name: Upload beta Play Store .aab artifact
@@ -255,7 +255,7 @@ jobs:
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: com.x8bit.bitwarden.beta.aab
-          path: app/build/outputs/bundle/standard/beta/com.x8bit.bitwarden.beta.aab
+          path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab
           if-no-files-found: error
 
       - name: Upload release .apk artifact
@@ -298,13 +298,13 @@ jobs:
       - name: Create checksum for release .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         run: |
-          sha256sum "app/build/outputs/bundle/standard/release/com.x8bit.bitwarden.aab" \
+          sha256sum "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab" \
             > ./com.x8bit.bitwarden.aab-sha256.txt
 
       - name: Create checksum for beta .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         run: |
-          sha256sum "app/build/outputs/bundle/standard/beta/com.x8bit.bitwarden.beta.aab" \
+          sha256sum "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab" \
             > ./com.x8bit.bitwarden.beta.aab-sha256.txt
 
       - name: Create checksum for Debug .apk artifact

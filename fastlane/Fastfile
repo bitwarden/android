@@ -161,7 +161,7 @@ platform :android do
     # Save changes
     File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
   end
-
+  
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
   private_lane :buildAndSignBitwarden do |options|
     gradle(
@@ -233,7 +233,7 @@ platform :android do
       track: "internal",
       release_status: "completed",
       rollout: "1",
-      aab: "app/build/outputs/bundle/standard/beta/com.x8bit.bitwarden.beta.aab",
+      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab",
     )
   end
 
@@ -244,7 +244,7 @@ platform :android do
       track: "internal",
       release_status: "completed",
       rollout: "1",
-      aab: "app/build/outputs/bundle/standard/release/com.x8bit.bitwarden.aab",
+      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab",
     )
   end
 
