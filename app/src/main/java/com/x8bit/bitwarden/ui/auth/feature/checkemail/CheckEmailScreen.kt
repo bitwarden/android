@@ -153,10 +153,7 @@ private fun CheckEmailContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         val descriptionAnnotatedString = createAnnotatedString(
-            mainString = stringResource(
-                id = R.string.we_sent_an_email_to,
-                email,
-            ),
+            mainStringResource = R.string.we_sent_an_email_to,
             highlights = listOf(email),
             highlightStyle = SpanStyle(
                 color = BitwardenTheme.colorScheme.text.primary,
@@ -242,10 +239,7 @@ private fun CheckEmailLegacyContent(
 
         @Suppress("MaxLineLength")
         val descriptionAnnotatedString = createAnnotatedString(
-            mainString = stringResource(
-                id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
-                email,
-            ),
+            mainStringResource = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
             highlights = listOf(email),
             highlightStyle = SpanStyle(
                 color = BitwardenTheme.colorScheme.text.primary,
@@ -277,9 +271,7 @@ private fun CheckEmailLegacyContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             val goBackAnnotatedString = createClickableAnnotatedString(
-                mainString = stringResource(
-                    id = R.string.no_email_go_back_to_edit_your_email_address,
-                ),
+                mainStringResource = R.string.no_email_go_back_to_edit_your_email_address,
                 highlights = listOf(
                     ClickableTextHighlight(
                         textToHighlight = stringResource(id = R.string.go_back),
@@ -292,12 +284,10 @@ private fun CheckEmailLegacyContent(
             )
             Spacer(modifier = Modifier.height(32.dp))
             val logInAnnotatedString = createClickableAnnotatedString(
-                mainString = stringResource(
-                    id = R.string.or_log_in_you_may_already_have_an_account,
-                ),
+                mainStringResource = R.string.or_log_in_you_may_already_have_an_account,
                 highlights = listOf(
                     ClickableTextHighlight(
-                        textToHighlight = stringResource(id = R.string.log_in_verb),
+                        textToHighlight = stringResource(id = R.string.or_log_in_highlight),
                         onTextClick = onLoginClick,
                     ),
                 ),

@@ -130,6 +130,7 @@ private fun MasterPasswordGuidanceContent(
     }
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
@@ -139,9 +140,7 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                     headerText = stringResource(R.string.choose_three_or_four_random_words)
                         .toAnnotatedString(),
                     subtitleText = createAnnotatedString(
-                        mainString = stringResource(
-                            R.string.pick_three_or_four_random_unrelated_words,
-                        ),
+                        mainStringResource = R.string.pick_three_or_four_random_unrelated_words,
                         highlights = listOf(
                             stringResource(
                                 R.string.pick_three_or_four_random_unrelated_words_highlight,
@@ -155,9 +154,7 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                     headerText = stringResource(R.string.combine_those_words_together)
                         .toAnnotatedString(),
                     subtitleText = createAnnotatedString(
-                        mainString = stringResource(
-                            R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
-                        ),
+                        mainStringResource = R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
                         highlights = listOf(
                             stringResource(
                                 R.string.use_hyphens_spaces_or_leave_them_as_long_word_highlight,
@@ -170,9 +167,7 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                 ContentBlockData(
                     headerText = stringResource(R.string.make_it_yours).toAnnotatedString(),
                     subtitleText = createAnnotatedString(
-                        mainString = stringResource(
-                            R.string.add_a_number_or_symbol_to_make_it_even_stronger,
-                        ),
+                        mainStringResource = R.string.add_a_number_or_symbol_to_make_it_even_stronger,
                         highlights = listOf(
                             stringResource(R.string.add_a_number_or_symbol_highlight),
                         ),

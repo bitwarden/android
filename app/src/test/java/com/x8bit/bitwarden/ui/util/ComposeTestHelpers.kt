@@ -182,6 +182,7 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
  * Helper function to assert link annotation is applied to the given text in
  * the [mainString] and invoke click action if it is found.
  */
+@Suppress("NestedBlockDepth")
 fun ComposeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
     mainString: String,
     highLightText: String,
@@ -195,14 +196,21 @@ fun ComposeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
         .getOrNull(SemanticsProperties.Text)
         ?.let { text ->
             text.forEach {
-                it.getLinkAnnotations(expectedStart, expectedEnd)
-                    .forEach { annotationRange ->
+                val linkAnnotations = it.getLinkAnnotations(expectedStart, expectedEnd)
+                if (linkAnnotations.isEmpty()) {
+                    throw AssertionError(
+                        "No link annotation found for " +
+                            "$highLightText in the expected range: $expectedStart - $expectedEnd",
+                    )
+                } else {
+                    linkAnnotations.forEach { annotationRange ->
                         val annotation = annotationRange.item as? LinkAnnotation.Clickable
                         val tag = annotation?.tag
                         assertNotNull(tag)
                         assertTrue(highLightText.equals(tag, ignoreCase = true))
                         annotation?.linkInteractionListener?.onClick(annotation)
                     }
+                }
             }
         }
 }
