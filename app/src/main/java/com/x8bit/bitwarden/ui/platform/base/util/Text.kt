@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -151,6 +152,7 @@ fun createAnnotatedString(
         )
         for (highlightString in highlights) {
             val startIndex = mainString.indexOf(highlightString, ignoreCase = true)
+            if (startIndex < 0) continue
             val endIndex = startIndex + highlightString.length
             addStyle(
                 style = highlightStyle,
@@ -167,6 +169,26 @@ fun createAnnotatedString(
             }
         }
     }
+}
+
+/**
+ * Create an [AnnotatedString] with highlighted parts.
+ * Overload function which takes a string resource with format args and
+ * puts the highlights in place and applies the highlight style.
+ */
+@Composable
+fun createAnnotatedString(
+    @StringRes mainStringResource: Int,
+    highlights: List<String>,
+    highlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    tag: String? = null,
+): AnnotatedString {
+    return createAnnotatedString(
+        mainString = stringResource(mainStringResource, *highlights.toTypedArray()),
+        highlights = highlights,
+        highlightStyle = highlightStyle,
+        tag = tag,
+    )
 }
 
 /**
@@ -224,6 +246,28 @@ fun createClickableAnnotatedString(
             )
         }
     }
+}
+
+/**
+ * Overload of [createClickableAnnotatedString] which takes a string resource with format args
+ * and puts the highlights in place and applies the highlight style.
+ */
+@Composable
+fun createClickableAnnotatedString(
+    @StringRes mainStringResource: Int,
+    highlights: List<ClickableTextHighlight>,
+    style: SpanStyle = bitwardenDefaultSpanStyle,
+    highlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+): AnnotatedString {
+    return createClickableAnnotatedString(
+        mainString = stringResource(
+            mainStringResource,
+            *highlights.map { it.textToHighlight }.toTypedArray(),
+        ),
+        highlights = highlights,
+        style = style,
+        highlightStyle = highlightStyle,
+    )
 }
 
 /**

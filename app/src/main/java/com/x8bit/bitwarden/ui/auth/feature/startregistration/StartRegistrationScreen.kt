@@ -288,7 +288,7 @@ private fun StartRegistrationContent(
     }
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,
@@ -297,11 +297,8 @@ private fun TermsAndPrivacyText(
 ) {
     val strTerms = stringResource(id = R.string.terms_of_service)
     val strPrivacy = stringResource(id = R.string.privacy_policy)
-    val strTermsAndPrivacy = stringResource(
-        id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
-    )
     val annotatedLinkString: AnnotatedString = createClickableAnnotatedString(
-        mainString = strTermsAndPrivacy,
+        mainStringResource = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
         highlights = listOf(
             ClickableTextHighlight(
                 textToHighlight = strTerms,
@@ -359,9 +356,7 @@ private fun ReceiveMarketingEmailsSwitch(
 
     @Suppress("MaxLineLength")
     val annotatedLinkString = createClickableAnnotatedString(
-        mainString = stringResource(
-            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
-        ),
+        mainStringResource = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
         highlights = listOf(
             ClickableTextHighlight(
                 textToHighlight = unsubscribeString,

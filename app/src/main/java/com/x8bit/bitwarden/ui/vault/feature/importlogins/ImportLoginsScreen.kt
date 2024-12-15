@@ -280,6 +280,7 @@ private fun InitialImportLoginsContent(
     }
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun ImportLoginsStepOneContent(
     onContinueClick: () -> Unit,
@@ -288,25 +289,19 @@ private fun ImportLoginsStepOneContent(
     modifier: Modifier = Modifier,
 ) {
     val instruction1 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager,
-        ),
+        mainStringResource = R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager,
         highlights = listOf(
             stringResource(R.string.log_in_to_your_current_browser_or_password_manager_highlight),
         ),
         highlightStyle = bitwardenBoldSpanStyle,
     )
     val instruction2 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.export_your_passwords_this_option_is_usually_found_in_your_settings,
-        ),
+        mainStringResource = R.string.export_your_passwords_this_option_is_usually_found_in_your_settings,
         listOf(stringResource(R.string.export_your_passwords_highlight)),
         highlightStyle = bitwardenBoldSpanStyle,
     )
     val instruction3 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
-        ),
+        mainStringResource = R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
         highlights = listOf(stringResource(R.string.save_the_exported_file_highlight)),
         highlightStyle = bitwardenBoldSpanStyle,
     )
@@ -347,10 +342,8 @@ private fun ImportLoginsStepTwoContent(
     modifier: Modifier = Modifier,
 ) {
     val instruction1 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
-            vaultUrl,
-        ),
+        mainStringResource =
+        R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
         highlights = listOf(
             stringResource(
                 R.string.go_to_vault_bitwarden_com_highlight,
@@ -387,7 +380,7 @@ private fun ImportLoginsStepTwoContent(
     )
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun ImportLoginsStepThreeContent(
     onContinueClick: () -> Unit,
@@ -396,9 +389,7 @@ private fun ImportLoginsStepThreeContent(
     modifier: Modifier = Modifier,
 ) {
     val instruction1 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
-        ),
+        mainStringResource = R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
         highlights = listOf(
             stringResource(R.string.find_the_tools_highlight),
             stringResource(R.string.select_import_data_step_3_highlight),
@@ -406,16 +397,14 @@ private fun ImportLoginsStepThreeContent(
         highlightStyle = bitwardenBoldSpanStyle,
     )
     val instruction2 = createAnnotatedString(
-        mainString = stringResource(R.string.fill_out_the_form_and_import_your_saved_password_file),
+        mainStringResource = R.string.fill_out_the_form_and_import_your_saved_password_file,
         highlights = listOf(
             stringResource(R.string.import_your_saved_password_file_highlight),
         ),
         highlightStyle = bitwardenBoldSpanStyle,
     )
     val instruction3 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
-        ),
+        mainStringResource = R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
         highlights = listOf(
             stringResource(R.string.select_import_data_highlight),
             stringResource(R.string.then_done_highlight),
@@ -423,9 +412,7 @@ private fun ImportLoginsStepThreeContent(
         highlightStyle = bitwardenBoldSpanStyle,
     )
     val instruction4 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.for_your_security_be_sure_to_delete_your_saved_password_file,
-        ),
+        mainStringResource = R.string.for_your_security_be_sure_to_delete_your_saved_password_file,
         highlights = listOf(
             stringResource(R.string.delete_your_saved_password_file),
         ),
