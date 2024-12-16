@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import CIBuildInfo
 import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -107,10 +106,7 @@ class AboutViewModel @Inject constructor(
         val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
         val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
         val buildInfo = "\uD83D\uDCE6 $buildVariant$buildFlavour"
-
-        val ciBuildInfoString = CIBuildInfo.info.joinToString(separator = "\n") { (key, value) ->
-            "$key $value"
-        }
+        val ciBuildInfoString = BuildConfig.CI_INFO
 
         clipboardManager.setText(
             text = state.copyrightInfo
