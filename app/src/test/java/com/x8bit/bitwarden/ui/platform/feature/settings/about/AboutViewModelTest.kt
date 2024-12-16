@@ -125,8 +125,13 @@ class AboutViewModelTest : BaseViewModelTest() {
             .concat("Version: $versionName ($versionCode)".asText())
             .concat("\n\n".asText())
             .concat("$deviceBrandModel $osInfo $buildInfo".asText())
-            .concat("\n".asText())
-            .concat((ciInfo).asText())
+            .let { text ->
+                if (ciInfo.isEmpty()) {
+                    text
+                } else {
+                    text.concat("\n".asText()).concat(ciInfo.asText())
+                }
+            }
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
 
