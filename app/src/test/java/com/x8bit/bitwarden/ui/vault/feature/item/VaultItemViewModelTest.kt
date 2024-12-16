@@ -2492,9 +2492,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on PrivateKeyVisibilityClick should show password dialog when re-prompt is required`() =
             runTest {
-                val sshKeyViewState = createViewState(
-                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                )
                 val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
                 every {
                     mockCipherView.toViewState(
@@ -2518,15 +2515,22 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     sshKeyState.copy(
-                        viewState = sshKeyViewState.copy(
-                            common = DEFAULT_COMMON,
-                            type = DEFAULT_SSH_KEY_TYPE.copy(
-                                showPrivateKey = true,
-                            ),
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            PasswordRepromptAction.ViewPrivateKeyClicked(isVisible = true),
                         ),
                     ),
                     viewModel.stateFlow.value,
                 )
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                }
             }
 
         @Test
