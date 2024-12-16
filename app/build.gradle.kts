@@ -1,7 +1,9 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.utils.cxx.io.removeExtensionIfPresent
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
+import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
@@ -64,7 +66,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField(
-            type ="String",
+            type = "String",
             name = "CI_INFO",
             value = "\"${ciProperties.getOrDefault("ci.info", "local")}\""
         )
@@ -133,14 +135,35 @@ android {
     }
 
     applicationVariants.all {
+        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
         outputs
             .mapNotNull { it as? BaseVariantOutputImpl }
             .forEach { output ->
-                output.outputFileName = when (flavorName) {
-                    "fdroid" -> "$applicationId-$flavorName.apk"
-                    "standard" -> "$applicationId.apk"
-                    else -> output.outputFileName
+                val fileNameWithoutExtension = when (flavorName) {
+                    "fdroid" -> "$applicationId-$flavorName"
+                    "standard" -> "$applicationId"
+                    else -> output.outputFileName.removeExtensionIfPresent(".apk")
                 }
+
+                // Set the APK output filename.
+                output.outputFileName = "$fileNameWithoutExtension.apk"
+
+                val variantName = name
+                val renameTaskName = "rename${variantName.capitalize()}AabFiles"
+                tasks.register(renameTaskName) {
+                    group = "build"
+                    description = "Renames the bundle files for $variantName variant"
+                    doLast {
+                        renameFile(
+                            "$bundlesDir/$variantName/$namespace-$flavorName-${buildType.name}.aab",
+                            "$fileNameWithoutExtension.aab",
+                        )
+                    }
+                }
+                // Force renaming task to execute after the variant is built.
+                tasks
+                    .getByName("bundle${variantName.capitalize()}")
+                    .finalizedBy(renameTaskName)
             }
     }
 
@@ -354,42 +377,6 @@ afterEvaluate {
     fdroidTasksToDisable
         .filter { it.name.contains("Fdroid") }
         .forEach { it.enabled = false }
-
-    tasks.named("bundle") {
-        finalizedBy("renameAabFiles")
-    }
-    tasks.register("renameAabFiles") {
-        group = "build"
-        doLast {
-            val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
-            println("bundlesDir: $bundlesDir")
-            renameFile(
-                "$bundlesDir/standardDebug/com.x8bit.bitwarden-standard-debug.aab",
-                "com.x8bit.bitwarden.dev.aab"
-            )
-            renameFile(
-                "$bundlesDir/standardBeta/com.x8bit.bitwarden-standard-beta.aab",
-                "com.x8bit.bitwarden.beta.aab"
-            )
-            renameFile(
-                "$bundlesDir/standardRelease/com.x8bit.bitwarden-standard-release.aab",
-                "com.x8bit.bitwarden.aab"
-            )
-
-            renameFile(
-                "$bundlesDir/fdroidDebug/com.x8bit.bitwarden-fdroid-debug.aab",
-                "com.x8bit.bitwarden.dev-fdroid.aab"
-            )
-            renameFile(
-                "$bundlesDir/fdroidBeta/com.x8bit.bitwarden-fdroid-beta.aab",
-                "com.x8bit.bitwarden.beta-fdroid.aab"
-            )
-            renameFile(
-                "$bundlesDir/fdroidRelease/com.x8bit.bitwarden-fdroid-release.aab",
-                "com.x8bit.bitwarden-fdroid.aab"
-            )
-        }
-    }
 }
 
 sonar {
