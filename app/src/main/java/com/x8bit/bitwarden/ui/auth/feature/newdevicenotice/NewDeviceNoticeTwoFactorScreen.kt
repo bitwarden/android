@@ -164,7 +164,7 @@ private fun MainContent(
         BitwardenFilledButton(
             label = stringResource(R.string.turn_on_two_step_login),
             onClick = onTurnOnTwoFactorClick,
-            iconRight = rememberVectorPainter(id = R.drawable.ic_external_link),
+            icon = rememberVectorPainter(id = R.drawable.ic_external_link),
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),
@@ -173,7 +173,7 @@ private fun MainContent(
         BitwardenOutlinedButton(
             label = stringResource(R.string.change_account_email),
             onClick = onChangeAccountEmailClick,
-            iconRight = rememberVectorPainter(id = R.drawable.ic_external_link),
+            icon = rememberVectorPainter(id = R.drawable.ic_external_link),
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),

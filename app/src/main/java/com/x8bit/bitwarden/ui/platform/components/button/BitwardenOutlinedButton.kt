@@ -29,7 +29,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
- * @param iconRight The icon on the right for the button.
  * @param isEnabled Whether or not the button is enabled.
  */
 @Composable
@@ -38,7 +37,6 @@ fun BitwardenOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: Painter? = null,
-    iconRight: Painter? = null,
     isEnabled: Boolean = true,
     colors: BitwardenOutlinedButtonColors = bitwardenOutlinedButtonColors(),
 ) {
@@ -50,7 +48,7 @@ fun BitwardenOutlinedButton(
             top = 10.dp,
             bottom = 10.dp,
             start = if (icon == null) 24.dp else 16.dp,
-            end = if (iconRight == null) 24.dp else 16.dp,
+            end = 24.dp,
         ),
         colors = colors.materialButtonColors,
         border = BorderStroke(
@@ -73,13 +71,6 @@ fun BitwardenOutlinedButton(
             text = label,
             style = BitwardenTheme.typography.labelLarge,
         )
-        iconRight?.let {
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(
-                painter = iconRight,
-                contentDescription = null,
-            )
-        }
     }
 }
 
@@ -112,20 +103,6 @@ private fun BitwardenOutlinedButton_preview() {
         BitwardenOutlinedButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
-            iconRight = rememberVectorPainter(id = R.drawable.ic_question_circle),
-            isEnabled = true,
-        )
-        BitwardenOutlinedButton(
-            label = "Label very long",
-            onClick = {},
-            icon = null,
-            iconRight = rememberVectorPainter(id = R.drawable.ic_question_circle),
-            isEnabled = true,
-        )
-        BitwardenOutlinedButton(
-            label = "Label",
-            onClick = {},
             icon = null,
             isEnabled = false,
         )
@@ -133,20 +110,6 @@ private fun BitwardenOutlinedButton_preview() {
             label = "Label",
             onClick = {},
             icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
-            isEnabled = false,
-        )
-        BitwardenOutlinedButton(
-            label = "Label",
-            onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
-            iconRight = rememberVectorPainter(id = R.drawable.ic_question_circle),
-            isEnabled = false,
-        )
-        BitwardenOutlinedButton(
-            label = "Label very long",
-            onClick = {},
-            icon = null,
-            iconRight = rememberVectorPainter(id = R.drawable.ic_question_circle),
             isEnabled = false,
         )
     }
