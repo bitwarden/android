@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -75,7 +76,8 @@ class VaultViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val snackbarRelayManager: SnackbarRelayManager,
-    featureFlagManager: FeatureFlagManager,
+    private val reviewPromptManager: ReviewPromptManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -201,6 +203,15 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal -> handleInternalAction(action)
             VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
             VaultAction.ImportActionCardClick -> handleImportActionCardClick()
+            VaultAction.LifecycleResumed -> handleLifecycleResumed()
+        }
+    }
+
+    private fun handleLifecycleResumed() {
+        val shouldShowPrompt = reviewPromptManager.shouldPromptForAppReview() &&
+            featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt)
+        if (shouldShowPrompt) {
+            sendEvent(VaultEvent.PromptForAppReview)
         }
     }
 
@@ -1102,6 +1113,11 @@ sealed class VaultEvent {
     data object NavigateToImportLogins : VaultEvent()
 
     /**
+     * Indicates that we should prompt the user for app review.
+     */
+    data object PromptForAppReview : VaultEvent()
+
+    /**
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultEvent()
@@ -1274,6 +1290,11 @@ sealed class VaultAction {
         val overflowAction: ListingItemOverflowAction.VaultAction,
         val password: String,
     ) : VaultAction()
+
+    /**
+     * The lifecycle of the VaultScreen has entered a resumed state.
+     */
+    data object LifecycleResumed : VaultAction()
 
     /**
      * Models actions that the [VaultViewModel] itself might send.
