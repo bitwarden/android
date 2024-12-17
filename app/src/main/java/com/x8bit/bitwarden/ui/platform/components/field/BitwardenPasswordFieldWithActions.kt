@@ -10,12 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -33,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
+ * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -49,6 +52,7 @@ fun BitwardenPasswordFieldWithActions(
     singleLine: Boolean = false,
     showPasswordTestTag: String? = null,
     passwordFieldTestTag: String? = null,
+    textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
@@ -68,6 +72,7 @@ fun BitwardenPasswordFieldWithActions(
                 .weight(1f)
                 .padding(end = 8.dp),
             showPasswordTestTag = showPasswordTestTag,
+            textToolbarType = textToolbarType,
         )
         actions()
     }

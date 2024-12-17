@@ -202,6 +202,12 @@ fun createClickableAnnotatedString(
                     mainString.lastIndexOf(text, ignoreCase = true)
                 }
             }
+
+            // Skip adding the link if the text to highlight is not found in the main string.
+            // This can happen if the highlighted text is correctly translated, but the main string
+            // is not yet translated, causing the startIndex to be -1.
+            if (startIndex < 0) continue
+
             val endIndex = startIndex + highlight.textToHighlight.length
             val link = LinkAnnotation.Clickable(
                 tag = highlight.textToHighlight,

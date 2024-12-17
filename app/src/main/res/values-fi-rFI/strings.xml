@@ -962,6 +962,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="remove_passkey">Poista pääsyavain</string>
   <string name="passkey_removed">Pääsyavain poistettiin</string>
   <string name="what_makes_a_password_strong">Mikä tekee salasanasta vahvan?</string>
+  <string name="a_secure_memorable_password">A secure, memorable password</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Mitä pidempi salasanasi on, sitä vaikeampi sitä on murtaa. Tilin luomisen vähimmäisvaatimus on 12 merkkiä, mutta jos käytät 14 merkkiä, salasanasi murtamiseen kuluu vuosisatoja!</string>
   <string name="the_strongest_passwords_are_usually">Vahvimmat salasanat ovat yleensä:</string>
   <string name="twelve_or_more_characters">vähintään 12 merkkiä</string>
@@ -977,7 +978,8 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="confirm">Vahvista</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Määritä biometriatiedot tai aseta PIN-koodi avataksesi holvisi ja automaattitäyttääksesi kirjautumistietojasi nopeasti.</string>
   <string name="never_lose_access_to_your_vault">Älä koskaan menetä pääsyä holviisi</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Paras tapa varmistaa pääsy holviisi on määrittää varmistustavat heti alussa.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
   <string name="create_a_hint">Luo vihje</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Vihjeesi lähetetään sinulle sähköpostitse, kun pyydät sitä.</string>
   <string name="write_your_password_down">Kirjoita salasanasi muistiin</string>
@@ -1072,6 +1074,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="bitwarden_tools">Bitwarden-työkalut</string>
   <string name="got_it">Selvä</string>
   <string name="no_logins_were_imported">Kirjautumistietoja ei tuotu</string>
+  <string name="import_error">Import error</string>
   <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
   <string name="logins_imported">Kirjautumistietoja tuotiin</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
@@ -1097,6 +1100,18 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="copy_address">Kopioi osoite</string>
   <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-  <string name="cxp_import">CXP Import</string>
-  <string name="cxp_export">CXP Export</string>
+  <string name="cxp_import">CXP-tuonti</string>
+  <string name="cxp_export">CXP-vienti</string>
+  <string name="choose_three_or_four_random_words">Valitse kolme tai neljä satunnaista sanaa</string>
+  <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of objects, places, or things you like.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">esineitä, paikkoja, tai asioita</string>
+  <string name="combine_those_words_together">Combine those words together</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. Use hyphens, spaces, or leave them as one long word—your choice!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Use hyphens, spaces, or leave them as one long word</string>
+  <string name="make_it_yours">Make it yours</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Add a number or symbol to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
+  <string name="add_a_number_or_symbol_highlight">Lisää numero tai merkki</string>
+  <string name="need_some_inspiration">"Tarvitsetko inspiraatiota?"</string>
+  <string name="check_out_the_passphrase_generator">"Tutustu salalausegeneraattoriin"</string>
+  <string name="copied_to_clipboard">Copied to clipboard.</string>
 </resources>
