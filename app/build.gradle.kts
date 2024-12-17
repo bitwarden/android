@@ -68,7 +68,7 @@ android {
         buildConfigField(
             type = "String",
             name = "CI_INFO",
-            value = "${ciProperties.getOrDefault("ci.info", "local")}"
+            value = "${ciProperties.getOrDefault("ci.info", "\"local\"")}"
         )
     }
 
