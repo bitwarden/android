@@ -328,7 +328,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_were_unable_to_verify_the_server_certificate.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     )
                 }
