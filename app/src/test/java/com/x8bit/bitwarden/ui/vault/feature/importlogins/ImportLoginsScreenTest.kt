@@ -385,7 +385,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         verifyActionSent(ImportLoginsAction.RetryVaultSync)
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText("Import logins later")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
@@ -420,7 +420,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         verifyActionSent(ImportLoginsAction.RetryVaultSync)
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText("Import logins later")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()

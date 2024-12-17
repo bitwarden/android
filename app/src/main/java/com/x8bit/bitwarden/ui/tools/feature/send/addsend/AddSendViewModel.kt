@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -70,6 +71,7 @@ class AddSendViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepo: VaultRepository,
     private val policyManager: PolicyManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -512,6 +514,17 @@ class AddSendViewModel @Inject constructor(
                     }
                     return@onContent
                 }
+            }
+            if (!networkConnectionManager.isNetworkConnected) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.internet_connection_required_title.asText(),
+                            message = R.string.internet_connection_required_message.asText(),
+                        ),
+                    )
+                }
+                return@onContent
             }
             mutableStateFlow.update {
                 it.copy(

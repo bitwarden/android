@@ -172,7 +172,7 @@ private class AndroidKeyStore(
     private val useSymmetricPreferenceKey: String = "essentials_use_symmetric"
 
     private val prefsMasterKey = "SecureStorageKey"
-    private val initializationVectorLen = 12; // Android supports an IV of 12 for AES/GCM
+    private val initializationVectorLen = 12 // Android supports an IV of 12 for AES/GCM
 
     init {
         keyStore.load(null)

@@ -962,6 +962,7 @@
   <string name="remove_passkey">إزالة مفتاح المرور</string>
   <string name="passkey_removed">تمت إزالة مفتاح المرور</string>
   <string name="what_makes_a_password_strong">ما الذي يجعل كلمة المرور قوية؟</string>
+  <string name="a_secure_memorable_password">A secure, memorable password</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">كلما طالت كلمة المرور الخاصة بك، زادت صعوبة اختراقها. الحد الأدنى لإنشاء الحساب هو 12 حرفاً، ولكن إذا جعلتها 14 حرفاً، فإن وقت تفكيك كلمة المرور الخاصة بك سيكون قروناً!</string>
   <string name="the_strongest_passwords_are_usually">أقوى كلمات المرور هي عادة:</string>
   <string name="twelve_or_more_characters">12 حرف أو أكثر</string>
@@ -977,7 +978,8 @@
   <string name="confirm">تأكيد</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">إعداد القياسات الحيوية أو اختيار رمز PIN للوصول بسرعة إلى المخزن الخاص بك وملء تلقائي لتسجيل الدخول.</string>
   <string name="never_lose_access_to_your_vault">لا تفقد أبدا الوصول إلى خزانتك</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">أفضل طريقة للتأكد من أنه يمكنك دائماً الوصول إلى حسابك هي إعداد ضمانات منذ البداية.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
   <string name="create_a_hint">إنشاء تلميح</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">سيتم إرسال تلميحك إليك عبر البريد الإلكتروني عندما تطلب ذلك.</string>
   <string name="write_your_password_down">اكتب كلمة المرور الخاصة بك</string>
@@ -1072,6 +1074,7 @@
   <string name="bitwarden_tools">أدوات Bitwarden</string>
   <string name="got_it">فهمت</string>
   <string name="no_logins_were_imported">لم يتم استيراد أي تسجيلات دخول</string>
+  <string name="import_error">Import error</string>
   <string name="verified_sso_domain_verified">نقطة نهاية نطاق SSO المتحقق منها</string>
   <string name="logins_imported">تسجيلات الدخول المستوردة</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">تذكر أن تحذف ملف كلمة المرور المستوردة من جهاز الكمبيوتر الخاص بك</string>
@@ -1099,4 +1102,16 @@
   <string name="biometrics_no_longer_supported">لقد تم تسجيل الخروج لأن القياسات الحيوية لجهازك لا تفي بأحدث المتطلبات الأمنية. لتحديث الإعدادات، قم بتسجيل الدخول مرة أخرى أو اتصل بالمسؤول الخاص بك للوصول.</string>
   <string name="cxp_import">استيراد CXP</string>
   <string name="cxp_export">تصدير CXP</string>
+  <string name="choose_three_or_four_random_words">Choose three or four random words</string>
+  <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of objects, places, or things you like.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">objects, places, or things</string>
+  <string name="combine_those_words_together">Combine those words together</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. Use hyphens, spaces, or leave them as one long word—your choice!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Use hyphens, spaces, or leave them as one long word</string>
+  <string name="make_it_yours">Make it yours</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Add a number or symbol to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
+  <string name="add_a_number_or_symbol_highlight">Add a number or symbol</string>
+  <string name="need_some_inspiration">"Need some inspiration?"</string>
+  <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
+  <string name="copied_to_clipboard">Copied to clipboard.</string>
 </resources>

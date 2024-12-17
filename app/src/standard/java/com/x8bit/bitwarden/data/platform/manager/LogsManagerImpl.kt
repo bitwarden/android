@@ -25,9 +25,6 @@ class LogsManagerImpl(
         set(value) {
             settingsRepository.isCrashLoggingEnabled = value
             Firebase.crashlytics.isCrashlyticsCollectionEnabled = value
-            if (BuildConfig.HAS_LOGS_ENABLED) {
-                Timber.plant(Timber.DebugTree())
-            }
             if (value) {
                 Timber.plant(nonfatalErrorTree)
             } else if (Timber.forest().contains(nonfatalErrorTree)) {
@@ -51,6 +48,9 @@ class LogsManagerImpl(
 
     init {
         legacyAppCenterMigrator.migrateIfNecessary()
+        if (BuildConfig.HAS_LOGS_ENABLED) {
+            Timber.plant(Timber.DebugTree())
+        }
         isEnabled = settingsRepository.isCrashLoggingEnabled
     }
 

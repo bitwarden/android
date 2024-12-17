@@ -961,6 +961,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="remove_passkey">Odebrat přístupový klíč</string>
   <string name="passkey_removed">Přístupový klíč byl odebrán</string>
   <string name="what_makes_a_password_strong">Co je silným heslem?</string>
+  <string name="a_secure_memorable_password">Bezpečné, zapamatovatelné heslo</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Čím delší je heslo, tím obtížnější je jeho prolomení. Minimum pro vytvoření účtu je 12 znaků, ale pokud uděláte 14 znaků, doba prolomení Vašeho hesla bude trvat staletí!</string>
   <string name="the_strongest_passwords_are_usually">Nejsilnější hesla jsou obvykle:</string>
   <string name="twelve_or_more_characters">12 nebo více znaků</string>
@@ -976,7 +977,8 @@ Chcete se přepnout na tento účet?</string>
   <string name="confirm">Potvrdit</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Nastavte si biometrické údaje nebo zvolte kód PIN pro rychlý přístup k trezoru a automatické vyplňování přihlašovacích údajů.</string>
   <string name="never_lose_access_to_your_vault">Nikdy neztratíte přístup do Vašeho trezoru</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Nejlepším způsobem, jak se ujistit, že máte vždy přístup k Vašemu účtu, je nastavit zabezpečení od začátku.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Nejlepším způsobem, jak se ujistit, že máte vždy přístup k Vašemu účtu, je nastavit zabezpečení hned na začátku.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Jedním z nejlepších způsobů, jak vytvořit bezpečné a zapamatovatelné heslo, je použití přístupové fráze.\nZde je, jak:</string>
   <string name="create_a_hint">Vytvořit nápovědu</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Nápověda Vám bude odeslána e-mailem, až o ni požádáte.</string>
   <string name="write_your_password_down">Zapište si své heslo</string>
@@ -1071,6 +1073,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="bitwarden_tools">Nástroje Bitwarden</string>
   <string name="got_it">Rozumím</string>
   <string name="no_logins_were_imported">Nebyla importována žádná přihlášení</string>
+  <string name="import_error">Chyba importu</string>
   <string name="verified_sso_domain_verified">Ověřený koncový bod domény SSO</string>
   <string name="logins_imported">Přihlášení byla importována</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Nezapomeňte smazat soubor importovaných hesel z Vašeho počítače</string>
@@ -1098,4 +1101,16 @@ Chcete se přepnout na tento účet?</string>
   <string name="biometrics_no_longer_supported">Byli jste odhlášeni, protože biometrika Vašeho zařízení nesplňuje nejnovější bezpečnostní požadavky. Chcete-li aktualizovat nastavení, přihlaste se znovu nebo kontaktujte správce pro přístup.</string>
   <string name="cxp_import">Import CXP</string>
   <string name="cxp_export">Exportovat CXP</string>
+  <string name="choose_three_or_four_random_words">Vyberte tři nebo čtyři náhodná slova</string>
+  <string name="pick_three_or_four_random_unrelated_words">Vyberte tři nebo čtyři náhodná slova, která si snadno pamatujete. Vzpomeňte si na objekty, místa nebo věci, které se Vám líbí.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">objekty, místa nebo věci</string>
+  <string name="combine_those_words_together">Spojte tato slova dohromady</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Vložte slova dohromady do libovolného pořadí pro vytvoření přístupové fráze. Použijte pomlčky, mezery nebo je nechte jako jedno dlouhé slovo!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Používejte pomlčky, mezery nebo je nechte jako jedno dlouhé slovo</string>
+  <string name="make_it_yours">Vytvořte si vlastní</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Přidejte číslo nebo symbol, abyste jej ještě posílili. Nyní máte jedinečnou, bezpečnou a zapamatovatelnou přístupovou frázi!</string>
+  <string name="add_a_number_or_symbol_highlight">Přidat číslo nebo symbol</string>
+  <string name="need_some_inspiration">"Potřebujete inspiraci?"</string>
+  <string name="check_out_the_passphrase_generator">"Podívejte se na generátor přístupové fráze"</string>
+  <string name="copied_to_clipboard">Zkopírováno do schránky.</string>
 </resources>

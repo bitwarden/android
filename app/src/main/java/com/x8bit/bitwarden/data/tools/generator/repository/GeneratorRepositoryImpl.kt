@@ -7,7 +7,7 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
@@ -54,7 +54,7 @@ class GeneratorRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
-    private val policyManager: PolicyManager,
+    private val reviewPromptManager: ReviewPromptManager,
     dispatcherManager: DispatcherManager,
 ) : GeneratorRepository {
 
@@ -69,7 +69,9 @@ class GeneratorRepositoryImpl(
         get() = mutablePasswordHistoryStateFlow.asStateFlow()
 
     override val generatorResultFlow: Flow<GeneratorResult>
-        get() = generatorResultChannel.receiveAsFlow()
+        get() = generatorResultChannel
+            .receiveAsFlow()
+            .onEach { reviewPromptManager.registerGeneratedResultAction() }
 
     init {
         mutablePasswordHistoryStateFlow

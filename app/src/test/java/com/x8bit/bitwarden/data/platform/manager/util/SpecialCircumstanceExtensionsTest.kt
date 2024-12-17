@@ -140,7 +140,7 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
-                assertNull(specialCircumstance.toFido2RequestOrNull())
+                assertNull(specialCircumstance.toFido2CreateRequestOrNull())
             }
     }
 
@@ -159,7 +159,7 @@ class SpecialCircumstanceExtensionsTest {
                 .Fido2Save(
                     fido2CreateCredentialRequest = fido2CreateCredentialRequest,
                 )
-                .toFido2RequestOrNull(),
+                .toFido2CreateRequestOrNull(),
         )
     }
 
