@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailA
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -76,12 +78,12 @@ private fun NewDeviceNoticeEmailAccessContent(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = modifier
             .standardHorizontalMargin()
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(104.dp))
         HeaderContent()
         Spacer(modifier = Modifier.height(24.dp))
         MainContent(
@@ -123,16 +125,16 @@ private fun HeaderContent(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.important_notice),
-            style = BitwardenTheme.typography.headlineMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = stringResource(
-                R.string.bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices,
+                R.string.bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february,
             ),
-            style = BitwardenTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
@@ -153,12 +155,23 @@ private fun MainContent(
         modifier = modifier,
     ) {
         Text(
-            text = stringResource(
-                R.string.do_you_have_reliable_access_to_your_email,
-                email,
+            text = createAnnotatedString(
+                mainString = stringResource(
+                    R.string.do_you_have_reliable_access_to_your_email,
+                    email,
+                ),
+                mainStringStyle = SpanStyle(
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    fontSize = BitwardenTheme.typography.bodyLarge.fontSize,
+                    fontWeight = FontWeight.Normal,
+                ),
+                highlights = listOf(email),
+                highlightStyle = SpanStyle(
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    fontSize = BitwardenTheme.typography.bodyLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                ),
             ),
-            style = BitwardenTheme.typography.labelLarge,
-            color = BitwardenTheme.colorScheme.text.primary,
         )
         Column {
             BitwardenSwitch(
