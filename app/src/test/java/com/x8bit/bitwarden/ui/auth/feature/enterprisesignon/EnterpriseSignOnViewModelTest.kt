@@ -446,6 +446,73 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `ssoCallbackResultFlow Success with same state with login CertificateError should show loading dialog then show certificate error dialog`() =
+        runTest {
+            val orgIdentifier = "Bitwarden"
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any(), any())
+            } returns LoginResult.CertificateError
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `ssoCallbackResultFlow Success with same state with login Success should show loading dialog, hide it, and save org identifier`() =
         runTest {
             coEvery {

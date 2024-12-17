@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
+import java.security.cert.CertPathValidatorException
+import javax.net.ssl.SSLHandshakeException
 
 class NetworkUtilsTest {
     @Test
@@ -55,6 +57,39 @@ class NetworkUtilsTest {
         assertEquals(
             false,
             IllegalStateException().isNoConnectionError(),
+        )
+    }
+
+    @Test
+    fun `isSslHandshakeError should return return true for SSLHandshakeException`() {
+        assertEquals(
+            true,
+            SSLHandshakeException("whoops").isSslHandShakeError(),
+        )
+    }
+
+    @Test
+    fun `isSslHandshakeError should return return true for CertPathValidatorException`() {
+        assertEquals(
+            true,
+            CertPathValidatorException("whoops").isSslHandShakeError(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isSslHandshakeError should return return true if exceptions cause is SSLHandshakeException`() {
+        assertEquals(
+            true,
+            Exception(SSLHandshakeException("whoops")).isSslHandShakeError(),
+        )
+    }
+
+    @Test
+    fun `isSslHandshakeError should return return false for not IllegalStateException`() {
+        assertEquals(
+            false,
+            IllegalStateException().isSslHandShakeError(),
         )
     }
 }

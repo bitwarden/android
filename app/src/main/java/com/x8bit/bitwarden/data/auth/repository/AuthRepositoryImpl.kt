@@ -94,6 +94,7 @@ import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITER
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -625,7 +626,12 @@ class AuthRepositoryImpl(
             )
         }
         .fold(
-            onFailure = { LoginResult.Error(errorMessage = null) },
+            onFailure = { throwable ->
+                when {
+                    throwable.isSslHandShakeError() -> LoginResult.CertificateError
+                    else -> LoginResult.Error(errorMessage = null)
+                }
+            },
             onSuccess = { it },
         )
 
@@ -1508,9 +1514,12 @@ class AuthRepositoryImpl(
             captchaToken = captchaToken,
         )
         .fold(
-            onFailure = {
-                when (configDiskSource.serverConfig?.isOfficialBitwardenServer) {
-                    false -> LoginResult.UnofficialServerError
+            onFailure = { throwable ->
+                when {
+                    throwable.isSslHandShakeError() -> LoginResult.CertificateError
+                    configDiskSource.serverConfig?.isOfficialBitwardenServer == false -> {
+                        LoginResult.UnofficialServerError
+                    }
                     else -> LoginResult.Error(errorMessage = null)
                 }
             },

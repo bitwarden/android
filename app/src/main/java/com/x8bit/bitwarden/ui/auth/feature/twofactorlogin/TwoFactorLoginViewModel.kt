@@ -323,6 +323,16 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             // NO-OP: Let the auth flow handle navigation after this.
             is LoginResult.Success -> Unit
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
