@@ -35,11 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmailHandler
-import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
-import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
@@ -152,15 +150,13 @@ private fun CheckEmailContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        val descriptionAnnotatedString = createAnnotatedString(
-            mainStringResource = R.string.we_sent_an_email_to,
-            highlights = listOf(email),
-            highlightStyle = SpanStyle(
+        val descriptionAnnotatedString = R.string.we_sent_an_email_to.toAnnotatedString(
+            email,
+            emphasisHighlightStyle = SpanStyle(
                 color = BitwardenTheme.colorScheme.text.primary,
                 fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Bold,
             ),
-            tag = "EMAIL",
         )
         Text(
             text = descriptionAnnotatedString,
@@ -238,15 +234,14 @@ private fun CheckEmailLegacyContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         @Suppress("MaxLineLength")
-        val descriptionAnnotatedString = createAnnotatedString(
-            mainStringResource = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
-            highlights = listOf(email),
-            highlightStyle = SpanStyle(
+        val descriptionAnnotatedString =
+            R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account.toAnnotatedString(
+                email,
+                emphasisHighlightStyle = SpanStyle(
                 color = BitwardenTheme.colorScheme.text.primary,
                 fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Bold,
             ),
-            tag = "EMAIL",
         )
         Text(
             text = descriptionAnnotatedString,
@@ -270,30 +265,17 @@ private fun CheckEmailLegacyContent(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val goBackAnnotatedString = createClickableAnnotatedString(
-                mainStringResource = R.string.no_email_go_back_to_edit_your_email_address,
-                highlights = listOf(
-                    ClickableTextHighlight(
-                        textToHighlight = stringResource(id = R.string.go_back),
-                        onTextClick = onChangeEmailClick,
-                    ),
-                ),
-            )
             Text(
-                text = goBackAnnotatedString,
+                text = R.string.no_email_go_back_to_edit_your_email_address.toAnnotatedString {
+                    onChangeEmailClick()
+                },
             )
             Spacer(modifier = Modifier.height(32.dp))
-            val logInAnnotatedString = createClickableAnnotatedString(
-                mainStringResource = R.string.or_log_in_you_may_already_have_an_account,
-                highlights = listOf(
-                    ClickableTextHighlight(
-                        textToHighlight = stringResource(id = R.string.or_log_in_highlight),
-                        onTextClick = onLoginClick,
-                    ),
-                ),
-            )
             Text(
-                text = logInAnnotatedString,
+                text = R.string.or_log_in_you_may_already_have_an_account
+                    .toAnnotatedString {
+                        onLoginClick()
+                    },
             )
         }
     }

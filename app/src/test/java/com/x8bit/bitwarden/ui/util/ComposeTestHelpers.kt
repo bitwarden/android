@@ -23,8 +23,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToString
 import androidx.compose.ui.text.LinkAnnotation
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.assertThrows
 
 /**
@@ -185,30 +185,29 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
 @Suppress("NestedBlockDepth")
 fun ComposeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
     mainString: String,
-    highLightText: String,
-    expectedStart: Int,
-    expectedEnd: Int,
+    expectedLinkCount: Int? = null,
 ) {
     this
-        .onNodeWithText(mainString)
+        .onNodeWithText(mainString, substring = true, ignoreCase = true)
         .fetchSemanticsNode()
         .config
         .getOrNull(SemanticsProperties.Text)
         ?.let { text ->
             text.forEach {
-                val linkAnnotations = it.getLinkAnnotations(expectedStart, expectedEnd)
+                val linkAnnotations = it.getLinkAnnotations(0, it.length)
                 if (linkAnnotations.isEmpty()) {
                     throw AssertionError(
-                        "No link annotation found for " +
-                            "$highLightText in the expected range: $expectedStart - $expectedEnd",
+                        "No link annotation found",
                     )
                 } else {
                     linkAnnotations.forEach { annotationRange ->
                         val annotation = annotationRange.item as? LinkAnnotation.Clickable
                         val tag = annotation?.tag
                         assertNotNull(tag)
-                        assertTrue(highLightText.equals(tag, ignoreCase = true))
                         annotation?.linkInteractionListener?.onClick(annotation)
+                    }
+                    expectedLinkCount?.let {
+                        assertEquals(expectedLinkCount, linkAnnotations.size)
                     }
                 }
             }
