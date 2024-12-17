@@ -262,6 +262,9 @@ Scanning will happen automatically.</string>
   <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Learn more</string>
   <string name="api_url">API server URL</string>
+  <string name="client_certificate">Client certificate</string>
+  <string name="client_certificate_footer">Client certificate that will be used for connections to the server. In case no user certificate is installed, clicking "Choose" will have no effect.</string>
+  <string name="choose_client_certificate">Choose</string>
   <string name="custom_environment">Custom environment</string>
   <string name="custom_environment_footer">For advanced users. You can specify the base URL of each service independently.</string>
   <string name="environment_saved">The environment URLs have been saved.</string>

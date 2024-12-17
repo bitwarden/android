@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.environment
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val ENVIRONMENT_ROUTE = "environment"
@@ -12,11 +13,12 @@ private const val ENVIRONMENT_ROUTE = "environment"
  */
 fun NavGraphBuilder.environmentDestination(
     onNavigateBack: () -> Unit,
+    choosePrivateKeyAlias: (ChoosePrivateKeyAliasCallback) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = ENVIRONMENT_ROUTE,
     ) {
-        EnvironmentScreen(onNavigateBack = onNavigateBack)
+        EnvironmentScreen(onNavigateBack = onNavigateBack, choosePrivateKeyAlias = choosePrivateKeyAlias)
     }
 }
 

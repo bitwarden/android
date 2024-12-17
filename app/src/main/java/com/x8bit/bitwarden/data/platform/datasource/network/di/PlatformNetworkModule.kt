@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
+import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
@@ -14,9 +16,13 @@ import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.util.TLSHelper
+import com.x8bit.bitwarden.data.platform.repository.KeyChainRepository
+import com.x8bit.bitwarden.data.platform.repository.KeyChainRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -72,12 +78,26 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
+    fun providesKeyChainRepository(
+        environmentDiskSource: EnvironmentDiskSource,
+        @ApplicationContext context: Context,
+    ): KeyChainRepository =
+        KeyChainRepositoryImpl(environmentDiskSource = environmentDiskSource, context = context)
+
+    @Provides
+    @Singleton
+    fun providesTlsHelper(keyChainRepository: KeyChainRepository): TLSHelper =
+        TLSHelper(keyChainRepository = keyChainRepository)
+
+    @Provides
+    @Singleton
     fun provideRetrofits(
         authTokenInterceptor: AuthTokenInterceptor,
         baseUrlInterceptors: BaseUrlInterceptors,
         headersInterceptor: HeadersInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
         json: Json,
+        tlsHelper: TLSHelper,
     ): Retrofits =
         RetrofitsImpl(
             authTokenInterceptor = authTokenInterceptor,
@@ -85,6 +105,7 @@ object PlatformNetworkModule {
             headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
             json = json,
+            tlsHelper = tlsHelper
         )
 
     @Provides

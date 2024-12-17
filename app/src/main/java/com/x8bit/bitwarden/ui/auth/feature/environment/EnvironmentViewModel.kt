@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.KeyChainRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -39,6 +40,7 @@ class EnvironmentViewModel @Inject constructor(
         }
         EnvironmentState(
             serverUrl = environmentUrlData.base,
+            keyAlias = environmentUrlData.keyAlias.orEmpty(),
             webVaultServerUrl = environmentUrlData.webVault.orEmpty(),
             apiServerUrl = environmentUrlData.api.orEmpty(),
             identityServerUrl = environmentUrlData.identity.orEmpty(),
@@ -61,6 +63,7 @@ class EnvironmentViewModel @Inject constructor(
         is EnvironmentAction.SaveClick -> handleSaveClickAction()
         is EnvironmentAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
         is EnvironmentAction.ServerUrlChange -> handleServerUrlChangeAction(action)
+        is EnvironmentAction.KeyAliasChange -> handleKeyAliasChangeAction(action)
         is EnvironmentAction.WebVaultServerUrlChange -> handleWebVaultServerUrlChangeAction(action)
         is EnvironmentAction.ApiServerUrlChange -> handleApiServerUrlChangeAction(action)
         is EnvironmentAction.IdentityServerUrlChange -> handleIdentityServerUrlChangeAction(action)
@@ -91,6 +94,7 @@ class EnvironmentViewModel @Inject constructor(
 
         // Ensure all non-null/non-empty values have "http(s)://" prefixed.
         val updatedServerUrl = state.serverUrl.prefixHttpsIfNecessaryOrNull() ?: ""
+        val updatedKeyAlias = state.keyAlias
         val updatedWebVaultServerUrl = state.webVaultServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedApiServerUrl = state.apiServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIdentityServerUrl = state.identityServerUrl.prefixHttpsIfNecessaryOrNull()
@@ -99,6 +103,7 @@ class EnvironmentViewModel @Inject constructor(
         environmentRepository.environment = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson(
                 base = updatedServerUrl,
+                keyAlias = updatedKeyAlias,
                 api = updatedApiServerUrl,
                 identity = updatedIdentityServerUrl,
                 icon = updatedIconsServerUrl,
@@ -119,6 +124,14 @@ class EnvironmentViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(serverUrl = action.serverUrl)
+        }
+    }
+
+    private fun handleKeyAliasChangeAction(
+        action: EnvironmentAction.KeyAliasChange,
+    ) {
+        mutableStateFlow.update {
+            it.copy(keyAlias = action.keyAlias)
         }
     }
 
@@ -161,6 +174,7 @@ class EnvironmentViewModel @Inject constructor(
 @Parcelize
 data class EnvironmentState(
     val serverUrl: String,
+    val keyAlias: String,
     val webVaultServerUrl: String,
     val apiServerUrl: String,
     val identityServerUrl: String,
@@ -209,6 +223,13 @@ sealed class EnvironmentAction {
      */
     data class ServerUrlChange(
         val serverUrl: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates that the key alias has changed.
+     */
+    data class KeyAliasChange(
+        val keyAlias: String,
     ) : EnvironmentAction()
 
     /**

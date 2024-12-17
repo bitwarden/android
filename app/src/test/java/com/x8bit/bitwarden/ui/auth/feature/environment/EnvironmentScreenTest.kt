@@ -9,8 +9,11 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.requestFocus
+import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
@@ -30,6 +33,9 @@ class EnvironmentScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val choosePrivateKeyAlias = { callback: ChoosePrivateKeyAliasCallback ->
+        callback.getCallback().alias("alias")
+    }
 
     @Before
     fun setUp() {
@@ -37,6 +43,7 @@ class EnvironmentScreenTest : BaseComposeTest() {
             EnvironmentScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
+                choosePrivateKeyAlias = choosePrivateKeyAlias,
             )
         }
     }
@@ -136,6 +143,44 @@ class EnvironmentScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 EnvironmentAction.ServerUrlChange(serverUrl = "updated-server-url"),
+            )
+        }
+    }
+
+    @Test
+    fun `key alias should change according to the state`() {
+        composeTestRule
+            .onNodeWithText("Client certificate")
+            // Click to focus to see placeholder
+            .performClick()
+            .assertTextEquals(
+                "Client certificate",
+                "Client certificate that will be used for connections to the server",
+                "",
+                "",
+            )
+
+        mutableStateFlow.update { it.copy(keyAlias = "alias") }
+
+        composeTestRule
+            .onNodeWithText("Client certificate")
+            .assertTextEquals(
+                "Client certificate",
+                "Client certificate that will be used for connections to the server",
+                "alias",
+            )
+    }
+
+    @Test
+    fun `key alias change should send KeyAliasChange`() {
+        composeTestRule
+            .onNodeWithText("Choose", useUnmergedTree = true)
+            .onParent()
+            .requestFocus()
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.KeyAliasChange(keyAlias = "alias"),
             )
         }
     }
@@ -255,6 +300,7 @@ class EnvironmentScreenTest : BaseComposeTest() {
     companion object {
         val DEFAULT_STATE = EnvironmentState(
             serverUrl = "",
+            keyAlias = "",
             webVaultServerUrl = "",
             apiServerUrl = "",
             identityServerUrl = "",

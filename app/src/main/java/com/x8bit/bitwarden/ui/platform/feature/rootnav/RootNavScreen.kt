@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_AUTO_FILL_AS_ROOT_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_COMPLETE_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_UNLOCK_AS_ROOT_ROUTE
@@ -75,6 +76,7 @@ fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     onSplashScreenRemoved: () -> Unit = {},
+    choosePrivateKeyAlias: (ChoosePrivateKeyAliasCallback) -> Unit = { _ -> },
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val previousStateReference = remember { AtomicReference(state) }
@@ -93,7 +95,7 @@ fun RootNavScreen(
         popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
-        authGraph(navController)
+        authGraph(navController = navController, choosePrivateKeyAlias = choosePrivateKeyAlias)
         removePasswordDestination()
         resetPasswordDestination()
         trustedDeviceGraph(navController)

@@ -262,6 +262,9 @@ Das Scannen erfolgt automatisch.</string>
   <string name="encryption_key_migration_required_description_long">Verschlüsselungscode-Migration erforderlich. Bitte melde dich über den Web-Tresor an, um deinen Verschlüsselungscode zu aktualisieren.</string>
   <string name="learn_more">Mehr erfahren</string>
   <string name="api_url">API Server-URL</string>
+  <string name="client_certificate">Clientzertifikat</string>
+  <string name="client_certificate_footer">Clientzertifikat, welches benutzt wird, um sich mit dem Server zu verbinden. Falls kein Clientzertifikat installiert ist, passiert beim Klicken auf „Auswählen“ nichts.</string>
+  <string name="choose_client_certificate">Auswählen</string>
   <string name="custom_environment">Benutzerdefinierte Umgebung</string>
   <string name="custom_environment_footer">Für fortgeschrittene Benutzer. Du kannst die Basis-URL der jeweiligen Dienste unabhängig voneinander festlegen.</string>
   <string name="environment_saved">Die URLs der Umgebung wurden gespeichert.</string>

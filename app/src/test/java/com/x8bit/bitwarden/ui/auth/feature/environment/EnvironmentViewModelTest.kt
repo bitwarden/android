@@ -173,6 +173,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     Environment.SelfHosted(
                         environmentUrlData = EnvironmentUrlDataJson(
                             base = "https://server-url",
+                            keyAlias = "",
                             api = "https://api-url",
                             identity = "https://identity-url",
                             icon = "https://icons-url",
@@ -220,6 +221,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     Environment.SelfHosted(
                         environmentUrlData = EnvironmentUrlDataJson(
                             base = "",
+                            keyAlias = "",
                             api = null,
                             identity = null,
                             icon = null,
@@ -308,6 +310,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     companion object {
         private val DEFAULT_STATE = EnvironmentState(
             serverUrl = "",
+            keyAlias = "",
             webVaultServerUrl = "",
             apiServerUrl = "",
             identityServerUrl = "",

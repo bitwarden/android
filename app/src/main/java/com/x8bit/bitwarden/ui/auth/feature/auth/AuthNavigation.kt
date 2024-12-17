@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.checkEmailDestination
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
@@ -50,6 +51,7 @@ const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 @Suppress("LongMethod")
 fun NavGraphBuilder.authGraph(
     navController: NavHostController,
+    choosePrivateKeyAlias: (ChoosePrivateKeyAliasCallback) -> Unit,
 ) {
     navigation(
         startDestination = LANDING_ROUTE,
@@ -173,6 +175,7 @@ fun NavGraphBuilder.authGraph(
         )
         environmentDestination(
             onNavigateBack = { navController.popBackStack() },
+            choosePrivateKeyAlias = choosePrivateKeyAlias,
         )
         masterPasswordHintDestination(
             onNavigateBack = { navController.popBackStack() },
