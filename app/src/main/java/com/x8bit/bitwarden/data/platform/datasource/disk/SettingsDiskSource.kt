@@ -325,4 +325,35 @@ interface SettingsDiskSource {
      * Emits updates that track [getVaultRegisteredForExport] for the given [userId].
      */
     fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets the number of qualifying add cipher actions for the device.
+     */
+    fun getAddCipherActionCount(): Int?
+
+    /**
+     * Stores the given [count] completed "add" cipher actions taken place on the device.
+     */
+    fun storeAddCipherActionCount(count: Int?)
+
+    /**
+     * Gets the number of qualifying generated result actions for the device.
+     */
+    fun getGeneratedResultActionCount(): Int?
+
+    /**
+     * Stores the given [count] completed generated password or username result actions taken
+     * for the device.
+     */
+    fun storeGeneratedResultActionCount(count: Int?)
+
+    /**
+     * Gets the number of qualifying create send actions for the device.
+     */
+    fun getCreateSendActionCount(): Int?
+
+    /**
+     * Stores the given [count] completed create send actions for the device.
+     */
+    fun storeCreateSendActionCount(count: Int?)
 }

@@ -59,7 +59,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
 
-    private val featureFlagManager = mockk<FeatureFlagManager>() {
+    private val featureFlagManager = mockk<FeatureFlagManager> {
         every {
             getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)
         } returns false

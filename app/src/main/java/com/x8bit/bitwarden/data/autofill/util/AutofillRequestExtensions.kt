@@ -24,7 +24,6 @@ fun AutofillRequest.Fillable.toAutofillSaveItem(): AutofillSaveItem =
                 .uri
                 ?.replace("https://", "")
                 ?.replace("http://", "")
-                ?.replace("androidapp://", "")
 
             AutofillSaveItem.Login(
                 username = partition.usernameSaveValue,

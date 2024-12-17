@@ -6,6 +6,7 @@ import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
@@ -39,6 +40,8 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -309,5 +312,19 @@ object PlatformManagerModule {
     ): DatabaseSchemeManager = DatabaseSchemeManagerImpl(
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
+    )
+
+    @Provides
+    @Singleton
+    fun provideReviewPromptManager(
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        autofillEnabledManager: AutofillEnabledManager,
+        accessibilityEnabledManager: AccessibilityEnabledManager,
+    ): ReviewPromptManager = ReviewPromptManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        autofillEnabledManager = autofillEnabledManager,
+        accessibilityEnabledManager = accessibilityEnabledManager,
     )
 }

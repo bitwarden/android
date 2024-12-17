@@ -516,8 +516,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="account_biometric_invalidated_extension">Ana parolun doğrulanması gözlənildiyi üçün bu hesab üzrə avto-doldurma biometrik kilid açma sıradan çıxarıldı.</string>
   <string name="enable_sync_on_refresh">Təzələmə zamanı sinxrn icazə ver</string>
   <string name="enable_sync_on_refresh_description">Barmağınızla aşağı çəkdikdə seyfi sinxronlaşdır.</string>
-  <string name="log_in_sso">Müəssisə üçün tək daxil olma</string>
-  <string name="log_in_sso_summary">Təşkilatınızın tək daxil olma portalını istifadə edərək daha tez giriş edə bilərsiniz. Başlatmaq üçün lütfən təşkilatınızın identifikatorunu daxil edin.</string>
+  <string name="log_in_sso">Müəssisə üçün vahid daxil olma</string>
+  <string name="log_in_sso_summary">Təşkilatınızın vahid daxil olma portalını istifadə edərək cəld giriş edin. Başlatmaq üçün lütfən təşkilatınızın identifikatorunu daxil edin.</string>
   <string name="org_identifier">Təşkilat identifikatoru</string>
   <string name="login_sso_error">Hazırda SSO ilə giriş edilə bilmir</string>
   <string name="set_master_password">Ana parolu ayarla</string>
@@ -961,6 +961,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="remove_passkey">Keçid açarını sil</string>
   <string name="passkey_removed">Keçid açarı silindi</string>
   <string name="what_makes_a_password_strong">Bir parol necə güclü olur?</string>
+  <string name="a_secure_memorable_password">Güvənli, yaddaqalan bir parol</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Parolunuz nə qədər uzun olsa, sındırılması da bir o qədər çətin olur. Hesab yaradarkən minimum say 12-dir, ancaq 14 simvollu bir parol istifadə etsəniz, onun sındırılmasına bir əsrdən çox vaxt lazım olacaq!</string>
   <string name="the_strongest_passwords_are_usually">Ən güclü parollar adətən belə olur:</string>
   <string name="twelve_or_more_characters">12 və ya daha çox simvoldan ibarət olanlar</string>
@@ -976,7 +977,8 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="confirm">Təsdiqlə</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Seyfinizə cəld müraciət etmək və giriş məlumatlarınızı Avto-doldurmaq üçün biometrik qurun və ya bir PIN kodu seçin.</string>
   <string name="never_lose_access_to_your_vault">Seyfinizə müraciətinizi heç vaxt itirməyin</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Hesabınıza daim müraciət edə bildiyinizə əmin olmağın ən yaxşı yolu başdan başlayaraq qoruma tədbiri almaqdır.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Seyfinizə daim müraciət edə bildiyinizə əmin olmağın ən yaxşı yolu başdan başlayaraq qoruma tədbiri almaqdır.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Güvənli və yaddaqalan parol yaratmağın ən yaxşı yollarından biri keçid ifadəsi istifadə etməkdir. \nİzahı:</string>
   <string name="create_a_hint">Bir ipucu yarat</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Tələb etdikdə ipucunuz sizə e-poçt ilə göndəriləcək.</string>
   <string name="write_your_password_down">Parolunuzu bir yerə yazın</string>
@@ -1071,6 +1073,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="bitwarden_tools">Bitwarden Alətləri</string>
   <string name="got_it">Anladım</string>
   <string name="no_logins_were_imported">Heç bir giriş daxilə köçürülmədi</string>
+  <string name="import_error">Daxilə köçürmə xətası</string>
   <string name="verified_sso_domain_verified">Doğrulanmış SSO Domen Endpoint</string>
   <string name="logins_imported">Girişlər daxilə köçürüldü</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Kompüterinizdən daxilə köçürdüyünüz parol faylını silməyi unutmayın</string>
@@ -1098,4 +1101,16 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="biometrics_no_longer_supported">Hesabınızdan çıxış edildi, çünki cihazınızın biometrikləri son güvənlik tələblərinə cavab vermir. Ayarları güncəlləmək üçün təkrar giriş edin və ya müraciət üçün inzibatçınızla əlaqə saxlayın.</string>
   <string name="cxp_import">CXP daxilə köçürmə</string>
   <string name="cxp_export">CXP xaricə köçürmə</string>
+  <string name="choose_three_or_four_random_words">Üç və ya dörd təsadüfi söz seçin</string>
+  <string name="pick_three_or_four_random_unrelated_words">Asanlıqla xatırlaya biləcəyiniz üç və ya dörd təsadüfi və əlaqəsiz söz seçin. Bəyəndiniz obyektləri, məkanları və ya şeyləri düşünün.</string>
+  <string name="pick_three_or_four_random_unrelated_words_highlight">obyekt, məkan və ya şeylər</string>
+  <string name="combine_those_words_together">Bu sözləri birləşdirin</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Keçid ifadənizi yaratmaq üçün sözləri istənilən sırada bir araya gətirin. Tire, boşluq istifadə edin və ya bunları tək bir uzun söz kimi saxlayın—seçim sizindir!</string>
+  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Tire, boşluq istifadə edin və ya bunları tək bir uzun söz kimi saxlayın</string>
+  <string name="make_it_yours">Özəlləşdirin</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Daha da güclü etmək üçün rəqəm və ya simvol əlavə edin. Artıq unikal, güvənli və yaddaqalan bir keçid ifadəniz var!</string>
+  <string name="add_a_number_or_symbol_highlight">Rəqəm və ya simvol əlavə edin</string>
+  <string name="need_some_inspiration">"Dəstək lazımdır?"</string>
+  <string name="check_out_the_passphrase_generator">"Parol yaradıcıya nəzər salın"</string>
+  <string name="copied_to_clipboard">Lövhəyə kopyalandı.</string>
 </resources>

@@ -6,21 +6,17 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
-import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
@@ -31,18 +27,14 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-private const val GOOGLE_ALLOW_LIST_FILE_NAME = "fido2_privileged_google.json"
-private const val COMMUNITY_ALLOW_LIST_FILE_NAME = "fido2_privileged_community.json"
-
 /**
  * Primary implementation of [Fido2CredentialManager].
  */
 @Suppress("TooManyFunctions")
 class Fido2CredentialManagerImpl(
-    private val assetManager: AssetManager,
-    private val digitalAssetLinkService: DigitalAssetLinkService,
     private val vaultSdkSource: VaultSdkSource,
     private val fido2CredentialStore: Fido2CredentialStore,
+    private val fido2OriginManager: Fido2OriginManager,
     private val json: Json,
 ) : Fido2CredentialManager,
     Fido2CredentialStore by fido2CredentialStore {
@@ -108,16 +100,14 @@ class Fido2CredentialManagerImpl(
             )
     }
 
-    override suspend fun validateOrigin(
+    private suspend fun validateOrigin(
         callingAppInfo: CallingAppInfo,
         relyingPartyId: String,
-    ): Fido2ValidateOriginResult {
-        return if (callingAppInfo.isOriginPopulated()) {
-            validatePrivilegedAppOrigin(callingAppInfo)
-        } else {
-            validateCallingApplicationAssetLinks(callingAppInfo, relyingPartyId)
-        }
-    }
+    ): Fido2ValidateOriginResult = fido2OriginManager
+        .validateOrigin(
+            callingAppInfo = callingAppInfo,
+            relyingPartyId = relyingPartyId,
+        )
 
     override fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
@@ -168,7 +158,7 @@ class Fido2CredentialManagerImpl(
                 Fido2CredentialAssertionResult.Error
             }
 
-            Fido2ValidateOriginResult.Success -> {
+            is Fido2ValidateOriginResult.Success -> {
                 vaultSdkSource
                     .authenticateFido2Credential(
                         request = AuthenticateFido2CredentialRequest(
@@ -199,127 +189,6 @@ class Fido2CredentialManagerImpl(
             }
         }
     }
-
-    private suspend fun validateCallingApplicationAssetLinks(
-        callingAppInfo: CallingAppInfo,
-        relyingPartyId: String,
-    ): Fido2ValidateOriginResult {
-        return digitalAssetLinkService
-            .getDigitalAssetLinkForRp(relyingParty = relyingPartyId)
-            .onFailure {
-                return Fido2ValidateOriginResult.Error.AssetLinkNotFound
-            }
-            .map { statements ->
-                statements
-                    .filterMatchingAppStatementsOrNull(
-                        rpPackageName = callingAppInfo.packageName,
-                    )
-                    ?: return Fido2ValidateOriginResult.Error.ApplicationNotFound
-            }
-            .map { matchingStatements ->
-                callingAppInfo
-                    .getSignatureFingerprintAsHexString()
-                    ?.let { certificateFingerprint ->
-                        matchingStatements
-                            .filterMatchingAppSignaturesOrNull(
-                                signature = certificateFingerprint,
-                            )
-                    }
-                    ?: return Fido2ValidateOriginResult.Error.ApplicationNotVerified
-            }
-            .fold(
-                onSuccess = {
-                    Fido2ValidateOriginResult.Success
-                },
-                onFailure = {
-                    Fido2ValidateOriginResult.Error.Unknown
-                },
-            )
-    }
-
-    private suspend fun validatePrivilegedAppOrigin(
-        callingAppInfo: CallingAppInfo,
-    ): Fido2ValidateOriginResult {
-        val googleAllowListResult =
-            validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
-        return when (googleAllowListResult) {
-            is Fido2ValidateOriginResult.Success -> {
-                // Application was found and successfully validated against the Google allow list so
-                // we can return the result as the final validation result.
-                googleAllowListResult
-            }
-
-            is Fido2ValidateOriginResult.Error -> {
-                // Check the community allow list if the Google allow list failed, and return the
-                // result as the final validation result.
-                validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
-            }
-        }
-    }
-
-    private suspend fun validatePrivilegedAppSignatureWithGoogleList(
-        callingAppInfo: CallingAppInfo,
-    ): Fido2ValidateOriginResult =
-        validatePrivilegedAppSignatureWithAllowList(
-            callingAppInfo = callingAppInfo,
-            fileName = GOOGLE_ALLOW_LIST_FILE_NAME,
-        )
-
-    private suspend fun validatePrivilegedAppSignatureWithCommunityList(
-        callingAppInfo: CallingAppInfo,
-    ): Fido2ValidateOriginResult =
-        validatePrivilegedAppSignatureWithAllowList(
-            callingAppInfo = callingAppInfo,
-            fileName = COMMUNITY_ALLOW_LIST_FILE_NAME,
-        )
-
-    private suspend fun validatePrivilegedAppSignatureWithAllowList(
-        callingAppInfo: CallingAppInfo,
-        fileName: String,
-    ): Fido2ValidateOriginResult =
-        assetManager
-            .readAsset(fileName)
-            .map { allowList ->
-                callingAppInfo.validatePrivilegedApp(
-                    allowList = allowList,
-                )
-            }
-            .fold(
-                onSuccess = { it },
-                onFailure = { Fido2ValidateOriginResult.Error.Unknown },
-            )
-
-    /**
-     * Returns statements targeting the calling Android application, or null.
-     */
-    private fun List<DigitalAssetLinkResponseJson>.filterMatchingAppStatementsOrNull(
-        rpPackageName: String,
-    ): List<DigitalAssetLinkResponseJson>? =
-        filter { statement ->
-            val target = statement.target
-            target.namespace == "android_app" &&
-                target.packageName == rpPackageName &&
-                statement.relation.containsAll(
-                    listOf(
-                        "delegate_permission/common.get_login_creds",
-                        "delegate_permission/common.handle_all_urls",
-                    ),
-                )
-        }
-            .takeUnless { it.isEmpty() }
-
-    /**
-     * Returns statements that match the given [signature], or null.
-     */
-    private fun List<DigitalAssetLinkResponseJson>.filterMatchingAppSignaturesOrNull(
-        signature: String,
-    ): List<DigitalAssetLinkResponseJson>? =
-        filter { statement ->
-            statement.target.sha256CertFingerprints
-                ?.contains(signature)
-                ?: false
-        }
-            .takeUnless { it.isEmpty() }
 
     override fun hasAuthenticationAttemptsRemaining(): Boolean =
         authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
