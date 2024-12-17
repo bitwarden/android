@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
-import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
@@ -662,7 +661,7 @@ class VaultAddEditViewModel @Inject constructor(
                 return
             }
 
-        if (activeAccount.vaultUnlockType == VaultUnlockType.PIN) {
+        if (settingsRepository.isUnlockWithPinEnabled) {
             mutableStateFlow.update {
                 it.copy(dialog = VaultAddEditState.DialogState.Fido2PinPrompt)
             }
