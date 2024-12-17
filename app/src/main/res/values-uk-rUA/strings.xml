@@ -1074,6 +1074,7 @@
   <string name="bitwarden_tools">Інструменти Bitwarden</string>
   <string name="got_it">Зрозуміло</string>
   <string name="no_logins_were_imported">Жодного запису не імпортовано</string>
+  <string name="import_error">Помилка імпорту</string>
   <string name="verified_sso_domain_verified">Кінцеву точку домену SSO підтверджено</string>
   <string name="logins_imported">Записи імпортовано</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Обов\'язково видаліть імпортований файл із паролями з комп\'ютера</string>

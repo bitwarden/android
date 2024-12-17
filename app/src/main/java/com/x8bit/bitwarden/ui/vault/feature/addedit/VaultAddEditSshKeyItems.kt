@@ -24,7 +24,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
-import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -210,10 +210,6 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            supportedLinkedTypes = persistentListOf(
-                VaultLinkedFieldType.PASSWORD,
-                VaultLinkedFieldType.USERNAME,
-            ),
             onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
         )
     }
@@ -222,6 +218,11 @@ fun LazyListScope.vaultAddEditSshKeyItems(
         Spacer(modifier = Modifier.height(16.dp))
         VaultAddEditCustomFieldsButton(
             onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
+            options = persistentListOf(
+                CustomFieldType.TEXT,
+                CustomFieldType.HIDDEN,
+                CustomFieldType.BOOLEAN,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),

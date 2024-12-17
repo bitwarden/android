@@ -132,6 +132,15 @@ sealed class FlagKey<out T : Any> {
         override val isRemotelyConfigured: Boolean = true
     }
 
+    /**
+     * Data object holding the feature flag key for the Cipher Key Encryption feature.
+     */
+    data object CipherKeyEncryption : FlagKey<Boolean>() {
+        override val keyName: String = "cipher-key-encryption"
+        override val defaultValue: Boolean = true
+        override val isRemotelyConfigured: Boolean = true
+    }
+
     //region Dummy keys for testing
     /**
      * Data object holding the key for a [Boolean] flag to be used in tests.

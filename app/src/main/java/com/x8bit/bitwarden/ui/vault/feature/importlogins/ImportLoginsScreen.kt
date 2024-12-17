@@ -212,7 +212,7 @@ private fun ImportLoginsDialogContent(
                 message = dialogState.message(),
                 onDismissRequest = handler.onDismissDialog,
                 confirmButtonText = stringResource(R.string.try_again),
-                dismissButtonText = stringResource(R.string.ok),
+                dismissButtonText = stringResource(R.string.import_logins_later),
                 onConfirmClick = handler.onRetrySync,
                 onDismissClick = handler.onFailedSyncAcknowledged,
             )

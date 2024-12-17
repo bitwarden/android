@@ -126,7 +126,7 @@ private fun LanguageSelectionRow(
     languageChangedDialogOption?.let {
         BitwardenBasicDialog(
             title = stringResource(id = R.string.language),
-            message = stringResource(id = R.string.language_change_x_description, it),
+            message = stringResource(id = R.string.language_change_x_description, it.invoke()),
             onDismissRequest = { languageChangedDialogOption = null },
         )
     }

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -35,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays the about self-hosted/custom environment screen.
@@ -114,6 +116,15 @@ fun EnvironmentScreen(
                 hint = stringResource(id = R.string.self_hosted_environment_footer),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
+                },
+                autoCompleteOptions = if (BuildConfig.BUILD_TYPE != "release") {
+                    persistentListOf(
+                        "https://vault.qa.bitwarden.pw",
+                        "https://qa-team.sh.bitwarden.pw",
+                        "https://vault.usdev.bitwarden.pw",
+                    )
+                } else {
+                    persistentListOf()
                 },
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier

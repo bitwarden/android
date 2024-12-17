@@ -1074,6 +1074,7 @@
   <string name="bitwarden_tools">Инструменти на Битуорден</string>
   <string name="got_it">Разбрано</string>
   <string name="no_logins_were_imported">Не бяха внесени никакви елементи за вписване</string>
+  <string name="import_error">Грешка при внасянето</string>
   <string name="verified_sso_domain_verified">Потвърден адрес на домейн за еднократно удостоверяване</string>
   <string name="logins_imported">Данните за вписване са внесени</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Не забравяйте да изтриете файла с паролите за внасяне от компютъра си</string>
@@ -1112,5 +1113,5 @@
   <string name="add_a_number_or_symbol_highlight">Добавете число или знак</string>
   <string name="need_some_inspiration">"Имате ли нужда от вдъхновение?"</string>
   <string name="check_out_the_passphrase_generator">"Изпробвайте генератора на пароли-фрази"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="copied_to_clipboard">Копирано в буфера.</string>
 </resources>

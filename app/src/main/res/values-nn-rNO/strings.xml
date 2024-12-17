@@ -1074,6 +1074,7 @@ Do you want to switch to this account?</string>
   <string name="bitwarden_tools">Bitwarden Tools</string>
   <string name="got_it">Got it</string>
   <string name="no_logins_were_imported">No logins were imported</string>
+  <string name="import_error">Import error</string>
   <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
   <string name="logins_imported">Logins imported</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>

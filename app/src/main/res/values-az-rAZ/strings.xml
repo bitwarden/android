@@ -516,8 +516,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="account_biometric_invalidated_extension">Ana parolun doğrulanması gözlənildiyi üçün bu hesab üzrə avto-doldurma biometrik kilid açma sıradan çıxarıldı.</string>
   <string name="enable_sync_on_refresh">Təzələmə zamanı sinxrn icazə ver</string>
   <string name="enable_sync_on_refresh_description">Barmağınızla aşağı çəkdikdə seyfi sinxronlaşdır.</string>
-  <string name="log_in_sso">Müəssisə üçün tək daxil olma</string>
-  <string name="log_in_sso_summary">Təşkilatınızın tək daxil olma portalını istifadə edərək daha tez giriş edə bilərsiniz. Başlatmaq üçün lütfən təşkilatınızın identifikatorunu daxil edin.</string>
+  <string name="log_in_sso">Müəssisə üçün vahid daxil olma</string>
+  <string name="log_in_sso_summary">Təşkilatınızın vahid daxil olma portalını istifadə edərək cəld giriş edin. Başlatmaq üçün lütfən təşkilatınızın identifikatorunu daxil edin.</string>
   <string name="org_identifier">Təşkilat identifikatoru</string>
   <string name="login_sso_error">Hazırda SSO ilə giriş edilə bilmir</string>
   <string name="set_master_password">Ana parolu ayarla</string>
@@ -1073,6 +1073,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="bitwarden_tools">Bitwarden Alətləri</string>
   <string name="got_it">Anladım</string>
   <string name="no_logins_were_imported">Heç bir giriş daxilə köçürülmədi</string>
+  <string name="import_error">Daxilə köçürmə xətası</string>
   <string name="verified_sso_domain_verified">Doğrulanmış SSO Domen Endpoint</string>
   <string name="logins_imported">Girişlər daxilə köçürüldü</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Kompüterinizdən daxilə köçürdüyünüz parol faylını silməyi unutmayın</string>
@@ -1111,5 +1112,5 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="add_a_number_or_symbol_highlight">Rəqəm və ya simvol əlavə edin</string>
   <string name="need_some_inspiration">"Dəstək lazımdır?"</string>
   <string name="check_out_the_passphrase_generator">"Parol yaradıcıya nəzər salın"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="copied_to_clipboard">Lövhəyə kopyalandı.</string>
 </resources>
