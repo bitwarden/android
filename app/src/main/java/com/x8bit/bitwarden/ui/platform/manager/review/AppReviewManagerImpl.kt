@@ -24,18 +24,18 @@ class AppReviewManagerImpl(
             if (task.isSuccessful) {
                 val reviewInfo = task.result
                 manager.launchReviewFlow(activity, reviewInfo)
-                if (BuildConfig.DEBUG) {
-                    Toast
-                        .makeText(
-                            activity,
-                            activity.getString(R.string.review_flow_launched),
-                            Toast.LENGTH_SHORT,
-                        )
-                        .show()
-                }
             } else {
-                Timber.e(task.exception)
+                Timber.e(task.exception, "Failed to launch review flow.")
             }
+        }
+        if (BuildConfig.DEBUG) {
+            Toast
+                .makeText(
+                    activity,
+                    activity.getString(R.string.review_flow_launched),
+                    Toast.LENGTH_SHORT,
+                )
+                .show()
         }
     }
 }
