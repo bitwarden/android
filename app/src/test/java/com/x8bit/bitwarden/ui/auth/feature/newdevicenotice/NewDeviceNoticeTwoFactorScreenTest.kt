@@ -23,6 +23,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<NewDeviceNoticeTwoFactorEvent>()
     private val viewModel = mockk<NewDeviceNoticeTwoFactorViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
+        every { trySendAction(action = any()) } just runs
     }
 
     @Before
@@ -41,7 +42,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Turn on", substring = true)
             .performClick()
-        verify {
+        verify(exactly = 1) {
             viewModel.trySendAction(
                 NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick,
             )
@@ -51,9 +52,9 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     @Test
     fun `Change account email click should send ChangeAccountEmailClick action`() {
         composeTestRule
-            .onNodeWithText("Change account email.")
+            .onNodeWithText("Change account email")
             .performClick()
-        verify {
+        verify(exactly = 1) {
             viewModel.trySendAction(
                 NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick,
             )
@@ -65,7 +66,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Remind me later")
             .performClick()
-        verify {
+        verify(exactly = 1) {
             viewModel.trySendAction(
                 NewDeviceNoticeTwoFactorAction.RemindMeLaterClick,
             )
@@ -79,7 +80,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
                 url = "https://bitwarden.com/#/settings/security/two-factor",
             ),
         )
-        verify {
+        verify(exactly = 1) {
             intentManager.launchUri("https://bitwarden.com/#/settings/security/two-factor".toUri())
         }
     }
@@ -91,7 +92,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
                 url = "https://vault.bitwarden.com/#/settings/account",
             ),
         )
-        verify {
+        verify(exactly = 1) {
             intentManager.launchUri("https://vault.bitwarden.com/#/settings/account".toUri())
         }
     }
