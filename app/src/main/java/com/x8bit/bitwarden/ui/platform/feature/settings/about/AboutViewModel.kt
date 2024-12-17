@@ -112,7 +112,7 @@ class AboutViewModel @Inject constructor(
             text = state.copyrightInfo
                 .concat("\n\n".asText())
                 .concat(state.version)
-                .concat("\n\n".asText())
+                .concat("\n".asText())
                 .concat("$deviceBrandModel $osInfo $buildInfo".asText())
                 .let { text ->
                     if (ciBuildInfoString.isEmpty()) {

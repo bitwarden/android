@@ -123,7 +123,7 @@ class AboutViewModelTest : BaseViewModelTest() {
             .concat(Year.now(fixedClock).value.toString().asText())
             .concat("\n\n".asText())
             .concat("Version: $versionName ($versionCode)".asText())
-            .concat("\n\n".asText())
+            .concat("\n".asText())
             .concat("$deviceBrandModel $osInfo $buildInfo".asText())
             .let { text ->
                 if (ciInfo.isEmpty()) {
