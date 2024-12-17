@@ -1,16 +1,13 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,10 +29,10 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -64,10 +61,7 @@ fun NewDeviceNoticeTwoFactorScreen(
         }
     }
 
-    BitwardenScaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
+    BitwardenScaffold {
         NewDeviceNoticeTwoFactorContent(
             onTurnOnTwoFactorClick = {
                 viewModel.trySendAction(TurnOnTwoFactorClick)
@@ -94,11 +88,11 @@ private fun NewDeviceNoticeTwoFactorContent(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(104.dp))
         HeaderContent()
         Spacer(modifier = Modifier.height(24.dp))
         MainContent(
@@ -120,25 +114,27 @@ private fun HeaderContent(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(horizontal = 24.dp),
+        modifier = modifier
+            .standardHorizontalMargin(),
     ) {
         Image(
             painter = rememberVectorPainter(id = R.drawable.user_lock),
             contentDescription = null,
             modifier = Modifier.size(120.dp),
         )
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.set_up_two_step_login),
-            style = BitwardenTheme.typography.headlineMedium,
+            style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = stringResource(
                 R.string.you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access,
             ),
-            style = BitwardenTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
         )
@@ -158,7 +154,7 @@ private fun MainContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(horizontal = 22.dp)
+            .standardHorizontalMargin()
             .fillMaxWidth(),
     ) {
         BitwardenFilledButton(
@@ -169,7 +165,7 @@ private fun MainContent(
                 .fillMaxWidth()
                 .imePadding(),
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         BitwardenOutlinedButton(
             label = stringResource(R.string.change_account_email),
             onClick = onChangeAccountEmailClick,
@@ -178,12 +174,13 @@ private fun MainContent(
                 .fillMaxWidth()
                 .imePadding(),
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenClickableText(
-            label = stringResource(id = R.string.remind_me_later),
+        Spacer(modifier = Modifier.height(12.dp))
+        BitwardenOutlinedButton(
+            label = stringResource(R.string.remind_me_later),
             onClick = onRemindMeLaterClick,
-            style = BitwardenTheme.typography.bodyLarge,
-            innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding(),
         )
     }
 }
