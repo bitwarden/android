@@ -18,7 +18,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
         var textClickCalled = false
         composeTestRule.setContent {
             val annotatedString =
-                R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time.toAnnotatedString {
+                R.string.test_for_single_link_annotation.toAnnotatedString {
                     textClickCalled = true
                 }
             Text(text = annotatedString)
@@ -34,7 +34,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
     fun `toAnnotatedString should add multiple Clickable LinkAnnotations to highlighted string`() {
         composeTestRule.setContent {
             val annotatedString =
-                R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy.toAnnotatedString()
+                R.string.test_for_multi_link_annotation.toAnnotatedString()
             Text(text = annotatedString)
         }
         composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
@@ -46,11 +46,11 @@ class StringRestExtensionsTest : BaseComposeTest() {
     @Test
     fun `no link annotations should be applied to non annotated string resource`() {
         composeTestRule.setContent {
-            Text(text = R.string.about.toAnnotatedString())
+            Text(text = R.string.test_for_string_with_no_annotations.toAnnotatedString())
         }
 
         composeTestRule
-            .onNodeWithText("About")
+            .onNodeWithText("Nothing special here.")
             .fetchSemanticsNode()
             .config
             .getOrNull(SemanticsProperties.Text)
@@ -68,7 +68,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
         composeTestRule.setContent {
             Text(
                 text =
-                R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com
+                R.string.test_for_string_with_annotation_and_arg_annotation
                     .toAnnotatedString(
                         args = arrayOf("vault.bitwarden.com", "i should not exist"),
                     ),
@@ -85,5 +85,19 @@ class StringRestExtensionsTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("i should not exist")
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun `string with arg annotations but no passed in args should just append empty string`() {
+        composeTestRule.setContent {
+            Text(
+                text = R.string.test_for_string_with_annotation_and_arg_annotation
+                    .toAnnotatedString(),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("On your computer, open a new browser tab and go to ")
+            .assertIsDisplayed()
     }
 }
