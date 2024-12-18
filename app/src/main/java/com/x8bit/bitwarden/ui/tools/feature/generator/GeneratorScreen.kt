@@ -752,9 +752,9 @@ private fun PassphraseWordSeparatorInputItem(
             }
         },
         modifier = modifier
-            .testTag("WordSeparatorEntry")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "WordSeparatorEntry",
     )
 }
 
@@ -917,8 +917,8 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .testTag("AnonAddyDomainNameEntry")
                     .fillMaxWidth(),
+                textFieldTestTag = "AnonAddyDomainNameEntry",
             )
         }
 
@@ -981,8 +981,8 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .testTag("ForwardedEmailDomainNameEntry")
                     .fillMaxWidth(),
+                textFieldTestTag = "ForwardedEmailDomainNameEntry",
             )
         }
 
@@ -1069,8 +1069,8 @@ private fun PlusAddressedEmailTextInputItem(
         onValueChange = onPlusAddressedEmailTextChange,
         modifier = modifier
             .fillMaxWidth()
-            .testTag("PlusAddressedEmailEntry")
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "PlusAddressedEmailEntry",
     )
 }
 
@@ -1103,8 +1103,8 @@ private fun CatchAllEmailTextInputItem(
         onValueChange = onDomainTextChange,
         modifier = modifier
             .fillMaxWidth()
-            .testTag("CatchAllEmailDomainEntry")
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "CatchAllEmailDomainEntry",
     )
 }
 

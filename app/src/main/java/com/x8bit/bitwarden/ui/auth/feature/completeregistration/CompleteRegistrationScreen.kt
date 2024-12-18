@@ -290,9 +290,9 @@ private fun CompleteRegistrationContent(
                     ?: R.string.master_password_hint_description,
             ),
             modifier = Modifier
-                .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "MasterPasswordHintLabel",
         )
         if (showNewOnboardingUi) {
             BitwardenClickableText(

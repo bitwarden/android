@@ -129,8 +129,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("ServerUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "ServerUrlEntry",
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -153,8 +153,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("WebVaultUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "WebVaultUrlEntry",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -183,8 +183,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("IdentityUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "IdentityUrlEntry",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -199,8 +199,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("IconsUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "IconsUrlEntry",
             )
 
             Spacer(modifier = Modifier.navigationBarsPadding())

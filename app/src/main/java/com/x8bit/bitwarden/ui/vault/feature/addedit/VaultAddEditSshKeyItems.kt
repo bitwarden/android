@@ -45,9 +45,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "ItemNameEntry",
         )
     }
 
@@ -59,9 +59,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             readOnly = true,
             onValueChange = { },
             modifier = Modifier
-                .testTag("PublicKeyEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "PublicKeyEntry",
         )
     }
 
@@ -90,9 +90,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             readOnly = true,
             onValueChange = { /* no-op */ },
             modifier = Modifier
-                .testTag("FingerprintEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "FingerprintEntry",
         )
     }
 
@@ -185,9 +185,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
             modifier = Modifier
-                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNotesEntry",
         )
     }
 

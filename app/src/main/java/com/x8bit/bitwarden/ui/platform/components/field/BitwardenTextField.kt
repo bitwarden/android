@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -89,7 +90,8 @@ fun BitwardenTextField(
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
-    autoCompleteOptions: ImmutableList<String> = persistentListOf<String>(),
+    autoCompleteOptions: ImmutableList<String> = persistentListOf(),
+    textFieldTestTag: String? = null,
 ) {
     var widthPx by remember { mutableIntStateOf(0) }
     val focusRequester = remember { FocusRequester() }
@@ -127,7 +129,8 @@ fun BitwardenTextField(
         Box(modifier = modifier) {
             OutlinedTextField(
                 colors = bitwardenTextFieldColors(),
-                modifier = Modifier
+                modifier = modifier
+                    .testTag(textFieldTestTag.orEmpty())
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
                     .focusRequester(focusRequester)
