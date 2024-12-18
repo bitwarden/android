@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -23,7 +24,6 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<NewDeviceNoticeTwoFactorEvent>()
     private val viewModel = mockk<NewDeviceNoticeTwoFactorViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
-        every { trySendAction(action = any()) } just runs
     }
 
     @Before
@@ -41,6 +41,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun `Turn on two-step verification click should send TurnOnTwoFactorClick action`() {
         composeTestRule
             .onNodeWithText("Turn on", substring = true)
+            .performScrollTo()
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
@@ -53,6 +54,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun `Change account email click should send ChangeAccountEmailClick action`() {
         composeTestRule
             .onNodeWithText("Change account email")
+            .performScrollTo()
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
@@ -65,6 +67,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun `Remind me later click should send RemindMeLaterClick action`() {
         composeTestRule
             .onNodeWithText("Remind me later")
+            .performScrollTo()
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
