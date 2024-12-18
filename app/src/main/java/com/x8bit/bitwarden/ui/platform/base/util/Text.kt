@@ -130,6 +130,8 @@ fun @receiver:StringRes Int.asText(vararg args: Any): Text = ResArgsText(this, a
  * Create an [AnnotatedString] with highlighted parts.
  * @param mainString the full string
  * @param highlights parts of the mainString that will be highlighted
+ * @param highlightStyle the style to apply to the highlights
+ * @param mainStringStyle the style to apply to the mainString
  * @param tag the tag that will be used for the annotation
  */
 @Composable
@@ -137,12 +139,13 @@ fun createAnnotatedString(
     mainString: String,
     highlights: List<String>,
     highlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    mainStringStyle: SpanStyle = bitwardenDefaultSpanStyle,
     tag: String? = null,
 ): AnnotatedString {
     return buildAnnotatedString {
         append(mainString)
         addStyle(
-            style = bitwardenDefaultSpanStyle,
+            style = mainStringStyle,
             start = 0,
             end = mainString.length,
         )
