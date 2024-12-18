@@ -82,4 +82,4 @@ jobs:
       - name: Upload to codecov.io
         uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5.1.1
         with:
-          file: app/build/reports/kover/reportStandardDebug.xml
+          files: app/build/reports/kover/reportStandardDebug.xml
