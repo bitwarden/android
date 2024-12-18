@@ -53,9 +53,9 @@ fun VaultItemSshKeyContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .testTag("SshKeyItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "SshKeyItemNameEntry",
             )
         }
 

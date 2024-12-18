@@ -71,9 +71,7 @@ fun BitwardenTextFieldWithActions(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BitwardenTextField(
-            modifier = Modifier
-                .semantics { textFieldTestTag?.let { testTag = it } }
-                .weight(1f),
+            modifier = Modifier.weight(1f),
             label = label,
             value = value,
             readOnly = readOnly,
@@ -85,6 +83,7 @@ fun BitwardenTextFieldWithActions(
             shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
             visualTransformation = visualTransformation,
             textToolbarType = textToolbarType,
+            textFieldTestTag = textFieldTestTag,
         )
         BitwardenRowOfActions(
             modifier = Modifier.run { actionsTestTag?.let { testTag(it) } ?: this },

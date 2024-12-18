@@ -228,9 +228,9 @@ private fun ResetPasswordScreenContent(
             onValueChange = onPasswordHintInputChanged,
             hint = stringResource(id = R.string.master_password_hint_description),
             modifier = Modifier
-                .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "MasterPasswordHintLabel",
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())

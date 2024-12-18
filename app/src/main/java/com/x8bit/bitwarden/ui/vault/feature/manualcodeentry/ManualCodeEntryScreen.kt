@@ -153,8 +153,8 @@ fun ManualCodeEntryScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .testTag("AddManualTOTPField"),
+                    .padding(horizontal = 16.dp),
+                textFieldTestTag = "AddManualTOTPField",
             )
 
             Spacer(modifier = Modifier.height(16.dp))

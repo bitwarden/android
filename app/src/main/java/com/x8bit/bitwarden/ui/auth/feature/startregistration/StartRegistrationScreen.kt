@@ -212,9 +212,9 @@ private fun StartRegistrationContent(
             value = nameInput,
             onValueChange = handler.onNameInputChange,
             modifier = Modifier
-                .testTag("NameEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "NameEntry",
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
@@ -225,10 +225,10 @@ private fun StartRegistrationContent(
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
             modifier = Modifier
-                .testTag("EmailAddressEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
             keyboardType = KeyboardType.Email,
+            textFieldTestTag = "EmailAddressEntry",
         )
         Spacer(modifier = Modifier.height(2.dp))
         Row(

@@ -116,8 +116,8 @@ fun PinInputDialog(
                     },
                     keyboardType = KeyboardType.Number,
                     modifier = Modifier
-                        .testTag(tag = "AlertInputField")
                         .fillMaxWidth(),
+                    textFieldTestTag = "AlertInputField",
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }
