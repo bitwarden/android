@@ -48,7 +48,8 @@ jobs:
             exit 1
           fi
           branch_name="release/hotfix-${latest_tag}"
-          if git show-ref --quiet refs/heads/$branch_name; then
+          echo "🌿 branch name: $branch_name"
+          if git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
             echo "# :fire: :warning: Hotfix branch already exists: ${branch_name}" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
