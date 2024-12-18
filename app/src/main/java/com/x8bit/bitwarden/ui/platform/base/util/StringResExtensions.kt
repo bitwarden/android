@@ -6,6 +6,7 @@ import android.text.SpannedString
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -55,68 +56,99 @@ fun @receiver:StringRes Int.toAnnotatedString(
     onAnnotationClick: ((annotationKey: String) -> Unit)? = null,
 ): AnnotatedString {
     val resources = LocalContext.current.resources
+    // The spannableBuilder is used to help parse through the annotations in the string resource.
     val spannableBuilder = try {
         SpannableStringBuilder(resources.getText(this) as SpannedString)
     } catch (e: ClassCastException) {
+        // the resource did not contain and valid spans so we just return the raw string.
         return stringResource(id = this).toAnnotatedString()
     }
+    // Replace any format arguments with the provided arguments.
     spannableBuilder.applyArgAnnotations(args = args)
+
+    // The annotatedStringBuilder is used to apply the styles to the string resource.
     val annotatedStringBuilder = AnnotatedString.Builder()
+
+    // Add the entire string to the annotated string builder and apply the style.
     annotatedStringBuilder.append(spannableBuilder)
     annotatedStringBuilder.addStyle(
         style = style,
         start = 0,
         end = spannableBuilder.length,
     )
-    spannableBuilder.getSpans<Annotation>(0, spannableBuilder.length)
-        .forEach { annotation ->
-            val start = spannableBuilder.getSpanStart(annotation)
-            val end = spannableBuilder.getSpanEnd(annotation)
-            when (annotation.key) {
-                "emphasis" -> {
-                    annotatedStringBuilder.addStyle(
-                        style = emphasisHighlightStyle,
-                        start = start,
-                        end = end,
-                    )
-                }
-
-                "link" -> {
-                    val link = LinkAnnotation.Clickable(
-                        tag = annotation.value.orEmpty(),
-                        styles = TextLinkStyles(
-                            style = linkHighlightStyle,
-                        ),
-                    ) {
-                        onAnnotationClick?.invoke(annotation.value.orEmpty())
-                    }
-                    annotatedStringBuilder.addLink(
-                        link,
-                        start = start,
-                        end = end,
-                    )
-                }
+    val annotations = spannableBuilder.getSpans<Annotation>()
+    // Iterate through the annotations and apply the appropriate style. If the [Annotation.key]
+    // does not match a [ValidAnnotationType] an exception will be thrown.
+    for (annotation in annotations) {
+        // Skip the annotation if it does not have a valid start in the spanned string.
+        val start = spannableBuilder.getSpanStart(annotation).takeIf { it >= 0 } ?: continue
+        val end = spannableBuilder.getSpanEnd(annotation)
+        when (ValidAnnotationType.valueOf(annotation.key.uppercase())) {
+            ValidAnnotationType.EMPHASIS -> {
+                annotatedStringBuilder.addStyle(
+                    style = emphasisHighlightStyle,
+                    start = start,
+                    end = end,
+                )
             }
+
+            ValidAnnotationType.LINK -> {
+                val link = LinkAnnotation.Clickable(
+                    tag = annotation.value.orEmpty(),
+                    styles = TextLinkStyles(
+                        style = linkHighlightStyle,
+                    ),
+                ) {
+                    onAnnotationClick?.invoke(annotation.value.orEmpty())
+                }
+                annotatedStringBuilder.addLink(
+                    link,
+                    start = start,
+                    end = end,
+                )
+            }
+            // Handled prior to this point, not styling to be applied.
+            ValidAnnotationType.ARG -> Unit
         }
-    return annotatedStringBuilder.toAnnotatedString()
+    }
+    return remember { annotatedStringBuilder.toAnnotatedString() }
 }
 
+/**
+ * The span between the <annotation arg="0"> and </annotation> tags in the string resource is
+ * replaced with the index value in the provided [args].
+ */
 private fun SpannableStringBuilder.applyArgAnnotations(
     vararg args: String,
 ) {
-    val annotations = getSpans<Annotation>()
-    annotations
-        .filter {
-            it.key == "arg"
-        }.forEach { annotation ->
-            val argIndex = Integer.parseInt(annotation.value)
-            this.replace(
-                this.getSpanStart(annotation),
-                this.getSpanEnd(annotation),
-                args[argIndex],
-            )
-        }
+    val argAnnotations = getSpans<Annotation>()
+        .filter { it.isArgAnnotation() }
+    for (annotation in argAnnotations) {
+        // Skip the annotation if it does not have a valid start in the spanned string.
+        val spanStart = getSpanStart(annotation).takeIf { it >= 0 } ?: continue
+        val argIndex = Integer.parseInt(annotation.value)
+        // if no string is available just replace it with an empty string.
+        val replacementString = args.getOrNull(argIndex).orEmpty()
+        this.replace(
+            spanStart,
+            this.getSpanEnd(annotation),
+            replacementString,
+        )
+    }
 }
+
+/**
+ * Enumerated values representing the valid <annotation> keys that can be processed
+ * by [Int.toAnnotatedString]
+ */
+private enum class ValidAnnotationType {
+    ARG,
+    LINK,
+    EMPHASIS,
+}
+
+private fun Annotation.isArgAnnotation(): Boolean =
+    this.key.uppercase() == ValidAnnotationType.ARG.name
 
 val bitwardenDefaultSpanStyle: SpanStyle
     @Composable
