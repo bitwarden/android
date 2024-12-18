@@ -804,6 +804,16 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked,
     ) {
         onSshKeyContent { content, sshKey ->
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewPrivateKeyClicked(
+                            isVisible = action.isVisible,
+                        ),
+                    ),
+                )
+                return@onSshKeyContent
+            }
             mutableStateFlow.update { currentState ->
                 currentState.copy(
                     viewState = content.copy(
@@ -2230,5 +2240,19 @@ sealed class PasswordRepromptAction : Parcelable {
     data object RestoreItemClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
             get() = VaultItemAction.Common.RestoreVaultItemClick
+    }
+
+    /**
+     * Indicates that we should launch the
+     * [VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked] upon password validation.
+     */
+    @Parcelize
+    data class ViewPrivateKeyClicked(
+        val isVisible: Boolean,
+    ) : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                isVisible = isVisible,
+            )
     }
 }
