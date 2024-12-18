@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import javax.crypto.Cipher
 
 /**
  * Responsible for managing vault data inside the network layer.
@@ -189,7 +190,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
     /**
      * Attempt to unlock the vault using the stored biometric key for the currently active user.
      */
-    suspend fun unlockVaultWithBiometrics(): VaultUnlockResult
+    suspend fun unlockVaultWithBiometrics(cipher: Cipher): VaultUnlockResult
 
     /**
      * Attempt to unlock the vault with the given [masterPassword] and for the currently active

@@ -172,6 +172,16 @@ interface AuthDiskSource {
     )
 
     /**
+     * Gets the biometrics initialization vector for the given [userId].
+     */
+    fun getUserBiometricInitVector(userId: String): ByteArray?
+
+    /**
+     * Stores the biometrics initialization vector for the given [userId].
+     */
+    fun storeUserBiometricInitVector(userId: String, iv: ByteArray?)
+
+    /**
      * Gets the biometrics key for the given [userId].
      */
     fun getUserBiometricUnlockKey(userId: String): String?

@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -47,6 +46,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import javax.crypto.Cipher
 
 @Suppress("LargeClass")
 class SettingsRepositoryTest {
@@ -58,7 +58,6 @@ class SettingsRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val policyManager: PolicyManager = mockk {
         every {
@@ -72,7 +71,6 @@ class SettingsRepositoryTest {
         authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultSdkSource = vaultSdkSource,
-        biometricsEncryptionManager = biometricsEncryptionManager,
         accessibilityEnabledManager = fakeAccessibilityEnabledManager,
         dispatcherManager = FakeDispatcherManager(),
         policyManager = policyManager,
@@ -801,21 +799,22 @@ class SettingsRepositoryTest {
     @Test
     fun `clearBiometricsKey should remove the stored biometrics key`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.storeUserBiometricUnlockKey(userId = USER_ID, "fake key")
+        fakeAuthDiskSource.storeUserBiometricInitVector(userId = USER_ID, byteArrayOf(1))
 
         settingsRepository.clearBiometricsKey()
 
-        fakeAuthDiskSource.assertBiometricsKey(
-            userId = USER_ID,
-            biometricsKey = null,
-        )
+        fakeAuthDiskSource.assertBiometricsKey(userId = USER_ID, biometricsKey = null)
+        fakeAuthDiskSource.assertBiometricInitVector(userId = USER_ID, iv = null)
     }
 
     @Test
     fun `setupBiometricsKey with missing user state should return BiometricsKeyResult Error`() =
         runTest {
+            val cipher = mockk<Cipher>()
             fakeAuthDiskSource.userState = null
 
-            val result = settingsRepository.setupBiometricsKey()
+            val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
             assertEquals(BiometricsKeyResult.Error, result)
             coVerify(exactly = 0) {
@@ -828,17 +827,14 @@ class SettingsRepositoryTest {
     fun `setupBiometricsKey with getUserEncryptionKey failure should return BiometricsKeyResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            every { biometricsEncryptionManager.setupBiometrics(USER_ID) } just runs
+            val cipher = mockk<Cipher>()
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             } returns Throwable("Fail").asFailure()
 
-            val result = settingsRepository.setupBiometricsKey()
+            val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
             assertEquals(BiometricsKeyResult.Error, result)
-            verify(exactly = 1) {
-                biometricsEncryptionManager.setupBiometrics(USER_ID)
-            }
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }
@@ -850,18 +846,24 @@ class SettingsRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val encryptedKey = "asdf1234"
-            every { biometricsEncryptionManager.setupBiometrics(USER_ID) } just runs
+            val encryptedBytes = byteArrayOf(1, 1)
+            val initVector = byteArrayOf(2, 2)
+            val cipher = mockk<Cipher> {
+                every { doFinal(any()) } returns encryptedBytes
+                every { iv } returns initVector
+            }
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             } returns encryptedKey.asSuccess()
 
-            val result = settingsRepository.setupBiometricsKey()
+            val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
             assertEquals(BiometricsKeyResult.Success, result)
-            fakeAuthDiskSource.assertBiometricsKey(userId = USER_ID, biometricsKey = encryptedKey)
-            verify(exactly = 1) {
-                biometricsEncryptionManager.setupBiometrics(USER_ID)
-            }
+            fakeAuthDiskSource.assertBiometricsKey(
+                userId = USER_ID,
+                biometricsKey = encryptedBytes.toString(Charsets.ISO_8859_1),
+            )
+            fakeAuthDiskSource.assertBiometricInitVector(userId = USER_ID, iv = initVector)
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }

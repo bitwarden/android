@@ -116,6 +116,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
+import javax.crypto.Cipher
 
 /**
  * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
@@ -542,19 +543,36 @@ class VaultRepositoryImpl(
         ),
     )
 
-    override suspend fun unlockVaultWithBiometrics(): VaultUnlockResult {
+    override suspend fun unlockVaultWithBiometrics(cipher: Cipher): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
         val biometricsKey = authDiskSource
             .getUserBiometricUnlockKey(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError
-        return unlockVaultForUser(
-            userId = userId,
-            initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                decryptedUserKey = biometricsKey,
-            ),
-        )
+        val iv = authDiskSource.getUserBiometricInitVector(userId = userId)
+        return this
+            .unlockVaultForUser(
+                userId = userId,
+                initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                    decryptedUserKey = iv
+                        ?.let {
+                            cipher
+                                .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
+                                .decodeToString()
+                        }
+                        ?: biometricsKey,
+                ),
+            )
             .also {
                 if (it is VaultUnlockResult.Success) {
+                    if (iv == null) {
+                        authDiskSource.storeUserBiometricUnlockKey(
+                            userId = userId,
+                            biometricsKey = cipher
+                                .doFinal(biometricsKey.encodeToByteArray())
+                                .toString(Charsets.ISO_8859_1),
+                        )
+                        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
+                    }
                     deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
                 }
             }
