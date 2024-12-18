@@ -3,6 +3,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "io.github.forkmaintainers.iceraven",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "9C:0D:22:37:9F:48:7B:70:A4:F9:F8:BE:C0:17:3C:F9:1A:16:44:F0:8F:93:38:5B:5B:78:2C:E3:76:60:BA:81"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "org.chromium.chrome",
         "signatures": [
           {
@@ -27,11 +39,11 @@
     {
       "type": "android",
       "info": {
-        "package_name": "org.mozilla.fennec_fdroid",
+        "package_name": "org.mozilla.fenix",
         "signatures": [
           {
             "build": "release",
-            "cert_fingerprint_sha256": "06:66:53:58:EF:D8:BA:05:BE:23:6A:47:A1:2C:B0:95:8D:7D:75:DD:93:9D:77:C2:B3:1F:53:98:53:7E:BD:C5"
+            "cert_fingerprint_sha256": "50:04:77:90:88:E7:F9:88:D5:BC:5C:C5:F8:79:8F:EB:F4:F8:CD:08:4A:1B:2A:46:EF:D4:C8:EE:4A:EA:F2:11"
           }
         ]
       }
@@ -39,11 +51,11 @@
     {
       "type": "android",
       "info": {
-        "package_name": "org.mozilla.fenix",
+        "package_name": "org.mozilla.fennec_fdroid",
         "signatures": [
           {
             "build": "release",
-            "cert_fingerprint_sha256": "50:04:77:90:88:E7:F9:88:D5:BC:5C:C5:F8:79:8F:EB:F4:F8:CD:08:4A:1B:2A:46:EF:D4:C8:EE:4A:EA:F2:11"
+            "cert_fingerprint_sha256": "06:66:53:58:EF:D8:BA:05:BE:23:6A:47:A1:2C:B0:95:8D:7D:75:DD:93:9D:77:C2:B3:1F:53:98:53:7E:BD:C5"
           }
         ]
       }
@@ -72,18 +84,6 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "26:0E:0A:49:67:8C:78:B7:0C:02:D6:53:7A:DD:3B:6D:C0:A1:71:71:BB:DE:8C:E7:5F:D4:02:6A:8A:3E:18:D2"
-          }
-        ]
-      }
-    },
-    {
-      "type": "android",
-      "info": {
-        "package_name": "io.github.forkmaintainers.iceraven",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "9C:0D:22:37:9F:48:7B:70:A4:F9:F8:BE:C0:17:3C:F9:1A:16:44:F0:8F:93:38:5B:5B:78:2C:E3:76:60:BA:81"
           }
         ]
       }
