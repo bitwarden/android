@@ -1,12 +1,7 @@
-name: Scan
+name: Scan Pull Requests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "main"
-      - "rc"
-      - "hotfix-rc"
   pull_request_target:
     types: [opened, synchronize]
   merge_group:
@@ -71,7 +66,6 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@02ef91109b2d589e757aefcfb2854c2783fd7b19 # v4.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: >
             -Dsonar.organization=${{ github.repository_owner }}
