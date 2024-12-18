@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
 import com.bitwarden.vault.CollectionView
+import com.x8bit.bitwarden.ui.vault.feature.util.model.CollectionPermission
 
 private const val COLLECTION_DIVIDER: String = "/"
 
@@ -110,15 +111,43 @@ fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(
  * Checks if the user has permission to assign an item to a collection.
  *
  * Assigning to a collection is not allowed when the item is in a collection that the user does not
- * have "manage" and "edit" permission for.
+ * have "manage" permission for and is also in a collection they cannot view the passwords in.
+ *
+ * E.g., If an item is in A collection with "view except passwords" or "edit except passwords"
+ * permission and in another with "manage" permission, the user **cannot** assign the item to other
+ * collections. Conversely, if an item is in a collection with "manage" permission and another with
+ * "view" or "edit" permission, the user **can** assign the item to other collections.
  */
-fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<String>?) =
-    this
-        ?.none {
-            val itemIsInCollection = currentCollectionIds
-                ?.contains(it.id)
-                ?: false
+fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<String>?): Boolean {
+    if (this.isNullOrEmpty()) return true
+    if (currentCollectionIds.isNullOrEmpty()) return true
 
-            itemIsInCollection && (!it.manage || it.readOnly)
-        }
-        ?: true
+    // Verify user can MANAGE at least one collection the item is in.
+    return this
+        .any {
+            currentCollectionIds.contains(it.id) &&
+                it.permission == CollectionPermission.MANAGE
+        } &&
+
+        // Verify user does not have "edit except password" or "view except passwords"
+        // permission in any collection the item is not in.
+        this
+            .none {
+                currentCollectionIds.contains(it.id) &&
+                    (it.permission == CollectionPermission.EDIT_EXCEPT_PASSWORD ||
+                        it.permission == CollectionPermission.VIEW_EXCEPT_PASSWORDS)
+            }
+}
+
+/**
+ * Determines the user's permission level for a given [CollectionView].
+ */
+val CollectionView.permission: CollectionPermission
+    get() = when {
+        manage -> CollectionPermission.MANAGE
+        readOnly && hidePasswords -> CollectionPermission.VIEW_EXCEPT_PASSWORDS
+        readOnly -> CollectionPermission.VIEW
+        !readOnly && hidePasswords -> CollectionPermission.EDIT_EXCEPT_PASSWORD
+        // !readOnly is the only other possible condition, which resolves to EDIT permission
+        else -> CollectionPermission.EDIT
+    }
