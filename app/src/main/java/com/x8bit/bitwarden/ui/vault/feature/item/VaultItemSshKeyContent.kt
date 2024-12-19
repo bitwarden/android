@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -84,12 +84,20 @@ fun VaultItemSshKeyContent(
 
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenPasswordField(
+            BitwardenPasswordFieldWithActions(
                 label = stringResource(id = R.string.private_key),
                 value = sshKeyItemState.privateKey,
                 onValueChange = { },
                 singleLine = false,
                 readOnly = true,
+                actions = {
+                    BitwardenTonalIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_private_key),
+                        onClick = vaultSshKeyItemTypeHandlers.onCopyPrivateKeyClick,
+                        modifier = Modifier.testTag(tag = "SshKeyCopyPrivateKeyButton"),
+                    )
+                },
                 showPassword = sshKeyItemState.showPrivateKey,
                 showPasswordTestTag = "ViewPrivateKeyButton",
                 showPasswordChange = vaultSshKeyItemTypeHandlers.onShowPrivateKeyClick,
