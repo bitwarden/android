@@ -25,6 +25,8 @@ import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
+import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
+import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManagerImpl
 
 /**
  * Helper [Composable] that wraps a [content] and provides manager classes via [CompositionLocal].
@@ -48,6 +50,7 @@ fun LocalManagerProvider(
         LocalBiometricsManager provides BiometricsManagerImpl(activity),
         LocalNfcManager provides NfcManagerImpl(activity),
         LocalFido2CompletionManager provides fido2CompletionManager,
+        LocalAppReviewManager provides AppReviewManagerImpl(activity),
     ) {
         content()
     }
@@ -88,7 +91,17 @@ val LocalNfcManager: ProvidableCompositionLocal<NfcManager> = compositionLocalOf
     error("CompositionLocal NfcManager not present")
 }
 
+/**
+ * Provides access to the FIDO2 completion manager throughout the app.
+ */
 val LocalFido2CompletionManager: ProvidableCompositionLocal<Fido2CompletionManager> =
     compositionLocalOf {
         error("CompositionLocal Fido2CompletionManager not present")
     }
+
+/**
+ * Provides access to the app review manager throughout the app.
+ */
+val LocalAppReviewManager: ProvidableCompositionLocal<AppReviewManager> = compositionLocalOf {
+    error("CompositionLocal AppReviewManager not present")
+}
