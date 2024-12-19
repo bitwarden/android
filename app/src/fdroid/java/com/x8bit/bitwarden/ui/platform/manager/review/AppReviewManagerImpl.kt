@@ -6,7 +6,7 @@ import android.app.Activity
  * No-op implementation of [AppReviewManager] for FDroid builds.
  */
 class AppReviewManagerImpl(
-    private val activity: Activity,
+    activity: Activity,
 ) : AppReviewManager {
     override fun promptForReview() = Unit
 }
