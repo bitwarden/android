@@ -53,9 +53,9 @@ fun VaultItemSshKeyContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .testTag("SshKeyItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "SshKeyItemNameEntry",
             )
         }
 
@@ -195,8 +195,8 @@ fun VaultItemSshKeyContent(
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,
-                    onAttachmentDownloadClick =
-                        vaultCommonItemTypeHandlers.onAttachmentDownloadClick,
+                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                        .onAttachmentDownloadClick,
                 )
             }
             item { Spacer(modifier = Modifier.height(8.dp)) }

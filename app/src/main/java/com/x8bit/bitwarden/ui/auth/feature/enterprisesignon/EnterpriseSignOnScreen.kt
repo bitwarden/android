@@ -159,11 +159,11 @@ private fun EnterpriseSignOnScreenContent(
         BitwardenTextField(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .testTag("OrgSSOIdentifierEntry"),
+                .fillMaxWidth(),
             value = state.orgIdentifierInput,
             onValueChange = onOrgIdentifierInputChange,
             label = stringResource(id = R.string.org_identifier),
+            textFieldTestTag = "OrgSSOIdentifierEntry",
         )
 
         Spacer(modifier = Modifier.height(16.dp))

@@ -78,11 +78,11 @@ fun BitwardenTextEntryDialog(
                 value = text,
                 onValueChange = { text = it },
                 modifier = Modifier
-                    .testTag("AlertContentText")
                     .focusRequester(focusRequester)
                     .onGloballyPositioned {
                         shouldRequestFocus = true
                     },
+                textFieldTestTag = "AlertContentText",
             )
         },
         shape = BitwardenTheme.shapes.dialog,

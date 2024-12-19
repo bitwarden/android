@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -91,8 +92,34 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleVersionClick() {
+        val buildFlavour = when (BuildConfig.FLAVOR) {
+            "standard" -> ""
+            else -> "-${BuildConfig.FLAVOR}"
+        }
+
+        val buildVariant = when (BuildConfig.BUILD_TYPE) {
+            "debug" -> "dev"
+            "release" -> "prod"
+            else -> BuildConfig.BUILD_TYPE
+        }
+
+        val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
+        val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
+        val buildInfo = "\uD83D\uDCE6 $buildVariant$buildFlavour"
+        val ciBuildInfoString = BuildConfig.CI_INFO
+
         clipboardManager.setText(
-            text = state.copyrightInfo.concat("\n\n".asText()).concat(state.version),
+            text = state.copyrightInfo
+                .concat("\n\n".asText())
+                .concat(state.version)
+                .concat("\n".asText())
+                .concat("$deviceBrandModel $osInfo $buildInfo".asText())
+                .concat(
+                    "\n$ciBuildInfoString"
+                        .takeUnless { ciBuildInfoString.isEmpty() }
+                        .orEmpty()
+                        .asText(),
+                ),
         )
     }
 

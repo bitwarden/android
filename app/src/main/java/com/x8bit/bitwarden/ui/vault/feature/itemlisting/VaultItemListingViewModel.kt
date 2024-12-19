@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -32,8 +33,8 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -106,6 +107,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val policyManager: PolicyManager,
     private val fido2CredentialManager: Fido2CredentialManager,
+    private val fido2OriginManager: Fido2OriginManager,
     private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
@@ -727,7 +729,7 @@ class VaultItemListingViewModel @Inject constructor(
                 return
             }
         viewModelScope.launch {
-            val validateOriginResult = fido2CredentialManager
+            val validateOriginResult = fido2OriginManager
                 .validateOrigin(
                     callingAppInfo = request.callingAppInfo,
                     relyingPartyId = relyingPartyId,
@@ -737,7 +739,7 @@ class VaultItemListingViewModel @Inject constructor(
                     handleFido2OriginValidationFail(validateOriginResult)
                 }
 
-                Fido2ValidateOriginResult.Success -> {
+                is Fido2ValidateOriginResult.Success -> {
                     sendAction(
                         VaultItemListingsAction.Internal.Fido2AssertionResultReceive(
                             result = fido2CredentialManager.authenticateFido2Credential(
@@ -1384,7 +1386,7 @@ class VaultItemListingViewModel @Inject constructor(
                     showFido2ErrorDialog()
                     return@launch
                 }
-            val validateOriginResult = fido2CredentialManager
+            val validateOriginResult = fido2OriginManager
                 .validateOrigin(
                     callingAppInfo = action.request.callingAppInfo,
                     relyingPartyId = options.relyingParty.id,
@@ -1394,7 +1396,7 @@ class VaultItemListingViewModel @Inject constructor(
                     handleFido2OriginValidationFail(validateOriginResult)
                 }
 
-                Fido2ValidateOriginResult.Success -> {
+                is Fido2ValidateOriginResult.Success -> {
                     observeVaultData()
                 }
             }
@@ -1427,7 +1429,7 @@ class VaultItemListingViewModel @Inject constructor(
                 R.string.passkey_operation_failed_because_app_not_found_in_asset_links
             }
 
-            Fido2ValidateOriginResult.Error.ApplicationNotVerified -> {
+            Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified -> {
                 R.string.passkey_operation_failed_because_app_could_not_be_verified
             }
 

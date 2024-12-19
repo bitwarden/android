@@ -52,9 +52,9 @@ fun LazyListScope.vaultAddEditCardItems(
             value = commonState.name,
             onValueChange = commonHandlers.onNameTextChange,
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNameEntry",
         )
     }
     item {
@@ -64,9 +64,9 @@ fun LazyListScope.vaultAddEditCardItems(
             value = cardState.cardHolderName,
             onValueChange = cardHandlers.onCardHolderNameTextChange,
             modifier = Modifier
-                .testTag("CardholderNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "CardholderNameEntry",
         )
     }
     item {
@@ -140,9 +140,9 @@ fun LazyListScope.vaultAddEditCardItems(
             onValueChange = cardHandlers.onExpirationYearTextChange,
             keyboardType = KeyboardType.Number,
             modifier = Modifier
-                .testTag("CardExpirationYearEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "CardExpirationYearEntry",
         )
     }
     item {
@@ -253,9 +253,9 @@ fun LazyListScope.vaultAddEditCardItems(
             value = commonState.notes,
             onValueChange = commonHandlers.onNotesTextChange,
             modifier = Modifier
-                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNotesEntry",
         )
     }
 

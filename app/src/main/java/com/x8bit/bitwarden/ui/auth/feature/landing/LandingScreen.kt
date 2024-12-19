@@ -242,13 +242,13 @@ private fun LandingScreenContent(
 
         BitwardenTextField(
             modifier = Modifier
-                .testTag("EmailAddressEntry")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
             value = state.emailInput,
             onValueChange = onEmailInputChange,
             label = stringResource(id = R.string.email_address),
             keyboardType = KeyboardType.Email,
+            textFieldTestTag = "EmailAddressEntry",
         )
 
         Spacer(modifier = Modifier.height(2.dp))

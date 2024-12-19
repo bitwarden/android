@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
@@ -144,6 +145,7 @@ class VaultRepositoryImpl(
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
+    private val reviewPromptManager: ReviewPromptManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
     VaultLockManager by vaultLockManager {
@@ -632,7 +634,10 @@ class VaultRepositoryImpl(
             }
             .fold(
                 onFailure = { CreateSendResult.Error(message = null) },
-                onSuccess = { CreateSendResult.Success(it) },
+                onSuccess = {
+                    reviewPromptManager.registerCreateSendAction()
+                    CreateSendResult.Success(it)
+                },
             )
     }
 

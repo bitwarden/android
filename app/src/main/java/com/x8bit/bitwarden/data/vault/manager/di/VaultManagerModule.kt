@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -44,6 +45,7 @@ object VaultManagerModule {
         authDiskSource: AuthDiskSource,
         fileManager: FileManager,
         clock: Clock,
+        reviewPromptManager: ReviewPromptManager,
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
@@ -51,6 +53,7 @@ object VaultManagerModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         clock = clock,
+        reviewPromptManager = reviewPromptManager,
     )
 
     @Provides

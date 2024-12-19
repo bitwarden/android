@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -101,7 +102,6 @@ fun GeneratorScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = rememberBitwardenSnackbarHostState()
-
     LivecycleEventEffect { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
@@ -394,6 +394,7 @@ private fun GeneratedStringItem(
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
         modifier = modifier.padding(horizontal = 16.dp),
+        textToolbarType = TextToolbarType.NONE,
     )
 }
 
@@ -751,9 +752,9 @@ private fun PassphraseWordSeparatorInputItem(
             }
         },
         modifier = modifier
-            .testTag("WordSeparatorEntry")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "WordSeparatorEntry",
     )
 }
 
@@ -916,8 +917,8 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .testTag("AnonAddyDomainNameEntry")
                     .fillMaxWidth(),
+                textFieldTestTag = "AnonAddyDomainNameEntry",
             )
         }
 
@@ -980,8 +981,8 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .testTag("ForwardedEmailDomainNameEntry")
                     .fillMaxWidth(),
+                textFieldTestTag = "ForwardedEmailDomainNameEntry",
             )
         }
 
@@ -1068,8 +1069,8 @@ private fun PlusAddressedEmailTextInputItem(
         onValueChange = onPlusAddressedEmailTextChange,
         modifier = modifier
             .fillMaxWidth()
-            .testTag("PlusAddressedEmailEntry")
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "PlusAddressedEmailEntry",
     )
 }
 
@@ -1102,8 +1103,8 @@ private fun CatchAllEmailTextInputItem(
         onValueChange = onDomainTextChange,
         modifier = modifier
             .fillMaxWidth()
-            .testTag("CatchAllEmailDomainEntry")
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "CatchAllEmailDomainEntry",
     )
 }
 

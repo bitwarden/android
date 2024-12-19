@@ -53,9 +53,9 @@ fun VaultItemCardContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .testTag("CardItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "CardItemNameEntry",
             )
         }
         cardState.cardholderName?.let { cardholderName ->
@@ -68,9 +68,9 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .testTag("CardholderNameEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    textFieldTestTag = "CardholderNameEntry",
                 )
             }
         }
@@ -112,9 +112,9 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .testTag("CardBrandEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    textFieldTestTag = "CardBrandEntry",
                 )
             }
         }
@@ -129,9 +129,9 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .testTag("CardExpirationEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    textFieldTestTag = "CardExpirationEntry",
                 )
             }
         }

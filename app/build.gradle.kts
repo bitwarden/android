@@ -1,6 +1,9 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.utils.cxx.io.removeExtensionIfPresent
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
+import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
@@ -32,6 +35,16 @@ val userProperties = Properties().apply {
     }
 }
 
+/**
+ * Loads CI-specific build properties that are not checked into source control.
+ */
+val ciProperties = Properties().apply {
+    val ciPropsFile = File(rootDir, "ci.properties")
+    if (ciPropsFile.exists()) {
+        FileInputStream(ciPropsFile).use { load(it) }
+    }
+}
+
 android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -51,6 +64,12 @@ android {
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            type = "String",
+            name = "CI_INFO",
+            value = "${ciProperties.getOrDefault("ci.info", "\"local\"")}"
+        )
     }
 
     androidResources {
@@ -113,6 +132,39 @@ android {
         create("fdroid") {
             dimension = "mode"
         }
+    }
+
+    applicationVariants.all {
+        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
+        outputs
+            .mapNotNull { it as? BaseVariantOutputImpl }
+            .forEach { output ->
+                val fileNameWithoutExtension = when (flavorName) {
+                    "fdroid" -> "$applicationId-$flavorName"
+                    "standard" -> "$applicationId"
+                    else -> output.outputFileName.removeExtensionIfPresent(".apk")
+                }
+
+                // Set the APK output filename.
+                output.outputFileName = "$fileNameWithoutExtension.apk"
+
+                val variantName = name
+                val renameTaskName = "rename${variantName.capitalize()}AabFiles"
+                tasks.register(renameTaskName) {
+                    group = "build"
+                    description = "Renames the bundle files for $variantName variant"
+                    doLast {
+                        renameFile(
+                            "$bundlesDir/$variantName/$namespace-$flavorName-${buildType.name}.aab",
+                            "$fileNameWithoutExtension.aab",
+                        )
+                    }
+                }
+                // Force renaming task to execute after the variant is built.
+                tasks
+                    .getByName("bundle${variantName.capitalize()}")
+                    .finalizedBy(renameTaskName)
+            }
     }
 
     compileOptions {
@@ -298,6 +350,10 @@ tasks {
         dependsOn("detekt")
     }
 
+    getByName("sonar") {
+        dependsOn("check")
+    }
+
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         jvmTarget = libs.versions.jvmTarget.get()
     }
@@ -315,10 +371,10 @@ tasks {
 
 afterEvaluate {
     // Disable Fdroid-specific tasks that we want to exclude
-    val tasks = tasks.withType<GoogleServicesTask>() +
+    val fdroidTasksToDisable = tasks.withType<GoogleServicesTask>() +
         tasks.withType<InjectMappingFileIdTask>() +
         tasks.withType<UploadMappingFileTask>()
-    tasks
+    fdroidTasksToDisable
         .filter { it.name.contains("Fdroid") }
         .forEach { it.enabled = false }
 }
@@ -335,8 +391,17 @@ sonar {
     }
 }
 
-tasks {
-    getByName("sonar") {
-        dependsOn("check")
+private fun renameFile(path: String, newName: String) {
+    val originalFile = File(path)
+    if (!originalFile.exists()) {
+        println("File $originalFile does not exist!")
+        return
+    }
+
+    val newFile = File(originalFile.parentFile, newName)
+    if (originalFile.renameTo(newFile)) {
+        println("Renamed $originalFile to $newFile")
+    } else {
+        throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }

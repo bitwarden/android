@@ -46,7 +46,7 @@ sealed class FlagKey<out T : Any> {
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-authenticator-sync-android"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -129,6 +129,15 @@ sealed class FlagKey<out T : Any> {
     data object AppReviewPrompt : FlagKey<Boolean>() {
         override val keyName: String = "app-review-prompt"
         override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the Cipher Key Encryption feature.
+     */
+    data object CipherKeyEncryption : FlagKey<Boolean>() {
+        override val keyName: String = "cipher-key-encryption"
+        override val defaultValue: Boolean = true
         override val isRemotelyConfigured: Boolean = true
     }
 

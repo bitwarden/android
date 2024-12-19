@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRe
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -152,6 +153,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
+    }
+    private val networkConnectionManager = mockk<NetworkConnectionManager> {
+        every { isNetworkConnected } returns true
     }
 
     @BeforeEach
@@ -1496,50 +1500,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `in edit mode, updateCipher success should ShowToast and NavigateBack`() =
-        runTest {
-            val cipherView = createMockCipherView(1)
-            val stateWithName = createVaultAddItemState(
-                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
-                commonContentViewState = createCommonContentViewState(
-                    name = "mockName-1",
-                ),
-            )
-
-            mutableVaultDataFlow.value = DataState.Loaded(createVaultData(cipherView = cipherView))
-
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
-                ),
-            )
-
-            coEvery {
-                vaultRepository.updateCipher(any(), any())
-            } returns UpdateCipherResult.Success
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                assertEquals(
-                    VaultAddEditEvent.ShowToast(
-                        R.string.item_updated.asText(),
-                    ),
-                    awaitItem(),
-                )
-                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
-            }
-        }
-
-    @Test
-    fun `in add mode, SaveClick createCipher error should show error dialog`() = runTest {
-
+    fun `in edit mode, updateCipher success should ShowToast and NavigateBack`() = runTest {
+        val cipherView = createMockCipherView(1)
         val stateWithName = createVaultAddItemState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
             commonContentViewState = createCommonContentViewState(
                 name = "mockName-1",
             ),
         )
-        mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+
+        mutableVaultDataFlow.value = DataState.Loaded(createVaultData(cipherView = cipherView))
 
         val viewModel = createAddVaultItemViewModel(
             createSavedStateHandleWithState(
@@ -1549,20 +1519,54 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
 
         coEvery {
-            vaultRepository.createCipherInOrganization(any(), any())
-        } returns CreateCipherResult.Error
-        viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-
-        assertEquals(
-            stateWithName.copy(
-                dialog = VaultAddEditState.DialogState.Generic(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+            vaultRepository.updateCipher(any(), any())
+        } returns UpdateCipherResult.Success
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+            assertEquals(
+                VaultAddEditEvent.ShowToast(
+                    R.string.item_updated.asText(),
                 ),
-            ),
-            viewModel.stateFlow.value,
-        )
+                awaitItem(),
+            )
+            assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+        }
     }
+
+    @Test
+    fun `in add mode, SaveClick with no network connection error should show error dialog`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            every { networkConnectionManager.isNetworkConnected } returns false
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Error
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+            assertEquals(
+                stateWithName.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `in edit mode, SaveClick should show dialog, and remove it once an item is saved`() =
@@ -3131,6 +3135,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 resourceManager = resourceManager,
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
+                networkConnectionManager = networkConnectionManager,
             )
         }
 
@@ -4360,6 +4365,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             resourceManager = bitwardenResourceManager,
             clock = clock,
             organizationEventManager = organizationEventManager,
+            networkConnectionManager = networkConnectionManager,
         )
 
     private fun createVaultData(
