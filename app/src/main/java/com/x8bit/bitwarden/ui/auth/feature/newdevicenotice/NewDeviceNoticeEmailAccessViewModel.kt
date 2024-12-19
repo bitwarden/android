@@ -39,6 +39,7 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
+        // TODO PM-8217: update new device notice status and navigate accordingly
         sendEvent(NavigateToTwoFactorOptions)
     }
 
