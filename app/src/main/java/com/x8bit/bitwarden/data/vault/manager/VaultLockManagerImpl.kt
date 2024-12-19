@@ -305,29 +305,38 @@ class VaultLockManagerImpl(
     }
 
     private fun observeAppCreationChanges() {
+        var isFirstCreated = true
         appStateManager
             .appCreatedStateFlow
             .onEach { appCreationState ->
                 when (appCreationState) {
-                    AppCreationState.CREATED -> Unit
-                    AppCreationState.DESTROYED -> handleOnDestroyed()
+                    is AppCreationState.Created -> {
+                        handleOnCreated(
+                            createdForAutofill = appCreationState.createdForAutofill,
+                            isFirstCreated = isFirstCreated,
+                        )
+                        isFirstCreated = false
+                    }
+
+                    AppCreationState.Destroyed -> Unit
                 }
             }
             .launchIn(unconfinedScope)
     }
 
-    private fun handleOnDestroyed() {
-        activeUserId?.let { userId ->
-            checkForVaultTimeout(
-                userId = userId,
-                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
-            )
-        }
+    private fun handleOnCreated(createdForAutofill: Boolean, isFirstCreated: Boolean) {
+        val userId = activeUserId ?: return
+        userIdTimerJobMap[userId]?.cancel()
+        checkForVaultTimeout(
+            userId = userId,
+            checkTimeoutReason = CheckTimeoutReason.AppCreated(
+                firstTimeCreation = isFirstCreated,
+                createdForAutofill = createdForAutofill,
+            ),
+        )
     }
 
     private fun observeAppForegroundChanges() {
-        var isFirstForeground = true
-
         appStateManager
             .appForegroundStateFlow
             .onEach { appForegroundState ->
@@ -336,10 +345,7 @@ class VaultLockManagerImpl(
                         handleOnBackground()
                     }
 
-                    AppForegroundState.FOREGROUNDED -> {
-                        handleOnForeground(isFirstForeground = isFirstForeground)
-                        isFirstForeground = false
-                    }
+                    AppForegroundState.FOREGROUNDED -> Unit
                 }
             }
             .launchIn(unconfinedScope)
@@ -349,19 +355,8 @@ class VaultLockManagerImpl(
         val userId = activeUserId ?: return
         checkForVaultTimeout(
             userId = userId,
-            checkTimeoutReason = CheckTimeoutReason.APP_BACKGROUNDED,
+            checkTimeoutReason = CheckTimeoutReason.AppBackgrounded,
         )
-    }
-
-    private fun handleOnForeground(isFirstForeground: Boolean) {
-        val userId = activeUserId ?: return
-        userIdTimerJobMap[userId]?.cancel()
-        if (isFirstForeground) {
-            checkForVaultTimeout(
-                userId = userId,
-                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
-            )
-        }
     }
 
     private fun observeUserSwitchingChanges() {
@@ -461,7 +456,7 @@ class VaultLockManagerImpl(
         // Check if the user's timeout action should be performed as we switch away.
         checkForVaultTimeout(
             userId = previousActiveUserId,
-            checkTimeoutReason = CheckTimeoutReason.USER_CHANGED,
+            checkTimeoutReason = CheckTimeoutReason.UserChanged,
         )
     }
 
@@ -491,10 +486,18 @@ class VaultLockManagerImpl(
 
             VaultTimeout.OnAppRestart -> {
                 // If this is an app restart, trigger the timeout action; otherwise ignore.
-                if (checkTimeoutReason == CheckTimeoutReason.APP_RESTARTED) {
+                if (checkTimeoutReason is CheckTimeoutReason.AppCreated) {
                     // On restart the vault should be locked already but we may need to soft-logout
                     // the user.
-                    handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+                    if (
+                        checkTimeoutReason.firstTimeCreation ||
+                        !checkTimeoutReason.createdForAutofill
+                    ) {
+                        handleTimeoutAction(
+                            userId = userId,
+                            vaultTimeoutAction = vaultTimeoutAction,
+                        )
+                    }
                 }
             }
 
@@ -502,16 +505,18 @@ class VaultLockManagerImpl(
                 when (checkTimeoutReason) {
                     // Always preform the timeout action on app restart to ensure the user is
                     // in the correct state.
-                    CheckTimeoutReason.APP_RESTARTED -> {
-                        handleTimeoutAction(
-                            userId = userId,
-                            vaultTimeoutAction = vaultTimeoutAction,
-                        )
+                    is CheckTimeoutReason.AppCreated -> {
+                        if (checkTimeoutReason.firstTimeCreation) {
+                            handleTimeoutAction(
+                                userId = userId,
+                                vaultTimeoutAction = vaultTimeoutAction,
+                            )
+                        }
                     }
 
                     // User no longer active or engaging with the app.
-                    CheckTimeoutReason.APP_BACKGROUNDED,
-                    CheckTimeoutReason.USER_CHANGED,
+                    CheckTimeoutReason.AppBackgrounded,
+                    CheckTimeoutReason.UserChanged,
                         -> {
                         handleTimeoutActionWithDelay(
                             userId = userId,
@@ -591,9 +596,11 @@ class VaultLockManagerImpl(
     /**
      * Helper enum that indicates the reason we are checking for timeout.
      */
-    private enum class CheckTimeoutReason {
-        APP_BACKGROUNDED,
-        APP_RESTARTED,
-        USER_CHANGED,
+    private sealed class CheckTimeoutReason {
+        data object AppBackgrounded : CheckTimeoutReason()
+        data class AppCreated(val firstTimeCreation: Boolean, val createdForAutofill: Boolean) :
+            CheckTimeoutReason()
+
+        data object UserChanged : CheckTimeoutReason()
     }
 }

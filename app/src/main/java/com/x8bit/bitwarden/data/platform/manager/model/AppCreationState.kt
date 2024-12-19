@@ -3,14 +3,15 @@ package com.x8bit.bitwarden.data.platform.manager.model
 /**
  * Represents the creation state of the app.
  */
-enum class AppCreationState {
+sealed class AppCreationState {
     /**
      * Denotes that the app is currently created.
+     * @param createdForAutofill Whether the app was created for autofill.
      */
-    CREATED,
+    data class Created(val createdForAutofill: Boolean) : AppCreationState()
 
     /**
      * Denotes that the app is currently destroyed.
      */
-    DESTROYED,
+    data object Destroyed : AppCreationState()
 }
