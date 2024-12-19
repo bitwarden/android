@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
@@ -92,7 +91,6 @@ object PlatformRepositoryModule {
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
         vaultSdkSource: VaultSdkSource,
-        encryptionManager: BiometricsEncryptionManager,
         accessibilityEnabledManager: AccessibilityEnabledManager,
         dispatcherManager: DispatcherManager,
         policyManager: PolicyManager,
@@ -103,7 +101,6 @@ object PlatformRepositoryModule {
             authDiskSource = authDiskSource,
             settingsDiskSource = settingsDiskSource,
             vaultSdkSource = vaultSdkSource,
-            biometricsEncryptionManager = encryptionManager,
             accessibilityEnabledManager = accessibilityEnabledManager,
             dispatcherManager = dispatcherManager,
             policyManager = policyManager,

@@ -21,6 +21,7 @@ import java.util.UUID
 private const val ACCOUNT_TOKENS_KEY = "accountTokens"
 private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY = "authenticatorSyncSymmetric"
 private const val AUTHENTICATOR_SYNC_UNLOCK_KEY = "authenticatorSyncUnlock"
+private const val BIOMETRICS_INIT_VECTOR_KEY = "biometricInitializationVector"
 private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "userKeyAutoUnlock"
 private const val DEVICE_KEY_KEY = "deviceKey"
@@ -142,6 +143,7 @@ class AuthDiskSourceImpl(
         storePrivateKey(userId = userId, privateKey = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
+        storeUserBiometricInitVector(userId = userId, iv = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
@@ -274,6 +276,17 @@ class AuthDiskSourceImpl(
         putEncryptedString(
             key = PENDING_ADMIN_AUTH_REQUEST_KEY.appendIdentifier(userId),
             value = pendingAuthRequest?.let { json.encodeToString(it) },
+        )
+    }
+
+    override fun getUserBiometricInitVector(userId: String): ByteArray? =
+        getEncryptedString(key = BIOMETRICS_INIT_VECTOR_KEY.appendIdentifier(userId))
+            ?.toByteArray(Charsets.ISO_8859_1)
+
+    override fun storeUserBiometricInitVector(userId: String, iv: ByteArray?) {
+        putEncryptedString(
+            key = BIOMETRICS_INIT_VECTOR_KEY.appendIdentifier(userId),
+            value = iv?.toString(Charsets.ISO_8859_1),
         )
     }
 

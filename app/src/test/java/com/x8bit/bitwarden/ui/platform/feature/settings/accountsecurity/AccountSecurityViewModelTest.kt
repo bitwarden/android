@@ -385,7 +385,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
 
             assertEquals(
-                AccountSecurityEvent.ShowBiometricsPrompt(CIPHER),
+                AccountSecurityEvent.ShowBiometricsPrompt(cipher = CIPHER),
                 awaitItem(),
             )
         }
@@ -426,8 +426,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle false should call clearBiometricsKey and update the state`() =
+    fun `on UnlockWithBiometricToggleDisabled should call clearBiometricsKey and update the state`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
             every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
@@ -435,7 +436,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
 
-            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(false))
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggleDisabled)
 
             assertEquals(
                 initialState.copy(isUnlockWithBiometricsEnabled = false),
@@ -448,7 +449,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle false should call clearBiometricsKey, reset the vaultTimeoutAction, and update the state`() =
+    fun `on UnlockWithBiometricToggleDisabled should call clearBiometricsKey, reset the vaultTimeoutAction, and update the state`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(
                 isUnlockWithPasswordEnabled = false,
@@ -460,7 +461,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
 
-            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(false))
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggleDisabled)
 
             assertEquals(
                 initialState.copy(
@@ -477,14 +478,18 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle true and setupBiometricsKey error should call update the state accordingly`() =
+    fun `on UnlockWithBiometricToggleEnabled and setupBiometricsKey error should call update the state accordingly`() =
         runTest {
-            coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Error
+            coEvery {
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
+            } returns BiometricsKeyResult.Error
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
-                viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+                viewModel.trySendAction(
+                    AccountSecurityAction.UnlockWithBiometricToggleEnabled(cipher = CIPHER),
+                )
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
@@ -501,20 +506,24 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify(exactly = 1) {
-                settingsRepository.setupBiometricsKey()
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle true and setupBiometricsKey success should call update the state accordingly`() =
+    fun `on UnlockWithBiometricToggleEnabled and setupBiometricsKey success should call update the state accordingly`() =
         runTest {
-            coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Success
+            coEvery {
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
+            } returns BiometricsKeyResult.Success
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
-                viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+                viewModel.trySendAction(
+                    AccountSecurityAction.UnlockWithBiometricToggleEnabled(cipher = CIPHER),
+                )
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
@@ -531,7 +540,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify(exactly = 1) {
-                settingsRepository.setupBiometricsKey()
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
             }
         }
 
