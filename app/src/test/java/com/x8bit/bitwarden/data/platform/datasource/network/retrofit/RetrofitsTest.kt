@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthToke
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.x8bit.bitwarden.data.platform.datasource.network.util.TLSHelper
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -13,6 +14,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import okhttp3.Authenticator
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -47,6 +49,10 @@ class RetrofitsTest {
     }
     private val json = Json
     private val server = MockWebServer()
+    private val tlsHelper = mockk<TLSHelper> {
+        val builderSlot = slot<OkHttpClient.Builder>()
+        every { setupOkHttpClientSSLSocketFactory(capture(builderSlot)) } answers { builderSlot.captured }
+    }
 
     private val retrofits = RetrofitsImpl(
         authTokenInterceptor = authTokenInterceptor,
@@ -54,6 +60,7 @@ class RetrofitsTest {
         headersInterceptor = headersInterceptors,
         refreshAuthenticator = refreshAuthenticator,
         json = json,
+        tlsHelper = tlsHelper,
     )
 
     private var isAuthInterceptorCalled = false
