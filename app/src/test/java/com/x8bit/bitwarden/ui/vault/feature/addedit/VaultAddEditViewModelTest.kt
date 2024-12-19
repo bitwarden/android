@@ -43,9 +43,13 @@ import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRep
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditExceptPasswordsCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -1182,7 +1186,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = false,
-                    canAssignToCollections = true,
+                    canAssignToCollections = false,
                 )
             } returns stateWithName.viewState
 
@@ -1190,10 +1194,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 data = createVaultData(
                     cipherView = cipherView,
                     collectionViewList = listOf(
-                        createMockCollectionView(
-                            number = 1,
-                            manage = false,
-                        ),
+                        createEditCollectionView(number = 1),
                     ),
                 ),
             )
@@ -1223,6 +1224,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `in edit mode, canDelete should be true when cipher is in a collection the user can manage`() =
         runTest {
             val cipherView = createMockCipherView(1)
+                .copy(collectionIds = listOf("mockId-1", "mockId-2"))
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
@@ -1258,16 +1260,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 data = createVaultData(
                     cipherView = cipherView,
                     collectionViewList = listOf(
-                        createMockCollectionView(
-                            number = 1,
-                            manage = true,
-                            readOnly = false,
-                        ),
-                        createMockCollectionView(
-                            number = 2,
-                            manage = false,
-                            readOnly = true,
-                        ),
+                        createManageCollectionView(number = 1),
+                        createViewCollectionView(number = 2),
                     ),
                 ),
             )
@@ -1294,7 +1288,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in edit mode, canAssociateToCollections should be false when cipher is in a collection the user cannot manage or edit`() =
+    fun `in edit mode, canAssociateToCollections should be false when cipher is in a collection with view permission`() =
         runTest {
             val cipherView = createMockCipherView(1)
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
@@ -1332,11 +1326,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 data = createVaultData(
                     cipherView = cipherView,
                     collectionViewList = listOf(
-                        createMockCollectionView(
-                            number = 1,
-                            readOnly = true,
-                            manage = false,
-                        ),
+                        createViewCollectionView(number = 1),
                     ),
                 ),
             )
@@ -1363,9 +1353,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in edit mode, canAssociateToCollections should be false when cipher is in a collection the user cannot manage but can edit`() =
+    fun `in edit mode, canAssociateToCollections should be false when cipher is in a collection with manage permission and a collection with edit, except password permission`() =
         runTest {
             val cipherView = createMockCipherView(1)
+                .copy(collectionIds = listOf("mockId-1", "mockId-2"))
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
@@ -1392,7 +1383,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
-                    canDelete = false,
+                    canDelete = true,
                     canAssignToCollections = false,
                 )
             } returns stateWithName.viewState
@@ -1401,11 +1392,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 data = createVaultData(
                     cipherView = cipherView,
                     collectionViewList = listOf(
-                        createMockCollectionView(
-                            number = 1,
-                            manage = false,
-                            readOnly = false,
-                        ),
+                        createManageCollectionView(number = 1),
+                        createEditExceptPasswordsCollectionView(number = 2),
                     ),
                 ),
             )
@@ -1424,7 +1412,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     totpData = null,
                     resourceManager = resourceManager,
                     clock = fixedClock,
-                    canDelete = false,
+                    canDelete = true,
                     canAssignToCollections = false,
                 )
             }
@@ -1432,9 +1420,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in edit mode, canAssociateToCollections should be false when cipher is in a collection the user can manage but cannot edit`() =
+    fun `in edit mode, canAssociateToCollections should be false when cipher is in a collection with manage permission and a collection with view, except password permission`() =
         runTest {
             val cipherView = createMockCipherView(1)
+                .copy(collectionIds = listOf("mockId-1", "mockId-2"))
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
@@ -1470,11 +1459,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 data = createVaultData(
                     cipherView = cipherView,
                     collectionViewList = listOf(
-                        createMockCollectionView(
-                            number = 1,
-                            manage = true,
-                            readOnly = true,
-                        ),
+                        createManageCollectionView(number = 1),
+                        createViewExceptPasswordsCollectionView(number = 2),
                     ),
                 ),
             )
