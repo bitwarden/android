@@ -30,7 +30,7 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClick with valid email should emit NavigateToTwoFactorOptions`() = runTest {
+    fun `ContinueClick should emit NavigateToTwoFactorOptions`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.ContinueClick)
