@@ -6,7 +6,6 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.util.isFdroid
 import timber.log.Timber
 
 /**
@@ -17,7 +16,6 @@ class AppReviewManagerImpl(
     private val activity: Activity,
 ) : AppReviewManager {
     override fun promptForReview() {
-        if (isFdroid) return
         val manager = ReviewManagerFactory.create(activity)
         val request = manager.requestReviewFlow()
         request.addOnCompleteListener { task ->

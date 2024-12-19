@@ -248,7 +248,6 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
-    implementation(libs.google.play.review)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
@@ -269,6 +268,7 @@ dependencies {
     standardImplementation(libs.google.firebase.cloud.messaging)
     standardImplementation(platform(libs.google.firebase.bom))
     standardImplementation(libs.google.firebase.crashlytics)
+    standardImplementation(libs.google.play.review)
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
