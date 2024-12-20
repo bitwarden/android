@@ -32,6 +32,7 @@ detekt = "1.23.7"
 firebaseBom = "33.7.0"
 glide = "1.0.0-beta01"
 googleServices = "4.4.2"
+googleReview = "2.0.2"
 hilt = "2.53.1"
 junit5 = "5.11.3"
 jvmTarget = "17"
@@ -96,6 +97,7 @@ google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlyti
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 google-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+google-play-review = { module = "com.google.android.play:review", version.ref = "googleReview"}
 junit-junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
 junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
