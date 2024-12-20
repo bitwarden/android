@@ -1114,4 +1114,5 @@ Anule a subscrição em qualquer altura.</string>
   <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
   <string name="check_out_the_passphrase_generator">"Dê uma vista de olhos no gerador de frases de acesso"</string>
   <string name="copied_to_clipboard">Copiado para a área de transferência.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. A cadeia de certificados ou as definições de proxy no seu dispositivo ou no seu servidor Bitwarden podem não estar corretamente configuradas.</string>
 </resources>

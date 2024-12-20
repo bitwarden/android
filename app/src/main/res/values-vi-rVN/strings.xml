@@ -1114,4 +1114,5 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="need_some_inspiration">"Cần cảm hứng?"</string>
   <string name="check_out_the_passphrase_generator">"Tham khảo trình tạo cụm mật khẩu"</string>
   <string name="copied_to_clipboard">Đã sao chép vào bộ nhớ tạm</string>
+  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
 </resources>

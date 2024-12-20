@@ -86,7 +86,7 @@
   <string name="account_created_success">您的新账户已成功创建！</string>
   <string name="add_an_item">添加项目</string>
   <string name="app_extension">应用程序扩展</string>
-  <string name="autofill_accessibility_description">使用 Bitwarden 无障碍服务在 App 和网站自动填充您的登录项目。</string>
+  <string name="autofill_accessibility_description">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。</string>
   <string name="autofill_service">自动填充服务</string>
   <string name="set_bitwarden_as_passkey_manager_description">在设备的设置中将 Bitwarden 设置为您的通行密钥提供程序。</string>
   <string name="avoid_ambiguous_characters">避免易混淆的字符</string>
@@ -332,7 +332,7 @@
   <string name="no_items_folder">此文件夹中没有项目。</string>
   <string name="no_items_trash">回收站中没有项目。</string>
   <string name="autofill_accessibility_service">自动填充无障碍服务</string>
-  <string name="autofill_accessibility_summary">在其他应 App 和网站上辅助填写用户名和密码字段。</string>
+  <string name="autofill_accessibility_summary">在其他 App 和网站上协助填充用户名和密码字段。</string>
   <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来协助将登录信息填充到你设备上的其他 App 中。</string>
   <string name="bitwarden_autofill_service_description">使用 Bitwarden 自动填充服务将登录信息填充到其他 App 中。</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">打开自动填充设置</string>
@@ -500,7 +500,7 @@
   <string name="open">打开</string>
   <string name="unable_to_save_attachment">保存此附件时出现问题。如果问题仍然存在，您可以从网页版密码库中保存它。</string>
   <string name="save_attachment_success">附件保存成功</string>
-  <string name="autofill_tile_accessibility_required">请从 Bitwarden 设置中启用「自动填充无障碍服务」以使用自动填充功能。</string>
+  <string name="autofill_tile_accessibility_required">请从 Bitwarden 设置中启用「自动填充无障碍服务」以使用自动填充磁贴。</string>
   <string name="autofill_tile_uri_not_found">未检测到密码字段</string>
   <string name="soft_deleting">正在发送到回收站...</string>
   <string name="item_soft_deleted">项目已发送到回收站。</string>
@@ -542,14 +542,14 @@
   <string name="inline_autofill">使用内嵌自动填充</string>
   <string name="inline_autofill_description">如果您所选的 IME（键盘）支持，将使用内嵌方式的自动填充。如果您的配置不支持（或此选项被关闭），将使用默认的叠加层方式的自动填充。</string>
   <string name="accessibility">使用无障碍</string>
-  <string name="accessibility_description">使用 Bitwarden 无障碍服务来自动填充您在 App 和网络中的登录信息。启用后，选中登录字段时将显示弹出窗口。</string>
-  <string name="accessibility_description2">使用 Bitwarden 无障碍服务来自动填充您在 App 和网络上的登录信息（需同时启用 Draw-Over 功能）。</string>
-  <string name="accessibility_description3">使用 Bitwarden 无障碍服务来使用自动填充快速行动磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</string>
-  <string name="accessibility_description4">要求使用自动填充快速行动磁贴，或通过使用 Draw-Over （若已启用）来增强自动填充服务。</string>
-  <string name="accessibility_description5">已请求使用自动填充快速操作图块。</string>
+  <string name="accessibility_description">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。设置后，选中登录字段时将显示一个弹出窗口。</string>
+  <string name="accessibility_description2">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。（需同时启用 Draw-Over 功能）</string>
+  <string name="accessibility_description3">使用 Bitwarden 无障碍服务来使用自动填充快速操作磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</string>
+  <string name="accessibility_description4">要求使用自动填充快速操作磁贴，或通过使用 Draw-Over （若已启用）来增强自动填充服务。</string>
+  <string name="accessibility_description5">要求使用自动填充快速操作磁贴。</string>
   <string name="draw_over">使用 Draw-Over</string>
   <string name="draw_over_description">允许 Bitwarden 无障碍服务在登录字段选中时显示弹出窗口。</string>
-  <string name="draw_over_description2">如果开启，当登录字段选中时，Bitwarden 无障碍服务将显示一个弹出窗口以帮助自动填充您的登录信息。</string>
+  <string name="draw_over_description2">开启后，当登录字段选中时，Bitwarden 无障碍服务将显示一个弹出窗口以协助自动填充您的登录信息。</string>
   <string name="draw_over_description3">如果开启，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧 App 的自动填充服务。</string>
   <string name="personal_ownership_submit_error">由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。</string>
   <string name="personal_ownership_policy_in_effect">某个组织策略正影响您的所有权选项。</string>
@@ -860,7 +860,7 @@
   <string name="x_hours_and_y_minutes">%1$s 小时 %2$s 分钟</string>
   <string name="x_hours">%1$s 小时</string>
   <string name="passkey_management_explanation_long">使用 Bitwarden 保存新的通行密钥并使用存储在密码库中的通行密钥登录。</string>
-  <string name="autofill_services_explanation_long">Android 自动填充框架用于帮助将登录信息填充到您设备上的其他 App。</string>
+  <string name="autofill_services_explanation_long">Android 自动填充框架用于协助将登录信息填充到您设备上的其他 App 中。</string>
   <string name="use_inline_autofill_explanation_long">如果您所选的键盘支持，请使用内联自动填充。否则，请使用默认叠加层。</string>
   <string name="additional_options">附加选项</string>
   <string name="continue_to_web_app">前往网页 App 吗？</string>
@@ -872,7 +872,7 @@
   <string name="continue_to_device_settings">前往设备设置吗？</string>
   <string name="two_step_login_description_long">通过在 Bitwarden 网页 App 中设置两步登录，可以使您的账户更加安全。</string>
   <string name="change_master_password_description_long">您可以在 Bitwarden 网页 App 上更改您的主密码。</string>
-  <string name="you_can_import_data_to_your_vault_on_x">您可以将数据导入到 %1$s 上的密码库。</string>
+  <string name="you_can_import_data_to_your_vault_on_x">您可以通过 %1$s 将数据导入您的密码库。</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">访问帮助中心了解更多如何使用 Bitwarden 的信息。</string>
   <string name="contact_support_description_long">找不到您想要的吗？请在 bitwarden.com 上联系 Bitwarden 支持。</string>
   <string name="privacy_policy_description_long">在 bitwarden.com 上查看我们的隐私政策。</string>
@@ -1011,7 +1011,7 @@
   <string name="return_to_complete_this_step_anytime_in_settings">您可以随时回到「设置」中完成此步骤。</string>
   <string name="what_bitwarden_has_to_offer">您现在可以探索 Bitwarden 的所有功能了，并开始安全地管理您的密码。</string>
   <string name="youre_all_set">一切就绪！</string>
-  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用不同的两步登录方式或联系 Duo 寻求帮助。</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用不同的两步登录方式或联系 Duo 获取协助。</string>
   <string name="master_password_hint_not_specified">主密码提示</string>
   <string name="master_password_important_hint">重要：主密码忘记后，将无法恢复！至少 12 个字符。</string>
   <string name="get_started">开始使用</string>
@@ -1029,7 +1029,7 @@
   <string name="the_following_instructions_will_guide_you_through_importing_logins">以下说明将指导您从台式电脑或笔记本电脑导入登录信息</string>
   <string name="import_logins">导入登录信息</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">按照以下说明，从您的电脑上导出您的浏览器或其他密码管理器保存的密码。然后安全地导入到 Bitwarden。</string>
-  <string name="give_your_vault_a_head_start">让您的密码库先行一步</string>
+  <string name="give_your_vault_a_head_start">让您的密码库领先一步</string>
   <string name="class_3_biometrics_description">使用生物识别解锁需要强大的生物识别身份验证，其可能与本设备上的所有生物识别选项不兼容。</string>
   <string name="class_2_biometrics_description">使用生物识别解锁需要强大的生物识别身份验证，其与本设备上提供的生物识别选项不兼容。</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">在您的计算机上，登录到当前浏览器或密码管理器。</string>
@@ -1074,7 +1074,7 @@
   <string name="bitwarden_tools">Bitwarden 工具</string>
   <string name="got_it">知道了</string>
   <string name="no_logins_were_imported">未导入任何登录信息</string>
-  <string name="import_error">导入错误</string>
+  <string name="import_error">导入出错</string>
   <string name="verified_sso_domain_verified">已验证的 SSO 域端点</string>
   <string name="logins_imported">登录信息已导入</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">记得从电脑中删除已导入的密码文件</string>
@@ -1114,4 +1114,5 @@
   <string name="need_some_inspiration">"需要一些灵感吗？"</string>
   <string name="check_out_the_passphrase_generator">"查看密码短语生成器"</string>
   <string name="copied_to_clipboard">已复制到剪贴板。</string>
+  <string name="we_couldnt_verify_the_servers_certificate">我们无法验证服务器的证书。您的设备或 Bitwarden 服务器上的证书链或代理设置可能未正确设置。</string>
 </resources>

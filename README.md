@@ -132,6 +132,11 @@ The following is a list of all third-party dependencies included as part of the 
     - https://github.com/firebase/firebase-android-sdk
     - Purpose: SDK for crash and non-fatal error reporting. (**NOTE:** This dependency is not included in builds distributed via F-Droid.)
     - License: Apache 2.0
+  
+- **Google Play Reviews**
+  - https://developer.android.com/reference/com/google/android/play/core/release-notes
+  - Purpose: On standard builds provide an interface to add a review for the password manager application in Google Play.
+  - License: Apache 2.0
 
 - **Glide**
     - https://github.com/bumptech/glide

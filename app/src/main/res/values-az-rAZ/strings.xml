@@ -1113,4 +1113,5 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="need_some_inspiration">"Dəstək lazımdır?"</string>
   <string name="check_out_the_passphrase_generator">"Parol yaradıcıya nəzər salın"</string>
   <string name="copied_to_clipboard">Lövhəyə kopyalandı.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Serverin sertifikatını doğrulaya bilmədik. Cihazınızda və ya Bitwarden serverinizdə sertifikat zənciri və ya proksi ayarları düzgün qurulmamış ola bilər.</string>
 </resources>
