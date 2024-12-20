@@ -1113,4 +1113,5 @@ Do you want to switch to this account?</string>
   <string name="need_some_inspiration">"Need some inspiration?"</string>
   <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
   <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
 </resources>

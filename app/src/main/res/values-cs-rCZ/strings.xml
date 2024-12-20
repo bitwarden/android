@@ -1113,4 +1113,5 @@ Chcete se přepnout na tento účet?</string>
   <string name="need_some_inspiration">"Potřebujete inspiraci?"</string>
   <string name="check_out_the_passphrase_generator">"Podívejte se na generátor přístupové fráze"</string>
   <string name="copied_to_clipboard">Zkopírováno do schránky.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Certifikát serveru se nám nepodařilo ověřit. Řetězec certifikátů nebo nastavení proxy serveru na Vašem zařízení nebo serveru Bitwardenu nemusí být správně nastaven.</string>
 </resources>

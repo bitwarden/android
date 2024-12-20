@@ -962,7 +962,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="remove_passkey">Usuń passkey</string>
   <string name="passkey_removed">Passkey został usunięty</string>
   <string name="what_makes_a_password_strong">Co czyni hasło silnym?</string>
-  <string name="a_secure_memorable_password">A secure, memorable password</string>
+  <string name="a_secure_memorable_password">Bezpieczne, łatwe do zapamiętania hasło</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Im dłuższe hasło, tym trudniej je zhakować. Minimalna liczba znaków dla utworzenia konta to 12, ale jeśli użyjesz 14 znaków, czas na złamanie hasła wzrośnie do stuleci!</string>
   <string name="the_strongest_passwords_are_usually">Najsilniejsze hasła to zwykle:</string>
   <string name="twelve_or_more_characters">12 lub więcej znaków</string>
@@ -978,7 +978,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="confirm">Potwierdź</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Skonfiguruj biometrię lub wybierz kod PIN, aby szybko uzyskać dostęp do sejfu i autouzupełnić swoje dane logowania.</string>
   <string name="never_lose_access_to_your_vault">Nigdy nie trać dostępu do swojego sejfu</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Najlepszym sposobem zapewnienia dostępu do swojego sejfu jest konfiguracja zabezpieczeń od początku.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
   <string name="create_a_hint">Utwórz wskazówkę</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Twoja wskazówka zostanie wysłana do Ciebie pocztą e-mail, gdy o nią poprosisz.</string>
@@ -991,7 +991,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Dowiedz się więcej o innych sposobach zapobiegania blokowaniu konta</string>
   <string name="help_with_server_geolocations">Pomóż mi z geolokalizacjami serwera.</string>
   <string name="email_address_required">Adres e-mail (wymagany)</string>
-  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
+  <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Kliknij w link we wiadomości e-mail, aby zweryfikować swój adres e-mail i kontynuować tworzenie konta. "</string>
   <string name="change_email_address">Zmień adres e-mail</string>
   <string name="next">Dalej</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nie może odzyskać utraconego lub zapomnianego hasła głównego.</string>
@@ -1014,10 +1014,10 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Wystąpił błąd podczas połączenia z usługą Duo. Aby uzyskać pomoc, użyj innej metody dwustopniowego logowania lub skontaktuj się z Duo.</string>
   <string name="master_password_hint_not_specified">Wskazówka do hasła głównego</string>
   <string name="master_password_important_hint">Ważne: Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz! Co najmniej 12 znaków.</string>
-  <string name="get_started">Get started</string>
+  <string name="get_started">Pierwsze kroki</string>
   <string name="save_and_protect_your_data">Save and protect your data</string>
   <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-  <string name="new_login">New login</string>
+  <string name="new_login">Nowe dane logowania</string>
   <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
   <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
   <string name="import_saved_logins">Import saved logins</string>
@@ -1038,15 +1038,15 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="export_your_passwords_highlight">Export your passwords.</string>
   <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Select Import data in the web app, then Done below to finish syncing.</string>
   <string name="select_import_data_highlight">Select Import data</string>
-  <string name="step_1_of_3">Step 1 of 3</string>
+  <string name="step_1_of_3">Krok 1 z 3</string>
   <string name="export_your_saved_logins">Export your saved logins</string>
   <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and go to %1$s</string>
-  <string name="go_to_vault_bitwarden_com_highlight">go to %1$s</string>
-  <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
-  <string name="step_2_of_3">Step 2 of 3</string>
-  <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
-  <string name="step_3_of_3">Step 3 of 3</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na komputerze otwórz nową kartę przeglądarki i przejdź do %1$s</string>
+  <string name="go_to_vault_bitwarden_com_highlight">idź do %1$s</string>
+  <string name="log_in_to_the_bitwarden_web_app">Zaloguj się do aplikacji internetowej Bitwarden.</string>
+  <string name="step_2_of_3">Krok 2 z 3</string>
+  <string name="log_in_to_bitwarden">Zaloguj się do Bitwarden</string>
+  <string name="step_3_of_3">Krok 3 z 3</string>
   <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
   <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, find the Tools option and select Import data.</string>
   <string name="find_the_tools_highlight">find the Tools</string>
@@ -1081,10 +1081,10 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="type_ssh_key">SSH key</string>
   <string name="public_key">Public key</string>
   <string name="private_key">Private key</string>
-  <string name="ssh_keys">SSH keys</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
-  <string name="enable_notifications">Enable notifications</string>
+  <string name="ssh_keys">Klucze SSH</string>
+  <string name="copy_public_key">Skopiuj klucz publiczny</string>
+  <string name="copy_fingerprint">Skopiuj odcisk palca</string>
+  <string name="enable_notifications">Włącz powiadomienia</string>
   <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Skip for now</string>
@@ -1113,5 +1113,6 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="add_a_number_or_symbol_highlight">Add a number or symbol</string>
   <string name="need_some_inspiration">"Need some inspiration?"</string>
   <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="copied_to_clipboard">Skopiowano do schowka.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
 </resources>

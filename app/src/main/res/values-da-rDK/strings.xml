@@ -1114,4 +1114,5 @@ Skift til denne konto?</string>
   <string name="need_some_inspiration">"Brug for inspiration?"</string>
   <string name="check_out_the_passphrase_generator">"Tjek adgangssætningsgeneratoren ud"</string>
   <string name="copied_to_clipboard">Kopieret til udklipsholderen.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Servercertifikatet kunne ikke bekræftes. Enhedens eller Bitwarden-serverens certifikatkæde eller proxy-indstillinger på er muligvis ikke opsat korrekt.</string>
 </resources>

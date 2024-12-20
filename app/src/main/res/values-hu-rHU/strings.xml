@@ -1113,4 +1113,5 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="need_some_inspiration">"Szükség van egy kis inspirációra?"</string>
   <string name="check_out_the_passphrase_generator">"Nézzük meg a jelszógenerátort"</string>
   <string name="copied_to_clipboard">Megtörtént a vágólapra másolás.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Nem lehetett ellenőrizni a szerver tanúsítványát. Előfordulhat, hogy a tanúsítványlánc vagy a proxy beállítások az eszközön vagy a Bitwarden szerveren nincsenek megfelelően beállítva.</string>
 </resources>
