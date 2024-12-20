@@ -52,7 +52,7 @@ class AppStateManagerImpl(
             activityCount++
             // Always be in a created state if we have an activity
             mutableAppCreationStateFlow.value = AppCreationState.Created(
-                createdForAutofill = activity.createdForAutofill,
+                isAutoFill = activity.createdForAutofill,
             )
         }
 

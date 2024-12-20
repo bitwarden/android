@@ -166,7 +166,7 @@ class VaultLockManagerTest {
         MOCK_TIMEOUTS.forEachIndexed { index, vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(createdForAutofill = false)
+                AppCreationState.Created(isAutoFill = false)
             // On the first time Created any status will see vault locked or for any subsequent
             // Created events only OnAppRestart should be locked.
             when {
@@ -188,7 +188,7 @@ class VaultLockManagerTest {
         MOCK_TIMEOUTS.forEach { vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(createdForAutofill = false)
+                AppCreationState.Created(isAutoFill = false)
             // Only OnAppRestart will be affected here as the first time event already took place.
             when (vaultTimeout) {
                 VaultTimeout.OnAppRestart,
@@ -323,7 +323,7 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(createdForAutofill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -340,7 +340,7 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(createdForAutofill = true)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = true)
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -353,7 +353,7 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(createdForAutofill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -369,7 +369,7 @@ class VaultLockManagerTest {
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appCreationState = AppCreationState.Created(createdForAutofill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         verify(exactly = 1) { settingsRepository.getVaultTimeoutActionStateFlow(USER_ID) }
     }
@@ -396,7 +396,7 @@ class VaultLockManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // We want to skip the first time since that is different from subsequent foregrounds
-        fakeAppStateManager.appCreationState = AppCreationState.Created(createdForAutofill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
@@ -413,7 +413,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(createdForAutofill = false)
+                AppCreationState.Created(isAutoFill = false)
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -442,7 +442,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(createdForAutofill = false)
+                AppCreationState.Created(isAutoFill = false)
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -475,7 +475,7 @@ class VaultLockManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // We want to skip the first time since that is different from subsequent foregrounds
-        fakeAppStateManager.appCreationState = AppCreationState.Created(createdForAutofill = false)
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
@@ -492,7 +492,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(createdForAutofill = true)
+                AppCreationState.Created(isAutoFill = true)
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 
@@ -506,7 +506,7 @@ class VaultLockManagerTest {
             resetTest(vaultTimeout = vaultTimeout)
 
             fakeAppStateManager.appCreationState =
-                AppCreationState.Created(createdForAutofill = true)
+                AppCreationState.Created(isAutoFill = true)
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
 

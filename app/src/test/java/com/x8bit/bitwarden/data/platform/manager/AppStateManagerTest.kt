@@ -72,7 +72,7 @@ class AppStateManagerTest {
                 assertEquals(AppCreationState.Destroyed, awaitItem())
 
                 activityLifecycleCallbacks.captured.onActivityCreated(activity, null)
-                assertEquals(AppCreationState.Created(createdForAutofill = false), awaitItem())
+                assertEquals(AppCreationState.Created(isAutoFill = false), awaitItem())
 
                 activityLifecycleCallbacks.captured.onActivityCreated(activity, null)
                 expectNoEvents()

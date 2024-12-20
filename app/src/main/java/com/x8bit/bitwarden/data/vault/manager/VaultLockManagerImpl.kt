@@ -312,7 +312,7 @@ class VaultLockManagerImpl(
                 when (appCreationState) {
                     is AppCreationState.Created -> {
                         handleOnCreated(
-                            createdForAutofill = appCreationState.createdForAutofill,
+                            createdForAutofill = appCreationState.isAutoFill,
                             isFirstCreated = isFirstCreated,
                         )
                         isFirstCreated = false
