@@ -2601,6 +2601,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns sshKeyViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2630,6 +2631,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2676,6 +2678,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
