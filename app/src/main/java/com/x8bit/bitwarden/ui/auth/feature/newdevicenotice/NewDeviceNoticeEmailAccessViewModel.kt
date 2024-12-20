@@ -16,7 +16,6 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the new device notice email access screen.
  */
-@Suppress("TooManyFunctions")
 @HiltViewModel
 class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -45,7 +44,7 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
 
     private fun handleEmailAccessToggle(action: EmailAccessToggle) {
         mutableStateFlow.update {
-            it.copy(isEmailAccessEnabled = action.newState)
+            it.copy(isEmailAccessEnabled = action.isEnabled)
         }
     }
 }
@@ -81,5 +80,5 @@ sealed class NewDeviceNoticeEmailAccessAction {
     /**
      * User tapped the email access toggle.
      */
-    data class EmailAccessToggle(val newState: Boolean) : NewDeviceNoticeEmailAccessAction()
+    data class EmailAccessToggle(val isEnabled: Boolean) : NewDeviceNoticeEmailAccessAction()
 }
