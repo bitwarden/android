@@ -951,7 +951,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="or_log_in_you_may_already_have_an_account">Tai kirjaudu sisään. Sinulla saattaa jo olla tili.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Vastaanota Bitwardenilta uutiskirjeitä julkaisuista, tukiresursseista ja tutkimusmahdollisuuksista. Lopeta tilaus milloin tahansa.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Vastaanota Bitwardenilta postilaatikkoosi vinkkejä, uutisia ja tutkimusmahdollisuuksia. Lopeta tilaus milloin tahansa.</string>
-  <string name="security_prioritized">Security, prioritized</string>
+  <string name="security_prioritized">Tietoturva etusijalla</string>
   <string name="welcome_message_1">Tallenna kirjautumistiedot, kortit and henkilöllisyydet suojattuun holviisi. Bitwarden suojaa tärkeät tietosi nollatietoisella päästä pähän -salauksella.</string>
   <string name="welcome_message_2">Määritä biometrinen avaus ja automaattitäyttö kirjautuaksesi tileillesi kirjoittamatta yhtään kirjainta.</string>
   <string name="quick_and_easy_login">Nopea ja helppo kirjautuminen</string>
@@ -1025,7 +1025,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
   <string name="import_logins_later">Tuo kirjautumistietoja myöhemmin</string>
   <string name="import_logins_later_dialog_title">Tuodaanko kirjautumistiedot myöhemmin?</string>
-  <string name="do_you_have_a_computer_available">Do you have a computer available?</string>
+  <string name="do_you_have_a_computer_available">Onko käytettävissäsi tietokonetta?</string>
   <string name="the_following_instructions_will_guide_you_through_importing_logins">The following instructions will guide you through importing logins from your desktop or laptop computer</string>
   <string name="import_logins">Tuo kirjautumistietoja</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
@@ -1074,7 +1074,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="bitwarden_tools">Bitwarden-työkalut</string>
   <string name="got_it">Selvä</string>
   <string name="no_logins_were_imported">Kirjautumistietoja ei tuotu</string>
-  <string name="import_error">Import error</string>
+  <string name="import_error">Tuontivirhe</string>
   <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
   <string name="logins_imported">Kirjautumistietoja tuotiin</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
@@ -1089,7 +1089,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Ohita tällä kertaa</string>
   <string name="done_text">Valmis</string>
-  <string name="page_number_x_of_y">%1$s of %2$s</string>
+  <string name="page_number_x_of_y">%1$s / %2$s</string>
   <string name="copy_identity_name">Kopioi identiteetin nimi</string>
   <string name="copy_company">Kopioi yritys</string>
   <string name="copy_ssn">Kopioi henkilötunnus</string>
@@ -1098,7 +1098,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="copy_email">Kopioi sähköpostiosoite</string>
   <string name="copy_phone">Kopioi puhelinnumero</string>
   <string name="copy_address">Kopioi osoite</string>
-  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
+  <string name="biometrics_no_longer_supported_title">Biometriaa ei enää tueta tällä laitteella</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
   <string name="cxp_import">CXP-tuonti</string>
   <string name="cxp_export">CXP-vienti</string>
@@ -1108,10 +1108,11 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="combine_those_words_together">Combine those words together</string>
   <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. Use hyphens, spaces, or leave them as one long word—your choice!</string>
   <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Use hyphens, spaces, or leave them as one long word</string>
-  <string name="make_it_yours">Make it yours</string>
+  <string name="make_it_yours">Tee siitä omasi</string>
   <string name="add_a_number_or_symbol_to_make_it_even_stronger">Add a number or symbol to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
   <string name="add_a_number_or_symbol_highlight">Lisää numero tai merkki</string>
   <string name="need_some_inspiration">"Tarvitsetko inspiraatiota?"</string>
   <string name="check_out_the_passphrase_generator">"Tutustu salalausegeneraattoriin"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="copied_to_clipboard">Kopioitu leikepöydälle.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
 </resources>

@@ -930,7 +930,7 @@
   <string name="continue_to_provide_feedback">Выберите \'Продолжить\', чтобы оставить отзыв о новом приложении!</string>
   <string name="file_password">Пароль к файлу</string>
   <string name="give_feedback">Оставить отзыв</string>
-  <string name="password_protected">Пароль защищен</string>
+  <string name="password_protected">Защищено паролем</string>
   <string name="password_used_to_export">Этот пароль будет использоваться для экспорта и импорта этого файла</string>
   <string name="autofill_suggestion">Предложения по автозаполнению</string>
   <string name="continue_to_complete_web_authn_verification">Перейти к завершению верификации WebAuthn.</string>
@@ -1116,4 +1116,5 @@
   <string name="need_some_inspiration">"Нужно вдохновение?"</string>
   <string name="check_out_the_passphrase_generator">"Проверьте генератор парольных фраз"</string>
   <string name="copied_to_clipboard">Скопировано в буфер обмена.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Мы не смогли проверить сертификат сервера. Возможно, цепочка сертификатов или настройки прокси на вашем устройстве или сервере Bitwarden настроены неправильно.</string>
 </resources>
