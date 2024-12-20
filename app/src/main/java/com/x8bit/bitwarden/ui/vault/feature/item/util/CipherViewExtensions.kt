@@ -41,7 +41,6 @@ fun CipherView.toViewState(
     clock: Clock = Clock.systemDefaultZone(),
     canDelete: Boolean,
     canAssignToCollections: Boolean,
-    canEdit: Boolean,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -84,7 +83,6 @@ fun CipherView.toViewState(
                 .orEmpty(),
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
-            canEdit = canEdit,
         ),
         type = when (type) {
             CipherType.LOGIN -> {

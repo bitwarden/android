@@ -2698,7 +2698,6 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         ),
         canDelete = true,
         canAssignToCollections = true,
-        canEdit = true,
     )
 
 private val DEFAULT_PASSKEY = R.string.created_xy.asText(
@@ -2782,7 +2781,6 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         attachments = emptyList(),
         canDelete = true,
         canAssignToCollections = true,
-        canEdit = true,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

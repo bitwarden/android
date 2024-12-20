@@ -172,7 +172,6 @@ fun createCommonContent(
             attachments = emptyList(),
             canDelete = true,
             canAssignToCollections = true,
-            canEdit = true,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -218,7 +217,6 @@ fun createCommonContent(
             ),
             canDelete = true,
             canAssignToCollections = true,
-            canEdit = true,
         )
     }
 
