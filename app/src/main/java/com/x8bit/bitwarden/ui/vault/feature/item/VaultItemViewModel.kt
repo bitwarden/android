@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
-import com.x8bit.bitwarden.ui.vault.feature.util.hasEditPermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -117,11 +116,7 @@ class VaultItemViewModel @Inject constructor(
                             .data
                             .canAssignToCollections(cipherViewState.data?.collectionIds)
 
-                        val canEdit = collectionsState
-                            .data
-                            .hasEditPermissionInAtLeastOneCollection(
-                                cipherViewState.data?.collectionIds,
-                            )
+                        val canEdit = cipherViewState.data?.edit == true
 
                         VaultItemStateData(
                             cipher = cipherViewState.data,

@@ -80,6 +80,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
     private val mockCipherView = mockk<CipherView> {
         every { collectionIds } returns emptyList()
+        every { edit } returns true
     }
 
     @BeforeEach
