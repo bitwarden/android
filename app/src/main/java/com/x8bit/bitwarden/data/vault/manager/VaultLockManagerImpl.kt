@@ -353,17 +353,17 @@ class VaultLockManagerImpl(
             .launchIn(unconfinedScope)
     }
 
-    private fun handleOnForeground() {
-        val userId = activeUserId ?: return
-        userIdTimerJobMap[userId]?.cancel()
-    }
-
     private fun handleOnBackground() {
         val userId = activeUserId ?: return
         checkForVaultTimeout(
             userId = userId,
             checkTimeoutReason = CheckTimeoutReason.AppBackgrounded,
         )
+    }
+
+    private fun handleOnForeground() {
+        val userId = activeUserId ?: return
+        userIdTimerJobMap[userId]?.cancel()
     }
 
     private fun observeUserSwitchingChanges() {
@@ -496,7 +496,7 @@ class VaultLockManagerImpl(
                 if (checkTimeoutReason is CheckTimeoutReason.AppCreated) {
                     // We need to check the timeout action on the first time creation no matter what
                     // for all subsequent creations we should check if this is for autofill and
-                    // if it is we skip checking the timeout action.
+                    // and if it is we skip checking the timeout action.
                     if (
                         checkTimeoutReason.firstTimeCreation ||
                         !checkTimeoutReason.createdForAutofill
@@ -617,8 +617,10 @@ class VaultLockManagerImpl(
          * @param createdForAutofill if the the creation event is due to an activity being launched
          * for autofill.
          */
-        data class AppCreated(val firstTimeCreation: Boolean, val createdForAutofill: Boolean) :
-            CheckTimeoutReason()
+        data class AppCreated(
+            val firstTimeCreation: Boolean,
+            val createdForAutofill: Boolean,
+        ) : CheckTimeoutReason()
 
         /**
          * Indicates that the current user has changed.

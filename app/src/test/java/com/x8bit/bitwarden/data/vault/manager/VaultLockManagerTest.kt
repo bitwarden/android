@@ -148,78 +148,12 @@ class VaultLockManagerTest {
         }
 
     @Test
-    fun `app being created should perform timeout action if necessary`() {
-        setAccountTokens()
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-        // Will be used within each loop to reset the test to a suitable initial state.
-        fun resetTest(vaultTimeout: VaultTimeout) {
-            clearVerifications(userLogoutManager)
-            mutableVaultTimeoutStateFlow.value = vaultTimeout
-            fakeAppStateManager.appCreationState = AppCreationState.Destroyed
-            verifyUnlockedVaultBlocking(userId = USER_ID)
-            assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
-        }
-
-        // Test Lock action
-        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
-        MOCK_TIMEOUTS.forEachIndexed { index, vaultTimeout ->
-            resetTest(vaultTimeout = vaultTimeout)
-            fakeAppStateManager.appCreationState =
-                AppCreationState.Created(isAutoFill = false)
-            // On the first time Created any status will see vault locked or for any subsequent
-            // Created events only OnAppRestart should be locked.
-            when {
-                (index == 0) ||
-                    (vaultTimeout is VaultTimeout.OnAppRestart)
-                    -> {
-                    assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
-                }
-
-                else -> {
-                    assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
-                }
-            }
-            verify(exactly = 0) { userLogoutManager.softLogout(any()) }
-        }
-
-        // Test Logout action
-        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
-        MOCK_TIMEOUTS.forEach { vaultTimeout ->
-            resetTest(vaultTimeout = vaultTimeout)
-            fakeAppStateManager.appCreationState =
-                AppCreationState.Created(isAutoFill = false)
-            // Only OnAppRestart will be affected here as the first time event already took place.
-            when (vaultTimeout) {
-                VaultTimeout.OnAppRestart,
-                    -> {
-                    verify(exactly = 1) { userLogoutManager.softLogout(any()) }
-                }
-
-                VaultTimeout.Immediately,
-                VaultTimeout.FifteenMinutes,
-                VaultTimeout.ThirtyMinutes,
-                VaultTimeout.OneHour,
-                VaultTimeout.FourHours,
-                is VaultTimeout.Custom,
-                VaultTimeout.OneMinute,
-                VaultTimeout.FiveMinutes,
-                VaultTimeout.Never,
-                    -> {
-                    verify(exactly = 0) { userLogoutManager.softLogout(any()) }
-                }
-            }
-        }
-    }
-
-    @Test
     fun `app coming into background subsequent times should perform timeout action if necessary`() {
         setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        // Start in a foregrounded state
+        // Start in a foregrounded state.
         fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
@@ -298,16 +232,16 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `app coming into foreground for the first time for Never timeout should not perform timeout action`() {
+    fun `app being created for the first time for Never timeout should not perform timeout action`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.Never
 
-        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAppStateManager.appCreationState = AppCreationState.Destroyed
         verifyUnlockedVaultBlocking(userId = USER_ID)
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
-        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = true)
 
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -331,7 +265,7 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `app being created for the first time should check timeout action regardless if it was created for autofill`() {
+    fun `app being created for the first time for other timeouts should check timeout action `() {
         setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
@@ -342,19 +276,6 @@ class VaultLockManagerTest {
         assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
 
         fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = true)
-
-        assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `app coming into created state the first time for non-Never timeout should clear existing times and perform timeout action`() {
-        setAccountTokens()
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
-        mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
-
-        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
     }
@@ -396,7 +317,7 @@ class VaultLockManagerTest {
         setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        // We want to skip the first time since that is different from subsequent foregrounds
+        // We want to skip the first time since that is different from subsequent creations
         fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         // Will be used within each loop to reset the test to a suitable initial state.
@@ -470,8 +391,9 @@ class VaultLockManagerTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `app being created subsequent times for AutoFill should do nothing `() {
+    fun `app being created subsequent times for AutoFill should do nothing regardless of timeout`() {
         setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
