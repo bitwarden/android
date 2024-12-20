@@ -95,7 +95,6 @@ fun AddSendContent(
 
         BitwardenTextField(
             modifier = Modifier
-                .testTag(tag = "SendNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             label = stringResource(id = R.string.name),
@@ -103,6 +102,7 @@ fun AddSendContent(
             readOnly = policyDisablesSend,
             value = state.common.name,
             onValueChange = addSendHandlers.onNamChange,
+            textFieldTestTag = "SendNameEntry",
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -203,7 +203,6 @@ fun AddSendContent(
             is AddSendState.ViewState.Content.SendType.Text -> {
                 BitwardenTextField(
                     modifier = Modifier
-                        .testTag(tag = "SendTextContentEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.text),
@@ -212,6 +211,7 @@ fun AddSendContent(
                     value = type.input,
                     singleLine = false,
                     onValueChange = addSendHandlers.onTextChange,
+                    textFieldTestTag = "SendTextContentEntry",
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 BitwardenSwitch(

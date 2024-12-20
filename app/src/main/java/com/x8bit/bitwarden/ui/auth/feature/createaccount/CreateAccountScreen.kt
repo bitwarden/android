@@ -187,10 +187,10 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(EmailInputChange(it)) }
                 },
                 modifier = Modifier
-                    .testTag("EmailAddressEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 keyboardType = KeyboardType.Email,
+                textFieldTestTag = "EmailAddressEntry",
             )
             Spacer(modifier = Modifier.height(16.dp))
             var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -239,9 +239,9 @@ fun CreateAccountScreen(
                 },
                 hint = stringResource(id = R.string.master_password_hint_description),
                 modifier = Modifier
-                    .testTag("MasterPasswordHintLabel")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "MasterPasswordHintLabel",
             )
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenSwitch(

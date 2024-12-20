@@ -57,9 +57,9 @@ fun LazyListScope.vaultAddEditLoginItems(
             value = commonState.name,
             onValueChange = commonActionHandler.onNameTextChange,
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNameEntry",
         )
     }
 
@@ -274,9 +274,9 @@ fun LazyListScope.vaultAddEditLoginItems(
             value = commonState.notes,
             onValueChange = commonActionHandler.onNotesTextChange,
             modifier = Modifier
-                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNotesEntry",
         )
     }
 

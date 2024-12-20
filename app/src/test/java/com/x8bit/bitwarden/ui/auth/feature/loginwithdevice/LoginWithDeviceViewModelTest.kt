@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 
+@Suppress("LargeClass")
 class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     private val mutableCreateAuthRequestWithUpdatesFlow =
@@ -431,6 +432,73 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             dialogState = LoginWithDeviceState.DialogState.Error(
                                 title = R.string.an_error_has_occurred.asText(),
                                 message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on createAuthRequestWithUpdates Success and login CertificateError should should update the state`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.CertificateError
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.stateFlow.test {
+                    assertEquals(DEFAULT_STATE, awaitItem())
+                    mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                        CreateAuthRequestResult.Success(
+                            authRequest = AUTH_REQUEST,
+                            privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                            accessCode = AUTH_REQUEST_ACCESS_CODE,
+                        ),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                            dialogState = LoginWithDeviceState.DialogState.Loading(
+                                message = R.string.logging_in.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            dialogState = LoginWithDeviceState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                         ),

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -35,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays the about self-hosted/custom environment screen.
@@ -115,11 +117,20 @@ fun EnvironmentScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
                 },
+                autoCompleteOptions = if (BuildConfig.BUILD_TYPE != "release") {
+                    persistentListOf(
+                        "https://vault.qa.bitwarden.pw",
+                        "https://qa-team.sh.bitwarden.pw",
+                        "https://vault.usdev.bitwarden.pw",
+                    )
+                } else {
+                    persistentListOf()
+                },
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("ServerUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "ServerUrlEntry",
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -142,8 +153,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("WebVaultUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "WebVaultUrlEntry",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -172,8 +183,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("IdentityUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "IdentityUrlEntry",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -188,8 +199,8 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("IconsUrlEntry")
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "IconsUrlEntry",
             )
 
             Spacer(modifier = Modifier.navigationBarsPadding())

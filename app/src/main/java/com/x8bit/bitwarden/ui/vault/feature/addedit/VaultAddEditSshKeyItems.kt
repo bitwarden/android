@@ -24,7 +24,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
-import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -45,9 +45,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "ItemNameEntry",
         )
     }
 
@@ -59,9 +59,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             readOnly = true,
             onValueChange = { },
             modifier = Modifier
-                .testTag("PublicKeyEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "PublicKeyEntry",
         )
     }
 
@@ -90,9 +90,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             readOnly = true,
             onValueChange = { /* no-op */ },
             modifier = Modifier
-                .testTag("FingerprintEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
+            textFieldTestTag = "FingerprintEntry",
         )
     }
 
@@ -185,9 +185,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
             modifier = Modifier
-                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNotesEntry",
         )
     }
 
@@ -210,10 +210,6 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            supportedLinkedTypes = persistentListOf(
-                VaultLinkedFieldType.PASSWORD,
-                VaultLinkedFieldType.USERNAME,
-            ),
             onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
         )
     }
@@ -222,6 +218,11 @@ fun LazyListScope.vaultAddEditSshKeyItems(
         Spacer(modifier = Modifier.height(16.dp))
         VaultAddEditCustomFieldsButton(
             onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
+            options = persistentListOf(
+                CustomFieldType.TEXT,
+                CustomFieldType.HIDDEN,
+                CustomFieldType.BOOLEAN,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
