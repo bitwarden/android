@@ -109,6 +109,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val settingsRepository: SettingsRepository = mockk {
         every { initialAutofillDialogShown = any() } just runs
         every { initialAutofillDialogShown } returns true
+        every { isUnlockWithPinEnabled } returns false
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(createUserState())
     private val authRepository: AuthRepository = mockk {
@@ -3670,8 +3671,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationNotSupported should display Fido2PinPrompt when user has pin`() {
+        fun `UserVerificationNotSupported should display Fido2PinPrompt when user has pin unlock enabled`() {
             val userState = createUserState()
+            every { settingsRepository.isUnlockWithPinEnabled } returns true
             mutableUserStateFlow.value = userState.copy(
                 accounts = listOf(
                     userState.accounts.first().copy(
@@ -3700,12 +3702,40 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationNotSupported should display Fido2PinSetUpPrompt when user has no password or pin`() {
+        fun `UserVerificationNotSupported should display Fido2PinSetUpPrompt when user has no password or pin and vaultUnlockType is MASTER_PASSWORD`() {
             val userState = createUserState()
             mutableUserStateFlow.value = userState.copy(
                 accounts = listOf(
                     userState.accounts.first().copy(
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = true,
+                            hasAdminApproval = true,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = true,
+                        ),
+                        hasMasterPassword = false,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported)
+
+            verify { fido2CredentialManager.isUserVerified = false }
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2PinSetUpPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `UserVerificationNotSupported should display Fido2PinSetUpPrompt when user has no password or pin and vaultUnlockType is PIN`() {
+            val userState = createUserState()
+            mutableUserStateFlow.value = userState.copy(
+                accounts = listOf(
+                    userState.accounts.first().copy(
+                        vaultUnlockType = VaultUnlockType.PIN,
                         trustedDevice = UserState.TrustedDevice(
                             isDeviceTrusted = true,
                             hasAdminApproval = true,
