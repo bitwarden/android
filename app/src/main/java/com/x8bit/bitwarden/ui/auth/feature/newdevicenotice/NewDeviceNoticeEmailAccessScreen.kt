@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -59,11 +60,10 @@ fun NewDeviceNoticeEmailAccessScreen(
             isEmailAccessEnabled = state.isEmailAccessEnabled,
             onEmailAccessToggleChanged = remember(viewModel) {
                 { newState ->
-                    viewModel.trySendAction(EmailAccessToggle(newState = newState))
+                    viewModel.trySendAction(EmailAccessToggle(isEnabled = newState))
                 }
             },
             onContinueClick = { viewModel.trySendAction(ContinueClick) },
-            modifier = Modifier,
         )
     }
 }
@@ -90,7 +90,6 @@ private fun NewDeviceNoticeEmailAccessContent(
             email = email,
             isEmailAccessEnabled = isEmailAccessEnabled,
             onEmailAccessToggleChanged = onEmailAccessToggleChanged,
-            modifier = Modifier,
         )
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenFilledButton(
@@ -107,38 +106,30 @@ private fun NewDeviceNoticeEmailAccessContent(
 /**
  * Header content containing the warning icon and title.
  */
-
 @Suppress("MaxLineLength")
 @Composable
-private fun HeaderContent(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
-    ) {
-        Image(
-            painter = rememberVectorPainter(id = R.drawable.warning),
-            contentDescription = null,
-            modifier = Modifier.size(120.dp),
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.important_notice),
-            style = BitwardenTheme.typography.titleMedium,
-            color = BitwardenTheme.colorScheme.text.primary,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = stringResource(
-                R.string.bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february,
-            ),
-            style = BitwardenTheme.typography.bodyMedium,
-            color = BitwardenTheme.colorScheme.text.primary,
-            textAlign = TextAlign.Center,
-        )
-    }
+private fun ColumnScope.HeaderContent() {
+    Image(
+        painter = rememberVectorPainter(id = R.drawable.warning),
+        contentDescription = null,
+        modifier = Modifier.size(120.dp),
+    )
+    Spacer(modifier = Modifier.height(24.dp))
+    Text(
+        text = stringResource(R.string.important_notice),
+        style = BitwardenTheme.typography.titleMedium,
+        color = BitwardenTheme.colorScheme.text.primary,
+        textAlign = TextAlign.Center,
+    )
+    Spacer(modifier = Modifier.height(12.dp))
+    Text(
+        text = stringResource(
+            R.string.bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february,
+        ),
+        style = BitwardenTheme.typography.bodyMedium,
+        color = BitwardenTheme.colorScheme.text.primary,
+        textAlign = TextAlign.Center,
+    )
 }
 
 /**
