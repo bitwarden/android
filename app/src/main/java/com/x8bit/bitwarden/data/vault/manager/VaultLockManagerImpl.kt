@@ -324,9 +324,11 @@ class VaultLockManagerImpl(
             .launchIn(unconfinedScope)
     }
 
-    private fun handleOnCreated(createdForAutofill: Boolean, isFirstCreated: Boolean) {
+    private fun handleOnCreated(
+        createdForAutofill: Boolean,
+        isFirstCreated: Boolean,
+    ) {
         val userId = activeUserId ?: return
-        userIdTimerJobMap[userId]?.cancel()
         checkForVaultTimeout(
             userId = userId,
             checkTimeoutReason = CheckTimeoutReason.AppCreated(
@@ -345,10 +347,15 @@ class VaultLockManagerImpl(
                         handleOnBackground()
                     }
 
-                    AppForegroundState.FOREGROUNDED -> Unit
+                    AppForegroundState.FOREGROUNDED -> handleOnForeground()
                 }
             }
             .launchIn(unconfinedScope)
+    }
+
+    private fun handleOnForeground() {
+        val userId = activeUserId ?: return
+        userIdTimerJobMap[userId]?.cancel()
     }
 
     private fun handleOnBackground() {
@@ -487,8 +494,9 @@ class VaultLockManagerImpl(
             VaultTimeout.OnAppRestart -> {
                 // If this is an app restart, trigger the timeout action; otherwise ignore.
                 if (checkTimeoutReason is CheckTimeoutReason.AppCreated) {
-                    // On restart the vault should be locked already but we may need to soft-logout
-                    // the user.
+                    // We need to check the timeout action on the first time creation no matter what
+                    // for all subsequent creations we should check if this is for autofill and
+                    // if it is we skip checking the timeout action.
                     if (
                         checkTimeoutReason.firstTimeCreation ||
                         !checkTimeoutReason.createdForAutofill
@@ -604,6 +612,7 @@ class VaultLockManagerImpl(
 
         /**
          * Indicates the app has entered a Created state.
+         *
          * @param firstTimeCreation if this is the first time the process is being created.
          * @param createdForAutofill if the the creation event is due to an activity being launched
          * for autofill.

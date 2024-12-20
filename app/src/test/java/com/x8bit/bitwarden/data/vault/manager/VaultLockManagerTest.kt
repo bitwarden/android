@@ -219,6 +219,7 @@ class VaultLockManagerTest {
 
         // Start in a foregrounded state
         fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        fakeAppStateManager.appCreationState = AppCreationState.Created(isAutoFill = false)
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
