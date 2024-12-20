@@ -50,9 +50,9 @@ fun VaultItemIdentityContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .testTag("ItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                textFieldTestTag = "ItemNameEntry",
             )
         }
         identityState.identityName?.let { identityName ->

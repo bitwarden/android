@@ -39,9 +39,9 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNameEntry",
         )
     }
 
@@ -133,9 +133,9 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
             modifier = Modifier
-                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNotesEntry",
         )
     }
 

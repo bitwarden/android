@@ -268,6 +268,7 @@ dependencies {
     standardImplementation(libs.google.firebase.cloud.messaging)
     standardImplementation(platform(libs.google.firebase.bom))
     standardImplementation(libs.google.firebase.crashlytics)
+    standardImplementation(libs.google.play.review)
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)

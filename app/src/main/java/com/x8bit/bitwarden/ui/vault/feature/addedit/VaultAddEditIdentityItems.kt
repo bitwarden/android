@@ -45,9 +45,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNameEntry",
         )
     }
     item {
@@ -68,9 +68,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.firstName,
             onValueChange = identityItemTypeHandlers.onFirstNameTextChange,
             modifier = Modifier
-                .testTag("IdentityFirstNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityFirstNameEntry",
         )
     }
     item {
@@ -80,9 +80,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.middleName,
             onValueChange = identityItemTypeHandlers.onMiddleNameTextChange,
             modifier = Modifier
-                .testTag("IdentityMiddleNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityMiddleNameEntry",
         )
     }
     item {
@@ -92,9 +92,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.lastName,
             onValueChange = identityItemTypeHandlers.onLastNameTextChange,
             modifier = Modifier
-                .testTag("IdentityLastNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityLastNameEntry",
         )
     }
     item {
@@ -104,9 +104,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.username,
             onValueChange = identityItemTypeHandlers.onUsernameTextChange,
             modifier = Modifier
-                .testTag("IdentityUsernameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityUsernameEntry",
         )
     }
     item {
@@ -116,9 +116,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.company,
             onValueChange = identityItemTypeHandlers.onCompanyTextChange,
             modifier = Modifier
-                .testTag("IdentityCompanyEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityCompanyEntry",
         )
     }
     item {
@@ -128,9 +128,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.ssn,
             onValueChange = identityItemTypeHandlers.onSsnTextChange,
             modifier = Modifier
-                .testTag("IdentitySsnEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentitySsnEntry",
         )
     }
     item {
@@ -140,9 +140,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.passportNumber,
             onValueChange = identityItemTypeHandlers.onPassportNumberTextChange,
             modifier = Modifier
-                .testTag("IdentityPassportNumberEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityPassportNumberEntry",
         )
     }
     item {
@@ -152,9 +152,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.licenseNumber,
             onValueChange = identityItemTypeHandlers.onLicenseNumberTextChange,
             modifier = Modifier
-                .testTag("IdentityLicenseNumberEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityLicenseNumberEntry",
         )
     }
     item {
@@ -164,9 +164,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.email,
             onValueChange = identityItemTypeHandlers.onEmailTextChange,
             modifier = Modifier
-                .testTag("IdentityEmailEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityEmailEntry",
         )
     }
     item {
@@ -176,9 +176,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.phone,
             onValueChange = identityItemTypeHandlers.onPhoneTextChange,
             modifier = Modifier
-                .testTag("IdentityPhoneEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityPhoneEntry",
         )
     }
     item {
@@ -188,9 +188,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.address1,
             onValueChange = identityItemTypeHandlers.onAddress1TextChange,
             modifier = Modifier
-                .testTag("IdentityAddressOneEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityAddressOneEntry",
         )
     }
     item {
@@ -200,9 +200,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.address2,
             onValueChange = identityItemTypeHandlers.onAddress2TextChange,
             modifier = Modifier
-                .testTag("IdentityAddressTwoEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityAddressTwoEntry",
         )
     }
     item {
@@ -212,9 +212,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.address3,
             onValueChange = identityItemTypeHandlers.onAddress3TextChange,
             modifier = Modifier
-                .testTag("IdentityAddressThreeEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityAddressThreeEntry",
         )
     }
     item {
@@ -224,9 +224,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.city,
             onValueChange = identityItemTypeHandlers.onCityTextChange,
             modifier = Modifier
-                .testTag("IdentityCityEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityCityEntry",
         )
     }
     item {
@@ -236,9 +236,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.state,
             onValueChange = identityItemTypeHandlers.onStateTextChange,
             modifier = Modifier
-                .testTag("IdentityStateEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityStateEntry",
         )
     }
     item {
@@ -248,9 +248,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.zip,
             onValueChange = identityItemTypeHandlers.onZipTextChange,
             modifier = Modifier
-                .testTag("IdentityPostalCodeEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityPostalCodeEntry",
         )
     }
     item {
@@ -260,9 +260,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.country,
             onValueChange = identityItemTypeHandlers.onCountryTextChange,
             modifier = Modifier
-                .testTag("IdentityCountryEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "IdentityCountryEntry",
         )
     }
     item {
@@ -354,9 +354,9 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
             modifier = Modifier
-                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            textFieldTestTag = "ItemNotesEntry",
         )
     }
 

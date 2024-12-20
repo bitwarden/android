@@ -1114,4 +1114,5 @@
   <string name="need_some_inspiration">"Имате ли нужда от вдъхновение?"</string>
   <string name="check_out_the_passphrase_generator">"Изпробвайте генератора на пароли-фрази"</string>
   <string name="copied_to_clipboard">Копирано в буфера.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Сертификатът на сървъра не може да бъде потвърден. Възможно е да има проблем в конфигурацията на сертификатите, настройките за сървър-посредник на устройството или на сървъра на Битуорден.</string>
 </resources>

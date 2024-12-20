@@ -1114,4 +1114,5 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="need_some_inspiration">"Nepieciešama iedvesma?"</string>
   <string name="check_out_the_passphrase_generator">"Ir vērts ieskatīties paroles vārdkopu veidotājā"</string>
   <string name="copied_to_clipboard">Ievietots starpliktuvē.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Mēs nevarējām apliecināt servera sertifikātu. Sertifikātu ķēde vai starpniekservera iestatījumi ierīcē, vai Bitwarden serveris varētu nebūt pareizi iestatīti.</string>
 </resources>
