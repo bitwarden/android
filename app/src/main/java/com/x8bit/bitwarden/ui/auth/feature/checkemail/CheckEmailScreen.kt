@@ -151,7 +151,7 @@ private fun CheckEmailContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         val descriptionAnnotatedString = R.string.we_sent_an_email_to.toAnnotatedString(
-            email,
+            args = arrayOf(email),
             emphasisHighlightStyle = SpanStyle(
                 color = BitwardenTheme.colorScheme.text.primary,
                 fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
