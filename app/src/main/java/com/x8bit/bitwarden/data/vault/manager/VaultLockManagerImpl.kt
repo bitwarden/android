@@ -594,13 +594,26 @@ class VaultLockManagerImpl(
     }
 
     /**
-     * Helper enum that indicates the reason we are checking for timeout.
+     * Helper sealed class which denotes the reason to check the vault timeout.
      */
     private sealed class CheckTimeoutReason {
+        /**
+         * Indicates the app has been backgrounded but is still running.
+         */
         data object AppBackgrounded : CheckTimeoutReason()
+
+        /**
+         * Indicates the app has entered a Created state.
+         * @param firstTimeCreation if this is the first time the process is being created.
+         * @param createdForAutofill if the the creation event is due to an activity being launched
+         * for autofill.
+         */
         data class AppCreated(val firstTimeCreation: Boolean, val createdForAutofill: Boolean) :
             CheckTimeoutReason()
 
+        /**
+         * Indicates that the current user has changed.
+         */
         data object UserChanged : CheckTimeoutReason()
     }
 }
