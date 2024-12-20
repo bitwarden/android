@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -35,6 +36,11 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @After
+    fun tearDown() {
+        onNavigateBackCalled = false
     }
 
     @Test
