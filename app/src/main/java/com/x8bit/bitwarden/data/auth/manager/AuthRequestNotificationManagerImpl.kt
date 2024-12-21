@@ -12,8 +12,10 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.util.createPasswordlessRequestDataIntent
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -28,6 +30,7 @@ class AuthRequestNotificationManagerImpl(
     private val authDiskSource: AuthDiskSource,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
+    private val appStateManager: AppStateManager,
 ) : AuthRequestNotificationManager {
     private val ioScope = CoroutineScope(dispatcherManager.io)
 
@@ -40,6 +43,13 @@ class AuthRequestNotificationManagerImpl(
 
     @SuppressLint("MissingPermission")
     private fun handlePasswordlessRequestData(data: PasswordlessRequestData) {
+
+        val pendingIntent = createContentIntent(data)
+        if (appStateManager.appForegroundStateFlow.value == AppForegroundState.FOREGROUNDED) {
+            pendingIntent.send()
+            return
+        }
+
         val notificationManager = NotificationManagerCompat.from(context)
         // Construct the channel, calling this more than once is safe
         notificationManager.createNotificationChannel(
@@ -54,7 +64,7 @@ class AuthRequestNotificationManagerImpl(
         if (!notificationManager.areNotificationsEnabled(NOTIFICATION_CHANNEL_ID)) return
         // Create the notification
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setContentIntent(createContentIntent(data))
+            .setContentIntent(pendingIntent)
             .setContentTitle(context.getString(R.string.log_in_requested))
             .setContentText(
                 authDiskSource

@@ -273,13 +273,16 @@ class MainViewModel @Inject constructor(
                         authRepository.switchAccount(passwordlessRequestData.userId)
                     }
                 }
-                specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PasswordlessRequest(
-                        passwordlessRequestData = passwordlessRequestData,
-                        // Allow users back into the already-running app when completing the
-                        // autofill task when this is not the first intent.
-                        shouldFinishWhenComplete = isFirstIntent,
-                    )
+
+                sendEvent(MainEvent.NavigateToLoginApproval(passwordlessRequestData.loginRequestId))
+
+//                specialCircumstanceManager.specialCircumstance =
+//                    SpecialCircumstance.PasswordlessRequest(
+//                        passwordlessRequestData = passwordlessRequestData,
+//                        // Allow users back into the already-running app when completing the
+//                        // autofill task when this is not the first intent.
+//                        shouldFinishWhenComplete = isFirstIntent,
+//                    )
             }
 
             completeRegistrationData != null -> {
@@ -518,4 +521,11 @@ sealed class MainEvent {
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : MainEvent()
+
+    /**
+     * Navigates to the Login Approval screen with the given fingerprint.
+     */
+    data class NavigateToLoginApproval(
+        val requestId: String,
+    ) : MainEvent()
 }
