@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
+import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallbackImpl
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
@@ -47,6 +49,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun EnvironmentScreen(
     onNavigateBack: () -> Unit,
     viewModel: EnvironmentViewModel = hiltViewModel(),
+    choosePrivateKeyAlias: (ChoosePrivateKeyAliasCallback) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -131,6 +134,37 @@ fun EnvironmentScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 textFieldTestTag = "ServerUrlEntry",
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.client_certificate),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+
+            BitwardenTextField(
+                label = stringResource(id = R.string.client_certificate),
+                value = state.keyAlias,
+                hint = stringResource(id = R.string.client_certificate_footer),
+                onValueChange = {
+                },
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("KeyAliasEntry")
+                    .padding(horizontal = 16.dp),
+            )
+
+            BitwardenTextButton(
+                label = stringResource(id = R.string.choose_client_certificate),
+                onClick = {
+                    choosePrivateKeyAlias(ChoosePrivateKeyAliasCallbackImpl {
+                        viewModel.trySendAction(EnvironmentAction.KeyAliasChange(it.orEmpty()))
+                    })
+                }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
