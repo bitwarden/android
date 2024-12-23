@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -1245,6 +1247,50 @@ class AuthDiskSourceTest {
             authDiskSource.storeShowImportLogins(userId = mockUserId, true)
             assertTrue(awaitItem() ?: false)
         }
+    }
+
+    @Test
+    fun `getNewDeviceNoticeState should pull from SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
+        val mockUserId = "mockUserId"
+        val expectedState = NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            delayDate = null,
+        )
+        fakeSharedPreferences.edit {
+            putString(
+                "${storeKey}_$mockUserId",
+                json.encodeToString(expectedState),
+            )
+        }
+        val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `setNewDeviceNoticeState should update SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
+        val mockUserId = "mockUserId"
+        val mockStatus =  NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            delayDate = null,
+        )
+        authDiskSource.storeNewDeviceNoticeState(
+            userId = mockUserId,
+            mockStatus,
+        )
+
+        val actual = fakeSharedPreferences.getString(
+            "${storeKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToString(mockStatus),
+            actual,
+        )
     }
 }
 
