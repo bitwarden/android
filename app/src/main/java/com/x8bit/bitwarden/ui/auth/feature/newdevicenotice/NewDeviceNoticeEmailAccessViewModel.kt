@@ -2,6 +2,12 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions
@@ -9,6 +15,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -18,6 +25,8 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val featureFlagManager: FeatureFlagManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<
     NewDeviceNoticeEmailAccessState,
@@ -38,8 +47,24 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
-        // TODO PM-8217: update new device notice status and navigate accordingly
-        sendEvent(NavigateToTwoFactorOptions)
+        if (state.isEmailAccessEnabled) {
+            val displayStatus =
+                if (featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)) {
+                    CAN_ACCESS_EMAIL_PERMANENT
+                } else {
+                    CAN_ACCESS_EMAIL
+                }
+
+            authRepository.setNewDeviceNoticeState(
+                NewDeviceNoticeState(
+                    displayStatus = displayStatus,
+                    delayDate = ZonedDateTime.now(),
+                ),
+            )
+            sendEvent(NewDeviceNoticeEmailAccessEvent.NavigateBackToVault)
+        } else {
+            sendEvent(NavigateToTwoFactorOptions)
+        }
     }
 
     private fun handleEmailAccessToggle(action: EmailAccessToggle) {
@@ -66,6 +91,11 @@ sealed class NewDeviceNoticeEmailAccessEvent {
      * Navigates to the Two Factor Options screen.
      */
     data object NavigateToTwoFactorOptions : NewDeviceNoticeEmailAccessEvent()
+
+    /**
+     * Navigates back.
+     */
+    data object NavigateBackToVault : NewDeviceNoticeEmailAccessEvent()
 }
 
 /**

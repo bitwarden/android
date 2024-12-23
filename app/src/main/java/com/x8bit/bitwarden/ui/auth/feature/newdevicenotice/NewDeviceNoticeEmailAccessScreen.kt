@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun NewDeviceNoticeEmailAccessScreen(
+    onNavigateBackToVault: () -> Unit,
     onNavigateToTwoFactorOptions: () -> Unit,
     viewModel: NewDeviceNoticeEmailAccessViewModel = hiltViewModel(),
 ) {
@@ -51,6 +52,7 @@ fun NewDeviceNoticeEmailAccessScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             NavigateToTwoFactorOptions -> onNavigateToTwoFactorOptions()
+            NewDeviceNoticeEmailAccessEvent.NavigateBackToVault -> onNavigateBackToVault()
         }
     }
 

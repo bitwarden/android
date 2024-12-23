@@ -2,12 +2,34 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
+    private val authRepository = mockk<AuthRepository> {
+        every { getNewDeviceNoticeState() } returns NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            delayDate = null,
+        )
+        every { setNewDeviceNoticeState(any()) } just runs
+        every { checkUserNeedsNewDeviceTwoFactorNotice() } returns true
+    }
+
+    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns true
+        every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
+    }
 
     @Test
     fun `initial state should be correct with email from state handle`() = runTest {
@@ -46,6 +68,8 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
             it["email_address"] = EMAIL
         },
     ): NewDeviceNoticeEmailAccessViewModel = NewDeviceNoticeEmailAccessViewModel(
+        authRepository = authRepository,
+        featureFlagManager = featureFlagManager,
         savedStateHandle = savedStateHandle,
     )
 }
