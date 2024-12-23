@@ -25,7 +25,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateBack
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateBackToVault
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -43,7 +43,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun NewDeviceNoticeTwoFactorScreen(
-    onNavigateBack: () -> Unit,
+    onNavigateBackToVault: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: NewDeviceNoticeTwoFactorViewModel = hiltViewModel(),
 ) {
@@ -57,7 +57,7 @@ fun NewDeviceNoticeTwoFactorScreen(
                 intentManager.launchUri(event.url.toUri())
             }
 
-            NavigateBack -> onNavigateBack()
+            NavigateBackToVault -> onNavigateBackToVault()
         }
     }
 

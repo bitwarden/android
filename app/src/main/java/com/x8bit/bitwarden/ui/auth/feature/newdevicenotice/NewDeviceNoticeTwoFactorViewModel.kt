@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
@@ -7,6 +10,7 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 /**
@@ -14,6 +18,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
+    val authRepository: AuthRepository,
     val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<Unit, NewDeviceNoticeTwoFactorEvent, NewDeviceNoticeTwoFactorAction>(
     initialState = Unit,
@@ -51,8 +56,13 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
             )
 
             RemindMeLaterClick -> {
-                // TODO PM-8217: Add logic to remind me later
-                sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBack)
+                authRepository.setNewDeviceNoticeState(
+                    NewDeviceNoticeState(
+                        displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                        delayDate = ZonedDateTime.now(),
+                    ),
+                )
+                sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
             }
         }
     }
@@ -75,9 +85,9 @@ sealed class NewDeviceNoticeTwoFactorEvent {
     data class NavigateToChangeAccountEmail(val url: String) : NewDeviceNoticeTwoFactorEvent()
 
     /**
-     * Navigates back.
+     * Navigates back to vault.
      */
-    data object NavigateBack : NewDeviceNoticeTwoFactorEvent()
+    data object NavigateBackToVault : NewDeviceNoticeTwoFactorEvent()
 }
 
 /**

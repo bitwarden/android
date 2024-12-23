@@ -31,7 +31,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun setUp() {
         composeTestRule.setContent {
             NewDeviceNoticeTwoFactorScreen(
-                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateBackToVault = { onNavigateBackCalled = true },
                 intentManager,
                 viewModel = viewModel,
             )
@@ -108,7 +108,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
 
     @Test
     fun `RemindMeLaterClick should call OnNavigateBack`() {
-        mutableEventFlow.tryEmit(NewDeviceNoticeTwoFactorEvent.NavigateBack)
+        mutableEventFlow.tryEmit(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
         assertTrue(onNavigateBackCalled)
     }
 }
