@@ -19,7 +19,7 @@ import org.junit.Test
 class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<NewDeviceNoticeEmailAccessEvent>()
-    private var onNavigateBackCalled = false
+    private var onNavigateBackToVaultCalled = false
     private var onNavigateToTwoFactorOptionsCalled = false
     private val viewModel = mockk<NewDeviceNoticeEmailAccessViewModel>(relaxed = true) {
         every { stateFlow } returns mutableStateFlow
@@ -30,7 +30,7 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     fun setUp() {
         composeTestRule.setContent {
             NewDeviceNoticeEmailAccessScreen(
-                onNavigateBackToVault = { onNavigateBackCalled = true },
+                onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
                 onNavigateToTwoFactorOptions = { onNavigateToTwoFactorOptionsCalled = true },
                 viewModel = viewModel,
             )

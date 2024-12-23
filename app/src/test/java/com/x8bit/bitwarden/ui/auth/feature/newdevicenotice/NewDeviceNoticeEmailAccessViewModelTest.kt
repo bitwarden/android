@@ -52,7 +52,21 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClick should emit NavigateToTwoFactorOptions`() = runTest {
+    fun `ContinueClick should emit NavigateBackToVault if isEmailAccessEnabled`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.EmailAccessToggle(true))
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.ContinueClick)
+            assertEquals(
+                NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ContinueClick should emit NavigateToTwoFactorOptions if isEmailAccessEnabled is false`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.ContinueClick)
