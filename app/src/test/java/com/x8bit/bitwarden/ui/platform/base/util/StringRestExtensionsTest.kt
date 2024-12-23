@@ -100,4 +100,20 @@ class StringRestExtensionsTest : BaseComposeTest() {
             .onNodeWithText("On your computer, open a new browser tab and go to ")
             .assertIsDisplayed()
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `string with no annotations with args should just be handled as normal annotated string`() {
+        composeTestRule.setContent {
+            Text(
+                text = R.string.test_for_string_with_no_annotations_with_format_arg.toAnnotatedString(
+                    args = arrayOf("this"),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Nothing special here, except this.")
+            .assertIsDisplayed()
+    }
 }

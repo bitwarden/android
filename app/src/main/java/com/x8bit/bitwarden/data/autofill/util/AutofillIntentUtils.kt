@@ -151,7 +151,7 @@ fun Intent.getTotpCopyIntentOrNull(): AutofillTotpCopyData? =
 
 /**
  * Checks if the given [Activity] was created for Autofill. This is useful to avoid locking the
- * vault if one of the Autofill services starts the only only instance of the [MainActivity].
+ * vault if one of the Autofill services starts the only instance of the [MainActivity].
  */
 val Activity.createdForAutofill: Boolean
     get() = intent.getAutofillSelectionDataOrNull() != null ||
