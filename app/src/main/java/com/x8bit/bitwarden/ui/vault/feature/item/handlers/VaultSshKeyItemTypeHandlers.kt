@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 data class VaultSshKeyItemTypeHandlers(
     val onCopyPublicKeyClick: () -> Unit,
     val onShowPrivateKeyClick: (isVisible: Boolean) -> Unit,
+    val onCopyPrivateKeyClick: () -> Unit,
     val onCopyFingerprintClick: () -> Unit,
 ) {
 
@@ -32,6 +33,11 @@ data class VaultSshKeyItemTypeHandlers(
                         VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
                             isVisible = it,
                         ),
+                    )
+                },
+                onCopyPrivateKeyClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick,
                     )
                 },
                 onCopyFingerprintClick = {

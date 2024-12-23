@@ -1,4 +1,3 @@
-#!/bin/sh
 # CI Build Info Updater
 #
 # Updates the ci.properties file with additional info from the CI build.

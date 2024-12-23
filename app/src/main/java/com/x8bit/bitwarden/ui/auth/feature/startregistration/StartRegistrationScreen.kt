@@ -49,10 +49,9 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegistrationHandler
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
-import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -288,7 +287,7 @@ private fun StartRegistrationContent(
     }
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,
@@ -297,22 +296,13 @@ private fun TermsAndPrivacyText(
 ) {
     val strTerms = stringResource(id = R.string.terms_of_service)
     val strPrivacy = stringResource(id = R.string.privacy_policy)
-    val strTermsAndPrivacy = stringResource(
-        id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
-    )
-    val annotatedLinkString: AnnotatedString = createClickableAnnotatedString(
-        mainString = strTermsAndPrivacy,
-        highlights = listOf(
-            ClickableTextHighlight(
-                textToHighlight = strTerms,
-                onTextClick = onTermsClick,
-            ),
-            ClickableTextHighlight(
-                textToHighlight = strPrivacy,
-                onTextClick = onPrivacyPolicyClick,
-            ),
-        ),
-    )
+    val annotatedLinkString: AnnotatedString =
+        R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy.toAnnotatedString {
+            when (it) {
+                "termsOfService" -> onTermsClick()
+                "privacyPolicy" -> onPrivacyPolicyClick()
+            }
+        }
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -356,19 +346,7 @@ private fun ReceiveMarketingEmailsSwitch(
     modifier: Modifier = Modifier,
 ) {
     val unsubscribeString = stringResource(id = R.string.unsubscribe)
-
     @Suppress("MaxLineLength")
-    val annotatedLinkString = createClickableAnnotatedString(
-        mainString = stringResource(
-            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
-        ),
-        highlights = listOf(
-            ClickableTextHighlight(
-                textToHighlight = unsubscribeString,
-                onTextClick = onUnsubscribeClick,
-            ),
-        ),
-    )
     BitwardenSwitch(
         modifier = modifier
             .semantics(mergeDescendants = true) {
@@ -382,7 +360,10 @@ private fun ReceiveMarketingEmailsSwitch(
                     ),
                 )
             },
-        label = annotatedLinkString,
+        label = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time
+            .toAnnotatedString {
+                onUnsubscribeClick()
+            },
         isChecked = isChecked,
         onCheckedChange = onCheckedChange,
         contentDescription = "ReceiveMarketingEmailsToggle",

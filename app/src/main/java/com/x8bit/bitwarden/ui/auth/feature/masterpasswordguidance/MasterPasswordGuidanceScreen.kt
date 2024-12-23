@@ -24,8 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
-import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -130,6 +128,7 @@ private fun MasterPasswordGuidanceContent(
     }
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
@@ -138,46 +137,20 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                 ContentBlockData(
                     headerText = stringResource(R.string.choose_three_or_four_random_words)
                         .toAnnotatedString(),
-                    subtitleText = createAnnotatedString(
-                        mainString = stringResource(
-                            R.string.pick_three_or_four_random_unrelated_words,
-                        ),
-                        highlights = listOf(
-                            stringResource(
-                                R.string.pick_three_or_four_random_unrelated_words_highlight,
-                            ),
-                        ),
-                        highlightStyle = bitwardenBoldSpanStyle,
-                    ),
+                    subtitleText = R.string.pick_three_or_four_random_unrelated_words.toAnnotatedString(),
                     iconVectorResource = R.drawable.ic_number1,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.combine_those_words_together)
                         .toAnnotatedString(),
-                    subtitleText = createAnnotatedString(
-                        mainString = stringResource(
-                            R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
-                        ),
-                        highlights = listOf(
-                            stringResource(
-                                R.string.use_hyphens_spaces_or_leave_them_as_long_word_highlight,
-                            ),
-                        ),
-                        highlightStyle = bitwardenBoldSpanStyle,
-                    ),
+                    subtitleText = R.string.put_the_words_together_in_any_order_to_form_your_passphrase
+                        .toAnnotatedString(),
                     iconVectorResource = R.drawable.ic_number2,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.make_it_yours).toAnnotatedString(),
-                    subtitleText = createAnnotatedString(
-                        mainString = stringResource(
-                            R.string.add_a_number_or_symbol_to_make_it_even_stronger,
-                        ),
-                        highlights = listOf(
-                            stringResource(R.string.add_a_number_or_symbol_highlight),
-                        ),
-                        highlightStyle = bitwardenBoldSpanStyle,
-                    ),
+                    subtitleText = R.string.add_a_number_or_symbol_to_make_it_even_stronger
+                        .toAnnotatedString(),
                     iconVectorResource = R.drawable.ic_number3,
                 ),
             ),

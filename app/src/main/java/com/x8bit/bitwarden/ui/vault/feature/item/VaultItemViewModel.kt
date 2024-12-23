@@ -790,6 +790,8 @@ class VaultItemViewModel @Inject constructor(
                 handlePrivateKeyVisibilityClicked(action)
             }
 
+            is VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick -> handleCopyPrivateKeyClick()
+
             VaultItemAction.ItemType.SshKey.CopyFingerprintClick -> handleCopyFingerprintClick()
         }
     }
@@ -804,6 +806,16 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked,
     ) {
         onSshKeyContent { content, sshKey ->
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewPrivateKeyClicked(
+                            isVisible = action.isVisible,
+                        ),
+                    ),
+                )
+                return@onSshKeyContent
+            }
             mutableStateFlow.update { currentState ->
                 currentState.copy(
                     viewState = content.copy(
@@ -811,6 +823,20 @@ class VaultItemViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun handleCopyPrivateKeyClick() {
+        onSshKeyContent { content, sshKey ->
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = sshKey.privateKey),
+                    ),
+                )
+                return@onSshKeyContent
+            }
+            clipboardManager.setText(text = sshKey.privateKey)
         }
     }
 
@@ -1951,6 +1977,11 @@ sealed class VaultItemAction {
             data class PrivateKeyVisibilityClicked(val isVisible: Boolean) : SshKey()
 
             /**
+             * The user has clicked the copy button for the private key.
+             */
+            data object CopyPrivateKeyClick : SshKey()
+
+            /**
              * The user has clicked the copy button for the fingerprint.
              */
             data object CopyFingerprintClick : SshKey()
@@ -2230,5 +2261,19 @@ sealed class PasswordRepromptAction : Parcelable {
     data object RestoreItemClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
             get() = VaultItemAction.Common.RestoreVaultItemClick
+    }
+
+    /**
+     * Indicates that we should launch the
+     * [VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked] upon password validation.
+     */
+    @Parcelize
+    data class ViewPrivateKeyClicked(
+        val isVisible: Boolean,
+    ) : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                isVisible = isVisible,
+            )
     }
 }

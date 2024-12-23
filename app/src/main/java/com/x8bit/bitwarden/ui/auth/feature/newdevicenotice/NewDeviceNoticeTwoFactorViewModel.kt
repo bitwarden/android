@@ -12,7 +12,6 @@ import javax.inject.Inject
 /**
  * Manages application state for the new device notice two factor screen.
  */
-@Suppress("TooManyFunctions")
 @HiltViewModel
 class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     val environmentRepository: EnvironmentRepository,
