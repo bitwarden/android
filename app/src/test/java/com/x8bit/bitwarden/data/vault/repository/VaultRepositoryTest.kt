@@ -4732,6 +4732,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = null,
     kdfParallelism = null,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(
