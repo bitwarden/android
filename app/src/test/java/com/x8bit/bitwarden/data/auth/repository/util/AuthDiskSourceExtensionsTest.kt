@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 class AuthDiskSourceExtensionsTest {
     private val authDiskSource: AuthDiskSource = FakeAuthDiskSource()
@@ -531,6 +532,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = null,
     kdfParallelism = null,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(
