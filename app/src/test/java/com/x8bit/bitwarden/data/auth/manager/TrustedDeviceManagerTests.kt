@@ -297,6 +297,8 @@ private val DEFAULT_ACCOUNT = AccountJson(
         kdfMemory = 16,
         kdfParallelism = 4,
         userDecryptionOptions = DEFAULT_USER_DECRYPTION_OPTIONS,
+        isTwoFactorEnabled = false,
+        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
@@ -319,6 +321,8 @@ private val UPDATED_ACCOUNT = AccountJson(
         kdfMemory = 16,
         kdfParallelism = 4,
         userDecryptionOptions = UPDATED_USER_DECRYPTION_OPTIONS,
+        isTwoFactorEnabled = false,
+        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
