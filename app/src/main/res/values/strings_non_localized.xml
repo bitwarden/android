@@ -22,5 +22,7 @@
     <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
     <string name="app_review_prompt">App Review Prompt</string>
     <string name="cipher_key_encryption">Cipher Key Encryption</string>">
+    <string name="new_device_permanent_dismiss">New device notice permanent dismiss</string>">
+    <string name="new_device_temporary_dismiss">New device notice temporary dismiss</string>">
     <!-- /Debug Menu -->
 </resources>
