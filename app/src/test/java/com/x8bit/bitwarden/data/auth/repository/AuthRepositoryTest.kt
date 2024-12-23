@@ -6571,6 +6571,8 @@ class AuthRepositoryTest {
             kdfMemory = 16,
             kdfParallelism = 4,
             userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         private val ACCOUNT_1 = AccountJson(
             profile = PROFILE_1,
@@ -6594,6 +6596,8 @@ class AuthRepositoryTest {
                 kdfMemory = null,
                 kdfParallelism = null,
                 userDecryptionOptions = null,
+                isTwoFactorEnabled = false,
+                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
             ),
             settings = AccountJson.Settings(
                 environmentUrlData = null,

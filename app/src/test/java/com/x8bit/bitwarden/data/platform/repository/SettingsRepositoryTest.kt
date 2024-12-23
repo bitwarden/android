@@ -47,6 +47,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class SettingsRepositoryTest {
@@ -1259,6 +1260,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = 16,
     kdfParallelism = 4,
     userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

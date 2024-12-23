@@ -25,6 +25,7 @@ fun createMockProfile(number: Int): SyncResponseJson.Profile =
         key = "mockKey-$number",
         securityStamp = "mockSecurityStamp-$number",
         providers = listOf(createMockProvider(number = number)),
+        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
     )
 
 /**
