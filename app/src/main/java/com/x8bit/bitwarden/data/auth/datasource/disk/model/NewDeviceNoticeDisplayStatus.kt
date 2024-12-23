@@ -52,5 +52,5 @@ data class NewDeviceNoticeState(
     /**
      * Whether the [delayDate] is at least 7 days old.
      */
-    val delayDateIsSevenDaysOld = delayDate?.isAfter(ZonedDateTime.now().plusDays(7)) ?: false
+    val delayDateIsSevenDaysOld = delayDate?.isBefore(ZonedDateTime.now().minusDays(7)) ?: false
 }

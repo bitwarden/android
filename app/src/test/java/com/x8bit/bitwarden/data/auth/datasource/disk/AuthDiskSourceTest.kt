@@ -1274,7 +1274,7 @@ class AuthDiskSourceTest {
     fun `setNewDeviceNoticeState should update SharedPreferences`() {
         val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
         val mockUserId = "mockUserId"
-        val mockStatus =  NewDeviceNoticeState(
+        val mockStatus = NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
             delayDate = null,
         )
