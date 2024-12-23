@@ -1114,4 +1114,5 @@ Wilt u naar dit account wisselen?</string>
   <string name="need_some_inspiration">"Wat inspiratie nodig?"</string>
   <string name="check_out_the_passphrase_generator">"Bekijk de wachtwoordzingenerator"</string>
   <string name="copied_to_clipboard">Naar klembord gekopieerd.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">We konden het certificaat van de server niet verifiëren. De certificaatketen of proxy-instellingen op je apparaat of je Bitwarden-server zijn mogelijk niet correct ingesteld.</string>
 </resources>

@@ -1114,4 +1114,5 @@
   <string name="need_some_inspiration">"Потрібне натхнення?"</string>
   <string name="check_out_the_passphrase_generator">"Скористайтеся генератором парольної фрази"</string>
   <string name="copied_to_clipboard">Скопійовано в буфер обміну.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
 </resources>

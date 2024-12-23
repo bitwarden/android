@@ -2490,11 +2490,58 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on PrivateKeyVisibilityClick should show password dialog when re-prompt is required`() =
+        fun `on PrivateKeyVisibilityClick should show private key when re-prompt is not required`() =
             runTest {
                 val sshKeyViewState = createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_SSH_KEY_TYPE,
                 )
+                val sshKeyState = DEFAULT_STATE.copy(viewState = sshKeyViewState)
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns sshKeyViewState
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+
+                assertEquals(sshKeyState, viewModel.stateFlow.value)
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                        isVisible = true,
+                    ),
+                )
+                assertEquals(
+                    sshKeyState.copy(
+                        viewState = sshKeyViewState.copy(
+                            common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                            type = DEFAULT_SSH_KEY_TYPE.copy(showPrivateKey = true),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on PrivateKeyVisibilityClick should show password dialog when re-prompt is required`() =
+            runTest {
                 val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
                 every {
                     mockCipherView.toViewState(
@@ -2518,15 +2565,87 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     sshKeyState.copy(
-                        viewState = sshKeyViewState.copy(
-                            common = DEFAULT_COMMON,
-                            type = DEFAULT_SSH_KEY_TYPE.copy(
-                                showPrivateKey = true,
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            PasswordRepromptAction.ViewPrivateKeyClicked(isVisible = true),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `onPrivateKeyCopyClick should copy private key to clipboard when re-prompt is not required`() =
+            runTest {
+                every { clipboardManager.setText("mockPrivateKey") } just runs
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_SSH_KEY_TYPE,
+                )
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+
+                viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick)
+
+                verify(exactly = 1) {
+                    clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.privateKey)
+                }
+            }
+
+        @Test
+        fun `onPrivateKeyCopyClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
+                every { clipboardManager.setText("mockPrivateKey") } just runs
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                    )
+                } returns SSH_KEY_VIEW_STATE
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+
+                viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick)
+
+                assertEquals(
+                    sshKeyState.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.CopyClick(
+                                value = DEFAULT_SSH_KEY_TYPE.privateKey,
                             ),
                         ),
                     ),
                     viewModel.stateFlow.value,
                 )
+                verify(exactly = 0) {
+                    clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.privateKey)
+                }
             }
 
         @Test

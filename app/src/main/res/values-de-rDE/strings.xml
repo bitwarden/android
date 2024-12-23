@@ -1113,4 +1113,5 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="need_some_inspiration">"Brauchst du etwas Inspiration?"</string>
   <string name="check_out_the_passphrase_generator">"Schau dir den Passphrasen-Generator an"</string>
   <string name="copied_to_clipboard">In die Zwischenablage kopiert.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Wir konnten das Zertifikat des Servers nicht verifizieren. Die Zertifikatskette oder die Proxy-Einstellungen auf Ihrem Gerät oder Ihr Bitwarden-Server sind möglicherweise nicht korrekt eingerichtet.</string>
 </resources>
