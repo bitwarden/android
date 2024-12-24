@@ -1,0 +1,69 @@
+name: Dispatch Workflow and Download Artifacts
+description: 'Dispatches a workflow, waits for completion, and downloads artifacts'
+inputs:
+  token:
+    description: GitHub Personal Access Token for making API requests.
+    required: true
+  workflow:
+    description: The workflow to dispatch, can be a filename or ID
+    required: true
+  ref:
+    description: The branch or tag to dispatch the workflow on
+    default: 'main'
+  repo:
+    description: Repository of the action to dispatch.
+    default: ${{ github.repository }}
+  owner:
+    description: Owner of the given repository.
+    default: ${{ github.repository_owner }}
+  workflow_timeout_seconds:
+    description: Time until giving up waiting for the start of the workflow run.
+    default: 120
+  workflow_inputs:
+    description: A flat JSON object, only supports strings, numbers, and booleans (as per workflow inputs API).
+  distinct_id:
+    description: Specify a static string to use instead of a random distinct ID.
+runs:
+  using: "composite"
+  steps:
+    - name: Log inputs to job summary
+      run: |
+        echo "<details><summary>Workflow Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo '```json' >> $GITHUB_STEP_SUMMARY
+        echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+    - name: Dispatch an action and get the run ID and URL
+      uses: codex-/return-dispatch@bcb9c46cb8ee849d5e6cca0ba9c8529d620ae006 # v1.15.0
+      id: return_dispatch
+      with:
+        token: ${{ inputs.token }}
+        ref: ${{ inputs.ref }}
+        repo: ${{ inputs.repo }}
+        owner: ${{ inputs.owner }}
+        workflow: ${{ inputs.workflow }}
+        workflow_timeout_seconds: ${{ inputs.workflow_timeout_seconds }}
+        workflow_inputs: ${{ inputs.workflow_inputs }}
+        distinct_id: ${{ inputs.distinct_id }}
+
+    - name: Use the output run ID and URL
+      shell: bash
+      run: |
+        echo ${{steps.return_dispatch.outputs.run_id}}
+        echo ${{steps.return_dispatch.outputs.run_url}}
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      id: download
+      with:
+        run-id: ${{steps.return_dispatch.outputs.run_id}}
+        github-token: ${{ inputs.token }}
+
+    - name: Debug artifact download
+      shell: bash
+      run: |
+        echo "Run ID: ${{steps.return_dispatch.outputs.run_id}}"
+        echo "Artifacts path: ${{ steps.download.outputs.download-path }}"
+        ls -laR ${{ steps.download.outputs.download-path }}
