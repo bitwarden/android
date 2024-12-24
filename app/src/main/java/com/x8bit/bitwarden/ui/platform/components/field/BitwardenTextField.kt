@@ -129,7 +129,7 @@ fun BitwardenTextField(
         Box(modifier = modifier) {
             OutlinedTextField(
                 colors = bitwardenTextFieldColors(),
-                modifier = modifier
+                modifier = Modifier
                     .testTag(textFieldTestTag.orEmpty())
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
