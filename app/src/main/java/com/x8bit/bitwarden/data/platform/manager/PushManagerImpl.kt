@@ -26,7 +26,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -107,6 +109,8 @@ class PushManagerImpl @Inject constructor(
     }
 
     override fun onMessageReceived(data: Map<String, String>) {
+        Timber.tag("PushManager").i(json.encodeToString(data))
+
         val notificationType = data["type"]
             ?.let { json.decodeFromStringOrNull<NotificationType>(string = it) }
             ?: return
