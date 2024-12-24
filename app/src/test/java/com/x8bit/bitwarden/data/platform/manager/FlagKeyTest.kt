@@ -46,4 +46,24 @@ class FlagKeyTest {
     fun `AppReviewPrompt default value should be false`() {
         assertFalse(FlagKey.AppReviewPrompt.defaultValue)
     }
+
+    @Test
+    fun `NewDevicePermanentDismiss default value should be false`() {
+        assertFalse(FlagKey.NewDevicePermanentDismiss.defaultValue)
+    }
+
+    @Test
+    fun `NewDevicePermanentDismiss is remotely configured value should be true`() {
+        assertTrue(FlagKey.NewDevicePermanentDismiss.isRemotelyConfigured)
+    }
+
+    @Test
+    fun `NewDeviceTemporaryDismiss default value should be false`() {
+        assertFalse(FlagKey.NewDeviceTemporaryDismiss.defaultValue)
+    }
+
+    @Test
+    fun `NewDeviceTemporaryDismiss is remotely configured value should be true`() {
+        assertTrue(FlagKey.NewDeviceTemporaryDismiss.isRemotelyConfigured)
+    }
 }
