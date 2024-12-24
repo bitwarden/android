@@ -41,6 +41,7 @@ fun NavController.navigateToNewDeviceNoticeEmailAccess(
  * Add the new device notice email access screen to the nav graph.
  */
 fun NavGraphBuilder.newDeviceNoticeEmailAccessDestination(
+    onNavigateBackToVault: () -> Unit,
     onNavigateToTwoFactorOptions: () -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -50,6 +51,7 @@ fun NavGraphBuilder.newDeviceNoticeEmailAccessDestination(
         ),
     ) {
         NewDeviceNoticeEmailAccessScreen(
+            onNavigateBackToVault = onNavigateBackToVault,
             onNavigateToTwoFactorOptions = onNavigateToTwoFactorOptions,
         )
     }

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -328,7 +329,17 @@ interface AuthDiskSource {
     fun storeShowImportLogins(userId: String, showImportLogins: Boolean?)
 
     /**
-     * Emits updates that track [getShowImportLogins]. This will replay the last known value,
+     * Emits updates that track [getShowImportLogins]. This will replay the last known value.
      */
     fun getShowImportLoginsFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets the new device notice state for the given [userId].
+     */
+    fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState
+
+    /**
+     * Stores the new device notice state for the given [userId].
+     */
+    fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?)
 }

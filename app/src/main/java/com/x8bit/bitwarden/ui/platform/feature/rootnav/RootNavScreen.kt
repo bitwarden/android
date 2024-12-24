@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.navigateToExpiredRegistrationLinkScreen
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.navigateToNewDeviceNoticeEmailAccess
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.REMOVE_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.navigateToRemovePassword
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.removePasswordDestination
@@ -126,6 +127,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForFido2GetCredentials,
+        is RootNavState.NewDeviceTwoFactorNotice,
             -> VAULT_UNLOCKED_GRAPH_ROUTE
 
         RootNavState.OnboardingAccountLockSetup -> SETUP_UNLOCK_AS_ROOT_ROUTE
@@ -253,6 +255,13 @@ fun RootNavScreen(
 
             RootNavState.OnboardingStepsComplete -> {
                 navController.navigateToSetupCompleteScreen(rootNavOptions)
+            }
+
+            is RootNavState.NewDeviceTwoFactorNotice -> {
+                navController.navigateToNewDeviceNoticeEmailAccess(
+                    emailAddress = currentState.email,
+                    navOptions = rootNavOptions,
+                )
             }
         }
     }

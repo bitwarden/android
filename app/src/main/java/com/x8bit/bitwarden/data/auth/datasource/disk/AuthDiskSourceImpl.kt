@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -46,6 +48,7 @@ private const val TDE_LOGIN_COMPLETE = "tdeLoginComplete"
 private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
+private const val NEW_DEVICE_NOTICE_STATE = "newDeviceNoticeState"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -470,6 +473,22 @@ class AuthDiskSourceImpl(
     override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
+
+    override fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState {
+        return getString(key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId))?.let {
+            json.decodeFromStringOrNull(it)
+        } ?: NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            delayDate = null,
+        )
+    }
+
+    override fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?) {
+        putString(
+            key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId),
+            value = newState?.let { json.encodeToString(it) },
+        )
+    }
 
     private fun generateAndStoreUniqueAppId(): String =
         UUID

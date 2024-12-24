@@ -141,6 +141,24 @@ sealed class FlagKey<out T : Any> {
         override val isRemotelyConfigured: Boolean = true
     }
 
+    /**
+     * Data object holding the feature flag key for the New Device Temporary Dismiss feature.
+     */
+    data object NewDeviceTemporaryDismiss : FlagKey<Boolean>() {
+        override val keyName: String = "new-device-temporary-dismiss"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the New Device Permanent Dismiss feature.
+     */
+    data object NewDevicePermanentDismiss : FlagKey<Boolean>() {
+        override val keyName: String = "new-device-permanent-dismiss"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
     //region Dummy keys for testing
     /**
      * Data object holding the key for a [Boolean] flag to be used in tests.

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -13,6 +14,8 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -22,8 +25,10 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
         every { startCustomTabsActivity(any()) } just runs
     }
     private var onNavigateBackCalled = false
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<NewDeviceNoticeTwoFactorEvent>()
     private val viewModel = mockk<NewDeviceNoticeTwoFactorViewModel>(relaxed = true) {
+        every { stateFlow } returns mutableStateFlow
         every { eventFlow } returns mutableEventFlow
     }
 
@@ -31,7 +36,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun setUp() {
         composeTestRule.setContent {
             NewDeviceNoticeTwoFactorScreen(
-                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateBackToVault = { onNavigateBackCalled = true },
                 intentManager,
                 viewModel = viewModel,
             )
@@ -108,7 +113,27 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
 
     @Test
     fun `RemindMeLaterClick should call OnNavigateBack`() {
-        mutableEventFlow.tryEmit(NewDeviceNoticeTwoFactorEvent.NavigateBack)
+        mutableEventFlow.tryEmit(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
         assertTrue(onNavigateBackCalled)
     }
+
+    @Test
+    fun `remind me later button visibility should update according to state`() {
+        composeTestRule
+            .onNodeWithText("Remind me later")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(shouldShowRemindMeLater = false)
+        }
+        composeTestRule
+            .onNodeWithText("Remind me later")
+            .assertDoesNotExist()
+    }
 }
+
+private val DEFAULT_STATE =
+    NewDeviceNoticeTwoFactorState(
+        shouldShowRemindMeLater = true,
+    )
