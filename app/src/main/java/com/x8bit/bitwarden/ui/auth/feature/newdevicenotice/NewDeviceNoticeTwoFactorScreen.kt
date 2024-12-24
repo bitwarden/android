@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
@@ -47,6 +49,7 @@ fun NewDeviceNoticeTwoFactorScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: NewDeviceNoticeTwoFactorViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is NavigateToTurnOnTwoFactor -> {
@@ -72,6 +75,7 @@ fun NewDeviceNoticeTwoFactorScreen(
             onRemindMeLaterClick = {
                 viewModel.trySendAction(RemindMeLaterClick)
             },
+            state = state,
         )
     }
 }
@@ -84,6 +88,7 @@ private fun NewDeviceNoticeTwoFactorContent(
     onTurnOnTwoFactorClick: () -> Unit,
     onChangeAccountEmailClick: () -> Unit,
     onRemindMeLaterClick: () -> Unit,
+    state: NewDeviceNoticeTwoFactorState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -100,6 +105,7 @@ private fun NewDeviceNoticeTwoFactorContent(
             onTurnOnTwoFactorClick = onTurnOnTwoFactorClick,
             onChangeAccountEmailClick = onChangeAccountEmailClick,
             onRemindMeLaterClick = onRemindMeLaterClick,
+            state = state,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -142,6 +148,7 @@ private fun ColumnScope.MainContent(
     onTurnOnTwoFactorClick: () -> Unit,
     onChangeAccountEmailClick: () -> Unit,
     onRemindMeLaterClick: () -> Unit,
+    state: NewDeviceNoticeTwoFactorState,
 ) {
     BitwardenFilledButton(
         label = stringResource(R.string.turn_on_two_step_login),
@@ -158,13 +165,15 @@ private fun ColumnScope.MainContent(
         modifier = Modifier
             .fillMaxWidth(),
     )
-    Spacer(modifier = Modifier.height(12.dp))
-    BitwardenOutlinedButton(
-        label = stringResource(R.string.remind_me_later),
-        onClick = onRemindMeLaterClick,
-        modifier = Modifier
-            .fillMaxWidth(),
-    )
+    if (state.shouldShowRemindMeLater) {
+        Spacer(modifier = Modifier.height(12.dp))
+        BitwardenOutlinedButton(
+            label = stringResource(R.string.remind_me_later),
+            onClick = onRemindMeLaterClick,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
 }
 
 @PreviewScreenSizes
@@ -175,6 +184,9 @@ private fun NewDeviceNoticeTwoFactorScreen_preview() {
             onTurnOnTwoFactorClick = {},
             onChangeAccountEmailClick = {},
             onRemindMeLaterClick = {},
+            state = NewDeviceNoticeTwoFactorState(
+                shouldShowRemindMeLater = true,
+            ),
         )
     }
 }

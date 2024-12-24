@@ -4,6 +4,8 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
@@ -22,6 +24,39 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             delayDate = null,
         )
         every { setNewDeviceNoticeState(any()) } just runs
+    }
+
+    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
+        every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
+    }
+
+    @Test
+    fun `initial state should be correct with NewDevicePermanentDismiss flag false`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `initial state should be correct with NewDevicePermanentDismiss flag true`() = runTest {
+        every { featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns true
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(shouldShowRemindMeLater = false),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state should be correct with email from state handle`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
     }
 
     @Test
@@ -68,5 +103,11 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         NewDeviceNoticeTwoFactorViewModel(
             authRepository = authRepository,
             environmentRepository = environmentRepository,
+            featureFlagManager = featureFlagManager,
         )
 }
+
+private val DEFAULT_STATE =
+    NewDeviceNoticeTwoFactorState(
+        shouldShowRemindMeLater = true,
+    )

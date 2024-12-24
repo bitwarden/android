@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
+import android.os.Parcelable
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
@@ -10,6 +13,7 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -20,8 +24,17 @@ import javax.inject.Inject
 class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     val authRepository: AuthRepository,
     val environmentRepository: EnvironmentRepository,
-) : BaseViewModel<Unit, NewDeviceNoticeTwoFactorEvent, NewDeviceNoticeTwoFactorAction>(
-    initialState = Unit,
+    val featureFlagManager: FeatureFlagManager,
+) : BaseViewModel<
+    NewDeviceNoticeTwoFactorState,
+    NewDeviceNoticeTwoFactorEvent,
+    NewDeviceNoticeTwoFactorAction,
+    >(
+    initialState = NewDeviceNoticeTwoFactorState(
+        shouldShowRemindMeLater = !featureFlagManager.getFeatureFlag(
+            FlagKey.NewDevicePermanentDismiss,
+        ),
+    ),
 ) {
     private val webTwoFactorUrl: String
         get() {
@@ -109,3 +122,11 @@ sealed class NewDeviceNoticeTwoFactorAction {
      */
     data object RemindMeLaterClick : NewDeviceNoticeTwoFactorAction()
 }
+
+/**
+ * Models state of the new device notice two factor screen.
+ */
+@Parcelize
+data class NewDeviceNoticeTwoFactorState(
+    val shouldShowRemindMeLater: Boolean,
+) : Parcelable
