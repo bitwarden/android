@@ -96,10 +96,6 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "BE:FE:E7:31:12:6A:A5:6E:7E:FD:AE:AF:5E:F3:FA:EA:44:1C:19:CC:E0:CA:EC:42:6B:65:BB:F8:2C:59:46:80"
-          },
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "32:57:D5:99:A4:9D:2C:96:1A:47:1C:A9:84:3F:59:D3:41:A4:05:88:45:83:FC:08:7D:F4:23:7B:73:3B:BD:6D"
           }
         ]
       }
