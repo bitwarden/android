@@ -36,6 +36,8 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 AppReviewPrompt,
+                NewDevicePermanentDismiss,
+                NewDeviceTemporaryDismiss,
             )
         }
     }
