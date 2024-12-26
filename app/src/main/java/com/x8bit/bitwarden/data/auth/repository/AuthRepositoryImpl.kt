@@ -1388,14 +1388,11 @@ class AuthRepositoryImpl(
      * - Cannot have two-factor authentication enabled.
      */
     private fun newDeviceNoticePreConditionsValid(): Boolean {
-        val hasSSOPolicy =
-            policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
-                .any { p -> p.isEnabled }
-        val isCloudUser = environmentRepository.environment.type != Environment.Type.SELF_HOSTED
+        if (environmentRepository.environment.type == Environment.Type.SELF_HOSTED) {
+            return false
+        }
+
         val userProfile = authDiskSource.userState?.activeAccount?.profile
-        val hasTwoFactorEnabled = userProfile
-            ?.isTwoFactorEnabled
-            ?: false
         val isProfileAtLeastWeekOld = userProfile
             ?.let {
                 it.creationDate
@@ -1405,17 +1402,22 @@ class AuthRepositoryImpl(
                     )
             }
             ?: false
-
-        // broken down for easier readability
-        if (!isCloudUser || !isProfileAtLeastWeekOld) {
+        if (!isProfileAtLeastWeekOld) {
             return false
         }
 
-        if (hasSSOPolicy || hasTwoFactorEnabled) {
+        val hasTwoFactorEnabled = userProfile
+            ?.isTwoFactorEnabled
+            ?: false
+        if (hasTwoFactorEnabled) {
             return false
         }
 
-        return true
+        val hasSSOPolicy =
+            policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+                .any { p -> p.isEnabled }
+
+        return !hasSSOPolicy
     }
 
     @Suppress("CyclomaticComplexMethod")
