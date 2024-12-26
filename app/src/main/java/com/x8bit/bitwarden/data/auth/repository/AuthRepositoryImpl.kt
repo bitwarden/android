@@ -1380,6 +1380,13 @@ class AuthRepositoryImpl(
             ?: false
     }
 
+    /**
+     * Checks if the preconditions are met for a user to see a new device notice:
+     * - Must be a Bitwarden cloud user.
+     * - The account must be at least one week old.
+     * - Cannot have an active policy requiring SSO to be enabled.
+     * - Cannot have two-factor authentication enabled.
+     */
     private fun newDeviceNoticePreConditionsValid(): Boolean {
         val hasSSOPolicy =
             policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
