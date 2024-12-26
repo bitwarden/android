@@ -66,6 +66,22 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `ContinueClick should emit NavigateBackToVault if isEmailAccessEnabled and NewDevicePermanentDismiss flag is off`() = runTest {
+        every { featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.EmailAccessToggle(true))
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.ContinueClick)
+            assertEquals(
+                NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `ContinueClick should emit NavigateToTwoFactorOptions if isEmailAccessEnabled is false`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

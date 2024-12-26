@@ -1254,8 +1254,8 @@ class AuthDiskSourceTest {
         val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
         val mockUserId = "mockUserId"
         val expectedState = NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            delayDate = null,
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+            delayDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
         )
         fakeSharedPreferences.edit {
             putString(
@@ -1271,12 +1271,26 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getNewDeviceNoticeState should pull default from SharedPreferences if no user is found`() {
+        val mockUserId = "mockUserId"
+        val defaultState = NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            delayDate = null,
+        )
+        val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
+        assertEquals(
+            defaultState,
+            actual,
+        )
+    }
+
+    @Test
     fun `setNewDeviceNoticeState should update SharedPreferences`() {
         val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
         val mockUserId = "mockUserId"
         val mockStatus = NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            delayDate = null,
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+            delayDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
         )
         authDiskSource.storeNewDeviceNoticeState(
             userId = mockUserId,

@@ -13,6 +13,7 @@ import io.mockk.verify
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -37,8 +38,14 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
+    @After
+    fun tearDown() {
+        onNavigateBackToVaultCalled = false
+        onNavigateToTwoFactorOptionsCalled = false
+    }
+
     @Test
+    @Suppress("MaxLineLength")
     fun `Do you have reliable access to your email should be toggled on or off according to the state`() {
         composeTestRule
             .onNodeWithText("Yes, I can reliably access my email", substring = true)
@@ -72,7 +79,15 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `ContinueClick should call onNavigateToTwoFactorOptions`() {
+    fun `ContinueClick should call onNavigateBackToVault if isEmailAccessEnabled is false`() {
+        mutableStateFlow.update { it.copy(isEmailAccessEnabled = false) }
+        mutableEventFlow.tryEmit(NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions)
+        assertTrue(onNavigateToTwoFactorOptionsCalled)
+    }
+
+    @Test
+    fun `ContinueClick should call onNavigateToTwoFactorOptions if isEmailAccessEnabled is true`() {
+        mutableStateFlow.update { it.copy(isEmailAccessEnabled = true) }
         mutableEventFlow.tryEmit(NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions)
         assertTrue(onNavigateToTwoFactorOptionsCalled)
     }

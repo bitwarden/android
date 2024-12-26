@@ -6797,6 +6797,82 @@ class AuthRepositoryTest {
             assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
         }
 
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with no active user returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = null
+
+            assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice account with null creationDate returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = USER_ID_1,
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = ACCOUNT_1.profile.copy(
+                            creationDate = null,
+                        ),
+                    ),
+                ),
+            )
+
+            assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice account with null isTwoFactorEnabled returns true`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = USER_ID_1,
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = ACCOUNT_1.profile.copy(
+                            isTwoFactorEnabled = null,
+                        ),
+                    ),
+                ),
+            )
+
+            assertTrue(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
