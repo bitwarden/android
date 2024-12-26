@@ -45,12 +45,16 @@ data class NewDeviceNoticeState(
     @SerialName("displayStatus")
     val displayStatus: NewDeviceNoticeDisplayStatus,
 
-    @SerialName("delayDate")
+    @SerialName("lastSeenDate")
     @Contextual
-    val delayDate: ZonedDateTime?,
+    val lastSeenDate: ZonedDateTime?,
 ) {
     /**
-     * Whether the [delayDate] is at least 7 days old.
+     * Whether the [lastSeenDate] is at least 7 days old.
      */
-    val delayDateIsSevenDaysOld = delayDate?.isBefore(ZonedDateTime.now().minusDays(7)) ?: false
+    val shouldDisplayNoticeIfSeen = lastSeenDate
+        ?.isBefore(
+            ZonedDateTime.now().minusDays(7),
+        )
+        ?: false
 }

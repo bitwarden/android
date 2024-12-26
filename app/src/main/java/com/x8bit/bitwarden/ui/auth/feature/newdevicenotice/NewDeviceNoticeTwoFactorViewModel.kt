@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 /**
@@ -80,7 +79,7 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
         authRepository.setNewDeviceNoticeState(
             NewDeviceNoticeState(
                 displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                delayDate = ZonedDateTime.now(),
+                lastSeenDate = null,
             ),
         )
         sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)

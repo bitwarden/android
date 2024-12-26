@@ -1255,7 +1255,7 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val expectedState = NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-            delayDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
+            lastSeenDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
         )
         fakeSharedPreferences.edit {
             putString(
@@ -1275,7 +1275,7 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val defaultState = NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            delayDate = null,
+            lastSeenDate = null,
         )
         val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
         assertEquals(
@@ -1290,7 +1290,7 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockStatus = NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-            delayDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
+            lastSeenDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
         )
         authDiskSource.storeNewDeviceNoticeState(
             userId = mockUserId,

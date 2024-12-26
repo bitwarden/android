@@ -1371,7 +1371,7 @@ class AuthRepositoryImpl(
                 // if the user has already seen but 7 days have already passed,
                 // the notice needs to appear again
                 NewDeviceNoticeDisplayStatus.HAS_SEEN ->
-                    newDeviceNoticeState.delayDateIsSevenDaysOld
+                    newDeviceNoticeState.shouldDisplayNoticeIfSeen
                 NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN -> true
                 // the user never needs to see the notice again
                 NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT -> false

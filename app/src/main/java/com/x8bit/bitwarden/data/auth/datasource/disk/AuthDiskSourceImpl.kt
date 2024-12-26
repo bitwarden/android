@@ -479,7 +479,7 @@ class AuthDiskSourceImpl(
             json.decodeFromStringOrNull(it)
         } ?: NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            delayDate = null,
+            lastSeenDate = null,
         )
     }
 

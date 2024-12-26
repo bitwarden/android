@@ -58,7 +58,7 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
             authRepository.setNewDeviceNoticeState(
                 NewDeviceNoticeState(
                     displayStatus = displayStatus,
-                    delayDate = ZonedDateTime.now(),
+                    lastSeenDate = ZonedDateTime.now(),
                 ),
             )
             sendEvent(NewDeviceNoticeEmailAccessEvent.NavigateBackToVault)

@@ -304,7 +304,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState {
         return storedNewDeviceNoticeState[userId] ?: NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            delayDate = null,
+            lastSeenDate = null,
             )
     }
 

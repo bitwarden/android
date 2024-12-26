@@ -20,7 +20,7 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { getNewDeviceNoticeState() } returns NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            delayDate = null,
+            lastSeenDate = null,
         )
         every { setNewDeviceNoticeState(any()) } just runs
         every { checkUserNeedsNewDeviceTwoFactorNotice() } returns true

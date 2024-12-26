@@ -6494,13 +6494,13 @@ class AuthRepositoryTest {
             repository.setNewDeviceNoticeState(
                 NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                    delayDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                    lastSeenDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
                 ),
             )
             assertEquals(
                 NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                    delayDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                    lastSeenDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
                 ),
                 fakeAuthDiskSource.getNewDeviceNoticeState(userId),
             )
@@ -6514,13 +6514,13 @@ class AuthRepositoryTest {
             repository.setNewDeviceNoticeState(
                 NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                    delayDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                    lastSeenDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
                 ),
             )
             assertEquals(
                 NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-                    delayDate = null,
+                    lastSeenDate = null,
                 ),
                 fakeAuthDiskSource.getNewDeviceNoticeState(userId),
             )
@@ -6668,7 +6668,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 newState = NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT,
-                    delayDate = null,
+                    lastSeenDate = null,
                 ),
             )
 
@@ -6697,7 +6697,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 newState = NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-                    delayDate = null,
+                    lastSeenDate = null,
                 ),
             )
 
@@ -6726,7 +6726,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 newState = NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                    delayDate = ZonedDateTime.now().minusDays(10),
+                    lastSeenDate = ZonedDateTime.now().minusDays(10),
                 ),
             )
 
@@ -6755,7 +6755,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 newState = NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                    delayDate = ZonedDateTime.now().minusDays(2),
+                    lastSeenDate = ZonedDateTime.now().minusDays(2),
                 ),
             )
 
@@ -6784,7 +6784,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 newState = NewDeviceNoticeState(
                     displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL,
-                    delayDate = ZonedDateTime.now().minusDays(2),
+                    lastSeenDate = ZonedDateTime.now().minusDays(2),
                 ),
             )
 
