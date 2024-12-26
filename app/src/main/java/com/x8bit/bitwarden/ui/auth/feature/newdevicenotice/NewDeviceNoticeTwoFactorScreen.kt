@@ -25,6 +25,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateBackToVault
@@ -34,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -62,6 +65,24 @@ fun NewDeviceNoticeTwoFactorScreen(
 
             NavigateBackToVault -> onNavigateBackToVault()
         }
+    }
+
+    // Show dialog if needed:
+    when (val dialogState = state.dialogState) {
+        is NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog,
+        is NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog,
+            ->
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.continue_to_web_app),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(id = R.string.confirm),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = { viewModel.trySendAction(ContinueDialogClick) },
+                onDismissClick = { viewModel.trySendAction(DismissDialogClick) },
+                onDismissRequest = { viewModel.trySendAction(DismissDialogClick) },
+            )
+
+        null -> Unit
     }
 
     BitwardenScaffold {

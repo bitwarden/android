@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -131,9 +134,100 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
             .onNodeWithText("Remind me later")
             .assertDoesNotExist()
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `turn on two factor dialog should be shown or hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog,
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Continue to web app", substring = true, ignoreCase = true)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                "Make your account more secure by setting up two-step login in the Bitwarden web app.",
+                substring = true,
+                ignoreCase = true,
+                )
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Continue", substring = true, ignoreCase = true)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Cancel", substring = true, ignoreCase = true)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `change account email dialog should be shown or hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog,
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Continue to web app", substring = true, ignoreCase = true)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                "You can change your account email on the Bitwarden web app.",
+                substring = true,
+                ignoreCase = true,
+            )
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Continue", substring = true, ignoreCase = true)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Cancel", substring = true, ignoreCase = true)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `dialog should be hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog,
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = null,
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+    }
 }
 
 private val DEFAULT_STATE =
     NewDeviceNoticeTwoFactorState(
         shouldShowRemindMeLater = true,
+        dialogState = null,
     )
