@@ -81,8 +81,8 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     @Test
     fun `ContinueClick should call onNavigateBackToVault if isEmailAccessEnabled is false`() {
         mutableStateFlow.update { it.copy(isEmailAccessEnabled = false) }
-        mutableEventFlow.tryEmit(NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions)
-        assertTrue(onNavigateToTwoFactorOptionsCalled)
+        mutableEventFlow.tryEmit(NewDeviceNoticeEmailAccessEvent.NavigateBackToVault)
+        assertTrue(onNavigateBackToVaultCalled)
     }
 
     @Test
