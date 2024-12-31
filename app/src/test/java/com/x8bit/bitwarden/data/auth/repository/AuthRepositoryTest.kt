@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -147,6 +149,7 @@ import kotlinx.serialization.json.put
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -6468,6 +6471,408 @@ class AuthRepositoryTest {
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
+    @Test
+    fun `getNewDeviceNoticeState should return device notice state if an account is active`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            val deviceNoticeState = repository.getNewDeviceNoticeState()
+            assertNotNull(deviceNoticeState)
+        }
+
+    @Test
+    fun `getNewDeviceNoticeState should return null if no account is active`() =
+        runTest {
+            val deviceNoticeState = repository.getNewDeviceNoticeState()
+            assertNull(deviceNoticeState)
+        }
+
+    @Test
+    fun `setNewDeviceNoticeState should update disk source`() =
+        runTest {
+            val userId = "2a135b23-e1fb-42c9-bec3-573857bc8181"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            repository.setNewDeviceNoticeState(
+                NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                    lastSeenDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                ),
+            )
+            assertEquals(
+                NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                    lastSeenDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                ),
+                fakeAuthDiskSource.getNewDeviceNoticeState(userId),
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `setNewDeviceNoticeState without an active account should not update disk source and return default`() =
+        runTest {
+            val userId = "2a135b23-e1fb-42c9-bec3-573857bc8181"
+            repository.setNewDeviceNoticeState(
+                NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                    lastSeenDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                ),
+            )
+            assertEquals(
+                NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+                    lastSeenDate = null,
+                ),
+                fakeAuthDiskSource.getNewDeviceNoticeState(userId),
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice flags on, is cloud user, profile at least week old, no required sso policy, no two factor enable returns true`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertTrue(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice NewDeviceTemporaryDismiss and NewDevicePermanentDismiss flags are off returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns false
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns false
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice has required SSO policy returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf(
+                createMockPolicy(
+                    type = PolicyTypeJson.REQUIRE_SSO,
+                    isEnabled = true,
+                ),
+            )
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with two factor enable returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice account less than a week old returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = USER_ID_1,
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = ACCOUNT_1.profile.copy(
+                            creationDate = ZonedDateTime.now().minusDays(2),
+                        ),
+                    ),
+                ),
+            )
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus CAN_ACCESS_EMAIL_PERMANENT return false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeNewDeviceNoticeState(
+                userId = USER_ID_1,
+                newState = NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT,
+                    lastSeenDate = null,
+                ),
+            )
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus HAS_NOT_SEEN return true`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeNewDeviceNoticeState(
+                userId = USER_ID_1,
+                newState = NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+                    lastSeenDate = null,
+                ),
+            )
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertTrue(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus HAS_SEEN return true if date is older than 7 days`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeNewDeviceNoticeState(
+                userId = USER_ID_1,
+                newState = NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                    lastSeenDate = ZonedDateTime.now().minusDays(10),
+                ),
+            )
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertTrue(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus HAS_SEEN return false if date is not older than 7 days`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeNewDeviceNoticeState(
+                userId = USER_ID_1,
+                newState = NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                    lastSeenDate = ZonedDateTime.now().minusDays(2),
+                ),
+            )
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus CAN_ACCESS_EMAIL return permanent flag value`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeNewDeviceNoticeState(
+                userId = USER_ID_1,
+                newState = NewDeviceNoticeState(
+                    displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL,
+                    lastSeenDate = ZonedDateTime.now().minusDays(2),
+                ),
+            )
+
+            assertTrue(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns false
+
+            assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with no active user returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = null
+
+            assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice account with null creationDate returns false`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = USER_ID_1,
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = ACCOUNT_1.profile.copy(
+                            creationDate = null,
+                        ),
+                    ),
+                ),
+            )
+
+            assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice account with null isTwoFactorEnabled returns true`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+            } returns true
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
+            } returns true
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.Us
+
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = USER_ID_1,
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = ACCOUNT_1.profile.copy(
+                            isTwoFactorEnabled = null,
+                        ),
+                    ),
+                ),
+            )
+
+            assertTrue(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+        }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
@@ -6596,7 +7001,7 @@ class AuthRepositoryTest {
                 kdfMemory = null,
                 kdfParallelism = null,
                 userDecryptionOptions = null,
-                isTwoFactorEnabled = false,
+                isTwoFactorEnabled = true,
                 creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
             ),
             settings = AccountJson.Settings(
@@ -6619,6 +7024,17 @@ class AuthRepositoryTest {
                             keyConnectorUserDecryptionOptions = null,
                             trustedDeviceUserDecryptionOptions = null,
                         ),
+                    ),
+                ),
+            ),
+        )
+
+        private val SINGLE_USER_STATE_1_NEW_ACCOUNT = UserStateJson(
+            activeUserId = USER_ID_1,
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = ACCOUNT_1.profile.copy(
+                        creationDate = ZonedDateTime.parse("2024-09-14T01:00:00.00Z"),
                     ),
                 ),
             ),

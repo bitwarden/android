@@ -23,13 +23,13 @@ fun NavController.navigateToNewDeviceNoticeTwoFactor(
  * Add the new device notice two factor screen to the nav graph.
  */
 fun NavGraphBuilder.newDeviceNoticeTwoFactorDestination(
-    onNavigateBack: () -> Unit,
+    onNavigateBackToVault: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = NEW_DEVICE_NOTICE_TWO_FACTOR_ROUTE,
     ) {
         NewDeviceNoticeTwoFactorScreen(
-            onNavigateBack = onNavigateBack,
+            onNavigateBackToVault = onNavigateBackToVault,
         )
     }
 }
