@@ -110,13 +110,8 @@ fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(
 /**
  * Checks if the user has permission to assign an item to a collection.
  *
- * Assigning to a collection is not allowed when the item is in a collection that the user does not
- * have "manage" permission for and is also in a collection they cannot view the passwords in.
- *
- * E.g., If an item is in A collection with "view except passwords" or "edit except passwords"
- * permission and in another with "manage" permission, the user **cannot** assign the item to other
- * collections. Conversely, if an item is in a collection with "manage" permission and another with
- * "view" or "edit" permission, the user **can** assign the item to other collections.
+ * Assigning to a collection is only allowed when the item is in a collection that the user does
+ * have "manage" or "edit" permission.
  */
 fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<String>?): Boolean {
     if (this.isNullOrEmpty()) return true
@@ -126,17 +121,9 @@ fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<Stri
     return this
         .any {
             currentCollectionIds.contains(it.id) &&
-                it.permission == CollectionPermission.MANAGE
-        } &&
-
-        // Verify user does not have "edit except password" or "view except passwords"
-        // permission in any collection the item is not in.
-        this
-            .none {
-                currentCollectionIds.contains(it.id) &&
-                    (it.permission == CollectionPermission.EDIT_EXCEPT_PASSWORD ||
-                        it.permission == CollectionPermission.VIEW_EXCEPT_PASSWORDS)
-            }
+                (it.permission == CollectionPermission.MANAGE ||
+                    it.permission == CollectionPermission.EDIT)
+        }
 }
 
 /**
