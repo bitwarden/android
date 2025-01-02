@@ -117,7 +117,7 @@ fun List<CollectionView>?.canAssignToCollections(currentCollectionIds: List<Stri
     if (this.isNullOrEmpty()) return true
     if (currentCollectionIds.isNullOrEmpty()) return true
 
-    // Verify user can MANAGE at least one collection the item is in.
+    // Verify user can MANAGE or EDIT at least one collection the item is in.
     return this
         .any {
             currentCollectionIds.contains(it.id) &&
