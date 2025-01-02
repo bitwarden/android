@@ -161,6 +161,15 @@ sealed class FlagKey<out T : Any> {
         override val isRemotelyConfigured: Boolean = true
     }
 
+    /**
+     * Data object holding the feature flag key to ignore an environment check.
+     */
+    data object IgnoreEnvironmentCheck : FlagKey<Boolean>() {
+        override val keyName: String = "ignore-environment-check"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
+    }
+
     //region Dummy keys for testing
     /**
      * Data object holding the key for a [Boolean] flag to be used in tests.

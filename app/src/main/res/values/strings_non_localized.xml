@@ -24,5 +24,6 @@
     <string name="cipher_key_encryption">Cipher Key Encryption</string>">
     <string name="new_device_permanent_dismiss">New device notice permanent dismiss</string>">
     <string name="new_device_temporary_dismiss">New device notice temporary dismiss</string>">
+    <string name="ignore_environment_check">Ignore environment check</string>">
     <!-- /Debug Menu -->
 </resources>
