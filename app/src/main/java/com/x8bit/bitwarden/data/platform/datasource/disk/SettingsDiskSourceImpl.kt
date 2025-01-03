@@ -40,6 +40,7 @@ private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 private const val ADD_ACTION_COUNT = "addActionCount"
 private const val COPY_ACTION_COUNT = "copyActionCount"
 private const val CREATE_ACTION_COUNT = "createActionCount"
+private const val RESUME_SCREEN = "resumeScreen"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -481,6 +482,13 @@ class SettingsDiskSourceImpl(
             value = count,
         )
     }
+
+    override fun storeAppResumeScreen(userId: String, data: String?) {
+        putString(RESUME_SCREEN.appendIdentifier(userId), data)
+    }
+
+    override fun getAppResumeScreen(userId: String): String? =
+        getString(RESUME_SCREEN.appendIdentifier(userId))
 
     private fun getMutableLastSyncFlow(
         userId: String,

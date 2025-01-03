@@ -15,6 +15,8 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterM
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -327,4 +329,20 @@ object PlatformManagerModule {
         autofillEnabledManager = autofillEnabledManager,
         accessibilityEnabledManager = accessibilityEnabledManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideAppResumeManager(
+        settingsDiskSource: SettingsDiskSource,
+        authRepository: AuthRepository,
+        appStateManager: AppStateManager,
+        dispatcherManager: DispatcherManager,
+    ): AppResumeManager {
+        return AppResumeManagerImpl(
+            settingsDiskSource,
+            authRepository,
+            appStateManager,
+            dispatcherManager,
+        )
+    }
 }

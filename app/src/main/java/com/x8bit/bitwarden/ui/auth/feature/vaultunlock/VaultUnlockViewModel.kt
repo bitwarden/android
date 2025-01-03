@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -52,6 +53,7 @@ class VaultUnlockViewModel @Inject constructor(
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val fido2CredentialManager: Fido2CredentialManager,
+    private val appResumeManager: AppResumeManager,
     environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
@@ -71,7 +73,14 @@ class VaultUnlockViewModel @Inject constructor(
             // There is no valid way to unlock this app.
             authRepository.logout()
         }
+
+        if (specialCircumstanceManager.specialCircumstance == null) {
+            specialCircumstanceManager.specialCircumstance =
+                appResumeManager.getResumeSpecialCircumstance()
+        }
+
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
+
         val showAccountMenu =
             VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&

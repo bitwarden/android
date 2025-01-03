@@ -60,6 +60,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
+    private val storedAppResumeScreenData = mutableMapOf<String, String?>()
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
@@ -378,6 +379,14 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun storeCreateSendActionCount(count: Int?) {
         createSendActionCount = count
+    }
+
+    override fun storeAppResumeScreen(userId: String, data: String?) {
+        storedAppResumeScreenData[userId] = data
+    }
+
+    override fun getAppResumeScreen(userId: String): String? {
+        return storedAppResumeScreenData[userId]
     }
 
     //region Private helper functions
