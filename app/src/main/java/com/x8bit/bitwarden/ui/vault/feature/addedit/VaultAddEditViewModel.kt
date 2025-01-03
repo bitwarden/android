@@ -2535,6 +2535,11 @@ sealed class VaultAddEditEvent {
     data class Fido2UserVerification(
         val isRequired: Boolean,
     ) : BackgroundEvent, VaultAddEditEvent()
+
+    /**
+     * Start the coach mark guided tour of the add login content.
+     */
+    data object StartAddLoginItemCoachMarkTour : VaultAddEditEvent()
 }
 
 /**

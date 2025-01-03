@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
@@ -156,13 +157,12 @@ fun Modifier.tabNavigation(): Modifier {
  */
 @OmitFromCoverage
 @Stable
-@Composable
 fun Modifier.standardHorizontalMargin(
     portrait: Dp = 16.dp,
     landscape: Dp = 48.dp,
-): Modifier {
+): Modifier = composed {
     val config = LocalConfiguration.current
-    return this.padding(horizontal = if (config.isPortrait) portrait else landscape)
+    this.padding(horizontal = if (config.isPortrait) portrait else landscape)
 }
 
 /**

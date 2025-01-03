@@ -291,7 +291,6 @@ class LazyListCoachMarkState<T : Enum<T>>(
                 if (itemAlreadyVisible) {
                     val offset =
                         layoutInfo.visibleItemsInfo.find { visItem ->
-
                             visItem.key == keyToFind
                         }
                             ?.offset
