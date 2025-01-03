@@ -38,6 +38,7 @@ sealed class FlagKey<out T : Any> {
                 AppReviewPrompt,
                 NewDevicePermanentDismiss,
                 NewDeviceTemporaryDismiss,
+                IgnoreEnvironmentCheck,
             )
         }
     }
