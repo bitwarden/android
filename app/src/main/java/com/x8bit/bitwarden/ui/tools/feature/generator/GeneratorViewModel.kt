@@ -12,9 +12,11 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -68,7 +70,7 @@ private const val NO_GENERATED_TEXT: String = "-"
  *
  * @property savedStateHandle Handles the saved state of this ViewModel.
  */
-@Suppress("LargeClass")
+@Suppress("LargeClass", "LongParameterList")
 @HiltViewModel
 class GeneratorViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -77,6 +79,7 @@ class GeneratorViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
+    private val appResumeManager: AppResumeManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = GeneratorArgs(savedStateHandle).type
@@ -134,6 +137,7 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainType -> handleMainTypeAction(action)
             is GeneratorAction.Internal -> handleInternalAction(action)
             GeneratorAction.LifecycleResume -> handleOnResumed()
+            GeneratorAction.LifecyclePause -> handleOnPaused()
         }
     }
 
@@ -141,6 +145,13 @@ class GeneratorViewModel @Inject constructor(
         // when the screen resumes we need to refresh the options for the current option from
         // disk in the event they were changed while the screen was in the foreground.
         loadOptions(shouldUseStorageOptions = true)
+        appResumeManager.setResumeScreen(
+            AppResumeScreenData.GeneratorScreen,
+        )
+    }
+
+    private fun handleOnPaused() {
+        appResumeManager.clearResumeScreen()
     }
 
     @Suppress("MaxLineLength")
@@ -2138,6 +2149,11 @@ sealed class GeneratorAction {
      * Indicates the UI has been entered a resumed lifecycle state.
      */
     data object LifecycleResume : GeneratorAction()
+
+    /**
+     * Indicates the UI has been entered a resumed lifecycle state.
+     */
+    data object LifecyclePause : GeneratorAction()
 
     /**
      * Indicates that the overflow option for password history has been clicked.

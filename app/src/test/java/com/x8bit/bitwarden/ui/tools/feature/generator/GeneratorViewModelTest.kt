@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -107,6 +108,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     private val reviewPromptManager: ReviewPromptManager = mockk {
         every { registerGeneratedResultAction() } just runs
+    }
+
+    private val appResumeManager: AppResumeManager = mockk {
+        every { setResumeScreen(any()) } just runs
     }
 
     @Test
@@ -2379,6 +2384,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         policyManager = policyManager,
         reviewPromptManager = reviewPromptManager,
+        appResumeManager = appResumeManager,
     )
 
     private fun createViewModel(
