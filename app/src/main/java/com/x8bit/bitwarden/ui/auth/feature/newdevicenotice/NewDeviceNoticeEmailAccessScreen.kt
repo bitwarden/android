@@ -31,8 +31,8 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailA
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun NewDeviceNoticeEmailAccessScreen(
+    onNavigateBackToVault: () -> Unit,
     onNavigateToTwoFactorOptions: () -> Unit,
     viewModel: NewDeviceNoticeEmailAccessViewModel = hiltViewModel(),
 ) {
@@ -51,6 +52,7 @@ fun NewDeviceNoticeEmailAccessScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             NavigateToTwoFactorOptions -> onNavigateToTwoFactorOptions()
+            NewDeviceNoticeEmailAccessEvent.NavigateBackToVault -> onNavigateBackToVault()
         }
     }
 
@@ -146,18 +148,14 @@ private fun MainContent(
         modifier = modifier,
     ) {
         Text(
-            text = createAnnotatedString(
-                mainString = stringResource(
-                    R.string.do_you_have_reliable_access_to_your_email,
-                    email,
-                ),
-                mainStringStyle = SpanStyle(
+            text = R.string.do_you_have_reliable_access_to_your_email.toAnnotatedString(
+                args = arrayOf(email),
+                style = SpanStyle(
                     color = BitwardenTheme.colorScheme.text.primary,
                     fontSize = BitwardenTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Normal,
                 ),
-                highlights = listOf(email),
-                highlightStyle = SpanStyle(
+                emphasisHighlightStyle = SpanStyle(
                     color = BitwardenTheme.colorScheme.text.primary,
                     fontSize = BitwardenTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,

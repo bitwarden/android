@@ -117,6 +117,9 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
     FlagKey.AppReviewPrompt to true,
+    FlagKey.NewDeviceTemporaryDismiss to true,
+    FlagKey.NewDevicePermanentDismiss to true,
+    FlagKey.IgnoreEnvironmentCheck to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -130,6 +133,9 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
     FlagKey.AppReviewPrompt to false,
+    FlagKey.NewDeviceTemporaryDismiss to false,
+    FlagKey.NewDevicePermanentDismiss to false,
+    FlagKey.IgnoreEnvironmentCheck to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

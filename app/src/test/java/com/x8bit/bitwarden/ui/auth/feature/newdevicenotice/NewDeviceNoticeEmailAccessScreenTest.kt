@@ -13,12 +13,14 @@ import io.mockk.verify
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<NewDeviceNoticeEmailAccessEvent>()
+    private var onNavigateBackToVaultCalled = false
     private var onNavigateToTwoFactorOptionsCalled = false
     private val viewModel = mockk<NewDeviceNoticeEmailAccessViewModel>(relaxed = true) {
         every { stateFlow } returns mutableStateFlow
@@ -29,14 +31,21 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     fun setUp() {
         composeTestRule.setContent {
             NewDeviceNoticeEmailAccessScreen(
+                onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
                 onNavigateToTwoFactorOptions = { onNavigateToTwoFactorOptionsCalled = true },
                 viewModel = viewModel,
             )
         }
     }
 
-    @Suppress("MaxLineLength")
+    @After
+    fun tearDown() {
+        onNavigateBackToVaultCalled = false
+        onNavigateToTwoFactorOptionsCalled = false
+    }
+
     @Test
+    @Suppress("MaxLineLength")
     fun `Do you have reliable access to your email should be toggled on or off according to the state`() {
         composeTestRule
             .onNodeWithText("Yes, I can reliably access my email", substring = true)
@@ -70,7 +79,15 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `ContinueClick should call onNavigateToTwoFactorOptions`() {
+    fun `ContinueClick should call onNavigateBackToVault if isEmailAccessEnabled is false`() {
+        mutableStateFlow.update { it.copy(isEmailAccessEnabled = false) }
+        mutableEventFlow.tryEmit(NewDeviceNoticeEmailAccessEvent.NavigateBackToVault)
+        assertTrue(onNavigateBackToVaultCalled)
+    }
+
+    @Test
+    fun `ContinueClick should call onNavigateToTwoFactorOptions if isEmailAccessEnabled is true`() {
+        mutableStateFlow.update { it.copy(isEmailAccessEnabled = true) }
         mutableEventFlow.tryEmit(NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions)
         assertTrue(onNavigateToTwoFactorOptionsCalled)
     }

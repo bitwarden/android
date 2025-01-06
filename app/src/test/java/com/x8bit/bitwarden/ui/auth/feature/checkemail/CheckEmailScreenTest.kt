@@ -2,10 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.printToLog
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -91,16 +89,9 @@ class CheckEmailScreenTest : BaseComposeTest() {
     @Test
     fun `go back and update email text click should send ChangeEmailClick action`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = false)
-        composeTestRule.onRoot().printToLog("oh shit")
         val mainString = "No email? Go back to edit your email address."
-        val linkText = "Go back"
-        val expectedStart = mainString.indexOf(linkText)
-        val expectedEnd = expectedStart + linkText.length
         composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString = mainString,
-            highLightText = linkText,
-            expectedStart = expectedStart,
-            expectedEnd = expectedEnd,
         )
 
         verify { viewModel.trySendAction(CheckEmailAction.ChangeEmailClick) }
@@ -110,14 +101,8 @@ class CheckEmailScreenTest : BaseComposeTest() {
     fun `already have account text click should send ChangeEmailClick action`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = false)
         val mainString = "Or log in, you may already have an account."
-        val linkText = "log in"
-        val expectedStart = mainString.indexOf(linkText)
-        val expectedEnd = expectedStart + linkText.length
         composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
             mainString = mainString,
-            highLightText = linkText,
-            expectedStart = expectedStart,
-            expectedEnd = expectedEnd,
         )
 
         verify { viewModel.trySendAction(CheckEmailAction.LoginClick) }

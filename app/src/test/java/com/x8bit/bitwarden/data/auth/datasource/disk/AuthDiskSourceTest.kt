@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -32,6 +34,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthDiskSourceTest {
@@ -1245,6 +1248,64 @@ class AuthDiskSourceTest {
             assertTrue(awaitItem() ?: false)
         }
     }
+
+    @Test
+    fun `getNewDeviceNoticeState should pull from SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
+        val mockUserId = "mockUserId"
+        val expectedState = NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+            lastSeenDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
+        )
+        fakeSharedPreferences.edit {
+            putString(
+                "${storeKey}_$mockUserId",
+                json.encodeToString(expectedState),
+            )
+        }
+        val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getNewDeviceNoticeState should pull default from SharedPreferences if no user is found`() {
+        val mockUserId = "mockUserId"
+        val defaultState = NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            lastSeenDate = null,
+        )
+        val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
+        assertEquals(
+            defaultState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `setNewDeviceNoticeState should update SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
+        val mockUserId = "mockUserId"
+        val mockStatus = NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+            lastSeenDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
+        )
+        authDiskSource.storeNewDeviceNoticeState(
+            userId = mockUserId,
+            mockStatus,
+        )
+
+        val actual = fakeSharedPreferences.getString(
+            "${storeKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToString(mockStatus),
+            actual,
+        )
+    }
 }
 
 private const val USER_STATE_JSON = """
@@ -1256,6 +1317,7 @@ private const val USER_STATE_JSON = """
             "userId": "activeUserId",
             "email": "email",
             "emailVerified": true,
+            "isTwoFactorEnabled": false,
             "name": "name",
             "stamp": "stamp",
             "orgIdentifier": "organizationId",
@@ -1278,7 +1340,8 @@ private const val USER_STATE_JSON = """
               "keyConnectorOption": {
                 "keyConnectorUrl": "keyConnectorUrl"
               }
-            }
+            },
+            "creationDate": "2024-09-13T01:00:00.000Z"
           },
           "tokens": {
             "accessToken": "accessToken",
@@ -1318,6 +1381,8 @@ private val USER_STATE = UserStateJson(
                 kdfIterations = 600000,
                 kdfMemory = 16,
                 kdfParallelism = 4,
+                isTwoFactorEnabled = false,
+                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
                 userDecryptionOptions = UserDecryptionOptionsJson(
                     hasMasterPassword = true,
                     trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(

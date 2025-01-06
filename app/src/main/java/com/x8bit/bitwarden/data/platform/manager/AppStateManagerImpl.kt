@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.x8bit.bitwarden.data.autofill.util.createdForAutofill
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ class AppStateManagerImpl(
     application: Application,
     processLifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get(),
 ) : AppStateManager {
-    private val mutableAppCreationStateFlow = MutableStateFlow(AppCreationState.DESTROYED)
+    private val mutableAppCreationStateFlow =
+        MutableStateFlow<AppCreationState>(AppCreationState.Destroyed)
     private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
 
     override val appCreatedStateFlow: StateFlow<AppCreationState>
@@ -49,13 +51,15 @@ class AppStateManagerImpl(
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             activityCount++
             // Always be in a created state if we have an activity
-            mutableAppCreationStateFlow.value = AppCreationState.CREATED
+            mutableAppCreationStateFlow.value = AppCreationState.Created(
+                isAutoFill = activity.createdForAutofill,
+            )
         }
 
         override fun onActivityDestroyed(activity: Activity) {
             activityCount--
             if (activityCount == 0 && !activity.isChangingConfigurations) {
-                mutableAppCreationStateFlow.value = AppCreationState.DESTROYED
+                mutableAppCreationStateFlow.value = AppCreationState.Destroyed
             }
         }
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- StringResExtensions Test value -->
+    <string name="test_for_single_link_annotation">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
+    <string name="test_for_multi_link_annotation">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+    <string name="test_for_string_with_no_annotations">Nothing special here.</string>
+    <string name="test_for_string_with_annotation_and_arg_annotation">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
+    <!-- /StringResExtensions Test value -->
+</resources>
