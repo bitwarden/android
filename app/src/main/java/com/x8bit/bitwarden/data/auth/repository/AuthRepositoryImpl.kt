@@ -1388,7 +1388,9 @@ class AuthRepositoryImpl(
      * - Cannot have two-factor authentication enabled.
      */
     private fun newDeviceNoticePreConditionsValid(): Boolean {
-        if (environmentRepository.environment.type == Environment.Type.SELF_HOSTED) {
+        val checkEnvironment = !featureFlagManager.getFeatureFlag(FlagKey.IgnoreEnvironmentCheck)
+        val isSelfHosted = environmentRepository.environment.type == Environment.Type.SELF_HOSTED
+        if (checkEnvironment && isSelfHosted) {
             return false
         }
 
