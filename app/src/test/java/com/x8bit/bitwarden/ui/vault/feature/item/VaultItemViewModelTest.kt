@@ -2696,6 +2696,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2725,6 +2726,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
