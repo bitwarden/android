@@ -1187,7 +1187,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = false,
-                    canAssignToCollections = false,
+                    canAssignToCollections = true,
                 )
             } returns stateWithName.viewState
 
@@ -1215,7 +1215,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = false,
-                    canAssignToCollections = false,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -1385,7 +1385,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = true,
-                    canAssignToCollections = false,
+                    canAssignToCollections = true,
                 )
             } returns stateWithName.viewState
 
@@ -1414,7 +1414,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = true,
-                    canAssignToCollections = false,
+                    canAssignToCollections = true,
                 )
             }
         }
@@ -1440,7 +1440,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                     notes = "mockNotes-1",
                     canDelete = true,
-                    canAssociateToCollections = false,
+                    canAssociateToCollections = true,
                 ),
             )
 
@@ -1452,7 +1452,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = true,
-                    canAssignToCollections = false,
+                    canAssignToCollections = true,
                 )
             } returns stateWithName.viewState
 
@@ -1481,7 +1481,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     resourceManager = resourceManager,
                     clock = fixedClock,
                     canDelete = true,
-                    canAssignToCollections = false,
+                    canAssignToCollections = true,
                 )
             }
         }
