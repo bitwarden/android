@@ -250,7 +250,10 @@ class AuthRepositoryTest {
     }
 
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
+        every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
+        every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns true
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
+        every { getFeatureFlag(FlagKey.IgnoreEnvironmentCheck) } returns false
     }
 
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
@@ -6531,12 +6534,6 @@ class AuthRepositoryTest {
     fun `checkUserNeedsNewDeviceTwoFactorNotice flags on, is cloud user, profile at least week old, no required sso policy, no two factor enable returns true`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
-            every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
             fakeEnvironmentRepository.environment = Environment.Us
@@ -6571,14 +6568,47 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `checkUserNeedsNewDeviceTwoFactorNotice has required SSO policy returns false`() =
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice IgnoreEnvironmentCheck flag enabled should not check for a cloud environment and return true`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+                featureFlagManager.getFeatureFlag(FlagKey.IgnoreEnvironmentCheck)
             } returns true
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                EnvironmentUrlDataJson(base = "https://myselfhosted.environment.com"),
+            )
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertTrue(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `checkUserNeedsNewDeviceTwoFactorNotice if environment is selfhosted return false`() =
+        runTest {
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
+            } returns listOf()
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                EnvironmentUrlDataJson(base = "https://myselfhosted.environment.com"),
+            )
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
+
+            assertFalse(shouldShowNewDeviceNotice)
+        }
+
+    @Test
+    fun `checkUserNeedsNewDeviceTwoFactorNotice has required SSO policy returns false`() =
+        runTest {
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf(
@@ -6600,12 +6630,6 @@ class AuthRepositoryTest {
     fun `checkUserNeedsNewDeviceTwoFactorNotice with two factor enable returns false`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
-            every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
             fakeEnvironmentRepository.environment = Environment.Us
@@ -6620,12 +6644,6 @@ class AuthRepositoryTest {
     @Test
     fun `checkUserNeedsNewDeviceTwoFactorNotice account less than a week old returns false`() =
         runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
@@ -6653,12 +6671,6 @@ class AuthRepositoryTest {
     fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus CAN_ACCESS_EMAIL_PERMANENT return false`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
-            every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
             fakeEnvironmentRepository.environment = Environment.Us
@@ -6681,12 +6693,6 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus HAS_NOT_SEEN return true`() =
         runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
@@ -6711,12 +6717,6 @@ class AuthRepositoryTest {
     fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus HAS_SEEN return true if date is older than 7 days`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
-            every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
             fakeEnvironmentRepository.environment = Environment.Us
@@ -6740,12 +6740,6 @@ class AuthRepositoryTest {
     fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus HAS_SEEN return false if date is not older than 7 days`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
-            every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
             fakeEnvironmentRepository.environment = Environment.Us
@@ -6768,12 +6762,6 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus CAN_ACCESS_EMAIL return permanent flag value`() =
         runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
@@ -6801,12 +6789,6 @@ class AuthRepositoryTest {
     fun `checkUserNeedsNewDeviceTwoFactorNotice with no active user returns false`() =
         runTest {
             every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
-            every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
             fakeEnvironmentRepository.environment = Environment.Us
@@ -6819,12 +6801,6 @@ class AuthRepositoryTest {
     @Test
     fun `checkUserNeedsNewDeviceTwoFactorNotice account with null creationDate returns false`() =
         runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
@@ -6848,12 +6824,6 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `checkUserNeedsNewDeviceTwoFactorNotice account with null isTwoFactorEnabled returns true`() =
         runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns true
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns true
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
             } returns listOf()
