@@ -35,6 +35,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CipherKeyEncryption,
     FlagKey.NewDevicePermanentDismiss,
     FlagKey.NewDeviceTemporaryDismiss,
+    FlagKey.IgnoreEnvironmentCheck,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -85,4 +86,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CipherKeyEncryption -> stringResource(R.string.cipher_key_encryption)
     FlagKey.NewDevicePermanentDismiss -> stringResource(R.string.new_device_permanent_dismiss)
     FlagKey.NewDeviceTemporaryDismiss -> stringResource(R.string.new_device_temporary_dismiss)
+    FlagKey.IgnoreEnvironmentCheck -> stringResource(R.string.ignore_environment_check)
 }
