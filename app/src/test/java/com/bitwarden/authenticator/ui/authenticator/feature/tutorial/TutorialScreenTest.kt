@@ -3,6 +3,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.tutorial
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialAction
@@ -116,6 +117,7 @@ class TutorialScreenTest : BaseComposeTest() {
     fun `skip button click should send SkipClick action`() {
         composeTestRule
             .onNodeWithText("Skip")
+            .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(TutorialAction.SkipClick) }
     }

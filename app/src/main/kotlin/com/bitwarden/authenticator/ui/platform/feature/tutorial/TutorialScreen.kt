@@ -15,11 +15,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,7 +53,7 @@ import com.bitwarden.authenticator.ui.platform.util.isPortrait
 /**
  * The custom horizontal margin that is specific to this screen.
  */
-private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 128.dp
+private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 48.dp
 
 /**
  * Top level composable for the tutorial screen.
@@ -98,6 +101,7 @@ fun TutorialScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun TutorialScreenContent(
     state: TutorialState,
@@ -114,21 +118,29 @@ private fun TutorialScreenContent(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        HorizontalPager(state = pagerState) { index ->
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth(),
+        ) { index ->
             if (LocalConfiguration.current.isPortrait) {
                 TutorialScreenPortrait(
                     state = state.pages[index],
-                    modifier = Modifier.standardHorizontalMargin(),
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .statusBarsPadding(),
                 )
             } else {
                 TutorialScreenLandscape(
                     state = state.pages[index],
                     modifier = Modifier
-                        .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN),
+                        .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                        .statusBarsPadding(),
                 )
             }
         }
@@ -212,9 +224,10 @@ private fun TutorialScreenLandscape(
         Image(
             painter = rememberVectorPainter(id = state.image),
             contentDescription = null,
-            modifier = Modifier
-                .size(132.dp),
+            modifier = Modifier.size(132.dp),
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -233,6 +246,8 @@ private fun TutorialScreenLandscape(
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
+
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
