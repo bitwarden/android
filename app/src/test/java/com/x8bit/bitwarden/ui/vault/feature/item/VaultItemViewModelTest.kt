@@ -80,6 +80,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
     private val mockCipherView = mockk<CipherView> {
         every { collectionIds } returns emptyList()
+        every { edit } returns true
     }
 
     @BeforeEach
@@ -170,6 +171,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -195,6 +197,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -214,6 +217,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginState
 
@@ -258,6 +262,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginState
 
@@ -291,6 +296,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -335,6 +341,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -382,6 +389,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -421,6 +429,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = createTotpCodeData(),
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -455,6 +464,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns viewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -493,6 +503,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -534,6 +545,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = createTotpCodeData(),
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -584,6 +596,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = createTotpCodeData(),
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -617,6 +630,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -635,6 +649,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
                 assertEquals(
@@ -660,7 +675,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns loginViewState
 
@@ -722,7 +739,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns loginViewState
 
@@ -776,7 +795,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns loginViewState
 
@@ -841,7 +862,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -865,7 +888,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 }
             }
@@ -880,7 +905,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
             } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             every { clipboardManager.setText(text = field) } just runs
@@ -898,7 +925,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedHiddenField(
@@ -937,7 +966,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -969,7 +1000,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 }
             }
@@ -1004,6 +1037,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1035,7 +1069,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
@@ -1055,7 +1091,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1079,7 +1117,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 }
             }
@@ -1098,7 +1138,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1132,7 +1174,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1158,7 +1202,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
             }
         }
@@ -1181,7 +1227,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1229,7 +1277,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1253,7 +1303,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     canDelete = true,
-                    canAssignToCollections = true, totpCodeItemData = null,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    totpCodeItemData = null,
                 )
             }
         }
@@ -1272,7 +1324,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1303,7 +1357,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1327,7 +1383,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         canDelete = true,
-                        canAssignToCollections = true, totpCodeItemData = null,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = null,
                     )
                 }
             }
@@ -1347,6 +1405,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -1390,6 +1449,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -1447,6 +1507,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -1513,6 +1574,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -1681,6 +1743,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns DEFAULT_VIEW_STATE
 
@@ -1719,6 +1782,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             } returns DEFAULT_VIEW_STATE
@@ -1760,6 +1824,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1779,6 +1844,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 } returns DEFAULT_VIEW_STATE
@@ -1807,6 +1873,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1822,6 +1889,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
@@ -1842,6 +1910,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1884,6 +1953,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
@@ -1904,6 +1974,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = createTotpCodeData(),
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             }
         }
@@ -1929,6 +2000,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1955,6 +2027,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -1971,6 +2044,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
                     .returns(
@@ -1999,6 +2073,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2016,6 +2091,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2046,6 +2122,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2066,6 +2143,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2099,6 +2177,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = createTotpCodeData(),
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledPasswordVisible(
@@ -2134,6 +2213,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2161,6 +2241,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2176,6 +2257,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns createViewState(
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2197,6 +2279,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             }
         }
@@ -2213,6 +2296,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2240,6 +2324,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2255,6 +2340,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns createViewState(
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2282,6 +2368,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             }
         }
@@ -2298,6 +2385,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2325,6 +2413,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2340,6 +2429,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns createViewState(
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2361,6 +2451,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             }
         }
@@ -2377,6 +2468,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2404,6 +2496,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2419,6 +2512,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns createViewState(
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2446,6 +2540,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             }
         }
@@ -2475,6 +2570,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2505,6 +2601,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns sshKeyViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2534,6 +2631,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2551,6 +2649,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2579,6 +2678,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 }
             }
@@ -2596,6 +2696,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2625,6 +2726,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                         canDelete = true,
                         canAssignToCollections = true,
+                        canEdit = true,
                     )
                 } returns SSH_KEY_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2659,6 +2761,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2692,6 +2795,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns IDENTITY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2841,6 +2945,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -2882,6 +2987,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -2921,6 +3027,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -2957,6 +3064,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canAssignToCollections = true,
+                    canEdit = true,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -3185,6 +3293,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
                 canDelete = true,
                 canAssignToCollections = true,
+                canEdit = true,
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =
