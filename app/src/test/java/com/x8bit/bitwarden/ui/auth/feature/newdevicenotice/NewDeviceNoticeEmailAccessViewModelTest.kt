@@ -93,6 +93,16 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `LearnMoreClick should emit NavigateToLearnMore`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.LearnMoreClick)
+                assertEquals(NewDeviceNoticeEmailAccessEvent.NavigateToLearnMore, awaitItem())
+            }
+        }
+
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle().also {
             it["email_address"] = EMAIL
