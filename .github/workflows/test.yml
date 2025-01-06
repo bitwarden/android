@@ -34,7 +34,7 @@ jobs:
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4.2.1
+        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
 
       - name: Cache Gradle files
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
@@ -56,12 +56,12 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@2a18b06812b0e15bb916e1df298d3e740422c47e # v1.203.0
+        uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4 # v1.207.0
         with:
           bundler-cache: true
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
@@ -77,7 +77,7 @@ jobs:
           bundle exec fastlane check
 
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5.1.1
+        uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
         with:
           file: app/build/reports/kover/reportDebug.xml
         env:

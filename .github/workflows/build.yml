@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4.2.1
+        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
 
       - name: Cache Gradle files
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
@@ -61,13 +61,13 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@2a18b06812b0e15bb916e1df298d3e740422c47e # v1.203.0
+        uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4 # v1.207.0
         with:
           bundler-cache: true
 
@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@2a18b06812b0e15bb916e1df298d3e740422c47e # v1.203.0
+        uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4 # v1.207.0
         with:
           bundler-cache: true
 
@@ -155,7 +155,7 @@ jobs:
           bundle exec fastlane run validate_play_store_json_key
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4.2.1
+        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
 
       - name: Cache Gradle files
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
@@ -177,7 +177,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
@@ -217,7 +217,7 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: com.bitwarden.authenticator.aab
           path: app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab
@@ -225,7 +225,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: com.bitwarden.authenticator.apk
           path: app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk
@@ -245,7 +245,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: authenticator-android-apk-sha256.txt
           path: ./authenticator-android-apk-sha256.txt
@@ -253,7 +253,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: authenticator-android-aab-sha256.txt
           path: ./authenticator-android-aab-sha256.txt
