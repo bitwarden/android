@@ -78,8 +78,12 @@ fun NewDeviceNoticeEmailAccessScreen(
                     viewModel.trySendAction(EmailAccessToggle(isEnabled = newState))
                 }
             },
-            onContinueClick = { viewModel.trySendAction(ContinueClick) },
-            onLearnMoreClick = { viewModel.trySendAction(LearnMoreClick) },
+            onContinueClick = remember(viewModel) {
+                { viewModel.trySendAction(ContinueClick) }
+            },
+            onLearnMoreClick = remember(viewModel) {
+                { viewModel.trySendAction(LearnMoreClick) }
+            },
         )
     }
 }

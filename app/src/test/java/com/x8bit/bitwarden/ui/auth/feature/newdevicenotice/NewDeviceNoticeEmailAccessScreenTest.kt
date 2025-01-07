@@ -42,7 +42,7 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
                 onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
                 onNavigateToTwoFactorOptions = { onNavigateToTwoFactorOptionsCalled = true },
                 viewModel = viewModel,
-                intentManager,
+                intentManager = intentManager,
             )
         }
     }
