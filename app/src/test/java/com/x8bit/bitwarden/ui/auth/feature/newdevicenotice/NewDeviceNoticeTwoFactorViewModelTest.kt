@@ -172,6 +172,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             featureFlagManager = featureFlagManager,
+            settingsRepository = mockk(relaxed = true),
         )
 }
 

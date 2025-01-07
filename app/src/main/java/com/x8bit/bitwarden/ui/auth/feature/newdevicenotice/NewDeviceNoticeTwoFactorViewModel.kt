@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
@@ -32,6 +33,7 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     val authRepository: AuthRepository,
     val environmentRepository: EnvironmentRepository,
     val featureFlagManager: FeatureFlagManager,
+    val settingsRepository: SettingsRepository,
 ) : BaseViewModel<
     NewDeviceNoticeTwoFactorState,
     NewDeviceNoticeTwoFactorEvent,
@@ -88,6 +90,8 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     private fun handleContinueDialog() {
         when (state.dialogState) {
             is ChangeAccountEmailDialog -> {
+                // when the user leaves the app set sync date to null to force a sync on next unlock
+                settingsRepository.vaultLastSync = null
                 sendEvent(
                     NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail(url = webAccountUrl),
                 )
@@ -95,6 +99,8 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
             }
 
             is TurnOnTwoFactorDialog -> {
+                // when the user leaves the app set sync date to null to force a sync on next unlock
+                settingsRepository.vaultLastSync = null
                 sendEvent(
                     NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor(url = webTwoFactorUrl),
                 )
