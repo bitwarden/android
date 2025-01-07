@@ -114,7 +114,7 @@
     <string name="import_success">Cofre importado com sucesso</string>
     <string name="key_is_invalid">A chave é inválida.</string>
     <string name="favorite_tooltip">Guardar como favorito</string>
-    <string name="favorite">Favorito</string>
+    <string name="favorite">Adicionar aos favoritos</string>
     <string name="favorites">Favoritos</string>
     <string name="backup">Cópia de segurança</string>
     <string name="data_backup_title">Cópia de segurança dos dados</string>

@@ -68,7 +68,7 @@
     <string name="get_verification_codes_for_all_your_accounts">Získejte ověřovací kódy pro všechny své účty, které podporují dvoufázové ověření.</string>
     <string name="use_your_device_camera_to_scan_codes">Použijte kameru zařízení ke skenování kódů</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Naskenujte QR kód v nastavení dvoufázového ověření pro jakýkoli účet.</string>
-    <string name="sign_in_using_unique_codes">Přihlásit se pomocí jedinečných kódů</string>
+    <string name="sign_in_using_unique_codes">Přihlašujte se pomocí jedinečných kódů</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Používáte-li dvoufázové ověření, zadejte své uživatelské jméno a heslo a kód vygenerovaný v této aplikaci.</string>
     <string name="continue_button">Pokračovat</string>
     <string name="skip">Přeskočit</string>
@@ -76,7 +76,7 @@
     <string name="unique_codes">Unikátní kódy</string>
     <string name="help">Nápověda</string>
     <string name="launch_tutorial">Spustit tutoriál</string>
-    <string name="value_has_been_copied">%1$s zkopírováno</string>
+    <string name="value_has_been_copied">%1$s zkopírován</string>
     <string name="delete_item">Smazat položku</string>
     <string name="item_deleted">Položka byla smazána</string>
     <string name="delete">Smazat</string>
