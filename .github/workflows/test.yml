@@ -20,10 +20,7 @@ jobs:
     name: Test
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
-      issues: write
       packages: read
-      pull-requests: write
 
     steps:
       - name: Check out repo
@@ -69,15 +66,35 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Build and test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
         run: |
           bundle exec fastlane check
 
-      - name: Upload test reports on failure
+      - name: Upload test reports
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
-        if: failure()
+        if: always()
         with:
           name: test-reports
-          path: app/build/reports/tests/
+          path: |
+            app/build/reports/tests/
+            app/build/reports/kover/reportStandardDebug.xml
+
+  report:
+    name: Process Reports
+    needs: test
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    if: always()
+
+    steps:
+      - name: Download test artifacts
+        uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
+        with:
+          name: test-reports
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
