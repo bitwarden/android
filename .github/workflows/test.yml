@@ -14,6 +14,8 @@ on:
 
 env:
   JAVA_VERSION: 17
+  GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
 
 jobs:
   test:
@@ -81,7 +83,7 @@ jobs:
             app/build/reports/kover/reportStandardDebug.xml
 
   report:
-    name: Process Reports
+    name: Process Test Reports
     needs: test
     runs-on: ubuntu-24.04
     permissions:
@@ -98,6 +100,17 @@ jobs:
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
+        continue-on-error: true
         with:
           os: linux
           files: kover/reportStandardDebug.xml
+          fail_ci_if_error: true
+
+      - name: Comment on PR if tests failed
+        if: failure() && github.event_name == 'pull_request'
+        env:
+            PR_NUMBER: ${{ github.event.number }}
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          message="❌ Uploading code coverage report failed. Please check the [test results]($GITHUB_ACTION_RUN_URL) for more details."
+          gh pr comment $PR_NUMBER --body "$message"
