@@ -19,9 +19,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -64,6 +66,17 @@ fun SendScreen(
             { viewModel.trySendAction(SendAction.RefreshPull) }
         },
     )
+    LivecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.trySendAction(SendAction.LifecycleResume)
+            }
+            Lifecycle.Event.ON_STOP -> {
+                viewModel.trySendAction(SendAction.LifecyclePause)
+            }
+            else -> Unit
+        }
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {

@@ -44,6 +44,8 @@ class AppResumeManagerImpl(
         val resumeScreenData = getResumeScreen()
 
         return when (resumeScreenData) {
+            is AppResumeScreenData.GeneratorScreen -> SpecialCircumstance.GeneratorShortcut
+            is AppResumeScreenData.SendScreen -> SpecialCircumstance.SendShortcut
             else -> null
         }
     }

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -53,6 +54,10 @@ class SendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+    }
+
+    private val appResumeManager: AppResumeManager = mockk {
+        every { setResumeScreen(any()) } just runs
     }
 
     @BeforeEach
@@ -454,6 +459,7 @@ class SendViewModelTest : BaseViewModelTest() {
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
         policyManager = policyManager,
+        appResumeManager = appResumeManager,
     )
 }
 

@@ -105,6 +105,12 @@ sealed class SpecialCircumstance : Parcelable {
     data object AccountSecurityShortcut : SpecialCircumstance()
 
     /**
+     * Deeplink to the Send.
+     */
+    @Parcelize
+    data object SendShortcut : SpecialCircumstance()
+
+    /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be
      * cleared after a successful login.
      */

@@ -90,7 +90,9 @@ fun VaultUnlockedNavBarScreen(
                     navigateToVaultGraph(navOptions)
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
+                VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen,
+                VaultUnlockedNavBarEvent.NavigateToSendScreen,
+                    -> {
                     navigateToSendGraph(navOptions)
                 }
 
