@@ -16,7 +16,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -60,7 +59,7 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
             authRepository.setNewDeviceNoticeState(
                 NewDeviceNoticeState(
                     displayStatus = displayStatus,
-                    lastSeenDate = ZonedDateTime.now(),
+                    lastSeenDate = null,
                 ),
             )
             sendEvent(NewDeviceNoticeEmailAccessEvent.NavigateBackToVault)
