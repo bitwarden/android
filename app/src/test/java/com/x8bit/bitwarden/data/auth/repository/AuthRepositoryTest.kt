@@ -6543,6 +6543,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertTrue(shouldShowNewDeviceNotice)
         }
 
@@ -6565,6 +6568,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6586,6 +6592,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertTrue(shouldShowNewDeviceNotice)
         }
 
@@ -6604,6 +6613,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6624,6 +6636,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6639,6 +6654,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6664,6 +6682,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6687,6 +6708,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6710,6 +6734,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertTrue(shouldShowNewDeviceNotice)
         }
 
@@ -6733,6 +6760,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertTrue(shouldShowNewDeviceNotice)
         }
 
@@ -6756,6 +6786,9 @@ class AuthRepositoryTest {
 
             val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
 
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
             assertFalse(shouldShowNewDeviceNotice)
         }
 
@@ -6784,6 +6817,9 @@ class AuthRepositoryTest {
             } returns false
 
             assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+            verify(exactly = 2) {
+                vaultRepository.syncIfNecessary()
+            }
         }
 
     @Test
@@ -6797,6 +6833,9 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.userState = null
 
             assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
         }
 
     @Test
@@ -6817,8 +6856,11 @@ class AuthRepositoryTest {
                     ),
                 ),
             )
-
             assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
         }
 
     @Test
@@ -6842,6 +6884,9 @@ class AuthRepositoryTest {
             )
 
             assertTrue(repository.checkUserNeedsNewDeviceTwoFactorNotice())
+            verify(exactly = 1) {
+                vaultRepository.syncIfNecessary()
+            }
         }
 
     companion object {
