@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog
@@ -29,6 +30,8 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
         every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
     }
+
+    private val settingsRepository = mockk<SettingsRepository>(relaxed = true)
 
     @Test
     fun `initial state should be correct with NewDevicePermanentDismiss flag false`() = runTest {
@@ -135,6 +138,9 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE,
                     viewModel.stateFlow.value,
                 )
+                verify(exactly = 1) {
+                    settingsRepository.vaultLastSync = null
+                }
             }
         }
 
@@ -156,6 +162,9 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE,
                     viewModel.stateFlow.value,
                 )
+                verify(exactly = 1) {
+                    settingsRepository.vaultLastSync = null
+                }
             }
         }
 
@@ -177,6 +186,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             featureFlagManager = featureFlagManager,
+            settingsRepository = settingsRepository,
             clock = FIXED_CLOCK,
         )
 }
