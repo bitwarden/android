@@ -62,7 +62,7 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
                 NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
                 awaitItem(),
             )
-            verify (exactly = 1){
+            verify(exactly = 1) {
                 authRepository.setNewDeviceNoticeState(
                     NewDeviceNoticeState(
                         displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT,
@@ -86,7 +86,7 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
                 NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
                 awaitItem(),
             )
-            verify (exactly = 1){
+            verify(exactly = 1) {
                 authRepository.setNewDeviceNoticeState(
                     NewDeviceNoticeState(
                         displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL,
