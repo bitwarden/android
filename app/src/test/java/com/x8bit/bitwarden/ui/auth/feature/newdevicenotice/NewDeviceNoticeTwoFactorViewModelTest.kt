@@ -12,23 +12,19 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
-    private val authRepository = mockk<AuthRepository> {
-        every { getNewDeviceNoticeState() } returns NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            lastSeenDate = null,
-        )
-        every { setNewDeviceNoticeState(any()) } just runs
-    }
+    private val authRepository = mockk<AuthRepository>(relaxed = true)
 
     private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
         every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
@@ -113,6 +109,14 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                 NewDeviceNoticeTwoFactorEvent.NavigateBackToVault,
                 awaitItem(),
             )
+            verify(exactly = 1) {
+                authRepository.setNewDeviceNoticeState(
+                    NewDeviceNoticeState(
+                        displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                        lastSeenDate = ZonedDateTime.now(FIXED_CLOCK),
+                    ),
+                )
+            }
         }
     }
 
@@ -183,6 +187,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             environmentRepository = environmentRepository,
             featureFlagManager = featureFlagManager,
             settingsRepository = settingsRepository,
+            clock = FIXED_CLOCK,
         )
 }
 
@@ -191,3 +196,8 @@ private val DEFAULT_STATE =
         shouldShowRemindMeLater = true,
         dialogState = null,
     )
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)
