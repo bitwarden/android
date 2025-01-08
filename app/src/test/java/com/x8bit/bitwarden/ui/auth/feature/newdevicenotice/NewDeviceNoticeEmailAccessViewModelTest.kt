@@ -12,6 +12,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -61,6 +62,14 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
                 NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
                 awaitItem(),
             )
+            verify (exactly = 1){
+                authRepository.setNewDeviceNoticeState(
+                    NewDeviceNoticeState(
+                        displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT,
+                        lastSeenDate = null,
+                    ),
+                )
+            }
         }
     }
 
@@ -77,6 +86,14 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
                 NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
                 awaitItem(),
             )
+            verify (exactly = 1){
+                authRepository.setNewDeviceNoticeState(
+                    NewDeviceNoticeState(
+                        displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL,
+                        lastSeenDate = null,
+                    ),
+                )
+            }
         }
     }
 
