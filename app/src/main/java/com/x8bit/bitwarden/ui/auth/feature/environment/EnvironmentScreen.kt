@@ -29,11 +29,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import kotlinx.collections.immutable.persistentListOf
@@ -100,20 +102,22 @@ fun EnvironmentScreen(
                 .imePadding()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.self_hosted_environment),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.server_url),
                 value = state.serverUrl,
                 placeholder = "ex. https://bitwarden.company.com",
-                hint = stringResource(id = R.string.self_hosted_environment_footer),
+                supportingText = stringResource(id = R.string.self_hosted_environment_footer),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
                 },
@@ -127,22 +131,24 @@ fun EnvironmentScreen(
                     persistentListOf()
                 },
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "ServerUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "ServerUrlEntry",
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.custom_environment),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.web_vault_url),
@@ -151,13 +157,14 @@ fun EnvironmentScreen(
                     { viewModel.trySendAction(EnvironmentAction.WebVaultServerUrlChange(it)) }
                 },
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "WebVaultUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "WebVaultUrlEntry",
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.api_url),
@@ -166,13 +173,14 @@ fun EnvironmentScreen(
                     { viewModel.trySendAction(EnvironmentAction.ApiServerUrlChange(it)) }
                 },
                 keyboardType = KeyboardType.Uri,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("ApiUrlEntry")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.identity_url),
@@ -181,13 +189,14 @@ fun EnvironmentScreen(
                     { viewModel.trySendAction(EnvironmentAction.IdentityServerUrlChange(it)) }
                 },
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "IdentityUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "IdentityUrlEntry",
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.icons_url),
@@ -195,14 +204,16 @@ fun EnvironmentScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.IconsServerUrlChange(it)) }
                 },
-                hint = stringResource(id = R.string.custom_environment_footer),
+                supportingText = stringResource(id = R.string.custom_environment_footer),
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "IconsUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "IconsUrlEntry",
+                    .standardHorizontalMargin(),
             )
 
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }

@@ -894,7 +894,7 @@ class VaultScreenTest : BaseComposeTest() {
             .assertTextEquals(collectionsHeader)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(collectionName)
+            .onNodeWithTextAfterScroll(collectionName)
             .assertTextEquals(collectionName, collectionCount.toString())
     }
 

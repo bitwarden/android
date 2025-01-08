@@ -34,6 +34,7 @@ fun BitwardenClickableText(
     style: TextStyle,
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
+    isEnabled: Boolean = true,
     cornerSize: Dp = 28.dp,
     color: Color = BitwardenTheme.colorScheme.text.interaction,
 ) {
@@ -46,6 +47,7 @@ fun BitwardenClickableText(
                     color = BitwardenTheme.colorScheme.background.pressed,
                 ),
                 interactionSource = remember { MutableInteractionSource() },
+                enabled = isEnabled,
                 onClick = onClick,
             )
             .padding(innerPadding),

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.row
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -32,7 +31,6 @@ fun BitwardenRowOfActions(
 ) {
     Row(
         modifier = modifier.padding(start = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
         content = actions,
     )

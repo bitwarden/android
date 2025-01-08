@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -37,9 +38,9 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Suppress("LongMethod", "CyclomaticComplexMethod", "MagicNumber")
 @Composable
 fun PasswordStrengthIndicator(
-    modifier: Modifier = Modifier,
     state: PasswordStrengthState,
     currentCharacterCount: Int,
+    modifier: Modifier = Modifier,
     minimumCharacterCount: Int? = null,
 ) {
     val minimumRequirementMet = (minimumCharacterCount == null) ||
@@ -86,6 +87,7 @@ fun PasswordStrengthIndicator(
             Modifier
                 .fillMaxWidth()
                 .height(4.dp)
+                .clip(shape = BitwardenTheme.shapes.progressIndicator)
                 .background(BitwardenTheme.colorScheme.sliderButton.unfilled),
         ) {
             Box(

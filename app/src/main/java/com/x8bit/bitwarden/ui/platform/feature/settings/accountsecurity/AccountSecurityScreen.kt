@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDial
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -177,6 +179,7 @@ fun AccountSecurityScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             AnimatedVisibility(
                 visible = state.shouldShowUnlockActionCard,
                 label = "UnlockActionCard",
@@ -200,7 +203,7 @@ fun AccountSecurityScreen(
                     },
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .padding(top = 12.dp, bottom = 16.dp),
+                        .padding(bottom = 16.dp),
                 )
             }
 
@@ -208,15 +211,19 @@ fun AccountSecurityScreen(
                 label = stringResource(id = R.string.approve_login_requests),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextRow(
                 text = stringResource(id = R.string.pending_log_in_requests),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("PendingLogInRequestsLabel")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -225,10 +232,14 @@ fun AccountSecurityScreen(
                 label = stringResource(id = R.string.unlock_options),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            val biometricSupportStatus = biometricsManager.biometricSupportStatus
             BitwardenUnlockWithBiometricsSwitch(
-                biometricSupportStatus = biometricsManager.biometricSupportStatus,
+                biometricSupportStatus = biometricSupportStatus,
                 isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
                 onDisableBiometrics = remember(viewModel) {
                     {
@@ -240,21 +251,24 @@ fun AccountSecurityScreen(
                 onEnableBiometrics = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("UnlockWithBiometricsSwitch")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenUnlockWithPinSwitch(
                 isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                 isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
                 onUnlockWithPinToggleAction = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("UnlockWithPinSwitch")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
             Spacer(Modifier.height(16.dp))
             if (state.shouldShowEnableAuthenticatorSync) {
@@ -274,14 +288,16 @@ fun AccountSecurityScreen(
                 label = stringResource(id = R.string.session_timeout),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             SessionTimeoutPolicyRow(
                 vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
                 vaultTimeoutPolicyAction = state.vaultTimeoutPolicyAction,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
             SessionTimeoutRow(
                 vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
@@ -291,7 +307,8 @@ fun AccountSecurityScreen(
                 },
                 modifier = Modifier
                     .testTag("VaultTimeoutChooser")
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
             (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
                 SessionCustomTimeoutRow(
@@ -304,7 +321,9 @@ fun AccountSecurityScreen(
                             )
                         }
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
                 )
             }
             SessionTimeoutActionRow(
@@ -316,7 +335,8 @@ fun AccountSecurityScreen(
                 },
                 modifier = Modifier
                     .testTag("VaultTimeoutActionChooser")
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -324,15 +344,19 @@ fun AccountSecurityScreen(
                 label = stringResource(id = R.string.other),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextRow(
                 text = stringResource(id = R.string.account_fingerprint_phrase),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick) }
                 },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .testTag("AccountFingerprintPhraseLabel")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
@@ -343,8 +367,10 @@ fun AccountSecurityScreen(
                 withDivider = false,
                 dialogTitle = stringResource(id = R.string.continue_to_web_app),
                 dialogMessage = stringResource(id = R.string.two_step_login_description_long),
+                cardStyle = CardStyle.Middle(),
                 modifier = Modifier
                     .testTag("TwoStepLoginLinkItemView")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
             if (state.isUnlockWithPasswordEnabled) {
@@ -358,7 +384,10 @@ fun AccountSecurityScreen(
                     dialogMessage = stringResource(
                         id = R.string.change_master_password_description_long,
                     ),
-                    modifier = Modifier.fillMaxWidth(),
+                    cardStyle = CardStyle.Middle(),
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
                 )
             }
             if (state.hasUnlockMechanism) {
@@ -367,8 +396,10 @@ fun AccountSecurityScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
                     },
+                    cardStyle = CardStyle.Middle(),
                     modifier = Modifier
                         .testTag("LockNowLabel")
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }
@@ -377,8 +408,10 @@ fun AccountSecurityScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
                 },
+                cardStyle = CardStyle.Middle(),
                 modifier = Modifier
                     .testTag("LogOutLabel")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
             BitwardenTextRow(
@@ -386,10 +419,13 @@ fun AccountSecurityScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
                 },
+                cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .testTag("DeleteAccountLabel")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
         }
     }
 }
@@ -474,6 +510,7 @@ private fun SessionTimeoutRow(
     BitwardenTextRow(
         text = stringResource(id = R.string.session_timeout),
         onClick = { shouldShowSelectionDialog = true },
+        cardStyle = CardStyle.Top(),
         modifier = modifier,
     ) {
         Text(
@@ -545,6 +582,7 @@ private fun SessionCustomTimeoutRow(
     BitwardenTextRow(
         text = stringResource(id = R.string.custom),
         onClick = { shouldShowTimePickerDialog = true },
+        cardStyle = CardStyle.Middle(),
         modifier = modifier,
     ) {
         val formattedTime = LocalTime
@@ -625,6 +663,7 @@ private fun SessionTimeoutActionRow(
             if (vaultTimeoutPolicyAction != null) return@BitwardenTextRow
             shouldShowSelectionDialog = true
         },
+        cardStyle = CardStyle.Bottom,
         modifier = modifier,
     ) {
         Text(
@@ -685,7 +724,7 @@ private fun SessionTimeoutActionRow(
 }
 
 @Composable
-private fun SyncWithAuthenticatorRow(
+private fun ColumnScope.SyncWithAuthenticatorRow(
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
@@ -693,12 +732,15 @@ private fun SyncWithAuthenticatorRow(
         label = stringResource(R.string.authenticator_sync),
         modifier = Modifier
             .fillMaxWidth()
+            .standardHorizontalMargin()
             .padding(horizontal = 16.dp),
     )
+    Spacer(modifier = Modifier.height(height = 8.dp))
     BitwardenSwitch(
         label = stringResource(R.string.allow_bitwarden_authenticator_syncing),
         onCheckedChange = onCheckedChange,
         isChecked = isChecked,
+        cardStyle = CardStyle.Full,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

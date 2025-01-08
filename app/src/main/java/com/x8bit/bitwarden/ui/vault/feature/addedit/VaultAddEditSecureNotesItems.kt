@@ -11,10 +11,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
@@ -38,25 +40,27 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             label = stringResource(id = R.string.name),
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
+            textFieldTestTag = "ItemNameEntry",
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textFieldTestTag = "ItemNameEntry",
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.miscellaneous),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
             options = commonState
@@ -71,36 +75,38 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                         .first { it.name == selectedFolderName },
                 )
             },
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .testTag("FolderPicker")
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenSwitch(
             label = stringResource(id = R.string.favorite),
             isChecked = commonState.favorite,
             onCheckedChange = commonTypeHandlers.onToggleFavorite,
+            cardStyle = if (commonState.isUnlockWithPasswordEnabled) {
+                CardStyle.Top()
+            } else {
+                CardStyle.Full
+            },
             modifier = Modifier
                 .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
 
     if (commonState.isUnlockWithPasswordEnabled) {
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.password_prompt),
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-                modifier = Modifier
-                    .testTag("MasterPasswordRepromptToggle")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = R.drawable.ic_question_circle,
@@ -111,53 +117,61 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                         contentColor = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .testTag("MasterPasswordRepromptToggle")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
         }
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.notes),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             singleLine = false,
             label = stringResource(id = R.string.notes),
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
+            textFieldTestTag = "ItemNotesEntry",
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textFieldTestTag = "ItemNotesEntry",
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.custom_fields),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     items(commonState.customFieldData) { customItem ->
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         VaultAddEditCustomField(
             customField = customItem,
             onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             onCustomFieldAction = commonTypeHandlers.onCustomFieldActionSelect,
+            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
+                .standardHorizontalMargin(),
         )
     }
 
@@ -172,23 +186,24 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
 
     if (isAddItemMode && commonState.hasOrganizations) {
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.ownership),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         item {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenMultiSelectButton(
                 label = stringResource(id = R.string.who_owns_this_item),
                 options = commonState
@@ -203,10 +218,11 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                             .first { it.name == selectedOwnerName },
                     )
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("ItemOwnershipPicker")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -216,9 +232,5 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                 onCollectionSelect = commonTypeHandlers.onCollectionSelect,
             )
         }
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }

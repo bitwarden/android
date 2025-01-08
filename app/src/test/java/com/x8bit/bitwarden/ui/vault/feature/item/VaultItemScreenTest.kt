@@ -1261,15 +1261,15 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `on login copy notes field click should send CopyNotesClick`() {
-
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 viewState = DEFAULT_LOGIN_VIEW_STATE,
             )
         }
-        composeTestRule.onNodeWithTextAfterScroll("Lots of notes")
+        // We scroll to custom fields, which is right after notes to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("CUSTOM FIELDS")
         composeTestRule
-            .onNodeWithTag("CipherNotesCopyButton")
+            .onNodeWithContentDescription("Copy note")
             .performClick()
 
         verify {
@@ -1638,6 +1638,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
+        composeTestRule.onNodeWithTextAfterScroll("Verification code (TOTP)")
         // There are 2 because of the pull-to-refresh
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
@@ -1654,11 +1655,12 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
+        composeTestRule.onNodeWithTextAfterScroll("Verification code (TOTP)")
         // There are 2 because of the pull-to-refresh
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         composeTestRule
-            .onNodeWithContentDescription("Copy TOTP")
+            .onNodeWithContentDescriptionAfterScroll("Copy TOTP")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1671,6 +1673,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
+        composeTestRule.onNodeWithTextAfterScroll("Verification code (TOTP)")
         // Only pull-to-refresh remains
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
@@ -1688,7 +1691,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Copy TOTP")
+            .onNodeWithContentDescriptionAfterScroll("Copy TOTP")
             .performClick()
 
         verify {
@@ -1913,7 +1916,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in login state, uris should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("URIS").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("AUTOFILL OPTIONS").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("URI").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("www.example.com").assertIsDisplayed()
 
@@ -1921,7 +1924,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             updateLoginType(currentState) { copy(uris = emptyList()) }
         }
 
-        composeTestRule.assertScrollableNodeDoesNotExist("URIS")
+        composeTestRule.assertScrollableNodeDoesNotExist("AUTOFILL OPTIONS")
         composeTestRule.assertScrollableNodeDoesNotExist("URI")
         composeTestRule.assertScrollableNodeDoesNotExist("www.example.com")
     }
@@ -2091,9 +2094,9 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in identity state, on copy username field click should send CopyUsernameClick`() {
-        val username = "the username"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll(username)
+        // We scroll to company, which is right after the username to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Company")
 
         composeTestRule
             .onNodeWithTag("IdentityCopyUsernameButton")
@@ -2154,10 +2157,9 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in identity state, on copy license number field click should send CopyLicenseNumberClick`() {
-        val licenseNumber = "the license number"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll(licenseNumber)
-
+        // We scroll to email, which is right after the license number to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Email")
         composeTestRule
             .onNodeWithTag("IdentityCopyLicenseNumberButton")
             .performClick()
@@ -2198,9 +2200,9 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in identity state, on copy address field click should send CopyAddressClick`() {
-        val address = "the address"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll(address)
+        // We scroll to notes, which is right after the address to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Notes")
 
         composeTestRule
             .onNodeWithTag("IdentityCopyAddressButton")
@@ -2548,8 +2550,10 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ssh key state, on copy private key click should send CopyPrivateKeyClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+        // We scroll to fingerprint, which is right after the private to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Fingerprint")
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll("Copy private key")
+            .onNodeWithContentDescription("Copy private key")
             .performClick()
 
         verify(exactly = 1) {
@@ -2567,6 +2571,8 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ssh key state, on copy fingerprint click should send CopyFingerprintClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_SSH_KEY_VIEW_STATE) }
+        // We scroll to notes, which is right after the fingerprint to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Notes")
         composeTestRule
             .onNodeWithContentDescription("Copy fingerprint")
             .performClick()

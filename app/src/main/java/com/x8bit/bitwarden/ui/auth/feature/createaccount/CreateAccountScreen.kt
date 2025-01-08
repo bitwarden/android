@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Ter
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -60,6 +61,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -179,43 +181,50 @@ fun CreateAccountScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.email_address),
                 value = state.emailInput,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EmailInputChange(it)) }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
                 keyboardType = KeyboardType.Email,
                 textFieldTestTag = "EmailAddressEntry",
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
             var showPassword by rememberSaveable { mutableStateOf(false) }
             BitwardenPasswordField(
                 label = stringResource(id = R.string.master_password),
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
                 value = state.passwordInput,
-                hint = state.passwordLengthLabel(),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(PasswordInputChange(it)) }
                 },
+                showPasswordTestTag = "PasswordVisibilityToggle",
+                supportingTextContent = {
+                    PasswordStrengthIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        state = state.passwordStrengthState,
+                        currentCharacterCount = state.passwordInput.length,
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = state.passwordLengthLabel(),
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                    )
+                },
+                cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                 modifier = Modifier
                     .testTag("MasterPasswordEntry")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                showPasswordTestTag = "PasswordVisibilityToggle",
+                    .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            PasswordStrengthIndicator(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                state = state.passwordStrengthState,
-                currentCharacterCount = state.passwordInput.length,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenPasswordField(
                 label = stringResource(id = R.string.retype_master_password),
                 value = state.confirmPasswordInput,
@@ -224,26 +233,27 @@ fun CreateAccountScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
                 },
+                showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
+                cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
                 modifier = Modifier
                     .testTag("ConfirmMasterPasswordEntry")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
+                    .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.master_password_hint),
                 value = state.passwordHintInput,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(PasswordHintChange(it)) }
                 },
-                hint = stringResource(id = R.string.master_password_hint_description),
+                supportingText = stringResource(id = R.string.master_password_hint_description),
+                textFieldTestTag = "MasterPasswordHintLabel",
+                cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "MasterPasswordHintLabel",
+                    .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
                 isChecked = state.isCheckDataBreachesToggled,
@@ -252,11 +262,12 @@ fun CreateAccountScreen(
                         viewModel.trySendAction(CheckDataBreachesToggle(newState = newState))
                     }
                 },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .testTag("CheckExposedMasterPasswordToggle")
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
             TermsAndPrivacySwitch(
                 isChecked = state.isAcceptPoliciesToggled,
                 onCheckedChange = remember(viewModel) {
@@ -270,8 +281,9 @@ fun CreateAccountScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -292,7 +304,7 @@ private fun TermsAndPrivacySwitch(
         isChecked = isChecked,
         contentDescription = "AcceptPoliciesToggle",
         onCheckedChange = onCheckedChange,
-        subContent = {
+        supportingTextContent = {
             FlowRow(
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.fillMaxWidth(),
@@ -301,7 +313,7 @@ private fun TermsAndPrivacySwitch(
                     label = stringResource(id = R.string.terms_of_service),
                     onClick = onTermsClick,
                     style = BitwardenTheme.typography.bodyMedium,
-                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
+                    innerPadding = PaddingValues(vertical = 8.dp, horizontal = 0.dp),
                 )
                 Text(
                     text = ",",
@@ -314,9 +326,10 @@ private fun TermsAndPrivacySwitch(
                     label = stringResource(id = R.string.privacy_policy),
                     onClick = onPrivacyPolicyClick,
                     style = BitwardenTheme.typography.bodyMedium,
-                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
+                    innerPadding = PaddingValues(vertical = 8.dp, horizontal = 0.dp),
                 )
             }
         },
+        cardStyle = CardStyle.Bottom,
     )
 }
