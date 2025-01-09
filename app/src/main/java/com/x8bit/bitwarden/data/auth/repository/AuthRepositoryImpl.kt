@@ -1350,6 +1350,7 @@ class AuthRepositoryImpl(
     }
 
     override fun checkUserNeedsNewDeviceTwoFactorNotice(): Boolean {
+        vaultRepository.syncIfNecessary()
         return activeUserId?.let { userId ->
             val temporaryFlag = featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
             val permanentFlag = featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
