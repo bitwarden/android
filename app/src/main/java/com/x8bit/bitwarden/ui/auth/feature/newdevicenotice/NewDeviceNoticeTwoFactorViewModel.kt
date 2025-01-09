@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import android.os.Parcelable
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
@@ -10,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
@@ -22,6 +24,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.ZonedDateTime
@@ -36,6 +39,7 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     val environmentRepository: EnvironmentRepository,
     val featureFlagManager: FeatureFlagManager,
     val settingsRepository: SettingsRepository,
+    val vaultRepository: VaultRepository,
     private val clock: Clock,
 ) : BaseViewModel<
     NewDeviceNoticeTwoFactorState,
@@ -48,6 +52,15 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
         ),
     ),
 ) {
+    init {
+        viewModelScope.launch {
+            vaultRepository.syncForResult()
+            if (!authRepository.checkUserNeedsNewDeviceTwoFactorNotice()) {
+                sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
+            }
+        }
+    }
+
     private val webTwoFactorUrl: String
         get() {
             val baseUrl = environmentRepository
