@@ -115,9 +115,9 @@ jobs:
             PR_ACTOR: ${{ github.actor }}
         run: |
           echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
-          echo "> Uploading code coverage report failed. Please check the Process Test Reports job for more details." >> $GITHUB_STEP_SUMMARY
+          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> $GITHUB_STEP_SUMMARY
 
           if [ ! -z "$PR_NUMBER" ]; then
-            message=$'> [!CAUTION]\n> @'$PR_ACTOR' Uploading code coverage report failed. Please check the [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
+            message=$'> [!WARNING]\n> @'$PR_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
           fi
