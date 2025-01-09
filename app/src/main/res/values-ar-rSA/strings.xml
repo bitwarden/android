@@ -962,7 +962,7 @@
   <string name="remove_passkey">إزالة مفتاح المرور</string>
   <string name="passkey_removed">تمت إزالة مفتاح المرور</string>
   <string name="what_makes_a_password_strong">ما الذي يجعل كلمة المرور قوية؟</string>
-  <string name="a_secure_memorable_password">A secure, memorable password</string>
+  <string name="a_secure_memorable_password">كلمة مرور آمنة، لا تنسى</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">كلما طالت كلمة المرور الخاصة بك، زادت صعوبة اختراقها. الحد الأدنى لإنشاء الحساب هو 12 حرفاً، ولكن إذا جعلتها 14 حرفاً، فإن وقت تفكيك كلمة المرور الخاصة بك سيكون قروناً!</string>
   <string name="the_strongest_passwords_are_usually">أقوى كلمات المرور هي عادة:</string>
   <string name="twelve_or_more_characters">12 حرف أو أكثر</string>
@@ -978,8 +978,8 @@
   <string name="confirm">تأكيد</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">إعداد القياسات الحيوية أو اختيار رمز PIN للوصول بسرعة إلى المخزن الخاص بك وملء تلقائي لتسجيل الدخول.</string>
   <string name="never_lose_access_to_your_vault">لا تفقد أبدا الوصول إلى خزانتك</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
-  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">أفضل طريقة للتأكد من أنه يمكنك دائماً الوصول إلى خزنتك هي إعداد ضمانات منذ البداية.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">إحدى أفضل الطرق لإنشاء كلمة مرور آمنة وسهلة التذكر هي استخدام عبارة مرور. \nإليك الطريقة:</string>
   <string name="create_a_hint">إنشاء تلميح</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">سيتم إرسال تلميحك إليك عبر البريد الإلكتروني عندما تطلب ذلك.</string>
   <string name="write_your_password_down">اكتب كلمة المرور الخاصة بك</string>
@@ -1033,33 +1033,22 @@
   <string name="class_3_biometrics_description">إلغاء القفل باستخدام القياسات الحيوية يتطلب مصادقة حيوية قوية وقد لا تكون متوافقة مع جميع خيارات القياسات الحيوية على هذا الجهاز.</string>
   <string name="class_2_biometrics_description">إلغاء القفل باستخدام القياسات الحيوية يتطلب مصادقة حيوية قوية، وهو غير متوافق مع خيارات القياسات الحيوية المتاحة على هذا الجهاز.</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">على جهاز الكمبيوتر الخاص بك، سجل الدخول إلى المتصفح الحالي أو مدير كلمة المرور.</string>
-  <string name="log_in_to_your_current_browser_or_password_manager_highlight">تسجيل الدخول إلى متصفحك الحالي أو مدير كلمة المرور.</string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">تصدير كلمات المرور الخاصة بك. عادة ما يتم العثور على هذا الخيار في الإعدادات الخاصة بك.</string>
-  <string name="export_your_passwords_highlight">تصدير كلمات المرور الخاصة بك.</string>
   <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">حدد استيراد البيانات في تطبيق الويب، ثم تمَّ الاستيراد أدناه لإنهاء المزامنة.</string>
-  <string name="select_import_data_highlight">حدد بيانات الاستيراد</string>
   <string name="step_1_of_3">الخطوة 1 من 3</string>
   <string name="export_your_saved_logins">تصدير تسجيلاتك المحفوظة</string>
   <string name="delete_this_file_after_import_is_complete">سوف تحذف هذا الملف بعد اكتمال الاستيراد.</string>
   <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">على جهاز الكمبيوتر الخاص بك، افتح علامة تبويب جديدة للمتصفح و انتقل إلى %1$s</string>
-  <string name="go_to_vault_bitwarden_com_highlight">الذهاب إلى %1$s</string>
   <string name="log_in_to_the_bitwarden_web_app">تسجيل الدخول إلى تطبيق ويب Bitwarden.</string>
   <string name="step_2_of_3">الخطوة 2 من 3</string>
   <string name="log_in_to_bitwarden">تسجيل الدخول إلى Bitwarden</string>
   <string name="step_3_of_3">الخطوة 3 من 3</string>
   <string name="import_logins_to_bitwarden">استيراد تسجيلات الدخول إلى Bitwarden</string>
   <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">في شريط التنقل في Bitwarden، ابحث عن خيار الأدوات وحدد استيراد البيانات.</string>
-  <string name="find_the_tools_highlight">العثور على الأدوات</string>
-  <string name="select_import_data_step_3_highlight">حدد استيراد البيانات.</string>
   <string name="fill_out_the_form_and_import_your_saved_password_file">املأ النموذج واستورد ملف كلمة المرور المحفوظة.</string>
-  <string name="import_your_saved_password_file_highlight">استيراد ملف كلمة المرور المحفوظة.</string>
-  <string name="then_done_highlight">بعد ذلك تمَّ</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">للأمان الخاص بك، تأكد من حذف ملف كلمة المرور المحفوظة.</string>
-  <string name="delete_your_saved_password_file">حذف ملف كلمة المرور المحفوظة.</string>
   <string name="need_help_check_out_import_help">بحاجة إلى مساعدة؟ تحقق من مساعدة الاستيراد.</string>
-  <string name="import_help_highlight">مساعدة الاستيراد</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">حفظ الملف المصدّر في مكان ما على جهاز الكمبيوتر الخاص بك يمكنك العثور عليه بسهولة.</string>
-  <string name="save_the_exported_file_highlight">حفظ الملف المصدّر</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">هذا ليس خادم Bitwarden المعترف به. قد تحتاج إلى التحقق مع المزود الخاص بك أو تحديث الخادم الخاص بك.</string>
   <string name="syncing_logins_loading_message">مزامنة تسجيلات الدخول...</string>
   <string name="ssh_key_cipher_item_types">أنواع عناصر مفتاح SSH</string>
@@ -1074,7 +1063,7 @@
   <string name="bitwarden_tools">أدوات Bitwarden</string>
   <string name="got_it">فهمت</string>
   <string name="no_logins_were_imported">لم يتم استيراد أي تسجيلات دخول</string>
-  <string name="import_error">Import error</string>
+  <string name="import_error">خطأ في الاستيراد</string>
   <string name="verified_sso_domain_verified">نقطة نهاية نطاق SSO المتحقق منها</string>
   <string name="logins_imported">تسجيلات الدخول المستوردة</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">تذكر أن تحذف ملف كلمة المرور المستوردة من جهاز الكمبيوتر الخاص بك</string>
@@ -1098,21 +1087,29 @@
   <string name="copy_email">نسخ البريد الإلكتروني</string>
   <string name="copy_phone">نسخ رقم الهاتف</string>
   <string name="copy_address">نسخ العنوان</string>
+  <string name="important_notice">ملاحظة هامة</string>
+  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">سيقوم Bitwarden بإرسال رمز إلى البريد الإلكتروني الخاص بحسابك للتحقق من تسجيلات الدخول من الأجهزة الجديدة ابتداء من فبراير 2025.</string>
+  <string name="do_you_have_reliable_access_to_your_email">هل لديك وصول موثوق إلى بريدك الإلكتروني، <annotation emphasis="bold"><annotation arg="0">%1$s؟</annotation></annotation></string>
+  <string name="yes_i_can_reliably_access_my_email">نعم، يمكنني الوصول بشكل موثوق إلى بريدي الإلكتروني</string>
   <string name="biometrics_no_longer_supported_title">القياسات الحيوية لم تعد مدعومة على هذا الجهاز</string>
   <string name="biometrics_no_longer_supported">لقد تم تسجيل الخروج لأن القياسات الحيوية لجهازك لا تفي بأحدث المتطلبات الأمنية. لتحديث الإعدادات، قم بتسجيل الدخول مرة أخرى أو اتصل بالمسؤول الخاص بك للوصول.</string>
   <string name="cxp_import">استيراد CXP</string>
   <string name="cxp_export">تصدير CXP</string>
-  <string name="choose_three_or_four_random_words">Choose three or four random words</string>
-  <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of objects, places, or things you like.</string>
-  <string name="pick_three_or_four_random_unrelated_words_highlight">objects, places, or things</string>
-  <string name="combine_those_words_together">Combine those words together</string>
-  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. Use hyphens, spaces, or leave them as one long word—your choice!</string>
-  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Use hyphens, spaces, or leave them as one long word</string>
-  <string name="make_it_yours">Make it yours</string>
-  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Add a number or symbol to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
-  <string name="add_a_number_or_symbol_highlight">Add a number or symbol</string>
-  <string name="need_some_inspiration">"Need some inspiration?"</string>
-  <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
-  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
+  <string name="set_up_two_step_login">إعداد تسجيل الدخول بخطوتين</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">يمكنك إعداد المصادقة الثنائية كطريقة بديلة لحماية حسابك أو تغيير بريدك الإلكتروني إلى بريد يمكنك الوصول إليه.</string>
+  <string name="turn_on_two_step_login">تشغيل تسجيل الدخول بخطوتين</string>
+  <string name="change_account_email">تغيير البريد الإلكتروني للحساب</string>
+  <string name="choose_three_or_four_random_words">اختر ثلاث أو أربع كلمات عشوائية</string>
+  <string name="pick_three_or_four_random_unrelated_words">اختر ثلاث أو أربع كلمات عشوائية لا علاقة لها بالموضوع والتي يمكنك تذكرها بسهولة. فكر في <annotation emphasis="bold">الأشياء أو الأماكن أو الأشياء</annotation> التي تعجبك.</string>
+  <string name="combine_those_words_together">دمج تلك الكلمات معا</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">اختر ثلاث أو أربع كلمات عشوائية لا علاقة لها بالموضوع والتي يمكنك تذكرها بسهولة. فكر في <annotation emphasis="bold">الأشياء أو الأماكن أو الأشياء</annotation> التي تعجبك!</string>
+  <string name="make_it_yours">أجعلها لك</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">أضف رقمًا أو رمزًا</annotation> لجعله أقوى. الآن لديك عبارة مرور فريدة وآمنة ولا تنسى!</string>
+  <string name="need_some_inspiration">"هل تحتاج إلى بعض الإلهام؟"</string>
+  <string name="check_out_the_passphrase_generator">"تحقق من مولد عبارة المرور"</string>
+  <string name="copied_to_clipboard">نُسخ إلى الحافظة.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">لا يمكننا التحقق من شهادة الخادم. قد لا يتم إعداد سلسلة الشهادات أو إعدادات الوكيل على جهازك أو خادم Bitwarden الخاص بك بشكل صحيح.</string>
+  <string name="review_flow_launched">تم تشغيل التدفق!</string>
+  <string name="copy_private_key">نسخ المفتاح الخاص</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">يمكنك تغيير البريد الإلكتروني لحسابك على تطبيق ويب Bitwarden.</string>
 </resources>

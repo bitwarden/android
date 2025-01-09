@@ -38,6 +38,7 @@ sealed class FlagKey<out T : Any> {
                 AppReviewPrompt,
                 NewDevicePermanentDismiss,
                 NewDeviceTemporaryDismiss,
+                IgnoreEnvironmentCheck,
             )
         }
     }
@@ -159,6 +160,15 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "new-device-permanent-dismiss"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to ignore an environment check.
+     */
+    data object IgnoreEnvironmentCheck : FlagKey<Boolean>() {
+        override val keyName: String = "ignore-environment-check"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
     }
 
     //region Dummy keys for testing

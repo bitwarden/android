@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,7 +47,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun BitwardenTextFieldWithActions(
-    label: String,
+    label: String?,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,

@@ -115,7 +115,7 @@
   <string name="extension_setup2">No Safari e no Chrome, encontre o Bitwarden utilizando o ícone de partilha (dica: deslize para a direita na linha inferior do menu de partilha).</string>
   <string name="extension_tap_icon">Toque no ícone do Bitwarden no menu para iniciar a extensão.</string>
   <string name="extension_turn_on">Para ativar o Bitwarden no Safari e noutras aplicações, toque no ícone \"mais\" na linha inferior do menu.</string>
-  <string name="favorite">Favorito</string>
+  <string name="favorite">Adicionar aos favoritos</string>
   <string name="fingerprint">Impressão digital</string>
   <string name="generate_password">Gerar palavra-passe</string>
   <string name="get_password_hint">Obter a dica da sua palavra-passe mestra</string>
@@ -938,18 +938,18 @@ Pretende mudar para esta conta?</string>
   <string name="user_verification_direction">Verificação do utilizador</string>
   <string name="creating_on">A criar em:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções do e-mail enviado para %1$s para continuar a criar a sua conta.</string>
-  <string name="we_sent_an_email_to">Enviámos um e-mail para %1$s.</string>
-  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os Termos de utilização e Política de privacidade</string>
+  <string name="we_sent_an_email_to">Enviámos um e-mail para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
   <string name="set_password">Definir palavra-passe</string>
   <string name="unsubscribe">Anular subscrição</string>
   <string name="check_your_email">Verifique o seu e-mail</string>
   <string name="open_email_app">Abrir a app de e-mail</string>
   <string name="go_back">Volte atrás</string>
   <string name="email_verified">E-mail verificado</string>
-  <string name="no_email_go_back_to_edit_your_email_address">Não recebeu nenhum e-mail? Volte atrás para editar o seu endereço de e-mail.</string>
-  <string name="or_log_in_you_may_already_have_an_account">Ou inicie sessão, uma vez que pode já ter uma conta.</string>
+  <string name="no_email_go_back_to_edit_your_email_address">Não recebeu nenhum e-mail? <annotation link="goBack">Volte atrás</annotation> para editar o seu endereço de e-mail.</string>
+  <string name="or_log_in_you_may_already_have_an_account">Ou <annotation link="logIn">inicie sessão</annotation>, uma vez que pode já ter uma conta.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Receba e-mails do Bitwarden com anúncios, conselhos e oportunidades de investigação.
-Anule a subscrição em qualquer altura.</string>
+<annotation link="unsubscribe">Anule a subscrição</annotation> a qualquer altura.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Receba conselhos, anúncios e oportunidades de investigação do Bitwarden na sua caixa de entrada. Anule a subscrição a qualquer altura.</string>
   <string name="security_prioritized">Segurança, com prioridade</string>
   <string name="welcome_message_1">Guarde credenciais, cartões e identidades no seu cofre seguro. O Bitwarden utiliza encriptação de conhecimento zero e de ponto a ponto para proteger o que é importante para si.</string>
@@ -1032,34 +1032,23 @@ Anule a subscrição em qualquer altura.</string>
   <string name="give_your_vault_a_head_start">Dê um avanço ao seu cofre</string>
   <string name="class_3_biometrics_description">O desbloqueio com biometria requer uma autenticação biométrica forte e pode não ser compatível com todas as opções biométricas deste dispositivo.</string>
   <string name="class_2_biometrics_description">O desbloqueio com biometria requer uma autenticação biométrica forte e não é compatível com as opções biométricas disponíveis neste dispositivo.</string>
-  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">No seu computador, inicie sessão no seu navegador atual ou gestor de palavras-passe.</string>
-  <string name="log_in_to_your_current_browser_or_password_manager_highlight">inicie sessão no seu navegador atual ou gestor de palavras-passe.</string>
-  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Exporte as suas palavras-passe. Esta opção encontra-se normalmente nas suas definições.</string>
-  <string name="export_your_passwords_highlight">Exporte as suas palavras-passe.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Selecione Importar dados na aplicação Web e, em seguida, Concluído abaixo para terminar a sincronização.</string>
-  <string name="select_import_data_highlight">Selecione Importar dados</string>
+  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">No seu computador, <annotation emphasis="bold">inicie sessão no seu navegador atual ou gestor de palavras-passe.</annotation></string>
+  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Exporte as suas palavras-passe.</annotation> Esta opção encontra-se normalmente nas suas definições.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Selecione Importar dados</annotation> na aplicação Web e, em seguida, Concluído abaixo para terminar a sincronização.</string>
   <string name="step_1_of_3">Passo 1 de 3</string>
   <string name="export_your_saved_logins">Exporte as suas credenciais guardadas</string>
   <string name="delete_this_file_after_import_is_complete">Eliminará este ficheiro após concluir a importação.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">No seu computador, abra um novo separador do navegador e vá a %1$s</string>
-  <string name="go_to_vault_bitwarden_com_highlight">vá a %1$s</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">No seu computador, abra um novo separador do navegador e <annotation emphasis="bold">vá a <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="log_in_to_the_bitwarden_web_app">Iniciar sessão na aplicação Web do Bitwarden.</string>
   <string name="step_2_of_3">Passo 2 de 3</string>
   <string name="log_in_to_bitwarden">Iniciar sessão no Bitwarden</string>
   <string name="step_3_of_3">Passo 3 de 3</string>
   <string name="import_logins_to_bitwarden">Importar credenciais para o Bitwarden</string>
-  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Na navegação do Bitwarden, encontre a opção Ferramentas e selecione Importar dados.</string>
-  <string name="find_the_tools_highlight">encontre as Ferramentas</string>
-  <string name="select_import_data_step_3_highlight">selecione Importar dados.</string>
-  <string name="fill_out_the_form_and_import_your_saved_password_file">Preencha o formulário e importe o seu ficheiro de palavras-passe guardado.</string>
-  <string name="import_your_saved_password_file_highlight">importe o seu ficheiro de palavras-passe guardadas.</string>
-  <string name="then_done_highlight">em seguida, Concluído</string>
-  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Para sua segurança, certifique-se de que elimina o ficheiro de palavras-passe guardadas.</string>
-  <string name="delete_your_saved_password_file">elimine o seu ficheiro de palavras-passe guardadas.</string>
-  <string name="need_help_check_out_import_help">Precisa de ajuda? Consulte a ajuda com a importação.</string>
-  <string name="import_help_highlight">ajuda com a importação</string>
-  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Guarde o ficheiro exportado num local do seu computador que possa encontrar facilmente.</string>
-  <string name="save_the_exported_file_highlight">Guarde o ficheiro exportado</string>
+  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Na navegação do Bitwarden, <annotation emphasis="bold">encontre a opção Ferramentas</annotation> e <annotation emphasis="bold">selecione Importar dados.</annotation></string>
+  <string name="fill_out_the_form_and_import_your_saved_password_file">Preencha o formulário e <annotation emphasis="bold">importe o seu ficheiro de palavras-passe guardado.</annotation></string>
+  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Para sua segurança, certifique-se de que <annotation emphasis="bold">elimina o ficheiro de palavras-passe guardadas.</annotation></string>
+  <string name="need_help_check_out_import_help">Precisa de ajuda? Consulte a <annotation link="importHelp">ajuda com a importação</annotation>.</string>
+  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Guarde o ficheiro exportado</annotation> num local do seu computador que possa encontrar facilmente.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Este não é um servidor Bitwarden reconhecido. Poderá ter de verificar com o seu fornecedor ou atualizar o seu servidor.</string>
   <string name="syncing_logins_loading_message">A sincronizar credenciais...</string>
   <string name="ssh_key_cipher_item_types">Tipos de itens de cifra de chave SSH</string>
@@ -1098,21 +1087,29 @@ Anule a subscrição em qualquer altura.</string>
   <string name="copy_email">Copiar e-mail</string>
   <string name="copy_phone">Copiar número de telefone</string>
   <string name="copy_address">Copiar endereço</string>
+  <string name="important_notice">Aviso importante</string>
+  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">O Bitwarden enviará um código para o e-mail da sua conta para verificar as credenciais de novos dispositivos a partir de fevereiro de 2025.</string>
+  <string name="do_you_have_reliable_access_to_your_email">Tem um acesso fiável ao seu e-mail, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="yes_i_can_reliably_access_my_email">Sim, consigo aceder de forma fiável ao meu e-mail</string>
   <string name="biometrics_no_longer_supported_title">A biometria já não é suportada neste dispositivo</string>
   <string name="biometrics_no_longer_supported">A sua sessão foi terminada porque os dados biométricos do seu dispositivo não cumprem os requisitos de segurança mais recentes. Para atualizar as definições, inicie sessão novamente ou contacte o seu administrador para obter acesso.</string>
   <string name="cxp_import">Importar CXP</string>
   <string name="cxp_export">Exportar CXP</string>
+  <string name="set_up_two_step_login">Definir a verificação de dois passos</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Pode configurar a verificação de dois passos como forma alternativa de proteger a sua conta ou alterar o seu e-mail para um a que possa aceder.</string>
+  <string name="turn_on_two_step_login">Ativar a verificação de dois passos</string>
+  <string name="change_account_email">Alterar o e-mail da conta</string>
   <string name="choose_three_or_four_random_words">Escolha três ou quatro palavras ao acaso</string>
-  <string name="pick_three_or_four_random_unrelated_words">Escolha três ou quatro palavras ao acaso, não relacionadas, de que se possa lembrar facilmente. Pense em objetos, lugares ou coisas de que gosta.</string>
-  <string name="pick_three_or_four_random_unrelated_words_highlight">objetos, lugares ou coisas</string>
+  <string name="pick_three_or_four_random_unrelated_words">Escolha três ou quatro palavras ao acaso, não relacionadas, de que se possa lembrar facilmente. Pense em <annotation emphasis="bold">objetos, lugares ou coisas</annotation> de que gosta.</string>
   <string name="combine_those_words_together">Combine estas palavras</string>
-  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Junte as palavras em qualquer ordem para formar a sua frase de acesso. Utilize hífenes, espaços ou deixe-as como uma palavra longa — a escolha é sua!</string>
-  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Utilize hífenes, espaços ou deixe-as como uma palavra longa</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Junte as palavras em qualquer ordem para formar a sua frase de acesso. <annotation emphasis="bold">Utilize hífenes, espaços ou deixe-as como uma palavra longa</annotation> — a escolha é sua!</string>
   <string name="make_it_yours">Torne-a sua</string>
-  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Acrescente um número ou símbolo para a tornar ainda mais forte. Agora tem uma frase de acesso única, segura e memorizável!</string>
-  <string name="add_a_number_or_symbol_highlight">Acrescente um número ou símbolo</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Acrescente um número ou símbolo</annotation> para a tornar ainda mais forte. Agora tem uma frase de acesso única, segura e memorizável!</string>
   <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
   <string name="check_out_the_passphrase_generator">"Dê uma vista de olhos no gerador de frases de acesso"</string>
   <string name="copied_to_clipboard">Copiado para a área de transferência.</string>
   <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. A cadeia de certificados ou as definições de proxy no seu dispositivo ou no seu servidor Bitwarden podem não estar corretamente configuradas.</string>
+  <string name="review_flow_launched">Fluxo de revisão lançado!</string>
+  <string name="copy_private_key">Copiar chave privada</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Pode alterar o e-mail da sua conta na aplicação Web Bitwarden.</string>
 </resources>
