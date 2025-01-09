@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -24,7 +25,9 @@ import java.time.ZonedDateTime
 
 class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
-    private val authRepository = mockk<AuthRepository>(relaxed = true)
+    private val authRepository = mockk<AuthRepository>(relaxed = true) {
+        every { checkUserNeedsNewDeviceTwoFactorNotice() } returns true
+    }
 
     private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
         every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
@@ -32,6 +35,8 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     }
 
     private val settingsRepository = mockk<SettingsRepository>(relaxed = true)
+
+    private val vaultRepository = mockk<VaultRepository>(relaxed = true)
 
     @Test
     fun `initial state should be correct with NewDevicePermanentDismiss flag false`() = runTest {
@@ -48,6 +53,27 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(shouldShowRemindMeLater = false),
+                awaitItem(),
+            )
+        }
+    }
+    
+    @Test
+    fun `Init should not send events if user needs new device notice`() = runTest {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns true
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `Init should send NavigateBackToVault if user does not need new device notice`() = runTest {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns false
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            assertEquals(
+                NewDeviceNoticeTwoFactorEvent.NavigateBackToVault,
                 awaitItem(),
             )
         }
@@ -187,6 +213,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             environmentRepository = environmentRepository,
             featureFlagManager = featureFlagManager,
             settingsRepository = settingsRepository,
+            vaultRepository = vaultRepository,
             clock = FIXED_CLOCK,
         )
 }
