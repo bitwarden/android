@@ -89,7 +89,7 @@ fun VaultUnlockScreen(
         }
     }
 
-    val onBiometricsUnlockSuccess: (cipher: Cipher?) -> Unit = remember(viewModel) {
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
     }
     val onBiometricsLockOut: () -> Unit = remember(viewModel) {
