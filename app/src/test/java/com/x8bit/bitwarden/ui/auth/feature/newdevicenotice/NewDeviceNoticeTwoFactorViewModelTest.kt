@@ -57,7 +57,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             )
         }
     }
-    
+
     @Test
     fun `Init should not send events if user needs new device notice`() = runTest {
         every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns true
