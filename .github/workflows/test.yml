@@ -113,9 +113,10 @@ jobs:
             PR_NUMBER: ${{ github.event.number }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          message="❌ Uploading code coverage report failed. Please check the [test results]($GITHUB_ACTION_RUN_URL) for more details."
-          echo $message >> $GITHUB_STEP_SUMMARY
+          echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
+          echo "> Uploading code coverage report failed. Please check the Process Test Reports job for more details." >> $GITHUB_STEP_SUMMARY
 
           if [ ! -z "$PR_NUMBER" ]; then
+            message=$'> [!WARNING]\n> Uploading code coverage report failed. Please check the [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment $PR_NUMBER --body "$message"
           fi
