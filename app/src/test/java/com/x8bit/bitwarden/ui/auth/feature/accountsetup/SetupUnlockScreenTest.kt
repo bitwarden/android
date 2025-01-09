@@ -112,7 +112,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggleDisabled`() {
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = true) }
         composeTestRule
             .onNodeWithText(text = "Unlock with Biometrics")
@@ -120,7 +120,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .assertIsOn()
             .performClick()
         verify(exactly = 1) {
-            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = false))
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleDisabled)
         }
     }
 
@@ -187,8 +187,9 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggleEnabled on success`() {
         composeTestRule
             .onNodeWithText(text = "Unlock with Biometrics")
             .performScrollTo()
@@ -204,7 +205,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertIsOff()
         verify(exactly = 1) {
-            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true))
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleEnabled(CIPHER))
         }
     }
 
