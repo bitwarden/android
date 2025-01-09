@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
@@ -32,11 +33,34 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
     }
 
+    private val vaultRepository = mockk<VaultRepository>(relaxed = true)
+
     @Test
     fun `initial state should be correct with email from state handle`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `Init should not send events if user needs new device notice`() = runTest {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns true
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `Init should send NavigateBackToVault if user does not need new device notice`() = runTest {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns false
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            assertEquals(
+                NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
+                awaitItem(),
+            )
         }
     }
 
@@ -127,6 +151,7 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
     ): NewDeviceNoticeEmailAccessViewModel = NewDeviceNoticeEmailAccessViewModel(
         authRepository = authRepository,
         featureFlagManager = featureFlagManager,
+        vaultRepository = vaultRepository,
         savedStateHandle = savedStateHandle,
     )
 }
