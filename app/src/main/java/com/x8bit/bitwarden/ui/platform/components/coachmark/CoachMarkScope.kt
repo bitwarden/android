@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
@@ -76,6 +78,18 @@ interface CoachMarkScope<T : Enum<T>> {
         rightAction: (@Composable RowScope.() -> Unit)? = null,
         anchorContent: @Composable () -> Unit,
     )
+
+    fun LazyListScope.coachMarkHighlight(
+        key: T,
+        title: String,
+        description: String,
+        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.SQUARE,
+        onDismiss: (() -> Unit)? = null,
+        leftAction: (@Composable RowScope.() -> Unit)? = null,
+        rightAction: (@Composable RowScope.() -> Unit)? = null,
+        lazyListKey: Any = key,
+        anchorContent: @Composable () -> Unit,
+    )
 }
 
 /**
@@ -138,6 +152,32 @@ class CoachMarkScopeInstance<T : Enum<T>>(
             }
         }
     }
+
+    override fun LazyListScope.coachMarkHighlight(
+        key: T,
+        title: String,
+        description: String,
+        shape: CoachMarkHighlightShape,
+        onDismiss: (() -> Unit)?,
+        leftAction: @Composable() (RowScope.() -> Unit)?,
+        rightAction: @Composable() (RowScope.() -> Unit)?,
+        lazyListKey: Any,
+        anchorContent: @Composable () -> Unit,
+    ) {
+        item(lazyListKey) {
+            this@CoachMarkScopeInstance.CoachMarkHighlight(
+                key = key,
+                title = title,
+                description = description,
+                shape = shape,
+                onDismiss = onDismiss,
+                leftAction = leftAction,
+                rightAction = rightAction,
+                anchorContent = anchorContent,
+            )
+        }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -32,7 +32,7 @@ class CoachMarkState<T : Enum<T>>(
     isCoachMarkVisible: Boolean = false,
 ) {
     private val mutex = Mutex()
-    private val highlights: MutableMap<T, CoachMarkHighlight<T>?> = mutableMapOf()
+    private val highlights: MutableMap<T, CoachMarkHighlightState<T>?> = mutableMapOf()
     private val _currentHighlight = mutableStateOf(initialCoachMarkHighlight)
     val currentHighlight: State<T?> = _currentHighlight
     private val _currentHighlightBounds = mutableStateOf(Rect.Zero)
@@ -61,7 +61,7 @@ class CoachMarkState<T : Enum<T>>(
         shape: CoachMarkHighlightShape = CoachMarkHighlightShape.SQUARE,
     ) {
         mutex.withLock {
-            highlights[key] = CoachMarkHighlight(
+            highlights[key] = CoachMarkHighlightState(
                 key = key,
                 highlightBounds = bounds ?: Rect.Zero,
                 toolTipState = toolTipState,
@@ -78,8 +78,11 @@ class CoachMarkState<T : Enum<T>>(
      * Shows the current coach mark, if it exists. If there is no current highlighted
      * coach mark, attempt to show the "next" available coach mark.
      */
-    suspend fun showCoachMark() {
+    suspend fun showCoachMark(coachMarkToShow: T? = null) {
         val highlightToShow = mutex.withLock {
+            coachMarkToShow?.let {
+                _currentHighlight.value = it
+            }
             getCurrentHighlight()
         }
         if (highlightToShow != null) {
@@ -146,13 +149,13 @@ class CoachMarkState<T : Enum<T>>(
     /**
      * Gets the current highlight information.
      *
-     * @return The current [CoachMarkHighlight] or null if no highlight is active.
+     * @return The current [CoachMarkHighlightState] or null if no highlight is active.
      */
-    private fun getCurrentHighlight(): CoachMarkHighlight<T>? {
+    private fun getCurrentHighlight(): CoachMarkHighlightState<T>? {
         return highlights[currentHighlight.value]
     }
 
-    private fun updateCoachMarkStateInternal(highlight: CoachMarkHighlight<T>?) {
+    private fun updateCoachMarkStateInternal(highlight: CoachMarkHighlightState<T>?) {
         _currentHighlightShape.value = highlight?.shape ?: CoachMarkHighlightShape.SQUARE
         _currentHighlightBounds.value = highlight?.highlightBounds ?: Rect.Zero
     }
@@ -228,7 +231,7 @@ inline fun <reified T : Enum<T>> rememberCoachMarkState(orderedList: List<T>): C
  * @property shape The shape of the highlight (e.g., square, oval).
  */
 @OptIn(ExperimentalMaterial3Api::class)
-data class CoachMarkHighlight<T : Enum<T>>(
+data class CoachMarkHighlightState<T : Enum<T>>(
     val key: T,
     val highlightBounds: Rect,
     val toolTipState: TooltipState,

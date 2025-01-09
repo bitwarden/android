@@ -61,17 +61,6 @@ fun <T : Enum<T>> CoachMarkContainer(
 ) {
     val scope = rememberCoroutineScope()
     Box(modifier = Modifier
-        .pointerInput(Unit) {
-            detectTapGestures(
-                onTap = {
-                    if (state.isVisible.value) {
-                        scope.launch {
-                            state.showCoachMark()
-                        }
-                    }
-                },
-            )
-        }
         .fillMaxSize()
         .then(modifier),
     ) {
@@ -87,6 +76,17 @@ fun <T : Enum<T>> CoachMarkContainer(
 
             Box(
                 modifier = Modifier
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = {
+                                if (state.isVisible.value) {
+                                    scope.launch {
+                                        state.showCoachMark()
+                                    }
+                                }
+                            },
+                        )
+                    }
                     .fillMaxSize()
                     .drawBehind {
                         clipPath(
@@ -145,7 +145,7 @@ private fun BitwardenCoachMarkContainer_preview() {
                     label = "Start Coach Mark Flow",
                     onClick = {
                         scope.launch {
-                            state.showCoachMark()
+                            state.showCoachMark(Foo.Bar)
                         }
                     },
                     style = BitwardenTheme.typography.labelLarge,

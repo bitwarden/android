@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -29,7 +30,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
-fun VaultAddEditContent(
+fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
     typeOptions: List<VaultAddEditState.ItemTypeOption>,
@@ -41,6 +42,9 @@ fun VaultAddEditContent(
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     modifier: Modifier = Modifier,
     permissionsManager: PermissionsManager,
+    onNextCoachMark: () -> Unit,
+    onPreviousCoachMark: () -> Unit,
+    onCoachMarkTourComplete: () -> Unit,
 ) {
     val launcher = permissionsManager.getLauncher(
         onResult = { isGranted ->
@@ -106,6 +110,12 @@ fun VaultAddEditContent(
                             launcher.launch(Manifest.permission.CAMERA)
                         }
                     },
+                    coachMarkScope = this@VaultAddEditContent,
+                    onGenerateCoachMarkNextClick = onNextCoachMark,
+                    onAuthenticatorKeyCoachMarkBackClick = onPreviousCoachMark,
+                    onAuthenticatorKeyCoachMarkNextClick = onNextCoachMark,
+                    onWebsiteURICoachMarkBackClick = onPreviousCoachMark,
+                    onWebsiteURICoachMarkDoneClick = onCoachMarkTourComplete,
                 )
             }
 
@@ -175,4 +185,10 @@ private fun TypeOptionsItem(
         },
         modifier = modifier,
     )
+}
+
+enum class AddEditItemCoachMark {
+    GENERATE_PASSWORD,
+    TOTP,
+    URI,
 }

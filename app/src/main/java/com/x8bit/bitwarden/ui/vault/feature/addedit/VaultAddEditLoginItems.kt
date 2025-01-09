@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkHighlightShape
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -28,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWi
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -43,13 +46,19 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod", "LongParameterList")
 fun LazyListScope.vaultAddEditLoginItems(
+    coachMarkScope: CoachMarkScope<AddEditItemCoachMark>,
     commonState: VaultAddEditState.ViewState.Content.Common,
     loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
     isAddItemMode: Boolean,
     commonActionHandler: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
-) {
+    onGenerateCoachMarkNextClick: () -> Unit,
+    onAuthenticatorKeyCoachMarkBackClick: () -> Unit,
+    onAuthenticatorKeyCoachMarkNextClick: () -> Unit,
+    onWebsiteURICoachMarkBackClick: () -> Unit,
+    onWebsiteURICoachMarkDoneClick: () -> Unit,
+) = coachMarkScope.apply {
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
@@ -77,6 +86,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             password = loginState.password,
             canViewPassword = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
+            onGenerateCoachMarkActionClick = onGenerateCoachMarkNextClick,
         )
     }
 
@@ -103,9 +113,12 @@ fun LazyListScope.vaultAddEditLoginItems(
                 .padding(horizontal = 16.dp),
         )
     }
-
-    if (loginState.totp != null) {
-        item {
+    coachMarkHighlight(
+        key = AddEditItemCoachMark.TOTP,
+        title = "2 of 3",
+        description = "You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in."
+    ) {
+        if (loginState.totp != null) {
             BitwardenTextFieldWithActions(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -138,9 +151,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 },
                 textFieldTestTag = "LoginTotpEntry",
             )
-        }
-    } else {
-        item {
+        } else {
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenOutlinedButton(
                 label = stringResource(id = R.string.setup_totp),
@@ -419,10 +430,11 @@ private fun UsernameRow(
 
 @Suppress("LongMethod")
 @Composable
-private fun PasswordRow(
+private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
     password: String,
     canViewPassword: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    onGenerateCoachMarkActionClick: () -> Unit,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -449,18 +461,32 @@ private fun PasswordRow(
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                 modifier = Modifier.testTag(tag = "CheckPasswordButton"),
             )
-            BitwardenTonalIconButton(
-                vectorIconRes = R.drawable.ic_generate,
-                contentDescription = stringResource(id = R.string.generate_password),
-                onClick = {
-                    if (password.isEmpty()) {
-                        loginItemTypeHandlers.onOpenPasswordGeneratorClick()
-                    } else {
-                        shouldShowDialog = true
-                    }
-                },
-                modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
-            )
+            CoachMarkHighlight(
+                key = AddEditItemCoachMark.GENERATE_PASSWORD,
+                title = "1 of 3",
+                description = "Use this button to generate a new unique password.",
+                shape = CoachMarkHighlightShape.OVAL,
+                rightAction = {
+                    BitwardenClickableText(
+                        label = "Next",
+                        onClick = onGenerateCoachMarkActionClick,
+                        style = BitwardenTheme.typography.labelLarge,
+                    )
+                }
+            ) {
+                BitwardenTonalIconButton(
+                    vectorIconRes = R.drawable.ic_generate,
+                    contentDescription = stringResource(id = R.string.generate_password),
+                    onClick = {
+                        if (password.isEmpty()) {
+                            loginItemTypeHandlers.onOpenPasswordGeneratorClick()
+                        } else {
+                            shouldShowDialog = true
+                        }
+                    },
+                    modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                )
+            }
 
             if (shouldShowDialog) {
                 BitwardenTwoButtonDialog(
