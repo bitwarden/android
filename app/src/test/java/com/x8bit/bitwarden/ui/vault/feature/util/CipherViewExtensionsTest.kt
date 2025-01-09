@@ -278,6 +278,64 @@ class CipherViewExtensionsTest {
     }
 
     @Test
+    fun `toOverflowActions should not return Edit action when cipher cannot be edited`() {
+        val cipher = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.LOGIN,
+        )
+            .copy(
+                id = id,
+                edit = false,
+                login = createMockLoginView(number = 1).copy(
+                    username = null,
+                    password = null,
+                    uris = null,
+                    totp = null,
+                ),
+            )
+
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
+
+        assertEquals(
+            listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should return Edit action when cipher can be edited`() {
+        val cipher = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.LOGIN,
+        )
+            .copy(
+                id = id,
+                edit = true,
+                login = createMockLoginView(number = 1).copy(
+                    username = null,
+                    password = null,
+                    uris = null,
+                    totp = null,
+                ),
+            )
+
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `toTrailingIcons should return collection icon if collectionId is not empty`() {
         val cipher = createMockCipherView(1).copy(
             organizationId = null,
