@@ -104,7 +104,7 @@ jobs:
         continue-on-error: true
         with:
           os: linux
-          files: wrong_path_test
+          files: kover/reportStandardDebug.xml
           fail_ci_if_error: true
 
       - name: Comment PR if tests failed
@@ -112,12 +112,12 @@ jobs:
         env:
             PR_NUMBER: ${{ github.event.number }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            PR_ACTOR: ${{ github.actor }}
+            PR_AUTHOR: ${{ github.actor }}
         run: |
           echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
           echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> $GITHUB_STEP_SUMMARY
 
           if [ ! -z "$PR_NUMBER" ]; then
-            message=$'> [!WARNING]\n> @'$PR_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
+            message=$'> [!WARNING]\n> @'$PR_AUTHOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
           fi
