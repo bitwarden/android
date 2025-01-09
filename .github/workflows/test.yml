@@ -100,18 +100,20 @@ jobs:
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
-        continue-on-error: true
         with:
           os: linux
           files: wrong_path_test
           fail_ci_if_error: true
 
       - name: Comment PR if tests failed
-        if: failure() && github.event_name == 'pull_request'
+        if: failure()
         env:
             PR_NUMBER: ${{ github.event.number }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           message="❌ Uploading code coverage report failed. Please check the [test results]($GITHUB_ACTION_RUN_URL) for more details."
           echo $message >> $GITHUB_STEP_SUMMARY
-          gh pr comment $PR_NUMBER --body "$message"
+
+          if [ ! -z "$PR_NUMBER" ]; then
+            gh pr comment $PR_NUMBER --body "$message"
+          fi
