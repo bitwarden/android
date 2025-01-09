@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.LearnMoreClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,6 +43,7 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
         when (action) {
             ContinueClick -> handleContinueClick()
             is EmailAccessToggle -> handleEmailAccessToggle(action)
+            LearnMoreClick -> handleLearnMoreClick()
         }
     }
 
@@ -71,6 +73,10 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
             it.copy(isEmailAccessEnabled = action.isEnabled)
         }
     }
+
+    private fun handleLearnMoreClick() {
+        sendEvent(NewDeviceNoticeEmailAccessEvent.NavigateToLearnMore)
+    }
 }
 
 /**
@@ -95,6 +101,11 @@ sealed class NewDeviceNoticeEmailAccessEvent {
      * Navigates back.
      */
     data object NavigateBackToVault : NewDeviceNoticeEmailAccessEvent()
+
+    /**
+     * Navigates to learn more about New Device Login Protection
+     */
+    data object NavigateToLearnMore : NewDeviceNoticeEmailAccessEvent()
 }
 
 /**
@@ -110,4 +121,9 @@ sealed class NewDeviceNoticeEmailAccessAction {
      * User tapped the email access toggle.
      */
     data class EmailAccessToggle(val isEnabled: Boolean) : NewDeviceNoticeEmailAccessAction()
+
+    /**
+     * User tapped the learn more button.
+     */
+    data object LearnMoreClick : NewDeviceNoticeEmailAccessAction()
 }
