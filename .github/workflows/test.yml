@@ -112,11 +112,12 @@ jobs:
         env:
             PR_NUMBER: ${{ github.event.number }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            PR_ACTOR: ${{ github.actor }}
         run: |
           echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
           echo "> Uploading code coverage report failed. Please check the Process Test Reports job for more details." >> $GITHUB_STEP_SUMMARY
 
           if [ ! -z "$PR_NUMBER" ]; then
-            message=$'> [!WARNING]\n> Uploading code coverage report failed. Please check the [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
+            message=$'> [!CAUTION]\n> @'$PR_ACTOR' Uploading code coverage report failed. Please check the [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
           fi
