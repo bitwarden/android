@@ -118,5 +118,5 @@ jobs:
 
           if [ ! -z "$PR_NUMBER" ]; then
             message=$'> [!WARNING]\n> Uploading code coverage report failed. Please check the [Process Test Reports job]('$GITHUB_ACTION_RUN_URL') for more details.'
-            gh pr comment $PR_NUMBER --body "$message"
+            gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
           fi
