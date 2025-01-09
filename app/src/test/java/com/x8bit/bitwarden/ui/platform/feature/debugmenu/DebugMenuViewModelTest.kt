@@ -121,6 +121,8 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.NewDevicePermanentDismiss to true,
     FlagKey.IgnoreEnvironmentCheck to true,
     FlagKey.MutualTls to true,
+    FlagKey.SingleTapPasskeyCreation to true,
+    FlagKey.SingleTapPasskeyAuthentication to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -138,6 +140,8 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.NewDevicePermanentDismiss to false,
     FlagKey.IgnoreEnvironmentCheck to false,
     FlagKey.MutualTls to false,
+    FlagKey.SingleTapPasskeyCreation to false,
+    FlagKey.SingleTapPasskeyAuthentication to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

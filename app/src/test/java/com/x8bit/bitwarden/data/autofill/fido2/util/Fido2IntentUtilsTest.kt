@@ -75,7 +75,7 @@ class Fido2IntentUtilsTest {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
         } returns mockProviderRequest
 
-        val createRequest = intent.getFido2CredentialRequestOrNull()
+        val createRequest = intent.getFido2CreateCredentialRequestOrNull()
         assertEquals(
             Fido2CreateCredentialRequest(
                 userId = "mockUserId",
@@ -83,6 +83,7 @@ class Fido2IntentUtilsTest {
                 packageName = mockCallingAppInfo.packageName,
                 signingInfo = mockCallingAppInfo.signingInfo,
                 origin = mockCallingAppInfo.origin,
+                isUserVerified = false,
             ),
             createRequest,
         )
@@ -94,7 +95,7 @@ class Fido2IntentUtilsTest {
 
         every { isBuildVersionBelow(34) } returns true
 
-        assertNull(intent.getFido2CredentialRequestOrNull())
+        assertNull(intent.getFido2CreateCredentialRequestOrNull())
     }
 
     @Suppress("MaxLineLength")
@@ -106,7 +107,7 @@ class Fido2IntentUtilsTest {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
         } returns null
 
-        assertNull(intent.getFido2CredentialRequestOrNull())
+        assertNull(intent.getFido2CreateCredentialRequestOrNull())
     }
 
     @Suppress("MaxLineLength")
@@ -127,7 +128,7 @@ class Fido2IntentUtilsTest {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
         } returns mockProviderRequest
 
-        assertNull(intent.getFido2CredentialRequestOrNull())
+        assertNull(intent.getFido2CreateCredentialRequestOrNull())
     }
 
     @Suppress("MaxLineLength")
@@ -157,7 +158,7 @@ class Fido2IntentUtilsTest {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
         } returns mockProviderRequest
 
-        assertNull(intent.getFido2CredentialRequestOrNull())
+        assertNull(intent.getFido2CreateCredentialRequestOrNull())
     }
 
     @Test
@@ -199,6 +200,7 @@ class Fido2IntentUtilsTest {
                 packageName = mockCallingAppInfo.packageName,
                 signingInfo = mockCallingAppInfo.signingInfo,
                 origin = mockCallingAppInfo.origin,
+                isUserVerified = false,
             ),
             assertionRequest,
         )

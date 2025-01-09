@@ -22,10 +22,10 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionReq
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -136,7 +136,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
-            Intent::getFido2CredentialRequestOrNull,
+            Intent::getFido2CreateCredentialRequestOrNull,
             Intent::getFido2GetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
         )
@@ -156,7 +156,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
-            Intent::getFido2CredentialRequestOrNull,
+            Intent::getFido2CreateCredentialRequestOrNull,
             Intent::getFido2GetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
         )
@@ -612,6 +612,7 @@ class MainViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         val fido2Intent = createMockIntent(
             mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -638,11 +639,13 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 request data should set the user to unverified`() {
+    fun `on ReceiveFirstIntent with fido2 create request data should set the user verification based on request`() {
         val viewModel = createViewModel()
+        val createCredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
         val fido2Intent = createMockIntent(
-            mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            mockFido2CreateCredentialRequest = createCredentialRequest,
         )
 
         viewModel.trySendAction(
@@ -652,7 +655,7 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         verify {
-            fido2CredentialManager.isUserVerified = false
+            fido2CredentialManager.isUserVerified = createCredentialRequest.isUserVerified ?: false
         }
     }
 
@@ -667,6 +670,7 @@ class MainViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         val mockIntent = createMockIntent(
             mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -697,6 +701,7 @@ class MainViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         val mockIntent = createMockIntent(
             mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -1101,7 +1106,7 @@ private fun createMockIntent(
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
     every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
-    every { getFido2CredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
+    every { getFido2CreateCredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
     every { getFido2GetCredentialsRequestOrNull() } returns mockFido2GetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut

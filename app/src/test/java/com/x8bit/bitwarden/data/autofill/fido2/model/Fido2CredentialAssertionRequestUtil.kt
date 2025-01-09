@@ -5,6 +5,7 @@ import android.content.pm.SigningInfo
 fun createMockFido2CredentialAssertionRequest(
     number: Int = 1,
     userId: String = "mockUserId-$number",
+    isUserVerified: Boolean = false,
 ): Fido2CredentialAssertionRequest =
     Fido2CredentialAssertionRequest(
         userId = userId,
@@ -15,4 +16,5 @@ fun createMockFido2CredentialAssertionRequest(
         packageName = "mockPackageName-$number",
         signingInfo = SigningInfo(),
         origin = "mockOrigin-$number",
+        isUserVerified = isUserVerified,
     )
