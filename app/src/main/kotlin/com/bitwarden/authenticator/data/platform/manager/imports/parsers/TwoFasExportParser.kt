@@ -8,11 +8,9 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportPar
 import com.bitwarden.authenticator.data.platform.manager.imports.model.TwoFasJsonExport
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
-import java.io.IOException
 import java.util.UUID
 
 private const val TOKEN_TYPE_HOTP = "HOTP"
@@ -21,7 +19,7 @@ private const val TOKEN_TYPE_HOTP = "HOTP"
  * An [ExportParser] responsible for transforming 2FAS export files into Bitwarden Authenticator
  * items.
  */
-class TwoFasExportParser : ExportParser {
+class TwoFasExportParser : ExportParser() {
     override fun parse(byteArray: ByteArray): ExportParseResult {
         return import2fasJson(byteArray)
     }
@@ -35,30 +33,24 @@ class TwoFasExportParser : ExportParser {
             encodeDefaults = true
         }
 
-        return try {
-            val exportData = importJson
-                .decodeFromStream<TwoFasJsonExport>(ByteArrayInputStream(byteArray))
+        val exportData = importJson.decodeFromStream<TwoFasJsonExport>(
+            ByteArrayInputStream(byteArray),
+        )
 
-            if (!exportData.servicesEncrypted.isNullOrEmpty()) {
-                ExportParseResult.Error(
-                    message = R.string.import_2fas_password_protected_not_supported.asText(),
-                )
-            } else {
-                ExportParseResult.Success(
-                    items = exportData.services.toAuthenticatorItemEntities(),
-                )
-            }
-        } catch (e: SerializationException) {
-            ExportParseResult.Error()
-        } catch (e: IllegalArgumentException) {
-            ExportParseResult.Error()
-        } catch (e: IOException) {
-            ExportParseResult.Error()
+        return if (!exportData.servicesEncrypted.isNullOrEmpty()) {
+            ExportParseResult.Error(
+                message = R.string.import_2fas_password_protected_not_supported.asText(),
+            )
+        } else {
+            ExportParseResult.Success(
+                items = exportData.services.toAuthenticatorItemEntities(),
+            )
         }
     }
 
-    private fun List<TwoFasJsonExport.Service>.toAuthenticatorItemEntities() =
-        mapNotNull { it.toAuthenticatorItemEntityOrNull() }
+    private fun List<TwoFasJsonExport.Service>.toAuthenticatorItemEntities() = mapNotNull {
+        it.toAuthenticatorItemEntityOrNull()
+    }
 
     @Suppress("MaxLineLength")
     private fun TwoFasJsonExport.Service.toAuthenticatorItemEntityOrNull(): AuthenticatorItemEntity {

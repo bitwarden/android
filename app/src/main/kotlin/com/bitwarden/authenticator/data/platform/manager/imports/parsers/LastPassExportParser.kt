@@ -6,18 +6,16 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.LastPassJsonExport
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
-import java.io.IOException
 import java.util.UUID
 
 /**
  * An [ExportParser] responsible for transforming LastPass export files into Bitwarden Authenticator
  * items.
  */
-class LastPassExportParser : ExportParser {
+class LastPassExportParser : ExportParser() {
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun parse(byteArray: ByteArray): ExportParseResult {
@@ -27,25 +25,19 @@ class LastPassExportParser : ExportParser {
             explicitNulls = false
         }
 
-        return try {
-            val exportData =
-                importJson.decodeFromStream<LastPassJsonExport>(ByteArrayInputStream(byteArray))
-            ExportParseResult.Success(
-                items = exportData
-                    .accounts
-                    .toAuthenticatorItemEntities(),
-            )
-        } catch (e: SerializationException) {
-            ExportParseResult.Error()
-        } catch (e: IllegalArgumentException) {
-            ExportParseResult.Error()
-        } catch (e: IOException) {
-            ExportParseResult.Error()
-        }
+        val exportData = importJson.decodeFromStream<LastPassJsonExport>(
+            ByteArrayInputStream(byteArray),
+        )
+
+        return ExportParseResult.Success(
+            items = exportData.accounts
+                .toAuthenticatorItemEntities(),
+        )
     }
 
-    private fun List<LastPassJsonExport.Account>.toAuthenticatorItemEntities() =
-        map { it.toAuthenticatorItemEntity() }
+    private fun List<LastPassJsonExport.Account>.toAuthenticatorItemEntities() = map {
+        it.toAuthenticatorItemEntity()
+    }
 
     private fun LastPassJsonExport.Account.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
 

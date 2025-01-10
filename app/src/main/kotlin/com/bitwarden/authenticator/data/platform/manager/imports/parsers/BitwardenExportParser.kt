@@ -11,18 +11,16 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportPar
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
-import java.io.IOException
 
 /**
  * Implementation of [ExportParser] responsible for parsing exports from the Bitwarden application.
  */
 class BitwardenExportParser(
     private val fileFormat: ImportFileFormat,
-) : ExportParser {
+) : ExportParser() {
     override fun parse(byteArray: ByteArray): ExportParseResult {
         return when (fileFormat) {
             ImportFileFormat.BITWARDEN_JSON -> importJsonFile(byteArray)
@@ -38,26 +36,20 @@ class BitwardenExportParser(
             explicitNulls = false
         }
 
-        return try {
-            val exportData = importJson
-                .decodeFromStream<ExportJsonData>(ByteArrayInputStream(byteArray))
-            ExportParseResult.Success(
-                items = exportData
-                    .items
-                    .filter { it.login?.totp != null }
-                    .toAuthenticatorItemEntities(),
-            )
-        } catch (e: SerializationException) {
-            ExportParseResult.Error()
-        } catch (e: IllegalArgumentException) {
-            ExportParseResult.Error()
-        } catch (e: IOException) {
-            ExportParseResult.Error()
-        }
+        val exportData = importJson.decodeFromStream<ExportJsonData>(
+            ByteArrayInputStream(byteArray),
+        )
+
+        return ExportParseResult.Success(
+            items = exportData.items
+                .filter { it.login?.totp != null }
+                .toAuthenticatorItemEntities(),
+        )
     }
 
-    private fun List<ExportJsonData.ExportItem>.toAuthenticatorItemEntities() =
-        map { it.toAuthenticatorItemEntity() }
+    private fun List<ExportJsonData.ExportItem>.toAuthenticatorItemEntities() = map {
+        it.toAuthenticatorItemEntity()
+    }
 
     @Suppress("MaxLineLength", "CyclomaticComplexMethod", "LongMethod")
     private fun ExportJsonData.ExportItem.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
@@ -73,8 +65,7 @@ class BitwardenExportParser(
             }
 
             else -> {
-                val uriString =
-                    "${TotpCodeManager.TOTP_CODE_PREFIX}/$name?${TotpCodeManager.SECRET_PARAM}=$otpString"
+                val uriString = "${TotpCodeManager.TOTP_CODE_PREFIX}/$name?${TotpCodeManager.SECRET_PARAM}=$otpString"
                 Uri.parse(uriString)
             }
         }
@@ -115,8 +106,7 @@ class BitwardenExportParser(
                 TotpCodeManager.STEAM_DIGITS_DEFAULT
             }
         }
-        val issuer = otpUri.getQueryParameter(TotpCodeManager.ISSUER_PARAM)
-            ?: name
+        val issuer = otpUri.getQueryParameter(TotpCodeManager.ISSUER_PARAM) ?: name
 
         val label = when (type) {
             AuthenticatorItemType.TOTP -> {

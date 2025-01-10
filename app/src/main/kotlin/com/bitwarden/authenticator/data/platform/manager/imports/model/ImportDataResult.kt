@@ -14,7 +14,11 @@ sealed class ImportDataResult {
     /**
      * Indicates import was not successful.
      *
-     * @property message Optional [Text] indicating why the import failed.
+     * @property title An optional [Text] providing a brief title of the reason the import failed.
+     * @property message An optional [Text] containing an explanation of why the import failed.
      */
-    data class Error(val message: Text? = null) : ImportDataResult()
+    data class Error(
+        val title: Text? = null,
+        val message: Text? = null,
+    ) : ImportDataResult()
 }

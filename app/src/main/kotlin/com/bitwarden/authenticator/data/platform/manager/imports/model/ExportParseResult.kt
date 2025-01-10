@@ -14,9 +14,14 @@ sealed class ExportParseResult {
     data class Success(val items: List<AuthenticatorItemEntity>) : ExportParseResult()
 
     /**
-     * Indicates there was an error while parsing the selected file.
+     * Represents an error that occurred while parsing the selected file.
+     * Provides user-friendly messages to display to the user.
      *
-     * @property message User friendly message displayed to the user, if provided.
+     * @property title A user-friendly title summarizing the error.
+     * @property message A detailed message describing the error.
      */
-    data class Error(val message: Text? = null) : ExportParseResult()
+    data class Error(
+        val title: Text? = null,
+        val message: Text? = null,
+    ) : ExportParseResult()
 }

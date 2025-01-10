@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
@@ -31,9 +32,8 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFil
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
@@ -85,15 +85,19 @@ fun ImportingScreen(
 
     when (val dialog = state.dialogState) {
         is ImportState.DialogState.Error -> {
-            BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialog.title,
-                    message = dialog.message,
-                ),
-                onDismissRequest = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(ImportAction.DialogDismiss)
-                    }
+            BitwardenTwoButtonDialog(
+                title = dialog.title?.invoke(),
+                message = dialog.message.invoke(),
+                confirmButtonText = stringResource(id = R.string.get_help),
+                onConfirmClick = {
+                    intentManager.launchUri("https://bitwarden.com/help".toUri())
+                },
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onDismissClick = {
+                    viewModel.trySendAction(ImportAction.DialogDismiss)
+                },
+                onDismissRequest = {
+                    viewModel.trySendAction(ImportAction.DialogDismiss)
                 },
             )
         }

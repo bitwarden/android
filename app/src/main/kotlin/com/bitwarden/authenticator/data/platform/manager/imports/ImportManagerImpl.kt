@@ -21,23 +21,33 @@ class ImportManagerImpl(
         importFileFormat: ImportFileFormat,
         byteArray: ByteArray,
     ): ImportDataResult {
+        val parser = createParser(importFileFormat)
+        return processParseResult(parser.parseForResult(byteArray))
+    }
 
-        val parser: ExportParser = when (importFileFormat) {
-            ImportFileFormat.BITWARDEN_JSON -> BitwardenExportParser(importFileFormat)
-            ImportFileFormat.TWO_FAS_JSON -> TwoFasExportParser()
-            ImportFileFormat.LAST_PASS_JSON -> LastPassExportParser()
-            ImportFileFormat.AEGIS -> AegisExportParser()
+    private fun createParser(
+        importFileFormat: ImportFileFormat,
+    ): ExportParser = when (importFileFormat) {
+        ImportFileFormat.BITWARDEN_JSON -> BitwardenExportParser(importFileFormat)
+        ImportFileFormat.TWO_FAS_JSON -> TwoFasExportParser()
+        ImportFileFormat.LAST_PASS_JSON -> LastPassExportParser()
+        ImportFileFormat.AEGIS -> AegisExportParser()
+    }
+
+    private suspend fun processParseResult(
+        parseResult: ExportParseResult,
+    ): ImportDataResult = when (parseResult) {
+        is ExportParseResult.Error -> {
+            ImportDataResult.Error(
+                title = parseResult.title,
+                message = parseResult.message,
+            )
         }
 
-        return when (val parseResult = parser.parse(byteArray)) {
-            is ExportParseResult.Error -> {
-                ImportDataResult.Error(parseResult.message)
-            }
-
-            is ExportParseResult.Success -> {
-                authenticatorDiskSource.saveItem(*parseResult.items.toTypedArray())
-                ImportDataResult.Success
-            }
+        is ExportParseResult.Success -> {
+            val items = parseResult.items.toTypedArray()
+            authenticatorDiskSource.saveItem(*items)
+            ImportDataResult.Success
         }
     }
 }

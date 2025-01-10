@@ -6,17 +6,15 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.platform.manager.imports.model.AegisJsonExport
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
-import java.io.IOException
 import java.util.UUID
 
 /**
  * Implementation of [ExportParser] responsible for parsing exports from the Aegis application.
  */
-class AegisExportParser : ExportParser {
+class AegisExportParser : ExportParser() {
     @OptIn(ExperimentalSerializationApi::class)
     override fun parse(byteArray: ByteArray): ExportParseResult {
         val importJson = Json {
@@ -25,22 +23,14 @@ class AegisExportParser : ExportParser {
             explicitNulls = false
         }
 
-        return try {
-            val exportData = importJson
-                .decodeFromStream<AegisJsonExport>(ByteArrayInputStream(byteArray))
-            ExportParseResult.Success(
-                items = exportData
-                    .db
-                    .entries
-                    .toAuthenticatorItemEntities(),
-            )
-        } catch (e: SerializationException) {
-            ExportParseResult.Error()
-        } catch (e: IllegalArgumentException) {
-            ExportParseResult.Error()
-        } catch (e: IOException) {
-            ExportParseResult.Error()
-        }
+        val exportData = importJson.decodeFromStream<AegisJsonExport>(
+            ByteArrayInputStream(byteArray),
+        )
+
+        return ExportParseResult.Success(
+            items = exportData.db.entries
+                .toAuthenticatorItemEntities(),
+        )
     }
 
     private fun List<AegisJsonExport.Database.Entry>.toAuthenticatorItemEntities() =
