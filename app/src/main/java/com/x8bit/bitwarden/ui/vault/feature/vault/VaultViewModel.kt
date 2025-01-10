@@ -12,10 +12,12 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -78,6 +80,7 @@ class VaultViewModel @Inject constructor(
     private val snackbarRelayManager: SnackbarRelayManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -208,6 +211,14 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLifecycleResumed() {
+        when (specialCircumstanceManager.specialCircumstance) {
+            is SpecialCircumstance.SearchShortcut -> {
+                sendEvent(VaultEvent.NavigateToVaultSearchScreen)
+            }
+
+            else -> Unit
+        }
+
         val shouldShowPrompt = reviewPromptManager.shouldPromptForAppReview() &&
             featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt)
         if (shouldShowPrompt) {

@@ -46,6 +46,10 @@ class AppResumeManagerImpl(
         return when (resumeScreenData) {
             is AppResumeScreenData.GeneratorScreen -> SpecialCircumstance.GeneratorShortcut
             is AppResumeScreenData.SendScreen -> SpecialCircumstance.SendShortcut
+            is AppResumeScreenData.SearchScreen -> SpecialCircumstance.SearchShortcut(
+                resumeScreenData.searchTerm,
+            )
+
             else -> null
         }
     }

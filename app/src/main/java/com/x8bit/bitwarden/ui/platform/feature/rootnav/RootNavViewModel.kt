@@ -160,6 +160,7 @@ class RootNavViewModel @Inject constructor(
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
                     SpecialCircumstance.SendShortcut,
+                    is SpecialCircumstance.SearchShortcut,
                     null,
                         -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 

@@ -9,14 +9,20 @@ import kotlinx.serialization.Serializable
 sealed class AppResumeScreenData {
 
     /**
-     * Data class representing the Generator screen for app resume.
+     * Data object representing the Generator screen for app resume.
      */
     @Serializable
     data object GeneratorScreen : AppResumeScreenData()
 
     /**
-     * Data class representing the Send screen for app resume.
+     * Data object representing the Send screen for app resume.
      */
     @Serializable
     data object SendScreen : AppResumeScreenData()
+
+    /**
+     * Data class representing the Search screen for app resume.
+     */
+    @Serializable
+    data class SearchScreen(val searchTerm: String) : AppResumeScreenData()
 }
