@@ -234,7 +234,7 @@
   <string name="attachments">附件</string>
   <string name="unable_to_download_file">无法下载文件。</string>
   <string name="unable_to_open_file">您的设备无法打开这种类型的文件。</string>
-  <string name="downloading">下载中...</string>
+  <string name="downloading">正在下载……</string>
   <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
   <string name="authenticator_key">验证器密钥 (TOTP)</string>
   <string name="verification_code_totp">验证码 (TOTP)</string>
@@ -371,7 +371,7 @@
   <string name="date_password_updated">密码更新于</string>
   <string name="date_updated">更新于</string>
   <string name="autofill_activated">自动填充已激活！</string>
-  <string name="must_log_in_main_app_autofill">您必须先登录 Bitwarden 主应用程序，才可以使用自动填充。</string>
+  <string name="must_log_in_main_app_autofill">您必须先登录 Bitwarden 主应用程序，才能使用自动填充。</string>
   <string name="autofill_setup">现在，当登录 App 和网站时，您可以通过键盘轻松访问您的登录信息。</string>
   <string name="autofill_setup2">我们建议您在「设置」里关闭其它您不再使用的自动填充 App 。</string>
   <string name="bitwarden_autofill_description">从键盘直接访问密码库以快速自动填充密码。</string>
@@ -620,7 +620,7 @@
   <string name="captcha_failed">Captcha 验证失败。请重试。</string>
   <string name="updated_master_password">已更新主密码</string>
   <string name="update_master_password">更新主密码</string>
-  <string name="update_master_password_warning">您的主密码最近被您组织的管理员更改过。要访问此密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</string>
+  <string name="update_master_password_warning">您的主密码最近被您组织的管理员更改过。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</string>
   <string name="updating_password">正在更新密码</string>
   <string name="update_password_error">当前无法更新密码</string>
   <string name="remove_master_password">移除主密码</string>
@@ -827,7 +827,7 @@
   <string name="vault_timeout_action_changed_to_log_out">密码库超时动作已更改为注销</string>
   <string name="block_auto_fill">阻止自动填充</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">不会为这些 URI 提供自动填充。</string>
-  <string name="new_blocked_uri">新增被阻止的 URI</string>
+  <string name="new_blocked_uri">新增屏蔽的 URI</string>
   <string name="uri_saved">URI 已保存</string>
   <string name="invalid_format_use_https_http_or_android_app">无效格式。请使用 https://、http:// 或 androidapp://</string>
   <string name="edit_uri">编辑 URI</string>
@@ -836,8 +836,8 @@
   <string name="format_x">格式：%1$s</string>
   <string name="invalid_uri">无效的 URI</string>
   <string name="uri_removed">URI 已移除</string>
-  <string name="there_are_no_blocked_ur_is">没有被阻止的 URI</string>
-  <string name="the_urix_is_already_blocked">URI %1$s 已被阻止</string>
+  <string name="there_are_no_blocked_ur_is">没有已屏蔽的 URI</string>
+  <string name="the_urix_is_already_blocked">URI %1$s 已被屏蔽</string>
   <string name="cannot_edit_multiple_ur_is_at_once">一次不能编辑多个 URI</string>
   <string name="login_approved">登录已批准</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">必须在 Bitwarden App 的设置中启用设备登录。需要其他登录选项吗？</string>
@@ -870,7 +870,7 @@
   <string name="continue_to_privacy_policy">查看隐私政策吗？</string>
   <string name="continue_to_app_store">前往 App Store 吗？</string>
   <string name="continue_to_device_settings">前往设备设置吗？</string>
-  <string name="two_step_login_description_long">通过在 Bitwarden 网页 App 中设置两步登录，可以使您的账户更加安全。</string>
+  <string name="two_step_login_description_long">在 Bitwarden 网页 App 中设置两步登录，让您的账户更加安全。</string>
   <string name="change_master_password_description_long">您可以在 Bitwarden 网页 App 上更改您的主密码。</string>
   <string name="you_can_import_data_to_your_vault_on_x">您可以通过 %1$s 将数据导入您的密码库。</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">访问帮助中心了解更多如何使用 Bitwarden 的信息。</string>
@@ -999,8 +999,8 @@
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">选择一个唯一且强大的密码，以保障您的信息安全。</string>
   <string name="minimum_characters">%1$s 个字符</string>
   <string name="expired_link">失效链接</string>
-  <string name="please_restart_registration_or_try_logging_in">请重新注册或尝试登录。您可能已经有一个账户了。</string>
-  <string name="restart_registration">重新开始注册</string>
+  <string name="please_restart_registration_or_try_logging_in">请重启注册或尝试登录。您可能已经有一个账户了。</string>
+  <string name="restart_registration">重启注册</string>
   <string name="authenticator_sync">验证器同步</string>
   <string name="allow_bitwarden_authenticator_syncing">允许验证器同步</string>
   <string name="there_was_an_issue_validating_the_registration_token">验证注册令牌时出现问题。</string>
