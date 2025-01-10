@@ -90,7 +90,7 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
-    if: always()
+    if: success()
 
     steps:
       - name: Download test artifacts
