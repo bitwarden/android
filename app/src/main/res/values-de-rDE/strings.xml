@@ -341,7 +341,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="use_face_id_to_unlock">Face ID zum Entsperren verwenden</string>
   <string name="verify_face_id">Face ID überprüfen</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_credential_provider_go_to_settings">We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</string>
+  <string name="bitwarden_credential_provider_go_to_settings">Wir waren nicht in der Lage, das Einstellungsmenü des Anmeldeinformationsanbieters von Android für dich zu öffnen. Du kannst zum Einstellungsmenü des Anmeldeinformationsanbieters manuell über Android Einstellungen &gt; System &gt; Passwörter &amp; Konten &gt; Passwörter, Passkeys und Datendienste gelangen.</string>
   <string name="bitwarden_autofill_go_to_settings">Die Android Auto-Fill Einstellungen konnten nicht automatisch geöffnet werden. Über Android Einstellungen &gt; Sprachen &amp; Eingabe &gt; AutoFill-Dienst kannst du manuell zu den Auto-Fill Einstellungen navigieren.</string>
   <string name="custom_field_name">Name des benutzerdefinierten Feldes</string>
   <string name="field_type_boolean">Ja/Nein</string>
@@ -936,7 +936,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="self_hosted_server_url">Selbst gehostete Server-URL</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da der Benutzer nicht verifiziert werden konnte.</string>
   <string name="user_verification_direction">Benutzer-Verifizierung</string>
-  <string name="creating_on">Creating on:</string>
+  <string name="creating_on">Erstellen auf:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Folge den Anweisungen in der an %1$s gesendeten E-Mail, um mit der Erstellung deines Kontos fortzufahren.</string>
   <string name="we_sent_an_email_to">Wir haben eine E-Mail an %1$s gesendet.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Wenn du fortfährst, stimmst du den Nutzungsbedingungen und der Datenschutzvereinbarung zu</string>
@@ -1050,7 +1050,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Speichere die exportierte Datei irgendwo auf deinem Computer, so dass du sie leicht wiederfinden kannst.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dies ist kein anerkannter Bitwarden-Server. Möglicherweise musst du dich bei deinem Anbieter erkundigen oder deinen Server aktualisieren.</string>
   <string name="syncing_logins_loading_message">Synchronisiere Zugangsdaten...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
+  <string name="ssh_key_cipher_item_types">SSH-Schlüssel-Cipher-Eintragsarten</string>
   <string name="download_the_browser_extension">Die Browser-Erweiterung herunterladen</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Gehe zu bitwarden.com/download, um Bitwarden für eine nahtlose Benutzererfahrung in deinen bevorzugten Browser zu integrieren.</string>
   <string name="use_the_web_app">Verwende die Web-App</string>

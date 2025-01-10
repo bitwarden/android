@@ -1111,5 +1111,5 @@
   <string name="we_couldnt_verify_the_servers_certificate">Не вдається перевірити сертифікат сервера. Можливо, налаштування ланцюжка сертифікатів, проксі вашого пристрою, або вашого сервера Bitwarden неправильні.</string>
   <string name="review_flow_launched">Розпочато процес відгуку!</string>
   <string name="copy_private_key">Копіювати закритий ключ</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Ви можете змінити електронну пошту у вебпрограмі Bitwarden.</string>
 </resources>
