@@ -216,6 +216,11 @@ class VaultViewModel @Inject constructor(
                 sendEvent(VaultEvent.NavigateToVaultSearchScreen)
             }
 
+            is SpecialCircumstance.VerificationCodeShortcut -> {
+                sendEvent(VaultEvent.NavigateToVerificationCodeScreen)
+                specialCircumstanceManager.specialCircumstance = null
+            }
+
             else -> Unit
         }
 

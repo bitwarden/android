@@ -161,6 +161,7 @@ class RootNavViewModel @Inject constructor(
                     SpecialCircumstance.VaultShortcut,
                     SpecialCircumstance.SendShortcut,
                     is SpecialCircumstance.SearchShortcut,
+                    SpecialCircumstance.VerificationCodeShortcut,
                     null,
                         -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 

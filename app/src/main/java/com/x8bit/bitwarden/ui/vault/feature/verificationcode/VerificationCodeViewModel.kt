@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -41,6 +43,7 @@ class VerificationCodeViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
+    private val appResumeManager: AppResumeManager,
 ) : BaseViewModel<VerificationCodeState, VerificationCodeEvent, VerificationCodeAction>(
     initialState = run {
         VerificationCodeState(
@@ -95,6 +98,8 @@ class VerificationCodeViewModel @Inject constructor(
             is VerificationCodeAction.RefreshPull -> handleRefreshPull()
             is VerificationCodeAction.SearchIconClick -> handleSearchIconClick()
             is VerificationCodeAction.SyncClick -> handleSyncClick()
+            is VerificationCodeAction.LifecycleResume -> handleOnResumed()
+            is VerificationCodeAction.LifecyclePause -> handleOnPaused()
             is VerificationCodeAction.Internal -> handleInternalAction(action)
         }
     }
@@ -332,6 +337,16 @@ class VerificationCodeViewModel @Inject constructor(
         }
         return DataState.Loaded(filteredAuthCodes)
     }
+
+    private fun handleOnResumed() {
+        appResumeManager.setResumeScreen(
+            AppResumeScreenData.VerificationCodeScreen,
+        )
+    }
+
+    private fun handleOnPaused() {
+        appResumeManager.clearResumeScreen()
+    }
 }
 
 /**
@@ -492,6 +507,16 @@ sealed class VerificationCodeAction {
      * User has clicked the refresh button.
      */
     data object SyncClick : VerificationCodeAction()
+
+    /**
+     * Indicates the UI has been entered a resumed lifecycle state.
+     */
+    data object LifecycleResume : VerificationCodeAction()
+
+    /**
+     * Indicates the UI has been entered a paused lifecycle state.
+     */
+    data object LifecyclePause : VerificationCodeAction()
 
     /**
      * Actions for internal use by the ViewModel.

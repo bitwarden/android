@@ -117,6 +117,12 @@ sealed class SpecialCircumstance : Parcelable {
     data class SearchShortcut(val searchTerm: String) : SpecialCircumstance()
 
     /**
+     * Deeplink to the Verification Code.
+     */
+    @Parcelize
+    data object VerificationCodeShortcut : SpecialCircumstance()
+
+    /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be
      * cleared after a successful login.
      */

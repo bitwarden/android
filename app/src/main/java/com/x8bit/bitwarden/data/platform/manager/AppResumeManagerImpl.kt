@@ -41,14 +41,15 @@ class AppResumeManagerImpl(
     }
 
     override fun getResumeSpecialCircumstance(): SpecialCircumstance? {
-        val resumeScreenData = getResumeScreen()
-
-        return when (resumeScreenData) {
-            is AppResumeScreenData.GeneratorScreen -> SpecialCircumstance.GeneratorShortcut
-            is AppResumeScreenData.SendScreen -> SpecialCircumstance.SendShortcut
+        return when (val resumeScreenData = getResumeScreen()) {
+            AppResumeScreenData.GeneratorScreen -> SpecialCircumstance.GeneratorShortcut
+            AppResumeScreenData.SendScreen -> SpecialCircumstance.SendShortcut
             is AppResumeScreenData.SearchScreen -> SpecialCircumstance.SearchShortcut(
                 resumeScreenData.searchTerm,
             )
+
+            AppResumeScreenData.VerificationCodeScreen ->
+                SpecialCircumstance.VerificationCodeShortcut
 
             else -> null
         }

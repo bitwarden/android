@@ -16,9 +16,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -59,6 +61,20 @@ fun VerificationCodeScreen(
             { viewModel.trySendAction(VerificationCodeAction.RefreshPull) }
         },
     )
+
+    LivecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.trySendAction(VerificationCodeAction.LifecycleResume)
+            }
+
+            Lifecycle.Event.ON_STOP -> {
+                viewModel.trySendAction(VerificationCodeAction.LifecyclePause)
+            }
+
+            else -> Unit
+        }
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {

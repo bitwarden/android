@@ -83,6 +83,15 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
                 )
             }
 
+            is SpecialCircumstance.VerificationCodeShortcut -> {
+                sendEvent(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
+                        labelRes = state.vaultNavBarLabelRes,
+                        contentDescRes = state.vaultNavBarContentDescriptionRes,
+                    ),
+                )
+            }
+
             else -> Unit
         }
     }

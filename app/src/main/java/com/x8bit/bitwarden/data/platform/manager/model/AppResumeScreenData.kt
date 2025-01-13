@@ -25,4 +25,10 @@ sealed class AppResumeScreenData {
      */
     @Serializable
     data class SearchScreen(val searchTerm: String) : AppResumeScreenData()
+
+    /**
+     * Data object representing the Verification Code screen for app resume.
+     */
+    @Serializable
+    data object VerificationCodeScreen : AppResumeScreenData()
 }
