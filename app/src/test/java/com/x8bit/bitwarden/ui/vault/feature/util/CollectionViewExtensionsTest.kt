@@ -155,13 +155,11 @@ class CollectionViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `canAssociateToCollections should return false if the user has except password permission at least one collection`() {
+    fun `canAssociateToCollections should return false if the user doesn't have any manage or edit permissions`() {
         val collectionList: List<CollectionView> = listOf(
             createEditExceptPasswordsCollectionView(number = 1),
             createViewCollectionView(number = 2),
             createViewExceptPasswordsCollectionView(number = 3),
-            createManageCollectionView(number = 4),
-            createEditCollectionView(number = 5),
         )
         val collectionIds = collectionList.mapNotNull { it.id }
         assertFalse(collectionList.canAssignToCollections(collectionIds))

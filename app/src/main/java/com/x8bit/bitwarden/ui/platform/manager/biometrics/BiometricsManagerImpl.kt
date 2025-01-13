@@ -43,14 +43,14 @@ class BiometricsManagerImpl(
         }
 
     override fun promptBiometrics(
-        onSuccess: (cipher: Cipher?) -> Unit,
+        onSuccess: (cipher: Cipher) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
         cipher: Cipher,
     ) {
         configureAndDisplayPrompt(
-            onSuccess = onSuccess,
+            onSuccess = { it?.let(block = onSuccess) ?: onError() },
             onCancel = onCancel,
             onLockOut = onLockOut,
             onError = onError,

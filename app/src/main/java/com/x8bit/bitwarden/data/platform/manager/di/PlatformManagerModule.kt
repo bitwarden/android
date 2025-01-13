@@ -143,8 +143,10 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideBiometricsEncryptionManager(
+        authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
     ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(
+        authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
     )
 

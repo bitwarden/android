@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBa
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
@@ -304,8 +305,8 @@ private fun ScrollContent(
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(12.dp))
         if (state.isUnderPolicy) {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.password_generator_policy_in_effect),
                 modifier = Modifier
@@ -314,16 +315,29 @@ private fun ScrollContent(
                     .fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
 
         GeneratedStringItem(
             generatedText = state.generatedText,
-            onCopyClick = onCopyClick,
             onRegenerateClick = onRegenerateClick,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BitwardenFilledButton(
+            label = stringResource(id = R.string.copy),
+            onClick = onCopyClick,
+            modifier = Modifier
+                .testTag(tag = "CopyValueButton")
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenListHeaderText(
             label = stringResource(id = R.string.options),
@@ -367,22 +381,15 @@ private fun ScrollContent(
 @Composable
 private fun GeneratedStringItem(
     generatedText: String,
-    onCopyClick: () -> Unit,
     onRegenerateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
-        label = "",
+        label = null,
         textFieldTestTag = "GeneratedPasswordLabel",
         value = generatedText,
         singleLine = false,
         actions = {
-            BitwardenTonalIconButton(
-                vectorIconRes = R.drawable.ic_copy,
-                contentDescription = stringResource(id = R.string.copy),
-                onClick = onCopyClick,
-                modifier = Modifier.testTag("CopyValueButton"),
-            )
             BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
@@ -395,7 +402,7 @@ private fun GeneratedStringItem(
         textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier,
         textToolbarType = TextToolbarType.NONE,
     )
 }

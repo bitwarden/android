@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAut
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -461,6 +462,13 @@ class Fido2ProviderProcessorTest {
         val mockIntent: PendingIntent = mockk()
         val mockPublicKeyCredentialEntry: PublicKeyCredentialEntry = mockk()
         mutableUserStateFlow.value = DEFAULT_USER_STATE
+
+        // verify Loading state is ignored
+        mutableCiphersStateFlow.value = DataState.Loading
+        coVerify(exactly = 0) {
+            vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
+        }
+
         mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onResult(capture(captureSlot)) } just runs

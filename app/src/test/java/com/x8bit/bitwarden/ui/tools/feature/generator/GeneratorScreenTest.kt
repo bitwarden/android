@@ -193,7 +193,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `clicking the Copy button should send CopyClick action`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Copy")
+            .onNodeWithText(text = "Copy")
             .performClick()
 
         verify {

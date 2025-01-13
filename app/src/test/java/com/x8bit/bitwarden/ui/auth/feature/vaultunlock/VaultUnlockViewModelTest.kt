@@ -1048,7 +1048,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithBiometrics()
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         } returns VaultUnlockResult.AuthenticationError()
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
@@ -1062,8 +1062,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        coVerify {
-            vaultRepository.unlockVaultWithBiometrics()
+        coVerify(exactly = 1) {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         }
     }
 
@@ -1076,7 +1076,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithBiometrics()
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         } returns VaultUnlockResult.GenericError
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
@@ -1090,8 +1090,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        coVerify {
-            vaultRepository.unlockVaultWithBiometrics()
+        coVerify(exactly = 1) {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         }
     }
 
@@ -1104,7 +1104,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithBiometrics()
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         } returns VaultUnlockResult.InvalidStateError
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
@@ -1118,8 +1118,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        coVerify {
-            vaultRepository.unlockVaultWithBiometrics()
+        coVerify(exactly = 1) {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         }
     }
 
@@ -1131,7 +1131,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithBiometrics()
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         } returns VaultUnlockResult.Success
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
@@ -1140,8 +1140,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             initialState.copy(dialog = null),
             viewModel.stateFlow.value,
         )
-        coVerify {
-            vaultRepository.unlockVaultWithBiometrics()
+        coVerify(exactly = 1) {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         }
     }
 
@@ -1154,7 +1154,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val resultFlow = bufferedMutableSharedFlow<VaultUnlockResult>()
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithBiometrics()
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         } coAnswers { resultFlow.first() }
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
@@ -1172,34 +1172,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         }
         resultFlow.tryEmit(VaultUnlockResult.GenericError)
         assertEquals(initialState.copy(dialog = null), viewModel.stateFlow.value)
-        coVerify {
-            vaultRepository.unlockVaultWithBiometrics()
+        coVerify(exactly = 1) {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
         }
-    }
-
-    @Test
-    fun `on BiometricsUnlockSuccess should set isBiometricsValid to false with null cipher`() {
-        val initialState = DEFAULT_STATE.copy(
-            isBiometricEnabled = true,
-            isBiometricsValid = true,
-        )
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
-        )
-        val viewModel = createViewModel(state = initialState)
-        coEvery {
-            vaultRepository.unlockVaultWithBiometrics()
-        } returns VaultUnlockResult.Success
-
-        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(cipher = null))
-
-        assertEquals(
-            initialState.copy(
-                dialog = null,
-                isBiometricsValid = false,
-            ),
-            viewModel.stateFlow.value,
-        )
     }
 
     @Suppress("MaxLineLength")

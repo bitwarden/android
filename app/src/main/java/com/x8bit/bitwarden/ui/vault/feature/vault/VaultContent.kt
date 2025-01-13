@@ -118,7 +118,7 @@ fun VaultContent(
                 BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 16.dp),
+                        .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
                 )
             }
         }
@@ -219,7 +219,7 @@ fun VaultContent(
                 BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 16.dp),
+                        .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
                 )
             }
 
@@ -257,7 +257,7 @@ fun VaultContent(
                 BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 16.dp),
+                        .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
                 )
             }
 
@@ -304,7 +304,7 @@ fun VaultContent(
                 BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 16.dp),
+                        .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
                 )
             }
 
@@ -337,7 +337,7 @@ fun VaultContent(
             BitwardenHorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = 16.dp),
+                    .padding(top = 16.dp, start = 16.dp, bottom = 16.dp),
             )
         }
 

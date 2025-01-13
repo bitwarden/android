@@ -6,32 +6,37 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
-    private val authRepository = mockk<AuthRepository> {
-        every { getNewDeviceNoticeState() } returns NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            lastSeenDate = null,
-        )
-        every { setNewDeviceNoticeState(any()) } just runs
+    private val authRepository = mockk<AuthRepository>(relaxed = true) {
+        every { checkUserNeedsNewDeviceTwoFactorNotice() } returns true
     }
 
     private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
         every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
         every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
     }
+
+    private val settingsRepository = mockk<SettingsRepository>(relaxed = true)
+
+    private val vaultRepository = mockk<VaultRepository>(relaxed = true)
 
     @Test
     fun `initial state should be correct with NewDevicePermanentDismiss flag false`() = runTest {
@@ -48,6 +53,27 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(shouldShowRemindMeLater = false),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `Init should not send events if user needs new device notice`() = runTest {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns true
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `Init should send NavigateBackToVault if user does not need new device notice`() = runTest {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns false
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            assertEquals(
+                NewDeviceNoticeTwoFactorEvent.NavigateBackToVault,
                 awaitItem(),
             )
         }
@@ -109,6 +135,14 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                 NewDeviceNoticeTwoFactorEvent.NavigateBackToVault,
                 awaitItem(),
             )
+            verify(exactly = 1) {
+                authRepository.setNewDeviceNoticeState(
+                    NewDeviceNoticeState(
+                        displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
+                        lastSeenDate = ZonedDateTime.now(FIXED_CLOCK),
+                    ),
+                )
+            }
         }
     }
 
@@ -130,6 +164,9 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE,
                     viewModel.stateFlow.value,
                 )
+                verify(exactly = 1) {
+                    settingsRepository.vaultLastSync = null
+                }
             }
         }
 
@@ -151,6 +188,9 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE,
                     viewModel.stateFlow.value,
                 )
+                verify(exactly = 1) {
+                    settingsRepository.vaultLastSync = null
+                }
             }
         }
 
@@ -172,6 +212,9 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             featureFlagManager = featureFlagManager,
+            settingsRepository = settingsRepository,
+            vaultRepository = vaultRepository,
+            clock = FIXED_CLOCK,
         )
 }
 
@@ -180,3 +223,8 @@ private val DEFAULT_STATE =
         shouldShowRemindMeLater = true,
         dialogState = null,
     )
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)

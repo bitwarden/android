@@ -69,10 +69,10 @@ import kotlinx.collections.immutable.toImmutableList
  * @param keyboardType the preferred type of keyboard input.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun BitwardenTextField(
-    label: String,
+    label: String?,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -136,7 +136,7 @@ fun BitwardenTextField(
                     .focusRequester(focusRequester)
                     .fillMaxWidth(),
                 enabled = enabled,
-                label = { Text(text = label) },
+                label = label?.let { { Text(text = it) } },
                 value = textFieldValue,
                 leadingIcon = leadingIconResource?.let { iconResource ->
                     {
