@@ -239,6 +239,9 @@
         android:name="org.gnu.icecat"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="org.ironfoxoss.ironfox"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="org.mozilla.fenix"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
