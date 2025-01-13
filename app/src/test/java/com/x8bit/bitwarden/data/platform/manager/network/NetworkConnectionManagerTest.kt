@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.x8bit.bitwarden.data.platform.manager.network
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,8 +7,7 @@ import android.net.NetworkCapabilities
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions
 
 class NetworkConnectionManagerTest {
     @Test
@@ -18,7 +17,7 @@ class NetworkConnectionManagerTest {
             every { getNetworkCapabilities(any()) } returns null
         }
         val networkConnectionManager = createNetworkConnectionManager(connectivityManager)
-        assertFalse(networkConnectionManager.isNetworkConnected)
+        Assertions.assertFalse(networkConnectionManager.isNetworkConnected)
     }
 
     @Test
@@ -32,7 +31,7 @@ class NetworkConnectionManagerTest {
             every { getNetworkCapabilities(network) } returns networkCapabilities
         }
         val networkConnectionManager = createNetworkConnectionManager(connectivityManager)
-        assertFalse(networkConnectionManager.isNetworkConnected)
+        Assertions.assertFalse(networkConnectionManager.isNetworkConnected)
     }
 
     @Test
@@ -46,7 +45,7 @@ class NetworkConnectionManagerTest {
             every { getNetworkCapabilities(network) } returns networkCapabilities
         }
         val networkConnectionManager = createNetworkConnectionManager(connectivityManager)
-        assertTrue(networkConnectionManager.isNetworkConnected)
+        Assertions.assertTrue(networkConnectionManager.isNetworkConnected)
     }
 
     private fun createNetworkConnectionManager(

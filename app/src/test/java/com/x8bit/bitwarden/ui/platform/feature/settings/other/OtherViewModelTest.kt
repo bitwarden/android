@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
