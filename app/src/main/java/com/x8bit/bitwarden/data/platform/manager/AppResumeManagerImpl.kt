@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
 
@@ -24,18 +23,20 @@ class AppResumeManagerImpl(
         // 5 minutes
         private const val UNLOCK_NAVIGATION_TIME: Long = 5 * 60
     }
+
     override fun setResumeScreen(screenData: AppResumeScreenData) {
         authRepository.activeUserId?.let {
             settingsDiskSource.storeAppResumeScreen(
-                it,
-                Json.encodeToString(screenData),
+                userId = it,
+                screenData = Json.encodeToString(screenData),
             )
         }
     }
 
     override fun getResumeScreen(): AppResumeScreenData? {
         val data =
-            authRepository.activeUserId?.let { settingsDiskSource.getAppResumeScreen(it) } ?: ""
+            authRepository.activeUserId?.let { settingsDiskSource.getAppResumeScreen(userId = it) }
+                ?: ""
 
         return Json.decodeFromStringOrNull<AppResumeScreenData>(data)
     }
@@ -69,8 +70,8 @@ class AppResumeManagerImpl(
         if (vaultLockManager.isVaultUnlocked(userId = authRepository.activeUserId ?: "")) {
             authRepository.activeUserId?.let {
                 settingsDiskSource.storeAppResumeScreen(
-                    it,
-                    null,
+                    userId = it,
+                    screenData = null,
                 )
             }
         }

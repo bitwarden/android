@@ -358,9 +358,9 @@ interface SettingsDiskSource {
     fun storeCreateSendActionCount(count: Int?)
 
     /**
-     * Stores the given [data] as the screen to resume to identified by [userId].
+     * Stores the given [screenData] as the screen to resume to identified by [userId].
      */
-    fun storeAppResumeScreen(userId: String, data: String?)
+    fun storeAppResumeScreen(userId: String, screenData: String?)
 
     /**
      * Gets the screen data to resume to for the device identified by [userId] or null if no screen

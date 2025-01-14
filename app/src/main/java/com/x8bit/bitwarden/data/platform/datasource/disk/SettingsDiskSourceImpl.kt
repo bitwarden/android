@@ -176,6 +176,7 @@ class SettingsDiskSourceImpl(
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
         storeVaultRegisteredForExport(userId = userId, isRegistered = null)
+        storeAppResumeScreen(userId = userId, screenData = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -483,8 +484,8 @@ class SettingsDiskSourceImpl(
         )
     }
 
-    override fun storeAppResumeScreen(userId: String, data: String?) {
-        putString(RESUME_SCREEN.appendIdentifier(userId), data)
+    override fun storeAppResumeScreen(userId: String, screenData: String?) {
+        putString(RESUME_SCREEN.appendIdentifier(userId), screenData)
     }
 
     override fun getAppResumeScreen(userId: String): String? =
