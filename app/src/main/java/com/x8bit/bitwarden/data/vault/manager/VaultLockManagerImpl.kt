@@ -50,6 +50,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
 import kotlin.time.Duration.Companion.minutes
 
 /**
@@ -268,6 +269,10 @@ class VaultLockManagerImpl(
         )
         if (!wasVaultLocked) {
             mutableVaultStateEventSharedFlow.tryEmit(VaultStateEvent.Locked(userId = userId))
+            authDiskSource.storeLastLockTimestamp(
+                userId = userId,
+                lastLockTimestamp = Instant.now(),
+            )
         }
     }
 

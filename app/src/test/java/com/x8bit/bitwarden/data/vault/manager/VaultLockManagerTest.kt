@@ -107,6 +107,7 @@ class VaultLockManagerTest {
             vaultLockManager.vaultStateEventFlow.test {
                 vaultLockManager.lockVault(userId = USER_ID)
                 assertEquals(VaultStateEvent.Locked(userId = USER_ID), awaitItem())
+                fakeAuthDiskSource.assertNotNullLastLockTimestamp(userId = USER_ID)
             }
         }
 

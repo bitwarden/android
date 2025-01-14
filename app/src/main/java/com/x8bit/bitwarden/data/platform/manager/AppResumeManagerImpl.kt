@@ -1,29 +1,29 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Instant
 
 /**
  * Primary implementation of [AppResumeManager].
  */
 class AppResumeManagerImpl(
-    val settingsDiskSource: SettingsDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
+    private val authDiskSource: AuthDiskSource,
     private val authRepository: AuthRepository,
-    private val appStateManager: AppStateManager,
-    dispatcherManager: DispatcherManager,
+    private val vaultLockManager: VaultLockManager,
 ) : AppResumeManager {
-    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
-
+    private companion object {
+        // 5 minutes
+        private const val UNLOCK_NAVIGATION_TIME: Long = 5 * 60
+    }
     override fun setResumeScreen(screenData: AppResumeScreenData) {
         authRepository.activeUserId?.let {
             settingsDiskSource.storeAppResumeScreen(
@@ -41,6 +41,15 @@ class AppResumeManagerImpl(
     }
 
     override fun getResumeSpecialCircumstance(): SpecialCircumstance? {
+        val timeNowMinus5Min = Instant.now().minusSeconds(UNLOCK_NAVIGATION_TIME)
+        val lastLockTimestamp = Instant.ofEpochMilli(
+            authDiskSource.getLastLockTimestamp(
+                userId = authRepository.activeUserId ?: "",
+            ),
+        )
+        if (timeNowMinus5Min.isAfter(lastLockTimestamp)) {
+            return null
+        }
         return when (val resumeScreenData = getResumeScreen()) {
             AppResumeScreenData.GeneratorScreen -> SpecialCircumstance.GeneratorShortcut
             AppResumeScreenData.SendScreen -> SpecialCircumstance.SendShortcut
@@ -57,17 +66,12 @@ class AppResumeManagerImpl(
 
     @Suppress("MagicNumber")
     override fun clearResumeScreen() {
-        unconfinedScope.launch {
-            // We must ensure that we wait enough for the AppForegroundState to be updated
-            // before we check it state
-            delay(500)
-            if (appStateManager.appForegroundStateFlow.value == AppForegroundState.FOREGROUNDED) {
-                authRepository.activeUserId?.let {
-                    settingsDiskSource.storeAppResumeScreen(
-                        it,
-                        null,
-                    )
-                }
+        if (vaultLockManager.isVaultUnlocked(userId = authRepository.activeUserId ?: "")) {
+            authRepository.activeUserId?.let {
+                settingsDiskSource.storeAppResumeScreen(
+                    it,
+                    null,
+                )
             }
         }
     }

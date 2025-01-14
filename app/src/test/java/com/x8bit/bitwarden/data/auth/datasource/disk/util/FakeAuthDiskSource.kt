@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import java.time.Instant
 
 class FakeAuthDiskSource : AuthDiskSource {
 
@@ -64,6 +66,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedNewDeviceNoticeState = mutableMapOf<String, NewDeviceNoticeState?>()
+    private val storedLastLockTimestampState = mutableMapOf<String, Long?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -321,6 +324,14 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedNewDeviceNoticeState[userId] = newState
     }
 
+    override fun getLastLockTimestamp(userId: String): Long {
+        return storedLastLockTimestampState[userId] ?: Long.MIN_VALUE
+    }
+
+    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant) {
+        storedLastLockTimestampState[userId] = Instant.now().toEpochMilli()
+    }
+
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
      */
@@ -469,6 +480,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         policies: List<SyncResponseJson.Policy>?,
     ) {
         assertEquals(policies, storedPolicies[userId])
+    }
+
+    /**
+     * Assert that the [lastLockTimestamp] was stored successfully using the [userId].
+     */
+    fun assertNotNullLastLockTimestamp(userId: String) {
+        assertNotNull(storedLastLockTimestampState[userId])
     }
 
     //region Private helper functions

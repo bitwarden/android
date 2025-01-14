@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult

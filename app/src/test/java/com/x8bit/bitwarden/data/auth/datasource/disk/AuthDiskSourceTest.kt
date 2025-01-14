@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
@@ -1333,6 +1334,50 @@ class AuthDiskSourceTest {
         assertEquals(
             json.encodeToString(mockStatus),
             actual,
+        )
+    }
+
+    @Test
+    fun `getLastLockTimestamp should pull from SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:lastLockTimestamp"
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z").toEpochMilli()
+        fakeSharedPreferences.edit {
+            putLong(
+                "${storeKey}_$mockUserId",
+                expectedState,
+            )
+        }
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getLastLockTimestamp should pull default from SharedPreferences if there is no data`() {
+        val mockUserId = "mockUserId"
+        val expectedState = Long.MIN_VALUE
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `setLastLockTimestamp should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+        authDiskSource.storeLastLockTimestamp(
+            userId = mockUserId,
+            expectedState,
+        )
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            Instant.ofEpochMilli(actual),
         )
     }
 }

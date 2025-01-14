@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -336,15 +337,15 @@ object PlatformManagerModule {
     @Singleton
     fun provideAppResumeManager(
         settingsDiskSource: SettingsDiskSource,
+        authDiskSource: AuthDiskSource,
         authRepository: AuthRepository,
-        appStateManager: AppStateManager,
-        dispatcherManager: DispatcherManager,
+        vaultLockManager: VaultLockManager,
     ): AppResumeManager {
         return AppResumeManagerImpl(
             settingsDiskSource,
+            authDiskSource,
             authRepository,
-            appStateManager,
-            dispatcherManager,
+            vaultLockManager,
         )
     }
 }

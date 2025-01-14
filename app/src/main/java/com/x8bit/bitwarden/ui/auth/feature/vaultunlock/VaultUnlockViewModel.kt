@@ -74,11 +74,6 @@ class VaultUnlockViewModel @Inject constructor(
             authRepository.logout()
         }
 
-        if (specialCircumstanceManager.specialCircumstance == null) {
-            specialCircumstanceManager.specialCircumstance =
-                appResumeManager.getResumeSpecialCircumstance()
-        }
-
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
 
         val showAccountMenu =
@@ -349,6 +344,11 @@ class VaultUnlockViewModel @Inject constructor(
             }
 
             VaultUnlockResult.Success -> {
+                if (specialCircumstanceManager.specialCircumstance == null) {
+                    specialCircumstanceManager.specialCircumstance =
+                        appResumeManager.getResumeSpecialCircumstance()
+                }
+
                 mutableStateFlow.update { it.copy(dialog = null) }
                 // Don't do anything, we'll navigate to the right place.
             }

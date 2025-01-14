@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Instant
 import java.util.UUID
 
 // These keys should be encrypted
@@ -50,6 +51,7 @@ private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val NEW_DEVICE_NOTICE_STATE = "newDeviceNoticeState"
+private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -500,6 +502,17 @@ class AuthDiskSourceImpl(
         putString(
             key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId),
             value = newState?.let { json.encodeToString(it) },
+        )
+    }
+
+    override fun getLastLockTimestamp(userId: String): Long {
+        return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId)) ?: Long.MIN_VALUE
+    }
+
+    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant) {
+        putLong(
+            key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId),
+            value = lastLockTimestamp.toEpochMilli(),
         )
     }
 
