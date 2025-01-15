@@ -923,6 +923,11 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
+
+    @Test
+    fun `send LifecycleResumed action on screen resume`() {
+        verify { viewModel.trySendAction(SearchAction.LifecycleResume) }
+    }
 }
 
 private val DEFAULT_STATE: SearchState = SearchState(

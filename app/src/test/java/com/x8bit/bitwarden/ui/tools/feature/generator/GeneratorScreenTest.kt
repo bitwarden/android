@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
+import androidx.activity.compose.setContent
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue

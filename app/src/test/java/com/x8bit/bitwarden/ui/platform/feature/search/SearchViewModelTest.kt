@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -51,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.SendAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
@@ -1436,6 +1438,26 @@ class SearchViewModelTest : BaseViewModelTest() {
 
         mutableIsIconLoadingDisabledFlow.value = true
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
+    }
+
+    @Test
+    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SearchAction.LifecycleResume)
+        verify(exactly = 1) {
+            appResumeManager.setResumeScreen(
+                AppResumeScreenData.SearchScreen(""),
+            )
+        }
+    }
+
+    @Test
+    fun `LifecyclePausedAction should call AppResumeManager clearResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SearchAction.LifecyclePause)
+        verify(exactly = 1) {
+            appResumeManager.clearResumeScreen()
+        }
     }
 
     @Suppress("CyclomaticComplexMethod")

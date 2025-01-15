@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -480,6 +481,26 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             initialState.copy(isPullToRefreshSettingEnabled = true),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VerificationCodeAction.LifecycleResume)
+        verify(exactly = 1) {
+            appResumeManager.setResumeScreen(
+                AppResumeScreenData.VerificationCodeScreen,
+            )
+        }
+    }
+
+    @Test
+    fun `LifecyclePausedAction should call AppResumeManager clearResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VerificationCodeAction.LifecyclePause)
+        verify(exactly = 1) {
+            appResumeManager.clearResumeScreen()
+        }
     }
 
     private fun setupMockUri() {

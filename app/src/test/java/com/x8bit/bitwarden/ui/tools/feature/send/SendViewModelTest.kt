@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -440,6 +441,26 @@ class SendViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(isPullToRefreshSettingEnabled = true),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SendAction.LifecycleResume)
+        verify(exactly = 1) {
+            appResumeManager.setResumeScreen(
+                AppResumeScreenData.SendScreen,
+            )
+        }
+    }
+
+    @Test
+    fun `LifecyclePausedAction should call AppResumeManager clearResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SendAction.LifecyclePause)
+        verify(exactly = 1) {
+            appResumeManager.clearResumeScreen()
+        }
     }
 
     @Suppress("LongParameterList")

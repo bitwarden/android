@@ -364,6 +364,11 @@ class VerificationCodeScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
+
+    @Test
+    fun `send LifecycleResumed action on screen resume`() {
+        verify { viewModel.trySendAction(VerificationCodeAction.LifecycleResume) }
+    }
 }
 
 private fun createDisplayItem(

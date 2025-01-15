@@ -761,6 +761,11 @@ class SendScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
+
+    @Test
+    fun `send LifecycleResumed action on screen resume`() {
+        verify { viewModel.trySendAction(SendAction.LifecycleResume) }
+    }
 }
 
 private val DEFAULT_STATE: SendState = SendState(
