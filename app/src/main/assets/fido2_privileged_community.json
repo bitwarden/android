@@ -12,6 +12,7 @@
         ]
       }
     },
+
     {
       "type": "android",
       "info": {
@@ -24,6 +25,7 @@
         ]
       }
     },
+
     {
       "type": "android",
       "info": {
@@ -44,6 +46,18 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "63:3F:A4:1D:82:11:D6:D0:91:6A:81:9B:89:66:8C:6D:E9:2E:64:23:2D:A6:7F:9D:16:FD:81:C3:B7:E9:23:FF"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.ironfoxoss.ironfox",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C5:E2:91:B5:A5:71:F9:C8:CD:9A:97:99:C2:C9:4E:02:EC:97:03:94:88:93:F2:CA:75:6D:67:B9:42:04:F9:04"
           }
         ]
       }
