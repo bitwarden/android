@@ -133,6 +133,7 @@ fun FolderAddEditScreen(
                         onValueChange = remember(viewModel) {
                             { viewModel.trySendAction(FolderAddEditAction.NameTextChange(it)) }
                         },
+                        textFieldTestTag = "FolderNameField",
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth(),
