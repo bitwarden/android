@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -484,12 +485,12 @@ class SettingsDiskSourceImpl(
         )
     }
 
-    override fun storeAppResumeScreen(userId: String, screenData: String?) {
-        putString(RESUME_SCREEN.appendIdentifier(userId), screenData)
+    override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
+        putString(RESUME_SCREEN.appendIdentifier(userId), json.encodeToString(screenData))
     }
 
-    override fun getAppResumeScreen(userId: String): String? =
-        getString(RESUME_SCREEN.appendIdentifier(userId))
+    override fun getAppResumeScreen(userId: String): AppResumeScreenData? =
+        getString(RESUME_SCREEN.appendIdentifier(userId))?.let { json.decodeFromStringOrNull(it) }
 
     private fun getMutableLastSyncFlow(
         userId: String,

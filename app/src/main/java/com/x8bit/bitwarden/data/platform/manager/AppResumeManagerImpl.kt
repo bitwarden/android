@@ -5,9 +5,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
-import kotlinx.serialization.json.Json
 import java.time.Instant
 
 /**
@@ -28,17 +26,15 @@ class AppResumeManagerImpl(
         authRepository.activeUserId?.let {
             settingsDiskSource.storeAppResumeScreen(
                 userId = it,
-                screenData = Json.encodeToString(screenData),
+                screenData = screenData,
             )
         }
     }
 
     override fun getResumeScreen(): AppResumeScreenData? {
-        val data =
-            authRepository.activeUserId?.let { settingsDiskSource.getAppResumeScreen(userId = it) }
-                ?: ""
-
-        return Json.decodeFromStringOrNull<AppResumeScreenData>(data)
+        return authRepository.activeUserId?.let { userId ->
+            settingsDiskSource.getAppResumeScreen(userId)
+        }
     }
 
     override fun getResumeSpecialCircumstance(): SpecialCircumstance? {

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -360,10 +361,10 @@ interface SettingsDiskSource {
     /**
      * Stores the given [screenData] as the screen to resume to identified by [userId].
      */
-    fun storeAppResumeScreen(userId: String, screenData: String?)
+    fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?)
 
     /**
      * Gets the screen data to resume to for the device identified by [userId] or null if no screen
      */
-    fun getAppResumeScreen(userId: String): String?
+    fun getAppResumeScreen(userId: String): AppResumeScreenData?
 }

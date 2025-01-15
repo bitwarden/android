@@ -1,14 +1,17 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
+import kotlinx.serialization.json.Json
 import java.time.Instant
 
 /**
@@ -381,12 +384,12 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         createSendActionCount = count
     }
 
-    override fun storeAppResumeScreen(userId: String, data: String?) {
-        storedAppResumeScreenData[userId] = data
+    override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
+        storedAppResumeScreenData[userId] = Json.encodeToString(screenData)
     }
 
-    override fun getAppResumeScreen(userId: String): String? {
-        return storedAppResumeScreenData[userId]
+    override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
+        return storedAppResumeScreenData[userId]?.let { Json.decodeFromStringOrNull(it) }
     }
 
     //region Private helper functions
