@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,6 +30,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.NavigateBackClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateBackToVault
@@ -34,6 +38,8 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -46,9 +52,12 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * The top level composable for the new device notice two factor screen.
  */
+@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun NewDeviceNoticeTwoFactorScreen(
     onNavigateBackToVault: () -> Unit,
+    onNavigateBack: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: NewDeviceNoticeTwoFactorViewModel = hiltViewModel(),
 ) {
@@ -64,6 +73,8 @@ fun NewDeviceNoticeTwoFactorScreen(
             }
 
             NavigateBackToVault -> onNavigateBackToVault()
+
+            NewDeviceNoticeTwoFactorEvent.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -85,7 +96,24 @@ fun NewDeviceNoticeTwoFactorScreen(
         null -> Unit
     }
 
-    BitwardenScaffold {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    BitwardenScaffold(
+        topBar = {
+            BitwardenTopAppBar(
+                title = "",
+                scrollBehavior = scrollBehavior,
+                navigationIcon = NavigationIcon(
+                    navigationIcon = rememberVectorPainter(R.drawable.ic_back),
+                    navigationIconContentDescription = stringResource(id = R.string.back),
+                    onNavigationIconClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(NavigateBackClick)
+                        }
+                    },
+                ),
+            )
+        },
+    ) {
         NewDeviceNoticeTwoFactorContent(
             onTurnOnTwoFactorClick = {
                 viewModel.trySendAction(TurnOnTwoFactorClick)
