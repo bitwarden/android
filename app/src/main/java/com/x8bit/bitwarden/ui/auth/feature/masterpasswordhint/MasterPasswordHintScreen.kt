@@ -117,7 +117,7 @@ fun MasterPasswordHintScreen(
                 },
                 label = stringResource(id = R.string.email_address),
                 keyboardType = KeyboardType.Email,
-                textFieldTestTag = "MasterPasswordHintEmailField"
+                textFieldTestTag = "MasterPasswordHintEmailField",
             )
 
             Text(
