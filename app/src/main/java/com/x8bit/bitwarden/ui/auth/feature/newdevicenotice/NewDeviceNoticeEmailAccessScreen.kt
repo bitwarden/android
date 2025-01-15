@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -190,15 +191,15 @@ private fun MainContent(
                 ),
             ),
         )
-        Column {
-            BitwardenSwitch(
-                label = stringResource(id = R.string.yes_i_can_reliably_access_my_email),
-                isChecked = isEmailAccessEnabled,
-                onCheckedChange = onEmailAccessToggleChanged,
-                modifier = Modifier
-                    .testTag("EmailAccessToggle"),
-            )
-        }
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        BitwardenSwitch(
+            label = stringResource(id = R.string.yes_i_can_reliably_access_my_email),
+            isChecked = isEmailAccessEnabled,
+            onCheckedChange = onEmailAccessToggleChanged,
+            cardStyle = CardStyle.Full,
+            modifier = Modifier
+                .testTag("EmailAccessToggle"),
+        )
     }
 }
 

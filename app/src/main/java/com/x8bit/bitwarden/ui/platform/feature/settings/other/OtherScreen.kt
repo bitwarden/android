@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -33,6 +34,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -40,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -102,20 +105,22 @@ fun OtherScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.enable_sync_on_refresh),
-                description = stringResource(id = R.string.enable_sync_on_refresh_description),
+                supportingText = stringResource(id = R.string.enable_sync_on_refresh_description),
                 isChecked = state.allowSyncOnRefresh,
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SyncOnRefreshSwitch")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             BitwardenOutlinedButton(
                 onClick = remember(viewModel) {
@@ -125,10 +130,10 @@ fun OtherScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SyncNowButton")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             Row(
                 modifier = Modifier
@@ -151,7 +156,7 @@ fun OtherScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             ClearClipboardFrequencyRow(
                 currentSelection = state.clearClipboardFrequency,
@@ -160,8 +165,11 @@ fun OtherScreen(
                 },
                 modifier = Modifier
                     .testTag("ClearClipboardChooser")
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
+
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             ScreenCaptureRow(
                 currentValue = state.allowScreenCapture,
@@ -171,8 +179,10 @@ fun OtherScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("AllowScreenCaptureSwitch")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -195,6 +205,7 @@ private fun ScreenCaptureRow(
                 shouldShowScreenCaptureConfirmDialog = true
             }
         },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     )
 
@@ -226,6 +237,7 @@ private fun ClearClipboardFrequencyRow(
         text = stringResource(id = R.string.clear_clipboard),
         description = stringResource(id = R.string.clear_clipboard_description),
         onClick = { shouldShowClearClipboardDialog = true },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     ) {
         Text(

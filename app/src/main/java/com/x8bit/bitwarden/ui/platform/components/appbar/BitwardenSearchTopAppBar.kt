@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -74,10 +73,7 @@ fun BitwardenSearchTopAppBar(
         },
         title = {
             TextField(
-                colors = bitwardenTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                ),
+                colors = bitwardenTextFieldColors(),
                 textStyle = BitwardenTheme.typography.bodyLarge,
                 placeholder = { Text(text = placeholder) },
                 value = searchTerm,

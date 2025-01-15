@@ -1366,11 +1366,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //region Username Type Tests
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in Username state, clicking the tooltip icon should send the TooltipClick action`() {
         updateState(DEFAULT_STATE.copy(selectedType = GeneratorState.MainType.Username()))
 
+        @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithContentDescription(
                 label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
