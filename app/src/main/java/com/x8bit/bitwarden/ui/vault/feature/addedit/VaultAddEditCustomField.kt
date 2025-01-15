@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import com.x8bit.bitwarden.R
@@ -85,7 +86,7 @@ fun VaultAddEditCustomField(
                 value = customField.value,
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
-                modifier = modifier,
+                modifier = modifier.testTag("AddEditCustomBooleanField"),
             )
         }
 
@@ -98,7 +99,7 @@ fun VaultAddEditCustomField(
                 },
                 onVisibilityChanged = onHiddenVisibilityChanged,
                 onEditValue = { shouldShowChooserDialog = true },
-                modifier = modifier,
+                modifier = modifier.testTag("AddEditCustomHiddenField"),
             )
         }
 
@@ -112,7 +113,7 @@ fun VaultAddEditCustomField(
                         onCustomFieldValueChange(customField.copy(vaultLinkedFieldType = it))
                     },
                     onEditValue = { shouldShowChooserDialog = true },
-                    modifier = modifier,
+                    modifier = modifier.testTag("AddEditCustomLinkedField"),
                 )
             }
         }
@@ -123,7 +124,7 @@ fun VaultAddEditCustomField(
                 value = customField.value,
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
-                modifier = modifier,
+                modifier = modifier.testTag("AddEditCustomTextField"),
             )
         }
     }
@@ -159,6 +160,7 @@ private fun CustomFieldBoolean(
                     vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
+                    modifier = Modifier.testTag("CustomFieldSettingsButton"),
                 )
             },
         )
@@ -188,12 +190,15 @@ private fun CustomFieldHiddenField(
             onVisibilityChanged(shouldShowPassword)
         },
         singleLine = true,
+        showPasswordTestTag = "CustomFieldShowPasswordButton",
+        passwordFieldTestTag = "CustomFieldValue",
         modifier = modifier,
         actions = {
             BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
+                modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
     )
@@ -215,12 +220,14 @@ private fun CustomFieldTextField(
         value = value,
         onValueChange = onValueChanged,
         singleLine = true,
+        textFieldTestTag = "CustomFieldValue",
         modifier = modifier,
         actions = {
             BitwardenTonalIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
+                modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
     )
@@ -257,7 +264,9 @@ private fun CustomFieldLinkedField(
                     }
                 }
             },
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .testTag("CustomFieldDropdown"),
         )
 
         BitwardenRowOfActions(
@@ -266,6 +275,7 @@ private fun CustomFieldLinkedField(
                     vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
+                    modifier = Modifier.testTag("CustomFieldSettingsButton"),
                 )
             },
         )
