@@ -24,12 +24,14 @@ fun NavController.navigateToNewDeviceNoticeTwoFactor(
  */
 fun NavGraphBuilder.newDeviceNoticeTwoFactorDestination(
     onNavigateBackToVault: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = NEW_DEVICE_NOTICE_TWO_FACTOR_ROUTE,
     ) {
         NewDeviceNoticeTwoFactorScreen(
             onNavigateBackToVault = onNavigateBackToVault,
+            onNavigateBack = onNavigateBack,
         )
     }
 }
