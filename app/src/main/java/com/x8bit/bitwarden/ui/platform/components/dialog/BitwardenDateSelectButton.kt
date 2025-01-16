@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDialog
@@ -9,7 +11,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +31,14 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
@@ -51,6 +59,7 @@ import java.time.ZonedDateTime
  * @param onDateSelect The callback to be invoked when a new date is selected.
  * @param isEnabled Whether the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param cardStyle Indicates the type of card style to be applied.
  */
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -62,6 +71,7 @@ fun BitwardenDateSelectButton(
     onDateSelect: (ZonedDateTime) -> Unit,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
+    cardStyle: CardStyle? = null,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     val formattedDate by remember(currentZonedDateTime) {
@@ -72,18 +82,22 @@ fun BitwardenDateSelectButton(
         )
     }
 
-    OutlinedTextField(
+    TextField(
         modifier = modifier
             .clearAndSetSemantics {
                 role = Role.DropdownList
                 contentDescription = "$label, $formattedDate"
             }
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
             .clickable(
                 enabled = isEnabled,
-                indication = null,
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { shouldShowDialog = !shouldShowDialog },
-            ),
+            )
+            .cardPadding(cardStyle = cardStyle)
+            .padding(top = 4.dp),
         textStyle = BitwardenTheme.typography.bodyLarge,
         readOnly = true,
         label = { Text(text = label) },
@@ -173,5 +187,9 @@ private fun bitwardenDatePickerColors(): DatePickerColors = DatePickerColors(
     dayInSelectionRangeContainerColor = BitwardenTheme.colorScheme.filledButton.background,
     dividerColor = BitwardenTheme.colorScheme.stroke.divider,
     dayInSelectionRangeContentColor = BitwardenTheme.colorScheme.text.primary,
-    dateTextFieldColors = bitwardenTextFieldColors(),
+    dateTextFieldColors = bitwardenTextFieldColors(
+        disabledBorderColor = BitwardenTheme.colorScheme.outlineButton.borderDisabled,
+        focusedBorderColor = BitwardenTheme.colorScheme.stroke.border,
+        unfocusedBorderColor = BitwardenTheme.colorScheme.stroke.divider,
+    ),
 )

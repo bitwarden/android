@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -128,6 +129,7 @@ fun AutoFillScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             AnimatedVisibility(
                 visible = state.showAutofillActionCard,
                 label = "AutofillActionCard",
@@ -151,31 +153,35 @@ fun AutoFillScreen(
                     },
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .padding(top = 12.dp, bottom = 16.dp),
+                        .padding(bottom = 16.dp),
                 )
             }
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.autofill),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.autofill_services),
-                description = stringResource(id = R.string.autofill_services_explanation_long),
+                supportingText = stringResource(id = R.string.autofill_services_explanation_long),
                 isChecked = state.isAutoFillServicesEnabled,
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.AutoFillServicesClick(it)) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("AutofillServicesSwitch")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             if (state.showInlineAutofillOption) {
                 BitwardenSwitch(
                     label = stringResource(id = R.string.inline_autofill),
-                    description = stringResource(
+                    supportingText = stringResource(
                         id = R.string.use_inline_autofill_explanation_long,
                     ),
                     isChecked = state.isUseInlineAutoFillEnabled,
@@ -183,11 +189,13 @@ fun AutoFillScreen(
                         { viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(it)) }
                     },
                     enabled = state.canInteractWithInlineAutofillToggle,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("InlineAutofillSwitch")
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
             if (state.showPasskeyManagementRow) {
                 BitwardenExternalLinkRow(
@@ -203,7 +211,12 @@ fun AutoFillScreen(
                         id = R.string.set_bitwarden_as_passkey_manager_description,
                     ),
                     withDivider = false,
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
             AccessibilityAutofillSwitch(
                 isAccessibilityAutoFillEnabled = state.isAccessibilityAutofillEnabled,
@@ -212,39 +225,45 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.additional_options),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.copy_totp_automatically),
-                description = stringResource(id = R.string.copy_totp_automatically_description),
+                supportingText = stringResource(id = R.string.copy_totp_automatically_description),
                 isChecked = state.isCopyTotpAutomaticallyEnabled,
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.CopyTotpAutomaticallyClick(it)) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("CopyTotpAutomaticallySwitch")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.ask_to_add_login),
-                description = stringResource(id = R.string.ask_to_add_login_description),
+                supportingText = stringResource(id = R.string.ask_to_add_login_description),
                 isChecked = state.isAskToAddLoginEnabled,
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.AskToAddLoginClick(it)) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("AskToAddLoginSwitch")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(8.dp))
             DefaultUriMatchTypeRow(
                 selectedUriMatchType = state.defaultUriMatchType,
                 onUriMatchTypeSelect = remember(viewModel) {
@@ -252,8 +271,10 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .testTag("DefaultUriMatchDetectionChooser")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextRow(
                 text = stringResource(id = R.string.block_auto_fill),
                 description = stringResource(
@@ -262,7 +283,10 @@ fun AutoFillScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -278,7 +302,7 @@ private fun AccessibilityAutofillSwitch(
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
     BitwardenSwitch(
         label = stringResource(id = R.string.accessibility),
-        description = stringResource(id = R.string.accessibility_description5),
+        supportingText = stringResource(id = R.string.accessibility_description5),
         isChecked = isAccessibilityAutoFillEnabled,
         onCheckedChange = {
             if (isAccessibilityAutoFillEnabled) {
@@ -287,6 +311,7 @@ private fun AccessibilityAutofillSwitch(
                 shouldShowDialog = true
             }
         },
+        cardStyle = CardStyle.Full,
         modifier = modifier.testTag(tag = "AccessibilityAutofillSwitch"),
     )
 
@@ -318,6 +343,7 @@ private fun DefaultUriMatchTypeRow(
         text = stringResource(id = R.string.default_uri_match_detection),
         description = stringResource(id = R.string.default_uri_match_detection_description),
         onClick = { shouldShowDialog = true },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     ) {
         Text(

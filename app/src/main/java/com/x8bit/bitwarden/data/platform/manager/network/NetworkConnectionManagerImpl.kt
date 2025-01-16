@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.x8bit.bitwarden.data.platform.manager.network
 
 import android.content.Context
 import android.net.ConnectivityManager
