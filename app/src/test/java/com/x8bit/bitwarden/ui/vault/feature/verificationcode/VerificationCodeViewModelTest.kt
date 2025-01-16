@@ -83,6 +83,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     private val appResumeManager: AppResumeManager = mockk {
         every { setResumeScreen(any()) } just runs
+        every { clearResumeScreen() } just runs
     }
 
     @AfterEach

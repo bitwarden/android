@@ -52,7 +52,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
-import com.x8bit.bitwarden.ui.tools.feature.send.SendAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
@@ -129,6 +128,7 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     private val appResumeManager: AppResumeManager = mockk {
         every { setResumeScreen(any()) } just runs
+        every { clearResumeScreen() } just runs
     }
 
     @BeforeEach
