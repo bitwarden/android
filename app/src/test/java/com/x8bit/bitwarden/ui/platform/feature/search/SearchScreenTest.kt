@@ -237,7 +237,8 @@ class SearchScreenTest : BaseComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        // SearchAction.LifecycleResume is called onResume
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -682,7 +683,8 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
 
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        // SearchAction.LifecycleResume is called onResume
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
 
         composeTestRule.assertMasterPasswordDialogDisplayed()
     }
