@@ -13,7 +13,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.geometry.Rect
-import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max
 import kotlin.math.min
@@ -119,8 +118,10 @@ open class CoachMarkState<T : Enum<T>>(
     fun addToExistingBounds(key: T, isFirstItem: Boolean, additionalBounds: Rect) {
         val highlight = highlights[key]
         highlight?.let {
-            val newRect = it.highlightBounds?.union(additionalBounds)
-                .takeIf { !isFirstItem } ?: additionalBounds
+            val newRect = it.highlightBounds
+                ?.union(additionalBounds)
+                .takeIf { !isFirstItem }
+                ?: additionalBounds
             highlights[key] = it.copy(highlightBounds = newRect)
             if (key == currentHighlight.value) {
                 updateCoachMarkStateInternal(getCurrentHighlight())
@@ -149,9 +150,7 @@ open class CoachMarkState<T : Enum<T>>(
         }
         mutableCurrentHighlight.value = coachMarkToShow
         val highlightToShow = getCurrentHighlight()
-        highlightToShow?.let {
-            updateCoachMarkStateInternal(it)
-        }
+        updateCoachMarkStateInternal(highlightToShow)
     }
 
     /**
@@ -281,11 +280,11 @@ class LazyListCoachMarkState<T : Enum<T>>(
 ) : CoachMarkState<T>(orderedList, initialCoachMarkHighlight, isCoachMarkVisible) {
 
     override suspend fun showCoachMark(coachMarkToShow: T) {
-        super.showCoachMark(coachMarkToShow)
         lazyListState.searchForKey(coachMarkToShow)
+        super.showCoachMark(coachMarkToShow)
     }
 
-    private suspend fun LazyListState.searchForKey(keyToFind: T): Boolean =
+    private suspend fun LazyListState.searchForKey(keyToFind: T) {
         layoutInfo.visibleItemsInfo.any { it.key == keyToFind }
             .takeIf { itemAlreadyVisible ->
                 if (itemAlreadyVisible) {
@@ -313,6 +312,7 @@ class LazyListCoachMarkState<T : Enum<T>>(
             }
             ?: scrollUpToKey(keyToFind).takeIf { it }
             ?: scrollDownToKey(keyToFind)
+    }
 
     private suspend fun LazyListState.scrollUpToKey(
         targetKey: T,
@@ -326,15 +326,12 @@ class LazyListCoachMarkState<T : Enum<T>>(
             if (visibleItems.any { it.key == targetKey }) {
                 scrollBy(-(layoutInfo.halfViewPortScrollAmount()))
                 found = true
-            } else {
-                if (!canScrollBackward) {
+            } else if (!canScrollBackward) {
                     keepSearching = false
                 } else {
                     this.scrollBy(scrollAmount)
                 }
-            }
         }
-        Timber.i("$targetKey has been found: $found by scrolling up.")
         return found
     }
 
@@ -350,20 +347,16 @@ class LazyListCoachMarkState<T : Enum<T>>(
             if (visibleItems.any { it.key == targetKey }) {
                 scrollBy(layoutInfo.halfViewPortScrollAmount())
                 found = true
+            } else if (!this.canScrollForward) {
+                // Reached the end of the list without finding the key
+                keepSearching = false
             } else {
-                if (!this.canScrollForward) {
-                    // Reached the end of the list without finding the key
-                    keepSearching = false
-                } else {
-                    this.scrollBy(scrollAmount)
-                }
+                this.scrollBy(scrollAmount)
             }
         }
-        Timber.i("$targetKey has been found: $found by scrolling down.")
         return found
     }
 
-    @Suppress("MagicNumber")
     private fun LazyListLayoutInfo.halfViewPortScrollAmount(): Float = when (this.orientation) {
         Orientation.Vertical -> (viewportSize.height / 2f)
         Orientation.Horizontal -> (viewportSize.width / 2f)

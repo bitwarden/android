@@ -294,11 +294,7 @@ fun VaultAddEditScreen(
                         BitwardenTextButton(
                             label = stringResource(id = R.string.save),
                             onClick = remember(viewModel) {
-                                { coroutineScope.launch {
-                                    coachMarkState.showCoachMark(
-                                        coachMarkToShow = AddEditItemCoachMark.GENERATE_PASSWORD,
-                                    )
-                                } }
+                                { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
                             },
                             modifier = Modifier.testTag("SaveButton"),
                         )
