@@ -35,8 +35,8 @@ fun BitwardenLoadingDialog(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    color = BitwardenTheme.colorScheme.background.secondary.copy(alpha = 0.90f)
-                )
+                    color = BitwardenTheme.colorScheme.background.secondary.copy(alpha = 0.90f),
+                ),
         ) {
             BitwardenLoadingContent(message = text)
         }
