@@ -530,7 +530,7 @@ private fun TotpRow(
             BitwardenTextField(
                 label = stringResource(id = R.string.totp),
                 value = totpKey,
-                cardStyle = CardStyle.Bottom,
+                cardStyle = CardStyle.Full,
                 modifier = modifier.testTag("LoginTotpEntry"),
                 onValueChange = {},
                 readOnly = true,
