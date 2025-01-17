@@ -127,7 +127,7 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `RemindMeLaterClick should emit NavigateBack`() = runTest {
+    fun `RemindMeLaterClick should emit NavigateBackToVault`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.RemindMeLaterClick)
@@ -143,6 +143,18 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
                     ),
                 )
             }
+        }
+    }
+
+    @Test
+    fun `NavigateBackClick should send NavigateBack event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.NavigateBackClick)
+        viewModel.eventFlow.test {
+            assertEquals(
+                NewDeviceNoticeTwoFactorEvent.NavigateBack,
+                awaitItem(),
+            )
         }
     }
 

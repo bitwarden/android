@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectB
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -44,10 +45,11 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             label = stringResource(id = R.string.name),
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
+            textFieldTestTag = "ItemNameEntry",
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            textFieldTestTag = "ItemNameEntry",
         )
     }
 
@@ -58,15 +60,15 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             value = sshKeyState.publicKey,
             readOnly = true,
             onValueChange = { },
+            textFieldTestTag = "PublicKeyEntry",
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            textFieldTestTag = "PublicKeyEntry",
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenPasswordField(
             label = stringResource(id = R.string.private_key),
             value = sshKeyState.privateKey,
@@ -75,6 +77,7 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             showPassword = sshKeyState.showPrivateKey,
             showPasswordChange = { sshKeyTypeHandlers.onPrivateKeyVisibilityChange(it) },
             showPasswordTestTag = "ViewPrivateKeyButton",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .testTag("PrivateKeyEntry")
                 .fillMaxWidth()
@@ -83,31 +86,32 @@ fun LazyListScope.vaultAddEditSshKeyItems(
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.fingerprint),
             value = sshKeyState.fingerprint,
             readOnly = true,
             onValueChange = { /* no-op */ },
+            textFieldTestTag = "FingerprintEntry",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            textFieldTestTag = "FingerprintEntry",
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.miscellaneous),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
             options = commonState
@@ -122,37 +126,39 @@ fun LazyListScope.vaultAddEditSshKeyItems(
                         .first { it.name == selectedFolderName },
                 )
             },
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .testTag("FolderPicker")
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenSwitch(
             label = stringResource(
                 id = R.string.favorite,
             ),
             isChecked = commonState.favorite,
             onCheckedChange = commonTypeHandlers.onToggleFavorite,
+            cardStyle = if (commonState.isUnlockWithPasswordEnabled) {
+                CardStyle.Top()
+            } else {
+                CardStyle.Full
+            },
             modifier = Modifier
                 .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     if (commonState.isUnlockWithPasswordEnabled) {
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.password_prompt),
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-                modifier = Modifier
-                    .testTag("MasterPasswordRepromptToggle")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = R.drawable.ic_question_circle_small,
@@ -163,54 +169,63 @@ fun LazyListScope.vaultAddEditSshKeyItems(
                         contentColor = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .testTag("MasterPasswordRepromptToggle")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
         }
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.notes),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             singleLine = false,
             label = stringResource(id = R.string.notes),
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
+            textFieldTestTag = "ItemNotesEntry",
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textFieldTestTag = "ItemNotesEntry",
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.custom_fields),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
     }
 
     items(commonState.customFieldData) { customItem ->
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         VaultAddEditCustomField(
             customField = customItem,
             onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             onCustomFieldAction = commonTypeHandlers.onCustomFieldActionSelect,
+            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
+                .standardHorizontalMargin(),
         )
     }
 
@@ -225,7 +240,7 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
 }

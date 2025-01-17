@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -87,7 +88,7 @@ private fun RemovePasswordScreenContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
             text = state.description(),
@@ -104,11 +105,12 @@ private fun RemovePasswordScreenContent(
             value = state.input,
             onValueChange = onInputChanged,
             showPasswordTestTag = "PasswordVisibilityToggle",
+            autoFocus = true,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .testTag(tag = "MasterPasswordEntry")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
-            autoFocus = true,
         )
         Spacer(modifier = Modifier.height(24.dp))
 

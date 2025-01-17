@@ -7,16 +7,20 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 
@@ -34,30 +38,33 @@ fun VaultItemIdentityContent(
 ) {
     LazyColumn(modifier = modifier) {
         item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.name),
                 value = commonState.name,
                 onValueChange = { },
                 readOnly = true,
                 singleLine = false,
+                textFieldTestTag = "ItemNameEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "ItemNameEntry",
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
         identityState.identityName?.let { identityName ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.identity_name),
                     value = identityName,
@@ -65,15 +72,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityNameEntry",
                     copyActionTestTag = "IdentityCopyNameButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyIdentityNameClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = identityName),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.username?.let { username ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.username),
                     value = username,
@@ -81,15 +93,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityUsernameEntry",
                     copyActionTestTag = "IdentityCopyUsernameButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyUsernameClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = username),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.company?.let { company ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.company),
                     value = company,
@@ -97,15 +114,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityCompanyEntry",
                     copyActionTestTag = "IdentityCopyCompanyButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyCompanyClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = company),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.ssn?.let { ssn ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.ssn),
                     value = ssn,
@@ -113,15 +135,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentitySsnEntry",
                     copyActionTestTag = "IdentityCopySsnButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopySsnClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = ssn),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.passportNumber?.let { passportNumber ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.passport_number),
                     value = passportNumber,
@@ -129,15 +156,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityPassportNumberEntry",
                     copyActionTestTag = "IdentityCopyPassportNumberButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyPassportNumberClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = passportNumber),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.licenseNumber?.let { licenseNumber ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.license_number),
                     value = licenseNumber,
@@ -145,15 +177,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityLicenseNumberEntry",
                     copyActionTestTag = "IdentityCopyLicenseNumberButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyLicenseNumberClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = licenseNumber),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.email?.let { email ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.email),
                     value = email,
@@ -161,15 +198,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityEmailEntry",
                     copyActionTestTag = "IdentityCopyEmailButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyEmailClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = email),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.phone?.let { phone ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.phone),
                     value = phone,
@@ -177,15 +219,20 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityPhoneEntry",
                     copyActionTestTag = "IdentityCopyPhoneButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyPhoneClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = phone),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         identityState.address?.let { address ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
                     label = stringResource(id = R.string.address),
                     value = address,
@@ -193,19 +240,26 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "IdentityAddressEntry",
                     copyActionTestTag = "IdentityCopyAddressButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyAddressClick,
+                    cardStyle = identityState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = identityState.propertyList.indexOf(element = address),
+                            dividerPadding = 0.dp,
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         commonState.notes?.let { notes ->
             item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.notes),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -216,69 +270,75 @@ fun VaultItemIdentityContent(
                     textFieldTestTag = "CipherNotesLabel",
                     copyActionTestTag = "CipherNotesCopyButton",
                     onCopyClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
             item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
             }
             items(customFields) { customField ->
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
                     onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
                     onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
                     onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
             item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            items(attachments) { attachmentItem ->
+            itemsIndexed(attachments) { index, attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
                         .testTag("CipherAttachment")
                         .fillMaxWidth()
-                        .padding(start = 16.dp),
+                        .standardHorizontalMargin(),
                     attachmentItem = attachmentItem,
-                    onAttachmentDownloadClick =
-                    vaultCommonItemTypeHandlers.onAttachmentDownloadClick,
+                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                        .onAttachmentDownloadClick,
+                    cardStyle = attachments.toListItemCardStyle(index = index),
                 )
             }
-            item { Spacer(modifier = Modifier.height(8.dp)) }
         }
 
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
             VaultItemUpdateText(
                 header = "${stringResource(id = R.string.date_updated)}: ",
                 text = commonState.lastUpdated,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp),
             )
         }
         item {
@@ -296,6 +356,7 @@ private fun IdentityCopyField(
     textFieldTestTag: String,
     copyActionTestTag: String,
     onCopyClick: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
@@ -305,14 +366,15 @@ private fun IdentityCopyField(
         readOnly = true,
         singleLine = false,
         actions = {
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_copy,
                 contentDescription = copyContentDescription,
                 onClick = onCopyClick,
                 modifier = Modifier.testTag(tag = copyActionTestTag),
             )
         },
-        modifier = modifier,
         textFieldTestTag = textFieldTestTag,
+        cardStyle = cardStyle,
+        modifier = modifier,
     )
 }

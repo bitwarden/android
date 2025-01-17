@@ -64,10 +64,7 @@ fun EnvironmentSelector(
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = { shouldShowDialog = !shouldShowDialog },
                 )
-                .padding(
-                    vertical = 8.dp,
-                    horizontal = 16.dp,
-                ),
+                .padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(

@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -31,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * user clicks this item.
  * @param dialogDismissButtonText The text on the dismiss button of the dialog displayed when the
  * user clicks this item.
+ * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
 fun BitwardenExternalLinkRow(
@@ -43,6 +45,7 @@ fun BitwardenExternalLinkRow(
     dialogMessage: String,
     dialogConfirmButtonText: String = stringResource(id = R.string.continue_text),
     dialogDismissButtonText: String = stringResource(id = R.string.cancel),
+    cardStyle: CardStyle? = null,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
@@ -51,6 +54,7 @@ fun BitwardenExternalLinkRow(
         onClick = { shouldShowDialog = true },
         modifier = modifier,
         withDivider = withDivider,
+        cardStyle = cardStyle,
     ) {
         Icon(
             modifier = Modifier.mirrorIfRtl(),
