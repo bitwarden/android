@@ -72,28 +72,28 @@ fun <T : Enum<T>> CoachMarkContainer(
         val currentHighlightShape by state.currentHighlightShape
 
         val highlightPath = remember(boundedRectangle, currentHighlightShape) {
-                if (boundedRectangle == Rect.Zero) {
-                    return@remember Path()
-                }
-                val highlightArea = Rect(
-                    topLeft = boundedRectangle.topLeft,
-                    bottomRight = boundedRectangle.bottomRight,
-                )
-                Path().apply {
-                    when (currentHighlightShape) {
-                        CoachMarkHighlightShape.SQUARE -> addRoundRect(
-                            RoundRect(
-                                rect = highlightArea,
-                                cornerRadius = CornerRadius(
-                                    x = ROUNDED_RECT_RADIUS,
-                                ),
+            if (boundedRectangle == Rect.Zero) {
+                return@remember Path()
+            }
+            val highlightArea = Rect(
+                topLeft = boundedRectangle.topLeft,
+                bottomRight = boundedRectangle.bottomRight,
+            )
+            Path().apply {
+                when (currentHighlightShape) {
+                    CoachMarkHighlightShape.SQUARE -> addRoundRect(
+                        RoundRect(
+                            rect = highlightArea,
+                            cornerRadius = CornerRadius(
+                                x = ROUNDED_RECT_RADIUS,
                             ),
-                        )
+                        ),
+                    )
 
-                        CoachMarkHighlightShape.OVAL -> addOval(highlightArea)
-                    }
+                    CoachMarkHighlightShape.OVAL -> addOval(highlightArea)
                 }
             }
+        }
         if (boundedRectangle != Rect.Zero && isVisible) {
             val backgroundColor = BitwardenTheme.colorScheme.background.scrim
             Box(

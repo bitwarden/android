@@ -100,11 +100,12 @@ open class CoachMarkState<T : Enum<T>>(
             highlightBounds = bounds,
             toolTipState = toolTipState,
             shape = shape,
-        ).also {
-            if (key == currentHighlight.value) {
-                updateCoachMarkStateInternal(it)
+        )
+            .also {
+                if (key == currentHighlight.value) {
+                    updateCoachMarkStateInternal(it)
+                }
             }
-        }
     }
 
     /**
@@ -175,8 +176,8 @@ open class CoachMarkState<T : Enum<T>>(
      * be hidden.
      */
     suspend fun showPreviousCoachMark() {
-        val currentHighlight = getCurrentHighlight()
-        currentHighlight?.toolTipState?.cleanUp() ?: return
+        val currentHighlight = getCurrentHighlight() ?: return
+        currentHighlight.toolTipState.cleanUp()
         val index = orderedList.indexOf(currentHighlight.key)
         if (index == 0) {
             mutableCurrentHighlight.value = null
@@ -285,13 +286,17 @@ class LazyListCoachMarkState<T : Enum<T>>(
     }
 
     private suspend fun LazyListState.searchForKey(keyToFind: T) {
-        layoutInfo.visibleItemsInfo.any { it.key == keyToFind }
+        layoutInfo
+            .visibleItemsInfo
+            .any { it.key == keyToFind }
             .takeIf { itemAlreadyVisible ->
                 if (itemAlreadyVisible) {
                     val offset =
-                        layoutInfo.visibleItemsInfo.find { visItem ->
-                            visItem.key == keyToFind
-                        }
+                        layoutInfo
+                            .visibleItemsInfo
+                            .find { visItem ->
+                                visItem.key == keyToFind
+                            }
                             ?.offset
                     when {
                         offset == null -> Unit
@@ -327,10 +332,10 @@ class LazyListCoachMarkState<T : Enum<T>>(
                 scrollBy(-(layoutInfo.halfViewPortScrollAmount()))
                 found = true
             } else if (!canScrollBackward) {
-                    keepSearching = false
-                } else {
-                    this.scrollBy(scrollAmount)
-                }
+                keepSearching = false
+            } else {
+                this.scrollBy(scrollAmount)
+            }
         }
         return found
     }

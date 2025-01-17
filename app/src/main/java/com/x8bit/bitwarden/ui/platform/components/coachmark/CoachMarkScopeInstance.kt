@@ -148,7 +148,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                 Box(
                     modifier = modifier.calculateBoundsAndAddForKey(key = key, isFirstItem = true),
                 ) {
-                    leadingStaticContent?.let { it() } ?: run {
+                    leadingStaticContent?.invoke(this) ?: run {
                         if (items.isNotEmpty()) {
                             itemContent(
                                 items[0],
