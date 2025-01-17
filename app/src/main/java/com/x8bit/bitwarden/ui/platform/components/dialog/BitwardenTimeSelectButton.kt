@@ -2,9 +2,13 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,8 +20,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
@@ -36,6 +44,7 @@ import java.time.ZonedDateTime
  * @param onTimeSelect The callback to be invoked when a new time is selected.
  * @param isEnabled Whether the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param is24Hour Indicates if the time selector should use a 24 hour format or a 12 hour format
  * with AM/PM.
  */
@@ -47,6 +56,7 @@ fun BitwardenTimeSelectButton(
     onTimeSelect: (hour: Int, minute: Int) -> Unit,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
+    cardStyle: CardStyle? = null,
     is24Hour: Boolean = false,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -57,18 +67,22 @@ fun BitwardenTimeSelectButton(
                 ?: "--:-- --",
         )
     }
-    OutlinedTextField(
+    TextField(
         modifier = modifier
             .clearAndSetSemantics {
                 role = Role.DropdownList
                 contentDescription = "$label, $formattedTime"
             }
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
             .clickable(
                 enabled = isEnabled,
-                indication = null,
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { shouldShowDialog = !shouldShowDialog },
-            ),
+            )
+            .cardPadding(cardStyle = cardStyle)
+            .padding(top = 4.dp),
         textStyle = BitwardenTheme.typography.bodyLarge,
         readOnly = true,
         label = { Text(text = label) },

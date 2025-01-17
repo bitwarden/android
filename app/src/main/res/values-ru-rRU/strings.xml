@@ -21,7 +21,7 @@
   <string name="email_address">Адрес email</string>
   <string name="email_us">Написать нам</string>
   <string name="email_us_description">Чтобы получить помощь или оставить отзыв, отправьте нам письмо.</string>
-  <string name="enter_pin">Введите PIN-код.</string>
+  <string name="enter_pin">Введите PIN-код</string>
   <string name="favorites">Избранные</string>
   <string name="file_bug_report">Сообщить об ошибке</string>
   <string name="file_bug_report_description">Откройте проблему в нашем репозитории на GitHub.</string>
@@ -40,7 +40,6 @@
   <string name="invalid_master_password">Неверный мастер-пароль. Попробуйте снова.</string>
   <string name="invalid_pin">Неверный PIN. Попробуйте снова.</string>
   <string name="launch">Перейти</string>
-  <string name="log_in">Войти</string>
   <string name="log_in_verb">Войти</string>
   <string name="log_in_noun">Вход</string>
   <string name="log_out">Выход</string>
@@ -478,7 +477,7 @@
   <string name="biometrics_direction">Биометрическая верификация.</string>
   <string name="biometrics">биометрией</string>
   <string name="use_biometrics_to_unlock">Использовать биометрию</string>
-  <string name="accessibility_overlay_permission_alert">Bitwarden требует внимания - см. раздел \"Служба специальных возможностей автозаполнения\" в настройках программы.</string>
+  <string name="accessibility_overlay_permission_alert">Bitwarden требует внимания - см. раздел \"Служба специальных возможностей автозаполнения\" в настройках программы</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. На экране настроек приложений Android для Bitwarden перейдите в раздел \"Отображение поверх других приложений\" (в разделе \"Дополнительно\") и коснитесь переключателя, чтобы включить поддержку наложения.</string>
   <string name="overlay_permission">Разрешение</string>
   <string name="bitwarden_autofill_service_open_overlay_permission_settings">Открыть настройки разрешения наложения</string>
@@ -537,7 +536,7 @@
   <string name="accept_policies_error">Условия предоставления услуг и Политика конфиденциальности не были подтверждены.</string>
   <string name="terms_of_service">Условия предоставления услуг</string>
   <string name="privacy_policy">Политика конфиденциальности</string>
-  <string name="accessibility_draw_over_permission_alert">Bitwarden требует внимания - включите \'Поверх других приложений\' в \'Службах автозаполнения\' из настроек Bitwarden.</string>
+  <string name="accessibility_draw_over_permission_alert">Bitwarden требует внимания - включите \'Поверх других приложений\' в \'Службах автозаполнения\' из настроек Bitwarden</string>
   <string name="passkey_management">Управление passkeys</string>
   <string name="autofill_services">Службы автозаполнения</string>
   <string name="inline_autofill">Встроенное в клавиатуру автозаполнение</string>
@@ -589,7 +588,7 @@
   <string name="notes_info">Личные заметки об этой Send.</string>
   <string name="disable_send">Отключить эту Send, чтобы никто не мог получить к ней доступ</string>
   <string name="no_sends">В вашем хранилище нет Send.</string>
-  <string name="add_a_send">Добавить Send</string>
+  <string name="add_a_send">Новая Send</string>
   <string name="copy_link">Скопировать ссылку</string>
   <string name="share_link">Поделиться ссылкой</string>
   <string name="send_link">Ссылка на Send</string>
@@ -802,7 +801,7 @@
   <string name="region">Регион</string>
   <string name="update_weak_master_password_warning">Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа.</string>
   <string name="current_master_password">Текущий мастер-пароль</string>
-  <string name="logged_in">Вход выполнен!</string>
+  <string name="logged_in">Выполнен вход!</string>
   <string name="approve_with_my_other_device">Одобрить с другим устройством</string>
   <string name="request_admin_approval">Запросить одобрение администратора</string>
   <string name="approve_with_master_password">Одобрить с мастер-паролем</string>
@@ -931,7 +930,7 @@
   <string name="continue_to_provide_feedback">Выберите \'Продолжить\', чтобы оставить отзыв о новом приложении!</string>
   <string name="file_password">Пароль к файлу</string>
   <string name="give_feedback">Оставить отзыв</string>
-  <string name="password_protected">Пароль защищен</string>
+  <string name="password_protected">Защищено паролем</string>
   <string name="password_used_to_export">Этот пароль будет использоваться для экспорта и импорта этого файла</string>
   <string name="autofill_suggestion">Предложения по автозаполнению</string>
   <string name="continue_to_complete_web_authn_verification">Перейти к завершению верификации WebAuthn.</string>
@@ -942,19 +941,19 @@
   <string name="user_verification_direction">Верификация пользователя</string>
   <string name="creating_on">Создано:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следуйте инструкциям в письме, отправленном на %1$s, чтобы продолжить создание аккаунта.</string>
-  <string name="we_sent_an_email_to">Мы отправили письмо на %1$s.</string>
-  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продолжая, вы принимаете Условия предоставления услуг и Политику конфиденциальности</string>
+  <string name="we_sent_an_email_to">Мы отправили письмо <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продолжая, вы принимаете <annotation link="termsOfService">Условия предоставления услуг</annotation> и <annotation link="privacyPolicy">Политику конфиденциальности</annotation></string>
   <string name="set_password">Задать пароль</string>
   <string name="unsubscribe">Отписаться</string>
   <string name="check_your_email">Проверьте свою почту</string>
   <string name="open_email_app">Открыть приложение электронной почты</string>
   <string name="go_back">Вернуться</string>
   <string name="email_verified">Email подтвержден</string>
-  <string name="no_email_go_back_to_edit_your_email_address">Нет письма? Вернитесь, чтобы изменить свой адрес email.</string>
-  <string name="or_log_in_you_may_already_have_an_account">Или авторизуйтесь, возможно, у вас уже есть аккаунт.</string>
-  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований. Отписаться можно в любое время.</string>
+  <string name="no_email_go_back_to_edit_your_email_address">Нет письма? <annotation link="goBack">Вернитесь</annotation>, чтобы изменить свой адрес email.</string>
+  <string name="or_log_in_you_may_already_have_an_account">Или <annotation link="logIn">авторизуйтесь</annotation>, возможно, у вас уже есть аккаунт.</string>
+  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований. <annotation link="unsubscribe">Отписаться</annotation> можно в любое время.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Получайте советы, объявления и исследования от Bitwarden в свой почтовый ящик. Отписаться можно в любое время.</string>
-  <string name="privacy_prioritized">Конфиденциальность, приоритет</string>
+  <string name="security_prioritized">Безопасность, приоритет</string>
   <string name="welcome_message_1">Сохраняйте логины, карты и личные данные в своем защищенном хранилище. Bitwarden использует сквозное шифрование, чтобы защитить то, что для вас важно.</string>
   <string name="welcome_message_2">Настройте биометрическую разблокировку и автозаполнение, чтобы входить в свои аккаунты, не набирая ни одной буквы.</string>
   <string name="quick_and_easy_login">Быстрая и простая авторизация</string>
@@ -965,6 +964,7 @@
   <string name="remove_passkey">Удалить passkey</string>
   <string name="passkey_removed">Passkey удален</string>
   <string name="what_makes_a_password_strong">Какой пароль считается надежным?</string>
+  <string name="a_secure_memorable_password">Надежный, запоминающийся пароль</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Чем длиннее ваш пароль, тем сложнее его взломать. Минимальный пароль для создания аккаунта - 12 символов, но если вы добавите еще два символа, время на взлом пароля будет исчисляться веками!</string>
   <string name="the_strongest_passwords_are_usually">Самые надежные пароли как правило:</string>
   <string name="twelve_or_more_characters">Содержат 12 или более символов</string>
@@ -980,7 +980,8 @@
   <string name="confirm">Подтвердить</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Настройте биометрию или задайте PIN-код для быстрого доступа к хранилищу и автозаполнения логинов.</string>
   <string name="never_lose_access_to_your_vault">Никогда не теряйте доступ к своему хранилищу</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_account">Лучший способ убедиться, что вы всегда сможете получить доступ к своему аккаунту, — это настроить меры безопасности с самого начала.</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Лучший способ убедиться, что вы всегда сможете получить доступ к своему хранилищу, — это настроить меры безопасности с самого начала.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Один из лучших способов создать надежный и запоминающийся пароль - использовать ключевую фразу. \nВот как:</string>
   <string name="create_a_hint">Создать подсказку</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Подсказка будет отправлена вам по email, когда вы ее запросите.</string>
   <string name="write_your_password_down">Запишите свой пароль</string>
@@ -1003,14 +1004,14 @@
   <string name="please_restart_registration_or_try_logging_in">Пожалуйста, повторите регистрацию или попробуйте авторизоваться. Возможно, у вас уже есть аккаунт.</string>
   <string name="restart_registration">Перезапустить регистрацию</string>
   <string name="authenticator_sync">Синхронизация Bitwarden Authenticator</string>
-  <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию Bitwarden Authenticator</string>
+  <string name="allow_bitwarden_authenticator_syncing">Разрешить синхронизацию аутентификатора</string>
   <string name="there_was_an_issue_validating_the_registration_token">Возникла проблема при проверке токена регистрации.</string>
   <string name="turn_on_autofill">Включить автозаполнение</string>
   <string name="use_autofill_to_log_into_your_accounts">Используйте автозаполнение для авторизации в ваших аккаунтах одним нажатием.</string>
   <string name="turn_on_later">Включить позже</string>
   <string name="turn_on_autofill_later">Включить автозаполнение позже?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Вы можете вернуться к выполнению этого шага в любое время в Настройках.</string>
-  <string name="what_bitwarden_has_to_offer">Теперь вы можете использовать автозаполнение для авторизации в приложениях и на веб-сайтах, используя сохраненные пароли. Познакомьтесь со всем, что может предложить Bitwarden.</string>
+  <string name="what_bitwarden_has_to_offer">Теперь вы можете изучить все возможности Bitwarden и начать безопасно управлять своими паролями.</string>
   <string name="youre_all_set">Все готово!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo.</string>
   <string name="master_password_hint_not_specified">Подсказка к мастер-паролю</string>
@@ -1033,34 +1034,23 @@
   <string name="give_your_vault_a_head_start">Дайте старт своему хранилищу</string>
   <string name="class_3_biometrics_description">Разблокировка с помощью биометрии требует надежной аутентификации и может быть совместима не со всеми биометрическими возможностями данного устройства.</string>
   <string name="class_2_biometrics_description">Разблокировка с помощью биометрии требует надежной аутентификации и не совместима с биометрическими возможностями, доступными на данном устройстве.</string>
-  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">На вашем компьютере войдите в текущий браузер или менеджер паролей.</string>
-  <string name="log_in_to_your_current_browser_or_password_manager_highlight">войдите в текущий браузер или менеджер паролей.</string>
-  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Экспортируйте пароли. Эта опция обычно находится в настройках.</string>
-  <string name="export_your_passwords_highlight">Экспортируйте пароли.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Выберите Импорт данных в веб-приложении, а затем Готово, чтобы завершить синхронизацию.</string>
-  <string name="select_import_data_highlight">Выберите Импорт данных</string>
+  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">На вашем компьютере <annotation emphasis="bold">войдите в текущий браузер или менеджер паролей.</annotation></string>
+  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Экспортируйте пароли.</annotation> Эта опция обычно находится в настройках.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Выберите Импорт данных</annotation> в веб-приложении, а затем Готово, чтобы завершить синхронизацию.</string>
   <string name="step_1_of_3">Шаг 1 из 3</string>
   <string name="export_your_saved_logins">Экспортировать сохраненные логины</string>
   <string name="delete_this_file_after_import_is_complete">Вы удалите этот файл после завершения импорта.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">На вашем компьютере откройте новую вкладку браузера и перейдите к на vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">перейдите на vault.bitwarden.com</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">На вашем компьютере откройте новую вкладку браузера и <annotation emphasis="bold">перейдите на <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="log_in_to_the_bitwarden_web_app">Войдите в веб-приложение Bitwarden.</string>
   <string name="step_2_of_3">Шаг 2 из 3</string>
   <string name="log_in_to_bitwarden">Войдите на Bitwarden</string>
   <string name="step_3_of_3">Шаг 3 из 3</string>
   <string name="import_logins_to_bitwarden">Импортируйте логины в Bitwarden</string>
-  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">В меню Bitwarden найдите Настройки и выберите Импорт данных.</string>
-  <string name="find_the_tools_highlight">найдите в Настройках</string>
-  <string name="select_import_data_step_3_highlight">выберите Импорт данных.</string>
-  <string name="fill_out_the_form_and_import_your_saved_password_file">Заполните форму и импортируйте сохраненный файл с паролями.</string>
-  <string name="import_your_saved_password_file_highlight">импортируйте файл с сохраненными паролями.</string>
-  <string name="then_done_highlight">затем Готово</string>
-  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">В целях безопасности не забудьте удалить сохраненный файл с паролями.</string>
-  <string name="delete_your_saved_password_file">удалите файл с сохраненными паролями.</string>
-  <string name="need_help_check_out_import_help">Нужна помощь? Ознакомьтесь с помощью по импорту.</string>
-  <string name="import_help_highlight">помощь по импорту</string>
-  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Сохраните экспортированный файл на компьютере, где его можно будет легко найти.</string>
-  <string name="save_the_exported_file_highlight">Сохранить экспортированный файл</string>
+  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">В меню Bitwarden <annotation emphasis="bold">найдите Настройки</annotation> и <annotation emphasis="bold">выберите Импорт данных.</annotation></string>
+  <string name="fill_out_the_form_and_import_your_saved_password_file">Заполните форму и <annotation emphasis="bold">импортируйте сохраненный файл с паролями.</annotation></string>
+  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">В целях безопасности не забудьте <annotation emphasis="bold">удалить сохраненный файл с паролями.</annotation></string>
+  <string name="need_help_check_out_import_help">Нужна помощь? Ознакомьтесь с <annotation link="importHelp">помощью по импорту</annotation>.</string>
+  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Сохраните экспортированный файл</annotation> на компьютере, где его можно будет легко найти.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Этот сервер Bitwarden не распознан. Возможно вам следует связаться с провайдером или изменить свой сервер.</string>
   <string name="syncing_logins_loading_message">Синхронизация логинов...</string>
   <string name="ssh_key_cipher_item_types">Типы элементов ключей шифрования SSH</string>
@@ -1075,6 +1065,7 @@
   <string name="bitwarden_tools">Инструменты Bitwarden</string>
   <string name="got_it">Понятно</string>
   <string name="no_logins_were_imported">Ни один логин не был импортирован</string>
+  <string name="import_error">Ошибка импорта</string>
   <string name="verified_sso_domain_verified">Конечная точка домена SSO верифицирована</string>
   <string name="logins_imported">Логины импортированы</string>
   <string name="remember_to_delete_your_imported_password_file_from_your_computer">Не забудьте удалить файл импортированных паролей с компьютера</string>
@@ -1089,4 +1080,40 @@
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden может уведомлять вас каждый раз, когда вы получаете новый запрос на вход с другого устройства.</string>
   <string name="skip_for_now">Пока пропустить</string>
   <string name="done_text">Готово</string>
+  <string name="page_number_x_of_y">%1$s из %2$s</string>
+  <string name="copy_identity_name">Скопировать имя личной информации</string>
+  <string name="copy_company">Скопировать компанию</string>
+  <string name="copy_ssn">Скопировать номер социального страхования</string>
+  <string name="copy_passport_number">Скопировать номер паспорта</string>
+  <string name="copy_license_number">Скопировать номер лицензии</string>
+  <string name="copy_email">Скопировать email</string>
+  <string name="copy_phone">Скопировать номер телефона</string>
+  <string name="copy_address">Скопировать адрес</string>
+  <string name="important_notice">Важное уведомление</string>
+  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Начиная с февраля 2025 года Bitwarden будет отправлять код на электронную почту вашего аккаунта для подтверждения авторизации с новых устройств.</string>
+  <string name="do_you_have_reliable_access_to_your_email">Есть ли у вас надежный доступ к электронной почте <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="yes_i_can_reliably_access_my_email">Да, я имею надежный доступ к своей электронной почте</string>
+  <string name="biometrics_no_longer_supported_title">Биометрия больше не поддерживается на этом устройстве</string>
+  <string name="biometrics_no_longer_supported">Вы были деавторизованы, поскольку биометрические данные вашего устройства не соответствуют последним требованиям безопасности. Чтобы обновить настройки, авторизуйтесь еще раз или обратитесь к администратору для получения доступа.</string>
+  <string name="cxp_import">Импорт CXP</string>
+  <string name="cxp_export">Экспорт CXP</string>
+  <string name="set_up_two_step_login">Настроить двухэтапную аутентификацию</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">В качестве альтернативного способа защиты учетной записи вы можете настроить двухэтапную аутентификацию или сменить электронную почту на ту, к которой вы можете получить доступ.</string>
+  <string name="turn_on_two_step_login">Включить двухэтапную аутентификацию</string>
+  <string name="change_account_email">Изменить email аккаунта</string>
+  <string name="choose_three_or_four_random_words">Выберите три или четыре случайных слова</string>
+  <string name="pick_three_or_four_random_unrelated_words">Выберите три или четыре случайных, не связанных между собой слова, которые вы можете легко запомнить. Подумайте о <annotation emphasis="bold">предметах, местах или вещах</annotation>, которые вам нравятся.</string>
+  <string name="combine_those_words_together">Объедините эти слова вместе</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Объедините слова в любом порядке, чтобы получилась парольная фраза. <annotation emphasis="bold">Используйте дефисы, пробелы или оставьте их как одно длинное слово</annotation> — на ваш выбор!</string>
+  <string name="make_it_yours">Сделайте его своим</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Добавьте цифру или символ</annotation>, чтобы сделать ее еще надежней. Теперь у вас есть уникальная, безопасная и запоминающаяся парольная фраза!</string>
+  <string name="need_some_inspiration">"Нужно вдохновение?"</string>
+  <string name="check_out_the_passphrase_generator">"Проверьте генератор парольных фраз"</string>
+  <string name="copied_to_clipboard">Скопировано в буфер обмена.</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Мы не смогли проверить сертификат сервера. Возможно, цепочка сертификатов или настройки прокси на вашем устройстве или сервере Bitwarden настроены неправильно.</string>
+  <string name="review_flow_launched">Review flow launched!</string>
+  <string name="copy_private_key">Скопировать приватный ключ</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Вы можете изменить email своего аккаунта в веб-приложении Bitwarden.</string>
+  <string name="login_credentials">Данные для авторизации</string>
+  <string name="autofill_options">Параметры автозаполнения</string>
 </resources>

@@ -12,7 +12,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
@@ -107,10 +107,11 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
-    fido2CreationData: Fido2CredentialRequest?,
+    fido2CreationData: Fido2CreateCredentialRequest?,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     totpData: TotpData?,
     isPremiumUser: Boolean,
+    organizationPremiumStatusMap: Map<String, Boolean>,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
         .filter { cipherView ->
@@ -142,6 +143,7 @@ fun VaultData.toViewState(
                 fido2CredentialAutofillViews = fido2CredentialAutofillViews,
                 isPremiumUser = isPremiumUser,
                 isTotp = totpData != null,
+                organizationPremiumStatusMap = organizationPremiumStatusMap,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -200,6 +202,7 @@ fun VaultData.toViewState(
         val shouldShowAddButton = when (itemListingType) {
             is VaultItemListingState.ItemListingType.Vault.Folder,
             VaultItemListingState.ItemListingType.Vault.Trash,
+            VaultItemListingState.ItemListingType.Vault.SshKey,
                 -> false
 
             else -> true
@@ -289,8 +292,10 @@ private fun List<CipherView>.toDisplayItemList(
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     isPremiumUser: Boolean,
     isTotp: Boolean,
+    organizationPremiumStatusMap: Map<String, Boolean>,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
+        val premiumStatus = organizationPremiumStatusMap[it.organizationId] ?: isPremiumUser
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
             hasMasterPassword = hasMasterPassword,
@@ -301,7 +306,7 @@ private fun List<CipherView>.toDisplayItemList(
                 ?.firstOrNull { fido2CredentialAutofillView ->
                     fido2CredentialAutofillView.cipherId == it.id
                 },
-            isPremiumUser = isPremiumUser,
+            isPremiumUser = premiumStatus,
             isTotp = isTotp,
         )
     }

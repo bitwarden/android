@@ -6,7 +6,7 @@ import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.sdk.Client
-import com.bitwarden.sdk.ClientGenerators
+import com.bitwarden.sdk.GeneratorClients
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
@@ -18,7 +18,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GeneratorSdkSourceTest {
-    private val clientGenerators = mockk<ClientGenerators>()
+    private val clientGenerators = mockk<GeneratorClients>()
     private val client = mockk<Client> {
         every { generators() } returns clientGenerators
     }

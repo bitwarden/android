@@ -43,16 +43,16 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
@@ -77,7 +77,7 @@ fun SetupUnlockScreen(
                 showBiometricsPrompt = true
                 biometricsManager.promptBiometrics(
                     onSuccess = {
-                        handler.unlockWithBiometricToggle()
+                        handler.unlockWithBiometricToggle(it)
                         showBiometricsPrompt = false
                     },
                     onCancel = { showBiometricsPrompt = false },
@@ -158,11 +158,13 @@ private fun SetupUnlockScreenContent(
         }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
+        val biometricSupportStatus = biometricsManager.biometricSupportStatus
         BitwardenUnlockWithBiometricsSwitch(
-            biometricSupportStatus = biometricsManager.biometricSupportStatus,
+            biometricSupportStatus = biometricSupportStatus,
             isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
             onDisableBiometrics = handler.onDisableBiometrics,
             onEnableBiometrics = handler.onEnableBiometrics,
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .testTag(tag = "UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
@@ -172,6 +174,11 @@ private fun SetupUnlockScreenContent(
             isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
             isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
             onUnlockWithPinToggleAction = handler.onUnlockWithPinToggle,
+            cardStyle = if (biometricSupportStatus == BiometricSupportStatus.NOT_SUPPORTED) {
+                CardStyle.Full
+            } else {
+                CardStyle.Bottom
+            },
             modifier = Modifier
                 .testTag(tag = "UnlockWithPinSwitch")
                 .fillMaxWidth()
@@ -324,14 +331,12 @@ private fun SetupUnlockScreenDialogs(
 ) {
     when (dialogState) {
         is SetupUnlockState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(text = dialogState.title),
+            text = dialogState.title(),
         )
 
         is SetupUnlockState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title(),
+            message = dialogState.message(),
             onDismissRequest = onDismissRequest,
         )
 

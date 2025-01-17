@@ -25,6 +25,7 @@ fun GetTokenResponseJson.Success.toUserState(
             userId = userId,
             email = jwtTokenData.email,
             isEmailVerified = jwtTokenData.isEmailVerified,
+            isTwoFactorEnabled = null,
             name = jwtTokenData.name,
             stamp = null,
             organizationId = null,
@@ -36,6 +37,7 @@ fun GetTokenResponseJson.Success.toUserState(
             kdfMemory = this.kdfMemory,
             kdfParallelism = this.kdfParallelism,
             userDecryptionOptions = this.userDecryptionOptions,
+            creationDate = null,
         ),
         settings = AccountJson.Settings(
             environmentUrlData = environmentUrlData,

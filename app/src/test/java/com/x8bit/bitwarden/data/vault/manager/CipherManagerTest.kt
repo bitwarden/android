@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -49,6 +50,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -58,6 +60,7 @@ import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class CipherManagerTest {
@@ -73,6 +76,9 @@ class CipherManagerTest {
     private val ciphersService: CiphersService = mockk()
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
+    private val reviewPromptManager: ReviewPromptManager = mockk {
+        every { registerAddCipherAction() } just runs
+    }
 
     private val cipherManager: CipherManager = CipherManagerImpl(
         ciphersService = ciphersService,
@@ -81,6 +87,7 @@ class CipherManagerTest {
         authDiskSource = fakeAuthDiskSource,
         fileManager = fileManager,
         clock = clock,
+        reviewPromptManager = reviewPromptManager,
     )
 
     @BeforeEach
@@ -147,7 +154,7 @@ class CipherManagerTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `createCipher with ciphersService createCipher success should return CreateCipherResult success`() =
+    fun `createCipher with ciphersService createCipher success should return CreateCipherResult success and increment addCipherActionCount`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -169,6 +176,7 @@ class CipherManagerTest {
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
             assertEquals(CreateCipherResult.Success, result)
+            verify(exactly = 1) { reviewPromptManager.registerAddCipherAction() }
         }
 
     @Test
@@ -238,7 +246,7 @@ class CipherManagerTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `createCipherInOrganization with ciphersService createCipher success should return CreateCipherResult success`() =
+    fun `createCipherInOrganization with ciphersService createCipher success should return CreateCipherResult success and increment addCipherActionCount`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -271,6 +279,7 @@ class CipherManagerTest {
             )
 
             assertEquals(CreateCipherResult.Success, result)
+            verify(exactly = 1) { reviewPromptManager.registerAddCipherAction() }
         }
 
     @Test
@@ -2012,6 +2021,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = null,
     kdfParallelism = null,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

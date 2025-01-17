@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,14 +27,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -80,10 +79,11 @@ fun EnterpriseSignOnScreen(
     when (val dialog = state.dialogState) {
         is EnterpriseSignOnState.DialogState.Error -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialog.title ?: R.string.an_error_has_occurred.asText(),
-                    message = dialog.message,
-                ),
+                title = dialog
+                    .title
+                    ?.invoke()
+                    ?: stringResource(id = R.string.an_error_has_occurred),
+                message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
                 },
@@ -91,11 +91,7 @@ fun EnterpriseSignOnScreen(
         }
 
         is EnterpriseSignOnState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message,
-                ),
-            )
+            BitwardenLoadingDialog(text = dialog.message())
         }
 
         null -> Unit
@@ -117,7 +113,7 @@ fun EnterpriseSignOnScreen(
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.log_in),
+                        label = stringResource(id = R.string.log_in_verb),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) }
                         },
@@ -150,28 +146,31 @@ private fun EnterpriseSignOnScreenContent(
             .verticalScroll(rememberScrollState())
             .fillMaxWidth(),
     ) {
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(id = R.string.log_in_sso_summary),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenTextField(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .testTag("OrgSSOIdentifierEntry"),
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
             value = state.orgIdentifierInput,
             onValueChange = onOrgIdentifierInputChange,
             label = stringResource(id = R.string.org_identifier),
+            textFieldTestTag = "OrgSSOIdentifierEntry",
+            cardStyle = CardStyle.Full,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

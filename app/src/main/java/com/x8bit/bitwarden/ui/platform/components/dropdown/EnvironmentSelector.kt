@@ -2,10 +2,9 @@ package com.x8bit.bitwarden.ui.platform.components.dropdown
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
@@ -40,7 +39,6 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
  * @param onOptionSelected A callback that gets invoked when an environment option is selected
  * and passes the selected option as an argument.
  * @param modifier A [Modifier] for the composable.
- *
  */
 @Composable
 fun EnvironmentSelector(
@@ -52,58 +50,50 @@ fun EnvironmentSelector(
     val options = Environment.Type.entries.toTypedArray()
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    Box(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(28.dp))
-                .clickable(
-                    indication = ripple(
-                        bounded = true,
-                        color = BitwardenTheme.colorScheme.background.pressed,
-                    ),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = { shouldShowDialog = !shouldShowDialog },
-                )
-                .padding(
-                    vertical = 8.dp,
-                    horizontal = 16.dp,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = labelText,
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.primary,
-                modifier = Modifier.padding(end = 12.dp),
+    Row(
+        modifier = modifier
+            .clip(shape = CircleShape)
+            .clickable(
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = { shouldShowDialog = !shouldShowDialog },
             )
-            Text(
-                text = selectedOption.displayLabel(),
-                style = BitwardenTheme.typography.labelLarge,
-                color = BitwardenTheme.colorScheme.text.interaction,
-                modifier = Modifier.padding(end = 8.dp),
-            )
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_chevron_down_small),
-                contentDescription = stringResource(id = R.string.region),
-                tint = BitwardenTheme.colorScheme.icon.secondary,
-            )
-        }
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = labelText,
+            style = BitwardenTheme.typography.bodySmall,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier.padding(end = 12.dp),
+        )
+        Text(
+            text = selectedOption.displayLabel(),
+            style = BitwardenTheme.typography.labelLarge,
+            color = BitwardenTheme.colorScheme.text.interaction,
+            modifier = Modifier.padding(end = 8.dp),
+        )
+        Icon(
+            painter = rememberVectorPainter(id = R.drawable.ic_chevron_down_small),
+            contentDescription = stringResource(id = R.string.region),
+            tint = BitwardenTheme.colorScheme.icon.secondary,
+        )
+    }
 
-        if (shouldShowDialog) {
-            BitwardenSelectionDialog(
-                title = stringResource(id = R.string.logging_in_on),
-                onDismissRequest = { shouldShowDialog = false },
-            ) {
-                options.forEach {
-                    BitwardenSelectionRow(
-                        text = it.displayLabel,
-                        onClick = {
-                            onOptionSelected.invoke(it)
-                            shouldShowDialog = false
-                        },
-                        isSelected = it == selectedOption,
-                    )
-                }
+    if (shouldShowDialog) {
+        BitwardenSelectionDialog(
+            title = stringResource(id = R.string.logging_in_on),
+            onDismissRequest = { shouldShowDialog = false },
+        ) {
+            options.forEach {
+                BitwardenSelectionRow(
+                    text = it.displayLabel,
+                    onClick = {
+                        onOptionSelected(it)
+                        shouldShowDialog = false
+                    },
+                    isSelected = it == selectedOption,
+                )
             }
         }
     }

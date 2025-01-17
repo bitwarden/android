@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.platform.feature.search
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -107,7 +109,10 @@ fun SearchContent(
     LazyColumn(
         modifier = modifier,
     ) {
-        items(viewState.displayItems) {
+        item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+        }
+        itemsIndexed(viewState.displayItems) { index, it ->
             BitwardenListItem(
                 startIcon = it.iconData,
                 label = it.title,
@@ -158,19 +163,19 @@ fun SearchContent(
                         )
                     }
                     .toPersistentList(),
+                cardStyle = viewState.displayItems.toListItemCardStyle(
+                    index = index,
+                    dividerPadding = 56.dp,
+                ),
                 modifier = Modifier
                     .testTag(searchType.searchItemTestTag)
                     .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        // There is some built-in padding to the menu button that makes up
-                        // the visual difference here.
-                        end = 12.dp,
-                    ),
+                    .standardHorizontalMargin(),
             )
         }
 
         item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }

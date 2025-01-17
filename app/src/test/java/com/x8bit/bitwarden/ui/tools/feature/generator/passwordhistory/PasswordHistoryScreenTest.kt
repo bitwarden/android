@@ -72,7 +72,7 @@ class PasswordHistoryScreenTest : BaseComposeTest() {
 
     @Test
     fun `navigation icon click should trigger navigate back`() {
-        composeTestRule.onNodeWithContentDescription("Close").performClick()
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
 
         verify {
             viewModel.trySendAction(

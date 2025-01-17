@@ -22,7 +22,7 @@ fun CipherView.toOverflowActions(
                     cipherId = cipherId,
                     requiresPasswordReprompt = hasMasterPassword,
                 )
-                    .takeUnless { this.deletedDate != null },
+                    .takeUnless { this.deletedDate != null || !this.edit },
                 this.login?.username?.let {
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
                 },

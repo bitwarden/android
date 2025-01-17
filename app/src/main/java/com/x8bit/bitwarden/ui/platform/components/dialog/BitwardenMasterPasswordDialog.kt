@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -76,10 +77,11 @@ fun BitwardenMasterPasswordDialog(
                     label = stringResource(id = R.string.master_password),
                     value = masterPassword,
                     onValueChange = { masterPassword = it },
+                    autoFocus = true,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .testTag("AlertInputField")
                         .imePadding(),
-                    autoFocus = true,
                 )
             }
         },

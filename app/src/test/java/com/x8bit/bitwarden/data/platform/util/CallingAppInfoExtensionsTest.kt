@@ -120,7 +120,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Success,
+            Fido2ValidateOriginResult.Success("origin"),
             mockAppInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
             ),

@@ -1,12 +1,10 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
-import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 
@@ -27,14 +25,6 @@ interface Fido2CredentialManager {
     var authenticationAttempts: Int
 
     /**
-     * Attempt to validate the RP and origin of the provided [callingAppInfo] and [relyingPartyId].
-     */
-    suspend fun validateOrigin(
-        callingAppInfo: CallingAppInfo,
-        relyingPartyId: String,
-    ): Fido2ValidateOriginResult
-
-    /**
      * Attempt to extract FIDO 2 passkey attestation options from the system [requestJson], or null.
      */
     fun getPasskeyAttestationOptionsOrNull(
@@ -53,7 +43,7 @@ interface Fido2CredentialManager {
      */
     suspend fun registerFido2Credential(
         userId: String,
-        fido2CredentialRequest: Fido2CredentialRequest,
+        fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult
 

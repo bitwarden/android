@@ -33,6 +33,12 @@ sealed class FlagKey<out T : Any> {
                 ImportLoginsFlow,
                 SshKeyCipherItems,
                 VerifiedSsoDomainEndpoint,
+                CredentialExchangeProtocolImport,
+                CredentialExchangeProtocolExport,
+                AppReviewPrompt,
+                NewDevicePermanentDismiss,
+                NewDeviceTemporaryDismiss,
+                IgnoreEnvironmentCheck,
             )
         }
     }
@@ -43,7 +49,7 @@ sealed class FlagKey<out T : Any> {
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-authenticator-sync-android"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -90,6 +96,7 @@ sealed class FlagKey<out T : Any> {
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
+
     /**
      * Data object holding the feature flag key for the new verified SSO domain endpoint feature.
      */
@@ -99,6 +106,72 @@ sealed class FlagKey<out T : Any> {
         override val isRemotelyConfigured: Boolean = true
     }
 
+    /**
+     * Data object holding hte feature flag key for the Credential Exchange Protocol (CXP) import
+     * feature.
+     */
+    data object CredentialExchangeProtocolImport : FlagKey<Boolean>() {
+        override val keyName: String = "cxp-import-mobile"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the Credential Exchange Protocol (CXP) export
+     * feature.
+     */
+    data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
+        override val keyName: String = "cxp-export-mobile"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the App Review Prompt feature.
+     */
+    data object AppReviewPrompt : FlagKey<Boolean>() {
+        override val keyName: String = "app-review-prompt"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the Cipher Key Encryption feature.
+     */
+    data object CipherKeyEncryption : FlagKey<Boolean>() {
+        override val keyName: String = "cipher-key-encryption"
+        override val defaultValue: Boolean = true
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the New Device Temporary Dismiss feature.
+     */
+    data object NewDeviceTemporaryDismiss : FlagKey<Boolean>() {
+        override val keyName: String = "new-device-temporary-dismiss"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the New Device Permanent Dismiss feature.
+     */
+    data object NewDevicePermanentDismiss : FlagKey<Boolean>() {
+        override val keyName: String = "new-device-permanent-dismiss"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to ignore an environment check.
+     */
+    data object IgnoreEnvironmentCheck : FlagKey<Boolean>() {
+        override val keyName: String = "ignore-environment-check"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
+    }
+
+    //region Dummy keys for testing
     /**
      * Data object holding the key for a [Boolean] flag to be used in tests.
      */
@@ -126,4 +199,5 @@ sealed class FlagKey<out T : Any> {
         override val defaultValue: String = "defaultValue"
         override val isRemotelyConfigured: Boolean = true
     }
+    //endregion Dummy keys for testing
 }

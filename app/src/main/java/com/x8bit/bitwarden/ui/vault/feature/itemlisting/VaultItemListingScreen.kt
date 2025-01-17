@@ -32,14 +32,12 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchA
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasswordConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -324,22 +322,18 @@ private fun VaultItemListingDialogs(
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title?.invoke(),
+            message = dialogState.message(),
             onDismissRequest = onDismissRequest,
         )
 
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(dialogState.message),
+            text = dialogState.message(),
         )
 
         is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = dialogState.title,
-                message = dialogState.message,
-            ),
+            title = dialogState.title(),
+            message = dialogState.message(),
             onDismissRequest = onDismissFido2ErrorDialog,
         )
 
@@ -380,10 +374,8 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2MasterPasswordError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = {
                     onRetryFido2PasswordVerification(dialogState.selectedCipherId)
                 },
@@ -404,10 +396,8 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2PinError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = {
                     onRetryFido2PinVerification(dialogState.selectedCipherId)
                 },
@@ -426,10 +416,8 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2PinSetUpError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = {
                     onRetryPinSetUpFido2Verification(dialogState.selectedCipherId)
                 },

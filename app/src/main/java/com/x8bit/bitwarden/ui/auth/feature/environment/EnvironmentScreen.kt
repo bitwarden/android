@@ -26,17 +26,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays the about self-hosted/custom environment screen.
@@ -59,20 +61,15 @@ fun EnvironmentScreen(
         }
     }
 
-    BitwardenBasicDialog(
-        visibilityState = if (state.shouldShowErrorDialog) {
-            BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.environment_page_urls_error.asText(),
-            )
-        } else {
-            BasicDialogState.Hidden
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
-        },
-    )
-
+    if (state.shouldShowErrorDialog) {
+        BitwardenBasicDialog(
+            title = stringResource(id = R.string.an_error_has_occurred),
+            message = stringResource(id = R.string.environment_page_urls_error),
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+            },
+        )
+    }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -105,40 +102,53 @@ fun EnvironmentScreen(
                 .imePadding()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.self_hosted_environment),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.server_url),
                 value = state.serverUrl,
                 placeholder = "ex. https://bitwarden.company.com",
-                hint = stringResource(id = R.string.self_hosted_environment_footer),
+                supportingText = stringResource(id = R.string.self_hosted_environment_footer),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
                 },
+                autoCompleteOptions = if (BuildConfig.BUILD_TYPE != "release") {
+                    persistentListOf(
+                        "https://vault.qa.bitwarden.pw",
+                        "https://qa-team.sh.bitwarden.pw",
+                        "https://vault.usdev.bitwarden.pw",
+                    )
+                } else {
+                    persistentListOf()
+                },
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "ServerUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("ServerUrlEntry")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.custom_environment),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.web_vault_url),
@@ -147,13 +157,14 @@ fun EnvironmentScreen(
                     { viewModel.trySendAction(EnvironmentAction.WebVaultServerUrlChange(it)) }
                 },
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "WebVaultUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("WebVaultUrlEntry")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.api_url),
@@ -162,13 +173,14 @@ fun EnvironmentScreen(
                     { viewModel.trySendAction(EnvironmentAction.ApiServerUrlChange(it)) }
                 },
                 keyboardType = KeyboardType.Uri,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("ApiUrlEntry")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.identity_url),
@@ -177,13 +189,14 @@ fun EnvironmentScreen(
                     { viewModel.trySendAction(EnvironmentAction.IdentityServerUrlChange(it)) }
                 },
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "IdentityUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("IdentityUrlEntry")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.icons_url),
@@ -191,14 +204,16 @@ fun EnvironmentScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.IconsServerUrlChange(it)) }
                 },
-                hint = stringResource(id = R.string.custom_environment_footer),
+                supportingText = stringResource(id = R.string.custom_environment_footer),
                 keyboardType = KeyboardType.Uri,
+                textFieldTestTag = "IconsUrlEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("IconsUrlEntry")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
 
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }

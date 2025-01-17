@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * Decryption options related to a user's trusted device.
@@ -13,20 +15,26 @@ import kotlinx.serialization.Serializable
  * @property hasManageResetPasswordPermission Whether or not the user has manage reset password
  * permission.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class TrustedDeviceUserDecryptionOptionsJson(
-    @SerialName("EncryptedPrivateKey")
+    @SerialName("encryptedPrivateKey")
+    @JsonNames("EncryptedPrivateKey")
     val encryptedPrivateKey: String?,
 
-    @SerialName("EncryptedUserKey")
+    @SerialName("encryptedUserKey")
+    @JsonNames("EncryptedUserKey")
     val encryptedUserKey: String?,
 
-    @SerialName("HasAdminApproval")
+    @SerialName("hasAdminApproval")
+    @JsonNames("HasAdminApproval")
     val hasAdminApproval: Boolean,
 
-    @SerialName("HasLoginApprovingDevice")
+    @SerialName("hasLoginApprovingDevice")
+    @JsonNames("HasLoginApprovingDevice")
     val hasLoginApprovingDevice: Boolean,
 
-    @SerialName("HasManageResetPasswordPermission")
+    @SerialName("hasManageResetPasswordPermission")
+    @JsonNames("HasManageResetPasswordPermission")
     val hasManageResetPasswordPermission: Boolean,
 )

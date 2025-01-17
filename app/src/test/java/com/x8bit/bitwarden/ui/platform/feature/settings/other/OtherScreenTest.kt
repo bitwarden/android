@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -45,7 +46,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on allow screen capture confirm should send AllowScreenCaptureToggle`() {
-        composeTestRule.onNodeWithText("Allow screen capture").performClick()
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
         composeTestRule.onNodeWithText("Yes").performClick()
         composeTestRule.assertNoDialogExists()
 
@@ -54,7 +55,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on allow screen capture cancel should dismiss dialog`() {
-        composeTestRule.onNodeWithText("Allow screen capture").performClick()
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
         composeTestRule
             .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -64,7 +65,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on allow screen capture row click should display confirm enable screen capture dialog`() {
-        composeTestRule.onNodeWithText("Allow screen capture").performClick()
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
         composeTestRule
             .onAllNodesWithText("Allow screen capture")
             .filterToOne(hasAnyAncestor(isDialog()))

@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
  * A faked implementation of [AppStateManager]
  */
 class FakeAppStateManager : AppStateManager {
-    private val mutableAppCreationStateFlow = MutableStateFlow(AppCreationState.DESTROYED)
+    private val mutableAppCreationStateFlow =
+        MutableStateFlow<AppCreationState>(AppCreationState.Destroyed)
     private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
 
     override val appCreatedStateFlow: StateFlow<AppCreationState>

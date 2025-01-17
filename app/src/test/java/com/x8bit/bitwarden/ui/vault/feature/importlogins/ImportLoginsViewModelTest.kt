@@ -59,7 +59,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         unmockkStatic(Uri::parse)
     }
 
-    private val snackbarRelayManager: SnackbarRelayManagerImpl = mockk() {
+    private val snackbarRelayManager: SnackbarRelayManagerImpl = mockk {
         coEvery { sendSnackbarData(any(), any()) } just runs
     }
 
@@ -143,47 +143,48 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmImportLater sets dialog state to null, sends NavigateBack event, and stores first time values`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            // Initial state
-            assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+    fun `ConfirmImportLater sets dialog state to null, sends NavigateBack event, and stores first time values`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                // Initial state
+                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
 
-            // Set the dialog state to ImportLater
-            viewModel.trySendAction(ImportLoginsAction.ImportLaterClick)
-            assertEquals(
-                ImportLoginsState(
-                    dialogState = ImportLoginsState.DialogState.ImportLater,
-                    viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
-                    showBottomSheet = false,
-                    currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
-                ),
-                stateFlow.awaitItem(),
-            )
-            viewModel.trySendAction(ImportLoginsAction.ConfirmImportLater)
-            assertEquals(
-                ImportLoginsState(
-                    dialogState = null,
-                    viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
-                    showBottomSheet = false,
-                    currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
-                ),
-                stateFlow.awaitItem(),
-            )
-            assertEquals(
-                ImportLoginsEvent.NavigateBack,
-                eventFlow.awaitItem(),
-            )
+                // Set the dialog state to ImportLater
+                viewModel.trySendAction(ImportLoginsAction.ImportLaterClick)
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = ImportLoginsState.DialogState.ImportLater,
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = false,
+                        showBottomSheet = false,
+                        currentWebVaultUrl = DEFAULT_VAULT_URL,
+                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                viewModel.trySendAction(ImportLoginsAction.ConfirmImportLater)
+                assertEquals(
+                    ImportLoginsState(
+                        dialogState = null,
+                        viewState = ImportLoginsState.ViewState.InitialContent,
+                        isVaultSyncing = false,
+                        showBottomSheet = false,
+                        currentWebVaultUrl = DEFAULT_VAULT_URL,
+                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    ImportLoginsEvent.NavigateBack,
+                    eventFlow.awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
+            }
         }
-        verify(exactly = 1) {
-            firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
-            firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
-        }
-    }
 
     @Test
     fun `ConfirmGetStarted sets dialog state to null and view state to step one`() = runTest {
@@ -419,7 +420,10 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     ImportLoginsState(
-                        dialogState = ImportLoginsState.DialogState.Error(R.string.no_logins_were_imported.asText()),
+                        dialogState = ImportLoginsState.DialogState.Error(
+                            message = R.string.no_logins_were_imported.asText(),
+                            title = R.string.import_error.asText(),
+                        ),
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         isVaultSyncing = false,
                         showBottomSheet = false,

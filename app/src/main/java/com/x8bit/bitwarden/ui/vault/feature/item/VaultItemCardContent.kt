@@ -7,16 +7,21 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -36,46 +41,53 @@ fun VaultItemCardContent(
 ) {
     LazyColumn(modifier = modifier) {
         item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.name),
                 value = commonState.name,
                 onValueChange = { },
                 readOnly = true,
                 singleLine = false,
+                textFieldTestTag = "CardItemNameEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("CardItemNameEntry")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
         cardState.cardholderName?.let { cardholderName ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.cardholder_name),
                     value = cardholderName,
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
+                    textFieldTestTag = "CardholderNameEntry",
+                    cardStyle = cardState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = cardState.propertyList.indexOf(element = cardholderName),
+                        ),
                     modifier = Modifier
-                        .testTag("CardholderNameEntry")
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
         cardState.number?.let { numberData ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 BitwardenPasswordFieldWithActions(
                     label = stringResource(id = R.string.number),
                     value = numberData.number,
@@ -85,7 +97,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     actions = {
-                        BitwardenTonalIconButton(
+                        BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_number),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
@@ -94,50 +106,62 @@ fun VaultItemCardContent(
                     },
                     passwordFieldTestTag = "CardNumberEntry",
                     showPasswordTestTag = "CardViewNumberButton",
+                    cardStyle = cardState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = cardState.propertyList.indexOf(element = numberData),
+                        ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         if (cardState.brand != null && cardState.brand != VaultCardBrand.SELECT) {
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.brand),
                     value = cardState.brand.shortName(),
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
+                    textFieldTestTag = "CardBrandEntry",
+                    cardStyle = cardState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = cardState.propertyList.indexOf(element = cardState.brand),
+                        ),
                     modifier = Modifier
-                        .testTag("CardBrandEntry")
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         cardState.expiration?.let { expiration ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.expiration),
                     value = expiration,
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
+                    textFieldTestTag = "CardExpirationEntry",
+                    cardStyle = cardState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = cardState.propertyList.indexOf(element = expiration),
+                        ),
                     modifier = Modifier
-                        .testTag("CardExpirationEntry")
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         cardState.securityCode?.let { securityCodeData ->
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 BitwardenPasswordFieldWithActions(
                     label = stringResource(id = R.string.security_code),
                     value = securityCodeData.code,
@@ -147,102 +171,122 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     actions = {
-                        BitwardenTonalIconButton(
+                        BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_security_code),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,
                             modifier = Modifier.testTag(tag = "CardCopySecurityCodeButton"),
                         )
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
                     showPasswordTestTag = "CardViewSecurityCodeButton",
                     passwordFieldTestTag = "CardSecurityCodeEntry",
+                    cardStyle = cardState
+                        .propertyList
+                        .toListItemCardStyle(
+                            index = cardState.propertyList.indexOf(element = securityCodeData),
+                        ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         commonState.notes?.let { notes ->
             item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.notes),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextField(
+                BitwardenTextFieldWithActions(
                     label = stringResource(id = R.string.notes),
                     value = notes,
                     onValueChange = { },
                     readOnly = true,
                     singleLine = false,
+                    actions = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_notes),
+                            onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
+                            modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
+                        )
+                    },
+                    textFieldTestTag = "CipherNotesLabel",
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
-                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
             item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
             }
             items(customFields) { customField ->
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
                     onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
                     onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
                     onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
             item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            items(attachments) { attachmentItem ->
+            itemsIndexed(attachments) { index, attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
                         .testTag("CipherAttachment")
                         .fillMaxWidth()
-                        .padding(start = 16.dp),
+                        .standardHorizontalMargin(),
                     attachmentItem = attachmentItem,
-                    onAttachmentDownloadClick =
-                    vaultCommonItemTypeHandlers.onAttachmentDownloadClick,
+                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                        .onAttachmentDownloadClick,
+                    cardStyle = attachments.toListItemCardStyle(index = index),
                 )
             }
-            item { Spacer(modifier = Modifier.height(8.dp)) }
         }
 
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
             VaultItemUpdateText(
                 header = "${stringResource(id = R.string.date_updated)}: ",
                 text = commonState.lastUpdated,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp),
             )
         }
         item {

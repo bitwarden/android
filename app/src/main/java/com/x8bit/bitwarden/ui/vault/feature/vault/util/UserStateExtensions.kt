@@ -71,3 +71,11 @@ fun UserState.Account.toVaultFilterData(
                 ),
             )
         }
+
+/**
+ * Returns a map of organization IDs and if they provide a premium status to the user for
+ * items owned by that organization.
+ */
+fun UserState.Account.getOrganizationPremiumStatusMap(): Map<String, Boolean> {
+    return organizations.associate { it.id to it.shouldUsersGetPremium }
+}

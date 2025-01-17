@@ -13,7 +13,7 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.ClientVault
+import com.bitwarden.sdk.VaultClient
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
@@ -48,7 +48,7 @@ import java.io.File
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
- * [ClientVault].
+ * [VaultClient].
  */
 @Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(

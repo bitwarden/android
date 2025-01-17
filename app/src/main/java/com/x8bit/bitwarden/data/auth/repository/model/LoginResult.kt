@@ -28,4 +28,9 @@ sealed class LoginResult {
      * There was an error while logging into an unofficial Bitwarden server.
      */
     data object UnofficialServerError : LoginResult()
+
+    /**
+     * There was an error in validating the certificate chain for the server
+     */
+    data object CertificateError : LoginResult()
 }

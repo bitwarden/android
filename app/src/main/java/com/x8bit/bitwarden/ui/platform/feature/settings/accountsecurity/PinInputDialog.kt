@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -43,6 +44,9 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onCancelClick A callback for when the "Cancel" button is clicked.
  * @param onSubmitClick A callback for when the "Submit" button is clicked.
  * @param onDismissRequest A callback for when the dialog is requesting to be dismissed.
+ * @param isPinCreation A flag for determining if the dialog is being used for PIN creation. We
+ * want to restrict PINs to numeric values but also support any existing PINs with non-numeric
+ * characters.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
@@ -51,6 +55,7 @@ fun PinInputDialog(
     onCancelClick: () -> Unit,
     onSubmitClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
+    isPinCreation: Boolean = false,
 ) {
     var pin by remember { mutableStateOf(value = "") }
     Dialog(
@@ -107,11 +112,13 @@ fun PinInputDialog(
                     label = stringResource(id = R.string.pin),
                     value = pin,
                     autoFocus = true,
-                    onValueChange = { pin = it },
+                    onValueChange = { newValue ->
+                        pin = newValue.filter { it.isDigit() || !isPinCreation }
+                    },
                     keyboardType = KeyboardType.Number,
-                    modifier = Modifier
-                        .testTag(tag = "AlertInputField")
-                        .fillMaxWidth(),
+                    textFieldTestTag = "AlertInputField",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }

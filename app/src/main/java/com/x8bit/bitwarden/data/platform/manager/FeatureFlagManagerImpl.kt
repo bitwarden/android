@@ -20,10 +20,7 @@ class FeatureFlagManagerImpl(
     override val sdkFeatureFlags: Map<String, Boolean>
         get() = mapOf(
             CIPHER_KEY_ENCRYPTION_KEY to
-                isServerVersionAtLeast(
-                    serverConfigRepository.serverConfigStateFlow.value,
-                    CIPHER_KEY_ENC_MIN_SERVER_VERSION,
-                ),
+                getCipherKeyEncryptionFlagState(),
         )
 
     override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> =
@@ -46,6 +43,16 @@ class FeatureFlagManagerImpl(
             .serverConfigStateFlow
             .value
             .getFlagValueOrDefault(key = key)
+
+    /**
+     * Get the computed value of the cipher key encryption flag based on server version and
+     * remote flag.
+     */
+    private fun getCipherKeyEncryptionFlagState() =
+        isServerVersionAtLeast(
+            serverConfigRepository.serverConfigStateFlow.value,
+            CIPHER_KEY_ENC_MIN_SERVER_VERSION,
+        ) && getFeatureFlag(FlagKey.CipherKeyEncryption)
 }
 
 /**

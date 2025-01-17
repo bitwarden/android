@@ -249,6 +249,7 @@ private fun BlockAutoFillListItem(
 ) {
     Row(
         modifier = Modifier
+            .defaultMinSize(minHeight = 60.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -257,7 +258,6 @@ private fun BlockAutoFillListItem(
                 onClick = onClick,
             )
             .bottomDivider(paddingStart = 16.dp)
-            .defaultMinSize(minHeight = 56.dp)
             .padding(end = 8.dp, top = 16.dp, bottom = 16.dp)
             .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween,

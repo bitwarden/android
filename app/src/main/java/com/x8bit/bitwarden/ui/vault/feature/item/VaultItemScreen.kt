@@ -30,12 +30,10 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItem
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -44,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 
@@ -272,6 +271,9 @@ fun VaultItemScreen(
             vaultSshKeyItemTypeHandlers = remember(viewModel) {
                 VaultSshKeyItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultIdentityItemTypeHandlers = remember(viewModel) {
+                VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -287,15 +289,13 @@ private fun VaultItemDialogs(
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = null,
-                message = dialog.message,
-            ),
+            title = null,
+            message = dialog.message(),
             onDismissRequest = onDismissRequest,
         )
 
         is VaultItemState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(text = dialog.message),
+            text = dialog.message(),
         )
 
         is VaultItemState.DialogState.MasterPasswordDialog -> {
@@ -350,6 +350,7 @@ private fun VaultItemContent(
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
+    vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -386,6 +387,7 @@ private fun VaultItemContent(
                         commonState = viewState.common,
                         identityState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultIdentityItemTypeHandlers = vaultIdentityItemTypeHandlers,
                         modifier = modifier,
                     )
                 }
@@ -402,6 +404,7 @@ private fun VaultItemContent(
                     VaultItemSshKeyContent(
                         commonState = viewState.common,
                         sshKeyItemState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
                         modifier = modifier,
                     )

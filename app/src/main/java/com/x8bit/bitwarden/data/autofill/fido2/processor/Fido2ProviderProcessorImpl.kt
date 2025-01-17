@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.fido2.processor
 
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.credentials.exceptions.GetCredentialUnknownException
@@ -12,13 +13,21 @@ import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.launch
 import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -143,10 +152,14 @@ class Fido2ProviderProcessorImpl(
     ): List<CredentialEntry> {
         val cipherViews = vaultRepository
             .ciphersStateFlow
-            .value
-            .data
-            ?.filter { it.isActiveWithFido2Credentials }
-            ?: emptyList()
+            .takeUntilLoaded()
+            .fold(emptyList<CipherView>()) { _, dataState ->
+                when (dataState) {
+                    is DataState.Loaded -> dataState.data.filter { it.isActiveWithFido2Credentials }
+
+                    else -> emptyList()
+                }
+            }
         val result = vaultRepository
             .getDecryptedFido2CredentialAutofillViews(cipherViews)
         return when (result) {
@@ -187,6 +200,13 @@ class Fido2ProviderProcessorImpl(
                                 requestCode = requestCode.getAndIncrement(),
                             ),
                         beginGetPublicKeyCredentialOption = option,
+                    )
+                    .setIcon(
+                        Icon
+                            .createWithResource(
+                                context,
+                                R.drawable.ic_bw_passkey,
+                            ),
                     )
                     .build()
             }

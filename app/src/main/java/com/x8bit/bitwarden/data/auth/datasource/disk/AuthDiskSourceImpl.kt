@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -13,7 +15,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.UUID
 
@@ -21,6 +22,7 @@ import java.util.UUID
 private const val ACCOUNT_TOKENS_KEY = "accountTokens"
 private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY = "authenticatorSyncSymmetric"
 private const val AUTHENTICATOR_SYNC_UNLOCK_KEY = "authenticatorSyncUnlock"
+private const val BIOMETRICS_INIT_VECTOR_KEY = "biometricInitializationVector"
 private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "userKeyAutoUnlock"
 private const val DEVICE_KEY_KEY = "deviceKey"
@@ -46,6 +48,7 @@ private const val TDE_LOGIN_COMPLETE = "tdeLoginComplete"
 private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
+private const val NEW_DEVICE_NOTICE_STATE = "newDeviceNoticeState"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -142,6 +145,7 @@ class AuthDiskSourceImpl(
         storePrivateKey(userId = userId, privateKey = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
+        storeUserBiometricInitVector(userId = userId, iv = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
@@ -274,6 +278,17 @@ class AuthDiskSourceImpl(
         putEncryptedString(
             key = PENDING_ADMIN_AUTH_REQUEST_KEY.appendIdentifier(userId),
             value = pendingAuthRequest?.let { json.encodeToString(it) },
+        )
+    }
+
+    override fun getUserBiometricInitVector(userId: String): ByteArray? =
+        getEncryptedString(key = BIOMETRICS_INIT_VECTOR_KEY.appendIdentifier(userId))
+            ?.toByteArray(Charsets.ISO_8859_1)
+
+    override fun storeUserBiometricInitVector(userId: String, iv: ByteArray?) {
+        putEncryptedString(
+            key = BIOMETRICS_INIT_VECTOR_KEY.appendIdentifier(userId),
+            value = iv?.toString(Charsets.ISO_8859_1),
         )
     }
 
@@ -470,6 +485,22 @@ class AuthDiskSourceImpl(
     override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
+
+    override fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState {
+        return getString(key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId))?.let {
+            json.decodeFromStringOrNull(it)
+        } ?: NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            lastSeenDate = null,
+        )
+    }
+
+    override fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?) {
+        putString(
+            key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId),
+            value = newState?.let { json.encodeToString(it) },
+        )
+    }
 
     private fun generateAndStoreUniqueAppId(): String =
         UUID

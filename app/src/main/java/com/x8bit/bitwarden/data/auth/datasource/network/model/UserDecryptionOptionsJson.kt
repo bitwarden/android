@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * The options available to a user for decryption.
@@ -12,14 +14,18 @@ import kotlinx.serialization.Serializable
  * device.
  * @property keyConnectorUserDecryptionOptions Decryption options related to a user's key connector.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class UserDecryptionOptionsJson(
-    @SerialName("HasMasterPassword")
+    @SerialName("hasMasterPassword")
+    @JsonNames("HasMasterPassword")
     val hasMasterPassword: Boolean,
 
-    @SerialName("TrustedDeviceOption")
+    @SerialName("trustedDeviceOption")
+    @JsonNames("TrustedDeviceOption")
     val trustedDeviceUserDecryptionOptions: TrustedDeviceUserDecryptionOptionsJson?,
 
-    @SerialName("KeyConnectorOption")
+    @SerialName("keyConnectorOption")
+    @JsonNames("KeyConnectorOption")
     val keyConnectorUserDecryptionOptions: KeyConnectorUserDecryptionOptionsJson?,
 )

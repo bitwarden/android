@@ -10,9 +10,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
-import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.password.model.PasswordRegisterCredentialResult
@@ -26,8 +25,10 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toPasswordCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
@@ -110,6 +111,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -128,7 +130,7 @@ class VaultAddEditViewModel @Inject constructor(
             // Check for totp data to pre-populate
             val totpData = specialCircumstance?.toTotpDataOrNull()
             // Check for Fido2 data to pre-populate
-            val fido2CreationRequest = specialCircumstance?.toFido2RequestOrNull()
+            val fido2CreationRequest = specialCircumstance?.toFido2CreateRequestOrNull()
             val fido2AttestationOptions = fido2CreationRequest?.let { request ->
                 fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request.requestJson)
             }
@@ -429,6 +431,14 @@ class VaultAddEditViewModel @Inject constructor(
                 message = R.string.select_one_collection.asText(),
             )
             return@onContent
+        } else if (
+            !networkConnectionManager.isNetworkConnected
+        ) {
+            showErrorDialog(
+                title = R.string.internet_connection_required_title.asText(),
+                message = R.string.internet_connection_required_message.asText(),
+            )
+            return@onContent
         }
 
         mutableStateFlow.update {
@@ -440,7 +450,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
 
         specialCircumstanceManager.specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 handleFido2RequestSpecialCircumstance(request, content.toCipherView())
                 return@onContent
@@ -477,7 +487,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleFido2RequestSpecialCircumstance(
-        request: Fido2CredentialRequest,
+        request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
         if (cipherView.isActiveWithFido2Credentials) {
@@ -541,7 +551,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun registerFido2Credential(
-        request: Fido2CredentialRequest,
+        request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
 
@@ -573,7 +583,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun registerFido2CredentialToCipher(
-        request: Fido2CredentialRequest,
+        request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
         viewModelScope.launch {
@@ -585,7 +595,7 @@ class VaultAddEditViewModel @Inject constructor(
             val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
                     userId = userId,
-                    fido2CredentialRequest = request,
+                    fido2CreateCredentialRequest = request,
                     selectedCipherView = cipherView,
                 )
             sendAction(
@@ -662,7 +672,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleConfirmOverwriteExistingPasskeyClick() {
         specialCircumstanceManager
             .specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 onContent { content ->
                     registerFido2Credential(request, content.toCipherView())
@@ -684,7 +694,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun getRequestAndRegisterCredential() =
         specialCircumstanceManager
             .specialCircumstance
-            ?.toFido2RequestOrNull()
+            ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 onContent { content ->
                     registerFido2CredentialToCipher(
@@ -741,7 +751,7 @@ class VaultAddEditViewModel @Inject constructor(
                 return
             }
 
-        if (activeAccount.vaultUnlockType == VaultUnlockType.PIN) {
+        if (settingsRepository.isUnlockWithPinEnabled) {
             mutableStateFlow.update {
                 it.copy(dialog = VaultAddEditState.DialogState.Fido2PinPrompt)
             }
@@ -1664,16 +1674,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.NoNetwork -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = VaultAddEditState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
-                                .asText()
-                                .concat(
-                                    " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
-                                ),
-                        ),
+                mutableStateFlow.update { currentState ->
+                    currentState.determineContentState(
+                        vaultData = vaultDataState.data,
+                        userData = action.userData,
                     )
                 }
             }
@@ -1690,25 +1694,33 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun VaultAddEditState.determineContentState(
-        vaultData: VaultData,
+        vaultData: VaultData?,
         userData: UserState?,
     ): VaultAddEditState {
+        val internalVaultData = vaultData
+            ?: VaultData(
+                cipherViewList = emptyList(),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+                fido2CredentialAutofillViewList = null,
+            )
         val isIndividualVaultDisabled = policyManager
             .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any()
         return copy(
-            viewState = vaultData.cipherViewList
+            viewState = internalVaultData.cipherViewList
                 .find { it.id == vaultAddEditType.vaultItemId }
                 .validateCipherOrReturnErrorState(
                     currentAccount = userData?.activeAccount,
                     vaultAddEditType = vaultAddEditType,
                 ) { currentAccount, cipherView ->
 
-                    val canDelete = vaultData
+                    val canDelete = internalVaultData
                         .collectionViewList
                         .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
 
-                    val canAssignToCollections = vaultData
+                    val canAssignToCollections = internalVaultData
                         .collectionViewList
                         .canAssignToCollections(cipherView?.collectionIds)
 
@@ -1726,8 +1738,8 @@ class VaultAddEditViewModel @Inject constructor(
                         )
                         ?: viewState)
                         .appendFolderAndOwnerData(
-                            folderViewList = vaultData.folderViewList,
-                            collectionViewList = vaultData
+                            folderViewList = internalVaultData.folderViewList,
+                            collectionViewList = internalVaultData
                                 .collectionViewList
                                 .filter { !it.readOnly },
                             activeAccount = currentAccount,

@@ -15,9 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -28,10 +32,12 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick The callback when the row is clicked.
  * @param modifier The modifier to be applied to the layout.
  * @param description An optional description label to be displayed below the [text].
+ * @param textTestTag The optional test tag for the inner text component.
  * @param isEnabled Indicates if the row is enabled or not, a disabled row will not be clickable
  * and it's contents will be dimmed.
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param content The content of the [BitwardenTextRow].
  */
 @Composable
@@ -40,13 +46,17 @@ fun BitwardenTextRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     description: String? = null,
+    textTestTag: String? = null,
     isEnabled: Boolean = true,
     withDivider: Boolean = false,
+    cardStyle: CardStyle? = null,
     content: (@Composable () -> Unit)? = null,
 ) {
     Box(
-        contentAlignment = Alignment.BottomCenter,
+        contentAlignment = Alignment.CenterStart,
         modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
             .clickable(
                 enabled = isEnabled,
                 interactionSource = remember { MutableInteractionSource() },
@@ -55,13 +65,11 @@ fun BitwardenTextRow(
                 ),
                 onClick = onClick,
             )
+            .cardPadding(cardStyle = cardStyle, horizontal = 16.dp)
             .semantics(mergeDescendants = true) { },
     ) {
         Row(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 56.dp)
-                .padding(start = 16.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -78,6 +86,7 @@ fun BitwardenTextRow(
                     } else {
                         BitwardenTheme.colorScheme.filledButton.foregroundDisabled
                     },
+                    modifier = Modifier.run { textTestTag?.let { testTag(it) } ?: this },
                 )
                 description?.let {
                     Text(

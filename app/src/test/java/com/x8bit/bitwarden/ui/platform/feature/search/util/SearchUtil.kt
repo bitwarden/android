@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
+import androidx.annotation.DrawableRes
 import com.bitwarden.send.SendType
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
@@ -16,6 +17,7 @@ fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
     isTotp: Boolean = false,
+    @DrawableRes fallbackIconRes: Int = R.drawable.ic_globe,
 ): SearchState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -27,7 +29,7 @@ fun createMockDisplayItemForCipher(
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                    fallbackIconRes = R.drawable.ic_globe,
+                    fallbackIconRes = fallbackIconRes,
                 ),
                 extraIconList = listOf(
                     IconRes(

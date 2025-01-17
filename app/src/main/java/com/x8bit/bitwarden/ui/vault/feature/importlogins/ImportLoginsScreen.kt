@@ -41,15 +41,14 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
-import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenFullScreenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
@@ -62,7 +61,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLoginsInstructionStep
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
-import com.x8bit.bitwarden.ui.vault.feature.importlogins.model.InstructionStep
 import kotlinx.collections.immutable.persistentListOf
 
 private const val IMPORT_HELP_URL = "https://bitwarden.com/help/import-data/"
@@ -213,7 +211,7 @@ private fun ImportLoginsDialogContent(
                 message = dialogState.message(),
                 onDismissRequest = handler.onDismissDialog,
                 confirmButtonText = stringResource(R.string.try_again),
-                dismissButtonText = stringResource(R.string.ok),
+                dismissButtonText = stringResource(R.string.import_logins_later),
                 onConfirmClick = handler.onRetrySync,
                 onDismissClick = handler.onFailedSyncAcknowledged,
             )
@@ -281,6 +279,7 @@ private fun InitialImportLoginsContent(
     }
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun ImportLoginsStepOneContent(
     onContinueClick: () -> Unit,
@@ -288,47 +287,32 @@ private fun ImportLoginsStepOneContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instruction1 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager,
-        ),
-        highlights = listOf(
-            stringResource(R.string.log_in_to_your_current_browser_or_password_manager_highlight),
-        ),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
-    val instruction2 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.export_your_passwords_this_option_is_usually_found_in_your_settings,
-        ),
-        listOf(stringResource(R.string.export_your_passwords_highlight)),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
-    val instruction3 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
-        ),
-        highlights = listOf(stringResource(R.string.save_the_exported_file_highlight)),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
+    val instruction1 =
+        R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager.toAnnotatedString()
+    val instruction2 =
+        R.string.export_your_passwords_this_option_is_usually_found_in_your_settings.toAnnotatedString()
+    val instruction3 =
+        R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily
+            .toAnnotatedString()
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_1_of_3),
         stepTitle = stringResource(R.string.export_your_saved_logins),
         instructions = persistentListOf(
-            InstructionStep(
-                stepNumber = 1,
-                instructionText = instruction1,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number1,
+                headerText = instruction1,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 2,
-                instructionText = instruction2,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number2,
+                headerText = instruction2,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 3,
-                instructionText = instruction3,
-                additionalText = stringResource(R.string.delete_this_file_after_import_is_complete),
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number3,
+                headerText = instruction3,
+                subtitleText = stringResource(R.string.delete_this_file_after_import_is_complete)
+                    .toAnnotatedString(),
             ),
         ),
         onBackClick = onBackClick,
@@ -346,19 +330,11 @@ private fun ImportLoginsStepTwoContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instruction1 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
-            vaultUrl,
-        ),
-        highlights = listOf(
-            stringResource(
-                R.string.go_to_vault_bitwarden_com_highlight,
+    val instruction1 =
+        R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com
+            .toAnnotatedString(
                 vaultUrl,
-            ),
-        ),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
+            )
     val instruction2Text = stringResource(R.string.log_in_to_the_bitwarden_web_app)
     val instruction2 = buildAnnotatedString {
         withStyle(bitwardenBoldSpanStyle) {
@@ -369,15 +345,15 @@ private fun ImportLoginsStepTwoContent(
         stepText = stringResource(R.string.step_2_of_3),
         stepTitle = stringResource(R.string.log_in_to_bitwarden),
         instructions = persistentListOf(
-            InstructionStep(
-                stepNumber = 1,
-                instructionText = instruction1,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number1,
+                headerText = instruction1,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 2,
-                instructionText = instruction2,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number2,
+                headerText = instruction2,
+                subtitleText = null,
             ),
         ),
         onBackClick = onBackClick,
@@ -387,7 +363,7 @@ private fun ImportLoginsStepTwoContent(
     )
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun ImportLoginsStepThreeContent(
     onContinueClick: () -> Unit,
@@ -395,65 +371,38 @@ private fun ImportLoginsStepThreeContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instruction1 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
-        ),
-        highlights = listOf(
-            stringResource(R.string.find_the_tools_highlight),
-            stringResource(R.string.select_import_data_step_3_highlight),
-        ),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
-    val instruction2 = createAnnotatedString(
-        mainString = stringResource(R.string.fill_out_the_form_and_import_your_saved_password_file),
-        highlights = listOf(
-            stringResource(R.string.import_your_saved_password_file_highlight),
-        ),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
-    val instruction3 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
-        ),
-        highlights = listOf(
-            stringResource(R.string.select_import_data_highlight),
-            stringResource(R.string.then_done_highlight),
-        ),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
-    val instruction4 = createAnnotatedString(
-        mainString = stringResource(
-            R.string.for_your_security_be_sure_to_delete_your_saved_password_file,
-        ),
-        highlights = listOf(
-            stringResource(R.string.delete_your_saved_password_file),
-        ),
-        highlightStyle = bitwardenBoldSpanStyle,
-    )
+    val instruction1 =
+        R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data
+            .toAnnotatedString()
+    val instruction2 = R.string.fill_out_the_form_and_import_your_saved_password_file
+        .toAnnotatedString()
+    val instruction3 = R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing
+        .toAnnotatedString()
+    val instruction4 = R.string.for_your_security_be_sure_to_delete_your_saved_password_file
+        .toAnnotatedString()
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_3_of_3),
         stepTitle = stringResource(R.string.import_logins_to_bitwarden),
         instructions = persistentListOf(
-            InstructionStep(
-                stepNumber = 1,
-                instructionText = instruction1,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number1,
+                headerText = instruction1,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 2,
-                instructionText = instruction2,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number2,
+                headerText = instruction2,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 3,
-                instructionText = instruction3,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number3,
+                headerText = instruction3,
+                subtitleText = null,
             ),
-            InstructionStep(
-                stepNumber = 4,
-                instructionText = instruction4,
-                additionalText = null,
+            ContentBlockData(
+                iconVectorResource = R.drawable.ic_number4,
+                headerText = instruction4,
+                subtitleText = null,
             ),
         ),
         onBackClick = onBackClick,
@@ -525,12 +474,8 @@ private fun ImportLoginsSuccessBottomSheetContent(
                 ),
             ),
             modifier = Modifier.standardHorizontalMargin(),
-        ) { contentData ->
-            BitwardenContentBlock(
-                data = contentData,
-                subtitleTextStyle = BitwardenTheme.typography.bodySmall,
-            )
-        }
+            contentSubtitleTextStyle = BitwardenTheme.typography.bodySmall,
+        )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.got_it),

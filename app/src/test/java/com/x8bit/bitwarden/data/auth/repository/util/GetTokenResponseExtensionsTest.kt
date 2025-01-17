@@ -141,6 +141,8 @@ private val PROFILE_1 = AccountJson.Profile(
     kdfMemory = 16,
     kdfParallelism = 4,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = null,
+    creationDate = null,
 )
 private val ACCOUNT_1 = AccountJson(
     profile = PROFILE_1,
@@ -164,6 +166,8 @@ private val ACCOUNT_2 = AccountJson(
         kdfMemory = null,
         kdfParallelism = null,
         userDecryptionOptions = null,
+        isTwoFactorEnabled = null,
+        creationDate = null,
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,

@@ -7,26 +7,17 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import org.junit.Test
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
 
 class DatabaseSchemeCallbackTest {
 
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
-        every { lastDatabaseSchemeChangeInstant = any() } just runs
+        every { clearSyncState() } just runs
     }
-    private val callback = DatabaseSchemeCallback(databaseSchemeManager, FIXED_CLOCK)
+    private val callback = DatabaseSchemeCallback(databaseSchemeManager)
 
     @Test
-    fun `onDestructiveMigration updates lastDatabaseSchemeChangeInstant`() {
+    fun `onDestructiveMigration calls clearSyncState`() {
         callback.onDestructiveMigration(mockk())
-
-        verify { databaseSchemeManager.lastDatabaseSchemeChangeInstant = FIXED_CLOCK.instant() }
+        verify(exactly = 1) { databaseSchemeManager.clearSyncState() }
     }
 }
-
-private val FIXED_CLOCK: Clock = Clock.fixed(
-    Instant.parse("2023-10-27T12:00:00Z"),
-    ZoneOffset.UTC,
-)

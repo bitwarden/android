@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -37,19 +38,25 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Suppress("LongMethod", "CyclomaticComplexMethod", "MagicNumber")
 @Composable
 fun PasswordStrengthIndicator(
-    modifier: Modifier = Modifier,
     state: PasswordStrengthState,
     currentCharacterCount: Int,
+    modifier: Modifier = Modifier,
     minimumCharacterCount: Int? = null,
 ) {
+    val minimumRequirementMet = (minimumCharacterCount == null) ||
+        (currentCharacterCount >= minimumCharacterCount)
     val widthPercent by animateFloatAsState(
-        targetValue = when (state) {
-            PasswordStrengthState.NONE -> 0f
-            PasswordStrengthState.WEAK_1 -> .25f
-            PasswordStrengthState.WEAK_2 -> .5f
-            PasswordStrengthState.WEAK_3 -> .66f
-            PasswordStrengthState.GOOD -> .82f
-            PasswordStrengthState.STRONG -> 1f
+        targetValue = if (minimumRequirementMet) {
+            when (state) {
+                PasswordStrengthState.NONE -> 0f
+                PasswordStrengthState.WEAK_1 -> .25f
+                PasswordStrengthState.WEAK_2 -> .5f
+                PasswordStrengthState.WEAK_3 -> .66f
+                PasswordStrengthState.GOOD -> .82f
+                PasswordStrengthState.STRONG -> 1f
+            }
+        } else {
+            0f
         },
         label = "Width Percent State",
     )
@@ -80,6 +87,7 @@ fun PasswordStrengthIndicator(
             Modifier
                 .fillMaxWidth()
                 .height(4.dp)
+                .clip(shape = BitwardenTheme.shapes.progressIndicator)
                 .background(BitwardenTheme.colorScheme.sliderButton.unfilled),
         ) {
             Box(
@@ -107,11 +115,13 @@ fun PasswordStrengthIndicator(
                     minimumCharacterCount = minCount,
                 )
             }
-            Text(
-                text = label(),
-                style = BitwardenTheme.typography.labelSmall,
-                color = indicatorColor,
-            )
+            if (minimumRequirementMet) {
+                Text(
+                    text = label(),
+                    style = BitwardenTheme.typography.labelSmall,
+                    color = indicatorColor,
+                )
+            }
         }
     }
 }
@@ -122,14 +132,6 @@ private fun MinimumCharacterCount(
     minimumRequirementMet: Boolean,
     minimumCharacterCount: Int,
 ) {
-    val characterCountColor by animateColorAsState(
-        targetValue = if (minimumRequirementMet) {
-            BitwardenTheme.colorScheme.status.strong
-        } else {
-            BitwardenTheme.colorScheme.text.secondary
-        },
-        label = "minmumCharacterCountColor",
-    )
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -145,14 +147,14 @@ private fun MinimumCharacterCount(
             Icon(
                 painter = rememberVectorPainter(id = it),
                 contentDescription = null,
-                tint = characterCountColor,
+                tint = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier.size(12.dp),
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
         Text(
             text = stringResource(R.string.minimum_characters, minimumCharacterCount),
-            color = characterCountColor,
+            color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.labelSmall,
         )
     }

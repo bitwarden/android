@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 class FirstTimeActionManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
@@ -328,6 +329,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = 16,
     kdfParallelism = 4,
     userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,15 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -116,6 +115,7 @@ private fun SetPasswordScreenContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(
                 id = R.string.your_organization_requires_you_to_set_a_master_password,
@@ -123,7 +123,7 @@ private fun SetPasswordScreenContent(
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -132,7 +132,7 @@ private fun SetPasswordScreenContent(
         BitwardenInfoCalloutCard(
             text = stringResource(id = R.string.reset_password_auto_enroll_invite_warning),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -145,14 +145,13 @@ private fun SetPasswordScreenContent(
             onValueChange = onPasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
-            hint = stringResource(id = R.string.master_password_description),
+            supportingText = stringResource(id = R.string.master_password_description),
+            cardStyle = CardStyle.Top(dividerPadding = 0.dp),
             modifier = Modifier
                 .testTag("NewPasswordField")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenPasswordField(
             label = stringResource(id = R.string.retype_master_password),
@@ -160,25 +159,26 @@ private fun SetPasswordScreenContent(
             onValueChange = onRetypePasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
+            cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
             modifier = Modifier
                 .testTag("RetypePasswordField")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenTextField(
             label = stringResource(id = R.string.master_password_hint),
             value = state.passwordHintInput,
             onValueChange = onPasswordHintInputChanged,
-            hint = stringResource(id = R.string.master_password_hint_description),
+            supportingText = stringResource(id = R.string.master_password_hint_description),
+            textFieldTestTag = "MasterPasswordHintLabel",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
-                .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
 
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -191,20 +191,14 @@ private fun SetPasswordDialogs(
     when (dialogState) {
         is SetPasswordState.DialogState.Error -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialogState.title,
-                    message = dialogState.message,
-                ),
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
                 onDismissRequest = onDismissRequest,
             )
         }
 
         is SetPasswordState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialogState.message,
-                ),
-            )
+            BitwardenLoadingDialog(text = dialogState.message())
         }
 
         null -> Unit

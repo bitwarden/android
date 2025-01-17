@@ -388,7 +388,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "PIN")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performTextInput("PIN")
+            .performTextInput("1234")
         composeTestRule
             .onAllNodesWithText(text = "Submit")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -397,7 +397,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.PinFido2SetUpSubmit(
-                    pin = "PIN",
+                    pin = "1234",
                 ),
             )
         }

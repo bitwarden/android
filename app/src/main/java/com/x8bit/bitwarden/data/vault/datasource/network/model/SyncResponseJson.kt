@@ -153,6 +153,7 @@ data class SyncResponseJson(
      * @property key The key of the profile (nullable).
      * @property securityStamp The secure stamp of the profile (nullable).
      * @property providers A list of providers associated with the profile (nullable).
+     * @property creationDate The creation date of the account.
      */
     @Serializable
     data class Profile(
@@ -209,6 +210,10 @@ data class SyncResponseJson(
 
         @SerialName("providers")
         val providers: List<Provider>?,
+
+        @SerialName("creationDate")
+        @Contextual
+        val creationDate: ZonedDateTime,
     ) {
         /**
          * Represents an organization in the vault response.

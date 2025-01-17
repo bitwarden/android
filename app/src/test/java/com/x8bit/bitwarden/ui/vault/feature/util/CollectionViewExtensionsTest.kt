@@ -1,7 +1,13 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
 import com.bitwarden.vault.CollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditExceptPasswordsCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
+import com.x8bit.bitwarden.ui.vault.feature.util.model.CollectionPermission
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -73,11 +79,14 @@ class CollectionViewExtensionsTest {
     @Test
     fun `hasDeletePermissionInAtLeastOneCollection should return true if the user has manage permission in at least one collection`() {
         val collectionList: List<CollectionView> = listOf(
-            createMockCollectionView(number = 1, manage = true),
-            createMockCollectionView(number = 2, manage = false),
+            createManageCollectionView(number = 1),
+            createEditCollectionView(number = 2),
+            createEditExceptPasswordsCollectionView(number = 3),
+            createViewCollectionView(number = 4),
+            createViewExceptPasswordsCollectionView(number = 5),
         )
 
-        val collectionIds = listOf("mockId-1", "mockId-2")
+        val collectionIds = collectionList.mapNotNull { it.id }
 
         assertTrue(collectionList.hasDeletePermissionInAtLeastOneCollection(collectionIds))
     }
@@ -86,10 +95,12 @@ class CollectionViewExtensionsTest {
     @Test
     fun `hasDeletePermissionInAtLeastOneCollection should return false if the user does not have manage permission in at least one collection`() {
         val collectionList: List<CollectionView> = listOf(
-            createMockCollectionView(number = 1, manage = false),
-            createMockCollectionView(number = 2, manage = false),
+            createEditCollectionView(number = 1),
+            createEditExceptPasswordsCollectionView(number = 2),
+            createViewCollectionView(number = 3),
+            createViewExceptPasswordsCollectionView(number = 4),
         )
-        val collectionIds = listOf("mockId-1", "mockId-2")
+        val collectionIds = collectionList.mapNotNull { it.id }
         assertFalse(collectionList.hasDeletePermissionInAtLeastOneCollection(collectionIds))
     }
 
@@ -104,8 +115,8 @@ class CollectionViewExtensionsTest {
     @Test
     fun `hasDeletePermissionInAtLeastOneCollection should return true if the collectionIds list is null`() {
         val collectionList: List<CollectionView> = listOf(
-            createMockCollectionView(number = 1, manage = true),
-            createMockCollectionView(number = 2, manage = false),
+            createManageCollectionView(number = 1),
+            createEditCollectionView(number = 2),
         )
         assertTrue(collectionList.hasDeletePermissionInAtLeastOneCollection(null))
     }
@@ -135,20 +146,22 @@ class CollectionViewExtensionsTest {
     @Test
     fun `canAssociateToCollections should return true if the user has edit and manage permission`() {
         val collectionList: List<CollectionView> = listOf(
-            createMockCollectionView(number = 1, manage = true, readOnly = false),
+            createEditCollectionView(number = 1),
+            createManageCollectionView(number = 2),
         )
-        val collectionIds = listOf("mockId-1", "mockId-2")
+        val collectionIds = collectionList.mapNotNull { it.id }
         assertTrue(collectionList.canAssignToCollections(collectionIds))
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `canAssociateToCollections should return false if the user does not have manage or edit permission in at least one collection`() {
+    fun `canAssociateToCollections should return false if the user doesn't have any manage or edit permissions`() {
         val collectionList: List<CollectionView> = listOf(
-            createMockCollectionView(number = 1, manage = false, readOnly = true),
-            createMockCollectionView(number = 2, manage = false, readOnly = true),
+            createEditExceptPasswordsCollectionView(number = 1),
+            createViewCollectionView(number = 2),
+            createViewExceptPasswordsCollectionView(number = 3),
         )
-        val collectionIds = listOf("mockId-1", "mockId-2")
+        val collectionIds = collectionList.mapNotNull { it.id }
         assertFalse(collectionList.canAssignToCollections(collectionIds))
     }
 
@@ -165,5 +178,20 @@ class CollectionViewExtensionsTest {
             createMockCollectionView(number = 2, manage = false),
         )
         assertTrue(collectionList.canAssignToCollections(null))
+    }
+
+    @Test
+    fun `permission should return correct value`() {
+        assertEquals(CollectionPermission.MANAGE, createManageCollectionView(number = 1).permission)
+        assertEquals(CollectionPermission.EDIT, createEditCollectionView(number = 1).permission)
+        assertEquals(
+            CollectionPermission.EDIT_EXCEPT_PASSWORD,
+            createEditExceptPasswordsCollectionView(number = 1).permission,
+        )
+        assertEquals(CollectionPermission.VIEW, createViewCollectionView(number = 1).permission)
+        assertEquals(
+            CollectionPermission.VIEW_EXCEPT_PASSWORDS,
+            createViewExceptPasswordsCollectionView(number = 1).permission,
+        )
     }
 }

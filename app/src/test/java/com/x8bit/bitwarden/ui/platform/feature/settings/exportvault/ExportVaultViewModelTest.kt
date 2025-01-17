@@ -38,6 +38,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class ExportVaultViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
@@ -479,18 +480,63 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `SendCodeClick should call requestOneTimePasscode`() {
-        val viewModel = createViewModel()
-        coEvery { authRepository.requestOneTimePasscode() } returns RequestOtpResult.Success
-        viewModel.trySendAction(ExportVaultAction.SendCodeClick)
+    fun `SendCodeClick should call requestOneTimePasscode and update dialog state to sending then back to null when request completes and send correct event on success`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery { authRepository.requestOneTimePasscode() } returns RequestOtpResult.Success
+            viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
+                assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
+                viewModel.trySendAction(ExportVaultAction.SendCodeClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = ExportVaultState.DialogState.Loading(
+                            message = R.string.sending.asText(),
+                        ),
+                    ),
+                    stateTurbine.awaitItem(),
+                )
+                assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
+                assertEquals(
+                    ExportVaultEvent.ShowToast(
+                        message = R.string.code_sent.asText(),
+                    ),
+                    eventTurbine.awaitItem(),
+                )
+            }
+            coVerify { authRepository.requestOneTimePasscode() }
+        }
 
-        assertEquals(
-            DEFAULT_STATE,
-            viewModel.stateFlow.value,
-        )
-        coVerify { authRepository.requestOneTimePasscode() }
-    }
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SendCodeClick should call requestOneTimePasscode and update dialog state to sending then back to null when request completes and send correct event on error`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                authRepository.requestOneTimePasscode()
+            } returns RequestOtpResult.Error(message = null)
+            viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
+                assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
+                viewModel.trySendAction(ExportVaultAction.SendCodeClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = ExportVaultState.DialogState.Loading(
+                            message = R.string.sending.asText(),
+                        ),
+                    ),
+                    stateTurbine.awaitItem(),
+                )
+                assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
+                assertEquals(
+                    ExportVaultEvent.ShowToast(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                    eventTurbine.awaitItem(),
+                )
+            }
+            coVerify { authRepository.requestOneTimePasscode() }
+        }
 
     @Test
     fun `ReceiveExportVaultDataToStringResult should update state to error if result is error`() {

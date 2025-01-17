@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -252,7 +253,19 @@ class LoginWithDeviceViewModel @Inject constructor(
             }
 
             is LoginResult.Success -> {
+                sendEvent(LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()))
                 mutableStateFlow.update { it.copy(dialogState = null) }
+            }
+
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -450,7 +463,7 @@ data class LoginWithDeviceState(
          */
         @Parcelize
         data class Error(
-            val title: Text?,
+            val title: Text? = null,
             val message: Text,
         ) : DialogState()
     }
@@ -494,8 +507,8 @@ sealed class LoginWithDeviceEvent {
      * Shows a toast with the given [message].
      */
     data class ShowToast(
-        val message: String,
-    ) : LoginWithDeviceEvent()
+        val message: Text,
+    ) : LoginWithDeviceEvent(), BackgroundEvent
 }
 
 /**

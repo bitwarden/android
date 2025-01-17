@@ -1,22 +1,19 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,11 +28,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
@@ -150,33 +149,24 @@ private fun FoldersContent(
         LazyColumn(
             modifier = modifier,
         ) {
-            items(foldersList) {
-                Row(
+            item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
+            }
+            itemsIndexed(foldersList) { index, it ->
+                BitwardenTextRow(
+                    text = it.name,
+                    onClick = { onItemClick(it.id) },
+                    textTestTag = "FolderName",
+                    cardStyle = foldersList.toListItemCardStyle(index = index),
                     modifier = Modifier
-                        .testTag("FolderCell")
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(
-                                color = BitwardenTheme.colorScheme.background.pressed,
-                            ),
-                            onClick = { onItemClick(it.id) },
-                        )
-                        .bottomDivider(paddingStart = 16.dp)
-                        .defaultMinSize(minHeight = 56.dp)
-                        .padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .testTag("FolderName")
-                            .padding(start = 16.dp)
-                            .weight(1f),
-                        text = it.name,
-                        style = BitwardenTheme.typography.bodyLarge,
-                        color = BitwardenTheme.colorScheme.text.primary,
-                    )
-                }
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .testTag(tag = "FolderCell"),
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(height = 88.dp))
+                Spacer(modifier = Modifier.navigationBarsPadding())
             }
         }
     }

@@ -15,10 +15,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -36,8 +39,7 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
     private var onNavigateToScanQrCodeCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<ManualCodeEntryEvent>()
-    private val mutableStateFlow =
-        MutableStateFlow(ManualCodeEntryState(""))
+    private val mutableStateFlow = MutableStateFlow<ManualCodeEntryState>(DEFAULT_STATE)
 
     private val fakePermissionManager: FakePermissionManager = FakePermissionManager()
     private val intentManager = mockk<IntentManager>(relaxed = true)
@@ -132,6 +134,59 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
     }
 
     @Test
+    fun `error dialog should be updated according to state`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ManualCodeEntryState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.authenticator_key_read_error.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "An error has occurred.")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cannot read authenticator key.")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `error dialog Ok click should emit DialogDismiss`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ManualCodeEntryState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.authenticator_key_read_error.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(ManualCodeEntryAction.DialogDismiss)
+        }
+    }
+
+    @Test
     fun `settings dialog should call SettingsClick action on confirm click`() {
         fakePermissionManager.checkPermissionResult = false
 
@@ -202,3 +257,8 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
         }
     }
 }
+
+private val DEFAULT_STATE: ManualCodeEntryState = ManualCodeEntryState(
+    code = "",
+    dialog = null,
+)

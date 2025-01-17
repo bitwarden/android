@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
@@ -61,7 +62,9 @@ fun BitwardenStandardIconButton(
     contentColor: Color = BitwardenTheme.colorScheme.icon.primary,
 ) {
     IconButton(
-        modifier = modifier.semantics(mergeDescendants = true) {},
+        modifier = modifier.semantics(mergeDescendants = true) {
+            this.contentDescription = contentDescription
+        },
         onClick = onClick,
         colors = bitwardenStandardIconButtonColors(contentColor = contentColor),
         enabled = isEnabled,

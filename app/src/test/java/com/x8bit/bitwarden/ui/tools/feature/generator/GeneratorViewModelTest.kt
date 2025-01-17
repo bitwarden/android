@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -102,6 +103,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(PolicyTypeJson.PASSWORD_GENERATOR) } returns emptyList()
         every { getActivePoliciesFlow(PolicyTypeJson.PASSWORD_GENERATOR) } returns mutablePolicyFlow
+    }
+
+    private val reviewPromptManager: ReviewPromptManager = mockk {
+        every { registerGeneratedResultAction() } just runs
     }
 
     @Test
@@ -517,7 +522,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CopyClick should call setText on ClipboardManager`() {
+    fun `CopyClick should call setText on ClipboardManager and register generator action`() {
         val viewModel = createViewModel()
         every { clipboardManager.setText(viewModel.stateFlow.value.generatedText) } just runs
 
@@ -525,6 +530,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         verify(exactly = 1) {
             clipboardManager.setText(text = viewModel.stateFlow.value.generatedText)
+            reviewPromptManager.registerGeneratedResultAction()
         }
     }
 
@@ -2372,6 +2378,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         generatorRepository = fakeGeneratorRepository,
         authRepository = authRepository,
         policyManager = policyManager,
+        reviewPromptManager = reviewPromptManager,
     )
 
     private fun createViewModel(

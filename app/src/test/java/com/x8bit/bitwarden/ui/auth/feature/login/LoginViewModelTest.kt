@@ -319,6 +319,44 @@ class LoginViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns CertificateError should update errorDialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = "",
+                    captchaToken = null,
+                )
+            } returns LoginResult.CertificateError
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = LoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            }
+        }
+
     @Test
     fun `LoginButtonClick login returns success should update loadingDialogState`() = runTest {
         coEvery {

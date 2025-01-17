@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -26,7 +28,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
 
     @Test
     fun `CloseClick should emit NavigateBack`() = runTest {
-        val viewModel = createViewModel(initialState = ManualCodeEntryState(""))
+        val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(ManualCodeEntryAction.CloseClick)
@@ -35,8 +37,29 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
     }
 
     @Test
+    fun `CodeSubmit wihh blank code should display error dialog`() {
+        val initialState = DEFAULT_STATE.copy(code = "   ")
+        val viewModel = createViewModel(initialState = initialState)
+
+        viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
+
+        verify(exactly = 0) {
+            vaultRepository.emitTotpCodeResult(TotpCodeResult.Success("TestCode"))
+        }
+        assertEquals(
+            initialState.copy(
+                dialog = ManualCodeEntryState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.authenticator_key_read_error.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `CodeSubmit should emit new code and NavigateBack`() = runTest {
-        val viewModel = createViewModel(initialState = ManualCodeEntryState("   TestCode   "))
+        val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(code = "   TestCode   "))
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
@@ -50,20 +73,29 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
 
     @Test
     fun `CodeTextChange should update state with new value`() = runTest {
-        val viewModel =
-            createViewModel(initialState = ManualCodeEntryState("TestCode"))
+        val viewModel = createViewModel(initialState = DEFAULT_STATE.copy(code = "TestCode"))
 
-        val expectedState = ManualCodeEntryState("NewCode")
+        val expectedState = DEFAULT_STATE.copy(code = "NewCode")
 
         viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange("NewCode"))
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
     @Test
-    fun `SettingsClick should emit NavigateToAppSettings and update state`() = runTest {
-        val viewModel = createViewModel(initialState = ManualCodeEntryState(""))
+    fun `DialogDismiss should clear the dialog state`() = runTest {
+        val viewModel = createViewModel()
 
-        val expectedState = ManualCodeEntryState("")
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ManualCodeEntryAction.CloseClick)
+            assertEquals(ManualCodeEntryEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `SettingsClick should emit NavigateToAppSettings and update state`() = runTest {
+        val viewModel = createViewModel()
+
+        val expectedState = DEFAULT_STATE
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(ManualCodeEntryAction.SettingsClick)
@@ -75,7 +107,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
 
     @Test
     fun `ScanQrTextCodeClick should emit NavigateToQrCodeScreen`() = runTest {
-        val viewModel = createViewModel(initialState = ManualCodeEntryState(""))
+        val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
@@ -84,7 +116,9 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel(initialState: ManualCodeEntryState): ManualCodeEntryViewModel =
+    private fun createViewModel(
+        initialState: ManualCodeEntryState? = null,
+    ): ManualCodeEntryViewModel =
         ManualCodeEntryViewModel(
             vaultRepository = vaultRepository,
             savedStateHandle = SavedStateHandle(
@@ -92,3 +126,8 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
             ),
         )
 }
+
+private val DEFAULT_STATE: ManualCodeEntryState = ManualCodeEntryState(
+    code = "",
+    dialog = null,
+)

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringWithErrorCallback
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.DomainsDao
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 /**
  * Default implementation of [VaultDiskSource].
@@ -70,9 +72,9 @@ class VaultDiskSourceImpl(
                         entities
                             .map { entity ->
                                 async {
-                                    json.decodeFromString<SyncResponseJson.Cipher>(
+                                    json.decodeFromStringWithErrorCallback<SyncResponseJson.Cipher>(
                                         string = entity.cipherJson,
-                                    )
+                                    ) { Timber.e(it, "Failed to deserialize Cipher in Vault") }
                                 }
                             }
                             .awaitAll()
@@ -126,7 +128,11 @@ class VaultDiskSourceImpl(
             .getDomains(userId)
             .map { entity ->
                 withContext(dispatcherManager.default) {
-                    entity?.domainsJson?.let { json.decodeFromString<SyncResponseJson.Domains>(it) }
+                    entity?.domainsJson?.let { domains ->
+                        json.decodeFromStringWithErrorCallback<SyncResponseJson.Domains>(
+                            string = domains,
+                        ) { Timber.e(it, "Failed to deserialize Domains in Vault") }
+                    }
                 }
             }
 
@@ -192,7 +198,9 @@ class VaultDiskSourceImpl(
                         entities
                             .map { entity ->
                                 async {
-                                    json.decodeFromString<SyncResponseJson.Send>(entity.sendJson)
+                                    json.decodeFromStringWithErrorCallback<SyncResponseJson.Send>(
+                                        string = entity.sendJson,
+                                    ) { Timber.e(it, "Failed to deserialize Send in Vault") }
                                 }
                             }
                             .awaitAll()

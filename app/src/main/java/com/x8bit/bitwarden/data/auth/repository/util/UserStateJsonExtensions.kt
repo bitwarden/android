@@ -59,6 +59,8 @@ fun UserStateJson.toUpdatedUserStateJson(
             avatarColorHex = syncProfile.avatarColor,
             stamp = syncProfile.securityStamp,
             hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
+            isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
+            creationDate = syncProfile.creationDate,
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this

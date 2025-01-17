@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +14,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -38,8 +33,6 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.toggleableState
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -56,30 +49,23 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegistrationHandler
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
-import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-
-/**
- * Constant string to be used in string annotation tag field
- */
-private const val TAG_URL = "URL"
 
 /**
  * Top level composable for the start registration screen.
@@ -147,7 +133,8 @@ fun StartRegistrationScreen(
     when (val dialog = state.dialog) {
         is StartRegistrationDialog.Error -> {
             BitwardenBasicDialog(
-                visibilityState = dialog.state,
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(ErrorDialogDismiss) }
                 },
@@ -155,9 +142,7 @@ fun StartRegistrationScreen(
         }
 
         StartRegistrationDialog.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(R.string.create_account.asText()),
-            )
+            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
         }
 
         null -> Unit
@@ -193,6 +178,7 @@ fun StartRegistrationScreen(
                 isNewOnboardingUiEnabled = state.showNewOnboardingUi,
                 handler = handler,
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -211,7 +197,7 @@ private fun StartRegistrationContent(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         if (isNewOnboardingUiEnabled) {
             Image(
                 painter = rememberVectorPainter(id = R.drawable.vault),
@@ -226,50 +212,50 @@ private fun StartRegistrationContent(
             label = stringResource(id = R.string.name),
             value = nameInput,
             onValueChange = handler.onNameInputChange,
+            textFieldTestTag = "NameEntry",
+            cardStyle = CardStyle.Top(dividerPadding = 0.dp),
             modifier = Modifier
-                .testTag("NameEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-        Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
-            label = stringResource(
-                id = R.string.email_address,
-            ),
+            label = stringResource(id = R.string.email_address),
             placeholder = stringResource(R.string.email_address_required),
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
-            modifier = Modifier
-                .testTag("EmailAddressEntry")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
             keyboardType = KeyboardType.Email,
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Row(
+            textFieldTestTag = "EmailAddressEntry",
+            supportingTextContent = {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    EnvironmentSelector(
+                        labelText = stringResource(id = R.string.creating_on),
+                        selectedOption = selectedEnvironmentType,
+                        onOptionSelected = handler.onEnvironmentTypeSelect,
+                        modifier = Modifier.testTag("RegionSelectorDropdown"),
+                    )
+                    if (isNewOnboardingUiEnabled) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_question_circle_small,
+                            contentDescription = stringResource(
+                                R.string.help_with_server_geolocations,
+                            ),
+                            onClick = handler.onServerGeologyHelpClick,
+                            contentColor = BitwardenTheme.colorScheme.icon.secondary,
+                            // Align with design but keep accessible touch target of IconButton.
+                            modifier = Modifier.offset(x = 16.dp),
+                        )
+                    }
+                }
+            },
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            EnvironmentSelector(
-                labelText = stringResource(id = R.string.creating_on),
-                selectedOption = selectedEnvironmentType,
-                onOptionSelected = handler.onEnvironmentTypeSelect,
-                modifier = Modifier
-                    .testTag("RegionSelectorDropdown"),
-            )
-            if (isNewOnboardingUiEnabled) {
-                BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_question_circle_small,
-                    contentDescription = stringResource(R.string.help_with_server_geolocations),
-                    onClick = handler.onServerGeologyHelpClick,
-                    contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                    // Align with design but keep accessible touch target of IconButton.
-                    modifier = Modifier.offset(y = (-8f).dp, x = 16.dp),
-                )
-            }
-        }
+        )
         Spacer(modifier = Modifier.height(24.dp))
 
         if (selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
@@ -277,7 +263,9 @@ private fun StartRegistrationContent(
                 isChecked = isReceiveMarketingEmailsToggled,
                 onCheckedChange = handler.onReceiveMarketingEmailsToggle,
                 onUnsubscribeClick = handler.onUnsubscribeMarketingEmailsClick,
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -301,7 +289,7 @@ private fun StartRegistrationContent(
     }
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,
@@ -310,22 +298,13 @@ private fun TermsAndPrivacyText(
 ) {
     val strTerms = stringResource(id = R.string.terms_of_service)
     val strPrivacy = stringResource(id = R.string.privacy_policy)
-    val strTermsAndPrivacy = stringResource(
-        id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
-    )
-    val annotatedLinkString: AnnotatedString = createClickableAnnotatedString(
-        mainString = strTermsAndPrivacy,
-        highlights = listOf(
-            ClickableTextHighlight(
-                textToHighlight = strTerms,
-                onTextClick = onTermsClick,
-            ),
-            ClickableTextHighlight(
-                textToHighlight = strPrivacy,
-                onTextClick = onPrivacyPolicyClick,
-            ),
-        ),
-    )
+    val annotatedLinkString: AnnotatedString =
+        R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy.toAnnotatedString {
+            when (it) {
+                "termsOfService" -> onTermsClick()
+                "privacyPolicy" -> onPrivacyPolicyClick()
+            }
+        }
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -361,7 +340,6 @@ private fun TermsAndPrivacyText(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun ReceiveMarketingEmailsSwitch(
     isChecked: Boolean,
@@ -370,24 +348,10 @@ private fun ReceiveMarketingEmailsSwitch(
     modifier: Modifier = Modifier,
 ) {
     val unsubscribeString = stringResource(id = R.string.unsubscribe)
-
     @Suppress("MaxLineLength")
-    val annotatedLinkString = createClickableAnnotatedString(
-        mainString = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time),
-        highlights = listOf(
-            ClickableTextHighlight(
-                textToHighlight = unsubscribeString,
-                onTextClick = onUnsubscribeClick,
-            ),
-        ),
-    )
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
+    BitwardenSwitch(
         modifier = modifier
             .semantics(mergeDescendants = true) {
-                testTag = "ReceiveMarketingEmailsToggle"
-                toggleableState = ToggleableState(isChecked)
                 customActions = listOf(
                     CustomAccessibilityAction(
                         label = unsubscribeString,
@@ -397,30 +361,16 @@ private fun ReceiveMarketingEmailsSwitch(
                         },
                     ),
                 )
-            }
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
-                onClick = { onCheckedChange.invoke(!isChecked) },
-            )
-            .fillMaxWidth(),
-    ) {
-        Switch(
-            modifier = Modifier
-                .height(32.dp)
-                .width(52.dp),
-            checked = isChecked,
-            onCheckedChange = null,
-            colors = bitwardenSwitchColors(),
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = annotatedLinkString,
-            style = BitwardenTheme.typography.bodyMedium,
-        )
-    }
+            },
+        label = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time
+            .toAnnotatedString {
+                onUnsubscribeClick()
+            },
+        isChecked = isChecked,
+        onCheckedChange = onCheckedChange,
+        contentDescription = "ReceiveMarketingEmailsToggle",
+        cardStyle = CardStyle.Full,
+    )
 }
 
 @PreviewScreenSizes

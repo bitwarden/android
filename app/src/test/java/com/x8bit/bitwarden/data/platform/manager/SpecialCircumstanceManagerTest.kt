@@ -55,7 +55,7 @@ class SpecialCircumstanceManagerTest {
 
                 specialCircumstanceManager.specialCircumstance = preLoginSpecialCircumstance
                 assertEquals(preLoginSpecialCircumstance, awaitItem())
-                val mockUserAccount = mockk<UserState.Account>() {
+                val mockUserAccount = mockk<UserState.Account> {
                     every { isLoggedIn } returns true
                 }
                 val mockUserState = mockk<UserState> {
@@ -76,7 +76,7 @@ class SpecialCircumstanceManagerTest {
 
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
                 assertEquals(SpecialCircumstance.VaultShortcut, awaitItem())
-                val mockUserAccount = mockk<UserState.Account>() {
+                val mockUserAccount = mockk<UserState.Account> {
                     every { isLoggedIn } returns true
                 }
                 val mockUserState = mockk<UserState> {

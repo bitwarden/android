@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import android.content.pm.SigningInfo
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import io.mockk.every
@@ -47,7 +47,7 @@ class Fido2CredentialRequestExtensionsTest {
                     ),
                 ),
             ),
-            Fido2CredentialRequest(
+            Fido2CreateCredentialRequest(
                 userId = "mockUserId-1",
                 requestJson = "mockRequestJson-1",
                 packageName = "mockPackageName-1",
@@ -83,7 +83,7 @@ class Fido2CredentialRequestExtensionsTest {
                     ),
                 ),
             ),
-            Fido2CredentialRequest(
+            Fido2CreateCredentialRequest(
                 userId = "mockUserId-1",
                 requestJson = "mockRequestJson-1",
                 packageName = "mockPackageName-1",

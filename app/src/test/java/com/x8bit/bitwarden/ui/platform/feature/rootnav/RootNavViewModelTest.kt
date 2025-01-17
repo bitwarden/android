@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -43,6 +43,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { authStateFlow } returns mutableAuthStateFlow
         every { showWelcomeCarousel } returns false
+        every { checkUserNeedsNewDeviceTwoFactorNotice() } returns false
     }
 
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
@@ -386,6 +387,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         needsMasterPassword = false,
@@ -662,7 +664,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
-        val fido2CredentialRequest = Fido2CredentialRequest(
+        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "activeUserId",
             requestJson = "{}",
             packageName = "com.x8bit.bitwarden",
@@ -670,7 +672,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
             origin = "mockOrigin",
         )
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.Fido2Save(fido2CredentialRequest)
+            SpecialCircumstance.Fido2Save(fido2CreateCredentialRequest)
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -703,7 +705,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         assertEquals(
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
-                fido2CredentialRequest = fido2CredentialRequest,
+                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
             ),
             viewModel.stateFlow.value,
         )
@@ -1328,6 +1330,45 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault and they need to be shown the new device notice the nav state should be NewDeviceTwoFactorNotice`() {
+        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns true
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = FirstTimeState(
+                            showImportLoginsCard = true,
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.NewDeviceTwoFactorNotice("email"),
             viewModel.stateFlow.value,
         )
     }

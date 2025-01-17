@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassph
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -43,6 +44,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -52,6 +54,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class GeneratorRepositoryTest {
@@ -70,7 +73,9 @@ class GeneratorRepositoryTest {
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val dispatcherManager = FakeDispatcherManager()
-    private val policyManager: PolicyManager = mockk()
+    private val reviewPromptManager: ReviewPromptManager = mockk {
+        every { registerGeneratedResultAction() } just runs
+    }
 
     private val repository = GeneratorRepositoryImpl(
         clock = fixedClock,
@@ -80,7 +85,7 @@ class GeneratorRepositoryTest {
         passwordHistoryDiskSource = passwordHistoryDiskSource,
         vaultSdkSource = vaultSdkSource,
         dispatcherManager = dispatcherManager,
-        policyManager = policyManager,
+        reviewPromptManager = reviewPromptManager,
     )
 
     @Suppress("MaxLineLength")
@@ -740,6 +745,17 @@ class GeneratorRepositoryTest {
                 generatorDiskSource.storeUsernameGenerationOptions(any(), any())
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `emitGeneratorResult should update the flow and increment the action count as side affect`() =
+        runTest {
+            repository.generatorResultFlow.test {
+                repository.emitGeneratorResult(GeneratorResult.Password("foo"))
+                assertEquals(GeneratorResult.Password("foo"), awaitItem())
+            }
+            verify(exactly = 1) { reviewPromptManager.registerGeneratedResultAction() }
+        }
 }
 
 private val USER_STATE = UserStateJson(
@@ -773,6 +789,8 @@ private val USER_STATE = UserStateJson(
                         keyConnectorUrl = "keyConnectorUrl",
                     ),
                 ),
+                isTwoFactorEnabled = false,
+                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
             ),
             tokens = AccountTokensJson(
                 accessToken = "accessToken",

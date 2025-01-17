@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.Instant
+import javax.crypto.Cipher
 
 /**
  * Provides an API for observing and modifying settings state.
@@ -234,7 +235,7 @@ interface SettingsRepository {
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */
-    suspend fun setupBiometricsKey(): BiometricsKeyResult
+    suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult
 
     /**
      * Stores the given PIN, allowing it to be used to unlock the current user's vault.
@@ -264,4 +265,21 @@ interface SettingsRepository {
      * Record that a user has logged in on this device.
      */
     fun storeUserHasLoggedInValue(userId: String)
+
+    /**
+     * Returns true if the given [userId] has previously registered for export via the credential
+     * exchange protocol.
+     */
+    fun isVaultRegisteredForExport(userId: String): Boolean
+
+    /**
+     * Stores that the given [userId] has previously registered for export via the credential
+     * exchange protocol.
+     */
+    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean)
+
+    /**
+     * Gets updates for the [isVaultRegisteredForExport] value for the given [userId].
+     */
+    fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean>
 }

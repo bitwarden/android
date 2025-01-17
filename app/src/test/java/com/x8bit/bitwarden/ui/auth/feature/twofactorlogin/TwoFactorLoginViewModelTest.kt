@@ -48,12 +48,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     private val mutableDuoTokenResultFlow = bufferedMutableSharedFlow<DuoCallbackTokenResult>()
     private val mutableYubiKeyResultFlow = bufferedMutableSharedFlow<YubiKeyResult>()
     private val mutableWebAuthResultFlow = bufferedMutableSharedFlow<WebAuthResult>()
-    private val authRepository: AuthRepository = mockk(relaxed = true) {
+    private val authRepository: AuthRepository = mockk {
         every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
+        coEvery { login(any(), any(), any(), any(), any()) } returns LoginResult.Success
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -98,8 +99,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `yubiKeyResultFlow update should populate the input field`() {
-        val initialState = DEFAULT_STATE
+    fun `yubiKeyResultFlow update should populate the input field and attempt login`() {
+        val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.YUBI_KEY)
         val token = "token"
         val viewModel = createViewModel(initialState)
         mutableYubiKeyResultFlow.tryEmit(YubiKeyResult(token))
@@ -110,6 +111,19 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        coVerify(exactly = 1) {
+            authRepository.login(
+                email = DEFAULT_STATE.email,
+                password = DEFAULT_STATE.password,
+                twoFactorData = TwoFactorDataModel(
+                    code = token,
+                    method = TwoFactorAuthMethod.YUBI_KEY.value.toString(),
+                    remember = DEFAULT_STATE.isRememberMeEnabled,
+                ),
+                captchaToken = DEFAULT_STATE.captchaToken,
+                orgIdentifier = DEFAULT_STATE.orgIdentifier,
+            )
+        }
     }
 
     @Test
@@ -683,6 +697,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss)
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+            coVerify {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick login returns CertificateError should update dialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            } returns LoginResult.CertificateError
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     ),
                     awaitItem(),

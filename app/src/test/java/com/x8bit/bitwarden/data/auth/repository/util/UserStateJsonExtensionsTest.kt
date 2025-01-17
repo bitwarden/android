@@ -24,6 +24,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class UserStateJsonExtensionsTest {
@@ -59,6 +60,8 @@ class UserStateJsonExtensionsTest {
             kdfMemory = 16,
             kdfParallelism = 4,
             userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -110,6 +113,8 @@ class UserStateJsonExtensionsTest {
                 trustedDeviceUserDecryptionOptions = null,
                 keyConnectorUserDecryptionOptions = null,
             ),
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -178,6 +183,8 @@ class UserStateJsonExtensionsTest {
             kdfMemory = 16,
             kdfParallelism = 4,
             userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -192,6 +199,8 @@ class UserStateJsonExtensionsTest {
                         profile = originalProfile.copy(
                             avatarColorHex = "avatarColor",
                             stamp = "securityStamp",
+                            isTwoFactorEnabled = false,
+                            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
                         ),
                     ),
                 ),
@@ -210,6 +219,9 @@ class UserStateJsonExtensionsTest {
                             every { securityStamp } returns "securityStamp"
                             every { isPremium } returns true
                             every { isPremiumFromOrganization } returns true
+                            every { isTwoFactorEnabled } returns false
+                            every { creationDate } returns ZonedDateTime
+                                .parse("2024-09-13T01:00:00.00Z")
                         }
                     },
                 ),
@@ -235,6 +247,8 @@ class UserStateJsonExtensionsTest {
             kdfMemory = 16,
             kdfParallelism = 4,
             userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -296,6 +310,8 @@ class UserStateJsonExtensionsTest {
                 keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
                 trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
             ),
+            isTwoFactorEnabled = false,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         val originalAccount = AccountJson(
             profile = originalProfile,
@@ -350,6 +366,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -414,6 +431,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -458,6 +476,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = true,
@@ -518,6 +537,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -563,6 +583,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -631,6 +652,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -676,6 +698,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -744,6 +767,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -789,6 +813,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -857,6 +882,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -903,6 +929,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = true,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.USER,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -974,6 +1001,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = true,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.USER,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -1178,6 +1206,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.USER,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -1248,6 +1277,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.USER,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),
@@ -1293,6 +1323,7 @@ class UserStateJsonExtensionsTest {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         isBiometricsEnabled = false,
@@ -1363,6 +1394,7 @@ class UserStateJsonExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    shouldUsersGetPremium = false,
                                 ),
                             ),
                         ),

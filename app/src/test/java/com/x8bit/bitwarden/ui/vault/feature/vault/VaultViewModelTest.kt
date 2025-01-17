@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -120,7 +121,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         mockk {
             every { vaultFilterType = any() } just runs
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-            every { sync() } just runs
+            every { sync(forced = any()) } just runs
             every { syncIfNecessary() } just runs
             every { lockVaultForCurrentUser() } just runs
             every { lockVault(any()) } just runs
@@ -143,6 +144,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             getFeatureFlag(FlagKey.SshKeyCipherItems)
         } returns mutableSshKeyVaultItemsEnabledFlow.value
     }
+    private val reviewPromptManager: ReviewPromptManager = mockk()
 
     @Test
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
@@ -181,7 +183,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val updatedUserId = "lockedUserId"
         viewModel.trySendAction(
             VaultAction.SwitchAccountClick(
-                accountSummary = mockk() {
+                accountSummary = mockk {
                     every { userId } returns updatedUserId
                 },
             ),
@@ -230,6 +232,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -316,6 +319,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -478,7 +482,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify {
-            vaultRepository.sync()
+            vaultRepository.sync(forced = true)
         }
     }
 
@@ -526,6 +530,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
+                                shouldUsersGetPremium = true,
                             ),
                         ),
                     ),
@@ -541,7 +546,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
                 showSshKeys = false,
+                organizationPremiumStatusMap = mapOf("testOrganizationId" to true),
             ),
+            organizationPremiumStatusMap = mapOf("testOrganizationId" to true),
         )
             .copy(
                 appBarTitle = R.string.vaults.asText(),
@@ -554,20 +561,22 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(VaultFilterType.MyVault))
 
-        assertEquals(
-            initialState.copy(
-                vaultFilterData = VAULT_FILTER_DATA.copy(
-                    selectedVaultFilterType = VaultFilterType.MyVault,
-                ),
-                viewState = vaultData.toViewState(
-                    isPremium = true,
-                    vaultFilterType = VaultFilterType.MyVault,
-                    isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
-                    baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
-                    hasMasterPassword = true,
-                    showSshKeys = false,
-                ),
+        val resultingState = initialState.copy(
+            vaultFilterData = VAULT_FILTER_DATA.copy(
+                selectedVaultFilterType = VaultFilterType.MyVault,
             ),
+            viewState = vaultData.toViewState(
+                isPremium = true,
+                vaultFilterType = VaultFilterType.MyVault,
+                isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
+                baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
+                hasMasterPassword = true,
+                showSshKeys = false,
+                organizationPremiumStatusMap = mapOf("testOrganizationId" to true),
+            ),
+        )
+        assertEquals(
+            resultingState,
             viewModel.stateFlow.value,
         )
         verify { vaultRepository.vaultFilterType = VaultFilterType.MyVault }
@@ -671,7 +680,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 1,
+                    totpItemsCount = 0,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
                 ),
@@ -696,7 +705,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     collectionItems = listOf(),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 1,
+                    totpItemsCount = 0,
                     itemTypesCount = 4,
                     sshKeyItemsCount = 0,
                 ),
@@ -810,7 +819,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 1,
+                    totpItemsCount = 0,
                     itemTypesCount = 4,
                     sshKeyItemsCount = 0,
                 ),
@@ -910,7 +919,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = 4,
                         sshKeyItemsCount = 0,
                     ),
@@ -952,7 +961,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `vaultDataStateFlow NoNetwork without data should update state to Error`() = runTest {
+    fun `vaultDataStateFlow NoNetwork without data should update state to NoItems`() = runTest {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.NoNetwork(),
         )
@@ -961,9 +970,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             createMockVaultState(
-                viewState = VaultState.ViewState.Error(
-                    message = R.string.internet_connection_required_message.asText(),
-                ),
+                viewState = VaultState.ViewState.NoItems,
             ),
             viewModel.stateFlow.value,
         )
@@ -971,12 +978,17 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow NoNetwork with items should update state to Content and show an error dialog`() =
+    fun `vaultDataStateFlow NoNetwork with items should update state to Content`() =
         runTest {
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.NoNetwork(
                     data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        cipherViewList = listOf(
+                            createMockCipherView(
+                                number = 1,
+                                organizationUsesTotp = true,
+                            ),
+                        ),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         sendViewList = listOf(createMockSendView(number = 1)),
@@ -1014,37 +1026,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = 4,
                         sshKeyItemsCount = 0,
                     ),
-                    dialog = VaultState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `vaultDataStateFlow NoNetwork with empty items should update state to NoItems and show an error dialog`() =
-        runTest {
-            mutableVaultDataStateFlow.tryEmit(
-                value = DataState.NoNetwork(
-                    data = VaultData(
-                        cipherViewList = emptyList(),
-                        collectionViewList = emptyList(),
-                        folderViewList = emptyList(),
-                        sendViewList = emptyList(),
-                    ),
-                ),
-            )
-            val viewModel = createViewModel()
-            assertEquals(
-                createMockVaultState(
-                    viewState = VaultState.ViewState.NoItems,
-                    dialog = VaultState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
-                    ),
+                    dialog = null,
                 ),
                 viewModel.stateFlow.value,
             )
@@ -1060,7 +1042,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val updatedUserId = "lockedUserId"
         viewModel.trySendAction(
             VaultAction.SwitchAccountClick(
-                accountSummary = mockk() {
+                accountSummary = mockk {
                     every { userId } returns updatedUserId
                 },
             ),
@@ -1116,7 +1098,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = CipherType.entries.size - 1,
                         sshKeyItemsCount = 0,
                     ),
@@ -1157,7 +1139,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
                     ),
@@ -1323,14 +1305,14 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.TryAgainClick)
 
-        verify { vaultRepository.sync() }
+        verify { vaultRepository.sync(forced = true) }
     }
 
     @Test
     fun `DialogDismiss should clear the active dialog`() {
-        // Show the No Network error dialog
-        val viewModel = createViewModel()
-        mutableVaultDataStateFlow.value = DataState.NoNetwork(
+
+        mutableVaultDataStateFlow.value = DataState.Error(
+            error = IllegalStateException(),
             data = VaultData(
                 cipherViewList = emptyList(),
                 collectionViewList = emptyList(),
@@ -1338,11 +1320,12 @@ class VaultViewModelTest : BaseViewModelTest() {
                 sendViewList = emptyList(),
             ),
         )
+        val viewModel = createViewModel()
         val initialState = DEFAULT_STATE.copy(
             viewState = VaultState.ViewState.NoItems,
             dialog = VaultState.DialogState.Error(
-                title = R.string.internet_connection_required_title.asText(),
-                message = R.string.internet_connection_required_message.asText(),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.generic_error_message.asText(),
             ),
         )
         assertEquals(
@@ -1365,7 +1348,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.RefreshPull)
 
         verify(exactly = 1) {
-            vaultRepository.sync()
+            vaultRepository.sync(forced = false)
         }
     }
 
@@ -1821,7 +1804,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             switchAccountResult = SwitchAccountResult.AccountSwitched
             viewModel.trySendAction(
                 VaultAction.SwitchAccountClick(
-                    accountSummary = mockk() {
+                    accountSummary = mockk {
                         every { userId } returns "updatedUserId"
                     },
                 ),
@@ -1830,6 +1813,46 @@ class VaultViewModelTest : BaseViewModelTest() {
                 snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LifecycleResumed action is handled, PromptForAppReview is sent if flag is enabled and criteria is met`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns true
+            every { reviewPromptManager.shouldPromptForAppReview() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                assertEquals(VaultEvent.PromptForAppReview, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LifecycleResumed action is handled, PromptForAppReview is not sent if flag is disabled`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns false
+            every { reviewPromptManager.shouldPromptForAppReview() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                expectNoEvents()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LifecycleResumed action is handled, PromptForAppReview is not sent if criteria is not met`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns true
+            every { reviewPromptManager.shouldPromptForAppReview() } returns false
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                expectNoEvents()
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1842,6 +1865,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             featureFlagManager = featureFlagManager,
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
+            reviewPromptManager = reviewPromptManager,
         )
 }
 
@@ -1914,6 +1938,7 @@ private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
     showSshKeys: Boolean = false,
+    organizationPremiumStatusMap: Map<String, Boolean> = emptyMap(),
 ): VaultState =
     VaultState(
         appBarTitle = R.string.my_vault.asText(),
@@ -1952,4 +1977,5 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         showSshKeys = showSshKeys,
+        organizationPremiumStatusMap = organizationPremiumStatusMap,
     )

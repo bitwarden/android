@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
@@ -30,10 +29,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -59,6 +62,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param supportingLabelTestTag The optional test tag for the [supportingLabel].
  * @param startIconTestTag The optional test tag for the [startIcon].
  * @param trailingLabelIcons An optional list of small icons to be displayed after the [label].
+ * @param cardStyle Indicates the type of card style to be applied.
  */
 @Suppress("LongMethod")
 @Composable
@@ -76,10 +80,13 @@ fun BitwardenListItem(
     supportingLabelTestTag: String? = null,
     startIconTestTag: String? = null,
     trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
+    cardStyle: CardStyle? = null,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     Row(
-        modifier = Modifier
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -87,9 +94,11 @@ fun BitwardenListItem(
                 ),
                 onClick = onClick,
             )
-            .defaultMinSize(minHeight = 72.dp)
-            .padding(vertical = 8.dp)
-            .then(modifier),
+            .cardPadding(
+                cardStyle = cardStyle,
+                start = 16.dp,
+                end = 4.dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -130,7 +139,7 @@ fun BitwardenListItem(
                 }
             }
 
-            secondSupportingLabel?.let { secondSupportLabel ->
+            secondSupportingLabel.orNullIfBlank()?.let { secondSupportLabel ->
                 Text(
                     text = secondSupportLabel,
                     style = BitwardenTheme.typography.bodyMedium,
@@ -141,7 +150,7 @@ fun BitwardenListItem(
                 )
             }
 
-            supportingLabel?.let { supportLabel ->
+            supportingLabel.orNullIfBlank()?.let { supportLabel ->
                 Text(
                     text = supportLabel,
                     style = BitwardenTheme.typography.bodyMedium,

@@ -101,6 +101,7 @@ class VaultUnlockViewModel @Inject constructor(
             fido2GetCredentialsRequest = null,
             // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
             fido2CredentialAssertionRequest = null,
+            hasMasterPassword = activeAccount.hasMasterPassword,
         )
     },
 ) {
@@ -144,7 +145,30 @@ class VaultUnlockViewModel @Inject constructor(
             is VaultUnlockAction.BiometricsUnlockSuccess -> handleBiometricsUnlockSuccess(action)
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
             is VaultUnlockAction.Internal -> handleInternalAction(action)
+            VaultUnlockAction.BiometricsNoLongerSupported -> {
+                handleBiometricsNoLongerSupported()
+            }
+
+            VaultUnlockAction.DismissBiometricsNoLongerSupportedDialog -> {
+                handleDismissBiometricsNoLongerSupportedDialog()
+            }
         }
+    }
+
+    private fun handleBiometricsNoLongerSupported() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported,
+            )
+        }
+    }
+
+    private fun handleDismissBiometricsNoLongerSupportedDialog() {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+        authRepository.logout()
+        authRepository.hasPendingAccountAddition = true
     }
 
     private fun handleAddAccountClick() {
@@ -221,13 +245,9 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleBiometricsUnlockSuccess(action: VaultUnlockAction.BiometricsUnlockSuccess) {
         val activeUserId = authRepository.activeUserId ?: return
-        if (!biometricsEncryptionManager.isBiometricIntegrityValid(activeUserId, action.cipher)) {
-            mutableStateFlow.update { it.copy(isBiometricsValid = false) }
-            return
-        }
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
-            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics()
+            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics(cipher = action.cipher)
             sendAction(
                 VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
                     userId = activeUserId,
@@ -335,9 +355,6 @@ class VaultUnlockViewModel @Inject constructor(
 
             VaultUnlockResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                if (state.isBiometricEnabled && !state.isBiometricsValid) {
-                    biometricsEncryptionManager.setupBiometrics(action.userId)
-                }
                 // Don't do anything, we'll navigate to the right place.
             }
         }
@@ -376,6 +393,7 @@ class VaultUnlockViewModel @Inject constructor(
                 isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
                 vaultUnlockType = userState.activeAccount.vaultUnlockType,
                 input = "",
+                hasMasterPassword = userState.activeAccount.hasMasterPassword,
             )
         }
 
@@ -419,6 +437,7 @@ data class VaultUnlockState(
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
     val passwordGetCredentialsRequest: PasswordGetCredentialsRequest? = null,
     val passwordCredentialAssertionRequest: PasswordCredentialAssertionRequest? = null,
+    private val hasMasterPassword: Boolean,
 ) : Parcelable {
 
     /**
@@ -444,6 +463,15 @@ data class VaultUnlockState(
         get() = fido2GetCredentialsRequest?.userId ?: fido2CredentialAssertionRequest?.userId
 
     /**
+     * If the user requires biometrics to be able to unlock the account.
+     */
+    val requiresBiometricsLogin: Boolean
+        get() = when (vaultUnlockType) {
+            VaultUnlockType.MASTER_PASSWORD -> !hasMasterPassword && isBiometricEnabled
+            VaultUnlockType.PIN -> false
+        }
+
+    /**
      * Represents the various dialogs the vault unlock screen can display.
      */
     sealed class VaultUnlockDialog : Parcelable {
@@ -461,6 +489,12 @@ data class VaultUnlockState(
          */
         @Parcelize
         data object Loading : VaultUnlockDialog()
+
+        /**
+         * Show dialog for when biometrics the user has is no longer supported.
+         */
+        @Parcelize
+        data object BiometricsNoLongerSupported : VaultUnlockDialog()
     }
 }
 
@@ -516,6 +550,11 @@ sealed class VaultUnlockAction {
     data object DismissDialog : VaultUnlockAction()
 
     /**
+     * The user has dismissed the biometrics not supported dialog
+     */
+    data object DismissBiometricsNoLongerSupportedDialog : VaultUnlockAction()
+
+    /**
      * The user has clicked on the logout confirmation button.
      */
     data object ConfirmLogoutClick : VaultUnlockAction()
@@ -559,13 +598,18 @@ sealed class VaultUnlockAction {
      * The user has received a successful response from the biometrics call.
      */
     data class BiometricsUnlockSuccess(
-        val cipher: Cipher?,
+        val cipher: Cipher,
     ) : VaultUnlockAction()
 
     /**
      * The user has attempted to login with biometrics too many times and has been locked out.
      */
     data object BiometricsLockOut : VaultUnlockAction()
+
+    /**
+     * The user has biometric unlock setup that is no longer valid.
+     */
+    data object BiometricsNoLongerSupported : VaultUnlockAction()
 
     /**
      * The user has clicked the unlock button.

@@ -6,6 +6,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
@@ -35,7 +36,7 @@ import java.time.Clock
 /**
  * The default implementation of the [CipherManager].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 class CipherManagerImpl(
     private val fileManager: FileManager,
     private val authDiskSource: AuthDiskSource,
@@ -43,6 +44,7 @@ class CipherManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val clock: Clock,
+    private val reviewPromptManager: ReviewPromptManager,
 ) : CipherManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -57,7 +59,10 @@ class CipherManagerImpl(
             .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
             .fold(
                 onFailure = { CreateCipherResult.Error },
-                onSuccess = { CreateCipherResult.Success },
+                onSuccess = {
+                    reviewPromptManager.registerAddCipherAction()
+                    CreateCipherResult.Success
+                },
             )
     }
 
@@ -87,7 +92,10 @@ class CipherManagerImpl(
             }
             .fold(
                 onFailure = { CreateCipherResult.Error },
-                onSuccess = { CreateCipherResult.Success },
+                onSuccess = {
+                    reviewPromptManager.registerAddCipherAction()
+                    CreateCipherResult.Success
+                },
             )
     }
 

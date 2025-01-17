@@ -261,7 +261,7 @@ private fun CameraPreview(
 
     val preview = Preview.Builder()
         .build()
-        .apply { setSurfaceProvider(previewView.surfaceProvider) }
+        .apply { surfaceProvider = previewView.surfaceProvider }
 
     // Unbind from the camera provider when we leave the screen.
     DisposableEffect(Unit) {

@@ -35,7 +35,7 @@ import kotlin.let
  * @param cardTitle The title of the card.
  * @param actionText The text content on the CTA button.
  * @param onActionClick The action to perform when the CTA button is clicked.
- * @param onDismissClick The action to perform when the dismiss button is clicked.
+ * @param onDismissClick Optional action to perform when the dismiss button is clicked.
  * @param leadingContent Optional content to display on the leading side of the
  * [cardTitle] [Text].
  */
@@ -44,8 +44,8 @@ fun BitwardenActionCard(
     cardTitle: String,
     actionText: String,
     onActionClick: () -> Unit,
-    onDismissClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onDismissClick: (() -> Unit)? = null,
     cardSubtitle: String? = null,
     leadingContent: @Composable (() -> Unit)? = null,
 ) {
@@ -69,11 +69,13 @@ fun BitwardenActionCard(
                 )
             }
             Spacer(Modifier.weight(1f))
-            BitwardenStandardIconButton(
-                painter = rememberVectorPainter(id = R.drawable.ic_close),
-                contentDescription = stringResource(id = R.string.close),
-                onClick = onDismissClick,
-            )
+            onDismissClick?.let {
+                BitwardenStandardIconButton(
+                    painter = rememberVectorPainter(id = R.drawable.ic_close),
+                    contentDescription = stringResource(id = R.string.close),
+                    onClick = it,
+                )
+            }
         }
         cardSubtitle?.let {
             Spacer(Modifier.height(4.dp))
@@ -102,6 +104,19 @@ fun BitwardenActionCard(
  * [androidx.compose.animation.AnimatedVisibility].
  */
 fun actionCardExitAnimation() = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun BitwardenActionCardWithSubtitleNoDismiss_preview() {
+    BitwardenTheme {
+        BitwardenActionCard(
+            cardTitle = "Title",
+            actionText = "Action",
+            onActionClick = {},
+        )
+    }
+}
 
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

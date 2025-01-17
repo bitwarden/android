@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -23,13 +25,17 @@ class ManualCodeEntryViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<ManualCodeEntryState, ManualCodeEntryEvent, ManualCodeEntryAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: ManualCodeEntryState(code = ""),
+        ?: ManualCodeEntryState(
+            code = "",
+            dialog = null,
+        ),
 ) {
     override fun handleAction(action: ManualCodeEntryAction) {
         when (action) {
             is ManualCodeEntryAction.CloseClick -> handleCloseClick()
             is ManualCodeEntryAction.CodeTextChange -> handleCodeTextChange(action)
             is ManualCodeEntryAction.CodeSubmit -> handleCodeSubmit()
+            ManualCodeEntryAction.DialogDismiss -> handleDialogDismiss()
             is ManualCodeEntryAction.ScanQrCodeTextClick -> handleScanQrCodeTextClick()
             is ManualCodeEntryAction.SettingsClick -> handleSettingsClick()
         }
@@ -46,8 +52,24 @@ class ManualCodeEntryViewModel @Inject constructor(
     }
 
     private fun handleCodeSubmit() {
-        vaultRepository.emitTotpCodeResult(TotpCodeResult.Success(state.code.trim()))
+        val code = state.code.trim()
+        if (code.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = ManualCodeEntryState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.authenticator_key_read_error.asText(),
+                    ),
+                )
+            }
+            return
+        }
+        vaultRepository.emitTotpCodeResult(TotpCodeResult.Success(code))
         sendEvent(ManualCodeEntryEvent.NavigateBack)
+    }
+
+    private fun handleDialogDismiss() {
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 
     private fun handleScanQrCodeTextClick() {
@@ -65,7 +87,22 @@ class ManualCodeEntryViewModel @Inject constructor(
 @Parcelize
 data class ManualCodeEntryState(
     val code: String,
-) : Parcelable
+    val dialog: DialogState?,
+) : Parcelable {
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
+    }
+}
 
 /**
  * Models events for the [ManualCodeEntryScreen].
@@ -112,6 +149,11 @@ sealed class ManualCodeEntryAction {
      * The user has changed the code text.
      */
     data class CodeTextChange(val code: String) : ManualCodeEntryAction()
+
+    /**
+     * User dismissed the dialog.
+     */
+    data object DialogDismiss : ManualCodeEntryAction()
 
     /**
      * The text to switch to QR code scanning is clicked.

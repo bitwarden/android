@@ -1168,6 +1168,8 @@ private val ACCOUNT: AccountJson = AccountJson(
         kdfMemory = 16,
         kdfParallelism = 4,
         userDecryptionOptions = null,
+        isTwoFactorEnabled = false,
+        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,

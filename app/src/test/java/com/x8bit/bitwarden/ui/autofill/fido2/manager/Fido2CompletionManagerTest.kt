@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.autofill.fido2.manager
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.drawable.Icon
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
@@ -92,6 +93,7 @@ class Fido2CompletionManagerTest {
             fido2CompletionManager = Fido2CompletionManagerImpl(mockActivity, mockIntentManager)
             mockkConstructor(Intent::class)
             mockkObject(PendingIntentHandler.Companion)
+            mockkStatic(Icon::class)
             every {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
             } just runs
@@ -105,6 +107,7 @@ class Fido2CompletionManagerTest {
             unmockkConstructor(Intent::class, PublicKeyCredentialEntry.Builder::class)
             unmockkObject(PendingIntentHandler.Companion)
             unmockkStatic(PendingIntent::class)
+            unmockkStatic(Icon::class)
         }
 
         @Suppress("MaxLineLength")
@@ -206,6 +209,7 @@ class Fido2CompletionManagerTest {
                 )
             } returns mockk()
             every { mockActivity.getString(any()) } returns "No username"
+            every { Icon.createWithResource(mockActivity, any()) } returns mockk<Icon>()
 
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
@@ -256,6 +260,7 @@ class Fido2CompletionManagerTest {
                 )
             } returns mockk()
             every { mockActivity.getString(any()) } returns "No Username"
+            every { Icon.createWithResource(mockActivity, any()) } returns mockk<Icon>()
 
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(

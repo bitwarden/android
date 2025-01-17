@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.dialog
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -77,12 +79,12 @@ fun BitwardenTextEntryDialog(
                 label = textFieldLabel,
                 value = text,
                 onValueChange = { text = it },
+                textFieldTestTag = "AlertContentText",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("AlertContentText")
                     .focusRequester(focusRequester)
-                    .onGloballyPositioned {
-                        shouldRequestFocus = true
-                    },
+                    .onGloballyPositioned { shouldRequestFocus = true }
+                    .fillMaxWidth(),
             )
         },
         shape = BitwardenTheme.shapes.dialog,

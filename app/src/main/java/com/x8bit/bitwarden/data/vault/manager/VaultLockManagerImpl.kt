@@ -305,29 +305,40 @@ class VaultLockManagerImpl(
     }
 
     private fun observeAppCreationChanges() {
+        var isFirstCreated = true
         appStateManager
             .appCreatedStateFlow
             .onEach { appCreationState ->
                 when (appCreationState) {
-                    AppCreationState.CREATED -> Unit
-                    AppCreationState.DESTROYED -> handleOnDestroyed()
+                    is AppCreationState.Created -> {
+                        handleOnCreated(
+                            createdForAutofill = appCreationState.isAutoFill,
+                            isFirstCreated = isFirstCreated,
+                        )
+                        isFirstCreated = false
+                    }
+
+                    AppCreationState.Destroyed -> Unit
                 }
             }
             .launchIn(unconfinedScope)
     }
 
-    private fun handleOnDestroyed() {
-        activeUserId?.let { userId ->
-            checkForVaultTimeout(
-                userId = userId,
-                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
-            )
-        }
+    private fun handleOnCreated(
+        createdForAutofill: Boolean,
+        isFirstCreated: Boolean,
+    ) {
+        val userId = activeUserId ?: return
+        checkForVaultTimeout(
+            userId = userId,
+            checkTimeoutReason = CheckTimeoutReason.AppCreated(
+                firstTimeCreation = isFirstCreated,
+                createdForAutofill = createdForAutofill,
+            ),
+        )
     }
 
     private fun observeAppForegroundChanges() {
-        var isFirstForeground = true
-
         appStateManager
             .appForegroundStateFlow
             .onEach { appForegroundState ->
@@ -336,10 +347,7 @@ class VaultLockManagerImpl(
                         handleOnBackground()
                     }
 
-                    AppForegroundState.FOREGROUNDED -> {
-                        handleOnForeground(isFirstForeground = isFirstForeground)
-                        isFirstForeground = false
-                    }
+                    AppForegroundState.FOREGROUNDED -> handleOnForeground()
                 }
             }
             .launchIn(unconfinedScope)
@@ -349,19 +357,13 @@ class VaultLockManagerImpl(
         val userId = activeUserId ?: return
         checkForVaultTimeout(
             userId = userId,
-            checkTimeoutReason = CheckTimeoutReason.APP_BACKGROUNDED,
+            checkTimeoutReason = CheckTimeoutReason.AppBackgrounded,
         )
     }
 
-    private fun handleOnForeground(isFirstForeground: Boolean) {
+    private fun handleOnForeground() {
         val userId = activeUserId ?: return
         userIdTimerJobMap[userId]?.cancel()
-        if (isFirstForeground) {
-            checkForVaultTimeout(
-                userId = userId,
-                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
-            )
-        }
     }
 
     private fun observeUserSwitchingChanges() {
@@ -461,7 +463,7 @@ class VaultLockManagerImpl(
         // Check if the user's timeout action should be performed as we switch away.
         checkForVaultTimeout(
             userId = previousActiveUserId,
-            checkTimeoutReason = CheckTimeoutReason.USER_CHANGED,
+            checkTimeoutReason = CheckTimeoutReason.UserChanged,
         )
     }
 
@@ -491,10 +493,19 @@ class VaultLockManagerImpl(
 
             VaultTimeout.OnAppRestart -> {
                 // If this is an app restart, trigger the timeout action; otherwise ignore.
-                if (checkTimeoutReason == CheckTimeoutReason.APP_RESTARTED) {
-                    // On restart the vault should be locked already but we may need to soft-logout
-                    // the user.
-                    handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+                if (checkTimeoutReason is CheckTimeoutReason.AppCreated) {
+                    // We need to check the timeout action on the first time creation no matter what
+                    // for all subsequent creations we should check if this is for autofill and
+                    // and if it is we skip checking the timeout action.
+                    if (
+                        checkTimeoutReason.firstTimeCreation ||
+                        !checkTimeoutReason.createdForAutofill
+                    ) {
+                        handleTimeoutAction(
+                            userId = userId,
+                            vaultTimeoutAction = vaultTimeoutAction,
+                        )
+                    }
                 }
             }
 
@@ -502,16 +513,18 @@ class VaultLockManagerImpl(
                 when (checkTimeoutReason) {
                     // Always preform the timeout action on app restart to ensure the user is
                     // in the correct state.
-                    CheckTimeoutReason.APP_RESTARTED -> {
-                        handleTimeoutAction(
-                            userId = userId,
-                            vaultTimeoutAction = vaultTimeoutAction,
-                        )
+                    is CheckTimeoutReason.AppCreated -> {
+                        if (checkTimeoutReason.firstTimeCreation) {
+                            handleTimeoutAction(
+                                userId = userId,
+                                vaultTimeoutAction = vaultTimeoutAction,
+                            )
+                        }
                     }
 
                     // User no longer active or engaging with the app.
-                    CheckTimeoutReason.APP_BACKGROUNDED,
-                    CheckTimeoutReason.USER_CHANGED,
+                    CheckTimeoutReason.AppBackgrounded,
+                    CheckTimeoutReason.UserChanged,
                         -> {
                         handleTimeoutActionWithDelay(
                             userId = userId,
@@ -589,11 +602,29 @@ class VaultLockManagerImpl(
     }
 
     /**
-     * Helper enum that indicates the reason we are checking for timeout.
+     * Helper sealed class which denotes the reason to check the vault timeout.
      */
-    private enum class CheckTimeoutReason {
-        APP_BACKGROUNDED,
-        APP_RESTARTED,
-        USER_CHANGED,
+    private sealed class CheckTimeoutReason {
+        /**
+         * Indicates the app has been backgrounded but is still running.
+         */
+        data object AppBackgrounded : CheckTimeoutReason()
+
+        /**
+         * Indicates the app has entered a Created state.
+         *
+         * @param firstTimeCreation if this is the first time the process is being created.
+         * @param createdForAutofill if the the creation event is due to an activity being launched
+         * for autofill.
+         */
+        data class AppCreated(
+            val firstTimeCreation: Boolean,
+            val createdForAutofill: Boolean,
+        ) : CheckTimeoutReason()
+
+        /**
+         * Indicates that the current user has changed.
+         */
+        data object UserChanged : CheckTimeoutReason()
     }
 }

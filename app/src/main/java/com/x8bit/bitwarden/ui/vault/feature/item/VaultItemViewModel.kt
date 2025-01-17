@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -25,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
@@ -115,11 +117,14 @@ class VaultItemViewModel @Inject constructor(
                             .data
                             .canAssignToCollections(cipherViewState.data?.collectionIds)
 
+                        val canEdit = cipherViewState.data?.edit == true
+
                         VaultItemStateData(
                             cipher = cipherViewState.data,
                             totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
+                            canEdit = canEdit,
                         )
                     },
             )
@@ -133,6 +138,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
+            is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -184,6 +190,7 @@ class VaultItemViewModel @Inject constructor(
             }
 
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
+            is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
         }
     }
 
@@ -243,7 +250,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleRefreshClick() {
         // No need to update the view state, the vault repo will emit a new state during this time
-        vaultRepository.sync()
+        vaultRepository.sync(forced = true)
     }
 
     private fun handleCopyCustomHiddenFieldClick(
@@ -505,6 +512,13 @@ class VaultItemViewModel @Inject constructor(
                         )
                     }
                 }
+        }
+    }
+
+    private fun handleCopyNotesClick() {
+        onContent { content ->
+            val notes = content.common.notes.orEmpty()
+            clipboardManager.setText(text = notes)
         }
     }
 
@@ -780,6 +794,8 @@ class VaultItemViewModel @Inject constructor(
                 handlePrivateKeyVisibilityClicked(action)
             }
 
+            is VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick -> handleCopyPrivateKeyClick()
+
             VaultItemAction.ItemType.SshKey.CopyFingerprintClick -> handleCopyFingerprintClick()
         }
     }
@@ -794,6 +810,16 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked,
     ) {
         onSshKeyContent { content, sshKey ->
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewPrivateKeyClicked(
+                            isVisible = action.isVisible,
+                        ),
+                    ),
+                )
+                return@onSshKeyContent
+            }
             mutableStateFlow.update { currentState ->
                 currentState.copy(
                     viewState = content.copy(
@@ -804,6 +830,20 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleCopyPrivateKeyClick() {
+        onSshKeyContent { content, sshKey ->
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = sshKey.privateKey),
+                    ),
+                )
+                return@onSshKeyContent
+            }
+            clipboardManager.setText(text = sshKey.privateKey)
+        }
+    }
+
     private fun handleCopyFingerprintClick() {
         onSshKeyContent { _, sshKey ->
             clipboardManager.setText(text = sshKey.fingerprint)
@@ -811,6 +851,99 @@ class VaultItemViewModel @Inject constructor(
     }
 
     //endregion SSH Key Type Handlers
+
+    //region Identity Type Handlers
+
+    private fun handleIdentityTypeActions(action: VaultItemAction.ItemType.Identity) {
+        when (action) {
+            VaultItemAction.ItemType.Identity.CopyIdentityNameClick -> {
+                handleCopyIdentityNameClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyUsernameClick -> {
+                handleCopyIdentityUsernameClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyCompanyClick -> handleCopyCompanyClick()
+            VaultItemAction.ItemType.Identity.CopySsnClick -> handleCopySsnClick()
+            VaultItemAction.ItemType.Identity.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick()
+            }
+
+            VaultItemAction.ItemType.Identity.CopyEmailClick -> handleCopyEmailClick()
+            VaultItemAction.ItemType.Identity.CopyPhoneClick -> handleCopyPhoneClick()
+            VaultItemAction.ItemType.Identity.CopyAddressClick -> handleCopyAddressClick()
+        }
+    }
+
+    private fun handleCopyIdentityNameClick() {
+        onIdentityContent { _, identity ->
+            val identityName = identity.identityName.orEmpty()
+            clipboardManager.setText(text = identityName)
+        }
+    }
+
+    private fun handleCopyIdentityUsernameClick() {
+        onIdentityContent { _, identity ->
+            val username = identity.username.orEmpty()
+            clipboardManager.setText(text = username)
+        }
+    }
+
+    private fun handleCopyCompanyClick() {
+        onIdentityContent { _, identity ->
+            val company = identity.company.orEmpty()
+            clipboardManager.setText(text = company)
+        }
+    }
+
+    private fun handleCopySsnClick() {
+        onIdentityContent { _, identity ->
+            val ssn = identity.ssn.orEmpty()
+            clipboardManager.setText(text = ssn)
+        }
+    }
+
+    private fun handleCopyPassportNumberClick() {
+        onIdentityContent { _, identity ->
+            val passportNumber = identity.passportNumber.orEmpty()
+            clipboardManager.setText(text = passportNumber)
+        }
+    }
+
+    private fun handleCopyLicenseNumberClick() {
+        onIdentityContent { _, identity ->
+            val licenseNumber = identity.licenseNumber.orEmpty()
+            clipboardManager.setText(text = licenseNumber)
+        }
+    }
+
+    private fun handleCopyEmailClick() {
+        onIdentityContent { _, identity ->
+            val email = identity.email.orEmpty()
+            clipboardManager.setText(text = email)
+        }
+    }
+
+    private fun handleCopyPhoneClick() {
+        onIdentityContent { _, identity ->
+            val phone = identity.phone.orEmpty()
+            clipboardManager.setText(text = phone)
+        }
+    }
+
+    private fun handleCopyAddressClick() {
+        onIdentityContent { _, identity ->
+            val address = identity.address.orEmpty()
+            clipboardManager.setText(text = address)
+        }
+    }
+
+    //endregion Identity Type Handlers
 
     //region Internal Type Handlers
 
@@ -926,14 +1059,20 @@ class VaultItemViewModel @Inject constructor(
     ): VaultItemState.ViewState = this
         .data
         ?.cipher
-        ?.toViewState(
-            previousState = state.viewState.asContentOrNull(),
-            isPremiumUser = account.isPremium,
-            hasMasterPassword = account.hasMasterPassword,
-            totpCodeItemData = this.data?.totpCodeItemData,
-            canDelete = this.data?.canDelete == true,
-            canAssignToCollections = this.data?.canAssociateToCollections == true,
-        )
+        ?.let { cipher ->
+            val ownerOrg: Organization? = account.organizations.find {
+                cipher.organizationId == it.id
+            }
+            cipher.toViewState(
+                previousState = state.viewState.asContentOrNull(),
+                isPremiumUser = ownerOrg?.shouldUsersGetPremium ?: account.isPremium,
+                hasMasterPassword = account.hasMasterPassword,
+                totpCodeItemData = this.data?.totpCodeItemData,
+                canDelete = this.data?.canDelete == true,
+                canAssignToCollections = this.data?.canAssociateToCollections == true,
+                canEdit = this.data?.canEdit == true,
+            )
+        }
         ?: VaultItemState.ViewState.Error(message = errorText)
 
     private fun handleValidatePasswordReceive(
@@ -1133,6 +1272,21 @@ class VaultItemViewModel @Inject constructor(
                     }
             }
     }
+
+    private inline fun onIdentityContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Identity,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Identity)
+                    ?.let { identityContent ->
+                        block(content, identityContent)
+                    }
+            }
+    }
 }
 
 /**
@@ -1154,11 +1308,16 @@ data class VaultItemState(
             ?.currentCipher
             ?.deletedDate != null
 
+    private val isCipherEditable: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canEdit == true
+
     /**
      * Whether or not the fab is visible.
      */
     val isFabVisible: Boolean
-        get() = viewState is ViewState.Content && !isCipherDeleted
+        get() = viewState is ViewState.Content && !isCipherDeleted && isCipherEditable
 
     /**
      * Whether or not the cipher is in a collection.
@@ -1254,6 +1413,7 @@ data class VaultItemState(
                 val attachments: List<AttachmentItem>?,
                 val canDelete: Boolean,
                 val canAssignToCollections: Boolean,
+                val canEdit: Boolean,
             ) : Parcelable {
 
                 /**
@@ -1358,6 +1518,15 @@ data class VaultItemState(
                 ) : ItemType() {
 
                     /**
+                     * Indicates that at least one of the login credentials are present.
+                     */
+                    val hasLoginCredentials: Boolean
+                        get() = username != null ||
+                            passwordData != null ||
+                            fido2CredentialCreationDateText != null ||
+                            totpCodeItemData != null
+
+                    /**
                      * A wrapper for the password data.
                      *
                      * @property password The password itself.
@@ -1412,7 +1581,24 @@ data class VaultItemState(
                     val email: String?,
                     val phone: String?,
                     val address: String?,
-                ) : ItemType()
+                ) : ItemType() {
+
+                    /**
+                     * An ordered list of Card specific elements.
+                     */
+                    val propertyList: List<String>
+                        get() = persistentListOfNotNull(
+                            identityName,
+                            username,
+                            company,
+                            ssn,
+                            passportNumber,
+                            licenseNumber,
+                            email,
+                            phone,
+                            address,
+                        )
+                }
 
                 /**
                  * Represents the `Card` item type.
@@ -1430,6 +1616,18 @@ data class VaultItemState(
                     val expiration: String?,
                     val securityCode: CodeData?,
                 ) : ItemType() {
+
+                    /**
+                     * An ordered list of Card specific elements.
+                     */
+                    val propertyList: List<Any>
+                        get() = persistentListOfNotNull(
+                            cardholderName,
+                            number,
+                            brand.takeIf { brand != VaultCardBrand.SELECT },
+                            expiration,
+                            securityCode,
+                        )
 
                     /**
                      * A wrapper for the number data.
@@ -1724,6 +1922,11 @@ sealed class VaultItemAction {
          * The user confirmed cloning a cipher without its FIDO 2 credentials.
          */
         data object ConfirmCloneWithoutFido2CredentialClick : Common()
+
+        /**
+         * The user has clicked the copy button for notes text field.
+         */
+        data object CopyNotesClick : Common()
     }
 
     /**
@@ -1823,9 +2026,64 @@ sealed class VaultItemAction {
             data class PrivateKeyVisibilityClicked(val isVisible: Boolean) : SshKey()
 
             /**
+             * The user has clicked the copy button for the private key.
+             */
+            data object CopyPrivateKeyClick : SshKey()
+
+            /**
              * The user has clicked the copy button for the fingerprint.
              */
             data object CopyFingerprintClick : SshKey()
+        }
+
+        /**
+         * Represents actions specific to the Identity type.
+         */
+        sealed class Identity : VaultItemAction() {
+            /**
+             * The user has clicked the copy button for the identity name.
+             */
+            data object CopyIdentityNameClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the username.
+             */
+            data object CopyUsernameClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the company.
+             */
+            data object CopyCompanyClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the SSN.
+             */
+            data object CopySsnClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the passport number.
+             */
+            data object CopyPassportNumberClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the license number.
+             */
+            data object CopyLicenseNumberClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the email.
+             */
+            data object CopyEmailClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the phone number.
+             */
+            data object CopyPhoneClick : Identity()
+
+            /**
+             * The user has clicked the copy button for the address.
+             */
+            data object CopyAddressClick : Identity()
         }
     }
 
@@ -2052,5 +2310,19 @@ sealed class PasswordRepromptAction : Parcelable {
     data object RestoreItemClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
             get() = VaultItemAction.Common.RestoreVaultItemClick
+    }
+
+    /**
+     * Indicates that we should launch the
+     * [VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked] upon password validation.
+     */
+    @Parcelize
+    data class ViewPrivateKeyClicked(
+        val isVisible: Boolean,
+    ) : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.ItemType.SshKey.PrivateKeyVisibilityClicked(
+                isVisible = isVisible,
+            )
     }
 }

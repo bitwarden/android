@@ -5,9 +5,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -19,9 +20,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -36,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param startIcon The leading icon for the item.
  * @param onCopyClick The lambda function to be invoked when the copy button is clicked.
  * @param onItemClick The lambda function to be invoked when the item is clicked.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The modifier for the item.
  * @param supportingLabel The supporting label for the item.
  */
@@ -50,11 +55,14 @@ fun VaultVerificationCodeItem(
     startIcon: IconData,
     onCopyClick: () -> Unit,
     onItemClick: () -> Unit,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     supportingLabel: String? = null,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -62,11 +70,8 @@ fun VaultVerificationCodeItem(
                 ),
                 onClick = onItemClick,
             )
-            .defaultMinSize(minHeight = 72.dp)
-            .padding(vertical = 8.dp)
-            .then(modifier),
+            .cardPadding(cardStyle = cardStyle, start = 16.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         BitwardenIcon(
             iconData = startIcon,
@@ -74,6 +79,8 @@ fun VaultVerificationCodeItem(
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),
         )
+
+        Spacer(modifier = Modifier.width(width = 16.dp))
 
         Column(
             horizontalAlignment = Alignment.Start,
@@ -102,27 +109,30 @@ fun VaultVerificationCodeItem(
         BitwardenCircularCountdownIndicator(
             timeLeftSeconds = timeLeftSeconds,
             periodSeconds = periodSeconds,
+            modifier = Modifier.size(size = 56.dp),
         )
 
         if (!hideAuthCode) {
             Text(
                 text = authCode.chunked(3).joinToString(" "),
-                style = BitwardenTheme.typography.bodyLarge,
+                style = BitwardenTheme.typography.sensitiveInfoSmall,
                 color = BitwardenTheme.colorScheme.text.primary,
             )
+
+            Spacer(modifier = Modifier.width(width = 16.dp))
 
             BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy),
                 onClick = onCopyClick,
-                contentColor = BitwardenTheme.colorScheme.icon.secondary,
+                contentColor = BitwardenTheme.colorScheme.icon.primary,
             )
         }
     }
 }
 
 @Suppress("MagicNumber")
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun VerificationCodeItem_preview() {
     BitwardenTheme {
@@ -136,7 +146,7 @@ private fun VerificationCodeItem_preview() {
             periodSeconds = 30,
             onCopyClick = {},
             onItemClick = {},
-            modifier = Modifier.padding(horizontal = 16.dp),
+            cardStyle = CardStyle.Full,
         )
     }
 }

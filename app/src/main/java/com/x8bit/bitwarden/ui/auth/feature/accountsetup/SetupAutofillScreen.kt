@@ -34,16 +34,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.rememberSetupAutoFillHandler
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.image.BitwardenGifImage
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -80,10 +79,8 @@ fun SetupAutoFillScreen(
     when (state.dialogState) {
         is SetupAutoFillDialogState.AutoFillFallbackDialog -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = null,
-                    message = R.string.bitwarden_autofill_go_to_settings.asText(),
-                ),
+                title = null,
+                message = stringResource(id = R.string.bitwarden_autofill_go_to_settings),
                 onDismissRequest = handler.onDismissDialog,
             )
         }
@@ -171,6 +168,7 @@ private fun SetupAutoFillContent(
             ),
             isChecked = state.autofillEnabled,
             onCheckedChange = onAutofillServiceChanged,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

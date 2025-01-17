@@ -11,6 +11,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -152,6 +153,7 @@ fun List<CipherView>.toViewState(
     isAutofill: Boolean,
     isTotp: Boolean,
     isPremiumUser: Boolean,
+    organizationPremiumStatusMap: Map<String, Boolean>,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -164,6 +166,7 @@ fun List<CipherView>.toViewState(
                     isAutofill = isAutofill,
                     isTotp = isTotp,
                     isPremiumUser = isPremiumUser,
+                    organizationPremiumStatusMap = organizationPremiumStatusMap,
                 )
                     .sortAlphabetically(),
             )
@@ -184,15 +187,17 @@ private fun List<CipherView>.toDisplayItemList(
     isAutofill: Boolean,
     isTotp: Boolean,
     isPremiumUser: Boolean,
+    organizationPremiumStatusMap: Map<String, Boolean>,
 ): List<SearchState.DisplayItem> =
     this.map {
+        val premiumStatus = organizationPremiumStatusMap[it.organizationId] ?: isPremiumUser
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isTotp = isTotp,
-            isPremiumUser = isPremiumUser,
+            isPremiumUser = premiumStatus,
         )
     }
 
@@ -243,7 +248,7 @@ private fun CipherView.toIconData(
             login?.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
-                usePasskeyDefaultIcon = false,
+                usePasskeyDefaultIcon = this.isActiveWithFido2Credentials,
             )
         }
 

@@ -198,7 +198,7 @@ class RootNavScreenTest : BaseComposeTest() {
         rootNavStateFlow.value =
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
-                fido2CredentialRequest = mockk(),
+                fido2CreateCredentialRequest = mockk(),
             )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
@@ -261,6 +261,16 @@ class RootNavScreenTest : BaseComposeTest() {
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "setup_complete",
+                navOptions = expectedNavOptions,
+            )
+        }
+
+        // Make sure navigating to new device two factor works as expected:
+        rootNavStateFlow.value =
+            RootNavState.NewDeviceTwoFactorNotice(email = "example@bitwarden.com")
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "new_device_notice/example@bitwarden.com",
                 navOptions = expectedNavOptions,
             )
         }

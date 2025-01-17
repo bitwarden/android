@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRes
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
@@ -215,6 +217,23 @@ class CiphersServiceImpl(
         ciphersApi
             .hasUnassignedCiphers()
             .toResult()
+
+    override suspend fun importCiphers(
+        request: ImportCiphersJsonRequest,
+    ): Result<ImportCiphersResponseJson> =
+        ciphersApi
+            .importCiphers(body = request)
+            .toResult()
+            .map { ImportCiphersResponseJson.Success }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<ImportCiphersResponseJson.Invalid>(
+                        code = 400,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
     private fun createMultipartBodyBuilder(
         encryptedFile: File,

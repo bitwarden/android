@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
@@ -133,6 +134,7 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import javax.crypto.Cipher
 
 @Suppress("LargeClass")
 class VaultRepositoryTest {
@@ -193,14 +195,12 @@ class VaultRepositoryTest {
             mutableUnlockedUserIdsStateFlow.first { userId in it }
         }
     }
-    private val mutableLastDatabaseSchemeChangeInstantFlow = MutableStateFlow<Instant?>(null)
+    private val mutableDatabaseSchemeChangeFlow = bufferedMutableSharedFlow<Unit>()
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
-        every {
-            lastDatabaseSchemeChangeInstant
-        } returns mutableLastDatabaseSchemeChangeInstantFlow.value
-        every {
-            lastDatabaseSchemeChangeInstantFlow
-        } returns mutableLastDatabaseSchemeChangeInstantFlow
+        every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
+    }
+    private val reviewPromptManager: ReviewPromptManager = mockk {
+        every { registerCreateSendAction() } just runs
     }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
@@ -238,6 +238,7 @@ class VaultRepositoryTest {
         clock = clock,
         userLogoutManager = userLogoutManager,
         databaseSchemeManager = databaseSchemeManager,
+        reviewPromptManager = reviewPromptManager,
     )
 
     @BeforeEach
@@ -787,34 +788,29 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `lastDatabaseSchemeChangeInstantFlow should trigger sync when new value is not null`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            every {
-                databaseSchemeManager.lastDatabaseSchemeChangeInstant
-            } returns mutableLastDatabaseSchemeChangeInstantFlow.value
-            coEvery { syncService.sync() } just awaits
+    fun `databaseSchemeChangeFlow should trigger sync on emission`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } just awaits
 
-            mutableLastDatabaseSchemeChangeInstantFlow.value = clock.instant()
+        mutableDatabaseSchemeChangeFlow.tryEmit(Unit)
 
-            coVerify(exactly = 1) { syncService.sync() }
-        }
+        coVerify(exactly = 1) { syncService.sync() }
+    }
 
     @Test
-    fun `lastDatabaseSchemeChangeInstantFlow should not sync when new value is null`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+    fun `sync with forced should skip checks and call the syncService sync`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } returns Throwable("failure").asFailure()
 
-            every {
-                databaseSchemeManager.lastDatabaseSchemeChangeInstant
-            } returns mutableLastDatabaseSchemeChangeInstantFlow.value
+        vaultRepository.sync(forced = true)
 
-            coEvery { syncService.sync() } just awaits
-
-            mutableLastDatabaseSchemeChangeInstantFlow.value = null
-
-            coVerify(exactly = 0) { syncService.sync() }
+        coVerify(exactly = 0) {
+            syncService.getAccountRevisionDateMillis()
         }
+        coVerify(exactly = 1) {
+            syncService.sync()
+        }
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1109,60 +1105,6 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `syncIfNecessary when there is no last scheme change should not sync the vault`() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId)
-        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
-        every {
-            databaseSchemeManager.lastDatabaseSchemeChangeInstant
-        } returns null
-        coEvery { syncService.sync() } just awaits
-
-        vaultRepository.syncIfNecessary()
-
-        coVerify(exactly = 0) { syncService.sync() }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncIfNecessary when the last scheme change is before the last sync time should not sync the vault`() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId)
-        } returns clock.instant().plus(1, ChronoUnit.MINUTES)
-        every {
-            databaseSchemeManager.lastDatabaseSchemeChangeInstant
-        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
-
-        coEvery { syncService.sync() } just awaits
-
-        vaultRepository.syncIfNecessary()
-
-        coVerify(exactly = 0) { syncService.sync() }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncIfNecessary when the last scheme change is after the last sync time should sync the vault`() {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every {
-            settingsDiskSource.getLastSyncTime(userId)
-        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
-        every {
-            databaseSchemeManager.lastDatabaseSchemeChangeInstant
-        } returns clock.instant().plus(1, ChronoUnit.MINUTES)
-        coEvery { syncService.sync() } just awaits
-
-        vaultRepository.syncIfNecessary()
-
-        coVerify { syncService.sync() }
-    }
-
-    @Test
     fun `sync when the last sync time is older than the revision date should sync the vault`() {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1207,12 +1149,13 @@ class VaultRepositoryTest {
     fun `unlockVaultWithBiometrics with missing user state should return InvalidStateError`() =
         runTest {
             fakeAuthDiskSource.userState = null
+            val cipher = mockk<Cipher>()
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultRepository.vaultUnlockDataStateFlow.value,
             )
 
-            val result = vaultRepository.unlockVaultWithBiometrics()
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(VaultUnlockResult.InvalidStateError, result)
             assertEquals(
@@ -1229,10 +1172,11 @@ class VaultRepositoryTest {
                 vaultRepository.vaultUnlockDataStateFlow.value,
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipher = mockk<Cipher>()
             val userId = MOCK_USER_STATE.activeUserId
             fakeAuthDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
 
-            val result = vaultRepository.unlockVaultWithBiometrics()
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(VaultUnlockResult.InvalidStateError, result)
             assertEquals(
@@ -1249,6 +1193,12 @@ class VaultRepositoryTest {
             val privateKey = "mockPrivateKey-1"
             val biometricsKey = "asdf1234"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val encryptedBytes = byteArrayOf(1, 1)
+            val initVector = byteArrayOf(2, 2)
+            val cipher = mockk<Cipher> {
+                every { doFinal(any()) } returns encryptedBytes
+                every { iv } returns initVector
+            }
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -1262,11 +1212,12 @@ class VaultRepositoryTest {
                 )
             } returns VaultUnlockResult.Success
             fakeAuthDiskSource.apply {
+                storeUserBiometricInitVector(userId = userId, iv = null)
                 storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
                 storePrivateKey(userId = userId, privateKey = privateKey)
             }
 
-            val result = vaultRepository.unlockVaultWithBiometrics()
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(VaultUnlockResult.Success, result)
             coVerify {
@@ -1277,6 +1228,64 @@ class VaultRepositoryTest {
                     privateKey = privateKey,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+            coVerify(exactly = 0) {
+                vaultSdkSource.derivePinProtectedUserKey(any(), any())
+            }
+            fakeAuthDiskSource.apply {
+                assertBiometricsKey(
+                    userId = userId,
+                    biometricsKey = encryptedBytes.toString(Charsets.ISO_8859_1),
+                )
+                assertBiometricInitVector(userId = userId, iv = initVector)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithBiometrics with an IV and VaultLockManager Success should store the updated key and IV and unlock for the current user and return Success`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val privateKey = "mockPrivateKey-1"
+            val biometricsKey = "asdf1234"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val encryptedBytes = byteArrayOf(1, 1)
+            val initVector = byteArrayOf(2, 2)
+            val cipher = mockk<Cipher> {
+                every { doFinal(any()) } returns encryptedBytes
+            }
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.apply {
+                storeUserBiometricInitVector(userId = userId, iv = initVector)
+                storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
+                storePrivateKey(userId = userId, privateKey = privateKey)
+            }
+
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
+
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify(exactly = 1) {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
                     ),
                     organizationKeys = null,
                 )
@@ -1296,6 +1305,12 @@ class VaultRepositoryTest {
             val pinProtectedUserKey = "pinProtectedUserkey"
             val biometricsKey = "asdf1234"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val encryptedBytes = byteArrayOf(1, 1)
+            val initVector = byteArrayOf(2, 2)
+            val cipher = mockk<Cipher> {
+                every { doFinal(any()) } returns encryptedBytes
+                every { iv } returns initVector
+            }
             coEvery {
                 vaultSdkSource.derivePinProtectedUserKey(
                     userId = userId,
@@ -1315,6 +1330,7 @@ class VaultRepositoryTest {
                 )
             } returns VaultUnlockResult.Success
             fakeAuthDiskSource.apply {
+                storeUserBiometricInitVector(userId = userId, iv = null)
                 storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
                 storePrivateKey(userId = userId, privateKey = privateKey)
                 storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
@@ -1325,7 +1341,7 @@ class VaultRepositoryTest {
                 )
             }
 
-            val result = vaultRepository.unlockVaultWithBiometrics()
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(VaultUnlockResult.Success, result)
             fakeAuthDiskSource.assertPinProtectedUserKey(
@@ -1350,6 +1366,13 @@ class VaultRepositoryTest {
                     userId = userId,
                     encryptedPin = encryptedPin,
                 )
+            }
+            fakeAuthDiskSource.apply {
+                assertBiometricsKey(
+                    userId = userId,
+                    biometricsKey = encryptedBytes.toString(Charsets.ISO_8859_1),
+                )
+                assertBiometricInitVector(userId = userId, iv = initVector)
             }
         }
 
@@ -2110,7 +2133,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `createSend with TEXT and sendsService createTextSend success should return CreateSendResult success`() =
+    fun `createSend with TEXT and sendsService createTextSend success should return CreateSendResult success and increment send action count`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -2136,6 +2159,8 @@ class VaultRepositoryTest {
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
 
             assertEquals(CreateSendResult.Success(mockSendViewResult), result)
+
+            verify(exactly = 1) { reviewPromptManager.registerCreateSendAction() }
         }
 
     @Test
@@ -4789,6 +4814,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = null,
     kdfParallelism = null,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

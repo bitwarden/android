@@ -28,7 +28,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToUnsubscribe
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -118,10 +117,8 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             emailInput = input,
             isContinueButtonEnabled = true,
             dialog = StartRegistrationDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.invalid_email.asText(),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.invalid_email.asText(),
             ),
         )
         viewModel.trySendAction(ContinueClick)
@@ -143,11 +140,9 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
             dialog = StartRegistrationDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required
-                        .asText(R.string.email_address.asText()),
-                ),
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required
+                    .asText(R.string.email_address.asText()),
             ),
         )
         viewModel.trySendAction(ContinueClick)
@@ -220,10 +215,8 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = StartRegistrationDialog.Error(
-                        BasicDialogState.Shown(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = "mock_error".asText(),
-                        ),
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = "mock_error".asText(),
                     ),
                 ),
                 awaitItem(),

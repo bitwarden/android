@@ -19,7 +19,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
@@ -180,10 +179,15 @@ class SendViewModel @Inject constructor(
                 }
             }
 
-            is DataState.Loaded -> {
+            is DataState.NoNetwork,
+            is DataState.Loaded,
+                -> {
+                val data = dataState
+                    .data
+                    ?: SendData(sendViewList = emptyList())
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = dataState.data.toViewState(
+                        viewState = data.toViewState(
                             baseWebSendUrl = environmentRepo
                                 .environment
                                 .environmentUrlData
@@ -198,23 +202,6 @@ class SendViewModel @Inject constructor(
             DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = SendState.ViewState.Loading)
-                }
-            }
-
-            is DataState.NoNetwork -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = SendState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
-                                .asText()
-                                .concat(
-                                    " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
-                                ),
-                        ),
-                        dialogState = null,
-                        isRefreshing = false,
-                    )
                 }
             }
 
@@ -255,7 +242,7 @@ class SendViewModel @Inject constructor(
 
     private fun handleRefreshClick() {
         // No need to update the view state, the vault repo will emit a new state during this time.
-        vaultRepo.sync()
+        vaultRepo.sync(forced = true)
     }
 
     private fun handleSearchClick() {
@@ -266,7 +253,7 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = SendState.DialogState.Loading(R.string.syncing.asText()))
         }
-        vaultRepo.sync()
+        vaultRepo.sync(forced = true)
     }
 
     private fun handleCopyClick(action: SendAction.CopyClick) {
@@ -321,7 +308,7 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepo.sync()
+        vaultRepo.sync(forced = false)
     }
 }
 

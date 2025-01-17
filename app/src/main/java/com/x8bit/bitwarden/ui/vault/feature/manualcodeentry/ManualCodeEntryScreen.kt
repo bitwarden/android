@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -108,6 +109,13 @@ fun ManualCodeEntryScreen(
         )
     }
 
+    ManualCodeEntryDialogs(
+        state = state.dialog,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(ManualCodeEntryAction.DialogDismiss) }
+        },
+    )
+
     BitwardenScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -145,8 +153,8 @@ fun ManualCodeEntryScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .testTag("AddManualTOTPField"),
+                    .padding(horizontal = 16.dp),
+                textFieldTestTag = "AddManualTOTPField",
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -198,5 +206,23 @@ fun ManualCodeEntryScreen(
                 modifier = Modifier.testTag("ScanQRCodeButton"),
             )
         }
+    }
+}
+
+@Composable
+private fun ManualCodeEntryDialogs(
+    state: ManualCodeEntryState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (state) {
+        is ManualCodeEntryState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = state.title?.invoke(),
+                message = state.message(),
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        null -> Unit
     }
 }

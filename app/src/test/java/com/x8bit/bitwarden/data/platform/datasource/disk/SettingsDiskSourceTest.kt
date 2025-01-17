@@ -1118,55 +1118,6 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `lastDatabaseSchemeChangeInstant should pull from SharedPreferences`() {
-        val schemeChangeKey = "bwPreferencesStorage:lastDatabaseSchemeChangeInstant"
-        val expected: Long = Instant.now().toEpochMilli()
-
-        fakeSharedPreferences
-            .edit {
-                remove(schemeChangeKey)
-            }
-        assertEquals(0, fakeSharedPreferences.getLong(schemeChangeKey, 0))
-        assertNull(settingsDiskSource.lastDatabaseSchemeChangeInstant)
-
-        // Updating the shared preferences should update disk source.
-        fakeSharedPreferences
-            .edit {
-                putLong(
-                    schemeChangeKey,
-                    expected,
-                )
-            }
-        val actual = settingsDiskSource.lastDatabaseSchemeChangeInstant
-        assertEquals(
-            expected,
-            actual?.toEpochMilli(),
-        )
-    }
-
-    @Test
-    fun `setting lastDatabaseSchemeChangeInstant should update SharedPreferences`() {
-        val schemeChangeKey = "bwPreferencesStorage:lastDatabaseSchemeChangeInstant"
-        val schemeChangeInstant = Instant.now()
-
-        // Setting to null should update disk source
-        settingsDiskSource.lastDatabaseSchemeChangeInstant = null
-        assertEquals(0, fakeSharedPreferences.getLong(schemeChangeKey, 0))
-        assertNull(settingsDiskSource.lastDatabaseSchemeChangeInstant)
-
-        // Setting to value should update disk source
-        settingsDiskSource.lastDatabaseSchemeChangeInstant = schemeChangeInstant
-        val actual = fakeSharedPreferences.getLong(
-            schemeChangeKey,
-            0,
-        )
-        assertEquals(
-            schemeChangeInstant.toEpochMilli(),
-            actual,
-        )
-    }
-
-    @Test
     fun `getShowImportLoginsSettingBadge should pull from shared preferences`() {
         val mockUserId = "mockUserId"
         val showImportLoginsSettingBadgeKey =
@@ -1207,5 +1158,85 @@ class SettingsDiskSourceTest {
             )
             assertFalse(awaitItem() ?: true)
         }
+    }
+
+    @Test
+    fun `getVaultRegisteredForExport should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val vaultRegisteredForExportKey =
+            "bwPreferencesStorage:isVaultRegisteredForExport_$mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean(vaultRegisteredForExportKey, true)
+        }
+        assertTrue(settingsDiskSource.getVaultRegisteredForExport(userId = mockUserId)!!)
+    }
+
+    @Test
+    fun `storeVaultRegisteredForExport should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val vaultRegisteredForExportKey =
+            "bwPreferencesStorage:isVaultRegisteredForExport_$mockUserId"
+        settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
+        assertTrue(fakeSharedPreferences.getBoolean(vaultRegisteredForExportKey, false))
+    }
+
+    @Test
+    fun `storeVaultRegisteredForExport should update the flow value`() = runTest {
+        val mockUserId = "mockUserId"
+        settingsDiskSource.getVaultRegisteredForExportFlow(mockUserId).test {
+            // The initial values of the Flow are in sync
+            assertFalse(awaitItem() ?: false)
+            settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
+            assertTrue(awaitItem() ?: false)
+            // Update the value to false
+            settingsDiskSource.storeVaultRegisteredForExport(mockUserId, false)
+            assertFalse(awaitItem() ?: true)
+        }
+    }
+
+    @Test
+    fun `getAddCipherActionCount should pull from SharedPreferences`() {
+        val addActionCountKey = "bwPreferencesStorage:addActionCount"
+        fakeSharedPreferences.edit { putInt(addActionCountKey, 1) }
+        assertEquals(
+            1, settingsDiskSource.getAddCipherActionCount(),
+        )
+    }
+
+    @Test
+    fun `storeAddCipherActionCount should update SharedPreferences`() {
+        val addActionCountKey = "bwPreferencesStorage:addActionCount"
+        settingsDiskSource.storeAddCipherActionCount(count = 1)
+        assertEquals(1, fakeSharedPreferences.getInt(addActionCountKey, 0))
+    }
+
+    @Test
+    fun `getCopyGeneratedResultActionCount should pull from SharedPreferences`() {
+        val copyActionCountKey = "bwPreferencesStorage:copyActionCount"
+        fakeSharedPreferences.edit { putInt(copyActionCountKey, 1) }
+        assertEquals(
+            1, settingsDiskSource.getGeneratedResultActionCount(),
+        )
+    }
+
+    @Test
+    fun `storeCopyGeneratedResultCount should update SharedPreferences`() {
+        val copyActionCountKey = "bwPreferencesStorage:copyActionCount"
+        settingsDiskSource.storeGeneratedResultActionCount(count = 1)
+        assertEquals(1, fakeSharedPreferences.getInt(copyActionCountKey, 0))
+    }
+
+    @Test
+    fun `getCreateSendActionCount should pull from SharedPreferences`() {
+        val createActionCountKey = "bwPreferencesStorage:createActionCount"
+        fakeSharedPreferences.edit { putInt(createActionCountKey, 1) }
+        assertEquals(1, settingsDiskSource.getCreateSendActionCount())
+    }
+
+    @Test
+    fun `storeCreateSendActionCount should update SharedPreferences`() {
+        val createActionCountKey = "bwPreferencesStorage:createActionCount"
+        settingsDiskSource.storeCreateSendActionCount(count = 1)
+        assertEquals(1, fakeSharedPreferences.getInt(createActionCountKey, 0))
     }
 }

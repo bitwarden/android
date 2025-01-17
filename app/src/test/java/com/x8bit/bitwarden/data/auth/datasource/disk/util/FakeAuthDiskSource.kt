@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -54,12 +56,14 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedAccountTokens = mutableMapOf<String, AccountTokensJson?>()
     private val storedDeviceKey = mutableMapOf<String, String?>()
     private val storedPendingAuthRequests = mutableMapOf<String, PendingAuthRequestJson?>()
+    private val storedBiometricInitVectors = mutableMapOf<String, ByteArray?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedAuthenticationSyncKeys = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
+    private val storedNewDeviceNoticeState = mutableMapOf<String, NewDeviceNoticeState?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -81,6 +85,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
+        storedBiometricInitVectors.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
 
@@ -221,6 +226,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPendingAuthRequests[userId] = pendingAuthRequest
     }
 
+    override fun getUserBiometricInitVector(userId: String): ByteArray? =
+        storedBiometricInitVectors[userId]
+
+    override fun storeUserBiometricInitVector(userId: String, iv: ByteArray?) {
+        storedBiometricInitVectors[userId] = iv
+    }
+
     override fun getUserBiometricUnlockKey(userId: String): String? =
         storedBiometricKeys[userId]
 
@@ -297,6 +309,17 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
+
+    override fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState {
+        return storedNewDeviceNoticeState[userId] ?: NewDeviceNoticeState(
+            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
+            lastSeenDate = null,
+            )
+    }
+
+    override fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?) {
+        storedNewDeviceNoticeState[userId] = newState
+    }
 
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
@@ -405,6 +428,13 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertPendingAuthRequest(userId: String, pendingAuthRequest: PendingAuthRequestJson?) {
         assertEquals(pendingAuthRequest, storedPendingAuthRequests[userId])
+    }
+
+    /**
+     * Assert that the [iv] was stored successfully using the [userId].
+     */
+    fun assertBiometricInitVector(userId: String, iv: ByteArray?) {
+        assertEquals(iv, storedBiometricInitVectors[userId])
     }
 
     /**

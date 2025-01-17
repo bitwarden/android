@@ -191,6 +191,17 @@ class LoginViewModel @Inject constructor(
             is LoginResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
             }
+
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -302,7 +313,7 @@ data class LoginState(
          */
         @Parcelize
         data class Error(
-            val title: Text?,
+            val title: Text? = null,
             val message: Text,
         ) : DialogState()
 

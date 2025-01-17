@@ -5,6 +5,7 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
@@ -30,7 +31,9 @@ fun BitwardenTonalIconButton(
     isEnabled: Boolean = true,
 ) {
     FilledIconButton(
-        modifier = modifier.semantics(mergeDescendants = true) {},
+        modifier = modifier.semantics(mergeDescendants = true) {
+            this.contentDescription = contentDescription
+        },
         onClick = onClick,
         colors = bitwardenTonalIconButtonColors(),
         enabled = isEnabled,

@@ -55,6 +55,7 @@ private const val SYNC_SUCCESS_JSON = """
     "forcePasswordReset": false,
     "usesKeyConnector": false,
     "avatarColor": "mockAvatarColor-1",
+    "creationDate": "2024-09-13T01:00:00.00Z",
     "organizations": [
       {
         "usePolicies": false,

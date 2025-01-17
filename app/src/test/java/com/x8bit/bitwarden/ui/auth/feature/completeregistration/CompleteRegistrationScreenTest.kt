@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -151,10 +150,8 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
-                    ),
+                    title = "title".asText(),
+                    message = "message".asText(),
                 ),
             )
         }
@@ -194,10 +191,8 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = CompleteRegistrationDialog.Error(
-                    BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
-                    ),
+                    title = "title".asText(),
+                    message = "message".asText(),
                 ),
             )
         }

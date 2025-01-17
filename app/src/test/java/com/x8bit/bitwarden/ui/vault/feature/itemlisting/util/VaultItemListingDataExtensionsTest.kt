@@ -8,7 +8,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -464,6 +464,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -557,6 +558,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
+            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -643,6 +645,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
+            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -702,6 +705,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -726,6 +730,30 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
+            ),
+        )
+
+        // SSH keys
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                header = R.string.save_and_protect_your_data.asText(),
+                message = R.string.no_items.asText(),
+                shouldShowAddButton = false,
+                buttonText = R.string.add_an_item.asText(),
+            ),
+            vaultData.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey,
+                vaultFilterType = VaultFilterType.AllVaults,
+                hasMasterPassword = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                autofillSelectionData = null,
+                fido2CreationData = null,
+                fido2CredentialAutofillViews = null,
+                totpData = null,
+                isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -748,6 +776,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -774,6 +803,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -792,7 +822,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = Fido2CredentialRequest(
+                fido2CreationData = Fido2CreateCredentialRequest(
                     userId = "",
                     requestJson = "",
                     packageName = "",
@@ -802,6 +832,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -828,6 +859,7 @@ class VaultItemListingDataExtensionsTest {
                     every { issuer } returns "issuer"
                 },
                 isPremiumUser = true,
+                organizationPremiumStatusMap = emptyMap(),
             ),
         )
     }
@@ -1032,6 +1064,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -1076,6 +1109,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(

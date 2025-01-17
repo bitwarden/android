@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 
 /**
@@ -21,6 +22,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
     isChecked: Boolean,
     onDisableBiometrics: () -> Unit,
     onEnableBiometrics: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     val biometricsDescription: String = when (biometricSupportStatus) {
@@ -49,6 +51,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
             }
         },
         enabled = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED,
-        description = biometricsDescription,
+        supportingText = biometricsDescription,
+        cardStyle = cardStyle,
     )
 }

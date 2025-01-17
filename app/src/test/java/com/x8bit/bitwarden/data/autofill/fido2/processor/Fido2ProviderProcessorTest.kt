@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.processor
 
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
@@ -42,16 +43,20 @@ import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAut
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkConstructor
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.encodeToString
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -99,6 +104,13 @@ class Fido2ProviderProcessorTest {
             clock,
             dispatcherManager,
         )
+
+        mockkStatic(Icon::class)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Icon::class)
     }
 
     @Test
@@ -450,6 +462,13 @@ class Fido2ProviderProcessorTest {
         val mockIntent: PendingIntent = mockk()
         val mockPublicKeyCredentialEntry: PublicKeyCredentialEntry = mockk()
         mutableUserStateFlow.value = DEFAULT_USER_STATE
+
+        // verify Loading state is ignored
+        mutableCiphersStateFlow.value = DataState.Loading
+        coVerify(exactly = 0) {
+            vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
+        }
+
         mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onResult(capture(captureSlot)) } just runs
@@ -477,6 +496,7 @@ class Fido2ProviderProcessorTest {
         every {
             anyConstructed<PublicKeyCredentialEntry.Builder>().build()
         } returns mockPublicKeyCredentialEntry
+        every { Icon.createWithResource(context, any()) } returns mockk<Icon>()
 
         fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
 

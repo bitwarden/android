@@ -28,7 +28,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
@@ -182,10 +181,8 @@ class CreateAccountScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = CreateAccountDialog.Error(
-                    BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
-                    ),
+                    title = "title".asText(),
+                    message = "message".asText(),
                 ),
             )
         }
@@ -225,10 +222,8 @@ class CreateAccountScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = CreateAccountDialog.Error(
-                    BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
-                    ),
+                    title = "title".asText(),
+                    message = "message".asText(),
                 ),
             )
         }

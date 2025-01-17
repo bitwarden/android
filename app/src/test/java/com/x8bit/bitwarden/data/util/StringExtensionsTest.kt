@@ -186,7 +186,6 @@ class StringExtensionsTest {
 
     @Test
     fun `hasPort returns true when port is present`() {
-        val uriString = "www.google.com:8080"
         assertTrue("www.google.com:8080".hasPort())
     }
 
