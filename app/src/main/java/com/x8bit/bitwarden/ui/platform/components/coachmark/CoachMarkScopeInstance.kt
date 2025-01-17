@@ -273,6 +273,7 @@ private fun TooltipScope.CoachMarkToolTip(
             .padding(horizontal = 4.dp)
             .semantics { isCoachMarkToolTip = true },
         caretSize = DpSize(width = 24.dp, height = 16.dp),
+        shape = BitwardenTheme.shapes.coachmark,
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
