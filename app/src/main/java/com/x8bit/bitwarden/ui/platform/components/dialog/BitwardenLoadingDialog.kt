@@ -38,7 +38,7 @@ fun BitwardenLoadingDialog(
                     color = BitwardenTheme.colorScheme.background.secondary.copy(alpha = 0.90f),
                 ),
         ) {
-            BitwardenLoadingContent(message = text)
+            BitwardenLoadingContent(text = text)
         }
     }
 }

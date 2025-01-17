@@ -20,14 +20,14 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenLoadingContent(
     modifier: Modifier = Modifier,
-    message: String? = null,
+    text: String? = null,
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        message?.let {
+        text?.let {
             Text(
                 text = it,
                 style = BitwardenTheme.typography.titleMedium,

@@ -49,7 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBott
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenFullScreenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -109,64 +109,59 @@ fun ImportLoginsScreen(
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    BitwardenFullScreenLoadingContent(
-        modifier = Modifier.fillMaxSize(),
-        showLoadingState = state.isVaultSyncing,
-        message = stringResource(R.string.syncing_logins_loading_message),
+
+    BitwardenScaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            BitwardenTopAppBar(
+                title = stringResource(R.string.import_logins),
+                navigationIcon = NavigationIcon(
+                    navigationIcon = rememberVectorPainter(R.drawable.ic_close),
+                    onNavigationIconClick = handler.onCloseClick,
+                    navigationIconContentDescription = stringResource(R.string.close),
+                ),
+                scrollBehavior = scrollBehavior,
+            )
+        },
     ) {
-        BitwardenScaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                BitwardenTopAppBar(
-                    title = stringResource(R.string.import_logins),
-                    navigationIcon = NavigationIcon(
-                        navigationIcon = rememberVectorPainter(R.drawable.ic_close),
-                        onNavigationIconClick = handler.onCloseClick,
-                        navigationIconContentDescription = stringResource(R.string.close),
-                    ),
-                    scrollBehavior = scrollBehavior,
-                )
-            },
-        ) {
-            Crossfade(
-                targetState = state.viewState,
-                label = "CrossfadeBetweenViewStates",
-                modifier = Modifier.fillMaxSize(),
-            ) { viewState ->
-                when (viewState) {
-                    ImportLoginsState.ViewState.InitialContent -> {
-                        InitialImportLoginsContent(
-                            onGetStartedClick = handler.onGetStartedClick,
-                            onImportLaterClick = handler.onImportLaterClick,
-                        )
-                    }
+        Crossfade(
+            targetState = state.viewState,
+            label = "CrossfadeBetweenViewStates",
+            modifier = Modifier.fillMaxSize(),
+        ) { viewState ->
+            when (viewState) {
+                ImportLoginsState.ViewState.InitialContent -> {
+                    InitialImportLoginsContent(
+                        onGetStartedClick = handler.onGetStartedClick,
+                        onImportLaterClick = handler.onImportLaterClick,
+                    )
+                }
 
-                    ImportLoginsState.ViewState.ImportStepOne -> {
-                        ImportLoginsStepOneContent(
-                            onBackClick = handler.onMoveToInitialContent,
-                            onContinueClick = handler.onMoveToStepTwo,
-                            onHelpClick = handler.onHelpClick,
-                        )
-                    }
+                ImportLoginsState.ViewState.ImportStepOne -> {
+                    ImportLoginsStepOneContent(
+                        onBackClick = handler.onMoveToInitialContent,
+                        onContinueClick = handler.onMoveToStepTwo,
+                        onHelpClick = handler.onHelpClick,
+                    )
+                }
 
-                    ImportLoginsState.ViewState.ImportStepTwo -> {
-                        ImportLoginsStepTwoContent(
-                            vaultUrl = state.currentWebVaultUrl,
-                            onBackClick = handler.onMoveToStepOne,
-                            onContinueClick = handler.onMoveToStepThree,
-                            onHelpClick = handler.onHelpClick,
-                        )
-                    }
+                ImportLoginsState.ViewState.ImportStepTwo -> {
+                    ImportLoginsStepTwoContent(
+                        vaultUrl = state.currentWebVaultUrl,
+                        onBackClick = handler.onMoveToStepOne,
+                        onContinueClick = handler.onMoveToStepThree,
+                        onHelpClick = handler.onHelpClick,
+                    )
+                }
 
-                    ImportLoginsState.ViewState.ImportStepThree -> {
-                        ImportLoginsStepThreeContent(
-                            onBackClick = handler.onMoveToStepTwo,
-                            onContinueClick = handler.onMoveToSyncInProgress,
-                            onHelpClick = handler.onHelpClick,
-                        )
-                    }
+                ImportLoginsState.ViewState.ImportStepThree -> {
+                    ImportLoginsStepThreeContent(
+                        onBackClick = handler.onMoveToStepTwo,
+                        onContinueClick = handler.onMoveToSyncInProgress,
+                        onHelpClick = handler.onHelpClick,
+                    )
                 }
             }
         }
@@ -216,6 +211,10 @@ private fun ImportLoginsDialogContent(
                 onDismissClick = handler.onFailedSyncAcknowledged,
             )
         }
+
+        is ImportLoginsState.DialogState.Syncing -> BitwardenLoadingDialog(
+            text = dialogState.message(),
+        )
 
         null -> Unit
     }
@@ -554,7 +553,6 @@ private class ImportLoginsDialogContentPreviewProvider :
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.GetStarted,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = "vault.bitwarden.com",
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -562,7 +560,6 @@ private class ImportLoginsDialogContentPreviewProvider :
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = "vault.bitwarden.com",
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
