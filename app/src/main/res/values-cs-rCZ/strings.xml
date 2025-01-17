@@ -1088,7 +1088,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="copy_address">Kopírovat adresu</string>
   <string name="important_notice">Důležité upozornění</string>
   <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden odešle kód na e-mail Vašeho účtu pro ověření přihlášení z nových zařízení počínaje únorem 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Máte spolehlivý přístup ke svému e-mailu <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="do_you_have_reliable_access_to_your_email">Máte spolehlivý přístup ke svému e-mailu <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>?</string>
   <string name="yes_i_can_reliably_access_my_email">Ano, ke svému e-mailu mám přístup</string>
   <string name="biometrics_no_longer_supported_title">Biometrika již není v tomto zařízení podporována</string>
   <string name="biometrics_no_longer_supported">Byli jste odhlášeni, protože biometrika Vašeho zařízení nesplňuje nejnovější bezpečnostní požadavky. Chcete-li aktualizovat nastavení, přihlaste se znovu nebo kontaktujte správce pro přístup.</string>
@@ -1111,4 +1111,6 @@ Chcete se přepnout na tento účet?</string>
   <string name="review_flow_launched">Přehled byl spuštěn!</string>
   <string name="copy_private_key">Kopírovat soukromý klíč</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu můžete změnit ve webové aplikaci Bitwarden.</string>
+  <string name="login_credentials">Přihlašovací údaje</string>
+  <string name="autofill_options">Volby automatického vyplňování</string>
 </resources>

@@ -1111,5 +1111,7 @@ Você deseja mudar para esta conta?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. As configurações da cadeia de certificados ou de proxy no seu dispositivo ou no seu servidor do Bitwarden podem não estar configuradas corretamente.</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copiar chave privada</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Você pode alterar a sua senha mestra no aplicativo web do Bitwarden.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>
