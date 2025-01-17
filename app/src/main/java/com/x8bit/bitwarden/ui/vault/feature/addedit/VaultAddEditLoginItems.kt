@@ -54,6 +54,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     onTotpSetupClick: () -> Unit,
 ) {
     item {
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.name),
             value = commonState.name,
