@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,7 +36,7 @@ fun BitwardenLoadingContent(
             )
             Spacer(Modifier.height(16.dp))
         }
-        BitwardenCircularProgressIndicator()
+        BitwardenCircularProgressIndicator(modifier = Modifier.size(48.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
