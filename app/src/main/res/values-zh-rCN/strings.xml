@@ -91,7 +91,7 @@
   <string name="set_bitwarden_as_passkey_manager_description">在设备的设置中将 Bitwarden 设置为您的通行密钥提供程序。</string>
   <string name="avoid_ambiguous_characters">避免易混淆的字符</string>
   <string name="bitwarden_app_extension">Bitwarden App 扩展</string>
-  <string name="bitwarden_app_extension_alert2">向您的密码库中添加新登录项目的最简单方法，就是通过 Bitwarden App 扩展。转到「设置」界面了解更多有关使用 Bitwarden App 扩展的方法。</string>
+  <string name="bitwarden_app_extension_alert2">向您的密码库中添加新登录项目的最简单方法，就是通过 Bitwarden App 扩展。转到「设置」界面进一步了解 Bitwarden App 扩展的使用。</string>
   <string name="bitwarden_app_extension_description">在 Safari 和其他 App 中使用 Bitwarden 来自动填充登录信息。</string>
   <string name="bitwarden_autofill_service">Bitwarden 自动填充服务</string>
   <string name="bitwarden_autofill_accessibility_service_description">使用 Bitwarden 无障碍服务自动填充您的登录信息。</string>
@@ -206,7 +206,7 @@
   <string name="off" tools:override="true">关闭</string>
   <string name="on" tools:override="true">开启</string>
   <string name="status">状态</string>
-  <string name="bitwarden_autofill_service_alert2">向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 自动填充服务。转到「设置」界面了解更多有关使用 Bitwarden 自动填充服务的方法。</string>
+  <string name="bitwarden_autofill_service_alert2">向您的密码库中添加新登录项目的最简单方法，就是通过 Bitwarden 自动填充服务。转到「设置」界面进一步了解 Bitwarden 自动填充服务的使用。</string>
   <string name="autofill">自动填充</string>
   <string name="autofill_or_view">您想自动填充还是查看此项目？</string>
   <string name="bitwarden_autofill_service_match_confirm">确定要自动填充此项目吗？它与「%1$s」并不完全匹配。</string>
@@ -382,7 +382,7 @@
   <string name="autofill_turn_on4">4. 打开自动填充</string>
   <string name="autofill_turn_on5">5. 勾选「Bitwarden」</string>
   <string name="password_autofill">密码自动填充</string>
-  <string name="bitwarden_autofill_alert2">向您的密码库中添加新登录项目的最简单方法，就是使用 Bitwarden 密码自动填充扩展。转到「设置」界面了解更多有关使用 Bitwarden 密码自动填充扩展的方法。</string>
+  <string name="bitwarden_autofill_alert2">向您的密码库中添加新登录项目的最简单方法，就是使用 Bitwarden 密码自动填充扩展。转到「设置」界面进一步了解 Bitwarden 密码自动填充扩展的使用。</string>
   <string name="invalid_email">无效的电子邮箱地址。</string>
   <string name="cards">支付卡</string>
   <string name="identities">身份</string>
@@ -873,7 +873,7 @@
   <string name="two_step_login_description_long">在 Bitwarden 网页 App 中设置两步登录，让您的账户更加安全。</string>
   <string name="change_master_password_description_long">您可以在 Bitwarden 网页 App 上更改您的主密码。</string>
   <string name="you_can_import_data_to_your_vault_on_x">您可以通过 %1$s 将数据导入您的密码库。</string>
-  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">访问帮助中心了解更多如何使用 Bitwarden 的信息。</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">访问帮助中心进一步了解如何使用 Bitwarden。</string>
   <string name="contact_support_description_long">找不到您想要的吗？请在 bitwarden.com 上联系 Bitwarden 支持。</string>
   <string name="privacy_policy_description_long">在 bitwarden.com 上查看我们的隐私政策。</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">在网页 App 上探索您的 Bitwarden 账户的更多功能。</string>
@@ -1112,4 +1112,6 @@
   <string name="review_flow_launched">审核流程已发起！</string>
   <string name="copy_private_key">复制私钥</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">您可以在 Bitwarden 网页 App 上更改您的账户电子邮箱。</string>
+  <string name="login_credentials">登录凭证</string>
+  <string name="autofill_options">自动填充选项</string>
 </resources>

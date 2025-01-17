@@ -1112,4 +1112,6 @@ Skift til denne konto?</string>
   <string name="review_flow_launched">Gennemgangs-flow startet!</string>
   <string name="copy_private_key">Kopiér privat nøgle</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Kontoe-mailadressen kan ændres via Bitwarden web-appen.</string>
+  <string name="login_credentials">Login-legitimationsoplysninger</string>
+  <string name="autofill_options">Autoudfyldningsindstillinger</string>
 </resources>
