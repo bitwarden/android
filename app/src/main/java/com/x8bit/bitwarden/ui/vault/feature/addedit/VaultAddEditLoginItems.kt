@@ -119,10 +119,10 @@ fun LazyListScope.vaultAddEditLoginItems(
             totpKey = loginState.totp,
             canViewTotp = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
+            onTotpSetupClick = onTotpSetupClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            onTotpSetupClick = onTotpSetupClick,
         )
     }
 
@@ -488,8 +488,8 @@ private fun TotpRow(
     totpKey: String?,
     canViewTotp: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
-    modifier: Modifier = Modifier,
     onTotpSetupClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     if (totpKey != null) {
         if (canViewTotp) {
