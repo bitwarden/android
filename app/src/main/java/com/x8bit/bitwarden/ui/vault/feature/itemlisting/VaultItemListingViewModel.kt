@@ -1478,13 +1478,13 @@ class VaultItemListingViewModel @Inject constructor(
                     state.passwordGetCredentialRequest,
                 )
             }
-        } else if (state.fido2CredentialAssertionRequest != null){
+        } else if (state.fido2CredentialAssertionRequest != null) {
             trySendAction(
                 VaultItemListingsAction.Internal.Fido2AssertionDataReceive(
                     data = state.fido2CredentialAssertionRequest,
                 ),
             )
-        } else if (state.passwordCredentialAssertionRequest != null){
+        } else if (state.passwordCredentialAssertionRequest != null) {
             trySendAction(
                 VaultItemListingsAction.Internal.PasswordAssertionDataReceive(
                     data = state.passwordCredentialAssertionRequest,
@@ -1493,9 +1493,7 @@ class VaultItemListingViewModel @Inject constructor(
         } else {
             mutableStateFlow.update { it.copy(isRefreshing = false) }
         }
-    }
-
-    private suspend fun handleGetCredentialsRequest(
+    }                  private suspend fun handleGetCredentialsRequest(
         fido2Request: Fido2GetCredentialsRequest?,
         passwordRequest: PasswordGetCredentialsRequest?,
     ) {
