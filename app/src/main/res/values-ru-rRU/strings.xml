@@ -1114,4 +1114,6 @@
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Скопировать приватный ключ</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Вы можете изменить email своего аккаунта в веб-приложении Bitwarden.</string>
+  <string name="login_credentials">Данные для авторизации</string>
+  <string name="autofill_options">Параметры автозаполнения</string>
 </resources>

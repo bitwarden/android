@@ -436,8 +436,8 @@ Skenovanie prebehne automaticky.</string>
   <string name="thirty_minutes">30 minút</string>
   <string name="set_pin_description">Nastaviť kód PIN na odomknutie Bitwarden. Nastavenie PIN sa vynuluje, ak úplne odhlásite z aplikácie.</string>
   <string name="logged_in_as_on">Prihlásený ako %1$s na %2$s.</string>
-  <string name="vault_locked_master_password">Váš trezor je uzamknutý. Overte sa hlavným heslom ak chcete pokračovať.</string>
-  <string name="vault_locked_pin">Váš trezor je uzamknutý. Overte sa PIN kódom ak chcete pokračovať.</string>
+  <string name="vault_locked_master_password">Váš trezor je uzamknutý. Ak chcete pokračovať, overte svoje hlavné heslo.</string>
+  <string name="vault_locked_pin">Váš trezor je uzamknutý. Pokračujte zadaním PIN kódu.</string>
   <string name="vault_locked_identity">Váš trezor je uzamknutý. Ak chcete pokračovať, overte svoju identitu.</string>
   <string name="dark">Tmavý</string>
   <string name="light">Svetlý</string>
@@ -1112,4 +1112,6 @@ Chcete prepnúť na tento účet?</string>
   <string name="review_flow_launched">Prebieha hodnotenie!</string>
   <string name="copy_private_key">Kopírovať súkromný kľúč</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu môžete zmeniť vo webovej aplikácii Bitwarden.</string>
+  <string name="login_credentials">Prihlasovacie údaje</string>
+  <string name="autofill_options">Možnosti automatického vypĺňania</string>
 </resources>

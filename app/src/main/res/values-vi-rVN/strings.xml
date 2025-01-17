@@ -1112,4 +1112,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="review_flow_launched">Đã khởi động xem trước luồng thao tác!</string>
   <string name="copy_private_key">Chép khóa riêng tư</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Bạn có thể thay đổi email trên Bitwarden bản web.</string>
+  <string name="login_credentials">Thông tin đăng nhập</string>
+  <string name="autofill_options">Tùy chọn tự động điền</string>
 </resources>
