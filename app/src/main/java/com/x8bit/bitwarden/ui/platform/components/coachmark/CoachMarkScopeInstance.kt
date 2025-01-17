@@ -90,7 +90,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         )
     }
 
-    override fun LazyListScope.coachMarkHighlight(
+    override fun LazyListScope.coachMarkHighlightItem(
         key: T,
         title: Text,
         description: Text,

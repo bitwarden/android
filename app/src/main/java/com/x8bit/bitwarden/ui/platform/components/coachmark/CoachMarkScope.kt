@@ -75,7 +75,7 @@ interface CoachMarkScope<T : Enum<T>> {
      * item the same `key` as the [key] for the coach mark.
      */
     @Suppress("LongParameterList")
-    fun LazyListScope.coachMarkHighlight(
+    fun LazyListScope.coachMarkHighlightItem(
         key: T,
         title: Text,
         description: Text,

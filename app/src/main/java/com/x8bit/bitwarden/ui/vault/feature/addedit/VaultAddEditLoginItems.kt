@@ -125,7 +125,7 @@ fun LazyListScope.vaultAddEditLoginItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
-    coachMarkHighlight(
+    coachMarkHighlightItem(
         key = AddEditItemCoachMark.TOTP,
         title = R.string.coachmark_2_of_3.asText(),
         description = R.string.you_ll_only_need_to_set_up_authenticator_key.asText(),
