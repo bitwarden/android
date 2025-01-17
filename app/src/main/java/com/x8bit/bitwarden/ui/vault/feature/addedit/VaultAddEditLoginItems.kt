@@ -114,55 +114,16 @@ fun LazyListScope.vaultAddEditLoginItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
-    if (loginState.totp != null) {
-        item {
-            BitwardenTextFieldWithActions(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-                label = stringResource(id = R.string.totp),
-                value = loginState.totp,
-                trailingIconContent = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_clear,
-                        contentDescription = stringResource(id = R.string.delete),
-                        onClick = loginItemTypeHandlers.onClearTotpKeyClick,
-                    )
-                },
-                onValueChange = {},
-                readOnly = true,
-                singleLine = true,
-                actions = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_copy,
-                        contentDescription = stringResource(id = R.string.copy_totp),
-                        onClick = {
-                            loginItemTypeHandlers.onCopyTotpKeyClick(loginState.totp)
-                        },
-                    )
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_camera,
-                        contentDescription = stringResource(id = R.string.camera),
-                        onClick = onTotpSetupClick,
-                    )
-                },
-                textFieldTestTag = "LoginTotpEntry",
-                cardStyle = CardStyle.Full,
-            )
-        }
-    } else {
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenOutlinedButton(
-                label = stringResource(id = R.string.setup_totp),
-                icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
-                onClick = onTotpSetupClick,
-                modifier = Modifier
-                    .testTag("SetupTotpButton")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-        }
+    item {
+        TotpRow(
+            totpKey = loginState.totp,
+            canViewTotp = loginState.canViewPassword,
+            loginItemTypeHandlers = loginItemTypeHandlers,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+            onTotpSetupClick = onTotpSetupClick,
+        )
     }
 
     item {
@@ -517,6 +478,77 @@ private fun PasswordRow(
             value = password,
             cardStyle = CardStyle.Bottom,
             modifier = modifier.testTag("LoginPasswordEntry"),
+        )
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun TotpRow(
+    totpKey: String?,
+    canViewTotp: Boolean,
+    loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    modifier: Modifier = Modifier,
+    onTotpSetupClick: () -> Unit,
+) {
+    if (totpKey != null) {
+        if (canViewTotp) {
+            BitwardenTextFieldWithActions(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+                label = stringResource(id = R.string.totp),
+                value = totpKey,
+                trailingIconContent = {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_clear,
+                        contentDescription = stringResource(id = R.string.delete),
+                        onClick = loginItemTypeHandlers.onClearTotpKeyClick,
+                    )
+                },
+                onValueChange = {},
+                readOnly = true,
+                singleLine = true,
+                actions = {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_totp),
+                        onClick = {
+                            loginItemTypeHandlers.onCopyTotpKeyClick(totpKey)
+                        },
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_camera,
+                        contentDescription = stringResource(id = R.string.camera),
+                        onClick = onTotpSetupClick,
+                    )
+                },
+                textFieldTestTag = "LoginTotpEntry",
+                cardStyle = CardStyle.Full,
+            )
+        } else {
+            BitwardenTextField(
+                label = stringResource(id = R.string.totp),
+                value = totpKey,
+                cardStyle = CardStyle.Bottom,
+                modifier = modifier.testTag("LoginTotpEntry"),
+                onValueChange = {},
+                readOnly = true,
+                enabled = false,
+                singleLine = true,
+            )
+        }
+    } else {
+        Spacer(modifier = Modifier.height(16.dp))
+        BitwardenOutlinedButton(
+            label = stringResource(id = R.string.setup_totp),
+            icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
+            onClick = onTotpSetupClick,
+            modifier = Modifier
+                .testTag("SetupTotpButton")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+            isEnabled = canViewTotp,
         )
     }
 }
