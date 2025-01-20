@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -74,7 +76,7 @@ class VaultUnlockViewModel @Inject constructor(
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val showAccountMenu =
             VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
-                (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&
+                (specialCircumstance !is SpecialCircumstance.GetCredentials &&
                     specialCircumstance !is SpecialCircumstance.Fido2Assertion)
         VaultUnlockState(
             accountSummaries = accountSummaries,
@@ -91,6 +93,10 @@ class VaultUnlockViewModel @Inject constructor(
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
             userId = userState.activeUserId,
+            // TODO: [PM-13075] Handle PasswordGetCredentialsRequest special circumstance
+            passwordGetCredentialsRequest = null,
+            // TODO: [PM-13075] Handle PasswordCredentialAssertionRequest special circumstance
+            passwordCredentialAssertionRequest = null,
             // TODO: [PM-13075] Handle Fido2GetCredentialsRequest special circumstance
             fido2GetCredentialsRequest = null,
             // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
@@ -178,6 +184,14 @@ class VaultUnlockViewModel @Inject constructor(
 
             state.fido2CredentialAssertionRequest != null -> {
                 sendEvent(VaultUnlockEvent.Fido2CredentialAssertionError)
+            }
+
+            state.passwordGetCredentialsRequest != null -> {
+                sendEvent(VaultUnlockEvent.PasswordGetCredentialsError)
+            }
+
+            state.passwordCredentialAssertionRequest != null -> {
+                sendEvent(VaultUnlockEvent.PasswordCredentialAssertionError)
             }
 
             else -> Unit
@@ -421,6 +435,8 @@ data class VaultUnlockState(
     val userId: String,
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    val passwordGetCredentialsRequest: PasswordGetCredentialsRequest? = null,
+    val passwordCredentialAssertionRequest: PasswordCredentialAssertionRequest? = null,
     private val hasMasterPassword: Boolean,
 ) : Parcelable {
 
@@ -438,13 +454,6 @@ data class VaultUnlockState(
      * Indicates if we want force focus on Master Password \ PIN input field and show keyboard.
      */
     val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
-
-    /**
-     * Indicates if the vault is being unlocked as a result of receiving a FIDO 2 request.
-     */
-    val isUnlockingForFido2Request: Boolean
-        get() = fido2GetCredentialsRequest != null ||
-            fido2CredentialAssertionRequest != null
 
     /**
      * Returns the user ID present in the current FIDO 2 request, or null when no FIDO 2 request is
@@ -514,6 +523,16 @@ sealed class VaultUnlockEvent {
      * Completes the FIDO2 credential assertion request with an error response.
      */
     data object Fido2CredentialAssertionError : VaultUnlockEvent()
+
+    /**
+     * Completes the Password get credentials request with an error response.
+     */
+    data object PasswordGetCredentialsError : VaultUnlockEvent()
+
+    /**
+     * Completes the Password credential assertion request with an error response.
+     */
+    data object PasswordCredentialAssertionError : VaultUnlockEvent()
 }
 
 /**

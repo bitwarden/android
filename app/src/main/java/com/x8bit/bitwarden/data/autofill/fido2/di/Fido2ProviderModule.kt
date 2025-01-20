@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManagerImpl
@@ -13,7 +12,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -38,23 +36,17 @@ object Fido2ProviderModule {
     @Singleton
     fun provideCredentialProviderProcessor(
         @ApplicationContext context: Context,
-        authRepository: AuthRepository,
         vaultRepository: VaultRepository,
-        fido2CredentialStore: Fido2CredentialStore,
         fido2CredentialManager: Fido2CredentialManager,
-        dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
         clock: Clock,
     ): Fido2ProviderProcessor =
         Fido2ProviderProcessorImpl(
             context,
-            authRepository,
             vaultRepository,
-            fido2CredentialStore,
             fido2CredentialManager,
             intentManager,
             clock,
-            dispatcherManager,
         )
 
     @Provides

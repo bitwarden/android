@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.autofill.fido2
+package com.x8bit.bitwarden.data.autofill.credential
 
 import android.os.Build
 import android.os.CancellationSignal
@@ -14,10 +14,13 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
+import com.x8bit.bitwarden.data.autofill.credential.processor.BitwardenCredentialProcessor
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
+const val UNLOCK_ACCOUNT_INTENT =
+    "com.x8bit.bitwarden.data.autofill.credential.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The [CredentialProviderService] for the app. This fulfills FIDO2 credential requests from other
@@ -27,14 +30,14 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Keep
 @AndroidEntryPoint
-class BitwardenFido2ProviderService : CredentialProviderService() {
+class BitwardenCredentialProviderService : CredentialProviderService() {
 
     /**
-     * A processor to handle the FIDO2 credential fulfillment. We keep the service light because it
-     * isn't easily testable.
+     * A processor to handle the FIDO2 and/or Password credential fulfillment. We keep the service
+     * light because it isn't easily testable.
      */
     @Inject
-    lateinit var processor: Fido2ProviderProcessor
+    lateinit var processor: BitwardenCredentialProcessor
 
     override fun onBeginCreateCredentialRequest(
         request: BeginCreateCredentialRequest,

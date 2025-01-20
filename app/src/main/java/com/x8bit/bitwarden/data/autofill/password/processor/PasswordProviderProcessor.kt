@@ -1,18 +1,19 @@
-package com.x8bit.bitwarden.data.autofill.fido2.processor
+package com.x8bit.bitwarden.data.autofill.password.processor
 
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
-import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
+import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
-import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
+import androidx.credentials.provider.BeginGetPasswordOption
+import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * A class to handle FIDO2 credential request processing. This includes save and autofill requests.
+ * A class to handle Password credential request processing. This includes save and autofill requests.
  */
-interface Fido2ProviderProcessor {
+interface PasswordProviderProcessor {
 
     /**
      * Process the [BeginCreateCredentialRequest] and returns the result.
@@ -24,20 +25,22 @@ interface Fido2ProviderProcessor {
     suspend fun processCreateCredentialRequest(
         requestCode: AtomicInteger,
         userState: UserState,
-        request: BeginCreatePublicKeyCredentialRequest,
-    ): BeginCreateCredentialResponse?
+        request: BeginCreatePasswordCredentialRequest,
+    ): BeginCreateCredentialResponse
 
     /**
      * Process the [BeginGetCredentialRequest] and returns the result.
      *
      * @param requestCode The requestCode to be used for pending intents.
      * @param activeUserId The id of the currently active user.
-     * @param beginGetCredentialOptions The request data from the OS that contains data about the requesting provider.
+     * @param callingAppInfo The info of the callingAppInfo because it's not present in [BeginGetPasswordOption].
+     * @param beginGetPasswordOptions The request data from the OS that contains data about the requesting provider.
      */
     suspend fun processGetCredentialRequest(
         requestCode: AtomicInteger,
         activeUserId: String,
-        beginGetCredentialOptions: List<BeginGetPublicKeyCredentialOption>,
+        callingAppInfo: CallingAppInfo?,
+        beginGetPasswordOptions: List<BeginGetPasswordOption>,
     ): List<CredentialEntry>?
 
 }

@@ -6,6 +6,9 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionReq
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordCredentialRequest
+import com.x8bit.bitwarden.data.autofill.password.model.PasswordGetCredentialsRequest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import kotlinx.parcelize.Parcelize
@@ -60,6 +63,16 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
+     * The app was launched via the credential manager framework request to retrieve passkeys or passwords
+     * associated with the requesting entity.
+     */
+    @Parcelize
+    data class GetCredentials(
+        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest?,
+        val passwordGetCredentialsRequest: PasswordGetCredentialsRequest?,
+    ) : SpecialCircumstance()
+
+    /**
      * The app was launched via the credential manager framework in order to allow the user to
      * manually save a passkey to their vault.
      */
@@ -78,12 +91,21 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the credential manager framework request to retrieve passkeys
-     * associated with the requesting entity.
+     * The app was launched via the credential manager framework in order to allow the user to
+     * manually save a password to their vault.
      */
     @Parcelize
-    data class Fido2GetCredentials(
-        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
+    data class PasswordSave(
+        val passwordCredentialRequest: PasswordCredentialRequest,
+    ) : SpecialCircumstance()
+
+    /**
+     * The app was launched via the credential manager framework in order to authenticate a Password
+     * credential saved to the user's vault.
+     */
+    @Parcelize
+    data class PasswordAssertion(
+        val passwordAssertionRequest: PasswordCredentialAssertionRequest,
     ) : SpecialCircumstance()
 
     /**
