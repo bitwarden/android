@@ -18,11 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
+import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
@@ -54,7 +54,12 @@ fun SearchScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val searchHandlers = remember(viewModel) { SearchHandlers.create(viewModel) }
     val context = LocalContext.current
-    LivecycleEventEffect(viewModel)
+
+    RegisterScreenDataOnLifecycleEffect(
+        appResumeScreenData = AppResumeScreenData.SearchScreen(
+            searchTerm = state.searchTerm,
+        ),
+    )
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -143,23 +148,6 @@ fun SearchScreen(
                     .fillMaxSize()
                     .imePadding(),
             )
-        }
-    }
-}
-
-@Composable
-private fun LivecycleEventEffect(viewModel: SearchViewModel) {
-    LivecycleEventEffect { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> {
-                viewModel.trySendAction(SearchAction.LifecycleResume)
-            }
-
-            Lifecycle.Event.ON_STOP -> {
-                viewModel.trySendAction(SearchAction.LifecycleStop)
-            }
-
-            else -> Unit
         }
     }
 }

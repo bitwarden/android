@@ -12,12 +12,10 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -83,7 +81,6 @@ class SearchViewModel @Inject constructor(
     environmentRepo: EnvironmentRepository,
     settingsRepo: SettingsRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
-    private val appResumeManager: AppResumeManager,
 ) : BaseViewModel<SearchState, SearchEvent, SearchAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -152,8 +149,6 @@ class SearchViewModel @Inject constructor(
             is SearchAction.SearchTermChange -> handleSearchTermChange(action)
             is SearchAction.VaultFilterSelect -> handleVaultFilterSelect(action)
             is SearchAction.OverflowOptionClick -> handleOverflowItemClick(action)
-            is SearchAction.LifecycleResume -> handleOnResumed()
-            is SearchAction.LifecycleStop -> handleOnStopped()
             is SearchAction.Internal -> handleInternalAction(action)
         }
     }
@@ -730,16 +725,6 @@ class SearchViewModel @Inject constructor(
             .data
             ?.cipherViewList
             ?.firstOrNull { it.id == cipherId }
-
-    private fun handleOnResumed() {
-        appResumeManager.setResumeScreen(
-            AppResumeScreenData.SearchScreen(searchTerm = state.searchTerm),
-        )
-    }
-
-    private fun handleOnStopped() {
-        appResumeManager.clearResumeScreen()
-    }
 }
 
 /**
@@ -1085,16 +1070,6 @@ sealed class SearchAction {
     data class OverflowOptionClick(
         val overflowAction: ListingItemOverflowAction,
     ) : SearchAction()
-
-    /**
-     * Indicates the UI has been entered a resumed lifecycle state.
-     */
-    data object LifecycleResume : SearchAction()
-
-    /**
-     * Indicates the UI has been entered a stopped lifecycle state.
-     */
-    data object LifecycleStop : SearchAction()
 
     /**
      * Models actions that the [SearchViewModel] itself might send.

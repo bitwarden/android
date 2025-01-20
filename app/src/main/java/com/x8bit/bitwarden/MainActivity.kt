@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityComp
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
@@ -98,6 +100,15 @@ class MainActivity : AppCompatActivity() {
             }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider {
+                ObserveScreenDataEffect(
+                    onDataUpdate = remember(mainViewModel) {
+                        {
+                            mainViewModel.trySendAction(
+                                MainAction.ScreenResumeDataReceived(it),
+                            )
+                        }
+                    },
+                )
                 BitwardenTheme(theme = state.theme) {
                     RootNavScreen(
                         onSplashScreenRemoved = { shouldShowSplashScreen = false },

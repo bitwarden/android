@@ -18,8 +18,10 @@ import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsReques
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -71,6 +73,7 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val appResumeManager: AppResumeManager,
     private val clock: Clock,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
@@ -180,6 +183,14 @@ class MainViewModel @Inject constructor(
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+            is MainAction.ScreenResumeDataReceived -> handleAppResumeDataUpdated(action)
+        }
+    }
+
+    private fun handleAppResumeDataUpdated(action: MainAction.ScreenResumeDataReceived) {
+        when (val data = action.screenResumeData) {
+            null -> appResumeManager.clearResumeScreen()
+            else -> appResumeManager.setResumeScreen(data)
         }
     }
 
@@ -442,6 +453,7 @@ sealed class MainAction {
      * Receive event to open the debug menu.
      */
     data object OpenDebugMenu : MainAction()
+    data class ScreenResumeDataReceived(val screenResumeData: AppResumeScreenData?) : MainAction()
 
     /**
      * Actions for internal use by the ViewModel.

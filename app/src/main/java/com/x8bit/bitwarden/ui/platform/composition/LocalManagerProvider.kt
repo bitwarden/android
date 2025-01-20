@@ -11,6 +11,8 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerImpl
@@ -51,6 +53,7 @@ fun LocalManagerProvider(
         LocalNfcManager provides NfcManagerImpl(activity),
         LocalFido2CompletionManager provides fido2CompletionManager,
         LocalAppReviewManager provides AppReviewManagerImpl(activity),
+        LocalAppResumeStateManager provides AppResumeStateManagerImpl(),
     ) {
         content()
     }
@@ -104,4 +107,8 @@ val LocalFido2CompletionManager: ProvidableCompositionLocal<Fido2CompletionManag
  */
 val LocalAppReviewManager: ProvidableCompositionLocal<AppReviewManager> = compositionLocalOf {
     error("CompositionLocal AppReviewManager not present")
+}
+
+val LocalAppResumeStateManager = compositionLocalOf<AppResumeStateManager> {
+    error("CompositionLocal AppResumeStateManager not present")
 }
