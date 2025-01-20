@@ -17,6 +17,15 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * Represents a Bitwarden-styled loading dialog that shows text and a circular progress indicator.
  *
+ * This implementation uses a `Popup` because the standard `Dialog` did not work with the intended
+ * designs. When using a `Dialog`, the status bar was appearing dark and the content was going below
+ * the navigation bar. To ensure the loading overlay fully covers the entire screen—including the
+ * status bar area, `Popup` was used with `clippingEnabled = false`. This allows it to extend
+ * beyond the default bounds, ensuring a full-screen design. \
+ *
+ * We retained the Dialog nomenclature to minimize refactor disruption, but we plan to transition
+ * to Modal-based terminology in the future. (https://bitwarden.atlassian.net/browse/PM-17356)
+ *
  * @param text The text to display in the dialog.
  */
 @OptIn(ExperimentalComposeUiApi::class)
@@ -28,6 +37,7 @@ fun BitwardenLoadingDialog(
         properties = PopupProperties(
             dismissOnBackPress = false,
             dismissOnClickOutside = false,
+            clippingEnabled = false,
         ),
     ) {
         BitwardenLoadingContent(

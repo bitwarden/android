@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,15 +34,15 @@ fun BitwardenLoadingContent(
                 style = BitwardenTheme.typography.titleMedium,
                 // setting color explicitly here as we can't assume what the surface will be.
                 color = BitwardenTheme.colorScheme.text.primary,
-                modifier = Modifier
-                    .testTag(tag = "AlertTitleText"),
+                modifier = Modifier.testTag(tag = "AlertTitleText"),
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
         BitwardenCircularProgressIndicator(
             modifier = Modifier
                 .size(48.dp)
                 .testTag(tag = "AlertProgressIndicator"),
         )
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
