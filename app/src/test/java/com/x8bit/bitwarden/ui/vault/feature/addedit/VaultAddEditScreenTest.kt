@@ -15,6 +15,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
@@ -3560,6 +3561,101 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertDoesNotExist()
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should show when state is add mode, login type content, and should show coach mark tour is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should not show when state is add mode, login type content, and should show coach mark tour is false`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem(
+                vaultItemCipherType = VaultItemCipherType.LOGIN,
+            ),
+            shouldShowCoachMarkTour = false,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should not show when state is edit mode, login type content, and should show coach mark tour is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "1234"),
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should not show when state is add mode, card type content, and should show coach mark tour is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "1234"),
+            shouldShowCoachMarkTour = false,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when learn about logins card is showing, clicking the close button sends LearnAboutLoginsDismissed action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNode(
+                hasContentDescription("Close")
+                    and hasAnySibling(hasText("Learn about new logins")),
+            )
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when learn about logins card is showing, clicking the call to action sends StartLearnAboutLogins action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins,
+            )
+        }
+    }
+
     //region Helper functions
 
     private fun updateLoginType(
@@ -3685,6 +3781,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -3696,6 +3793,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -3707,6 +3805,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -3718,6 +3817,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         @Suppress("MaxLineLength")
@@ -3740,6 +3840,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -3751,6 +3852,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -3762,6 +3864,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            shouldShowCoachMarkTour = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(
