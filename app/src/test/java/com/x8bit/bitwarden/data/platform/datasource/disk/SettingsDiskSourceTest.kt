@@ -1253,4 +1253,34 @@ class SettingsDiskSourceTest {
         settingsDiskSource.storeCreateSendActionCount(count = 1)
         assertEquals(1, fakeSharedPreferences.getInt(createActionCountKey, 0))
     }
+
+    @Test
+    fun `getHasSeenAddLoginCoachMark should pull value from SharedPreferences`() {
+        val hasSeenAddLoginCoachMarkKey = "bwPreferencesStorage:hasSeenAddLoginCoachMark"
+        fakeSharedPreferences.edit { putBoolean(hasSeenAddLoginCoachMarkKey, true) }
+        assertTrue(settingsDiskSource.getHasSeenAddLoginCoachMark() == true)
+    }
+
+    @Test
+    fun `storeHasSeenAddLoginCoachMark should update SharedPreferences`() {
+        val hasSeenAddLoginCoachMarkKey = "bwPreferencesStorage:hasSeenAddLoginCoachMark"
+        settingsDiskSource.storeHasSeenAddLoginCoachMark(hasSeen = true)
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                key = hasSeenAddLoginCoachMarkKey,
+                defaultValue = false,
+            ),
+        )
+    }
+
+    @Test
+    fun `getHasSeenAddLoginCoachMarkFlow emits changes to stored value`() = runTest {
+        settingsDiskSource.getHasSeenAddLoginCoachMarkFlow().test {
+            assertNull(awaitItem())
+            settingsDiskSource.storeHasSeenAddLoginCoachMark(hasSeen = false)
+            assertFalse(awaitItem() ?: true)
+            settingsDiskSource.storeHasSeenAddLoginCoachMark(hasSeen = true)
+            assertTrue(awaitItem() ?: false)
+        }
+    }
 }

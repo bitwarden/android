@@ -15,10 +15,13 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialReques
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
@@ -63,6 +66,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -103,6 +107,8 @@ class VaultAddEditViewModel @Inject constructor(
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -170,6 +176,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
                 supportedItemTypes = getSupportedItemTypeOptions(),
+                hasSeenLearnAboutLoginsCard = false,
             )
         },
 ) {
@@ -208,6 +215,20 @@ class VaultAddEditViewModel @Inject constructor(
                     it.viewState is VaultAddEditState.ViewState.Content
                 }
                 VaultAddEditAction.Internal.GeneratorResultReceive(generatorResult = result)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        firstTimeActionManager
+            .hasSeenAddLoginCoachMarkFlow
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(key = FlagKey.OnboardingFlow),
+            ) { hasSeenTour, onboardFeatureFlag ->
+                // The result of this will hide the card if the tour has been shown or if the
+                // onboarding flow feature is off.
+                VaultAddEditAction.Internal.HasSeenAddLoginCoachMarkValueChangeReceive(
+                    newValue = hasSeenTour || !onboardFeatureFlag,
+                )
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -967,7 +988,24 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick -> {
                 handleLoginClearFido2Credential()
             }
+
+            VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed -> {
+                handleLearnAboutLoginsDismissed()
+            }
+
+            VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins -> {
+                handleStartLearnAboutLogins()
+            }
         }
+    }
+
+    private fun handleStartLearnAboutLogins() {
+        firstTimeActionManager.hasSeenAddLoginCoachMarkTour()
+        sendEvent(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+    }
+
+    private fun handleLearnAboutLoginsDismissed() {
+        firstTimeActionManager.hasSeenAddLoginCoachMarkTour()
     }
 
     private fun handleLoginUsernameTextInputChange(
@@ -1445,6 +1483,20 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.ValidateFido2PinResultReceive -> {
                 handleValidateFido2PinResultReceive(action)
             }
+
+            is VaultAddEditAction.Internal.HasSeenAddLoginCoachMarkValueChangeReceive -> {
+                handleHasSeenAddLoginCoachMarkValueChange(action)
+            }
+        }
+    }
+
+    private fun handleHasSeenAddLoginCoachMarkValueChange(
+        action: VaultAddEditAction.Internal.HasSeenAddLoginCoachMarkValueChangeReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                hasSeenLearnAboutLoginsCard = action.newValue,
+            )
         }
     }
 
@@ -1992,6 +2044,7 @@ data class VaultAddEditState(
     // Internal
     val shouldExitOnSave: Boolean = false,
     val totpData: TotpData? = null,
+    private val hasSeenLearnAboutLoginsCard: Boolean,
 ) : Parcelable {
 
     /**
@@ -2039,6 +2092,11 @@ data class VaultAddEditState(
             ?.common
             ?.canAssignToCollections
             ?: false
+
+    val shouldShowLearnAboutNewLogins: Boolean
+        get() = !hasSeenLearnAboutLoginsCard &&
+            ((viewState as? ViewState.Content)?.type is ViewState.Content.ItemType.Login) &&
+            isAddItemMode
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
@@ -2850,6 +2908,16 @@ sealed class VaultAddEditAction {
              * Represents the action to clear the fido2 credential.
              */
             data object ClearFido2CredentialClick : LoginType()
+
+            /**
+             * User has clicked the call to action on the learn about logins card.
+             */
+            data object StartLearnAboutLogins : LoginType()
+
+            /**
+             * User has dismissed the learn about logins card.
+             */
+            data object LearnAboutLoginsDismissed : LoginType()
         }
 
         /**
@@ -3137,6 +3205,13 @@ sealed class VaultAddEditAction {
          */
         data class ValidateFido2PinResultReceive(
             val result: ValidatePinResult,
+        ) : Internal()
+
+        /**
+         * The value for the hasSeenAddLoginCoachMark has changed.
+         */
+        data class HasSeenAddLoginCoachMarkValueChangeReceive(
+            val newValue: Boolean,
         ) : Internal()
     }
 }

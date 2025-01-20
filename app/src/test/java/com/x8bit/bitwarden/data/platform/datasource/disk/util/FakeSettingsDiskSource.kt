@@ -40,6 +40,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableHasUserLoggedInOrCreatedAccount =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableHasSeenAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
+
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
@@ -70,6 +72,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var addCipherActionCount: Int? = null
     private var generatedActionCount: Int? = null
     private var createSendActionCount: Int? = null
+    private var hasSeenAddLoginCoachMark: Boolean? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -389,6 +392,20 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun storeCreateSendActionCount(count: Int?) {
         createSendActionCount = count
     }
+
+    override fun getHasSeenAddLoginCoachMark(): Boolean? {
+        return hasSeenAddLoginCoachMark
+    }
+
+    override fun storeHasSeenAddLoginCoachMark(hasSeen: Boolean?) {
+        hasSeenAddLoginCoachMark = hasSeen
+        mutableHasSeenAddLoginCoachMarkFlow.tryEmit(hasSeen)
+    }
+
+    override fun getHasSeenAddLoginCoachMarkFlow(): Flow<Boolean?> =
+        mutableHasSeenAddLoginCoachMarkFlow.onSubscription {
+            emit(getHasSeenAddLoginCoachMark())
+        }
 
     //region Private helper functions
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {

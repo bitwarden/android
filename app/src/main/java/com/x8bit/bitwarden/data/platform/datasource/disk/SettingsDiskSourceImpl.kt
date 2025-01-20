@@ -39,6 +39,7 @@ private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 private const val ADD_ACTION_COUNT = "addActionCount"
 private const val COPY_ACTION_COUNT = "copyActionCount"
 private const val CREATE_ACTION_COUNT = "createActionCount"
+private const val HAS_SEEN_ADD_LOGIN_COACH_MARK = "hasSeenAddLoginCoachMark"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -77,6 +78,8 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableHasSeenAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -185,6 +188,7 @@ class SettingsDiskSourceImpl(
         // - screen capture allowed
         // - show autofill setting badge
         // - show unlock setting badge
+        // - has seen add login coach mark
     }
 
     override fun getAccountBiometricIntegrityValidity(
@@ -485,6 +489,22 @@ class SettingsDiskSourceImpl(
             value = count,
         )
     }
+
+    override fun getHasSeenAddLoginCoachMark(): Boolean? =
+        getBoolean(key = HAS_SEEN_ADD_LOGIN_COACH_MARK)
+
+    override fun storeHasSeenAddLoginCoachMark(hasSeen: Boolean?) {
+        putBoolean(
+            key = HAS_SEEN_ADD_LOGIN_COACH_MARK,
+            value = hasSeen,
+        )
+        mutableHasSeenAddLoginCoachMarkFlow.tryEmit(hasSeen)
+    }
+
+    override fun getHasSeenAddLoginCoachMarkFlow(): Flow<Boolean?> =
+        mutableHasSeenAddLoginCoachMarkFlow.onSubscription {
+            emit(getBoolean(key = HAS_SEEN_ADD_LOGIN_COACH_MARK))
+        }
 
     private fun getMutableLastSyncFlow(
         userId: String,

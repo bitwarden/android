@@ -42,6 +42,8 @@ data class VaultAddEditLoginTypeHandlers(
     val onAddNewUriClick: () -> Unit,
     val onPasswordVisibilityChange: (Boolean) -> Unit,
     val onClearFido2CredentialClick: () -> Unit,
+    val onStartLoginCoachMarkTour: () -> Unit,
+    val onDismissLearnAboutLoginsCard: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -121,6 +123,16 @@ data class VaultAddEditLoginTypeHandlers(
                 onClearFido2CredentialClick = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick,
+                    )
+                },
+                onStartLoginCoachMarkTour = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins,
+                    )
+                },
+                onDismissLearnAboutLoginsCard = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed,
                     )
                 },
             )

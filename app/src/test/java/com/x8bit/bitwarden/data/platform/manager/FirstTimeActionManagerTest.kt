@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
@@ -295,6 +296,23 @@ class FirstTimeActionManagerTest {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `hasSeenAddLoginCoachMarkFlow updates when disk source updates`() = runTest {
+        firstTimeActionManager.hasSeenAddLoginCoachMarkFlow.test {
+            // null will be mapped to false
+            assertFalse(awaitItem())
+            fakeSettingsDiskSource.storeHasSeenAddLoginCoachMark(hasSeen = true)
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
+    fun `hasSeenAddLoginCoachMarkTour sets the value to true in the disk source`() {
+        assertNull(fakeSettingsDiskSource.getHasSeenAddLoginCoachMark())
+        firstTimeActionManager.hasSeenAddLoginCoachMarkTour()
+        assertTrue(fakeSettingsDiskSource.getHasSeenAddLoginCoachMark() == true)
     }
 }
 

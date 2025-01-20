@@ -361,4 +361,19 @@ interface SettingsDiskSource {
      * Stores the given [count] completed create send actions for the device.
      */
     fun storeCreateSendActionCount(count: Int?)
+
+    /**
+     * Gets the Boolean value of if the Add Login CoachMark tour has been interacted with.
+     */
+    fun getHasSeenAddLoginCoachMark(): Boolean?
+
+    /**
+     * Stores a value for if the Add Login CoachMark tour has been interacted with
+     */
+    fun storeHasSeenAddLoginCoachMark(hasSeen: Boolean?)
+
+    /**
+     * Returns an [Flow] to observe updates to the "HasSeenAddLoginCoachMark" value.
+     */
+    fun getHasSeenAddLoginCoachMarkFlow(): Flow<Boolean?>
 }

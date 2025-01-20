@@ -384,6 +384,7 @@ fun VaultAddEditScreen(
                             coachMarkState.coachingComplete(onComplete = scrollBackToTop)
                         },
                         onCoachMarkDismissed = scrollBackToTop,
+                        shouldShowLearnAboutLoginsCard = state.shouldShowLearnAboutNewLogins,
                         modifier = Modifier
                             .imePadding()
                             .fillMaxSize(),
