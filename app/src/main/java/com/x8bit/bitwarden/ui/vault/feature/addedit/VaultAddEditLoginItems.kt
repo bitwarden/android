@@ -24,8 +24,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
+import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -60,7 +60,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     onPreviousCoachMark: () -> Unit,
     onCoachMarkTourComplete: () -> Unit,
     onCoachMarkDismissed: () -> Unit,
-) = coachMarkScope.apply {
+) = coachMarkScope.run {
     item {
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextField(

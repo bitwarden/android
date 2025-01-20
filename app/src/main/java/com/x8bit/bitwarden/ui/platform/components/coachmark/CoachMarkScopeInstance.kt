@@ -2,20 +2,13 @@ package com.x8bit.bitwarden.ui.platform.components.coachmark
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.RichTooltip
-import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.TooltipScope
 import androidx.compose.material3.TooltipState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
@@ -29,20 +22,18 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTip
+import okhttp3.internal.toImmutableList
 import org.jetbrains.annotations.VisibleForTesting
 
 /**
@@ -133,7 +124,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         itemContent: @Composable (item: R, cardStyle: CardStyle) -> Unit,
     ) {
         val hasLeadingContent = (leadingStaticContent != null)
-        val topCardAlreadyExists = hasLeadingContent && leadingContentIsTopCard
+        var topCardAlreadyExists = hasLeadingContent && leadingContentIsTopCard
         val bottomCardAlreadyExists = (trailingStaticContent != null) && trailingContentIsBottomCard
         item(key = key) {
             this@CoachMarkScopeInstance.CoachMarkHighlightInternal(
@@ -151,21 +142,24 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                     leadingStaticContent?.invoke(this) ?: run {
                         if (items.isNotEmpty()) {
                             itemContent(
-                                items[0],
+                                items.first(),
                                 items.toCoachMarkListItemCardStyle(
                                     index = 0,
                                     topCardAlreadyExists = false,
                                     bottomCardAlreadyExists = bottomCardAlreadyExists,
                                 ),
                             )
+                            topCardAlreadyExists = true
                         }
                     }
                 }
             }
         }
-        itemsIndexed(items) { index, item ->
-            // if there is no leading content we already added the first item.
-            if (!hasLeadingContent && index == 0) return@itemsIndexed
+        itemsIndexed(
+            items
+                .drop(if (hasLeadingContent) 0 else 1)
+                .toImmutableList(),
+        ) { index, item ->
             Box(
                 modifier = modifier.calculateBoundsAndAddForKey(key),
             ) {
@@ -209,7 +203,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                 spacingBetweenTooltipAndAnchor = 12.dp,
             ),
             tooltip = {
-                CoachMarkToolTip(
+                BitwardenToolTip(
                     title = title,
                     description = description,
                     onDismiss = {
@@ -218,6 +212,9 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                     },
                     leftAction = leftAction,
                     rightAction = rightAction,
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .semantics { isCoachMarkToolTip = true },
                 )
             },
             enableUserInput = false,
@@ -241,75 +238,21 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         key: T,
         isFirstItem: Boolean = false,
     ): Modifier = composed {
-        var bounds by remember {
-            mutableStateOf(Rect.Zero)
+        var bounds: Rect? by remember {
+            mutableStateOf(null)
         }
         LaunchedEffect(bounds) {
-            if (bounds != Rect.Zero) {
+            bounds?.let {
                 coachMarkState.addToExistingBounds(
                     key = key,
                     isFirstItem = isFirstItem,
-                    additionalBounds = bounds,
+                    additionalBounds = it,
                 )
             }
         }
         this.onGloballyPositioned {
             bounds = it.boundsInRoot()
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TooltipScope.CoachMarkToolTip(
-    title: String,
-    description: String,
-    onDismiss: (() -> Unit),
-    leftAction: (@Composable RowScope.() -> Unit)?,
-    rightAction: (@Composable RowScope.() -> Unit)?,
-) {
-    RichTooltip(
-        modifier = Modifier
-            .padding(horizontal = 4.dp)
-            .semantics { isCoachMarkToolTip = true },
-        caretSize = DpSize(width = 24.dp, height = 16.dp),
-        shape = BitwardenTheme.shapes.coachmark,
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = title,
-                    style = BitwardenTheme.typography.eyebrowMedium,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                BitwardenStandardIconButton(
-                    painter = rememberVectorPainter(R.drawable.ic_close),
-                    contentDescription = stringResource(R.string.close),
-                    onClick = onDismiss,
-                    modifier = Modifier.size(16.dp),
-                )
-            }
-        },
-        action = {
-            Row(
-                Modifier.fillMaxWidth(),
-            ) {
-                leftAction?.invoke(this)
-                Spacer(modifier = Modifier.weight(1f))
-                rightAction?.invoke(this)
-            }
-        },
-        colors = TooltipDefaults.richTooltipColors(
-            containerColor = BitwardenTheme.colorScheme.background.secondary,
-        ),
-    ) {
-        Text(
-            text = description,
-            style = BitwardenTheme.typography.bodyMedium,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
     }
 }
 
