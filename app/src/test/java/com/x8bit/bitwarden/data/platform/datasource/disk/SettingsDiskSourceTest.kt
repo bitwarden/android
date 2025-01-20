@@ -1270,4 +1270,24 @@ class SettingsDiskSourceTest {
             },
         )
     }
+
+    @Test
+    fun `storeAppResumeScreen should save null when passed`() {
+        val mockUserId = "mockUserId"
+        val resumeScreenKey = "bwPreferencesStorage:resumeScreen_$mockUserId"
+        val expectedData = AppResumeScreenData.GeneratorScreen
+            settingsDiskSource.storeAppResumeScreen(mockUserId, expectedData)
+        assertEquals(
+            expectedData,
+            fakeSharedPreferences.getString(resumeScreenKey, "")?.let {
+                Json.decodeFromStringOrNull<AppResumeScreenData>(it)
+            },
+        )
+        settingsDiskSource.storeAppResumeScreen(mockUserId, null)
+        assertNull(
+            fakeSharedPreferences.getString(resumeScreenKey, "")?.let {
+                Json.decodeFromStringOrNull<AppResumeScreenData>(it)
+            },
+        )
+    }
 }

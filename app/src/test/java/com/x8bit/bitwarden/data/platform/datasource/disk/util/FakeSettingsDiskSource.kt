@@ -385,7 +385,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     }
 
     override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
-        storedAppResumeScreenData[userId] = Json.encodeToString(screenData)
+        storedAppResumeScreenData[userId] = screenData.let { Json.encodeToString(it) }
     }
 
     override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
