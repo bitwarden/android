@@ -111,7 +111,7 @@ fun GeneratorScreen(
                 viewModel.trySendAction(GeneratorAction.LifecycleResume)
             }
             Lifecycle.Event.ON_STOP -> {
-                viewModel.trySendAction(GeneratorAction.LifecyclePause)
+                viewModel.trySendAction(GeneratorAction.LifecycleStop)
             }
             else -> Unit
         }

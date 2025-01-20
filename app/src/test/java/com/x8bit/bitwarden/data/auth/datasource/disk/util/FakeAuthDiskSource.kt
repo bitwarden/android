@@ -317,7 +317,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         return storedNewDeviceNoticeState[userId] ?: NewDeviceNoticeState(
             displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
             lastSeenDate = null,
-            )
+        )
     }
 
     override fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?) {
@@ -328,7 +328,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         return storedLastLockTimestampState[userId] ?: Long.MIN_VALUE
     }
 
-    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant) {
+    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {
         storedLastLockTimestampState[userId] = Instant.now().toEpochMilli()
     }
 

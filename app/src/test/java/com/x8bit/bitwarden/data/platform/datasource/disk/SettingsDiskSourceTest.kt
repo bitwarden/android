@@ -1265,8 +1265,7 @@ class SettingsDiskSourceTest {
         settingsDiskSource.storeAppResumeScreen(mockUserId, expectedData)
         assertEquals(
             expectedData,
-            fakeSharedPreferences.getString(resumeScreenKey, "")?.let
-            {
+            fakeSharedPreferences.getString(resumeScreenKey, "")?.let {
                 Json.decodeFromStringOrNull<AppResumeScreenData>(it)
             },
         )

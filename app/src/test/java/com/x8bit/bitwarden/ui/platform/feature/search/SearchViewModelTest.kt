@@ -1452,9 +1452,9 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LifecyclePausedAction should call AppResumeManager clearResumeScreen`() {
+    fun `LifecycleStop Action should call AppResumeManager clearResumeScreen`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(SearchAction.LifecyclePause)
+        viewModel.trySendAction(SearchAction.LifecycleStop)
         verify(exactly = 1) {
             appResumeManager.clearResumeScreen()
         }

@@ -357,10 +357,10 @@ interface AuthDiskSource {
     /**
      * Gets the last lock timestamp for the given [userId].
      */
-    fun getLastLockTimestamp(userId: String): Long
+    fun getLastLockTimestamp(userId: String): Long?
 
     /**
      * Stores the last lock timestamp for the given [userId].
      */
-    fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant)
+    fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?)
 }

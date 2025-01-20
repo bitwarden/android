@@ -27,7 +27,6 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -1356,9 +1355,9 @@ class AuthDiskSourceTest {
     }
 
     @Test
-    fun `getLastLockTimestamp should pull default from SharedPreferences if there is no data`() {
+    fun `getLastLockTimestamp should pull null from SharedPreferences if there is no data`() {
         val mockUserId = "mockUserId"
-        val expectedState = Long.MIN_VALUE
+        val expectedState = null
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
         assertEquals(
             expectedState,
@@ -1377,8 +1376,20 @@ class AuthDiskSourceTest {
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
         assertEquals(
             expectedState,
-            Instant.ofEpochMilli(actual),
+            Instant.ofEpochMilli(actual ?: Long.MIN_VALUE),
         )
+    }
+
+    @Test
+    fun `setLastLockTimestamp should clear SharedPreferences when null is passed`() {
+        val mockUserId = "mockUserId"
+        val expectedState = null
+        authDiskSource.storeLastLockTimestamp(
+            userId = mockUserId,
+            expectedState,
+        )
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertNull(actual)
     }
 }
 

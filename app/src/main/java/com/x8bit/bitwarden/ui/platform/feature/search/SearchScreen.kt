@@ -156,7 +156,7 @@ private fun LivecycleEventEffect(viewModel: SearchViewModel) {
             }
 
             Lifecycle.Event.ON_STOP -> {
-                viewModel.trySendAction(SearchAction.LifecyclePause)
+                viewModel.trySendAction(SearchAction.LifecycleStop)
             }
 
             else -> Unit

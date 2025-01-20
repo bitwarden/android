@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
 
@@ -486,7 +485,10 @@ class SettingsDiskSourceImpl(
     }
 
     override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
-        putString(RESUME_SCREEN.appendIdentifier(userId), json.encodeToString(screenData))
+        putString(
+            key = RESUME_SCREEN.appendIdentifier(userId),
+            value = screenData?.let { json.encodeToString(it) },
+        )
     }
 
     override fun getAppResumeScreen(userId: String): AppResumeScreenData? =

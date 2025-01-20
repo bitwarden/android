@@ -79,6 +79,7 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
+        clock: Clock,
     ): VaultLockManager =
         VaultLockManagerImpl(
             authDiskSource = authDiskSource,
@@ -89,6 +90,7 @@ object VaultManagerModule {
             userLogoutManager = userLogoutManager,
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,
+            clock = clock,
         )
 
     @Provides

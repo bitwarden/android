@@ -496,9 +496,9 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LifecyclePausedAction should call AppResumeManager clearResumeScreen`() {
+    fun `LifecycleStop Action should call AppResumeManager clearResumeScreen`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(VerificationCodeAction.LifecyclePause)
+        viewModel.trySendAction(VerificationCodeAction.LifecycleStop)
         verify(exactly = 1) {
             appResumeManager.clearResumeScreen()
         }

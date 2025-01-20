@@ -340,12 +340,14 @@ object PlatformManagerModule {
         authDiskSource: AuthDiskSource,
         authRepository: AuthRepository,
         vaultLockManager: VaultLockManager,
+        clock: Clock,
     ): AppResumeManager {
         return AppResumeManagerImpl(
-            settingsDiskSource,
-            authDiskSource,
-            authRepository,
-            vaultLockManager,
+            settingsDiskSource = settingsDiskSource,
+            authDiskSource = authDiskSource,
+            authRepository = authRepository,
+            vaultLockManager = vaultLockManager,
+            clock = clock,
         )
     }
 }

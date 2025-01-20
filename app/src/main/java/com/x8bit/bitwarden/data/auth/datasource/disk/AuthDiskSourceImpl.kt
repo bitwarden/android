@@ -504,14 +504,14 @@ class AuthDiskSourceImpl(
         )
     }
 
-    override fun getLastLockTimestamp(userId: String): Long {
-        return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId)) ?: Long.MIN_VALUE
+    override fun getLastLockTimestamp(userId: String): Long? {
+        return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId))
     }
 
-    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant) {
+    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {
         putLong(
             key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId),
-            value = lastLockTimestamp.toEpochMilli(),
+            value = lastLockTimestamp?.toEpochMilli(),
         )
     }
 

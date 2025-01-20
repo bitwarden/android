@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import java.time.Clock
 import java.time.Instant
 
 /**
@@ -16,6 +17,7 @@ class AppResumeManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val authRepository: AuthRepository,
     private val vaultLockManager: VaultLockManager,
+    private val clock: Clock,
 ) : AppResumeManager {
     private companion object {
         // 5 minutes
@@ -38,38 +40,39 @@ class AppResumeManagerImpl(
     }
 
     override fun getResumeSpecialCircumstance(): SpecialCircumstance? {
-        val timeNowMinus5Min = Instant.now().minusSeconds(UNLOCK_NAVIGATION_TIME)
+        val userId = authRepository.activeUserId ?: return null
+        val timeNowMinus5Min = clock.instant().minusSeconds(UNLOCK_NAVIGATION_TIME)
         val lastLockTimestamp = Instant.ofEpochMilli(
             authDiskSource.getLastLockTimestamp(
-                userId = authRepository.activeUserId ?: "",
-            ),
+                userId = userId,
+            ) ?: Long.MIN_VALUE,
         )
         if (timeNowMinus5Min.isAfter(lastLockTimestamp)) {
+            clearResumeScreen()
             return null
         }
         return when (val resumeScreenData = getResumeScreen()) {
             AppResumeScreenData.GeneratorScreen -> SpecialCircumstance.GeneratorShortcut
             AppResumeScreenData.SendScreen -> SpecialCircumstance.SendShortcut
             is AppResumeScreenData.SearchScreen -> SpecialCircumstance.SearchShortcut(
-                resumeScreenData.searchTerm,
+                searchTerm = resumeScreenData.searchTerm,
             )
 
-            AppResumeScreenData.VerificationCodeScreen ->
+            AppResumeScreenData.VerificationCodeScreen -> {
                 SpecialCircumstance.VerificationCodeShortcut
+            }
 
             else -> null
         }
     }
 
-    @Suppress("MagicNumber")
     override fun clearResumeScreen() {
-        if (vaultLockManager.isVaultUnlocked(userId = authRepository.activeUserId ?: "")) {
-            authRepository.activeUserId?.let {
+        val userId = authRepository.activeUserId ?: return
+        if (vaultLockManager.isVaultUnlocked(userId = userId)) {
                 settingsDiskSource.storeAppResumeScreen(
-                    userId = it,
+                    userId = userId,
                     screenData = null,
                 )
-            }
         }
     }
 }

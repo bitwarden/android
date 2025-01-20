@@ -14,7 +14,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 class AppResumeManagerTest {
 
@@ -29,12 +31,17 @@ class AppResumeManagerTest {
         every { isVaultUnlocked(USER_ID) } returns true
     }
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
+
     private val appResumeManager = AppResumeManagerImpl(
         settingsDiskSource = fakeSettingsDiskSource,
         authDiskSource = authDiskSource,
         authRepository = authRepository,
         vaultLockManager = vaultLockManager,
-
+        clock = fixedClock,
     )
 
     private val json = PlatformNetworkModule.providesJson()

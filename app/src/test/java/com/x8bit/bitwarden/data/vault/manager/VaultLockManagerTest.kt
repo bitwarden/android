@@ -49,6 +49,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -87,6 +90,11 @@ class VaultLockManagerTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val fakeDispatcherManager = FakeDispatcherManager(unconfined = testDispatcher)
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2021-01-01T00:00:00Z"),
+        ZoneOffset.UTC,
+    )
+
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         authSdkSource = authSdkSource,
@@ -96,6 +104,7 @@ class VaultLockManagerTest {
         userLogoutManager = userLogoutManager,
         trustedDeviceManager = trustedDeviceManager,
         dispatcherManager = fakeDispatcherManager,
+        clock = fixedClock,
     )
 
     @Test

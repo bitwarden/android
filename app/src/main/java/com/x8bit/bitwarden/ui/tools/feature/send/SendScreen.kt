@@ -72,7 +72,7 @@ fun SendScreen(
                 viewModel.trySendAction(SendAction.LifecycleResume)
             }
             Lifecycle.Event.ON_STOP -> {
-                viewModel.trySendAction(SendAction.LifecyclePause)
+                viewModel.trySendAction(SendAction.LifecycleStop)
             }
             else -> Unit
         }

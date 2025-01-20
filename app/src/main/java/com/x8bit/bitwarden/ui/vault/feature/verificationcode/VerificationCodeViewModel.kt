@@ -99,7 +99,7 @@ class VerificationCodeViewModel @Inject constructor(
             is VerificationCodeAction.SearchIconClick -> handleSearchIconClick()
             is VerificationCodeAction.SyncClick -> handleSyncClick()
             is VerificationCodeAction.LifecycleResume -> handleOnResumed()
-            is VerificationCodeAction.LifecyclePause -> handleOnPaused()
+            is VerificationCodeAction.LifecycleStop -> handleOnStopped()
             is VerificationCodeAction.Internal -> handleInternalAction(action)
         }
     }
@@ -344,7 +344,7 @@ class VerificationCodeViewModel @Inject constructor(
         )
     }
 
-    private fun handleOnPaused() {
+    private fun handleOnStopped() {
         appResumeManager.clearResumeScreen()
     }
 }
@@ -514,9 +514,9 @@ sealed class VerificationCodeAction {
     data object LifecycleResume : VerificationCodeAction()
 
     /**
-     * Indicates the UI has been entered a paused lifecycle state.
+     * Indicates the UI has been entered a stopped lifecycle state.
      */
-    data object LifecyclePause : VerificationCodeAction()
+    data object LifecycleStop : VerificationCodeAction()
 
     /**
      * Actions for internal use by the ViewModel.

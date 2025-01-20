@@ -91,11 +91,12 @@ class SearchViewModel @Inject constructor(
             val searchType = SearchArgs(savedStateHandle).type
             val userState = requireNotNull(authRepo.userStateFlow.value)
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
-            var searchTerm: String = ""
-
-            if (specialCircumstance is SpecialCircumstance.SearchShortcut) {
-                searchTerm = specialCircumstance.searchTerm
-                specialCircumstanceManager.specialCircumstance = null
+            val searchTerm = if (specialCircumstance is SpecialCircumstance.SearchShortcut) {
+                specialCircumstance
+                    .searchTerm
+                    .also { specialCircumstanceManager.specialCircumstance = null }
+            } else {
+                ""
             }
 
             SearchState(
@@ -153,7 +154,7 @@ class SearchViewModel @Inject constructor(
             is SearchAction.VaultFilterSelect -> handleVaultFilterSelect(action)
             is SearchAction.OverflowOptionClick -> handleOverflowItemClick(action)
             is SearchAction.LifecycleResume -> handleOnResumed()
-            is SearchAction.LifecyclePause -> handleOnPaused()
+            is SearchAction.LifecycleStop -> handleOnPaused()
             is SearchAction.Internal -> handleInternalAction(action)
         }
     }
@@ -1094,7 +1095,7 @@ sealed class SearchAction {
     /**
      * Indicates the UI has been entered a paused lifecycle state.
      */
-    data object LifecyclePause : SearchAction()
+    data object LifecycleStop : SearchAction()
 
     /**
      * Models actions that the [SearchViewModel] itself might send.

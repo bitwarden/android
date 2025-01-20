@@ -97,7 +97,7 @@ class SendViewModel @Inject constructor(
         SendAction.DismissDialog -> handleDismissDialog()
         SendAction.RefreshPull -> handleRefreshPull()
         SendAction.LifecycleResume -> handleOnResumed()
-        SendAction.LifecyclePause -> handleOnPaused()
+        SendAction.LifecycleStop -> handleOnStopped()
         is SendAction.Internal -> handleInternalAction(action)
     }
 
@@ -322,7 +322,7 @@ class SendViewModel @Inject constructor(
         )
     }
 
-    private fun handleOnPaused() {
+    private fun handleOnStopped() {
         appResumeManager.clearResumeScreen()
     }
 }
@@ -543,9 +543,9 @@ sealed class SendAction {
     data object LifecycleResume : SendAction()
 
     /**
-     * Indicates the UI has been entered a paused lifecycle state.
+     * Indicates the UI has been entered a stopped lifecycle state.
      */
-    data object LifecyclePause : SendAction()
+    data object LifecycleStop : SendAction()
 
     /**
      * Models actions that the [SendViewModel] itself will send.

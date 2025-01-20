@@ -50,7 +50,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
 /**
@@ -71,6 +71,7 @@ class VaultLockManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     dispatcherManager: DispatcherManager,
+    private val clock: Clock,
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
@@ -271,7 +272,7 @@ class VaultLockManagerImpl(
             mutableVaultStateEventSharedFlow.tryEmit(VaultStateEvent.Locked(userId = userId))
             authDiskSource.storeLastLockTimestamp(
                 userId = userId,
-                lastLockTimestamp = Instant.now(),
+                lastLockTimestamp = clock.instant(),
             )
         }
     }

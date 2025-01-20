@@ -74,7 +74,7 @@ fun VerificationCodeScreen(
             }
 
             Lifecycle.Event.ON_STOP -> {
-                viewModel.trySendAction(VerificationCodeAction.LifecyclePause)
+                viewModel.trySendAction(VerificationCodeAction.LifecycleStop)
             }
 
             else -> Unit
