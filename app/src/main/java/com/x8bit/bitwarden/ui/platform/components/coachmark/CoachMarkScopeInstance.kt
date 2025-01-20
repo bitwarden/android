@@ -126,6 +126,9 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         val hasLeadingContent = (leadingStaticContent != null)
         var topCardAlreadyExists = hasLeadingContent && leadingContentIsTopCard
         val bottomCardAlreadyExists = (trailingStaticContent != null) && trailingContentIsBottomCard
+        val itemsAdjusted = items
+            .drop(if (hasLeadingContent) 0 else 1)
+            .toImmutableList()
         item(key = key) {
             this@CoachMarkScopeInstance.CoachMarkHighlightInternal(
                 key = key,
@@ -156,14 +159,12 @@ class CoachMarkScopeInstance<T : Enum<T>>(
             }
         }
         itemsIndexed(
-            items
-                .drop(if (hasLeadingContent) 0 else 1)
-                .toImmutableList(),
+            itemsAdjusted,
         ) { index, item ->
             Box(
                 modifier = modifier.calculateBoundsAndAddForKey(key),
             ) {
-                val cardStyle = items.toCoachMarkListItemCardStyle(
+                val cardStyle = itemsAdjusted.toCoachMarkListItemCardStyle(
                     index = index,
                     topCardAlreadyExists = topCardAlreadyExists,
                     bottomCardAlreadyExists = bottomCardAlreadyExists,
