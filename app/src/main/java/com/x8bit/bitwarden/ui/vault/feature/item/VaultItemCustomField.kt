@@ -93,8 +93,8 @@ fun CustomField(
                 readOnly = true,
                 singleLine = false,
                 cardStyle = cardStyle,
-                modifier = modifier.testTag("ViewCustomLinkedField"),
                 textFieldTestTag = "CustomFieldDropdown",
+                modifier = modifier.testTag("ViewCustomLinkedField"),
             )
         }
 
