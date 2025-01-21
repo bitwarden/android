@@ -128,6 +128,9 @@ open class CoachMarkState<T : Enum<T>>(
         val previousHighlight = getCurrentHighlight()
         previousHighlight?.toolTipState?.cleanUp()
         val index = orderedList.indexOf(previousHighlight?.key)
+        // We return early here if the the previous highlight does exist but is somehow not
+        // present in the list. If the previous highlight is null we resolve that the next
+        // coach mark to show is the first item in the orderedList.
         if (index < 0 && previousHighlight != null) return
         mutableCurrentHighlight.value = orderedList.getOrNull(index + 1)
         mutableCurrentHighlight.value?.let {
