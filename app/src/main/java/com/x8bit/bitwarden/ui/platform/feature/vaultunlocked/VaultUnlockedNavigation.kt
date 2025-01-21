@@ -241,6 +241,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         newDeviceNoticeTwoFactorDestination(
             onNavigateBackToVault = { navController.navigateToVaultUnlockedGraph() },
+            onNavigateBack = { navController.popBackStack() },
         )
     }
 }

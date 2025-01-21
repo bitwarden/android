@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -35,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
@@ -563,6 +565,21 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `syncing dialog should be displayed according to state`() {
+        composeTestRule.assertNoPopupExists()
+        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Syncing)
+        }
+
+        composeTestRule
+            .onNodeWithText("Syncing...")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isPopup()))
+    }
+
+    @Test
     fun `Error screen should be shown according to the state`() {
         val errorMessage = "Error message"
         val tryAgainButtonText = "Try again"
@@ -894,7 +911,7 @@ class VaultScreenTest : BaseComposeTest() {
             .assertTextEquals(collectionsHeader)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(collectionName)
+            .onNodeWithTextAfterScroll(collectionName)
             .assertTextEquals(collectionName, collectionCount.toString())
     }
 

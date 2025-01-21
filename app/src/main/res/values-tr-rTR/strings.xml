@@ -934,9 +934,9 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Kullanıcı doğrulanamadığı için geçiş anahtarı işlemi başarısız oldu.</string>
   <string name="user_verification_direction">Kullanıcı doğrulama</string>
-  <string name="creating_on">Creating on:</string>
+  <string name="creating_on">Oluşturulacak konum:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Hesabınızı oluşturmaya devam etmek için %1$s adresine gönderdiğimiz e-postadaki yönergeleri uygulayın.</string>
   <string name="we_sent_an_email_to">%1$s adresine bir e-posta gönderdik.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Devam etmeniz halinde Hizmet Şartları ve Gizlilik Politikası\'nı kabul etmiş olursunuz</string>
@@ -961,7 +961,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="remove_passkey">Geçiş anahtarını kaldır</string>
   <string name="passkey_removed">Geçiş anahtarı kaldırıldı</string>
   <string name="what_makes_a_password_strong">Bir parola nasıl güçlü olur?</string>
-  <string name="a_secure_memorable_password">A secure, memorable password</string>
+  <string name="a_secure_memorable_password">Güvenli, ezberlenebilir bir parola</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">The longer your password, the more difficult it is to hack. The minimum for account creation is 12 characters but if you do 14 characters, the time to crack your password would be centuries!</string>
   <string name="the_strongest_passwords_are_usually">The strongest passwords are usually:</string>
   <string name="twelve_or_more_characters">12 veya daha fazla karakter</string>
@@ -1094,10 +1094,10 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="biometrics_no_longer_supported">Cihazınızın biyometrisi en son güvenlik gereksinimlerini karşılamadığı için oturumunuz kapatıldı. Ayarları güncellemek için yeniden oturum açın veya erişim için yöneticinize başvurun.</string>
   <string name="cxp_import">CXP Import</string>
   <string name="cxp_export">CXP Export</string>
-  <string name="set_up_two_step_login">Set up two-step login</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">You can set up two-step login as an alternative way to protect your account or change your email to one you can access.</string>
-  <string name="turn_on_two_step_login">Turn on two-step login</string>
-  <string name="change_account_email">Change account email</string>
+  <string name="set_up_two_step_login">İki adımlı girişi ayarlayın</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Hesabınızı korumanın alternatif bir yolu olarak iki adımlı girişi etkinleştirebilirsiniz. Aksi halde e-posta adresinizin doğru olduğundan emin olmalısınız.</string>
+  <string name="turn_on_two_step_login">İki adımlı girişi etkinleştir</string>
+  <string name="change_account_email">Hesap e-postasını değiştir</string>
   <string name="choose_three_or_four_random_words">Choose three or four random words</string>
   <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
   <string name="combine_those_words_together">Combine those words together</string>
@@ -1111,4 +1111,6 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copy private key</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Hesap e-postanızı Bitwarden web uygulamasında değiştirebilirsiniz.</string>
+  <string name="login_credentials">Hesap Bilgileri</string>
+  <string name="autofill_options">Otomatik Doldurma Seçenekleri</string>
 </resources>

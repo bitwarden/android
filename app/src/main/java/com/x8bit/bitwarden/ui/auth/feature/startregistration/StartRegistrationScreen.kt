@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -177,6 +178,7 @@ fun StartRegistrationScreen(
                 isNewOnboardingUiEnabled = state.showNewOnboardingUi,
                 handler = handler,
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -195,7 +197,7 @@ private fun StartRegistrationContent(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         if (isNewOnboardingUiEnabled) {
             Image(
                 painter = rememberVectorPainter(id = R.drawable.vault),
@@ -210,50 +212,50 @@ private fun StartRegistrationContent(
             label = stringResource(id = R.string.name),
             value = nameInput,
             onValueChange = handler.onNameInputChange,
+            textFieldTestTag = "NameEntry",
+            cardStyle = CardStyle.Top(dividerPadding = 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            textFieldTestTag = "NameEntry",
         )
-        Spacer(modifier = Modifier.height(16.dp))
         BitwardenTextField(
-            label = stringResource(
-                id = R.string.email_address,
-            ),
+            label = stringResource(id = R.string.email_address),
             placeholder = stringResource(R.string.email_address_required),
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Row(
+            supportingTextContent = {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    EnvironmentSelector(
+                        labelText = stringResource(id = R.string.creating_on),
+                        selectedOption = selectedEnvironmentType,
+                        onOptionSelected = handler.onEnvironmentTypeSelect,
+                        modifier = Modifier.testTag("RegionSelectorDropdown"),
+                    )
+                    if (isNewOnboardingUiEnabled) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_question_circle_small,
+                            contentDescription = stringResource(
+                                R.string.help_with_server_geolocations,
+                            ),
+                            onClick = handler.onServerGeologyHelpClick,
+                            contentColor = BitwardenTheme.colorScheme.icon.secondary,
+                            // Align with design but keep accessible touch target of IconButton.
+                            modifier = Modifier.offset(x = 16.dp),
+                        )
+                    }
+                }
+            },
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            EnvironmentSelector(
-                labelText = stringResource(id = R.string.creating_on),
-                selectedOption = selectedEnvironmentType,
-                onOptionSelected = handler.onEnvironmentTypeSelect,
-                modifier = Modifier
-                    .testTag("RegionSelectorDropdown"),
-            )
-            if (isNewOnboardingUiEnabled) {
-                BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_question_circle_small,
-                    contentDescription = stringResource(R.string.help_with_server_geolocations),
-                    onClick = handler.onServerGeologyHelpClick,
-                    contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                    // Align with design but keep accessible touch target of IconButton.
-                    modifier = Modifier.offset(y = (-8f).dp, x = 16.dp),
-                )
-            }
-        }
+        )
         Spacer(modifier = Modifier.height(24.dp))
 
         if (selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
@@ -367,6 +369,7 @@ private fun ReceiveMarketingEmailsSwitch(
         isChecked = isChecked,
         onCheckedChange = onCheckedChange,
         contentDescription = "ReceiveMarketingEmailsToggle",
+        cardStyle = CardStyle.Full,
     )
 }
 

@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -7,12 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
@@ -159,3 +164,72 @@ fun Modifier.standardHorizontalMargin(
     val config = LocalConfiguration.current
     return this.padding(horizontal = if (config.isPortrait) portrait else landscape)
 }
+
+/**
+ * This is a [Modifier] extension that applies a card background to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardBackground(
+    cardStyle: CardStyle?,
+    color: Color = BitwardenTheme.colorScheme.background.secondary,
+): Modifier {
+    cardStyle ?: return this
+    val shape = if ("robolectric" == Build.FINGERPRINT) {
+        // TODO: This is here to ensure our click events work in robolectric tests because of the
+        //  uneven rounded corners that need to be clipped. This should be removed when the bug is
+        //  resolved: https://issuetracker.google.com/issues/366255137
+        RectangleShape
+    } else {
+        when (cardStyle) {
+            is CardStyle.Top -> BitwardenTheme.shapes.contentTop
+            is CardStyle.Middle -> BitwardenTheme.shapes.contentMiddle
+            CardStyle.Bottom -> BitwardenTheme.shapes.contentBottom
+            CardStyle.Full -> BitwardenTheme.shapes.content
+        }
+    }
+    return this
+        .clip(shape = shape)
+        .background(color = color, shape = shape)
+        .bottomDivider(
+            paddingStart = cardStyle.dividerPadding,
+            enabled = cardStyle.hasDivider,
+        )
+}
+
+/**
+ * This is a [Modifier] extension that applies card padding to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardPadding(
+    cardStyle: CardStyle?,
+    start: Dp = 0.dp,
+    top: Dp = 12.dp,
+    end: Dp = 0.dp,
+    bottom: Dp = 12.dp,
+): Modifier {
+    cardStyle ?: return this
+    return this.padding(start = start, top = top, end = end, bottom = bottom)
+}
+
+/**
+ * This is a [Modifier] extension that applies card padding to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardPadding(
+    cardStyle: CardStyle?,
+    vertical: Dp = 12.dp,
+    horizontal: Dp = 0.dp,
+): Modifier =
+    this.cardPadding(
+        cardStyle = cardStyle,
+        start = horizontal,
+        top = vertical,
+        end = horizontal,
+        bottom = vertical,
+    )

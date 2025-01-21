@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,9 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -28,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWi
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -51,15 +54,16 @@ fun LazyListScope.vaultAddEditLoginItems(
     onTotpSetupClick: () -> Unit,
 ) {
     item {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.name),
             value = commonState.name,
             onValueChange = commonActionHandler.onNameTextChange,
+            textFieldTestTag = "ItemNameEntry",
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textFieldTestTag = "ItemNameEntry",
+                .standardHorizontalMargin(),
         )
     }
 
@@ -68,15 +72,20 @@ fun LazyListScope.vaultAddEditLoginItems(
         UsernameRow(
             username = loginState.username,
             loginItemTypeHandlers = loginItemTypeHandlers,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         PasswordRow(
             password = loginState.password,
             canViewPassword = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
@@ -85,23 +94,25 @@ fun LazyListScope.vaultAddEditLoginItems(
             Spacer(modifier = Modifier.height(8.dp))
             PasskeyField(
                 creationDateTime = creationDateTime,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
                 canRemovePasskey = loginState.canRemovePasskey,
                 loginItemTypeHandlers = loginItemTypeHandlers,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
         }
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.authenticator_key),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     if (loginState.totp != null) {
@@ -109,7 +120,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             BitwardenTextFieldWithActions(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
                 label = stringResource(id = R.string.totp),
                 value = loginState.totp,
                 trailingIconContent = {
@@ -123,20 +134,21 @@ fun LazyListScope.vaultAddEditLoginItems(
                 readOnly = true,
                 singleLine = true,
                 actions = {
-                    BitwardenTonalIconButton(
+                    BitwardenStandardIconButton(
                         vectorIconRes = R.drawable.ic_copy,
                         contentDescription = stringResource(id = R.string.copy_totp),
                         onClick = {
                             loginItemTypeHandlers.onCopyTotpKeyClick(loginState.totp)
                         },
                     )
-                    BitwardenTonalIconButton(
+                    BitwardenStandardIconButton(
                         vectorIconRes = R.drawable.ic_camera,
                         contentDescription = stringResource(id = R.string.camera),
                         onClick = onTotpSetupClick,
                     )
                 },
                 textFieldTestTag = "LoginTotpEntry",
+                cardStyle = CardStyle.Full,
             )
         }
     } else {
@@ -149,27 +161,32 @@ fun LazyListScope.vaultAddEditLoginItems(
                 modifier = Modifier
                     .testTag("SetupTotpButton")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.ur_is),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
-    items(loginState.uriList) { uriItem ->
-        Spacer(modifier = Modifier.height(8.dp))
+    itemsIndexed(loginState.uriList) { index, uriItem ->
         VaultAddEditUriItem(
             uriItem = uriItem,
             onUriValueChange = loginItemTypeHandlers.onUriValueChange,
             onUriItemRemoved = loginItemTypeHandlers.onRemoveUriClick,
+            cardStyle = loginState.uriList.toListItemCardStyle(index = index),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
@@ -181,22 +198,23 @@ fun LazyListScope.vaultAddEditLoginItems(
             modifier = Modifier
                 .testTag("LoginAddNewUriButton")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.miscellaneous),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
             options = commonState
@@ -211,37 +229,39 @@ fun LazyListScope.vaultAddEditLoginItems(
                         .first { it.name == selectedFolderName },
                 )
             },
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .testTag("FolderPicker")
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenSwitch(
             label = stringResource(
                 id = R.string.favorite,
             ),
             isChecked = commonState.favorite,
             onCheckedChange = commonActionHandler.onToggleFavorite,
+            cardStyle = if (commonState.isUnlockWithPasswordEnabled) {
+                CardStyle.Top()
+            } else {
+                CardStyle.Full
+            },
             modifier = Modifier
                 .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     if (commonState.isUnlockWithPasswordEnabled) {
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.password_prompt),
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonActionHandler.onToggleMasterPasswordReprompt,
-                modifier = Modifier
-                    .testTag("MasterPasswordRepromptToggle")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = R.drawable.ic_question_circle_small,
@@ -252,58 +272,67 @@ fun LazyListScope.vaultAddEditLoginItems(
                         contentColor = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .testTag("MasterPasswordRepromptToggle")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
         }
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.notes),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             singleLine = false,
             label = stringResource(id = R.string.notes),
             value = commonState.notes,
             onValueChange = commonActionHandler.onNotesTextChange,
+            textFieldTestTag = "ItemNotesEntry",
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textFieldTestTag = "ItemNotesEntry",
+                .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.custom_fields),
             modifier = Modifier
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
     }
 
     items(commonState.customFieldData) { customItem ->
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 8.dp))
         VaultAddEditCustomField(
             customField = customItem,
             onCustomFieldValueChange = commonActionHandler.onCustomFieldValueChange,
             onCustomFieldAction = commonActionHandler.onCustomFieldActionSelect,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
             supportedLinkedTypes = persistentListOf(
                 VaultLinkedFieldType.PASSWORD,
                 VaultLinkedFieldType.USERNAME,
             ),
             onHiddenVisibilityChanged = commonActionHandler.onHiddenFieldVisibilityChange,
+            cardStyle = CardStyle.Full,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
@@ -313,23 +342,24 @@ fun LazyListScope.vaultAddEditLoginItems(
             onFinishNamingClick = commonActionHandler.onAddNewCustomFieldClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
 
     if (isAddItemMode && commonState.hasOrganizations) {
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.ownership),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         item {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenMultiSelectButton(
                 label = stringResource(id = R.string.who_owns_this_item),
                 options = commonState
@@ -344,10 +374,11 @@ fun LazyListScope.vaultAddEditLoginItems(
                             .first { it.name == selectedOwnerName },
                     )
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("ItemOwnershipPicker")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -358,16 +389,13 @@ fun LazyListScope.vaultAddEditLoginItems(
             )
         }
     }
-
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
-    }
 }
 
 @Composable
 private fun UsernameRow(
     username: String,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -376,7 +404,7 @@ private fun UsernameRow(
         value = username,
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_username),
                 onClick = {
@@ -389,9 +417,9 @@ private fun UsernameRow(
                 modifier = Modifier.testTag(tag = "GenerateUsernameButton"),
             )
         },
-        modifier = Modifier
-            .padding(horizontal = 16.dp),
         textFieldTestTag = "LoginUsernameEntry",
+        cardStyle = CardStyle.Top(dividerPadding = 0.dp),
+        modifier = modifier,
     )
 
     if (shouldShowDialog) {
@@ -423,6 +451,7 @@ private fun PasswordRow(
     password: String,
     canViewPassword: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -439,17 +468,16 @@ private fun PasswordRow(
             },
             showPasswordTestTag = "ViewPasswordButton",
             passwordFieldTestTag = "LoginPasswordEntry",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            cardStyle = CardStyle.Bottom,
+            modifier = modifier,
         ) {
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_check_mark,
                 contentDescription = stringResource(id = R.string.check_password),
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                 modifier = Modifier.testTag(tag = "CheckPasswordButton"),
             )
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
                 onClick = {
@@ -488,10 +516,8 @@ private fun PasswordRow(
         BitwardenHiddenPasswordField(
             label = stringResource(id = R.string.password),
             value = password,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .testTag("LoginPasswordEntry"),
+            cardStyle = CardStyle.Bottom,
+            modifier = modifier.testTag("LoginPasswordEntry"),
         )
     }
 }
@@ -509,10 +535,9 @@ private fun PasskeyField(
         onValueChange = { },
         readOnly = true,
         singleLine = true,
-        modifier = modifier,
         actions = {
             if (canRemovePasskey) {
-                BitwardenTonalIconButton(
+                BitwardenStandardIconButton(
                     vectorIconRes = R.drawable.ic_minus,
                     contentDescription = stringResource(id = R.string.remove_passkey),
                     onClick = loginItemTypeHandlers.onClearFido2CredentialClick,
@@ -520,5 +545,7 @@ private fun PasskeyField(
                 )
             }
         },
+        cardStyle = CardStyle.Full,
+        modifier = modifier,
     )
 }

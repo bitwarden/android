@@ -1112,4 +1112,6 @@ Do you want to switch to this account?</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copy private key</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

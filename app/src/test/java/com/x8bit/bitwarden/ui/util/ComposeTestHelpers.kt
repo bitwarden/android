@@ -13,6 +13,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -50,6 +51,15 @@ val isProgressBar: SemanticsMatcher
 fun ComposeContentTestRule.assertNoDialogExists() {
     this
         .onNode(isDialog())
+        .assertDoesNotExist()
+}
+
+/**
+* Asserts that no popup currently exists.
+*/
+fun ComposeContentTestRule.assertNoPopupExists() {
+    this
+        .onNode(isPopup())
         .assertDoesNotExist()
 }
 

@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.NavigateBackClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog
@@ -90,6 +91,8 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
             DismissDialogClick -> updateDialogState(newState = null)
 
             ContinueDialogClick -> handleContinueDialog()
+
+            NavigateBackClick -> sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBack)
         }
     }
 
@@ -154,6 +157,11 @@ sealed class NewDeviceNoticeTwoFactorEvent {
      * Navigates back to vault.
      */
     data object NavigateBackToVault : NewDeviceNoticeTwoFactorEvent()
+
+    /**
+     * Navigates back to previous screen.
+     */
+    data object NavigateBack : NewDeviceNoticeTwoFactorEvent()
 }
 
 /**
@@ -184,6 +192,11 @@ sealed class NewDeviceNoticeTwoFactorAction {
      * User tapped the continue dialog button.
      */
     data object ContinueDialogClick : NewDeviceNoticeTwoFactorAction()
+
+    /**
+     * User tapped the back button.
+     */
+    data object NavigateBackClick : NewDeviceNoticeTwoFactorAction()
 }
 
 /**

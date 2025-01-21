@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -115,9 +116,9 @@ fun PinInputDialog(
                         pin = newValue.filter { it.isDigit() || !isPinCreation }
                     },
                     keyboardType = KeyboardType.Number,
-                    modifier = Modifier
-                        .fillMaxWidth(),
                     textFieldTestTag = "AlertInputField",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }

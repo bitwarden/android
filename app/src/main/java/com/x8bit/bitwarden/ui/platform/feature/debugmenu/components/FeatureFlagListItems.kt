@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
@@ -15,6 +16,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 fun <T : Any> FlagKey<T>.ListItemContent(
     currentValue: T,
     onValueChange: (key: FlagKey<T>, value: T) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) = when (val flagKey = this) {
     FlagKey.DummyBoolean,
@@ -41,6 +43,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
         key = flagKey as FlagKey<Boolean>,
         currentValue = currentValue as Boolean,
         onValueChange = onValueChange as (FlagKey<Boolean>, Boolean) -> Unit,
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 }
@@ -54,14 +57,14 @@ private fun BooleanFlagItem(
     key: FlagKey<Boolean>,
     currentValue: Boolean,
     onValueChange: (key: FlagKey<Boolean>, value: Boolean) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
         label = label,
         isChecked = currentValue,
-        onCheckedChange = {
-            onValueChange(key, it)
-        },
+        onCheckedChange = { onValueChange(key, it) },
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 }

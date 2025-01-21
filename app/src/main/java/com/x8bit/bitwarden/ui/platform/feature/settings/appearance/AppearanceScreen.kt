@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,10 +28,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -78,6 +82,7 @@ fun AppearanceScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             LanguageSelectionRow(
                 currentSelection = state.language,
                 onLanguageSelection = remember(viewModel) {
@@ -85,9 +90,10 @@ fun AppearanceScreen(
                 },
                 modifier = Modifier
                     .testTag("LanguageChooser")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-
+            Spacer(modifier = Modifier.height(height = 8.dp))
             ThemeSelectionRow(
                 currentSelection = state.theme,
                 onThemeSelection = remember(viewModel) {
@@ -95,21 +101,24 @@ fun AppearanceScreen(
                 },
                 modifier = Modifier
                     .testTag("ThemeChooser")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.show_website_icons),
-                description = stringResource(id = R.string.show_website_icons_description),
+                supportingText = stringResource(id = R.string.show_website_icons_description),
                 isChecked = state.showWebsiteIcons,
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it)) }
                 },
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("ShowWebsiteIconsSwitch")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -133,6 +142,7 @@ private fun LanguageSelectionRow(
     BitwardenTextRow(
         text = stringResource(id = R.string.language),
         onClick = { shouldShowLanguageSelectionDialog = true },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     ) {
         Text(
@@ -174,6 +184,7 @@ private fun ThemeSelectionRow(
         text = stringResource(id = R.string.theme),
         description = stringResource(id = R.string.theme_description),
         onClick = { shouldShowThemeSelectionDialog = true },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     ) {
         Text(

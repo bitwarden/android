@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.image.BitwardenGifImage
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -167,6 +168,7 @@ private fun SetupAutoFillContent(
             ),
             isChecked = state.autofillEnabled,
             onCheckedChange = onAutofillServiceChanged,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

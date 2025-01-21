@@ -2,7 +2,9 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +20,11 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.toImmutableList
 import java.time.ZonedDateTime
@@ -43,7 +49,10 @@ fun SendExpirationDateChooser(
     val options = ExpirationOptions.entries.associateWith { it.text() }
     var selectedOption: ExpirationOptions by rememberSaveable { mutableStateOf(defaultOption) }
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = CardStyle.Full)
+            .cardPadding(cardStyle = CardStyle.Full, vertical = 0.dp),
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.expiration_date),
@@ -61,11 +70,11 @@ fun SendExpirationDateChooser(
                     )
                 }
             },
+            insets = PaddingValues(top = 6.dp, bottom = 4.dp),
         )
-
         AnimatedVisibility(visible = selectedOption == ExpirationOptions.CUSTOM) {
             Column {
-                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
                 AddSendCustomDateChooser(
                     dateLabel = stringResource(id = R.string.expiration_date),
                     timeLabel = stringResource(id = R.string.expiration_time),
@@ -77,8 +86,8 @@ fun SendExpirationDateChooser(
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(4.dp))
+        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(id = R.string.expiration_date_info),
             style = BitwardenTheme.typography.bodySmall,
@@ -87,6 +96,7 @@ fun SendExpirationDateChooser(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 12.dp))
     }
 }
 

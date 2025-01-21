@@ -1,7 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,16 +17,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.ImmutableList
@@ -34,9 +44,10 @@ import kotlinx.collections.immutable.toImmutableList
  * @param customField The field that is to be displayed.
  * @param onCustomFieldValueChange Invoked when the user changes the value.
  * @param onCustomFieldAction Invoked when the user chooses an action.
+ * @param onHiddenVisibilityChanged Emits when the visibility of a hidden custom field changes.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier Modifier for the UI elements.
  * @param supportedLinkedTypes The supported linked types for the vault item.
- * @param onHiddenVisibilityChanged Emits when the visibility of a hidden custom field changes.
  */
 @Composable
 @Suppress("LongMethod")
@@ -44,9 +55,10 @@ fun VaultAddEditCustomField(
     customField: VaultAddEditState.Custom,
     onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     onCustomFieldAction: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
+    onHiddenVisibilityChanged: (Boolean) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     supportedLinkedTypes: ImmutableList<VaultLinkedFieldType> = persistentListOf(),
-    onHiddenVisibilityChanged: (Boolean) -> Unit,
 ) {
     var shouldShowChooserDialog by remember { mutableStateOf(false) }
     var shouldShowEditDialog by remember { mutableStateOf(false) }
@@ -86,6 +98,7 @@ fun VaultAddEditCustomField(
                 value = customField.value,
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
+                cardStyle = cardStyle,
                 modifier = modifier.testTag("AddEditCustomBooleanField"),
             )
         }
@@ -99,6 +112,7 @@ fun VaultAddEditCustomField(
                 },
                 onVisibilityChanged = onHiddenVisibilityChanged,
                 onEditValue = { shouldShowChooserDialog = true },
+                cardStyle = cardStyle,
                 modifier = modifier.testTag("AddEditCustomHiddenField"),
             )
         }
@@ -113,6 +127,7 @@ fun VaultAddEditCustomField(
                         onCustomFieldValueChange(customField.copy(vaultLinkedFieldType = it))
                     },
                     onEditValue = { shouldShowChooserDialog = true },
+                    cardStyle = cardStyle,
                     modifier = modifier.testTag("AddEditCustomLinkedField"),
                 )
             }
@@ -124,6 +139,7 @@ fun VaultAddEditCustomField(
                 value = customField.value,
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
+                cardStyle = cardStyle,
                 modifier = modifier.testTag("AddEditCustomTextField"),
             )
         }
@@ -139,24 +155,33 @@ private fun CustomFieldBoolean(
     value: Boolean,
     onValueChanged: (Boolean) -> Unit,
     onEditValue: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .semantics(mergeDescendants = true) {}
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
+                onClick = { onValueChanged(!value) },
+            )
+            .cardPadding(cardStyle = cardStyle, end = 4.dp, top = 6.dp, bottom = 6.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BitwardenSwitch(
             label = label,
             isChecked = value,
-            onCheckedChange = onValueChanged,
+            onCheckedChange = null,
             modifier = Modifier.weight(1f),
         )
 
         BitwardenRowOfActions(
             actions = {
-                BitwardenTonalIconButton(
+                BitwardenStandardIconButton(
                     vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
@@ -177,6 +202,7 @@ private fun CustomFieldHiddenField(
     onValueChanged: (String) -> Unit,
     onEditValue: () -> Unit,
     onVisibilityChanged: (Boolean) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowPassword by remember { mutableStateOf(value = false) }
@@ -192,15 +218,16 @@ private fun CustomFieldHiddenField(
         singleLine = true,
         showPasswordTestTag = "CustomFieldShowPasswordButton",
         passwordFieldTestTag = "CustomFieldValue",
-        modifier = modifier,
         actions = {
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
                 modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
+        cardStyle = cardStyle,
+        modifier = modifier,
     )
 }
 
@@ -213,6 +240,7 @@ private fun CustomFieldTextField(
     value: String,
     onValueChanged: (String) -> Unit,
     onEditValue: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
@@ -221,15 +249,16 @@ private fun CustomFieldTextField(
         onValueChange = onValueChanged,
         singleLine = true,
         textFieldTestTag = "CustomFieldValue",
-        modifier = modifier,
         actions = {
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
                 modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
+        cardStyle = cardStyle,
+        modifier = modifier,
     )
 }
 
@@ -242,44 +271,34 @@ private fun CustomFieldLinkedField(
     selectedOption: VaultLinkedFieldType,
     onValueChanged: (VaultLinkedFieldType) -> Unit,
     onEditValue: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     supportedLinkedTypes: ImmutableList<VaultLinkedFieldType> = persistentListOf(),
 ) {
     val possibleTypesWithStrings = supportedLinkedTypes.associateWith { it.label.invoke() }
-
-    Row(
-        modifier = modifier
-            .semantics(mergeDescendants = true) {}
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        BitwardenMultiSelectButton(
-            label = label,
-            options = supportedLinkedTypes.map { it.label.invoke() }.toImmutableList(),
-            selectedOption = selectedOption.label.invoke(),
-            onOptionSelected = { selectedType ->
-                possibleTypesWithStrings.forEach {
-                    if (it.value == selectedType) {
-                        onValueChanged(it.key)
-                    }
+    BitwardenMultiSelectButton(
+        modifier = modifier.testTag("CustomFieldDropdown"),
+        label = label,
+        options = supportedLinkedTypes.map { it.label.invoke() }.toImmutableList(),
+        selectedOption = selectedOption.label.invoke(),
+        onOptionSelected = { selectedType ->
+            possibleTypesWithStrings.forEach {
+                if (it.value == selectedType) {
+                    onValueChanged(it.key)
                 }
-            },
-            modifier = Modifier
-                .weight(1f)
-                .testTag("CustomFieldDropdown"),
-        )
-
-        BitwardenRowOfActions(
-            actions = {
-                BitwardenTonalIconButton(
-                    vectorIconRes = R.drawable.ic_cog,
-                    contentDescription = stringResource(id = R.string.edit),
-                    onClick = onEditValue,
-                    modifier = Modifier.testTag("CustomFieldSettingsButton"),
-                )
-            },
-        )
-    }
+            }
+        },
+        actions = {
+            BitwardenStandardIconButton(
+                vectorIconRes = R.drawable.ic_cog,
+                contentDescription = stringResource(id = R.string.edit),
+                onClick = onEditValue,
+                modifier = Modifier.testTag("CustomFieldSettingsButton"),
+            )
+        },
+        actionsPadding = PaddingValues(end = 4.dp),
+        cardStyle = cardStyle,
+    )
 }
 
 /**

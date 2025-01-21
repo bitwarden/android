@@ -38,7 +38,6 @@ class ImportLoginsViewModel @Inject constructor(
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 // attempt to trim the scheme of the vault url
                 currentWebVaultUrl = vaultUrl.toUriOrNull()?.host ?: vaultUrl,
@@ -73,7 +72,7 @@ class ImportLoginsViewModel @Inject constructor(
     private fun handleSuccessSyncAcknowledged() {
         mutableStateFlow.update {
             it.copy(
-                isVaultSyncing = false,
+                dialogState = null,
                 showBottomSheet = false,
             )
         }
@@ -96,10 +95,7 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun handleRetryVaultSync() {
         mutableStateFlow.update {
-            it.copy(
-                isVaultSyncing = true,
-                dialogState = null,
-            )
+            it.copy(dialogState = ImportLoginsState.DialogState.Syncing)
         }
         syncVault()
     }
@@ -111,7 +107,6 @@ class ImportLoginsViewModel @Inject constructor(
             is SyncVaultDataResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        isVaultSyncing = false,
                         dialogState = ImportLoginsState.DialogState.Error(),
                     )
                 }
@@ -124,13 +119,12 @@ class ImportLoginsViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             showBottomSheet = true,
-                            isVaultSyncing = false,
+                            dialogState = null,
                         )
                     }
                 } else {
                     mutableStateFlow.update {
                         it.copy(
-                            isVaultSyncing = false,
                             dialogState = ImportLoginsState.DialogState.Error(
                                 message = R.string.no_logins_were_imported.asText(),
                                 title = R.string.import_error.asText(),
@@ -143,7 +137,7 @@ class ImportLoginsViewModel @Inject constructor(
     }
 
     private fun handleMoveToSyncInProgress() {
-        mutableStateFlow.update { it.copy(isVaultSyncing = true) }
+        mutableStateFlow.update { it.copy(dialogState = ImportLoginsState.DialogState.Syncing) }
         syncVault()
     }
 
@@ -225,7 +219,6 @@ class ImportLoginsViewModel @Inject constructor(
 data class ImportLoginsState(
     val dialogState: DialogState?,
     val viewState: ViewState,
-    val isVaultSyncing: Boolean,
     val showBottomSheet: Boolean,
     val currentWebVaultUrl: String,
     val snackbarRelay: SnackbarRelay,
@@ -262,6 +255,14 @@ data class ImportLoginsState(
             override val message: Text = R.string.generic_error_message.asText(),
             override val title: Text? = null,
         ) : DialogState()
+
+        /**
+         * Represents a dialog indication and ongoing manual sync.
+         */
+        data object Syncing : DialogState() {
+            override val message: Text = R.string.syncing_logins_loading_message.asText()
+            override val title: Text? = null
+        }
     }
 
     /**

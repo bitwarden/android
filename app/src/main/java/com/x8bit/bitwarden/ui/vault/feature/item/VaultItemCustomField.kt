@@ -5,10 +5,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -16,13 +18,17 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 /**
  * Custom Field UI common for all item types.
  */
-@Suppress("LongMethod", "MaxLineLength")
+@Suppress("LongMethod")
 @Composable
 fun CustomField(
     customField: VaultItemState.ViewState.Content.Common.Custom,
     onCopyCustomHiddenField: (String) -> Unit,
     onCopyCustomTextField: (String) -> Unit,
-    onShowHiddenFieldClick: (VaultItemState.ViewState.Content.Common.Custom.HiddenField, Boolean) -> Unit,
+    onShowHiddenFieldClick: (
+        VaultItemState.ViewState.Content.Common.Custom.HiddenField,
+        Boolean,
+    ) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     when (customField) {
@@ -32,33 +38,47 @@ fun CustomField(
                 isChecked = customField.value,
                 readOnly = true,
                 onCheckedChange = { },
+                cardStyle = cardStyle,
                 modifier = modifier.testTag("ViewCustomBooleanField"),
             )
         }
 
         is VaultItemState.ViewState.Content.Common.Custom.HiddenField -> {
-            BitwardenPasswordFieldWithActions(
-                label = customField.name,
-                value = customField.value,
-                showPasswordChange = { onShowHiddenFieldClick(customField, it) },
-                showPassword = customField.isVisible,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
-                showPasswordTestTag = "CustomFieldShowPasswordButton",
-                passwordFieldTestTag = "CustomFieldValue",
-                modifier = modifier.testTag("ViewCustomHiddenField"),
-                actions = {
-                    if (customField.isCopyable) {
-                        BitwardenTonalIconButton(
+            if (customField.isCopyable) {
+                BitwardenPasswordFieldWithActions(
+                    label = customField.name,
+                    value = customField.value,
+                    showPasswordChange = { onShowHiddenFieldClick(customField, it) },
+                    showPassword = customField.isVisible,
+                    onValueChange = { },
+                    readOnly = true,
+                    singleLine = false,
+                    showPasswordTestTag = "CustomFieldShowPasswordButton",
+                    passwordFieldTestTag = "CustomFieldValue",
+                    actions = {
+                        BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomHiddenField(customField.value) },
                             modifier = Modifier.testTag("CustomFieldCopyValueButton"),
                         )
-                    }
-                },
-            )
+                    },
+                    cardStyle = cardStyle,
+                    modifier = modifier.testTag("ViewCustomHiddenField"),
+                )
+            } else {
+                BitwardenPasswordField(
+                    label = customField.name,
+                    value = customField.value,
+                    showPasswordChange = { onShowHiddenFieldClick(customField, it) },
+                    showPassword = customField.isVisible,
+                    onValueChange = { },
+                    readOnly = true,
+                    singleLine = false,
+                    cardStyle = cardStyle,
+                    modifier = modifier,
+                )
+            }
         }
 
         is VaultItemState.ViewState.Content.Common.Custom.LinkedField -> {
@@ -72,8 +92,9 @@ fun CustomField(
                 onValueChange = { },
                 readOnly = true,
                 singleLine = false,
+                cardStyle = cardStyle,
                 modifier = modifier.testTag("ViewCustomLinkedField"),
-                textFieldTestTag = "CustomFieldDropdown"
+                textFieldTestTag = "CustomFieldDropdown",
             )
         }
 
@@ -85,10 +106,9 @@ fun CustomField(
                 readOnly = true,
                 singleLine = false,
                 textFieldTestTag = "CustomFieldValue",
-                modifier = modifier.testTag("ViewCustomTextField"),
                 actions = {
                     if (customField.isCopyable) {
-                        BitwardenTonalIconButton(
+                        BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomTextField(customField.value) },
@@ -96,6 +116,8 @@ fun CustomField(
                         )
                     }
                 },
+                cardStyle = cardStyle,
+                modifier = modifier.testTag("ViewCustomTextField"),
             )
         }
     }

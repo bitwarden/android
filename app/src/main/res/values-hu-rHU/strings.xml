@@ -1111,4 +1111,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="review_flow_launched">A felülvizsgálati folyamat elindult!</string>
   <string name="copy_private_key">Személyes kulcs másolása</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">A fiók email cím a Bitwarden webalkalmazásban módosítható.</string>
+  <string name="login_credentials">Bejelentkezési hitelesítő adatok</string>
+  <string name="autofill_options">Automatikus kitöltés opciók</string>
 </resources>

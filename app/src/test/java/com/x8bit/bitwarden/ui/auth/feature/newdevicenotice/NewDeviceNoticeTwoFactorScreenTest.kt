@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -20,6 +21,7 @@ import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -27,6 +29,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
     }
+    private var onNavigateBackToVaultCalled = false
     private var onNavigateBackCalled = false
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<NewDeviceNoticeTwoFactorEvent>()
@@ -39,7 +42,8 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     fun setUp() {
         composeTestRule.setContent {
             NewDeviceNoticeTwoFactorScreen(
-                onNavigateBackToVault = { onNavigateBackCalled = true },
+                onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
+                onNavigateBack = { onNavigateBackCalled = true },
                 intentManager,
                 viewModel = viewModel,
             )
@@ -48,7 +52,19 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
 
     @After
     fun tearDown() {
+        onNavigateBackToVaultCalled = false
         onNavigateBackCalled = false
+    }
+
+    @Test
+    fun `onNavigateBack should send action to viewModel`() {
+        composeTestRule
+            .onNodeWithContentDescription("Back")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.NavigateBackClick)
+        }
     }
 
     @Test
@@ -117,7 +133,13 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     @Test
     fun `RemindMeLaterClick should call OnNavigateBack`() {
         mutableEventFlow.tryEmit(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
-        assertTrue(onNavigateBackCalled)
+        assertTrue(onNavigateBackToVaultCalled)
+    }
+
+    @Test
+    fun `onNavigateBack should set onNavigateBackCalled to true`() {
+        mutableEventFlow.tryEmit(NewDeviceNoticeTwoFactorEvent.NavigateBack)
+        Assert.assertTrue(onNavigateBackCalled)
     }
 
     @Test
@@ -157,7 +179,7 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
                 "Make your account more secure by setting up two-step login in the Bitwarden web app.",
                 substring = true,
                 ignoreCase = true,
-                )
+            )
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
