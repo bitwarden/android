@@ -536,13 +536,10 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithText("New password")
             .assertDoesNotExist()
         composeTestRule
-            .onNodeWithText("Notes")
+            .onNodeWithText("Private notes")
             .assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Hide my email address from recipients")
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText("Deactivate this Send", substring = true)
             .assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Additional options")
@@ -555,13 +552,10 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithText("New password")
             .assertExists()
         composeTestRule
-            .onNodeWithText("Notes")
+            .onNodeWithText("Private notes")
             .assertExists()
         composeTestRule
             .onNodeWithText("Hide my email address from recipients")
-            .assertExists()
-        composeTestRule
-            .onNodeWithText("Deactivate this Send", substring = true)
             .assertExists()
     }
 
