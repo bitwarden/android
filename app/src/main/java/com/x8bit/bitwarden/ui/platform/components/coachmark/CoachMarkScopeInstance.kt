@@ -18,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -235,10 +234,11 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         }
     }
 
+    @Composable
     private fun Modifier.calculateBoundsAndAddForKey(
         key: T,
         isFirstItem: Boolean = false,
-    ): Modifier = composed {
+    ): Modifier {
         var bounds: Rect? by remember {
             mutableStateOf(null)
         }
@@ -251,7 +251,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                 )
             }
         }
-        this.onGloballyPositioned {
+        return this.onGloballyPositioned {
             bounds = it.boundsInRoot()
         }
     }
