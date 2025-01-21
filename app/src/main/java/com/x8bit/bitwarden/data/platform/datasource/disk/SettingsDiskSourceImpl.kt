@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
 
@@ -40,6 +39,7 @@ private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 private const val ADD_ACTION_COUNT = "addActionCount"
 private const val COPY_ACTION_COUNT = "copyActionCount"
 private const val CREATE_ACTION_COUNT = "createActionCount"
+private const val HAS_SEEN_GENERATOR_COACH_MARK = "hasSeenGeneratorCoachMark"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -77,6 +77,8 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableHasSeenGeneratorCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -181,6 +183,7 @@ class SettingsDiskSourceImpl(
         // - screen capture allowed
         // - show autofill setting badge
         // - show unlock setting badge
+        // - has seen generator coach mark
     }
 
     override fun getAccountBiometricIntegrityValidity(
@@ -481,6 +484,22 @@ class SettingsDiskSourceImpl(
             value = count,
         )
     }
+
+    override fun getHasSeenGeneratorCoachMark(): Boolean? =
+        getBoolean(key = HAS_SEEN_GENERATOR_COACH_MARK)
+
+    override fun storeHasSeenGeneratorCoachMark(hasSeen: Boolean?) {
+        putBoolean(
+            key = HAS_SEEN_GENERATOR_COACH_MARK,
+            value = hasSeen,
+        )
+        mutableHasSeenGeneratorCoachMarkFlow.tryEmit(hasSeen)
+    }
+
+    override fun getHasSeenGeneratorCoachMarkFlow(): Flow<Boolean?> =
+        mutableHasSeenGeneratorCoachMarkFlow.onSubscription {
+            emit(getHasSeenGeneratorCoachMark())
+        }
 
     private fun getMutableLastSyncFlow(
         userId: String,

@@ -40,6 +40,12 @@ interface FirstTimeActionManager {
     val firstTimeStateFlow: Flow<FirstTimeState>
 
     /**
+     * Returns observable flow of if a user on the device has seen the Generator screen
+     * coach mark tour.
+     */
+    val hasSeenGeneratorCoachMarkFlow: Flow<Boolean>
+
+    /**
      * Get the current [FirstTimeState] of the active user if available, otherwise return
      * a default configuration.
      */
@@ -66,4 +72,9 @@ interface FirstTimeActionManager {
      * Update the value of the showImportLoginsSettingsBadge status for the active user.
      */
     fun storeShowImportLoginsSettingsBadge(showBadge: Boolean)
+
+    /**
+     * Can be called to indicate that a user has seen the Generator coach mark tour.
+     */
+    fun hasSeenGeneratorCoachMarkTour()
 }

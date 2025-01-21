@@ -356,4 +356,19 @@ interface SettingsDiskSource {
      * Stores the given [count] completed create send actions for the device.
      */
     fun storeCreateSendActionCount(count: Int?)
+
+    /**
+     * Gets the Boolean value of if the Generator CoachMark tour has been interacted with.
+     */
+    fun getHasSeenGeneratorCoachMark(): Boolean?
+
+    /**
+     * Stores a value for if the Generator CoachMark tour has been interacted with
+     */
+    fun storeHasSeenGeneratorCoachMark(hasSeen: Boolean?)
+
+    /**
+     * Returns an [Flow] to observe updates to the "HasSeenGeneratorCoachMark" value.
+     */
+    fun getHasSeenGeneratorCoachMarkFlow(): Flow<Boolean?>
 }

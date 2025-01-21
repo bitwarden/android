@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItem
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -317,6 +318,20 @@ private fun ScrollContent(
             )
 
             Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        if (state.shouldShowExploreGeneratorCard) {
+            BitwardenActionCard(
+                cardTitle = stringResource(R.string.explore_the_generator),
+                cardSubtitle = stringResource(
+                    R.string.learn_more_about_generating_secure_login_credentials_with_guided_tour,
+                ),
+                actionText = stringResource(R.string.get_started),
+                onActionClick = passwordHandlers.onGeneratorActionCardClicked,
+                onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
+                modifier = Modifier.standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
         GeneratedStringItem(

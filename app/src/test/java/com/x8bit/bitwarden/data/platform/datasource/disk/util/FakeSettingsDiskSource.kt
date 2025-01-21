@@ -42,6 +42,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableHasSeenGeneratorCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
+
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
@@ -68,6 +70,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var addCipherActionCount: Int? = null
     private var generatedActionCount: Int? = null
     private var createSendActionCount: Int? = null
+    private var hasSeenGeneratorCoachMark: Boolean? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -379,6 +382,19 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun storeCreateSendActionCount(count: Int?) {
         createSendActionCount = count
     }
+
+    override fun getHasSeenGeneratorCoachMark(): Boolean? =
+        hasSeenGeneratorCoachMark
+
+    override fun storeHasSeenGeneratorCoachMark(hasSeen: Boolean?) {
+        hasSeenGeneratorCoachMark = hasSeen
+        mutableHasSeenGeneratorCoachMarkFlow.tryEmit(hasSeen)
+    }
+
+    override fun getHasSeenGeneratorCoachMarkFlow(): Flow<Boolean?> =
+        mutableHasSeenGeneratorCoachMarkFlow.onSubscription {
+            emit(hasSeenGeneratorCoachMark)
+        }
 
     //region Private helper functions
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {

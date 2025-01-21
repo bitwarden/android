@@ -8,10 +8,13 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
@@ -37,11 +40,14 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -109,6 +115,19 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         every { registerGeneratedResultAction() } just runs
     }
 
+    private val mutableHasSeenGeneratorCoachMarkFlow = MutableStateFlow(false)
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { hasSeenGeneratorCoachMarkTour() } just runs
+        every { hasSeenGeneratorCoachMarkFlow } returns mutableHasSeenGeneratorCoachMarkFlow
+    }
+
+    private val mutableOnboardFlowFeatureFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.OnboardingFlow)
+        } returns mutableOnboardFlowFeatureFlagFlow
+    }
+
     @Test
     fun `initial state should be correct when there is no saved state`() {
         val viewModel = createViewModel(state = null)
@@ -139,6 +158,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             currentEmailAddress = "currentEmail",
             isUnderPolicy = false,
             website = "",
+            hasSeenExploreGeneratorCard = true,
         )
 
         val viewModel = createViewModel(
@@ -174,6 +194,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             currentEmailAddress = "currentEmail",
             isUnderPolicy = false,
             website = null,
+            hasSeenExploreGeneratorCard = true,
         )
 
         val viewModel = createViewModel(
@@ -2160,6 +2181,76 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
         assertEquals(10, password.computedMinimumLength)
     }
+
+    @Test
+    fun `when OnboardFlow feature flag is off, shouldShowExploreGeneratorCard should be false`() {
+        mutableOnboardFlowFeatureFlagFlow.update { true }
+        val viewModel = createViewModel()
+        assertTrue(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+
+        mutableOnboardFlowFeatureFlagFlow.update { false }
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager has seen generator tour value updates to true shouldShowExploreGeneratorCard should update to false`() {
+        mutableOnboardFlowFeatureFlagFlow.update { true }
+        val viewModel = createViewModel()
+        assertTrue(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+        mutableHasSeenGeneratorCoachMarkFlow.update { true }
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldShowExploreGeneratorCard value should be false if generator screen is in modal mode`() {
+        mutableOnboardFlowFeatureFlagFlow.update { true }
+        mutableHasSeenGeneratorCoachMarkFlow.update { false }
+        val viewModel = createViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createPasswordState().copy(
+                    hasSeenExploreGeneratorCard = false,
+                    generatorMode = GeneratorMode.Modal.Password,
+                ),
+            ),
+        )
+
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldShowExploreGeneratorCard value should be false if generator screen selected type is not password`() {
+        mutableOnboardFlowFeatureFlagFlow.update { true }
+        mutableHasSeenGeneratorCoachMarkFlow.update { false }
+        val viewModel = createViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createUsernameModeState().copy(
+                    hasSeenExploreGeneratorCard = false,
+                ),
+            ),
+        )
+
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ExploreGeneratorCardDismissed action calls first time action manager hasSeenGeneratorCoachMarkTour called`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(GeneratorAction.ExploreGeneratorCardDismissed)
+        verify(exactly = 1) { firstTimeActionManager.hasSeenGeneratorCoachMarkTour() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `StartExploreGeneratorTour action calls first time action manager hasSeenGeneratorCoachMarkTour called and show coach mark event sent`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
+        verify(exactly = 1) { firstTimeActionManager.hasSeenGeneratorCoachMarkTour() }
+    }
     //region Helper Functions
 
     @Suppress("LongParameterList")
@@ -2187,6 +2278,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 avoidAmbiguousChars = avoidAmbiguousChars,
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createPassphraseState(
@@ -2205,6 +2297,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 includeNumber = includeNumber,
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createUsernameModeState(
@@ -2220,6 +2313,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createForwardedEmailAliasState(
@@ -2235,6 +2329,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createAddyIoState(
@@ -2249,6 +2344,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createDuckDuckGoState(
@@ -2263,6 +2359,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createFastMailState(
@@ -2277,6 +2374,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createFirefoxRelayState(
@@ -2291,6 +2389,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createForwardEmailState(
@@ -2305,6 +2404,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createSimpleLoginState(
@@ -2319,6 +2419,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createPlusAddressedEmailState(
@@ -2333,6 +2434,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createCatchAllEmailState(
@@ -2347,6 +2449,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createRandomWordState(
@@ -2363,6 +2466,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            hasSeenExploreGeneratorCard = true,
         )
 
     private fun createSavedStateHandleWithState(state: GeneratorState) =
@@ -2379,6 +2483,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         policyManager = policyManager,
         reviewPromptManager = reviewPromptManager,
+        firstTimeActionManager = firstTimeActionManager,
+        featureFlagManager = featureFlagManager,
     )
 
     private fun createViewModel(

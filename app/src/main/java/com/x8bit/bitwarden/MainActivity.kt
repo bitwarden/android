@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider {
+             LocalManagerProvider {
                 BitwardenTheme(theme = state.theme) {
                     RootNavScreen(
                         onSplashScreenRemoved = { shouldShowSplashScreen = false },

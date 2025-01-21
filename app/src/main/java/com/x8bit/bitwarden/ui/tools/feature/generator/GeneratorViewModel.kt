@@ -12,9 +12,12 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -47,6 +50,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -68,7 +72,7 @@ private const val NO_GENERATED_TEXT: String = "-"
  *
  * @property savedStateHandle Handles the saved state of this ViewModel.
  */
-@Suppress("LargeClass")
+@Suppress("LargeClass", "LongParameterList")
 @HiltViewModel
 class GeneratorViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -77,6 +81,8 @@ class GeneratorViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = GeneratorArgs(savedStateHandle).type
@@ -105,6 +111,7 @@ class GeneratorViewModel @Inject constructor(
                 .getActivePolicies<PolicyInformation.PasswordGenerator>()
                 .any(),
             website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
+            hasSeenExploreGeneratorCard = false,
         )
     },
 ) {
@@ -121,6 +128,20 @@ class GeneratorViewModel @Inject constructor(
             .map { GeneratorAction.Internal.PasswordGeneratorPolicyReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        firstTimeActionManager
+            .hasSeenGeneratorCoachMarkFlow
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { hasSeenCoachMarkTour, featureEnabled ->
+                // The result of this will hide the card if the tour has been shown or if the
+                // onboarding flow feature is off.
+                GeneratorAction.Internal.HasSeenGeneratorCoachMarkValueChangeReceive(
+                    newValue = hasSeenCoachMarkTour || !featureEnabled,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: GeneratorAction) {
@@ -134,7 +155,18 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainType -> handleMainTypeAction(action)
             is GeneratorAction.Internal -> handleInternalAction(action)
             GeneratorAction.LifecycleResume -> handleOnResumed()
+            GeneratorAction.ExploreGeneratorCardDismissed -> handleExploreCardDismissed()
+            GeneratorAction.StartExploreGeneratorTour -> handleStartExploreGeneratorTour()
         }
+    }
+
+    private fun handleExploreCardDismissed() {
+        firstTimeActionManager.hasSeenGeneratorCoachMarkTour()
+    }
+
+    private fun handleStartExploreGeneratorTour() {
+        firstTimeActionManager.hasSeenGeneratorCoachMarkTour()
+        // TODO: PM-16622 send show coach mark event.
     }
 
     private fun handleOnResumed() {
@@ -232,6 +264,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.PasswordGeneratorPolicyReceive -> {
                 handlePasswordGeneratorPolicyReceive(action)
+            }
+
+            is GeneratorAction.Internal.HasSeenGeneratorCoachMarkValueChangeReceive -> {
+                handleHasSeenCoachMarkValueChange(action)
             }
         }
     }
@@ -743,6 +779,14 @@ class GeneratorViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun handleHasSeenCoachMarkValueChange(
+        action: GeneratorAction.Internal.HasSeenGeneratorCoachMarkValueChangeReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(hasSeenExploreGeneratorCard = action.newValue)
         }
     }
 
@@ -1726,6 +1770,7 @@ data class GeneratorState(
     val isUnderPolicy: Boolean = false,
     val website: String? = null,
     var passcodePolicyOverride: PasscodePolicyOverride? = null,
+    private val hasSeenExploreGeneratorCard: Boolean,
 ) : Parcelable {
 
     /**
@@ -1740,6 +1785,15 @@ data class GeneratorState(
 
             is GeneratorMode.Modal.Username -> emptyList()
         }
+
+    /**
+     * Whether to show the action card which starts the coach mark tour. Should only show
+     * if has not be interacted with prior and the screen mode is the default.
+     */
+    val shouldShowExploreGeneratorCard: Boolean
+        get() = !hasSeenExploreGeneratorCard &&
+            generatorMode is GeneratorMode.Default &&
+            selectedType is MainType.Password
 
     /**
      * Enum representing the main type options for the generator, such as PASSWORD PASSPHRASE, and
@@ -2174,6 +2228,16 @@ sealed class GeneratorAction {
     ) : GeneratorAction()
 
     /**
+     * User clicked the close button on the action card for exploring the generator.
+     */
+    data object ExploreGeneratorCardDismissed : GeneratorAction()
+
+    /**
+     * User has clicked the call to action to start the coach mark tour.
+     */
+    data object StartExploreGeneratorTour : GeneratorAction()
+
+    /**
      * Represents actions related to the [GeneratorState.MainType] in the generator feature.
      */
     sealed class MainType : GeneratorAction() {
@@ -2544,6 +2608,13 @@ sealed class GeneratorAction {
          */
         data class UpdateGeneratedForwardedServiceUsernameResult(
             val result: GeneratedForwardedServiceUsernameResult,
+        ) : Internal()
+
+        /**
+         * The value for the hasSeenGeneratorCoachMark has changed.
+         */
+        data class HasSeenGeneratorCoachMarkValueChangeReceive(
+            val newValue: Boolean,
         ) : Internal()
     }
 }

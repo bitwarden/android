@@ -1239,4 +1239,34 @@ class SettingsDiskSourceTest {
         settingsDiskSource.storeCreateSendActionCount(count = 1)
         assertEquals(1, fakeSharedPreferences.getInt(createActionCountKey, 0))
     }
+
+    @Test
+    fun `getHasSeenGeneratorCoachMark should pull value from SharedPreferences`() {
+        val hasSeenGeneratorCoachMarkKey = "bwPreferencesStorage:hasSeenGeneratorCoachMark"
+        fakeSharedPreferences.edit { putBoolean(hasSeenGeneratorCoachMarkKey, true) }
+        assertTrue(settingsDiskSource.getHasSeenGeneratorCoachMark() == true)
+    }
+
+    @Test
+    fun `storeHasSeenGeneratorCoachMark should update SharedPreferences`() {
+        val hasSeenGeneratorCoachMarkKey = "bwPreferencesStorage:hasSeenGeneratorCoachMark"
+        settingsDiskSource.storeHasSeenGeneratorCoachMark(hasSeen = true)
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                key = hasSeenGeneratorCoachMarkKey,
+                defaultValue = false,
+            ),
+        )
+    }
+
+    @Test
+    fun `getHasSeenGeneratorCoachMarkFlow emits changes to stored value`() = runTest {
+        settingsDiskSource.getHasSeenGeneratorCoachMarkFlow().test {
+            assertNull(awaitItem())
+            settingsDiskSource.storeHasSeenGeneratorCoachMark(hasSeen = false)
+            assertFalse(awaitItem() ?: true)
+            settingsDiskSource.storeHasSeenGeneratorCoachMark(hasSeen = true)
+            assertTrue(awaitItem() ?: false)
+        }
+    }
 }

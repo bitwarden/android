@@ -154,6 +154,12 @@ class FirstTimeActionManagerImpl @Inject constructor(
             }
             .distinctUntilChanged()
 
+    override val hasSeenGeneratorCoachMarkFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .getHasSeenGeneratorCoachMarkFlow()
+            .map { it ?: false }
+            .distinctUntilChanged()
+
     /**
      * Get the current [FirstTimeState] of the active user if available, otherwise return
      * a default configuration.
@@ -209,6 +215,10 @@ class FirstTimeActionManagerImpl @Inject constructor(
             userId = activeUserId,
             showBadge = showBadge,
         )
+    }
+
+    override fun hasSeenGeneratorCoachMarkTour() {
+        settingsDiskSource.storeHasSeenGeneratorCoachMark(hasSeen = true)
     }
 
     /**
