@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.KeyManager
+import com.x8bit.bitwarden.data.platform.manager.KeyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -329,4 +331,10 @@ object PlatformManagerModule {
         autofillEnabledManager = autofillEnabledManager,
         accessibilityEnabledManager = accessibilityEnabledManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideKeyManager(
+        @ApplicationContext context: Context,
+    ): KeyManager = KeyManagerImpl(context = context)
 }
