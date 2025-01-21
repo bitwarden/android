@@ -285,9 +285,7 @@ fun VaultAddEditScreen(
                         navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                         navigationIconContentDescription = stringResource(id = R.string.close),
                         onNavigationIconClick = remember(viewModel) {
-                            { coroutineScope.launch {
-                                coachMarkState.showCoachMark(AddEditItemCoachMark.GENERATE_PASSWORD)
-                            } }
+                            { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
                         },
                     )
                         .takeIf { state.shouldShowCloseButton },
@@ -371,9 +369,6 @@ fun VaultAddEditScreen(
                         identityItemTypeHandlers = identityItemTypeHandlers,
                         cardItemTypeHandlers = cardItemTypeHandlers,
                         sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
-                        modifier = Modifier
-                            .imePadding()
-                            .fillMaxSize(),
                         lazyListState = lazyListState,
                         onPreviousCoachMark = {
                             coroutineScope.launch {
@@ -389,6 +384,9 @@ fun VaultAddEditScreen(
                             coachMarkState.coachingComplete(onComplete = scrollBackToTop)
                         },
                         onCoachMarkDismissed = scrollBackToTop,
+                        modifier = Modifier
+                            .imePadding()
+                            .fillMaxSize(),
                     )
                 }
 
