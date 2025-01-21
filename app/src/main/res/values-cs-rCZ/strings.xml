@@ -147,4 +147,9 @@
     <string name="add_code_to_bitwarden">Přidat kód do Bitwardenu</string>
     <string name="add_code_locally">Přidat kód místně</string>
     <string name="local_codes">Místní kódy</string>
+    <string name="required_information_missing">Chybí požadované informace</string>
+    <string name="required_information_missing_message">"Chybí požadované informace (např. \"služby\" nebo \"tajné\"). Zkontrolujte soubor a zkuste to znovu. Navštivte bitwarden.com/help pro pomoc."</string>
+    <string name="file_could_not_be_processed">"Soubor nelze zpracovat"</string>
+    <string name="file_could_not_be_processed_message">"Soubor nelze zpracovat. Ujistěte se, že je to platný JSON a zkuste to znovu. Potřebujete pomoc? Navštivte bitwarden.com/help"</string>
+    <string name="get_help">Získat pomoc</string>
 </resources>

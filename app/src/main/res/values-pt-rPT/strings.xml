@@ -147,4 +147,9 @@
     <string name="add_code_to_bitwarden">Adicionar código ao Bitwarden</string>
     <string name="add_code_locally">Adicionar código localmente</string>
     <string name="local_codes">Códigos locais</string>
+    <string name="required_information_missing">Informações necessárias em falta</string>
+    <string name="required_information_missing_message">"A informação necessária está em falta (por exemplo, \"serviços\" ou \"segredo\"). Verifique o seu ficheiro e tente novamente. Visite bitwarden.com/help para obter suporte"</string>
+    <string name="file_could_not_be_processed">"O ficheiro não pôde ser processado"</string>
+    <string name="file_could_not_be_processed_message">"O ficheiro não pôde ser processado. Certifique-se de que se trata de um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help"</string>
+    <string name="get_help">Obter ajuda</string>
 </resources>

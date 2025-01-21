@@ -147,4 +147,9 @@
     <string name="add_code_to_bitwarden">Додај кôд у Bitwarden</string>
     <string name="add_code_locally">Додај кôд локално</string>
     <string name="local_codes">Локални кодови</string>
+    <string name="required_information_missing">Недостају потребне информације</string>
+    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
+    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
+    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
+    <string name="get_help">Get Help</string>
 </resources>

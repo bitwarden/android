@@ -30,7 +30,7 @@
     <string name="settings">Ayarlar</string>
     <string name="enable_camera_permission_to_use_the_scanner">Skaneri istifadə etmək üçün kamera icazəsini fəallaşdırın</string>
     <string name="empty_item_list">Boş element siyahısı</string>
-    <string name="you_dont_have_items_to_display">Göstəriləcək elementiniz yoxdur.</string>
+    <string name="you_dont_have_items_to_display">Göstəriləcək heç bir elementiniz yoxdur.</string>
     <string name="empty_item_list_instruction">Hesablarınızı qorumaq üçün yeni bir kod əlavə edin.</string>
     <string name="add_code">Kod əlavə et</string>
     <string name="authenticator_key_read_error">Açar oxuna bilmir.</string>
@@ -64,13 +64,13 @@
     <string name="light">İşıqlı</string>
     <string name="language">Dil</string>
     <string name="language_change_x_description">Dil, %1$s olaraq dəyişdirildi. Dəyişiklikləri görmək üçün lütfən tətbiqi yenidən başladın</string>
-    <string name="secure_your_accounts_with_bitwarden_authenticator">Hesablarınızı Bitwarden Bitwarden ilə qoruyun</string>
+    <string name="secure_your_accounts_with_bitwarden_authenticator">Hesablarınızı Bitwarden Authenticator ilə qoruyun</string>
     <string name="get_verification_codes_for_all_your_accounts">2 addımlı doğrulamanı dəstəkləyən bütün hesablarınız üçün doğrulama kodu alın.</string>
     <string name="use_your_device_camera_to_scan_codes">Kodları skan etmək üçün cihazınızın kamerasını istifadə edin</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">İstənilən hesab üçün 2 addımlı doğrulama ayarlarınızdakı QR kodu skan edin.</string>
-    <string name="sign_in_using_unique_codes">Unikal kodları istifadə edərək daxil ol</string>
+    <string name="sign_in_using_unique_codes">Unikal kodları istifadə edərək hesabınıza daxil olun</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">2 addımlı doğrulamanı istifadə edərkən istifadəçi adınızı, parolunuzu və bu tətbiqdə yaradılan kodu daxil edəcəksiniz.</string>
-    <string name="continue_button">Davam</string>
+    <string name="continue_button">Davam et</string>
     <string name="skip">Ötür</string>
     <string name="get_started">Başlayaq</string>
     <string name="unique_codes">Unikal kodlar</string>
@@ -92,11 +92,11 @@
     <string name="unlock_with">%1$s ilə kilidi aç</string>
     <string name="biometrics">Biometrik</string>
     <string name="security">Güvənlik</string>
-    <string name="use_biometrics_to_unlock">Kilidi biometriklə aç</string>
+    <string name="use_biometrics_to_unlock">Kilidi açmaq üçün biometrik istifadə et</string>
     <string name="too_many_failed_biometric_attempts">Həddən artıq uğursuz biometrik cəhdi.</string>
     <string name="about">Haqqında</string>
     <string name="version">Versiya</string>
-    <string name="continue_text">Davam</string>
+    <string name="continue_text">Davam et</string>
     <string name="bitwarden_help_center">Bitwarden Kömək Mərkəzi</string>
     <string name="continue_to_help_center">Kömək Mərkəzi ilə davam edilsin?</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Kömək Mərkəzində Bitwarden Authenticator-u necə istifadə ediləcəyi ilə bağlı ətraflı öyrənin.</string>
@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Bütün doğrulama kodlarınıza burada baxmaq üçün ayarlarda Authenticator tətbiqinin sinxronlaşdırmasına icazə verin.</string>
     <string name="something_went_wrong">Nəsə səhv getdi</string>
     <string name="please_try_again">Lütfən yenidən sınayın</string>
-    <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="move_to_bitwarden">\"Bitwarden\"ə daşı</string>
     <string name="default_save_option">İlkin saxlama seçimi</string>
     <string name="save_to_bitwarden">\"Bitwarden\"də saxla</string>
     <string name="save_here">Burada saxla</string>
@@ -147,4 +147,9 @@
     <string name="add_code_to_bitwarden">Kodu Bitwarden-ə əlavə et</string>
     <string name="add_code_locally">Kodu daxili anbara əlavə et</string>
     <string name="local_codes">Daxili anbardakı kodlar</string>
+    <string name="required_information_missing">Tələb olunan məlumat əskikdir</string>
+    <string name="required_information_missing_message">"Tələb olunan məlumatlar əskikdir (məs. 'xidmətlər' və ya 'sirr'). Faylınızı yoxlayıb yenidən sınayın. Dəstək üçün bitwarden.com/help ünvanını ziyarət edin"</string>
+    <string name="file_could_not_be_processed">"Fayl emal oluna bilmədi"</string>
+    <string name="file_could_not_be_processed_message">"Fayl emal edilə bilmədi. Bunun yararlı JSON faylı olduğuna əmin olub yenidən sınayın. Kömək lazımdır? bitwarden.com/help ünvanını ziyarət edin"</string>
+    <string name="get_help">Kömək al</string>
 </resources>

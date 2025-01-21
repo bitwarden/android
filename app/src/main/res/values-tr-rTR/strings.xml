@@ -147,4 +147,9 @@
     <string name="add_code_to_bitwarden">Bitwarden\'a kod ekle</string>
     <string name="add_code_locally">Kodu yerel olarak ekle</string>
     <string name="local_codes">Yerel kodlar</string>
+    <string name="required_information_missing">Gerekli Bilgiler Eksik</string>
+    <string name="required_information_missing_message">"Gerekli bilgi eksik (örneğin, 'services' veya 'secret'). Dosyanızı kontrol edin ve tekrar deneyin. Destek için bitwarden.com/help adresini ziyaret edin"</string>
+    <string name="file_could_not_be_processed">"Dosya İşlenemedi"</string>
+    <string name="file_could_not_be_processed_message">"Dosya işlenemedi. Geçerli JSON olduğundan emin olun ve tekrar deneyin. Yardıma mı ihtiyacınız var? bitwarden.com/help adresini ziyaret edin"</string>
+    <string name="get_help">Yardım Al</string>
 </resources>

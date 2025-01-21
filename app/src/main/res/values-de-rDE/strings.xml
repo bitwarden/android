@@ -147,4 +147,9 @@
     <string name="add_code_to_bitwarden">Code zu Bitwarden hinzufügen</string>
     <string name="add_code_locally">Code lokal hinzufügen</string>
     <string name="local_codes">Lokale Codes</string>
+    <string name="required_information_missing">Erforderliche Informationen fehlen</string>
+    <string name="required_information_missing_message">"Benötigte Informationen fehlen (z.B. „Dienste“ oder „Geheimnis“). Überprüfe deine Datei und versuche es erneut. Besuche bitwarden.com/help für Unterstützung"</string>
+    <string name="file_could_not_be_processed">"Datei konnte nicht verarbeitet werden"</string>
+    <string name="file_could_not_be_processed_message">"Datei konnte nicht verarbeitet werden. Stelle sicher, dass es sich um ein gültiges JSON handelt und versuche es erneut. Benötigst du Hilfe? Besuche bitwarden.com/help"</string>
+    <string name="get_help">Hilfe erhalten</string>
 </resources>
