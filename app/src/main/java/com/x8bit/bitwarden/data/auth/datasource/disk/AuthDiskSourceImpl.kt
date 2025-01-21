@@ -156,6 +156,7 @@ class AuthDiskSourceImpl(
         storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = null)
         storeAuthenticatorSyncUnlockKey(userId = userId, authenticatorSyncUnlockKey = null)
         storeShowImportLogins(userId = userId, showImportLogins = null)
+        storeLastLockTimestamp(userId = userId, lastLockTimestamp = null)
 
         // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
         // indefinitely unless the TDE flow explicitly removes them.
@@ -504,8 +505,10 @@ class AuthDiskSourceImpl(
         )
     }
 
-    override fun getLastLockTimestamp(userId: String): Long? {
-        return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId))
+    override fun getLastLockTimestamp(userId: String): Instant? {
+        return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId))?.let {
+            Instant.ofEpochMilli(it)
+        }
     }
 
     override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {

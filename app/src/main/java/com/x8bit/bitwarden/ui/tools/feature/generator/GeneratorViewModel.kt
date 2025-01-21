@@ -2151,7 +2151,7 @@ sealed class GeneratorAction {
     data object LifecycleResume : GeneratorAction()
 
     /**
-     * Indicates the UI has been entered a resumed lifecycle state.
+     * Indicates the UI has been entered a stopped lifecycle state.
      */
     data object LifecycleStop : GeneratorAction()
 

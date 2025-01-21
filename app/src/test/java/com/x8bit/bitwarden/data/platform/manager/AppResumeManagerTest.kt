@@ -21,7 +21,7 @@ import java.time.ZoneOffset
 class AppResumeManagerTest {
 
     private val authDiskSource: AuthDiskSource = mockk {
-        every { getLastLockTimestamp(any()) } returns Instant.now().toEpochMilli()
+        every { getLastLockTimestamp(any()) } returns Instant.now()
     }
     private val fakeSettingsDiskSource: SettingsDiskSource = FakeSettingsDiskSource()
     private val authRepository = mockk<AuthRepository> {

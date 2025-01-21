@@ -7,7 +7,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import java.time.Clock
-import java.time.Instant
+
+// 5 minutes
+private const val UNLOCK_NAVIGATION_TIME_MS: Long = 5 * 60
 
 /**
  * Primary implementation of [AppResumeManager].
@@ -19,10 +21,6 @@ class AppResumeManagerImpl(
     private val vaultLockManager: VaultLockManager,
     private val clock: Clock,
 ) : AppResumeManager {
-    private companion object {
-        // 5 minutes
-        private const val UNLOCK_NAVIGATION_TIME: Long = 5 * 60
-    }
 
     override fun setResumeScreen(screenData: AppResumeScreenData) {
         authRepository.activeUserId?.let {
@@ -41,12 +39,11 @@ class AppResumeManagerImpl(
 
     override fun getResumeSpecialCircumstance(): SpecialCircumstance? {
         val userId = authRepository.activeUserId ?: return null
-        val timeNowMinus5Min = clock.instant().minusSeconds(UNLOCK_NAVIGATION_TIME)
-        val lastLockTimestamp = Instant.ofEpochMilli(
-            authDiskSource.getLastLockTimestamp(
-                userId = userId,
-            ) ?: Long.MIN_VALUE,
-        )
+        val timeNowMinus5Min = clock.instant().minusSeconds(UNLOCK_NAVIGATION_TIME_MS)
+        val lastLockTimestamp = authDiskSource.getLastLockTimestamp(
+            userId = userId,
+        ) ?: return null
+
         if (timeNowMinus5Min.isAfter(lastLockTimestamp)) {
             clearResumeScreen()
             return null
@@ -69,10 +66,10 @@ class AppResumeManagerImpl(
     override fun clearResumeScreen() {
         val userId = authRepository.activeUserId ?: return
         if (vaultLockManager.isVaultUnlocked(userId = userId)) {
-                settingsDiskSource.storeAppResumeScreen(
-                    userId = userId,
-                    screenData = null,
-                )
+            settingsDiskSource.storeAppResumeScreen(
+                userId = userId,
+                screenData = null,
+            )
         }
     }
 }

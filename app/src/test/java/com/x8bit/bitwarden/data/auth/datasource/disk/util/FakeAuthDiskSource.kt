@@ -66,7 +66,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedNewDeviceNoticeState = mutableMapOf<String, NewDeviceNoticeState?>()
-    private val storedLastLockTimestampState = mutableMapOf<String, Long?>()
+    private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -324,12 +324,12 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedNewDeviceNoticeState[userId] = newState
     }
 
-    override fun getLastLockTimestamp(userId: String): Long {
-        return storedLastLockTimestampState[userId] ?: Long.MIN_VALUE
+    override fun getLastLockTimestamp(userId: String): Instant? {
+        return storedLastLockTimestampState[userId]
     }
 
     override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {
-        storedLastLockTimestampState[userId] = Instant.now().toEpochMilli()
+        storedLastLockTimestampState[userId] = lastLockTimestamp
     }
 
     /**

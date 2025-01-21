@@ -1340,11 +1340,11 @@ class AuthDiskSourceTest {
     fun `getLastLockTimestamp should pull from SharedPreferences`() {
         val storeKey = "bwPreferencesStorage:lastLockTimestamp"
         val mockUserId = "mockUserId"
-        val expectedState = Instant.parse("2025-01-13T12:00:00Z").toEpochMilli()
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
         fakeSharedPreferences.edit {
             putLong(
                 "${storeKey}_$mockUserId",
-                expectedState,
+                expectedState.toEpochMilli(),
             )
         }
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
@@ -1376,7 +1376,7 @@ class AuthDiskSourceTest {
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
         assertEquals(
             expectedState,
-            Instant.ofEpochMilli(actual ?: Long.MIN_VALUE),
+            actual,
         )
     }
 
