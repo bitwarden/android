@@ -325,7 +325,7 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `on name input change should send NameChange`() {
         composeTestRule
-            .onNodeWithText("Name")
+            .onNodeWithText("Send name (required)")
             .performTextInput("input")
         verify { viewModel.trySendAction(AddSendAction.NameChange("input")) }
     }
@@ -333,8 +333,8 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `name input should change according to the state`() {
         composeTestRule
-            .onNodeWithText("Name")
-            .assertTextEquals("Name", "")
+            .onNodeWithText("Send name (required)")
+            .assertTextEquals("Send name (required)", "")
 
         mutableStateFlow.update {
             it.copy(
@@ -344,8 +344,8 @@ class AddSendScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Name")
-            .assertTextEquals("Name", "input")
+            .onNodeWithText("Send name (required)")
+            .assertTextEquals("Send name (required)", "input")
     }
 
     @Test
@@ -463,7 +463,7 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `text input change should send TextChange`() {
         composeTestRule
-            .onAllNodesWithText("Text")
+            .onAllNodesWithText("Text to share")
             .filterToOne(isEditableText)
             .performScrollTo()
             .performTextInput("input")
@@ -475,9 +475,9 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `text input should change according to the state`() {
         composeTestRule
-            .onAllNodesWithText("Text")
+            .onAllNodesWithText("Text to share")
             .filterToOne(hasSetTextAction())
-            .assertTextEquals("Text", "")
+            .assertTextEquals("Text to share", "")
 
         mutableStateFlow.update {
             it.copy(
@@ -490,9 +490,9 @@ class AddSendScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Text")
+            .onAllNodesWithText("Text to share")
             .filterToOne(hasSetTextAction())
-            .assertTextEquals("Text", "input")
+            .assertTextEquals("Text to share", "input")
     }
 
     @Test
@@ -527,9 +527,6 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `options sections should start hidden and show after options clicked`() {
         composeTestRule
-            .onNodeWithContentDescription("Deletion date", substring = true)
-            .assertDoesNotExist()
-        composeTestRule
             .onNodeWithContentDescription("Expiration date", substring = true)
             .assertDoesNotExist()
         composeTestRule
@@ -551,12 +548,6 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithText("Additional options")
             .performScrollTo()
             .performClick()
-        composeTestRule
-            .onNodeWithContentDescription("Deletion date", substring = true)
-            .assertExists()
-        composeTestRule
-            .onNodeWithContentDescription("Expiration date", substring = true)
-            .assertExists()
         composeTestRule
             .onNodeWithText("Maximum access count")
             .assertExists()
@@ -671,7 +662,7 @@ class AddSendScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Notes")
+            .onNodeWithText("Private notes")
             .performTextInput("input")
         verify { viewModel.trySendAction(AddSendAction.NoteChange("input")) }
     }
@@ -684,8 +675,8 @@ class AddSendScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
         composeTestRule
-            .onNodeWithText("Notes")
-            .assertTextEquals("Notes", "")
+            .onNodeWithText("Private notes")
+            .assertTextEquals("Private notes", "")
 
         mutableStateFlow.update {
             it.copy(
@@ -695,8 +686,8 @@ class AddSendScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Notes")
-            .assertTextEquals("Notes", "input")
+            .onNodeWithText("Private notes")
+            .assertTextEquals("Private notes", "input")
     }
 
     @Test
@@ -778,102 +769,6 @@ class AddSendScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertIsDisplayed()
             .assertIsEnabled()
-    }
-
-    @Test
-    fun `on deactivate this send toggle should send DeactivateThisSendToggle`() = runTest {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Deactivate this Send", substring = true)
-            .performScrollTo()
-            .performClick()
-        verify { viewModel.trySendAction(AddSendAction.DeactivateThisSendToggle(true)) }
-    }
-
-    @Test
-    fun `deactivate send toggle should change according to the state`() {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("Deactivate this Send", substring = true)
-            .assertIsOff()
-
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(isDeactivateChecked = true),
-                ),
-            )
-        }
-        composeTestRule
-            .onNodeWithText("Deactivate this Send", substring = true)
-            .assertIsOn()
-    }
-
-    @Test
-    fun `in edit mode, clear button should be enabled based on state`() {
-        mutableStateFlow.update {
-            it.copy(addSendType = AddSendType.EditItem(sendItemId = "sendId"))
-        }
-
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("Clear")
-            .performScrollTo()
-            .assertIsNotEnabled()
-
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("Clear")
-            .performScrollTo()
-            .assertIsEnabled()
-    }
-
-    @Test
-    fun `in edit mode, clear button should send ClearExpirationDate`() {
-        mutableStateFlow.update {
-            it.copy(
-                addSendType = AddSendType.EditItem(sendItemId = "sendId"),
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("Clear")
-            .performScrollTo()
-            .performClick()
-
-        verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.ClearExpirationDate)
-        }
     }
 
     @Test
