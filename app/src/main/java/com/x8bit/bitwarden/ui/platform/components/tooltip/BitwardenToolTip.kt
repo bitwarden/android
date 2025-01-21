@@ -48,10 +48,10 @@ fun TooltipScope.BitwardenToolTip(
                 Spacer(modifier = Modifier.weight(1f))
                 onDismiss?.let {
                     BitwardenStandardIconButton(
-                        painter = rememberVectorPainter(R.drawable.ic_close),
+                        painter = rememberVectorPainter(R.drawable.ic_close_small),
                         contentDescription = stringResource(R.string.close),
                         onClick = it,
-                        modifier = Modifier.offset(x = 16.dp, y = 16.dp),
+                        modifier = Modifier.offset(x = 16.dp, y = (-16).dp),
                     )
                 }
             }

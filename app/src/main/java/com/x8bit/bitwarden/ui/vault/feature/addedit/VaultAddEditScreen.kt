@@ -285,7 +285,9 @@ fun VaultAddEditScreen(
                         navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                         navigationIconContentDescription = stringResource(id = R.string.close),
                         onNavigationIconClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
+                            { coroutineScope.launch {
+                                coachMarkState.showCoachMark(AddEditItemCoachMark.GENERATE_PASSWORD)
+                            } }
                         },
                     )
                         .takeIf { state.shouldShowCloseButton },
