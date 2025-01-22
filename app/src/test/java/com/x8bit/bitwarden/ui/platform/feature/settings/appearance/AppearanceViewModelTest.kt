@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -10,14 +9,10 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AppearanceViewModelTest : BaseViewModelTest() {
@@ -28,16 +23,6 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabled = true } just runs
         every { appTheme = AppTheme.DARK } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(AppCompatDelegate::setApplicationLocales)
-    }
-
-    @AfterEach
-    fun teardown() {
-        unmockkStatic(AppCompatDelegate::setApplicationLocales)
     }
 
     @Test
@@ -72,9 +57,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE,
                 awaitItem(),
             )
-            viewModel.trySendAction(
-                AppearanceAction.LanguageChange(AppLanguage.ENGLISH),
-            )
+            viewModel.trySendAction(AppearanceAction.LanguageChange(AppLanguage.ENGLISH))
             assertEquals(
                 DEFAULT_STATE.copy(
                     language = AppLanguage.ENGLISH,
@@ -82,8 +65,8 @@ class AppearanceViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+
         verify {
-            AppCompatDelegate.setApplicationLocales(any())
             mockSettingsRepository.appLanguage
             mockSettingsRepository.appLanguage = AppLanguage.ENGLISH
         }
@@ -126,11 +109,11 @@ class AppearanceViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(theme = AppTheme.DARK),
                 awaitItem(),
             )
+        }
 
-            verify {
-                mockSettingsRepository.appTheme
-                mockSettingsRepository.appTheme = AppTheme.DARK
-            }
+        verify(exactly = 1) {
+            mockSettingsRepository.appTheme
+            mockSettingsRepository.appTheme = AppTheme.DARK
         }
     }
 
