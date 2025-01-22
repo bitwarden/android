@@ -159,6 +159,13 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .getHasSeenAddLoginCoachMarkFlow()
             // default value of false.
             .map { it ?: false }
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { hasSeenTour, featureIsEnabled ->
+                // If the feature flag is off always return true so observers know
+                // the card has not been shown.
+                hasSeenTour || !featureIsEnabled
+            }
             .distinctUntilChanged()
 
     /**

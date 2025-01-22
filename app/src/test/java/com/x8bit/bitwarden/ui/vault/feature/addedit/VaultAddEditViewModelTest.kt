@@ -25,7 +25,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCreden
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -33,7 +32,6 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -173,14 +171,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { hasSeenAddLoginCoachMarkTour() } just runs
         every { hasSeenAddLoginCoachMarkFlow } returns mutableHasSeenAddLoginCoachMarkFlow
-    }
-
-    // Feature flag default to be enabled.
-    private val mutableOnboardingFeatureFlagFlow = MutableStateFlow(true)
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every {
-            getFeatureFlagFlow(FlagKey.OnboardingFlow)
-        } returns mutableOnboardingFeatureFlagFlow
     }
 
     @BeforeEach
@@ -2623,25 +2613,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `when OnboardFlow feature flag is off, shouldShowLearnAboutNewLogins should be false`() {
-        mutableOnboardingFeatureFlagFlow.update { true }
-        val viewModel = createAddVaultItemViewModel(
-            savedStateHandle = createSavedStateHandleWithState(
-                state = createVaultAddItemState(
-                    typeContentViewState = createLoginTypeContentViewState(),
-                ),
-                vaultAddEditType = VaultAddEditType.AddItem(
-                    vaultItemCipherType = VaultItemCipherType.LOGIN,
-                ),
-            ),
-        )
-        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
-
-        mutableOnboardingFeatureFlagFlow.update { false }
-        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `when first time action manager has seen logins tour value updates to true shouldShowLearnAboutNewLogins should update to false`() {
@@ -2710,7 +2681,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LearnAboutLoginsDismissed action calls first time action manager hasSeenAddLoginCoachMarkTour called and show coach mark event sent`() =
+    fun `StartLearnAboutLogins action calls first time action manager hasSeenAddLoginCoachMarkTour called and show coach mark event sent`() =
         runTest {
             val viewModel = createAddVaultItemViewModel()
             viewModel.eventFlow.test {
@@ -3246,7 +3217,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 organizationEventManager = organizationEventManager,
                 networkConnectionManager = networkConnectionManager,
                 firstTimeActionManager = firstTimeActionManager,
-                featureFlagManager = featureFlagManager,
             )
         }
 
@@ -4508,7 +4478,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             organizationEventManager = organizationEventManager,
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
-            featureFlagManager = featureFlagManager,
         )
 
     private fun createVaultData(

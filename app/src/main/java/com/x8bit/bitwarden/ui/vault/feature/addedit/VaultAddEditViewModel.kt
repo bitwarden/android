@@ -15,13 +15,11 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialReques
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
@@ -66,7 +64,6 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -108,7 +105,6 @@ class VaultAddEditViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -221,13 +217,9 @@ class VaultAddEditViewModel @Inject constructor(
 
         firstTimeActionManager
             .hasSeenAddLoginCoachMarkFlow
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(key = FlagKey.OnboardingFlow),
-            ) { hasSeenTour, onboardFeatureFlag ->
-                // The result of this will hide the card if the tour has been shown or if the
-                // onboarding flow feature is off.
+            .map { hasSeenTour ->
                 VaultAddEditAction.Internal.HasSeenAddLoginCoachMarkValueChangeReceive(
-                    newValue = hasSeenTour || !onboardFeatureFlag,
+                    hasSeenCoachMark = hasSeenTour,
                 )
             }
             .onEach(::sendAction)
@@ -1495,7 +1487,7 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                hasSeenLearnAboutLoginsCard = action.newValue,
+                hasSeenLearnAboutLoginsCard = action.hasSeenCoachMark,
             )
         }
     }
@@ -3211,7 +3203,7 @@ sealed class VaultAddEditAction {
          * The value for the hasSeenAddLoginCoachMark has changed.
          */
         data class HasSeenAddLoginCoachMarkValueChangeReceive(
-            val newValue: Boolean,
+            val hasSeenCoachMark: Boolean,
         ) : Internal()
     }
 }

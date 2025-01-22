@@ -36,8 +36,10 @@ class FirstTimeActionManagerTest {
     }
 
     private val mutableImportLoginsFlow = MutableStateFlow(false)
+    private val mutableOnboardingFeatureFlow = MutableStateFlow(false)
     private val featureFlagManager = mockk<FeatureFlagManager> {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlow
+        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableOnboardingFeatureFlow
     }
 
     private val mutableAutofillEnabledFlow = MutableStateFlow(false)
@@ -300,13 +302,27 @@ class FirstTimeActionManagerTest {
 
     @Test
     fun `hasSeenAddLoginCoachMarkFlow updates when disk source updates`() = runTest {
+        // Enable the feature for this test.
+        mutableOnboardingFeatureFlow.update { true }
         firstTimeActionManager.hasSeenAddLoginCoachMarkFlow.test {
-            // null will be mapped to false
+            // Null will be mapped to false.
             assertFalse(awaitItem())
             fakeSettingsDiskSource.storeHasSeenAddLoginCoachMark(hasSeen = true)
             assertTrue(awaitItem())
         }
     }
+
+    @Test
+    fun `hasSeenAddLoginCoachMarkFlow updates when feature flag for onboarding updates`() =
+        runTest {
+            firstTimeActionManager.hasSeenAddLoginCoachMarkFlow.test {
+                // Null will be mapped to false but feature being "off" will override to true.
+                assertTrue(awaitItem())
+                mutableOnboardingFeatureFlow.update { true }
+                // Will use the value from disk source (null ?: false).
+                assertFalse(awaitItem())
+            }
+        }
 
     @Test
     fun `hasSeenAddLoginCoachMarkTour sets the value to true in the disk source`() {

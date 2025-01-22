@@ -92,7 +92,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     actionText = stringResource(R.string.get_started),
                     onActionClick = loginItemTypeHandlers.onStartLoginCoachMarkTour,
                     onDismissClick = loginItemTypeHandlers.onDismissLearnAboutLoginsCard,
-                    modifier = Modifier.standardHorizontalMargin(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
                 )
             }
         }
