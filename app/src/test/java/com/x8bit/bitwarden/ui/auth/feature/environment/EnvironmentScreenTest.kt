@@ -9,13 +9,15 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.requestFocus
-import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
+import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,12 +31,14 @@ class EnvironmentScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<EnvironmentEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+    private val mockKeyChainManager = mockk<KeyChainManager> {
+        coEvery {
+            choosePrivateKeyAlias(any())
+        } returns PrivateKeyAliasSelectionResult.Success("mockAlias")
+    }
     private val viewModel = mockk<EnvironmentViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
-    }
-    private val choosePrivateKeyAlias = { callback: ChoosePrivateKeyAliasCallback ->
-        callback.getCallback().alias("alias")
     }
 
     @Before
@@ -42,8 +46,8 @@ class EnvironmentScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             EnvironmentScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                keyChainManager = mockKeyChainManager,
                 viewModel = viewModel,
-                choosePrivateKeyAlias = choosePrivateKeyAlias,
             )
         }
     }
@@ -139,41 +143,54 @@ class EnvironmentScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `key alias should change according to the state`() {
+    fun `use system certificate click should send UseSystemKeyCertificateClick`() {
         composeTestRule
-            .onNodeWithText("Client certificate")
-            // Click to focus to see placeholder
+            .onNodeWithText("Use system certificate")
+            .performScrollTo()
+            .assertIsDisplayed()
             .performClick()
-            .assertTextEquals(
-                "Client certificate",
-                "Client certificate that will be used for connections to the server",
-                "",
-                "",
-            )
 
-        mutableStateFlow.update { it.copy(keyAlias = "alias") }
-
-        composeTestRule
-            .onNodeWithText("Client certificate")
-            .assertTextEquals(
-                "Client certificate",
-                "Client certificate that will be used for connections to the server",
-                "alias",
-            )
+        verify {
+            viewModel.trySendAction(EnvironmentAction.UseSystemCertificateClick)
+        }
     }
 
     @Test
-    fun `key alias change should send KeyAliasChange`() {
-        composeTestRule
-            .onNodeWithText("Choose", useUnmergedTree = true)
-            .onParent()
-            .requestFocus()
-            .performClick()
+    fun `ShowSystemCertificateSelection event should show system certificate selection dialog`() {
+        mutableEventFlow.tryEmit(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+        coVerify { mockKeyChainManager.choosePrivateKeyAlias("") }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `system certificate selection should send SystemCertificateSelectionResultReceive action`() {
+        coEvery {
+            mockKeyChainManager.choosePrivateKeyAlias("")
+        } returns PrivateKeyAliasSelectionResult.Success("alias")
+
+        mutableEventFlow.tryEmit(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+
         verify {
             viewModel.trySendAction(
-                EnvironmentAction.KeyAliasChange(keyAlias = "alias"),
+                EnvironmentAction.SystemCertificateSelectionResultReceive(
+                    result = PrivateKeyAliasSelectionResult.Success("alias"),
+                ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `key alias should change according to the state`() {
+        composeTestRule
+            .onNodeWithText("Certificate alias")
+            .assertTextEquals("Certificate alias", "")
+
+        mutableStateFlow.update { it.copy(keyAlias = "mock-alias") }
+
+        composeTestRule
+            .onNodeWithText("Certificate alias")
+            .assertTextEquals("Certificate alias", "mock-alias")
     }
 
     @Test

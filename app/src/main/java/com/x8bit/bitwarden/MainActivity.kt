@@ -19,8 +19,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityComp
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
-import com.x8bit.bitwarden.data.platform.repository.KeyChainRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
@@ -54,9 +52,6 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
-
-    @Inject
-    lateinit var keyChainRepository: KeyChainRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var shouldShowSplashScreen = true
@@ -107,9 +102,6 @@ class MainActivity : AppCompatActivity() {
                     RootNavScreen(
                         onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         navController = navController,
-                        choosePrivateKeyAlias = { callback: ChoosePrivateKeyAliasCallback ->
-                            keyChainRepository.choosePrivateKeyAlias(this@MainActivity, callback)
-                        },
                     )
                 }
             }

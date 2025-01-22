@@ -262,9 +262,9 @@ Scanning will happen automatically.</string>
   <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
   <string name="learn_more">Learn more</string>
   <string name="api_url">API server URL</string>
-  <string name="client_certificate">Client certificate</string>
-  <string name="client_certificate_footer">Client certificate that will be used for connections to the server. In case no user certificate is installed, clicking "Choose" will have no effect.</string>
-  <string name="choose_client_certificate">Choose</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">Custom environment</string>
   <string name="custom_environment_footer">For advanced users. You can specify the base URL of each service independently.</string>
   <string name="environment_saved">The environment URLs have been saved.</string>
@@ -1124,4 +1124,6 @@ Do you want to switch to this account?</string>
   <string name="coachmark_3_of_3">3 of 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Mutual TLS</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
 </resources>

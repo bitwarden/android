@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.platform.repository
 
-import android.app.Activity
 import android.content.Context
 import android.security.KeyChain
 import android.security.KeyChainException
@@ -27,16 +26,6 @@ class KeyChainRepositoryImpl @Inject constructor(
             .toEnvironmentUrlsOrDefault()
             .environmentUrlData
             .keyAlias
-    }
-
-    override fun choosePrivateKeyAlias(
-        activity: Activity,
-        callback: ChoosePrivateKeyAliasCallback,
-    ) {
-        KeyChain.choosePrivateKeyAlias(activity, { a ->
-            callback.getCallback().alias(a)
-            alias = a
-        }, null, null, null, alias)
     }
 
     override fun getPrivateKey(): PrivateKey? {

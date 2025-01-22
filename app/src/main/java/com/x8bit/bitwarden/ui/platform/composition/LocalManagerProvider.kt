@@ -20,6 +20,8 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
+import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
+import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -49,6 +51,7 @@ fun LocalManagerProvider(
         LocalNfcManager provides NfcManagerImpl(activity),
         LocalFido2CompletionManager provides fido2CompletionManager,
         LocalAppReviewManager provides AppReviewManagerImpl(activity),
+        LocalKeyChainManager provides KeyChainManagerImpl(activity),
     ) {
         content()
     }
@@ -102,4 +105,8 @@ val LocalFido2CompletionManager: ProvidableCompositionLocal<Fido2CompletionManag
  */
 val LocalAppReviewManager: ProvidableCompositionLocal<AppReviewManager> = compositionLocalOf {
     error("CompositionLocal AppReviewManager not present")
+}
+
+val LocalKeyChainManager: ProvidableCompositionLocal<KeyChainManager> = compositionLocalOf {
+    error("CompositionLocal KeyChainManager not present")
 }

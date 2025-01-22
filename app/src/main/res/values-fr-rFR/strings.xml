@@ -262,9 +262,9 @@ La numérisation se fera automatiquement.</string>
   <string name="encryption_key_migration_required_description_long">Migration de la clé de chiffrement nécessaire. Veuillez vous connecter sur le coffre web pour mettre à jour votre clé de chiffrement.</string>
   <string name="learn_more">En savoir plus</string>
   <string name="api_url">URL du serveur de l\'API</string>
-  <string name="client_certificate">Certificat client</string>
-  <string name="client_certificate_footer">Certificat client qui sera envoyé au serveur. Si aucun certificat client n\'est installé, cliquer sur le bouton « Choisir » n\'aura aucun effet.</string>
-  <string name="choose_client_certificate">Choisir</string>
+  <string name="client_certificate_mtls">Certificat client</string>
+  <string name="certificate_used_for_client_authentication">Certificat client qui sera envoyé au serveur. Si aucun certificat client n\'est installé, cliquer sur le bouton « Choisir » n\'aura aucun effet.</string>
+  <string name="use_system_certificate">Choisir</string>
   <string name="custom_environment">Environnement personnalisé</string>
   <string name="custom_environment_footer">Pour les utilisateurs avancés. Vous pouvez spécifier l\'URL de base de chaque service indépendamment.</string>
   <string name="environment_saved">Les URLs d\'environnement ont été enregistrées.</string>

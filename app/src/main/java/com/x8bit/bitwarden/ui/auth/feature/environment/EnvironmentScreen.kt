@@ -28,8 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallback
-import com.x8bit.bitwarden.data.platform.repository.ChoosePrivateKeyAliasCallbackImpl
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -40,6 +38,8 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
+import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -50,8 +50,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun EnvironmentScreen(
     onNavigateBack: () -> Unit,
+    keyChainManager: KeyChainManager = LocalKeyChainManager.current,
     viewModel: EnvironmentViewModel = hiltViewModel(),
-    choosePrivateKeyAlias: (ChoosePrivateKeyAliasCallback) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -60,6 +60,14 @@ fun EnvironmentScreen(
             is EnvironmentEvent.NavigateBack -> onNavigateBack.invoke()
             is EnvironmentEvent.ShowToast -> {
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
+            }
+
+            is EnvironmentEvent.ShowSystemCertificateSelectionDialog -> {
+                viewModel.trySendAction(
+                    EnvironmentAction.SystemCertificateSelectionResultReceive(
+                        result = keyChainManager.choosePrivateKeyAlias(state.serverUrl),
+                    ),
+                )
             }
         }
     }
@@ -144,18 +152,21 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.client_certificate),
+                label = stringResource(id = R.string.client_certificate_mtls),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
 
             BitwardenTextField(
-                label = stringResource(id = R.string.client_certificate),
+                label = stringResource(id = R.string.certificate_alias),
                 value = state.keyAlias,
-                supportingText = stringResource(id = R.string.client_certificate_footer),
+                supportingText = stringResource(
+                    id = R.string.certificate_used_for_client_authentication,
+                ),
                 onValueChange = {},
                 readOnly = true,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("KeyAliasEntry")
@@ -163,12 +174,11 @@ fun EnvironmentScreen(
             )
 
             BitwardenTextButton(
-                label = stringResource(id = R.string.choose_client_certificate),
-                onClick = {
-                    choosePrivateKeyAlias(ChoosePrivateKeyAliasCallbackImpl {
-                        viewModel.trySendAction(EnvironmentAction.KeyAliasChange(it.orEmpty()))
-                    })
+                label = stringResource(id = R.string.use_system_certificate),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.UseSystemCertificateClick) }
                 },
+                modifier = Modifier.standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(height = 16.dp))

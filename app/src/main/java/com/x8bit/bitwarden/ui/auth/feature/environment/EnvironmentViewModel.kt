@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidUri
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,6 +25,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the self-hosted/custom environment screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
@@ -62,11 +64,14 @@ class EnvironmentViewModel @Inject constructor(
         is EnvironmentAction.SaveClick -> handleSaveClickAction()
         is EnvironmentAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
         is EnvironmentAction.ServerUrlChange -> handleServerUrlChangeAction(action)
-        is EnvironmentAction.KeyAliasChange -> handleKeyAliasChangeAction(action)
         is EnvironmentAction.WebVaultServerUrlChange -> handleWebVaultServerUrlChangeAction(action)
         is EnvironmentAction.ApiServerUrlChange -> handleApiServerUrlChangeAction(action)
         is EnvironmentAction.IdentityServerUrlChange -> handleIdentityServerUrlChangeAction(action)
         is EnvironmentAction.IconsServerUrlChange -> handleIconsServerUrlChangeAction(action)
+        is EnvironmentAction.UseSystemCertificateClick -> handleUseSystemCertificateClickAction()
+        is EnvironmentAction.SystemCertificateSelectionResultReceive -> {
+            handleSystemCertificateSelectionResultReceive(action)
+        }
     }
 
     private fun handleCloseClickAction() {
@@ -126,14 +131,6 @@ class EnvironmentViewModel @Inject constructor(
         }
     }
 
-    private fun handleKeyAliasChangeAction(
-        action: EnvironmentAction.KeyAliasChange,
-    ) {
-        mutableStateFlow.update {
-            it.copy(keyAlias = action.keyAlias)
-        }
-    }
-
     private fun handleWebVaultServerUrlChangeAction(
         action: EnvironmentAction.WebVaultServerUrlChange,
     ) {
@@ -165,6 +162,30 @@ class EnvironmentViewModel @Inject constructor(
             it.copy(iconsServerUrl = action.iconsServerUrl)
         }
     }
+
+    private fun handleUseSystemCertificateClickAction() {
+        sendEvent(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+    }
+
+    private fun handleSystemCertificateSelectionResultReceive(
+        action: EnvironmentAction.SystemCertificateSelectionResultReceive,
+    ) {
+        when (val result = action.result) {
+            is PrivateKeyAliasSelectionResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(keyAlias = result.alias.orEmpty())
+                }
+            }
+
+            is PrivateKeyAliasSelectionResult.Error -> {
+                sendEvent(
+                    EnvironmentEvent.ShowToast(
+                        message = R.string.error_loading_certificate.asText(),
+                    ),
+                )
+            }
+        }
+    }
 }
 
 /**
@@ -189,6 +210,11 @@ sealed class EnvironmentEvent {
      * Navigate back.
      */
     data object NavigateBack : EnvironmentEvent()
+
+    /**
+     * Show the system certificate selection dialog.
+     */
+    data object ShowSystemCertificateSelectionDialog : EnvironmentEvent()
 
     /**
      * Show a toast with the given message.
@@ -218,17 +244,15 @@ sealed class EnvironmentAction {
     data object ErrorDialogDismiss : EnvironmentAction()
 
     /**
+     * User clicked the use system certificate button.
+     */
+    data object UseSystemCertificateClick : EnvironmentAction()
+
+    /**
      * Indicates that the overall server URL has changed.
      */
     data class ServerUrlChange(
         val serverUrl: String,
-    ) : EnvironmentAction()
-
-    /**
-     * Indicates that the key alias has changed.
-     */
-    data class KeyAliasChange(
-        val keyAlias: String,
     ) : EnvironmentAction()
 
     /**
@@ -257,6 +281,13 @@ sealed class EnvironmentAction {
      */
     data class IconsServerUrlChange(
         val iconsServerUrl: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates the result of system certificate selection has been received.
+     */
+    data class SystemCertificateSelectionResultReceive(
+        val result: PrivateKeyAliasSelectionResult,
     ) : EnvironmentAction()
 }
 
