@@ -12,12 +12,10 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -50,7 +48,6 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -82,7 +79,6 @@ class GeneratorViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val firstTimeActionManager: FirstTimeActionManager,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = GeneratorArgs(savedStateHandle).type
@@ -131,13 +127,9 @@ class GeneratorViewModel @Inject constructor(
 
         firstTimeActionManager
             .hasSeenGeneratorCoachMarkFlow
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
-            ) { hasSeenCoachMarkTour, featureEnabled ->
-                // The result of this will hide the card if the tour has been shown or if the
-                // onboarding flow feature is off.
+            .map { hasSeenCoachMarkTour ->
                 GeneratorAction.Internal.HasSeenGeneratorCoachMarkValueChangeReceive(
-                    newValue = hasSeenCoachMarkTour || !featureEnabled,
+                    hasSeenCoachMark = hasSeenCoachMarkTour,
                 )
             }
             .onEach(::sendAction)
@@ -786,7 +778,7 @@ class GeneratorViewModel @Inject constructor(
         action: GeneratorAction.Internal.HasSeenGeneratorCoachMarkValueChangeReceive,
     ) {
         mutableStateFlow.update {
-            it.copy(hasSeenExploreGeneratorCard = action.newValue)
+            it.copy(hasSeenExploreGeneratorCard = action.hasSeenCoachMark)
         }
     }
 
@@ -2614,7 +2606,7 @@ sealed class GeneratorAction {
          * The value for the hasSeenGeneratorCoachMark has changed.
          */
         data class HasSeenGeneratorCoachMarkValueChangeReceive(
-            val newValue: Boolean,
+            val hasSeenCoachMark: Boolean,
         ) : Internal()
     }
 }

@@ -158,6 +158,11 @@ class FirstTimeActionManagerImpl @Inject constructor(
         get() = settingsDiskSource
             .getHasSeenGeneratorCoachMarkFlow()
             .map { it ?: false }
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { hasSeenTour, featureFlagEnabled ->
+                hasSeenTour || !featureFlagEnabled
+            }
             .distinctUntilChanged()
 
     /**

@@ -329,7 +329,9 @@ private fun ScrollContent(
                 actionText = stringResource(R.string.get_started),
                 onActionClick = passwordHandlers.onGeneratorActionCardClicked,
                 onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.height(24.dp))
         }
