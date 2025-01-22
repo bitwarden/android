@@ -92,7 +92,7 @@ fun RootNavScreen(
         popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
-        authGraph(navController = navController)
+        authGraph(navController)
         removePasswordDestination()
         resetPasswordDestination()
         trustedDeviceGraph(navController)
