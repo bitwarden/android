@@ -1112,4 +1112,6 @@
   <string name="review_flow_launched">Розпочато процес відгуку!</string>
   <string name="copy_private_key">Копіювати закритий ключ</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Ви можете змінити електронну пошту у вебпрограмі Bitwarden.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

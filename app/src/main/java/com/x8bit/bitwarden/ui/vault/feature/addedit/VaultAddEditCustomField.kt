@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -98,7 +99,7 @@ fun VaultAddEditCustomField(
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
                 cardStyle = cardStyle,
-                modifier = modifier,
+                modifier = modifier.testTag("AddEditCustomBooleanField"),
             )
         }
 
@@ -112,7 +113,7 @@ fun VaultAddEditCustomField(
                 onVisibilityChanged = onHiddenVisibilityChanged,
                 onEditValue = { shouldShowChooserDialog = true },
                 cardStyle = cardStyle,
-                modifier = modifier,
+                modifier = modifier.testTag("AddEditCustomHiddenField"),
             )
         }
 
@@ -127,7 +128,7 @@ fun VaultAddEditCustomField(
                     },
                     onEditValue = { shouldShowChooserDialog = true },
                     cardStyle = cardStyle,
-                    modifier = modifier,
+                    modifier = modifier.testTag("AddEditCustomLinkedField"),
                 )
             }
         }
@@ -139,7 +140,7 @@ fun VaultAddEditCustomField(
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
                 cardStyle = cardStyle,
-                modifier = modifier,
+                modifier = modifier.testTag("AddEditCustomTextField"),
             )
         }
     }
@@ -184,6 +185,7 @@ private fun CustomFieldBoolean(
                     vectorIconRes = R.drawable.ic_cog,
                     contentDescription = stringResource(id = R.string.edit),
                     onClick = onEditValue,
+                    modifier = Modifier.testTag("CustomFieldSettingsButton"),
                 )
             },
         )
@@ -214,11 +216,14 @@ private fun CustomFieldHiddenField(
             onVisibilityChanged(shouldShowPassword)
         },
         singleLine = true,
+        showPasswordTestTag = "CustomFieldShowPasswordButton",
+        passwordFieldTestTag = "CustomFieldValue",
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
+                modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
         cardStyle = cardStyle,
@@ -243,11 +248,13 @@ private fun CustomFieldTextField(
         value = value,
         onValueChange = onValueChanged,
         singleLine = true,
+        textFieldTestTag = "CustomFieldValue",
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
+                modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
         cardStyle = cardStyle,
@@ -270,7 +277,7 @@ private fun CustomFieldLinkedField(
 ) {
     val possibleTypesWithStrings = supportedLinkedTypes.associateWith { it.label.invoke() }
     BitwardenMultiSelectButton(
-        modifier = modifier,
+        modifier = modifier.testTag("CustomFieldDropdown"),
         label = label,
         options = supportedLinkedTypes.map { it.label.invoke() }.toImmutableList(),
         selectedOption = selectedOption.label.invoke(),
@@ -286,6 +293,7 @@ private fun CustomFieldLinkedField(
                 vectorIconRes = R.drawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
+                modifier = Modifier.testTag("CustomFieldSettingsButton"),
             )
         },
         actionsPadding = PaddingValues(end = 4.dp),

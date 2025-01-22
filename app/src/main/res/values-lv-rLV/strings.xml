@@ -1112,4 +1112,6 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="review_flow_launched">Palaista izskatīšanas plūsma.</string>
   <string name="copy_private_key">Ievietot privāto atslēgu starpliktuvē</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Savu konta e-pasta adresi var mainīt Bitwarden tīmekļa lietotnē.</string>
+  <string name="login_credentials">Pieteikšanās dati</string>
+  <string name="autofill_options">Automātiskās aizpildes iespējas</string>
 </resources>

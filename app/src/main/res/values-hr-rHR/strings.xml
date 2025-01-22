@@ -1111,4 +1111,6 @@
   <string name="review_flow_launched">Pokrenut tok pregleda!</string>
   <string name="copy_private_key">Kopiraj privatni ključ</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">e-poštu svog računa možeš promijeniti u Bitwarden web aplikaciji.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

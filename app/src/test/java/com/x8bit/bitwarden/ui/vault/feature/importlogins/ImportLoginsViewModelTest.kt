@@ -80,7 +80,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.GetStarted,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -97,7 +96,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -119,7 +117,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 ImportLoginsState(
                     dialogState = ImportLoginsState.DialogState.GetStarted,
                     viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
                     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -131,7 +128,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 ImportLoginsState(
                     dialogState = null,
                     viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
                     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -156,7 +152,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ImportLoginsState(
                         dialogState = ImportLoginsState.DialogState.ImportLater,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = false,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -168,7 +163,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ImportLoginsState(
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = false,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -199,7 +193,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 ImportLoginsState(
                     dialogState = ImportLoginsState.DialogState.GetStarted,
                     viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = false,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
                     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -211,7 +204,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 ImportLoginsState(
                     dialogState = null,
                     viewState = ImportLoginsState.ViewState.ImportStepOne,
-                    isVaultSyncing = false,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
                     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -253,7 +245,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.ImportStepOne,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -270,7 +261,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.ImportStepTwo,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -287,7 +277,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.ImportStepThree,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -308,7 +297,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -328,9 +316,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
             assertEquals(
                 ImportLoginsState(
-                    dialogState = null,
+                    dialogState = ImportLoginsState.DialogState.Syncing,
                     viewState = ImportLoginsState.ViewState.InitialContent,
-                    isVaultSyncing = true,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
                     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -357,9 +344,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(ImportLoginsAction.RetryVaultSync)
                 assertEquals(
                     ImportLoginsState(
-                        dialogState = null,
+                        dialogState = ImportLoginsState.DialogState.Syncing,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = true,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -380,7 +366,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = true,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -409,9 +394,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
                 assertEquals(
                     ImportLoginsState(
-                        dialogState = null,
+                        dialogState = ImportLoginsState.DialogState.Syncing,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = true,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -425,7 +409,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                             title = R.string.import_error.asText(),
                         ),
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = false,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -444,7 +427,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.Error(),
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
                 snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -468,7 +450,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ImportLoginsState(
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = false,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -493,9 +474,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
                 assertEquals(
                     ImportLoginsState(
-                        dialogState = null,
+                        dialogState = ImportLoginsState.DialogState.Syncing,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = true,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -506,7 +486,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ImportLoginsState(
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = false,
                         showBottomSheet = true,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -518,7 +497,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ImportLoginsState(
                         dialogState = null,
                         viewState = ImportLoginsState.ViewState.InitialContent,
-                        isVaultSyncing = false,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
                         snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
@@ -560,7 +538,6 @@ private const val DEFAULT_VAULT_URL = "vault.bitwarden.com"
 private val DEFAULT_STATE = ImportLoginsState(
     dialogState = null,
     viewState = ImportLoginsState.ViewState.InitialContent,
-    isVaultSyncing = false,
     showBottomSheet = false,
     currentWebVaultUrl = DEFAULT_VAULT_URL,
     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
