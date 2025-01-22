@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import java.time.Clock
 
 // 5 minutes
-private const val UNLOCK_NAVIGATION_TIME_MS: Long = 5 * 60
+private const val UNLOCK_NAVIGATION_TIME_SECONDS: Long = 5 * 60
 
 /**
  * Primary implementation of [AppResumeManager].
@@ -39,7 +39,7 @@ class AppResumeManagerImpl(
 
     override fun getResumeSpecialCircumstance(): SpecialCircumstance? {
         val userId = authRepository.activeUserId ?: return null
-        val timeNowMinus5Min = clock.instant().minusSeconds(UNLOCK_NAVIGATION_TIME_MS)
+        val timeNowMinus5Min = clock.instant().minusSeconds(UNLOCK_NAVIGATION_TIME_SECONDS)
         val lastLockTimestamp = authDiskSource.getLastLockTimestamp(
             userId = userId,
         ) ?: return null
