@@ -23,8 +23,6 @@ data class AddSendHandlers(
     val onHideEmailToggle: (Boolean) -> Unit,
     val onDeactivateSendToggle: (Boolean) -> Unit,
     val onDeletionDateChange: (ZonedDateTime) -> Unit,
-    val onExpirationDateChange: (ZonedDateTime?) -> Unit,
-    val onClearExpirationDateClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -58,12 +56,6 @@ data class AddSendHandlers(
                 },
                 onDeletionDateChange = {
                     viewModel.trySendAction(AddSendAction.DeletionDateChange(it))
-                },
-                onExpirationDateChange = {
-                    viewModel.trySendAction(AddSendAction.ExpirationDateChange(it))
-                },
-                onClearExpirationDateClick = {
-                    viewModel.trySendAction(AddSendAction.ClearExpirationDate)
                 },
             )
     }
