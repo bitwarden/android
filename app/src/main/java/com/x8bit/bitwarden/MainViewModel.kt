@@ -108,6 +108,11 @@ class MainViewModel @Inject constructor(
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
             .launchIn(viewModelScope)
+        settingsRepository
+            .appLanguageStateFlow
+            .map { MainEvent.UpdateAppLocale(it.localeName) }
+            .onEach(::sendEvent)
+            .launchIn(viewModelScope)
 
         settingsRepository
             .isScreenCaptureAllowedStateFlow
@@ -211,6 +216,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
         mutableStateFlow.update { it.copy(theme = action.theme) }
+        sendEvent(MainEvent.UpdateAppTheme(osTheme = action.theme.osValue))
     }
 
     private fun handleVaultUnlockStateChange() {
@@ -518,4 +524,18 @@ sealed class MainEvent {
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : MainEvent()
+
+    /**
+     * Indicates that the app language has been updated.
+     */
+    data class UpdateAppLocale(
+        val localeName: String?,
+    ) : MainEvent()
+
+    /**
+     * Indicates that the app theme has been updated.
+     */
+    data class UpdateAppTheme(
+        val osTheme: Int,
+    ) : MainEvent()
 }

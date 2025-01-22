@@ -64,6 +64,16 @@ class SettingsRepositoryImpl(
             settingsDiskSource.appLanguage = value
         }
 
+    override val appLanguageStateFlow: StateFlow<AppLanguage>
+        get() = settingsDiskSource
+            .appLanguageFlow
+            .map { it ?: AppLanguage.DEFAULT }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = appLanguage,
+            )
+
     override var appTheme: AppTheme by settingsDiskSource::appTheme
 
     override val appThemeStateFlow: StateFlow<AppTheme>

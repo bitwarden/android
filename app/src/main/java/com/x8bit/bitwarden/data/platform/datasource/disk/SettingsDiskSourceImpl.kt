@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
 
@@ -50,6 +49,7 @@ class SettingsDiskSourceImpl(
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     SettingsDiskSource {
+    private val mutableAppLanguageFlow = bufferedMutableSharedFlow<AppLanguage?>(replay = 1)
     private val mutableAppThemeFlow = bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
     private val mutableLastSyncFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
@@ -94,7 +94,11 @@ class SettingsDiskSourceImpl(
                 key = APP_LANGUAGE_KEY,
                 value = value?.localeName,
             )
+            mutableAppLanguageFlow.tryEmit(value)
         }
+
+    override val appLanguageFlow: Flow<AppLanguage?>
+        get() = mutableAppLanguageFlow.onSubscription { emit(appLanguage) }
 
     override var initialAutofillDialogShown: Boolean?
         get() = getBoolean(key = INITIAL_AUTOFILL_DIALOG_SHOWN)
