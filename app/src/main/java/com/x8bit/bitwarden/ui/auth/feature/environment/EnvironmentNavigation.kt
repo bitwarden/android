@@ -18,7 +18,10 @@ fun NavGraphBuilder.environmentDestination(
     composableWithSlideTransitions(
         route = ENVIRONMENT_ROUTE,
     ) {
-        EnvironmentScreen(onNavigateBack = onNavigateBack, choosePrivateKeyAlias = choosePrivateKeyAlias)
+        EnvironmentScreen(
+            onNavigateBack = onNavigateBack,
+            choosePrivateKeyAlias = choosePrivateKeyAlias,
+        )
     }
 }
 

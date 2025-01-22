@@ -51,7 +51,9 @@ class RetrofitsTest {
     private val server = MockWebServer()
     private val tlsHelper = mockk<TLSHelper> {
         val builderSlot = slot<OkHttpClient.Builder>()
-        every { setupOkHttpClientSSLSocketFactory(capture(builderSlot)) } answers { builderSlot.captured }
+        every {
+            setupOkHttpClientSSLSocketFactory(capture(builderSlot))
+        } answers { builderSlot.captured }
     }
 
     private val retrofits = RetrofitsImpl(

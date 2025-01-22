@@ -164,7 +164,7 @@ fun EnvironmentScreen(
                     choosePrivateKeyAlias(ChoosePrivateKeyAliasCallbackImpl {
                         viewModel.trySendAction(EnvironmentAction.KeyAliasChange(it.orEmpty()))
                     })
-                }
+                },
             )
 
             Spacer(modifier = Modifier.height(24.dp))

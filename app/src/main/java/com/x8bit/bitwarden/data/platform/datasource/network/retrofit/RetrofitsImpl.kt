@@ -25,7 +25,7 @@ class RetrofitsImpl(
     headersInterceptor: HeadersInterceptor,
     refreshAuthenticator: RefreshAuthenticator,
     json: Json,
-    tlsHelper: TLSHelper
+    tlsHelper: TLSHelper,
 ) : Retrofits {
     //region Authenticated Retrofits
 

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.util
 
 import com.x8bit.bitwarden.data.platform.repository.KeyChainRepository
+import okhttp3.OkHttpClient
 import java.net.Socket
 import java.security.KeyStore
 import java.security.Principal
@@ -12,11 +13,21 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509ExtendedKeyManager
 import javax.net.ssl.X509TrustManager
-import okhttp3.OkHttpClient
 
+/**
+ * Helper class for setting up TLS (Transport Layer Security) for OkHttp client.
+ * It provides functionality to setup a SSL Socket factory using KeyChainRepository certificate and
+ * key.
+ *
+ * @param keyChainRepository repository for access to certificate and private key.
+ */
 class TLSHelper @Inject constructor(
     @Named("keyChainRepository") private val keyChainRepository: KeyChainRepository,
 ) {
+
+    /**
+     * Sets up a SSL Socket factory using KeyChainRepository certificate and key.
+     */
     fun setupOkHttpClientSSLSocketFactory(builder: OkHttpClient.Builder): OkHttpClient.Builder {
         val trustManagerFactory =
             TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())

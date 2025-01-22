@@ -3,12 +3,16 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.app.Activity
 import android.content.Context
 import android.security.KeyChain
+import android.security.KeyChainException
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import java.security.PrivateKey
 import java.security.cert.X509Certificate
 import javax.inject.Inject
 
+/**
+ * Default implementation of [KeyChainRepository].
+ */
 class KeyChainRepositoryImpl @Inject constructor(
     environmentDiskSource: EnvironmentDiskSource,
     val context: Context,
@@ -18,8 +22,11 @@ class KeyChainRepositoryImpl @Inject constructor(
     private var chain: Array<X509Certificate>? = null
 
     init {
-        alias =
-            environmentDiskSource.preAuthEnvironmentUrlData.toEnvironmentUrlsOrDefault().environmentUrlData.keyAlias
+        alias = environmentDiskSource
+            .preAuthEnvironmentUrlData
+            .toEnvironmentUrlsOrDefault()
+            .environmentUrlData
+            .keyAlias
     }
 
     override fun choosePrivateKeyAlias(
@@ -36,7 +43,7 @@ class KeyChainRepositoryImpl @Inject constructor(
         if (key == null && !alias.isNullOrEmpty()) {
             key = try {
                 KeyChain.getPrivateKey(context, alias!!)
-            } catch (e: Exception) {
+            } catch (_: KeyChainException) {
                 null
             }
         }
@@ -48,7 +55,7 @@ class KeyChainRepositoryImpl @Inject constructor(
         if (chain == null && !alias.isNullOrEmpty()) {
             chain = try {
                 KeyChain.getCertificateChain(context, alias!!)
-            } catch (e: Exception) {
+            } catch (_: KeyChainException) {
                 null
             }
         }

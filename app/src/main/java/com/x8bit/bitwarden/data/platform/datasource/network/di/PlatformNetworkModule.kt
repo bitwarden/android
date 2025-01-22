@@ -105,7 +105,7 @@ object PlatformNetworkModule {
             headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
             json = json,
-            tlsHelper = tlsHelper
+            tlsHelper = tlsHelper,
         )
 
     @Provides
