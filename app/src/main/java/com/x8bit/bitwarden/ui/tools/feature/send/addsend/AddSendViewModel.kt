@@ -154,6 +154,8 @@ class AddSendViewModel @Inject constructor(
         is AddSendAction.CloseClick -> handleCloseClick()
         is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
         AddSendAction.DismissDialogClick -> handleDismissDialogClick()
+        is AddSendAction.ExpirationDateChange -> handleExpirationDateChange(action)
+        AddSendAction.ClearExpirationDate -> handleClearExpirationDate()
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
         is AddSendAction.TextTypeClick -> handleTextTypeClick()
@@ -457,6 +459,16 @@ class AddSendViewModel @Inject constructor(
         updateCommonContent {
             it.copy(deletionDate = action.deletionDate)
         }
+    }
+
+    private fun handleExpirationDateChange(action: AddSendAction.ExpirationDateChange) {
+        updateCommonContent {
+            it.copy(expirationDate = action.expirationDate)
+        }
+    }
+
+    private fun handleClearExpirationDate() {
+        updateCommonContent { it.copy(expirationDate = null) }
     }
 
     @Suppress("LongMethod")
@@ -986,6 +998,16 @@ sealed class AddSendAction {
      * The user changed the deletion date.
      */
     data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddSendAction()
+
+    /**
+     * The user changed the expiration date.
+     */
+    data class ExpirationDateChange(val expirationDate: ZonedDateTime?) : AddSendAction()
+
+    /**
+     * The user has cleared the expiration date.
+     */
+    data object ClearExpirationDate : AddSendAction()
 
     /**
      * Models actions that the [AddSendViewModel] itself might send.
