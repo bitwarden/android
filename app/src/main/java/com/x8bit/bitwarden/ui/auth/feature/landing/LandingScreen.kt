@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -39,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenPlaceholderAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -216,7 +217,7 @@ private fun LandingScreenContent(
             colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
             contentDescription = null,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .width(220.dp)
                 .height(74.dp)
                 .fillMaxWidth(),
@@ -232,7 +233,7 @@ private fun LandingScreenContent(
             style = BitwardenTheme.typography.headlineSmall,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .standardHorizontalMargin()
                 .wrapContentHeight(),
         )
 
@@ -242,38 +243,40 @@ private fun LandingScreenContent(
 
         BitwardenTextField(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
             value = state.emailInput,
             onValueChange = onEmailInputChange,
             label = stringResource(id = R.string.email_address),
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
+            cardStyle = CardStyle.Full,
+            supportingTextContent = {
+                EnvironmentSelector(
+                    labelText = stringResource(id = R.string.logging_in_on),
+                    selectedOption = state.selectedEnvironmentType,
+                    onOptionSelected = onEnvironmentTypeSelect,
+                    modifier = Modifier
+                        .testTag("RegionSelectorDropdown")
+                        .fillMaxWidth(),
+                )
+            },
         )
 
-        Spacer(modifier = Modifier.height(2.dp))
-
-        EnvironmentSelector(
-            labelText = stringResource(id = R.string.logging_in_on),
-            selectedOption = state.selectedEnvironmentType,
-            onOptionSelected = onEnvironmentTypeSelect,
-            modifier = Modifier
-                .testTag("RegionSelectorDropdown")
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenSwitch(
             label = stringResource(id = R.string.remember_me),
             isChecked = state.isRememberMeEnabled,
             onCheckedChange = onRememberMeToggle,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .testTag("RememberMeSwitch")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
             label = stringResource(id = R.string.continue_text),
@@ -281,17 +284,17 @@ private fun LandingScreenContent(
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
                 .testTag("ContinueButton")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth()
                 .wrapContentHeight(),
         ) {
@@ -309,7 +312,7 @@ private fun LandingScreenContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(58.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

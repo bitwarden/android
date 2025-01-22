@@ -61,7 +61,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
         SpannableStringBuilder(resources.getText(this) as SpannedString)
     } catch (e: ClassCastException) {
         // the resource did not contain and valid spans so we just return the raw string.
-        return stringResource(id = this).toAnnotatedString()
+        return stringResource(id = this, *args).toAnnotatedString()
     }
     // Replace any format arguments with the provided arguments.
     spannableBuilder.applyArgAnnotations(args = args)

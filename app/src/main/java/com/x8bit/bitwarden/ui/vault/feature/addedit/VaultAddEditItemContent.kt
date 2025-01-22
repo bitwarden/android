@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -29,7 +33,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
-fun VaultAddEditContent(
+fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
     typeOptions: List<VaultAddEditState.ItemTypeOption>,
@@ -40,7 +44,12 @@ fun VaultAddEditContent(
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState,
     permissionsManager: PermissionsManager,
+    onNextCoachMark: () -> Unit,
+    onPreviousCoachMark: () -> Unit,
+    onCoachMarkTourComplete: () -> Unit,
+    onCoachMarkDismissed: () -> Unit,
 ) {
     val launcher = permissionsManager.getLauncher(
         onResult = { isGranted ->
@@ -56,13 +65,14 @@ fun VaultAddEditContent(
         },
     )
 
-    LazyColumn(modifier = modifier) {
-        item {
-            if (state.isIndividualVaultDisabled && isAddItemMode) {
+    LazyColumn(modifier = modifier, state = lazyListState) {
+        if (state.isIndividualVaultDisabled && isAddItemMode) {
+            item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
                     text = stringResource(R.string.personal_ownership_policy_in_effect),
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .testTag("PersonalOwnershipPolicyLabel")
                         .fillMaxWidth(),
                 )
@@ -70,23 +80,25 @@ fun VaultAddEditContent(
         }
 
         item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
         if (isAddItemMode) {
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 TypeOptionsItem(
                     entries = typeOptions,
                     itemType = state.type,
                     onTypeOptionClicked = onTypeOptionClicked,
                     modifier = Modifier
                         .testTag("ItemTypePicker")
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
@@ -106,6 +118,11 @@ fun VaultAddEditContent(
                             launcher.launch(Manifest.permission.CAMERA)
                         }
                     },
+                    coachMarkScope = this@VaultAddEditContent,
+                    onPreviousCoachMark = onPreviousCoachMark,
+                    onNextCoachMark = onNextCoachMark,
+                    onCoachMarkTourComplete = onCoachMarkTourComplete,
+                    onCoachMarkDismissed = onCoachMarkDismissed,
                 )
             }
 
@@ -148,6 +165,7 @@ fun VaultAddEditContent(
         }
 
         item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -173,6 +191,16 @@ private fun TypeOptionsItem(
                 .key
             onTypeOptionClicked(selectedOptionId)
         },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     )
+}
+
+/**
+ * Enumerated values representing the coach mark items to be shown.
+ */
+enum class AddEditItemCoachMark {
+    GENERATE_PASSWORD,
+    TOTP,
+    URI,
 }

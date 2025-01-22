@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import android.os.Parcelable
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
@@ -8,10 +9,13 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ChangeAccountEmailClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.NavigateBackClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog
@@ -21,7 +25,10 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 /**
@@ -32,6 +39,9 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     val authRepository: AuthRepository,
     val environmentRepository: EnvironmentRepository,
     val featureFlagManager: FeatureFlagManager,
+    val settingsRepository: SettingsRepository,
+    val vaultRepository: VaultRepository,
+    private val clock: Clock,
 ) : BaseViewModel<
     NewDeviceNoticeTwoFactorState,
     NewDeviceNoticeTwoFactorEvent,
@@ -43,6 +53,15 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
         ),
     ),
 ) {
+    init {
+        viewModelScope.launch {
+            vaultRepository.syncForResult()
+            if (!authRepository.checkUserNeedsNewDeviceTwoFactorNotice()) {
+                sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
+            }
+        }
+    }
+
     private val webTwoFactorUrl: String
         get() {
             val baseUrl = environmentRepository
@@ -72,6 +91,8 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
             DismissDialogClick -> updateDialogState(newState = null)
 
             ContinueDialogClick -> handleContinueDialog()
+
+            NavigateBackClick -> sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBack)
         }
     }
 
@@ -79,7 +100,7 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
         authRepository.setNewDeviceNoticeState(
             NewDeviceNoticeState(
                 displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                lastSeenDate = null,
+                lastSeenDate = ZonedDateTime.now(clock),
             ),
         )
         sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
@@ -88,6 +109,8 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     private fun handleContinueDialog() {
         when (state.dialogState) {
             is ChangeAccountEmailDialog -> {
+                // when the user leaves the app set sync date to null to force a sync on next unlock
+                settingsRepository.vaultLastSync = null
                 sendEvent(
                     NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail(url = webAccountUrl),
                 )
@@ -95,6 +118,8 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
             }
 
             is TurnOnTwoFactorDialog -> {
+                // when the user leaves the app set sync date to null to force a sync on next unlock
+                settingsRepository.vaultLastSync = null
                 sendEvent(
                     NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor(url = webTwoFactorUrl),
                 )
@@ -132,6 +157,11 @@ sealed class NewDeviceNoticeTwoFactorEvent {
      * Navigates back to vault.
      */
     data object NavigateBackToVault : NewDeviceNoticeTwoFactorEvent()
+
+    /**
+     * Navigates back to previous screen.
+     */
+    data object NavigateBack : NewDeviceNoticeTwoFactorEvent()
 }
 
 /**
@@ -162,6 +192,11 @@ sealed class NewDeviceNoticeTwoFactorAction {
      * User tapped the continue dialog button.
      */
     data object ContinueDialogClick : NewDeviceNoticeTwoFactorAction()
+
+    /**
+     * User tapped the back button.
+     */
+    data object NavigateBackClick : NewDeviceNoticeTwoFactorAction()
 }
 
 /**

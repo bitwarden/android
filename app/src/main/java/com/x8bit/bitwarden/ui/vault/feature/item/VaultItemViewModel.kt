@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
@@ -116,11 +117,14 @@ class VaultItemViewModel @Inject constructor(
                             .data
                             .canAssignToCollections(cipherViewState.data?.collectionIds)
 
+                        val canEdit = cipherViewState.data?.edit == true
+
                         VaultItemStateData(
                             cipher = cipherViewState.data,
                             totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
+                            canEdit = canEdit,
                         )
                     },
             )
@@ -1066,6 +1070,7 @@ class VaultItemViewModel @Inject constructor(
                 totpCodeItemData = this.data?.totpCodeItemData,
                 canDelete = this.data?.canDelete == true,
                 canAssignToCollections = this.data?.canAssociateToCollections == true,
+                canEdit = this.data?.canEdit == true,
             )
         }
         ?: VaultItemState.ViewState.Error(message = errorText)
@@ -1303,11 +1308,16 @@ data class VaultItemState(
             ?.currentCipher
             ?.deletedDate != null
 
+    private val isCipherEditable: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canEdit == true
+
     /**
      * Whether or not the fab is visible.
      */
     val isFabVisible: Boolean
-        get() = viewState is ViewState.Content && !isCipherDeleted
+        get() = viewState is ViewState.Content && !isCipherDeleted && isCipherEditable
 
     /**
      * Whether or not the cipher is in a collection.
@@ -1403,6 +1413,7 @@ data class VaultItemState(
                 val attachments: List<AttachmentItem>?,
                 val canDelete: Boolean,
                 val canAssignToCollections: Boolean,
+                val canEdit: Boolean,
             ) : Parcelable {
 
                 /**
@@ -1507,6 +1518,15 @@ data class VaultItemState(
                 ) : ItemType() {
 
                     /**
+                     * Indicates that at least one of the login credentials are present.
+                     */
+                    val hasLoginCredentials: Boolean
+                        get() = username != null ||
+                            passwordData != null ||
+                            fido2CredentialCreationDateText != null ||
+                            totpCodeItemData != null
+
+                    /**
                      * A wrapper for the password data.
                      *
                      * @property password The password itself.
@@ -1561,7 +1581,24 @@ data class VaultItemState(
                     val email: String?,
                     val phone: String?,
                     val address: String?,
-                ) : ItemType()
+                ) : ItemType() {
+
+                    /**
+                     * An ordered list of Card specific elements.
+                     */
+                    val propertyList: List<String>
+                        get() = persistentListOfNotNull(
+                            identityName,
+                            username,
+                            company,
+                            ssn,
+                            passportNumber,
+                            licenseNumber,
+                            email,
+                            phone,
+                            address,
+                        )
+                }
 
                 /**
                  * Represents the `Card` item type.
@@ -1579,6 +1616,18 @@ data class VaultItemState(
                     val expiration: String?,
                     val securityCode: CodeData?,
                 ) : ItemType() {
+
+                    /**
+                     * An ordered list of Card specific elements.
+                     */
+                    val propertyList: List<Any>
+                        get() = persistentListOfNotNull(
+                            cardholderName,
+                            number,
+                            brand.takeIf { brand != VaultCardBrand.SELECT },
+                            expiration,
+                            securityCode,
+                        )
 
                     /**
                      * A wrapper for the number data.

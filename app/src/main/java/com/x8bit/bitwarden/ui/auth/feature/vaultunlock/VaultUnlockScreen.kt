@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -47,6 +46,9 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -58,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
@@ -89,7 +92,7 @@ fun VaultUnlockScreen(
         }
     }
 
-    val onBiometricsUnlockSuccess: (cipher: Cipher?) -> Unit = remember(viewModel) {
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
     }
     val onBiometricsLockOut: () -> Unit = remember(viewModel) {
@@ -247,6 +250,7 @@ fun VaultUnlockScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(12.dp))
             if (!state.hideInput) {
                 BitwardenPasswordField(
                     label = state.vaultUnlockType.unlockScreenInputLabel(),
@@ -258,10 +262,6 @@ fun VaultUnlockScreen(
                     showPasswordTestTag = state
                         .vaultUnlockType
                         .inputFieldVisibilityToggleTestTag,
-                    modifier = Modifier
-                        .testTag(state.vaultUnlockType.unlockScreenInputTestTag)
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
                     autoFocus = state.showKeyboard,
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(
@@ -269,17 +269,18 @@ fun VaultUnlockScreen(
                             { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
                         },
                     ),
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = state.vaultUnlockType.unlockScreenMessage(),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
+                    supportingText = state.vaultUnlockType.unlockScreenMessage(),
+                    cardStyle = CardStyle.Top(hasDivider = false),
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .testTag(tag = state.vaultUnlockType.unlockScreenInputTestTag)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+            }
+            val trailingTextCardStyle = if (state.hideInput) {
+                CardStyle.Full
+            } else {
+                CardStyle.Bottom
             }
             Text(
                 text = stringResource(
@@ -287,11 +288,19 @@ fun VaultUnlockScreen(
                     state.email,
                     state.environmentUrl,
                 ),
-                style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .testTag("UserAndEnvironmentDataLabel")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
+                    .cardBackground(cardStyle = trailingTextCardStyle)
+                    .cardPadding(
+                        cardStyle = trailingTextCardStyle,
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 0.dp,
+                        bottom = 12.dp,
+                    )
                     .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -302,7 +311,7 @@ fun VaultUnlockScreen(
                         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
                     },
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -312,7 +321,7 @@ fun VaultUnlockScreen(
                     textAlign = TextAlign.Start,
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.status.error,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier.standardHorizontalMargin(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -325,7 +334,7 @@ fun VaultUnlockScreen(
                     isEnabled = state.input.isNotEmpty(),
                     modifier = Modifier
                         .testTag("UnlockVaultButton")
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }

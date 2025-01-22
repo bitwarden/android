@@ -15,12 +15,12 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialReques
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
@@ -2535,6 +2535,11 @@ sealed class VaultAddEditEvent {
     data class Fido2UserVerification(
         val isRequired: Boolean,
     ) : BackgroundEvent, VaultAddEditEvent()
+
+    /**
+     * Start the coach mark guided tour of the add login content.
+     */
+    data object StartAddLoginItemCoachMarkTour : VaultAddEditEvent()
 }
 
 /**

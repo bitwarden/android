@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
@@ -149,7 +150,7 @@ private fun ResetPasswordScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-
+        Spacer(modifier = Modifier.height(height = 12.dp))
         val instructionsTextId =
             if (state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
                 R.string.update_weak_master_password_warning
@@ -159,7 +160,7 @@ private fun ResetPasswordScreenContent(
         BitwardenInfoCalloutCard(
             text = stringResource(id = instructionsTextId),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -174,7 +175,7 @@ private fun ResetPasswordScreenContent(
             BitwardenInfoCalloutCard(
                 text = passwordPolicyContent,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -184,13 +185,12 @@ private fun ResetPasswordScreenContent(
                 label = stringResource(id = R.string.current_master_password),
                 value = state.currentPasswordInput,
                 onValueChange = onCurrentPasswordInputChanged,
+                cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                 modifier = Modifier
                     .testTag("MasterPasswordField")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
 
         var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
@@ -200,13 +200,17 @@ private fun ResetPasswordScreenContent(
             onValueChange = onPasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
+            cardStyle = if (
+                state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
+                CardStyle.Middle(dividerPadding = 0.dp)
+            } else {
+                CardStyle.Top(dividerPadding = 0.dp)
+            },
             modifier = Modifier
                 .testTag("NewPasswordField")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenPasswordField(
             label = stringResource(id = R.string.retype_master_password),
@@ -214,23 +218,23 @@ private fun ResetPasswordScreenContent(
             onValueChange = onRetypePasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
+            cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
             modifier = Modifier
                 .testTag("RetypePasswordField")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenTextField(
             label = stringResource(id = R.string.master_password_hint),
             value = state.passwordHintInput,
             onValueChange = onPasswordHintInputChanged,
-            hint = stringResource(id = R.string.master_password_hint_description),
+            supportingText = stringResource(id = R.string.master_password_hint_description),
+            textFieldTestTag = "MasterPasswordHintLabel",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textFieldTestTag = "MasterPasswordHintLabel",
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())

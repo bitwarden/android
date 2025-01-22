@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -20,6 +21,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -112,7 +114,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggleDisabled`() {
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = true) }
         composeTestRule
             .onNodeWithText(text = "Unlock with Biometrics")
@@ -120,7 +122,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .assertIsOn()
             .performClick()
         verify(exactly = 1) {
-            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = false))
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleDisabled)
         }
     }
 
@@ -187,8 +189,9 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggleEnabled on success`() {
         composeTestRule
             .onNodeWithText(text = "Unlock with Biometrics")
             .performScrollTo()
@@ -204,7 +207,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertIsOff()
         verify(exactly = 1) {
-            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true))
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleEnabled(CIPHER))
         }
     }
 
@@ -576,14 +579,14 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     @Test
     fun `Loading Dialog should be displayed according to state`() {
         val title = "title"
-        composeTestRule.assertNoDialogExists()
+        composeTestRule.assertNoPopupExists()
 
         mutableStateFlow.update {
             it.copy(dialogState = SetupUnlockState.DialogState.Loading(title = title.asText()))
         }
         composeTestRule
             .onAllNodesWithText(text = title)
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }

@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
@@ -70,6 +71,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -3448,6 +3450,114 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 VaultAddEditAction.ItemType.SshKeyType.PrivateKeyVisibilityChange(true),
             )
         }
+    }
+
+    @Test
+    fun `CoachMark tour starts when StartAddLoginItemCoachMarkTour event received`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `CoachMark tour able to move forward and backward between coach marks`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("2 of 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Back")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 of 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Clicking close on a coach mark should end the tour`() = runTest {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 of 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNode(
+                hasAnyAncestor(isCoachMarkToolTip) and
+                    hasContentDescription("Close"),
+            )
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `CoachMark tour is closed when user clicks done on final coach mark`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 of 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("2 of 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 of 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("3 of 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Done")
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
     }
 
     //region Helper functions

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +43,7 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
@@ -50,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -217,13 +220,14 @@ private fun TwoFactorLoginScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = state.authMethod.description(state.displayEmail)(),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -255,31 +259,33 @@ private fun TwoFactorLoginScreenContent(
                 keyboardActions = KeyboardActions(
                     onDone = { onContinueButtonClick() },
                 ),
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         BitwardenSwitch(
             label = stringResource(id = R.string.remember_me),
             isChecked = state.isRememberMeEnabled,
             onCheckedChange = onRememberMeToggle,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
             label = state.buttonText(),
             onClick = onContinueButtonClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -290,10 +296,12 @@ private fun TwoFactorLoginScreenContent(
                 label = stringResource(id = R.string.send_verification_code_again),
                 onClick = onResendEmailButtonClick,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
         }
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
@@ -303,7 +311,7 @@ private fun TwoFactorLoginScreenContentPreview() {
     BitwardenTheme {
         TwoFactorLoginScreenContent(
             state = TwoFactorLoginState(
-                TwoFactorAuthMethod.EMAIL,
+                authMethod = TwoFactorAuthMethod.EMAIL,
                 availableAuthMethods = listOf(TwoFactorAuthMethod.EMAIL),
                 codeInput = "",
                 dialogState = null,

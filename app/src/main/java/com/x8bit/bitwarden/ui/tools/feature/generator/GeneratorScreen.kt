@@ -8,7 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,18 +36,20 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTonalIconButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
@@ -300,37 +303,42 @@ private fun ScrollContent(
     Column(
         modifier = modifier
             .fillMaxHeight()
+            .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(12.dp))
         if (state.isUnderPolicy) {
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.password_generator_policy_in_effect),
                 modifier = Modifier
                     .testTag("PasswordGeneratorPolicyInEffectLabel")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
 
         GeneratedStringItem(
             generatedText = state.generatedText,
-            onCopyClick = onCopyClick,
             onRegenerateClick = onRegenerateClick,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.options),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BitwardenFilledButton(
+            label = stringResource(id = R.string.copy),
+            onClick = onCopyClick,
+            modifier = Modifier
+                .testTag(tag = "CopyValueButton")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         when (val selectedType = state.selectedType) {
             is GeneratorState.MainType.Passphrase -> {
@@ -359,29 +367,24 @@ private fun ScrollContent(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
 @Composable
 private fun GeneratedStringItem(
     generatedText: String,
-    onCopyClick: () -> Unit,
     onRegenerateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
-        label = "",
+        label = null,
         textFieldTestTag = "GeneratedPasswordLabel",
         value = generatedText,
         singleLine = false,
         actions = {
-            BitwardenTonalIconButton(
-                vectorIconRes = R.drawable.ic_copy,
-                contentDescription = stringResource(id = R.string.copy),
-                onClick = onCopyClick,
-                modifier = Modifier.testTag("CopyValueButton"),
-            )
-            BitwardenTonalIconButton(
+            BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_password),
                 onClick = onRegenerateClick,
@@ -393,8 +396,9 @@ private fun GeneratedStringItem(
         textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier,
         textToolbarType = TextToolbarType.NONE,
+        cardStyle = CardStyle.Full,
     )
 }
 
@@ -452,8 +456,6 @@ private fun ColumnScope.PasswordTypeContent(
     passwordTypeState: GeneratorState.MainType.Password,
     passwordHandlers: PasswordHandlers,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
-
     BitwardenSlider(
         value = passwordTypeState.length,
         onValueChange = { newValue, isUserInteracting ->
@@ -464,41 +466,58 @@ private fun ColumnScope.PasswordTypeContent(
         range = passwordTypeState.minLength..passwordTypeState.maxLength,
         sliderTag = "PasswordLengthSlider",
         valueTag = "PasswordLengthLabel",
+        cardStyle = CardStyle.Full,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = 28.dp),
+            .standardHorizontalMargin(),
     )
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-
-        PasswordCapitalLettersToggleItem(
-            useCapitals = passwordTypeState.useCapitals,
-            onPasswordToggleCapitalLettersChange = passwordHandlers
-                .onPasswordToggleCapitalLettersChange,
-            enabled = passwordTypeState.capitalsEnabled,
-        )
-        PasswordLowercaseLettersToggleItem(
-            useLowercase = passwordTypeState.useLowercase,
-            onPasswordToggleLowercaseLettersChange = passwordHandlers
-                .onPasswordToggleLowercaseLettersChange,
-            enabled = passwordTypeState.lowercaseEnabled,
-        )
-        PasswordNumbersToggleItem(
-            useNumbers = passwordTypeState.useNumbers,
-            onPasswordToggleNumbersChange = passwordHandlers.onPasswordToggleNumbersChange,
-            enabled = passwordTypeState.numbersEnabled,
-        )
-        PasswordSpecialCharactersToggleItem(
-            useSpecialChars = passwordTypeState.useSpecialChars,
-            onPasswordToggleSpecialCharactersChange = passwordHandlers
-                .onPasswordToggleSpecialCharactersChange,
-            enabled = passwordTypeState.specialCharsEnabled,
-        )
-    }
+    PasswordCapitalLettersToggleItem(
+        useCapitals = passwordTypeState.useCapitals,
+        onPasswordToggleCapitalLettersChange = passwordHandlers
+            .onPasswordToggleCapitalLettersChange,
+        enabled = passwordTypeState.capitalsEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    PasswordLowercaseLettersToggleItem(
+        useLowercase = passwordTypeState.useLowercase,
+        onPasswordToggleLowercaseLettersChange = passwordHandlers
+            .onPasswordToggleLowercaseLettersChange,
+        enabled = passwordTypeState.lowercaseEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    PasswordNumbersToggleItem(
+        useNumbers = passwordTypeState.useNumbers,
+        onPasswordToggleNumbersChange = passwordHandlers.onPasswordToggleNumbersChange,
+        enabled = passwordTypeState.numbersEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    PasswordSpecialCharactersToggleItem(
+        useSpecialChars = passwordTypeState.useSpecialChars,
+        onPasswordToggleSpecialCharactersChange = passwordHandlers
+            .onPasswordToggleSpecialCharactersChange,
+        enabled = passwordTypeState.specialCharsEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    PasswordAvoidAmbiguousCharsToggleItem(
+        avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
+        onPasswordToggleAvoidAmbiguousCharsChange = passwordHandlers
+            .onPasswordToggleAvoidAmbiguousCharsChange,
+        enabled = passwordTypeState.ambiguousCharsEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
 
     Spacer(modifier = Modifier.height(8.dp))
 
@@ -507,9 +526,10 @@ private fun ColumnScope.PasswordTypeContent(
         onPasswordMinNumbersCounterChange = passwordHandlers.onPasswordMinNumbersCounterChange,
         maxValue = max(passwordTypeState.maxNumbersAllowed, passwordTypeState.minNumbersAllowed),
         minValue = passwordTypeState.minNumbersAllowed,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
-
-    Spacer(modifier = Modifier.height(8.dp))
 
     PasswordMinSpecialCharactersCounterItem(
         minSpecial = passwordTypeState.minSpecial,
@@ -517,15 +537,9 @@ private fun ColumnScope.PasswordTypeContent(
             .onPasswordMinSpecialCharactersChange,
         maxValue = max(passwordTypeState.maxSpecialAllowed, passwordTypeState.minSpecialAllowed),
         minValue = passwordTypeState.minSpecialAllowed,
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    PasswordAvoidAmbiguousCharsToggleItem(
-        avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
-        onPasswordToggleAvoidAmbiguousCharsChange = passwordHandlers
-            .onPasswordToggleAvoidAmbiguousCharsChange,
-        enabled = passwordTypeState.ambiguousCharsEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 }
 
@@ -542,10 +556,8 @@ private fun PasswordCapitalLettersToggleItem(
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
         enabled = enabled,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("UppercaseAtoZToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Top(),
+        modifier = modifier.testTag(tag = "UppercaseAtoZToggle"),
     )
 }
 
@@ -562,10 +574,8 @@ private fun PasswordLowercaseLettersToggleItem(
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
         enabled = enabled,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("LowercaseAtoZToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Middle(),
+        modifier = modifier.testTag(tag = "LowercaseAtoZToggle"),
     )
 }
 
@@ -582,10 +592,8 @@ private fun PasswordNumbersToggleItem(
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
         enabled = enabled,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("NumbersZeroToNineToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Middle(),
+        modifier = modifier.testTag(tag = "NumbersZeroToNineToggle"),
     )
 }
 
@@ -602,10 +610,8 @@ private fun PasswordSpecialCharactersToggleItem(
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
         enabled = enabled,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("SpecialCharactersToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Middle(),
+        modifier = modifier.testTag(tag = "SpecialCharactersToggle"),
     )
 }
 
@@ -622,9 +628,8 @@ private fun PasswordMinNumbersCounterItem(
         value = minNumbers.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinNumbersCounterChange,
-        modifier = modifier
-            .testTag("MinNumberValueLabel")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Top(),
+        modifier = modifier.testTag(tag = "MinNumberValueLabel"),
     )
 }
 
@@ -641,9 +646,8 @@ private fun PasswordMinSpecialCharactersCounterItem(
         value = minSpecial.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinSpecialCharactersChange,
-        modifier = modifier
-            .testTag("MinSpecialValueLabel")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier.testTag(tag = "MinSpecialValueLabel"),
     )
 }
 
@@ -659,10 +663,8 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
         isChecked = avoidAmbiguousChars,
         enabled = enabled,
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("AvoidAmbiguousCharsToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier.testTag(tag = "AvoidAmbiguousCharsToggle"),
     )
 }
 
@@ -675,13 +677,14 @@ private fun ColumnScope.PassphraseTypeContent(
     passphraseTypeState: GeneratorState.MainType.Passphrase,
     passphraseHandlers: PassphraseHandlers,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
-
     PassphraseNumWordsCounterItem(
         numWords = passphraseTypeState.numWords,
         onPassphraseNumWordsCounterChange = passphraseHandlers.onPassphraseNumWordsCounterChange,
         minValue = passphraseTypeState.minNumWords,
         maxValue = passphraseTypeState.maxNumWords,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -689,26 +692,31 @@ private fun ColumnScope.PassphraseTypeContent(
     PassphraseWordSeparatorInputItem(
         wordSeparator = passphraseTypeState.wordSeparator,
         onPassphraseWordSeparatorChange = passphraseHandlers.onPassphraseWordSeparatorChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(8.dp))
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        PassphraseCapitalizeToggleItem(
-            capitalize = passphraseTypeState.capitalize,
-            onPassphraseCapitalizeToggleChange = passphraseHandlers
-                .onPassphraseCapitalizeToggleChange,
-            enabled = passphraseTypeState.capitalizeEnabled,
-        )
-        PassphraseIncludeNumberToggleItem(
-            includeNumber = passphraseTypeState.includeNumber,
-            onPassphraseIncludeNumberToggleChange = passphraseHandlers
-                .onPassphraseIncludeNumberToggleChange,
-            enabled = passphraseTypeState.includeNumberEnabled,
-        )
-    }
+    PassphraseCapitalizeToggleItem(
+        capitalize = passphraseTypeState.capitalize,
+        onPassphraseCapitalizeToggleChange = passphraseHandlers
+            .onPassphraseCapitalizeToggleChange,
+        enabled = passphraseTypeState.capitalizeEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    PassphraseIncludeNumberToggleItem(
+        includeNumber = passphraseTypeState.includeNumber,
+        onPassphraseIncludeNumberToggleChange = passphraseHandlers
+            .onPassphraseIncludeNumberToggleChange,
+        enabled = passphraseTypeState.includeNumberEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
 }
 
 @Composable
@@ -719,17 +727,14 @@ private fun PassphraseNumWordsCounterItem(
     minValue: Int = PASSPHRASE_MIN_NUMBER_OF_WORDS,
     maxValue: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
 ) {
-    val coercedNumWords = numWords.coerceIn(minValue, maxValue)
-
     BitwardenStepper(
         label = stringResource(id = R.string.number_of_words),
-        value = coercedNumWords,
+        value = numWords.coerceIn(minimumValue = minValue, maximumValue = maxValue),
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
         stepperActionsTestTag = "NumberOfWordsStepper",
-        modifier = modifier
-            .testTag("NumberOfWordsLabel")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Full,
+        modifier = modifier.testTag(tag = "NumberOfWordsLabel"),
     )
 }
 
@@ -751,10 +756,9 @@ private fun PassphraseWordSeparatorInputItem(
                 onPassphraseWordSeparatorChange(char)
             }
         },
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Full,
         textFieldTestTag = "WordSeparatorEntry",
+        modifier = modifier,
     )
 }
 
@@ -770,10 +774,8 @@ private fun PassphraseCapitalizeToggleItem(
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
         enabled = enabled,
-        modifier = modifier
-            .testTag("CapitalizePassphraseToggle")
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Top(),
+        modifier = modifier.testTag(tag = "CapitalizePassphraseToggle"),
     )
 }
 
@@ -789,10 +791,8 @@ private fun PassphraseIncludeNumberToggleItem(
         isChecked = includeNumber,
         enabled = enabled,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
-        modifier = modifier
-            .testTag("IncludeNumbersToggle")
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier.testTag(tag = "IncludeNumbersToggle"),
     )
 }
 
@@ -810,7 +810,14 @@ private fun ColumnScope.UsernameTypeItems(
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
 ) {
-    UsernameOptionsItem(usernameState, onSubStateOptionClicked, usernameTypeHandlers)
+    UsernameOptionsItem(
+        currentSubState = usernameState,
+        onSubStateOptionClicked = onSubStateOptionClicked,
+        usernameTypeHandlers = usernameTypeHandlers,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
 
     when (val selectedType = usernameState.selectedType) {
         is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
@@ -869,10 +876,8 @@ private fun UsernameOptionsItem(
             onClick = usernameTypeHandlers.onUsernameTooltipClicked,
             contentDescription = stringResource(id = R.string.learn_more),
         ),
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .testTag("UsernameTypePicker"),
+        cardStyle = CardStyle.Full,
+        modifier = modifier.testTag(tag = "UsernameTypePicker"),
     )
 }
 
@@ -891,20 +896,23 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
     ServiceTypeOptionsItem(
         currentSubState = usernameTypeState,
         onSubStateOptionClicked = forwardedEmailAliasHandlers.onServiceChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 
     Spacer(modifier = Modifier.height(8.dp))
 
     when (usernameTypeState.selectedServiceType) {
-
         is ServiceType.AddyIo -> {
             BitwardenPasswordField(
                 label = stringResource(id = R.string.api_access_token),
                 value = usernameTypeState.selectedServiceType.apiAccessToken,
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -915,10 +923,11 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.domain_name_required_parenthesis),
                 value = usernameTypeState.selectedServiceType.domainName,
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
                 textFieldTestTag = "AnonAddyDomainNameEntry",
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
             )
         }
 
@@ -928,8 +937,9 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -941,8 +951,9 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -954,8 +965,9 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiAccessToken,
                 onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -967,8 +979,9 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -979,10 +992,11 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.domain_name_required_parenthesis),
                 value = usernameTypeState.selectedServiceType.domainName,
                 onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
                 textFieldTestTag = "ForwardedEmailDomainNameEntry",
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
             )
         }
 
@@ -992,8 +1006,9 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -1006,8 +1021,9 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = obfuscatedTextField,
                 onValueChange = { obfuscatedTextField = it },
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
@@ -1035,10 +1051,8 @@ private fun ServiceTypeOptionsItem(
                 optionsWithStrings.entries.first { it.value == selectedOption }.key
             onSubStateOptionClicked(selectedOptionId)
         },
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .testTag("ServiceTypePicker")
-            .fillMaxWidth(),
+        cardStyle = CardStyle.Full,
+        modifier = modifier.testTag(tag = "ServiceTypePicker"),
     )
 }
 
@@ -1054,6 +1068,9 @@ private fun ColumnScope.PlusAddressedEmailTypeContent(
     PlusAddressedEmailTextInputItem(
         email = usernameTypeState.email,
         onPlusAddressedEmailTextChange = plusAddressedEmailHandlers.onEmailChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 }
 
@@ -1067,10 +1084,9 @@ private fun PlusAddressedEmailTextInputItem(
         label = stringResource(id = R.string.email_required_parenthesis),
         value = email,
         onValueChange = onPlusAddressedEmailTextChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
         textFieldTestTag = "PlusAddressedEmailEntry",
+        cardStyle = CardStyle.Full,
+        modifier = modifier,
     )
 }
 
@@ -1088,6 +1104,9 @@ private fun ColumnScope.CatchAllEmailTypeContent(
     CatchAllEmailTextInputItem(
         domain = usernameTypeState.domainName,
         onDomainTextChange = catchAllEmailHandlers.onDomainChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 }
 
@@ -1101,10 +1120,9 @@ private fun CatchAllEmailTextInputItem(
         label = stringResource(id = R.string.domain_name_required_parenthesis),
         value = domain,
         onValueChange = onDomainTextChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
         textFieldTestTag = "CatchAllEmailDomainEntry",
+        cardStyle = CardStyle.Full,
+        modifier = modifier,
     )
 }
 
@@ -1117,16 +1135,22 @@ private fun ColumnScope.RandomWordTypeContent(
     randomWordTypeState: GeneratorState.MainType.Username.UsernameType.RandomWord,
     randomWordHandlers: RandomWordHandlers,
 ) {
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(8.dp))
 
     RandomWordCapitalizeToggleItem(
         capitalize = randomWordTypeState.capitalize,
         onRandomWordCapitalizeToggleChange = randomWordHandlers.onCapitalizeChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 
     RandomWordIncludeNumberToggleItem(
         includeNumber = randomWordTypeState.includeNumber,
         onRandomWordIncludeNumberToggleChange = randomWordHandlers.onIncludeNumberChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 }
 
@@ -1140,10 +1164,8 @@ private fun RandomWordCapitalizeToggleItem(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onRandomWordCapitalizeToggleChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("CapitalizeRandomWordUsernameToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Top(),
+        modifier = modifier.testTag(tag = "CapitalizeRandomWordUsernameToggle"),
     )
 }
 
@@ -1157,10 +1179,8 @@ private fun RandomWordIncludeNumberToggleItem(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
         onCheckedChange = onRandomWordIncludeNumberToggleChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("IncludeNumberRandomWordUsernameToggle")
-            .padding(horizontal = 16.dp),
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier.testTag(tag = "IncludeNumberRandomWordUsernameToggle"),
     )
 }
 

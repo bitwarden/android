@@ -170,14 +170,6 @@ class VaultItemListingViewModel @Inject constructor(
                         ),
                     )
                 }
-                ?: state.fido2CredentialAssertionRequest
-                    ?.let { request ->
-                        sendAction(
-                            VaultItemListingsAction.Internal.Fido2AssertionDataReceive(
-                                data = request,
-                            ),
-                        )
-                    }
                 ?: observeVaultData()
         }
 
@@ -1334,6 +1326,14 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 )
             }
+            ?: state.fido2CredentialAssertionRequest
+                ?.let { request ->
+                    trySendAction(
+                        VaultItemListingsAction.Internal.Fido2AssertionDataReceive(
+                            data = request,
+                        ),
+                    )
+                }
             ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 

@@ -66,4 +66,14 @@ class FlagKeyTest {
     fun `NewDeviceTemporaryDismiss is remotely configured value should be true`() {
         assertTrue(FlagKey.NewDeviceTemporaryDismiss.isRemotelyConfigured)
     }
+
+    @Test
+    fun `IgnoreEnvironmentCheck default value should be false`() {
+        assertFalse(FlagKey.IgnoreEnvironmentCheck.defaultValue)
+    }
+
+    @Test
+    fun `IgnoreEnvironmentCheck is remotely configured value should be false`() {
+        assertFalse(FlagKey.IgnoreEnvironmentCheck.isRemotelyConfigured)
+    }
 }

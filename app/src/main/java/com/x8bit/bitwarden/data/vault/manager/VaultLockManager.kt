@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -69,7 +69,7 @@ interface VaultLockManager {
      * [vaultUnlockDataStateFlow] is up-to-date.
      *
      * This is only meant to be used when the SDK unlocks the vault as a side-effect of some other
-     * function, such as [ClientAuth.makeRegisterTdeKeys]. When using the regular [unlockVault]
+     * function, such as [AuthClient.makeRegisterTdeKeys]. When using the regular [unlockVault]
      * functions, this is not necessary.
      */
     suspend fun syncVaultState(userId: String)

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.slider
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -22,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -37,8 +37,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.slider.color.bitwardenSliderColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -52,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier The [Modifier] to be applied to this radio button.
  * @param sliderTag The option test tag for the slider component.
  * @param valueTag The option test tag for the value field component.
+ * @param cardStyle Indicates the type of card style to be applied.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
@@ -63,13 +67,18 @@ fun BitwardenSlider(
     modifier: Modifier = Modifier,
     sliderTag: String? = null,
     valueTag: String? = null,
+    cardStyle: CardStyle? = null,
 ) {
     val sliderValue by rememberUpdatedState(newValue = value.coerceIn(range = range))
     var labelTextWidth by remember { mutableStateOf(value = Dp.Unspecified) }
     val density = LocalDensity.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.semantics(mergeDescendants = true) {},
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardBackground(cardStyle = cardStyle)
+            .cardPadding(cardStyle = cardStyle, end = 16.dp)
+            .semantics(mergeDescendants = true) {},
     ) {
         TextField(
             value = sliderValue.toString(),
@@ -79,6 +88,7 @@ fun BitwardenSlider(
             label = {
                 Text(
                     text = stringResource(id = R.string.length),
+                    style = BitwardenTheme.typography.bodySmall,
                     modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
                         if (labelTextWidth == Dp.Unspecified) {
                             labelTextWidth = layoutCoordinates.size.width.toDp(density = density)
@@ -88,11 +98,7 @@ fun BitwardenSlider(
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            colors = bitwardenTextFieldColors(
-                disabledBorderColor = Color.Transparent,
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-            ),
+            colors = bitwardenTextFieldColors(),
             modifier = Modifier
                 .onPreviewKeyEvent { keyEvent ->
                     when (keyEvent.key) {

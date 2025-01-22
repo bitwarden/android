@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -78,7 +80,7 @@ fun DebugMenuScreen(
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
             FeatureFlagContent(
                 featureFlagMap = state.featureFlags,
                 onValueChange = remember(viewModel) {
@@ -92,7 +94,9 @@ fun DebugMenuScreen(
                     }
                 },
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenHorizontalDivider()
+            Spacer(Modifier.height(height = 16.dp))
             // Pulled these into variable to avoid over-nested formatting in the composable call.
             val isRestartOnboardingEnabled = state.featureFlags[FlagKey.OnboardingFlow] as? Boolean
             val isRestartOnboardingCarouselEnabled = state
@@ -111,6 +115,7 @@ fun DebugMenuScreen(
                     }
                 },
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -126,22 +131,26 @@ private fun FeatureFlagContent(
     Column(
         modifier = modifier,
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenListHeaderText(
             label = stringResource(R.string.feature_flags),
-            modifier = Modifier.standardHorizontalMargin(),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenHorizontalDivider()
         featureFlagMap.forEach { featureFlag ->
             featureFlag.key.ListItemContent(
                 currentValue = featureFlag.value,
                 onValueChange = onValueChange,
-                modifier = Modifier.standardHorizontalMargin(),
+                cardStyle = featureFlagMap.keys.toListItemCardStyle(
+                    index = featureFlagMap.keys.indexOf(element = featureFlag.key),
+                ),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
             )
-            BitwardenHorizontalDivider()
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.reset_values),
             onClick = onResetValues,
@@ -149,7 +158,6 @@ private fun FeatureFlagContent(
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -167,11 +175,11 @@ private fun OnboardingOverrideContent(
     Column(modifier) {
         BitwardenListHeaderText(
             label = stringResource(R.string.onboarding_override),
-            modifier = Modifier.standardHorizontalMargin(),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenHorizontalDivider()
-        Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledButton(
             label = stringResource(R.string.restart_onboarding_cta),
             onClick = onStartOnboarding,

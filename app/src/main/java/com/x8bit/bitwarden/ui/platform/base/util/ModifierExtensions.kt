@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -7,25 +9,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.node.CompositionLocalConsumerModifierNode
+import androidx.compose.ui.node.LayoutModifierNode
+import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.node.currentValueOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
@@ -151,11 +166,122 @@ fun Modifier.tabNavigation(): Modifier {
  */
 @OmitFromCoverage
 @Stable
-@Composable
 fun Modifier.standardHorizontalMargin(
     portrait: Dp = 16.dp,
     landscape: Dp = 48.dp,
-): Modifier {
-    val config = LocalConfiguration.current
-    return this.padding(horizontal = if (config.isPortrait) portrait else landscape)
+): Modifier =
+    this then StandardHorizontalMarginElement(portrait = portrait, landscape = landscape)
+
+private data class StandardHorizontalMarginElement(
+    private val portrait: Dp,
+    private val landscape: Dp,
+) : ModifierNodeElement<StandardHorizontalMarginElement.StandardHorizontalMarginConsumerNode>() {
+    override fun create(): StandardHorizontalMarginConsumerNode =
+        StandardHorizontalMarginConsumerNode(
+            portrait = portrait,
+            landscape = landscape,
+        )
+
+    override fun update(node: StandardHorizontalMarginConsumerNode) {
+        node.portrait = portrait
+        node.landscape = landscape
+    }
+
+    class StandardHorizontalMarginConsumerNode(
+        var portrait: Dp,
+        var landscape: Dp,
+    ) : Modifier.Node(),
+        LayoutModifierNode,
+        CompositionLocalConsumerModifierNode {
+        override fun MeasureScope.measure(
+            measurable: Measurable,
+            constraints: Constraints,
+        ): MeasureResult {
+            val currentConfig = currentValueOf(LocalConfiguration)
+            val paddingPx = (if (currentConfig.isPortrait) portrait else landscape).roundToPx()
+            // Account for the padding on each side.
+            val horizontalPx = paddingPx * 2
+            // Measure the placeable within the horizontal space accounting for the padding Px.
+            val placeable = measurable.measure(
+                constraints = constraints.offset(
+                    horizontal = -horizontalPx,
+                    vertical = 0,
+                ),
+            )
+            // The width of the placeable plus the total padding, used to create the layout.
+            val width = constraints.constrainWidth(width = placeable.width + horizontalPx)
+            return layout(width = width, height = placeable.height) {
+                placeable.place(x = paddingPx, y = 0)
+            }
+        }
+    }
 }
+
+/**
+ * This is a [Modifier] extension that applies a card background to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardBackground(
+    cardStyle: CardStyle?,
+    color: Color = BitwardenTheme.colorScheme.background.secondary,
+): Modifier {
+    cardStyle ?: return this
+    val shape = if ("robolectric" == Build.FINGERPRINT) {
+        // TODO: This is here to ensure our click events work in robolectric tests because of the
+        //  uneven rounded corners that need to be clipped. This should be removed when the bug is
+        //  resolved: https://issuetracker.google.com/issues/366255137
+        RectangleShape
+    } else {
+        when (cardStyle) {
+            is CardStyle.Top -> BitwardenTheme.shapes.contentTop
+            is CardStyle.Middle -> BitwardenTheme.shapes.contentMiddle
+            CardStyle.Bottom -> BitwardenTheme.shapes.contentBottom
+            CardStyle.Full -> BitwardenTheme.shapes.content
+        }
+    }
+    return this
+        .clip(shape = shape)
+        .background(color = color, shape = shape)
+        .bottomDivider(
+            paddingStart = cardStyle.dividerPadding,
+            enabled = cardStyle.hasDivider,
+        )
+}
+
+/**
+ * This is a [Modifier] extension that applies card padding to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardPadding(
+    cardStyle: CardStyle?,
+    start: Dp = 0.dp,
+    top: Dp = 12.dp,
+    end: Dp = 0.dp,
+    bottom: Dp = 12.dp,
+): Modifier {
+    cardStyle ?: return this
+    return this.padding(start = start, top = top, end = end, bottom = bottom)
+}
+
+/**
+ * This is a [Modifier] extension that applies card padding to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardPadding(
+    cardStyle: CardStyle?,
+    vertical: Dp = 12.dp,
+    horizontal: Dp = 0.dp,
+): Modifier =
+    this.cardPadding(
+        cardStyle = cardStyle,
+        start = horizontal,
+        top = vertical,
+        end = horizontal,
+        bottom = vertical,
+    )

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -24,19 +25,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
+import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.LearnMoreClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessEvent.NavigateToTwoFactorOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -47,12 +54,19 @@ fun NewDeviceNoticeEmailAccessScreen(
     onNavigateBackToVault: () -> Unit,
     onNavigateToTwoFactorOptions: () -> Unit,
     viewModel: NewDeviceNoticeEmailAccessViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             NavigateToTwoFactorOptions -> onNavigateToTwoFactorOptions()
             NewDeviceNoticeEmailAccessEvent.NavigateBackToVault -> onNavigateBackToVault()
+            is NewDeviceNoticeEmailAccessEvent.NavigateToLearnMore -> {
+                intentManager.launchUri(
+                    "https://bitwarden.com/help/new-device-verification/"
+                        .toUri(),
+                )
+            }
         }
     }
 
@@ -65,7 +79,12 @@ fun NewDeviceNoticeEmailAccessScreen(
                     viewModel.trySendAction(EmailAccessToggle(isEnabled = newState))
                 }
             },
-            onContinueClick = { viewModel.trySendAction(ContinueClick) },
+            onContinueClick = remember(viewModel) {
+                { viewModel.trySendAction(ContinueClick) }
+            },
+            onLearnMoreClick = remember(viewModel) {
+                { viewModel.trySendAction(LearnMoreClick) }
+            },
         )
     }
 }
@@ -76,6 +95,7 @@ private fun NewDeviceNoticeEmailAccessContent(
     isEmailAccessEnabled: Boolean,
     onEmailAccessToggleChanged: (Boolean) -> Unit,
     onContinueClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -86,7 +106,7 @@ private fun NewDeviceNoticeEmailAccessContent(
             .verticalScroll(state = rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(104.dp))
-        HeaderContent()
+        HeaderContent(onLearnMoreClick = onLearnMoreClick)
         Spacer(modifier = Modifier.height(24.dp))
         MainContent(
             email = email,
@@ -110,7 +130,9 @@ private fun NewDeviceNoticeEmailAccessContent(
  */
 @Suppress("MaxLineLength")
 @Composable
-private fun ColumnScope.HeaderContent() {
+private fun ColumnScope.HeaderContent(
+    onLearnMoreClick: () -> Unit,
+) {
     Image(
         painter = rememberVectorPainter(id = R.drawable.warning),
         contentDescription = null,
@@ -131,6 +153,13 @@ private fun ColumnScope.HeaderContent() {
         style = BitwardenTheme.typography.bodyMedium,
         color = BitwardenTheme.colorScheme.text.primary,
         textAlign = TextAlign.Center,
+    )
+    BitwardenClickableText(
+        label = stringResource(id = R.string.learn_more),
+        onClick = onLearnMoreClick,
+        style = BitwardenTheme.typography.labelLarge,
+        innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+        modifier = Modifier.testTag("LearnMoreLabel"),
     )
 }
 
@@ -162,15 +191,15 @@ private fun MainContent(
                 ),
             ),
         )
-        Column {
-            BitwardenSwitch(
-                label = stringResource(id = R.string.yes_i_can_reliably_access_my_email),
-                isChecked = isEmailAccessEnabled,
-                onCheckedChange = onEmailAccessToggleChanged,
-                modifier = Modifier
-                    .testTag("EmailAccessToggle"),
-            )
-        }
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        BitwardenSwitch(
+            label = stringResource(id = R.string.yes_i_can_reliably_access_my_email),
+            isChecked = isEmailAccessEnabled,
+            onCheckedChange = onEmailAccessToggleChanged,
+            cardStyle = CardStyle.Full,
+            modifier = Modifier
+                .testTag("EmailAccessToggle"),
+        )
     }
 }
 
@@ -183,6 +212,7 @@ private fun NewDeviceNoticeEmailAccessScreen_preview() {
             isEmailAccessEnabled = true,
             onEmailAccessToggleChanged = {},
             onContinueClick = {},
+            onLearnMoreClick = {},
         )
     }
 }

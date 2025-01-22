@@ -937,17 +937,17 @@
   <string name="user_verification_direction">Provjera korisnika</string>
   <string name="creating_on">Stvaranje na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Za nastavak stvaranja svog računa, prati upute poslane na %1$s.</string>
-  <string name="we_sent_an_email_to">Poslana e-pošta na %1$s</string>
-  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Nastavkom, slažeš se s Uvjetima usluge i Politikom privatnost</string>
+  <string name="we_sent_an_email_to">e-pošta poslana na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Nastavkom, slažeš se s <annotation link="termsOfService">Uvjetima usluge</annotation> i <annotation link="privacyPolicy">Politikom privatnosti</annotation></string>
   <string name="set_password">Postavi lozinku</string>
   <string name="unsubscribe">Poništi pretplatu</string>
   <string name="check_your_email">Provjeri svoju e-poštu</string>
   <string name="open_email_app">Otvori aplikaciju za e-poštu</string>
   <string name="go_back">Nazad</string>
   <string name="email_verified">e-pošta potvrđena</string>
-  <string name="no_email_go_back_to_edit_your_email_address">e-pošta nije stigla? Vrati se na unos adrese.</string>
-  <string name="or_log_in_you_may_already_have_an_account">Ili se prijavi, ako već imaš račun.</string>
-  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Primaj e-poštu od Bitwardena s najavamam savjetima i mogućnostima istraživanja. Otkaži pretplatu u bilo kojem trenutku.</string>
+  <string name="no_email_go_back_to_edit_your_email_address">e-pošta nije stigla? <annotation link="goBack">Vrati se</annotation> na unos adrese.</string>
+  <string name="or_log_in_you_may_already_have_an_account">Ili se <annotation link="logIn">prijavi</annotation>, ako već imaš račun.</string>
+  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Primaj e-poštu od Bitwardena s najavamam savjetima i mogućnostima istraživanja. <annotation link="unsubscribe">Otkaži pretplatu</annotation> u bilo kojem trenutku.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Primaj savjete, najave i mogućnosti istraživanja od Bitwardena u svoju Ulaznu poštu. Otkaži pretplatu u bilo kojem trenutku.</string>
   <string name="security_prioritized">Sigurnost je imperativ</string>
   <string name="welcome_message_1">Spremi prijave, kartice i identitete u svoj sigurni trezor. Bitwarden koristi end-to-end enkripciju bez znanja kako bi zaštitio ono što ti je važno.</string>
@@ -1030,34 +1030,23 @@
   <string name="give_your_vault_a_head_start">Daj svom trezoru prednost</string>
   <string name="class_3_biometrics_description">Otključavanje biometrijom zahtijeva jaku biometrijsku autentifikaciju i možda neće biti kompatibilno sa svim biometrijskim mogućnostima ovog uređaja.</string>
   <string name="class_2_biometrics_description">Otključavanje biometrijom zahtijeva jaku biometrijsku autentifikaciju i nije kompatibilno s biometrijskim mogućnostima ovog uređaja.</string>
-  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Na računalu se prijavi u svoj trenutni preglednik ili upravitelj lozinki.</string>
-  <string name="log_in_to_your_current_browser_or_password_manager_highlight">prijavi se u svoj trenutni preglednik ili upravitelj lozinki.</string>
-  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Izvezi svoje lozinke. Ova mogućnost najčešće se nalazi u postavkama.</string>
-  <string name="export_your_passwords_highlight">Izvezi svoje lozinke.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Odaberi uvoz podataka u web aplikaciji, a potom „Gotovo” za završetak sinkronizacije.</string>
-  <string name="select_import_data_highlight">Odaberi uvoz podataka</string>
+  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Na računalu se <annotation emphasis="bold">prijavi u svoj trenutni preglednik ili upravitelj lozinki</annotation>.</string>
+  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Izvezi svoje lozinke</annotation>. Ova mogućnost najčešće se nalazi u postavkama.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Odaberi uvoz podataka</annotation> u web aplikaciji, a potom „Gotovo” za završetak sinkronizacije.</string>
   <string name="step_1_of_3">Korak 1 od 3</string>
   <string name="export_your_saved_logins">Izvezi svoje spremljene prijave</string>
   <string name="delete_this_file_after_import_is_complete">Ovu datoteku ćeš obrisati nakon uvoza.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na računalu, u pregledniku, otvori novu karticu i posjeti %1$s</string>
-  <string name="go_to_vault_bitwarden_com_highlight">posjeti %1$s</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na računalu, u pregledniku, otvori novu karticu i <annotation emphasis="bold">posjeti <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="log_in_to_the_bitwarden_web_app">Prijavi se u Bitwarden web aplikaciju.</string>
   <string name="step_2_of_3">Korak 2 od 3</string>
   <string name="log_in_to_bitwarden">Prijavi se u Bitwarden</string>
   <string name="step_3_of_3">Korak 3 od 3</string>
   <string name="import_logins_to_bitwarden">Uvezi prijave u Bitwarden</string>
-  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Odaberi Alati, a zatim Uvezi podatke.</string>
-  <string name="find_the_tools_highlight">pronađi Alati</string>
-  <string name="select_import_data_step_3_highlight">odaberi Uvezi podatke.</string>
-  <string name="fill_out_the_form_and_import_your_saved_password_file">Ispuni obrazac i uvezi svoju datoteku spremljenih lozinki.</string>
-  <string name="import_your_saved_password_file_highlight">uvezi svoju datoteku spremljenih lozinki.</string>
-  <string name="then_done_highlight">zatim „Gotovo”</string>
-  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Za svoju sigurnost, obriši datoteku spremljenih lozinki.</string>
-  <string name="delete_your_saved_password_file">obriši svoju datoteku spremljenih lozinki.</string>
-  <string name="need_help_check_out_import_help">Trebaš pomoć? Pogledaj pomoć za uvoz.</string>
-  <string name="import_help_highlight">pomoć za uvoz</string>
-  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Spremi izvezenu datoteku na mjesto na računalu koje možeš lako naći.</string>
-  <string name="save_the_exported_file_highlight">Spremi izvezenu datoteku</string>
+  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Odaberi <annotation emphasis="bold">Alati</annotation>, a zatim <annotation emphasis="bold">Uvezi podatke</annotation>.</string>
+  <string name="fill_out_the_form_and_import_your_saved_password_file">Ispuni obrazac i <annotation emphasis="bold">uvezi svoju datoteku spremljenih lozinki</annotation>.</string>
+  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Za svoju sigurnost, <annotation emphasis="bold">obriši datoteku spremljenih lozinki</annotation>.</string>
+  <string name="need_help_check_out_import_help">Trebaš pomoć? Pogledaj <annotation emphasis="bold">pomoć za uvoz</annotation>.</string>
+  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Spremi izvezenu datoteku</annotation> na mjesto na računalu koje možeš lako naći.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ovo nije prepoznati Bitwarden poslužitelj. Možda ćeš morati provjeriti kod svog davatelja usluga ili ažurirati svoj poslužitelj.</string>
   <string name="syncing_logins_loading_message">Sinkronizacija prijava...</string>
   <string name="ssh_key_cipher_item_types">Vrste stavki šifre SSH ključa</string>
@@ -1096,21 +1085,32 @@
   <string name="copy_email">Kopiraj e-poštu</string>
   <string name="copy_phone">Kopiraj broj telefona</string>
   <string name="copy_address">Kopiraj adresu</string>
+  <string name="important_notice">Važna napomena</string>
+  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden će, počevši od veljače 2025., za provjeru prijava s novih uređaja poslati kôd na e-poštu tvog računa.</string>
+  <string name="do_you_have_reliable_access_to_your_email">Imaš li pouzdan pristup svojoj e-pošti: <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="yes_i_can_reliably_access_my_email">Da, pouzdano mogu pristupiti svojoj e-pošti</string>
   <string name="biometrics_no_longer_supported_title">Na ovom uređaju biometrija više nije podržaana</string>
   <string name="biometrics_no_longer_supported">Odjavlili smo te jer biometrijski podaci tvojeg uređaja ne zadovoljavaju najnovije sigurnosne zahtjeve. Za ažuriranje postavki ponovno se prijavi ili kontaktiraj svog administratora za pristup.</string>
   <string name="cxp_import">CXP uvoz</string>
   <string name="cxp_export">CXP izvoz</string>
+  <string name="set_up_two_step_login">Postavi dvostruku autentifikaciju</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Prijavu dvostrukom autentifikacijom možeš postaviti kao alternativni način zaštite svog računa ili promijeni svoju e-poštu u onu kojoj možeš pristupiti.</string>
+  <string name="turn_on_two_step_login">Uključi prijavu dvostrukom autentifikacijom</string>
+  <string name="change_account_email">Promjeni e-poštu računa</string>
   <string name="choose_three_or_four_random_words">Odaberi tri ili četiri nasumične riječi</string>
-  <string name="pick_three_or_four_random_unrelated_words">Odaberi tri ili četiri nasumične, nevezane riješa koje možeš jednostavno zapamtiti. Stvari, mjesta ili nešto što voliš.</string>
-  <string name="pick_three_or_four_random_unrelated_words_highlight">objekti, mjesta ili stvari</string>
+  <string name="pick_three_or_four_random_unrelated_words">Odaberi tri ili četiri nasumične, nevezane riješa koje možeš jednostavno zapamtiti. <annotation emphasis="bold">Stvari, mjesta ili nešto</annotation> 
+što voliš.</string>
   <string name="combine_those_words_together">Kombiniraj te riječi zajedno</string>
-  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Stavi riječi bilo kojim redoslijedom za formiranje svoje frazne lozinke. Koristi crtice, razmake ili ostavi spojene kao jednu dugu riječ - tvoj izbor!</string>
-  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Koristi crtice, razmake ili ostavi spojene kao jednu dugu riječ</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Stavi riječi bilo kojim redoslijedom za formiranje svoje frazne lozinke. <annotation emphasis="bold">Koristi crtice, razmake ili ostavi spojene kao jednu dugu riječ</annotation> – tvoj izbor!</string>
   <string name="make_it_yours">Učinite sve svojim</string>
-  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Dodaj broj ili znak kako bi bila još sigurnija. Sada imaš jedinstvenu, sigurnu i pamtljivu fraznu lozinku!</string>
-  <string name="add_a_number_or_symbol_highlight">Dodaj broj ili znak</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Dodaj broj ili znak</annotation> kako bi bila još sigurnija. Sada imaš jedinstvenu, sigurnu i pamtljivu fraznu lozinku!</string>
   <string name="need_some_inspiration">"Trebaš inspiraciju?"</string>
   <string name="check_out_the_passphrase_generator">"Pogledaj generator fraznih lozinki"</string>
   <string name="copied_to_clipboard">Kopirano u međuspremnik.</string>
   <string name="we_couldnt_verify_the_servers_certificate">Nismo mogli provjeriti certifikat poslužitelja. Postavke lanca certifikata ili proxyja na tvom uređaju ili Bitwarden poslužitelju možda nisu ispravno postavljene.</string>
+  <string name="review_flow_launched">Pokrenut tok pregleda!</string>
+  <string name="copy_private_key">Kopiraj privatni ključ</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">e-poštu svog računa možeš promijeniti u Bitwarden web aplikaciji.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

@@ -870,7 +870,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="continue_to_app_store">Pokračovat do obchodu s aplikacemi?</string>
   <string name="continue_to_device_settings">Pokračovat do nastavení zařízení?</string>
   <string name="two_step_login_description_long">Vytvořte svůj účet bezpečnějším nastavením dvoufázového přihlášení ve webové aplikaci Bitwarden.</string>
-  <string name="change_master_password_description_long">Hlavní heslo můžete změnit na webové aplikaci Bitwarden.</string>
+  <string name="change_master_password_description_long">Hlavní heslo můžete změnit ve webové aplikaci Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Data můžete importovat do Vašeho trezoru na %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Přečtěte si více o tom, jak používat Bitwarden v centru nápovědy.</string>
   <string name="contact_support_description_long">Nenašli jste to, co jste hledali? Na bitwarden.com získejte podporu.</string>
@@ -938,17 +938,17 @@ Chcete se přepnout na tento účet?</string>
   <string name="user_verification_direction">Ověření uživatele</string>
   <string name="creating_on">Vytváření na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Postupujte podle instrukcí zaslaných na e-mail %1$s, abyste mohli pokračovat ve vytváření účtu.</string>
-  <string name="we_sent_an_email_to">Poslali jsme e-mail na %1$s.</string>
-  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Pokračováním souhlasíte s Podmínkami služby a Zásadami ochrany osobních údajů</string>
+  <string name="we_sent_an_email_to">Poslali jsme e-mail na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Pokračováním souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
   <string name="set_password">Nastavit heslo</string>
   <string name="unsubscribe">Odhlásit odběr</string>
   <string name="check_your_email">Zkontrolujte Váš e-mail</string>
   <string name="open_email_app">Otevřít e-mailovou aplikaci</string>
   <string name="go_back">Zpět</string>
   <string name="email_verified">E-mail byl ověřen</string>
-  <string name="no_email_go_back_to_edit_your_email_address">Žádný e-mail? Vraťte se a upravte svou e-mailovou adresu.</string>
-  <string name="or_log_in_you_may_already_have_an_account">Nebo se přihlaste, možná už máte účet.</string>
-  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Získejte e-maily od Bitwardenu pro oznámení, poradenství a výzkumné příležitosti. Můžete se kdykoli odhlásit.</string>
+  <string name="no_email_go_back_to_edit_your_email_address">Žádný e-mail? <annotation link="goBack">Vraťte se</annotation> a upravte svou e-mailovou adresu.</string>
+  <string name="or_log_in_you_may_already_have_an_account">Nebo se <annotation link="logIn">přihlaste</annotation>, možná už máte účet.</string>
+  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Získejte e-maily od Bitwardenu pro oznámení, poradenství a výzkumné příležitosti. <annotation link="unsubscribe">Odhlásit</annotation> se můžete kdykoli.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Dostávejte do své e-mailové schránky rady, oznámení a příležitosti k výzkumu od společnosti Bitwarden. Odhlásit odběr můžete kdykoli.</string>
   <string name="security_prioritized">Bezpečnost, priorita</string>
   <string name="welcome_message_1">Uložte si přihlašovací údaje, karty a identity do zabezpečeného trezoru. Bitwarden používá šifrování end-to-end s nulovou znalostí, aby ochránil to, co je pro Vás důležité.</string>
@@ -1031,34 +1031,23 @@ Chcete se přepnout na tento účet?</string>
   <string name="give_your_vault_a_head_start">Dejte svému trezoru náskok</string>
   <string name="class_3_biometrics_description">Odemykání pomocí biometrie vyžaduje silné biometrické ověření a nemusí být kompatibilní se všemi biometrickými volbami tohoto zařízení.</string>
   <string name="class_2_biometrics_description">Odemykání pomocí biometrie vyžaduje silné biometrické ověření a není kompatibilní s volbami biometrie dostupnými v tomto zařízení.</string>
-  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Na Vašem počítači se přihlaste do aktuálního prohlížeče nebo správce hesel.</string>
-  <string name="log_in_to_your_current_browser_or_password_manager_highlight">se přihlaste do aktuálního prohlížeče nebo správce hesel.</string>
-  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Exportujte Vaše hesla. Tato volba může být obvykle nalezena v nastavení.</string>
-  <string name="export_your_passwords_highlight">Exportujte Vaše hesla.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Vyberte data k importu ve webové aplikaci a poté klepněte na tlačítko Hotovo pro dokončení synchronizace.</string>
-  <string name="select_import_data_highlight">Vyberte data k importu.</string>
+  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Na Vašem počítači se <annotation emphasis="bold">přihlaste do aktuálního prohlížeče nebo správce hesel.</annotation></string>
+  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Exportujte Vaše hesla.</annotation> Tato volba může být obvykle nalezena v nastavení.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Vyberte data k importu</annotation> ve webové aplikaci a poté klepněte na tlačítko Hotovo pro dokončení synchronizace.</string>
   <string name="step_1_of_3">Krok 1 ze 3</string>
   <string name="export_your_saved_logins">Export Vašich uložených přihlášení</string>
   <string name="delete_this_file_after_import_is_complete">Po dokončení importu tento soubor smažete.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na Vašem počítači otevřete novou kartu prohlížeče a přejděte na vault.bitwarden.com</string>
-  <string name="go_to_vault_bitwarden_com_highlight">přejděte na %1$s</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Na Vašem počítači otevřete novou kartu prohlížeče a <annotation emphasis="bold">přejděte na <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="log_in_to_the_bitwarden_web_app">Přihlaste se do webové aplikace Bitwarden.</string>
   <string name="step_2_of_3">Krok 2 ze 3</string>
   <string name="log_in_to_bitwarden">Přihlásit se do Bitwardenu</string>
   <string name="step_3_of_3">Krok 3 ze 3</string>
   <string name="import_logins_to_bitwarden">Importovat přihlášení do Bitwardenu</string>
-  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">V navigaci Bitwarden najděte volbu Nástroje a vyberte Importovat data.</string>
-  <string name="find_the_tools_highlight">najděte volbu Nástroje</string>
-  <string name="select_import_data_step_3_highlight">vyberte Importovat data.</string>
-  <string name="fill_out_the_form_and_import_your_saved_password_file">Vyplňte formulář a importujte soubor s uloženým heslem.</string>
-  <string name="import_your_saved_password_file_highlight">importujte soubor s uloženým heslem.</string>
-  <string name="then_done_highlight">a poté klepněte na tlačítko Hotovo</string>
-  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Z důvodu bezpečnosti nezapomeňte smazat soubor s uloženým heslem.</string>
-  <string name="delete_your_saved_password_file">smazat soubor s uloženým heslem.</string>
-  <string name="need_help_check_out_import_help">Potřebujete pomoc? Podívejte se na nápovědu pro import.</string>
-  <string name="import_help_highlight">nápověda pro import</string>
-  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný soubor někde na Vašem počítači, kde jej můžete snadno najít.</string>
-  <string name="save_the_exported_file_highlight">Uložit exportovaný soubor</string>
+  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">V navigaci Bitwardenu <annotation emphasis="bold">najděte volbu Nástroje</annotation> a vyberte <annotation emphasis="bold">Importovat data.</annotation></string>
+  <string name="fill_out_the_form_and_import_your_saved_password_file">Vyplňte formulář a <annotation emphasis="bold">importujte soubor s uloženým heslem.</annotation></string>
+  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Z důvodu bezpečnosti nezapomeňte <annotation emphasis="bold">smazat soubor s uloženým heslem.</annotation></string>
+  <string name="need_help_check_out_import_help">Potřebujete pomoc? Podívejte se na <annotation link="importHelp">nápovědu pro import</annotation>.</string>
+  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný soubor</annotation> někde na Vašem počítači, kde jej můžete snadno najít.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Nejedná se o rozpoznaný server Bitwarden. Možná budete muset zkontrolovat svého poskytovatele nebo aktualizovat svůj server.</string>
   <string name="syncing_logins_loading_message">Synchronizování přihlášení...</string>
   <string name="ssh_key_cipher_item_types">Typy položek klíče SSH Cipher</string>
@@ -1097,21 +1086,31 @@ Chcete se přepnout na tento účet?</string>
   <string name="copy_email">Kopírovat e-mail</string>
   <string name="copy_phone">Kopírovat telefonní číslo</string>
   <string name="copy_address">Kopírovat adresu</string>
+  <string name="important_notice">Důležité upozornění</string>
+  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden odešle kód na e-mail Vašeho účtu pro ověření přihlášení z nových zařízení počínaje únorem 2025.</string>
+  <string name="do_you_have_reliable_access_to_your_email">Máte spolehlivý přístup ke svému e-mailu <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>?</string>
+  <string name="yes_i_can_reliably_access_my_email">Ano, ke svému e-mailu mám přístup</string>
   <string name="biometrics_no_longer_supported_title">Biometrika již není v tomto zařízení podporována</string>
   <string name="biometrics_no_longer_supported">Byli jste odhlášeni, protože biometrika Vašeho zařízení nesplňuje nejnovější bezpečnostní požadavky. Chcete-li aktualizovat nastavení, přihlaste se znovu nebo kontaktujte správce pro přístup.</string>
   <string name="cxp_import">Import CXP</string>
   <string name="cxp_export">Exportovat CXP</string>
+  <string name="set_up_two_step_login">Nastavit dvoufázové přihlášení</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Dvoufázové přihlášení můžete nastavit jako alternativní způsob ochrany Vašeho účtu nebo změnit svůj e-mail na ten, k němuž můžete přistupovat.</string>
+  <string name="turn_on_two_step_login">Zapnout dvoufázové přihlášení</string>
+  <string name="change_account_email">Změnit e-mail účtu</string>
   <string name="choose_three_or_four_random_words">Vyberte tři nebo čtyři náhodná slova</string>
-  <string name="pick_three_or_four_random_unrelated_words">Vyberte tři nebo čtyři náhodná slova, která si snadno pamatujete. Vzpomeňte si na objekty, místa nebo věci, které se Vám líbí.</string>
-  <string name="pick_three_or_four_random_unrelated_words_highlight">objekty, místa nebo věci</string>
+  <string name="pick_three_or_four_random_unrelated_words">Vyberte tři nebo čtyři náhodná slova, která si snadno pamatujete. Vzpomeňte si na <annotation emphasis="bold">objekty, místa nebo věci,</annotation> které se Vám líbí.</string>
   <string name="combine_those_words_together">Spojte tato slova dohromady</string>
-  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Vložte slova dohromady do libovolného pořadí pro vytvoření přístupové fráze. Použijte pomlčky, mezery nebo je nechte jako jedno dlouhé slovo!</string>
-  <string name="use_hyphens_spaces_or_leave_them_as_long_word_highlight">Používejte pomlčky, mezery nebo je nechte jako jedno dlouhé slovo</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Vložte slova dohromady do libovolného pořadí pro vytvoření přístupové fráze. <annotation emphasis="bold">Použijte pomlčky, mezery nebo je nechte jako jedno dlouhé slovo</annotation> - je to na Vás!</string>
   <string name="make_it_yours">Vytvořte si vlastní</string>
-  <string name="add_a_number_or_symbol_to_make_it_even_stronger">Přidejte číslo nebo symbol, abyste jej ještě posílili. Nyní máte jedinečnou, bezpečnou a zapamatovatelnou přístupovou frázi!</string>
-  <string name="add_a_number_or_symbol_highlight">Přidat číslo nebo symbol</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Přidejte číslo nebo symbol,</annotation> abyste jej ještě posílili. Nyní máte jedinečnou, bezpečnou a zapamatovatelnou přístupovou frázi!</string>
   <string name="need_some_inspiration">"Potřebujete inspiraci?"</string>
   <string name="check_out_the_passphrase_generator">"Podívejte se na generátor přístupové fráze"</string>
   <string name="copied_to_clipboard">Zkopírováno do schránky.</string>
   <string name="we_couldnt_verify_the_servers_certificate">Certifikát serveru se nám nepodařilo ověřit. Řetězec certifikátů nebo nastavení proxy serveru na Vašem zařízení nebo serveru Bitwardenu nemusí být správně nastaven.</string>
+  <string name="review_flow_launched">Přehled byl spuštěn!</string>
+  <string name="copy_private_key">Kopírovat soukromý klíč</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu můžete změnit ve webové aplikaci Bitwarden.</string>
+  <string name="login_credentials">Přihlašovací údaje</string>
+  <string name="autofill_options">Volby automatického vyplňování</string>
 </resources>

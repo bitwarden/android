@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -273,7 +274,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     fun `loading dialog should display according to state`() {
         composeTestRule
             .onAllNodesWithText("loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsNotDisplayed()
 
         mutableStateFlow.update {
@@ -284,7 +285,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
     }
 

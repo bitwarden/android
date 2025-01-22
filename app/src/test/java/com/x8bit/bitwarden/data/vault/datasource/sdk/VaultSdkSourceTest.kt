@@ -17,17 +17,17 @@ import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
-import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.ClientCiphers
-import com.bitwarden.sdk.ClientCrypto
-import com.bitwarden.sdk.ClientExporters
+import com.bitwarden.sdk.CryptoClient
+import com.bitwarden.sdk.ExporterClient
 import com.bitwarden.sdk.ClientFido2
 import com.bitwarden.sdk.ClientFido2Authenticator
 import com.bitwarden.sdk.ClientFido2Client
 import com.bitwarden.sdk.ClientPasswordHistory
-import com.bitwarden.sdk.ClientPlatform
-import com.bitwarden.sdk.ClientSends
-import com.bitwarden.sdk.ClientVault
+import com.bitwarden.sdk.PlatformClient
+import com.bitwarden.sdk.SendClient
+import com.bitwarden.sdk.VaultClient
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
@@ -71,25 +71,25 @@ import java.security.MessageDigest
 
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
-    private val clientAuth = mockk<ClientAuth>()
-    private val clientCrypto = mockk<ClientCrypto>()
+    private val clientAuth = mockk<AuthClient>()
+    private val clientCrypto = mockk<CryptoClient>()
     private val fido2 = mockk<ClientFido2Client> {
         coEvery { register(any(), any(), any()) }
     }
     private val clientFido2 = mockk<ClientFido2> {
         every { client(any(), any()) } returns fido2
     }
-    private val clientPlatform = mockk<ClientPlatform> {
+    private val clientPlatform = mockk<PlatformClient> {
         every { fido2() } returns clientFido2
     }
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
-    private val clientSends = mockk<ClientSends>()
+    private val clientSends = mockk<SendClient>()
     private val clientCiphers = mockk<ClientCiphers>()
-    private val clientVault = mockk<ClientVault> {
+    private val clientVault = mockk<VaultClient> {
         every { ciphers() } returns clientCiphers
         every { passwordHistory() } returns clientPasswordHistory
     }
-    private val clientExporters = mockk<ClientExporters> {
+    private val clientExporters = mockk<ExporterClient> {
         coEvery { exportVault(any(), any(), any()) }
     }
     private val client = mockk<Client> {

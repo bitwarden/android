@@ -21,12 +21,6 @@ interface BiometricsEncryptionManager {
     ): Cipher?
 
     /**
-     * Sets up biometrics to ensure future integrity checks work properly. If this method has never
-     * been called [isBiometricIntegrityValid] will return false.
-     */
-    fun setupBiometrics(userId: String)
-
-    /**
      * Checks to verify that the biometrics integrity is still valid. This returns `true` if the
      * biometrics data has not changed since the app setup biometrics; `false` will be returned if
      * it has changed.
