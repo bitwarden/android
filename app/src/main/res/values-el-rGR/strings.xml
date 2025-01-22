@@ -194,7 +194,7 @@
   <string name="translations">Μεταφράσεις</string>
   <string name="items_for_uri">Στοιχεία για %1$s</string>
   <string name="no_items_for_uri">Δεν υπάρχουν στοιχεία στην λίστα σας για %1$s.</string>
-  <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
+  <string name="no_items_for_vault">Δεν υπάρχουν αντικείμενα στη κρύπτη σας που ταιριάζουν με \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Αναζητήστε μια σύνδεση ή προσθέστε μια νέα σύνδεση</string>
   <string name="bitwarden_autofill_service_overlay">Όταν επιλέξετε ένα πεδίο εισαγωγής και δείτε μια επικάλυψη αυτόματης συμπλήρωσης Bitwarden, μπορείτε να πατήσετε για να ξεκινήσει η υπηρεσία αυτόματης συμπλήρωσης.</string>
   <string name="bitwarden_autofill_service_notification_content">Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από το vault σας.</string>
@@ -951,7 +951,7 @@
   <string name="or_log_in_you_may_already_have_an_account">Ή συνδεθείτε, μπορεί να έχετε ήδη λογαριασμό.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Λάβετε μηνύματα ηλ. ταχυδρομείου από το Bitwarden για ανακοινώσεις, συμβουλές και ερευνητικές ευκαιρίες. Ακυρώστε τη συνδρομή σας ανα πάσα στιγμή.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Λάβετε συμβουλές, ανακοινώσεις και ευκαιρίες έρευνας από το Bitwarden στα εισερχόμενά σας. Μπορείτε να απεγγραφείτε ανα πάσα στιγμή.</string>
-  <string name="security_prioritized">Security, prioritized</string>
+  <string name="security_prioritized">Ασφάλεια, σε προτεραιότητα</string>
   <string name="welcome_message_1">Αποθηκεύστε συνδέσεις, κάρτες και ταυτότητες στο ασφαλές θησαυ/κιό σας. Το Bitwarden χρησιμοποιεί κρυπτογράφηση από άκρο σε άκρο και μηδενικής γνώσης για να προστατεύσει ό,τι είναι σημαντικό για εσάς.</string>
   <string name="welcome_message_2">Ρυθμίστε το βιομετρικό ξεκλείδωμα και την αυτόματη συμπλήρωση για σύνδεση στους λογαριασμούς σας χωρίς να πληκτρολογήσετε ούτε ένα γράμμα.</string>
   <string name="quick_and_easy_login">Γρήγορη και εύκολη σύνδεση</string>
@@ -962,7 +962,7 @@
   <string name="remove_passkey">Αφαίρεση κλειδιού πρόσβασης</string>
   <string name="passkey_removed">Το κλειδί πρόσβασης αφαιρέθηκε</string>
   <string name="what_makes_a_password_strong">Τι κάνει έναν κωδικό πρόσβασης ισχυρό;</string>
-  <string name="a_secure_memorable_password">A secure, memorable password</string>
+  <string name="a_secure_memorable_password">Ένας ασφαλής, αξέχαστος κωδικός πρόσβασης</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Όσο μεγαλύτερος ο κωδικός προσβασής σας, τόσο πιο δύσκολα χακάρεται. Το ελάχιστο μήκος για δημιουργία λογαριασμού είναι 12 χαρακτήρες αλλά τον κάνετε 14 χαρακτήρες, ο χρόνος για να σπασει ο κωδικός πρόσβασής σας θα ειναι κάποιοι αιώνες!</string>
   <string name="the_strongest_passwords_are_usually">Οι ισχυρότεροι κωδικοί πρόσβασης είναι συνήθως:</string>
   <string name="twelve_or_more_characters">12 ή περισσότεροι χαρακτήρες</string>
@@ -978,8 +978,8 @@
   <string name="confirm">Επιβεβαίωση</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Ρυθμίστε τα βιομετρικά στοιχεία ή επιλέξτε έναν κωδικό PIN για γρήγορη πρόσβαση στο θησαυ/κιο και αυτόματη συμπλήρωση των συνδέσεών σας.</string>
   <string name="never_lose_access_to_your_vault">Δεν θα χάσετε ποτέ πρόσβαση στο θησαυ/κιό σας</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
-  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Ο καλύτερος τρόπος για να βεβαιωθείτε ότι μπορείτε πάντα να έχετε πρόσβαση στο λογαριασμό σας είναι να δημιουργήσετε δικλείδες ασφαλείας από την αρχή.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Ένας από τους καλύτερους τρόπους για να δημιουργήσετε ένα ασφαλές και αξέχαστο κωδικό πρόσβασης είναι να χρησιμοποιήσετε μια φράση πρόσβασης. \nΟρίστε πώς:</string>
   <string name="create_a_hint">Δημιουργήστε μια υπόδειξη</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Η υπόδειξή σας θα σας αποσταλεί μέσω μηνύματος ηλ. ταχυδρομείου όταν το ζητήσετε.</string>
   <string name="write_your_password_down">Γράψτε τον κωδικό σας</string>
@@ -1030,7 +1030,7 @@
   <string name="import_logins">Εισαγωγή Συνδέσεων</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Από τον υπολογιστή σας, ακολουθήστε αυτές τις οδηγίες για να εξαγάγετε αποθηκευμένους κωδικούς πρόσβασης από το πρόγραμμα περιήγησης ή άλλο διαχειριστή κωδικών πρόσβασης. Στη συνέχεια, εισαγάγετε τους με ασφάλεια στο Bitwarden.</string>
   <string name="give_your_vault_a_head_start">Δώστε στη κρύπτη σας ένα πλεονέκτημα</string>
-  <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
+  <string name="class_3_biometrics_description">Το ξεκλείδωμα με βιομετρικά στοιχεία απαιτεί ισχυρή βιομετρική πιστοποίηση και μπορεί να μην είναι συμβατό με όλες τις βιομετρικές επιλογές σε αυτή τη συσκευή.</string>
   <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
@@ -1089,7 +1089,7 @@
   <string name="copy_address">Copy address</string>
   <string name="important_notice">Important notice</string>
   <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden will send a code to your account email to verify logins from new devices starting in February 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Do you have reliable access to your email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="do_you_have_reliable_access_to_your_email">Do you have reliable access to your email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
   <string name="yes_i_can_reliably_access_my_email">Yes, I can reliably access my email</string>
   <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
@@ -1112,4 +1112,6 @@
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copy private key</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

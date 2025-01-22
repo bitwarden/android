@@ -6,6 +6,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -71,7 +72,7 @@ class DeleteAccountScreenTest : BaseComposeTest() {
     fun `loading dialog presence should update with dialog state`() {
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -80,7 +81,7 @@ class DeleteAccountScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertExists()
     }
 

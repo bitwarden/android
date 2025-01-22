@@ -861,7 +861,7 @@
   <string name="x_hours">%1$s 小時</string>
   <string name="passkey_management_explanation_long">使用 Bitwarden 來在您的密碼庫中儲存新的密碼金鑰或使用密碼金鑰來登入。</string>
   <string name="autofill_services_explanation_long">Android 自動填入框架用於協助將登入資訊填入裝置上的其他應用程式。</string>
-  <string name="use_inline_autofill_explanation_long">如果您選擇的鍵盤支持，請使用内嵌式自動填入。否則，使用預設覆蓋。</string>
+  <string name="use_inline_autofill_explanation_long">如果您選擇的鍵盤支援，請使用内嵌式自動填入。否則，使用預設疊層。</string>
   <string name="additional_options">額外選項</string>
   <string name="continue_to_web_app">接下來造訪 Web App 嗎？</string>
   <string name="continue_to_x">接下來造訪 %1$s 嗎？</string>
@@ -1112,4 +1112,6 @@
   <string name="review_flow_launched">已推出審核流程檢視！</string>
   <string name="copy_private_key">複製私密金鑰</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">您可以在 Bitwarden 網頁應用程式上變更帳號電子郵件位址。</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

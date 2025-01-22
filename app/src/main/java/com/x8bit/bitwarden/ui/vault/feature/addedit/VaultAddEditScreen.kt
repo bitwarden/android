@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -28,6 +30,8 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -56,6 +60,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
+import kotlinx.coroutines.launch
 
 /**
  * Top level composable for the vault add item screen.
@@ -84,6 +89,11 @@ fun VaultAddEditScreen(
         VaultAddEditUserVerificationHandlers.create(viewModel = viewModel)
     }
 
+    val lazyListState = rememberLazyListState()
+    val coachMarkState = rememberLazyListCoachMarkState(
+        lazyListState = lazyListState,
+        orderedList = AddEditItemCoachMark.entries,
+    )
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
@@ -131,6 +141,12 @@ fun VaultAddEditScreen(
                     onError = userVerificationHandlers.onUserVerificationFail,
                     onLockOut = userVerificationHandlers.onUserVerificationLockOut,
                     onNotSupported = userVerificationHandlers.onUserVerificationNotSupported,
+                )
+            }
+
+            VaultAddEditEvent.StartAddLoginItemCoachMarkTour -> {
+                coachMarkState.showCoachMark(
+                    coachMarkToShow = AddEditItemCoachMark.GENERATE_PASSWORD,
                 )
             }
         }
@@ -247,112 +263,145 @@ fun VaultAddEditScreen(
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    BitwardenScaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            BitwardenTopAppBar(
-                title = state.screenDisplayName(),
-                navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
-                    },
-                )
-                    .takeIf { state.shouldShowCloseButton },
-                scrollBehavior = scrollBehavior,
-                actions = {
-                    BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
-                        },
-                        modifier = Modifier.testTag("SaveButton"),
-                    )
-                    BitwardenOverflowActionItem(
-                        menuItemDataList = persistentListOfNotNull(
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.attachments),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultAddEditAction.Common.AttachmentsClick,
-                                        )
-                                    }
-                                },
-                            )
-                                .takeUnless { state.isAddItemMode },
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.move_to_organization),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultAddEditAction.Common.MoveToOrganizationClick,
-                                        )
-                                    }
-                                },
-                            )
-                                .takeUnless { state.isAddItemMode || state.isCipherInCollection },
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.collections),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            VaultAddEditAction.Common.CollectionsClick,
-                                        )
-                                    }
-                                },
-                            )
-                                .takeUnless {
-                                    state.isAddItemMode ||
-                                        !state.isCipherInCollection ||
-                                        !state.canAssociateToCollections
-                                },
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.delete),
-                                onClick = { pendingDeleteCipher = true },
-                            )
-                                .takeUnless { state.isAddItemMode || !state.canDelete },
-                        ),
-                    )
-                },
-            )
-        },
+    val coroutineScope = rememberCoroutineScope()
+    val scrollBackToTop: () -> Unit = remember {
+        {
+            coroutineScope.launch {
+                lazyListState.animateScrollToItem(0)
+            }
+        }
+    }
+    CoachMarkContainer(
+        state = coachMarkState,
     ) {
-        when (val viewState = state.viewState) {
-            is VaultAddEditState.ViewState.Content -> {
-                VaultAddEditContent(
-                    state = viewState,
-                    isAddItemMode = state.isAddItemMode,
-                    typeOptions = state.supportedItemTypes,
-                    onTypeOptionClicked = remember(viewModel) {
-                        { viewModel.trySendAction(VaultAddEditAction.Common.TypeOptionSelect(it)) }
+        BitwardenScaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                BitwardenTopAppBar(
+                    title = state.screenDisplayName(),
+                    navigationIcon = NavigationIcon(
+                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        onNavigationIconClick = remember(viewModel) {
+                            { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
+                        },
+                    )
+                        .takeIf { state.shouldShowCloseButton },
+                    scrollBehavior = scrollBehavior,
+                    actions = {
+                        BitwardenTextButton(
+                            label = stringResource(id = R.string.save),
+                            onClick = remember(viewModel) {
+                                { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
+                            },
+                            modifier = Modifier.testTag("SaveButton"),
+                        )
+                        BitwardenOverflowActionItem(
+                            menuItemDataList = persistentListOfNotNull(
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.attachments),
+                                    onClick = remember(viewModel) {
+                                        {
+                                            viewModel.trySendAction(
+                                                VaultAddEditAction.Common.AttachmentsClick,
+                                            )
+                                        }
+                                    },
+                                )
+                                    .takeUnless { state.isAddItemMode },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.move_to_organization),
+                                    onClick = remember(viewModel) {
+                                        {
+                                            viewModel.trySendAction(
+                                                VaultAddEditAction.Common.MoveToOrganizationClick,
+                                            )
+                                        }
+                                    },
+                                )
+                                    .takeUnless {
+                                        state.isAddItemMode || state.isCipherInCollection
+                                    },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.collections),
+                                    onClick = remember(viewModel) {
+                                        {
+                                            viewModel.trySendAction(
+                                                VaultAddEditAction.Common.CollectionsClick,
+                                            )
+                                        }
+                                    },
+                                )
+                                    .takeUnless {
+                                        state.isAddItemMode ||
+                                            !state.isCipherInCollection ||
+                                            !state.canAssociateToCollections
+                                    },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.delete),
+                                    onClick = { pendingDeleteCipher = true },
+                                )
+                                    .takeUnless { state.isAddItemMode || !state.canDelete },
+                            ),
+                        )
                     },
-                    loginItemTypeHandlers = loginItemTypeHandlers,
-                    commonTypeHandlers = commonTypeHandlers,
-                    permissionsManager = permissionsManager,
-                    identityItemTypeHandlers = identityItemTypeHandlers,
-                    cardItemTypeHandlers = cardItemTypeHandlers,
-                    sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
-                    modifier = Modifier
-                        .imePadding()
-                        .fillMaxSize(),
                 )
-            }
+            },
+        ) {
+            when (val viewState = state.viewState) {
+                is VaultAddEditState.ViewState.Content -> {
+                    VaultAddEditContent(
+                        state = viewState,
+                        isAddItemMode = state.isAddItemMode,
+                        typeOptions = state.supportedItemTypes,
+                        onTypeOptionClicked = remember(viewModel) {
+                            {
+                                viewModel.trySendAction(
+                                    VaultAddEditAction.Common.TypeOptionSelect(it),
+                                )
+                            }
+                        },
+                        loginItemTypeHandlers = loginItemTypeHandlers,
+                        commonTypeHandlers = commonTypeHandlers,
+                        permissionsManager = permissionsManager,
+                        identityItemTypeHandlers = identityItemTypeHandlers,
+                        cardItemTypeHandlers = cardItemTypeHandlers,
+                        sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
+                        lazyListState = lazyListState,
+                        onPreviousCoachMark = {
+                            coroutineScope.launch {
+                                coachMarkState.showPreviousCoachMark()
+                            }
+                        },
+                        onNextCoachMark = {
+                            coroutineScope.launch {
+                                coachMarkState.showNextCoachMark()
+                            }
+                        },
+                        onCoachMarkTourComplete = {
+                            coachMarkState.coachingComplete(onComplete = scrollBackToTop)
+                        },
+                        onCoachMarkDismissed = scrollBackToTop,
+                        modifier = Modifier
+                            .imePadding()
+                            .fillMaxSize(),
+                    )
+                }
 
-            is VaultAddEditState.ViewState.Error -> {
-                BitwardenErrorContent(
-                    message = viewState.message(),
-                    modifier = Modifier.fillMaxSize(),
-                )
-            }
+                is VaultAddEditState.ViewState.Error -> {
+                    BitwardenErrorContent(
+                        message = viewState.message(),
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
 
-            VaultAddEditState.ViewState.Loading -> {
-                BitwardenLoadingContent(
-                    modifier = Modifier.fillMaxSize(),
-                )
+                VaultAddEditState.ViewState.Loading -> {
+                    BitwardenLoadingContent(
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
         }
     }

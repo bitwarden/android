@@ -1112,4 +1112,6 @@ Pretende mudar para esta conta?</string>
   <string name="review_flow_launched">Fluxo de revisão lançado!</string>
   <string name="copy_private_key">Copiar chave privada</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Pode alterar o e-mail da sua conta na aplicação Web Bitwarden.</string>
+  <string name="login_credentials">Credenciais de início de sessão</string>
+  <string name="autofill_options">Opções de preenchimento automático</string>
 </resources>

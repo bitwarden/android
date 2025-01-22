@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
@@ -50,7 +51,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
     fun `loading dialog presence should update with dialog state`() {
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -61,7 +62,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertExists()
     }
 
