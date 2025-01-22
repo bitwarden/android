@@ -16,8 +16,9 @@ import java.time.Instant
  */
 class FakeSettingsDiskSource : SettingsDiskSource {
 
-    private val mutableAppThemeFlow =
-        bufferedMutableSharedFlow<AppTheme>(replay = 1)
+    private val mutableAppLanguageFlow = bufferedMutableSharedFlow<AppLanguage?>(replay = 1)
+
+    private val mutableAppThemeFlow = bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
     private val mutableLastSyncCallFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
@@ -42,6 +43,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
@@ -81,7 +83,15 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableVaultRegisteredForExportFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
-    override var appLanguage: AppLanguage? = null
+    override var appLanguage: AppLanguage?
+        get() = storedAppLanguage
+        set(value) {
+            storedAppLanguage = value
+            mutableAppLanguageFlow.tryEmit(value)
+        }
+
+    override val appLanguageFlow: Flow<AppLanguage?>
+        get() = mutableAppLanguageFlow.onSubscription { emit(appLanguage) }
 
     override var appTheme: AppTheme
         get() = storedAppTheme
