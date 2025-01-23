@@ -348,8 +348,8 @@ private fun AddSendOptions(
             )
             .minimumInteractiveComponentSize()
             .padding(top = 16.dp, bottom = 8.dp)
-            .padding(horizontal = 16.dp)
             .standardHorizontalMargin()
+            .padding(horizontal = 16.dp)
             .semantics(mergeDescendants = true) {},
         verticalAlignment = Alignment.CenterVertically,
     ) {
