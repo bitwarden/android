@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
+import androidx.compose.runtime.State
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,6 +13,8 @@ const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
  */
 fun NavGraphBuilder.generatorGraph(
     onNavigateToPasswordHistory: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
+    scrimClickCount: State<Int>,
 ) {
     navigation(
         route = GENERATOR_GRAPH_ROUTE,
@@ -19,6 +22,8 @@ fun NavGraphBuilder.generatorGraph(
     ) {
         generatorDestination(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+            onDimNavBarRequest = onDimNavBarRequest,
+            scrimClickCount = scrimClickCount,
         )
     }
 }

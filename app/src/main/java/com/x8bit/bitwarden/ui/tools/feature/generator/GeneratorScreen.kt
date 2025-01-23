@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,9 +20,14 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -46,6 +53,11 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
+import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
+import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -56,6 +68,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
+import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -86,10 +99,12 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPasswordH
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPlusAddressedEmailHandlers
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberRandomWordHandlers
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberUsernameTypeHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.ExploreGeneratorCoachMark
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 import kotlin.math.max
 
 /**
@@ -102,6 +117,8 @@ fun GeneratorScreen(
     viewModel: GeneratorViewModel = hiltViewModel(),
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateBack: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
+    scrimClickCount: State<Int>,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -116,6 +133,20 @@ fun GeneratorScreen(
         }
     }
 
+    val lazyListState = rememberLazyListState()
+    val coachMarkState = rememberLazyListCoachMarkState(
+        orderedList = ExploreGeneratorCoachMark.entries,
+        lazyListState = lazyListState,
+    )
+
+    LaunchedEffect(key1 = scrimClickCount.value, key2 = coachMarkState.isVisible.value) {
+        onDimNavBarRequest(coachMarkState.isVisible.value)
+        // If the scrim click count increases we want to ensure the tool tip is
+        // showing.
+        if (scrimClickCount.value > 0) {
+            coachMarkState.showToolTipForCurrentCoachMark()
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             GeneratorEvent.NavigateToPasswordHistory -> onNavigateToPasswordHistory()
@@ -134,9 +165,11 @@ fun GeneratorScreen(
             }
 
             GeneratorEvent.NavigateBack -> onNavigateBack.invoke()
+            GeneratorEvent.StartCoachMarkTour -> {
+                coachMarkState.showCoachMark(ExploreGeneratorCoachMark.PASSWORD_MODE)
+            }
         }
     }
-
     val onRegenerateClick: () -> Unit = remember(viewModel) {
         { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
     }
@@ -158,6 +191,25 @@ fun GeneratorScreen(
             }
         }
 
+    val scope = rememberCoroutineScope()
+    val onShowNextCoachMark: () -> Unit = remember {
+        {
+            scope.launch { coachMarkState.showNextCoachMark() }
+        }
+    }
+
+    val onShowPreviousCoachMark: () -> Unit = remember {
+        {
+            scope.launch { coachMarkState.showPreviousCoachMark() }
+        }
+    }
+
+    val onDismissCoachMark: () -> Unit = remember {
+        {
+            scope.launch { lazyListState.animateScrollToItem(index = 0) }
+        }
+    }
+
     val passwordHandlers = rememberPasswordHandlers(viewModel)
     val passphraseHandlers = rememberPassphraseHandlers(viewModel)
     val usernameTypeHandlers = rememberUsernameTypeHandlers(viewModel)
@@ -167,60 +219,74 @@ fun GeneratorScreen(
     val randomWordHandlers = rememberRandomWordHandlers(viewModel)
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    BitwardenScaffold(
-        topBar = {
-            when (val generatorMode = state.generatorMode) {
-                is GeneratorMode.Modal -> {
-                    ModalAppBar(
-                        generatorMode = generatorMode,
-                        scrollBehavior = scrollBehavior,
-                        onCloseClick = remember(viewModel) {
-                            { viewModel.trySendAction(GeneratorAction.CloseClick) }
-                        },
-                        onSelectClick = remember(viewModel) {
-                            { viewModel.trySendAction(GeneratorAction.SelectClick) }
-                        },
-                    )
-                }
-
-                GeneratorMode.Default -> {
-                    DefaultAppBar(
-                        scrollBehavior = scrollBehavior,
-                        onPasswordHistoryClick = remember(viewModel) {
-                            { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
-                        },
-                    )
-                }
-            }
-        },
-        utilityBar = {
-            MainStateOptionsItem(
-                selectedType = state.selectedType,
-                passcodePolicyOverride = state.passcodePolicyOverride,
-                possibleMainStates = state.typeOptions.toImmutableList(),
-                onMainStateOptionClicked = onMainStateOptionClicked,
-                modifier = Modifier
-                    .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
-            )
-        },
-        snackbarHost = {
-            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    CoachMarkContainer(
+        state = coachMarkState,
+        modifier = Modifier.fillMaxSize(),
     ) {
-        ScrollContent(
-            state = state,
-            onRegenerateClick = onRegenerateClick,
-            onCopyClick = onCopyClick,
-            onUsernameSubStateOptionClicked = onUsernameOptionClicked,
-            passwordHandlers = passwordHandlers,
-            passphraseHandlers = passphraseHandlers,
-            usernameTypeHandlers = usernameTypeHandlers,
-            forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-            plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-            catchAllEmailHandlers = catchAllEmailHandlers,
-            randomWordHandlers = randomWordHandlers,
-        )
+        BitwardenScaffold(
+            topBar = {
+                when (val generatorMode = state.generatorMode) {
+                    is GeneratorMode.Modal -> {
+                        ModalAppBar(
+                            generatorMode = generatorMode,
+                            scrollBehavior = scrollBehavior,
+                            onCloseClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.CloseClick) }
+                            },
+                            onSelectClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.SelectClick) }
+                            },
+                        )
+                    }
+
+                    GeneratorMode.Default -> {
+                        DefaultAppBar(
+                            scrollBehavior = scrollBehavior,
+                            onPasswordHistoryClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
+                            },
+                        )
+                    }
+                }
+            },
+            utilityBar = {
+                MainStateOptionsItem(
+                    selectedType = state.selectedType,
+                    passcodePolicyOverride = state.passcodePolicyOverride,
+                    possibleMainStates = state.typeOptions.toImmutableList(),
+                    onMainStateOptionClicked = onMainStateOptionClicked,
+                    onShowNextCoachMark = onShowNextCoachMark,
+                    onShowPreviousCoachMark = onShowPreviousCoachMark,
+                    onDismissCoachMark = onDismissCoachMark,
+                    modifier = Modifier
+                        .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+                )
+            },
+            snackbarHost = {
+                BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+            },
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        ) {
+            ScrollContent(
+                state = state,
+                onRegenerateClick = onRegenerateClick,
+                onCopyClick = onCopyClick,
+                onUsernameSubStateOptionClicked = onUsernameOptionClicked,
+                passwordHandlers = passwordHandlers,
+                passphraseHandlers = passphraseHandlers,
+                usernameTypeHandlers = usernameTypeHandlers,
+                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                catchAllEmailHandlers = catchAllEmailHandlers,
+                randomWordHandlers = randomWordHandlers,
+            )
+        }
+    }
+    // Remove dim nav bar effect when we leave this screen.
+    DisposableEffect(Unit) {
+        onDispose {
+            onDimNavBarRequest(false)
+        }
     }
 }
 
@@ -419,12 +485,16 @@ private fun GeneratedStringItem(
     )
 }
 
+@Suppress("MaxLineLength", "LongMethod")
 @Composable
-private fun MainStateOptionsItem(
+private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
     selectedType: GeneratorState.MainType,
     passcodePolicyOverride: GeneratorState.PasscodePolicyOverride?,
     possibleMainStates: ImmutableList<GeneratorState.MainTypeOption>,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
+    onShowNextCoachMark: () -> Unit,
+    onShowPreviousCoachMark: () -> Unit,
+    onDismissCoachMark: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenSegmentedButton(
@@ -460,7 +530,85 @@ private fun MainStateOptionsItem(
         modifier = modifier
             .fillMaxWidth()
             .testTag(tag = "GeneratorTypePicker"),
-    )
+    ) { index, option ->
+        when (index) {
+            0 -> {
+                CoachMarkHighlight(
+                    key = ExploreGeneratorCoachMark.PASSWORD_MODE,
+                    title = stringResource(R.string.coachmark_1_of_6),
+                    description = stringResource(
+                        R.string.use_the_generator_to_create_secure_passwords_passphrases_and_usernames,
+                    ),
+                    onDismiss = onDismissCoachMark,
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                ) {
+                    SegmentedButtonOptionContent(option = option)
+                }
+            }
+
+            1 -> {
+                CoachMarkHighlight(
+                    key = ExploreGeneratorCoachMark.PASSPHRASE_MODE,
+                    title = stringResource(R.string.coachmark_2_of_6),
+                    description = stringResource(
+                        R.string.passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords,
+                    ),
+                    onDismiss = onDismissCoachMark,
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    leftAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.back),
+                            onActionClick = onShowPreviousCoachMark,
+                        )
+                    },
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                ) {
+                    SegmentedButtonOptionContent(option = option)
+                }
+            }
+
+            2 -> {
+                CoachMarkHighlight(
+                    key = ExploreGeneratorCoachMark.USERNAME_MODE,
+                    title = stringResource(R.string.coachmark_3_of_6),
+                    description = stringResource(
+                        R.string.unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts,
+                    ),
+                    onDismiss = onDismissCoachMark,
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    leftAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.back),
+                            onActionClick = onShowPreviousCoachMark,
+                        )
+                    },
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                ) {
+                    SegmentedButtonOptionContent(option = option)
+                }
+            }
+
+            else -> {
+                SegmentedButtonOptionContent(option = option)
+            }
+        }
+    }
 }
 
 //endregion ScrollContent and Static Items
@@ -1210,6 +1358,8 @@ private fun Generator_preview() {
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
             onNavigateBack = {},
+            onDimNavBarRequest = {},
+            scrimClickCount = remember { mutableIntStateOf(0) },
         )
     }
 }

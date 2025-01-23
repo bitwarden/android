@@ -38,7 +38,9 @@ open class CoachMarkState<T : Enum<T>>(
     val currentHighlight: State<T?> = mutableCurrentHighlight
     private val mutableCurrentHighlightBounds = mutableStateOf(Rect.Zero)
     val currentHighlightBounds: State<Rect> = mutableCurrentHighlightBounds
-    private val mutableCurrentHighlightShape = mutableStateOf(CoachMarkHighlightShape.SQUARE)
+    private val mutableCurrentHighlightShape = mutableStateOf<CoachMarkHighlightShape>(
+        CoachMarkHighlightShape.RoundedRectangle(),
+    )
     val currentHighlightShape: State<CoachMarkHighlightShape> = mutableCurrentHighlightShape
 
     private val mutableIsVisible = mutableStateOf(isCoachMarkVisible)
@@ -53,13 +55,13 @@ open class CoachMarkState<T : Enum<T>>(
      * Rect.Zero.
      * @param toolTipState The state of the tooltip associated with this highlight.
      * @param shape The shape of the highlight (e.g., square, oval). Defaults to
-     * [CoachMarkHighlightShape.SQUARE].
+     * [CoachMarkHighlightShape.RoundedRectangle].
      */
     fun updateHighlight(
         key: T,
         bounds: Rect?,
         toolTipState: BitwardenToolTipState,
-        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.SQUARE,
+        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.RoundedRectangle(),
     ) {
         highlights[key] = CoachMarkHighlightState(
             key = key,
@@ -168,7 +170,7 @@ open class CoachMarkState<T : Enum<T>>(
         getCurrentHighlight()?.toolTipState?.cleanUp()
         mutableCurrentHighlight.value = null
         mutableCurrentHighlightBounds.value = Rect.Zero
-        mutableCurrentHighlightShape.value = CoachMarkHighlightShape.SQUARE
+        mutableCurrentHighlightShape.value = CoachMarkHighlightShape.RoundedRectangle()
         mutableIsVisible.value = false
         onComplete?.invoke()
     }
@@ -184,7 +186,8 @@ open class CoachMarkState<T : Enum<T>>(
 
     private fun updateCoachMarkStateInternal(highlight: CoachMarkHighlightState<T>?) {
         mutableIsVisible.value = highlight != null
-        mutableCurrentHighlightShape.value = highlight?.shape ?: CoachMarkHighlightShape.SQUARE
+        mutableCurrentHighlightShape.value =
+            highlight?.shape ?: CoachMarkHighlightShape.RoundedRectangle()
         if (currentHighlightBounds.value != highlight?.highlightBounds) {
             mutableCurrentHighlightBounds.value = highlight?.highlightBounds ?: Rect.Zero
         }

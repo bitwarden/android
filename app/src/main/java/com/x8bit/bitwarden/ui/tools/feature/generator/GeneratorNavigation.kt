@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -48,11 +51,15 @@ data class GeneratorArgs(
  */
 fun NavGraphBuilder.generatorDestination(
     onNavigateToPasswordHistory: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
+    scrimClickCount: State<Int>,
 ) {
     composable(GENERATOR_ROUTE) {
         GeneratorScreen(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateBack = {},
+            onDimNavBarRequest = onDimNavBarRequest,
+            scrimClickCount = scrimClickCount,
         )
     }
 }
@@ -76,6 +83,10 @@ fun NavGraphBuilder.generatorModalDestination(
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
             onNavigateBack = onNavigateBack,
+            onDimNavBarRequest = {},
+            scrimClickCount = remember {
+                mutableIntStateOf(0)
+            },
         )
     }
 }

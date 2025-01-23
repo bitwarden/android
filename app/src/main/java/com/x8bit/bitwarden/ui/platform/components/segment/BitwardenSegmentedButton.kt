@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.SingleChoiceSegmentedButtonRowScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,6 +33,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @param modifier Modifier.
  * @param windowInsets The insets to be applied to this composable.
  */
+@Suppress("MaxLineLength")
 @Composable
 fun BitwardenSegmentedButton(
     options: ImmutableList<SegmentedButtonState>,
@@ -39,6 +41,14 @@ fun BitwardenSegmentedButton(
     windowInsets: WindowInsets = WindowInsets.displayCutout
         .union(WindowInsets.navigationBars)
         .only(WindowInsetsSides.Horizontal),
+    optionContent: @Composable SingleChoiceSegmentedButtonRowScope.(
+        Int,
+        SegmentedButtonState,
+    ) -> Unit = { _, optionState ->
+        this.SegmentedButtonOptionContent(
+            option = optionState,
+        )
+    },
 ) {
     if (options.isEmpty()) return
     Box(
@@ -58,27 +68,37 @@ fun BitwardenSegmentedButton(
             space = 0.dp,
         ) {
             options.forEachIndexed { index, option ->
-                SegmentedButton(
-                    enabled = option.isEnabled,
-                    selected = option.isChecked,
-                    onClick = option.onClick,
-                    colors = bitwardenSegmentedButtonColors(),
-                    shape = BitwardenTheme.shapes.segmentedControl,
-                    border = BorderStroke(width = 0.dp, color = Color.Transparent),
-                    label = {
-                        Text(
-                            text = option.text,
-                            style = BitwardenTheme.typography.labelLarge,
-                        )
-                    },
-                    icon = {
-                        // No icon required
-                    },
-                    modifier = Modifier.semantics { option.testTag?.let { testTag = it } },
-                )
+                optionContent(index, option)
             }
         }
     }
+}
+
+/**
+ * Default content definition for each option in a [BitwardenSegmentedButton].
+ */
+@Composable
+fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
+    option: SegmentedButtonState,
+) {
+    SegmentedButton(
+        enabled = option.isEnabled,
+        selected = option.isChecked,
+        onClick = option.onClick,
+        colors = bitwardenSegmentedButtonColors(),
+        shape = BitwardenTheme.shapes.segmentedControl,
+        border = BorderStroke(width = 0.dp, color = Color.Transparent),
+        label = {
+            Text(
+                text = option.text,
+                style = BitwardenTheme.typography.labelLarge,
+            )
+        },
+        icon = {
+            // No icon required
+        },
+        modifier = Modifier.semantics { option.testTag?.let { testTag = it } },
+    )
 }
 
 /**

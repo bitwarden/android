@@ -38,8 +38,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.coroutines.launch
 
-private const val ROUNDED_RECT_RADIUS = 8f
-
 /**
  * A composable container that manages and displays coach mark highlights.
  *
@@ -79,17 +77,17 @@ fun <T : Enum<T>> CoachMarkContainer(
                 bottomRight = boundedRectangle.bottomRight,
             )
             Path().apply {
-                when (currentHighlightShape) {
-                    CoachMarkHighlightShape.SQUARE -> addRoundRect(
+                when (val shape = currentHighlightShape) {
+                    is CoachMarkHighlightShape.RoundedRectangle -> addRoundRect(
                         RoundRect(
                             rect = highlightArea,
                             cornerRadius = CornerRadius(
-                                x = ROUNDED_RECT_RADIUS,
+                                x = shape.radius,
                             ),
                         ),
                     )
 
-                    CoachMarkHighlightShape.OVAL -> addOval(highlightArea)
+                    CoachMarkHighlightShape.Oval -> addOval(highlightArea)
                 }
             }
         }
@@ -189,7 +187,7 @@ private fun BitwardenCoachMarkContainer_preview() {
                                 style = BitwardenTheme.typography.labelLarge,
                             )
                         },
-                        shape = CoachMarkHighlightShape.OVAL,
+                        shape = CoachMarkHighlightShape.Oval,
                     ) {
                         BitwardenStandardIconButton(
                             painter = rememberVectorPainter(R.drawable.ic_puzzle),
@@ -203,6 +201,7 @@ private fun BitwardenCoachMarkContainer_preview() {
                     key = Foo.Baz,
                     title = "Foo",
                     description = "Baz",
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
                     leftAction = {
                         BitwardenClickableText(
                             label = "Back",

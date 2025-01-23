@@ -1117,10 +1117,10 @@ Do you want to switch to this account?</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
-  <string name="coachmark_1_of_3">1 of 3</string>
-  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="coachmark_1_of_3">1 OF 3</string>
+  <string name="coachmark_2_of_3">2 OF 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
-  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="coachmark_3_of_3">3 OF 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Single tap passkey creation</string>
@@ -1132,4 +1132,10 @@ Do you want to switch to this account?</string>
   <string name="import_client_certificate">Import client certificate</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+  <string name="coachmark_1_of_6">1 OF 6</string>
+  <string name="coachmark_2_of_6">2 OF 6</string>
+  <string name="coachmark_3_of_6">3 OF 6</string>
 </resources>
