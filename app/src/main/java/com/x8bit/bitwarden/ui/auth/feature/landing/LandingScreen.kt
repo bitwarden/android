@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -204,7 +205,8 @@ private fun LandingScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .imePadding()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .statusBarsPadding(),
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
@@ -214,7 +216,7 @@ private fun LandingScreenContent(
             modifier = Modifier
                 .standardHorizontalMargin()
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 12.dp),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -227,7 +229,7 @@ private fun LandingScreenContent(
             modifier = Modifier
                 .standardHorizontalMargin()
                 .wrapContentHeight()
-                .padding(top = 16.dp, bottom = 24.dp),
+                .padding(top = 12.dp, bottom = 24.dp),
         )
 
         BitwardenTextField(
@@ -301,7 +303,7 @@ private fun LandingScreenContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
