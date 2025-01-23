@@ -243,7 +243,7 @@ private fun LoginScreenContent(
                 BitwardenClickableText(
                     label = stringResource(id = R.string.get_master_passwordword_hint),
                     onClick = onMasterPasswordClick,
-                    style = BitwardenTheme.typography.bodySmall,
+                    style = BitwardenTheme.typography.labelMedium,
                     innerPadding = PaddingValues(
                         top = 8.dp,
                         bottom = 8.dp,
