@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                     onDataUpdate = remember(mainViewModel) {
                         {
                             mainViewModel.trySendAction(
-                                MainAction.ScreenResumeDataReceived(it),
+                                MainAction.ResumeScreenDataReceived(it),
                             )
                         }
                     },

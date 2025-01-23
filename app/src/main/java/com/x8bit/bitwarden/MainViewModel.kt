@@ -183,11 +183,11 @@ class MainViewModel @Inject constructor(
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
-            is MainAction.ScreenResumeDataReceived -> handleAppResumeDataUpdated(action)
+            is MainAction.ResumeScreenDataReceived -> handleAppResumeDataUpdated(action)
         }
     }
 
-    private fun handleAppResumeDataUpdated(action: MainAction.ScreenResumeDataReceived) {
+    private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
         when (val data = action.screenResumeData) {
             null -> appResumeManager.clearResumeScreen()
             else -> appResumeManager.setResumeScreen(data)
@@ -453,7 +453,11 @@ sealed class MainAction {
      * Receive event to open the debug menu.
      */
     data object OpenDebugMenu : MainAction()
-    data class ScreenResumeDataReceived(val screenResumeData: AppResumeScreenData?) : MainAction()
+
+    /**
+     * Receive event to save the app resume screen
+     */
+    data class ResumeScreenDataReceived(val screenResumeData: AppResumeScreenData?) : MainAction()
 
     /**
      * Actions for internal use by the ViewModel.

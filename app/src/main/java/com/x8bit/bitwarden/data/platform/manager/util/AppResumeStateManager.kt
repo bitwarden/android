@@ -9,12 +9,28 @@ import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 
+/**
+ * Manages the state of the screen to resume to after the app is unlocked.
+ */
 interface AppResumeStateManager {
+    /**
+     * The current state of the screen to resume to.
+     * It will be `null` if there is no screen to resume to.
+     */
     val appResumeState: State<AppResumeScreenData?>
 
+    /**
+     * Updates the screen data to resume to.
+     *
+     * @param data The [AppResumeScreenData] for the screen to resume to, or `null` if there is no
+     * screen to resume to.
+     */
     fun updateScreenData(data: AppResumeScreenData?)
 }
 
+/**
+ * Primary implementation of [AppResumeStateManager].
+ */
 class AppResumeStateManagerImpl : AppResumeStateManager {
     private val mutableAppResumeState = mutableStateOf<AppResumeScreenData?>(null)
     override val appResumeState: State<AppResumeScreenData?> = mutableAppResumeState
