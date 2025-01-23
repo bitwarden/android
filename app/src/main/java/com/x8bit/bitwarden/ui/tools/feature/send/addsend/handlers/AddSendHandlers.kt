@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
  * send items.
  */
 data class AddSendHandlers(
-    val onNamChange: (String) -> Unit,
+    val onNameChange: (String) -> Unit,
     val onFileTypeSelect: () -> Unit,
     val onTextTypeSelect: () -> Unit,
     val onChooseFileClick: (hasPermission: Boolean) -> Unit,
@@ -34,7 +34,7 @@ data class AddSendHandlers(
             viewModel: AddSendViewModel,
         ): AddSendHandlers =
             AddSendHandlers(
-                onNamChange = { viewModel.trySendAction(AddSendAction.NameChange(it)) },
+                onNameChange = { viewModel.trySendAction(AddSendAction.NameChange(it)) },
                 onFileTypeSelect = { viewModel.trySendAction(AddSendAction.FileTypeClick) },
                 onTextTypeSelect = { viewModel.trySendAction(AddSendAction.TextTypeClick) },
                 onChooseFileClick = { viewModel.trySendAction(AddSendAction.ChooseFileClick(it)) },

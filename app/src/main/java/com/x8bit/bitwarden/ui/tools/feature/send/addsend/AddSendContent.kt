@@ -128,7 +128,7 @@ fun AddSendContent(
             label = stringResource(id = R.string.send_name_required),
             readOnly = policyDisablesSend,
             value = state.common.name,
-            onValueChange = addSendHandlers.onNamChange,
+            onValueChange = addSendHandlers.onNameChange,
             textFieldTestTag = "SendNameEntry",
             cardStyle = CardStyle.Full,
         )
