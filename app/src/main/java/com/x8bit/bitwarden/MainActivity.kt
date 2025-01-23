@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
+    @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
