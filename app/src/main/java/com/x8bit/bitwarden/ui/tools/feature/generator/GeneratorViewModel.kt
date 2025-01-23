@@ -16,7 +16,6 @@ import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -144,9 +143,6 @@ class GeneratorViewModel @Inject constructor(
         // when the screen resumes we need to refresh the options for the current option from
         // disk in the event they were changed while the screen was in the foreground.
         loadOptions(shouldUseStorageOptions = true)
-        appResumeManager.setResumeScreen(
-            AppResumeScreenData.GeneratorScreen,
-        )
     }
 
     @Suppress("MaxLineLength")

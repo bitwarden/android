@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -978,18 +977,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 expectNoEvents()
             }
         }
-
-    @Test
-    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        val initialState = initialPasscodeState
-        val viewModel = createViewModel(initialState)
-        viewModel.trySendAction(GeneratorAction.LifecycleResume)
-        verify(exactly = 1) {
-            appResumeManager.setResumeScreen(
-                AppResumeScreenData.GeneratorScreen,
-            )
-        }
-    }
 
     @Nested
     inner class PasswordActions {
