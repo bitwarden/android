@@ -76,10 +76,10 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
@@ -129,7 +129,7 @@ fun BitwardenPasswordField(
             TextField(
                 colors = bitwardenTextFieldColors(),
                 textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-                label = { Text(text = label) },
+                label = label?.let { { Text(text = it) } },
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValueState = it
@@ -215,7 +215,7 @@ fun BitwardenPasswordField(
  */
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
@@ -289,7 +289,7 @@ fun BitwardenPasswordField(
  */
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -351,7 +351,7 @@ fun BitwardenPasswordField(
  */
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
