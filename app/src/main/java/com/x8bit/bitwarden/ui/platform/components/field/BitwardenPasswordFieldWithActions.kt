@@ -59,7 +59,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun BitwardenPasswordFieldWithActions(
-    label: String,
+    label: String?,
     value: String,
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
