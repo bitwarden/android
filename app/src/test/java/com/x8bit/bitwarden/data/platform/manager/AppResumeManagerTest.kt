@@ -4,7 +4,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -19,10 +18,6 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 class AppResumeManagerTest {
-
-    private val authDiskSource: AuthDiskSource = mockk {
-        every { getLastLockTimestamp(any()) } returns Instant.now()
-    }
     private val fakeSettingsDiskSource: SettingsDiskSource = FakeSettingsDiskSource()
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns USER_ID
@@ -36,6 +31,10 @@ class AppResumeManagerTest {
         ZoneOffset.UTC,
     )
 
+    private val authDiskSource: AuthDiskSource = mockk {
+        every { getLastLockTimestamp(any()) } returns fixedClock.instant()
+    }
+
     private val appResumeManager = AppResumeManagerImpl(
         settingsDiskSource = fakeSettingsDiskSource,
         authDiskSource = authDiskSource,
@@ -43,8 +42,6 @@ class AppResumeManagerTest {
         vaultLockManager = vaultLockManager,
         clock = fixedClock,
     )
-
-    private val json = PlatformNetworkModule.providesJson()
 
     @Suppress("MaxLineLength")
     @Test
@@ -142,6 +139,34 @@ class AppResumeManagerTest {
             val actualValue = appResumeManager.getResumeSpecialCircumstance()
             assertEquals(expectedValue, actualValue)
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getResumeSpecialCircumstance should should clear app resume screen if have passed 5 minutes`() {
+        val delayedAuthDiskSource: AuthDiskSource = mockk {
+            every { getLastLockTimestamp(any()) } returns fixedClock.instant()
+                .minusSeconds(5 * 60 + 1)
+        }
+
+        val delayedAppResumeManager = AppResumeManagerImpl(
+            settingsDiskSource = fakeSettingsDiskSource,
+            authDiskSource = delayedAuthDiskSource,
+            authRepository = authRepository,
+            vaultLockManager = vaultLockManager,
+            clock = fixedClock,
+        )
+        fakeSettingsDiskSource.storeAppResumeScreen(
+            userId = USER_ID,
+            screenData = AppResumeScreenData.GeneratorScreen,
+        )
+        val actualValue = delayedAppResumeManager.getResumeSpecialCircumstance()
+        assertNull(actualValue)
+
+        val actualSettingsValue = fakeSettingsDiskSource.getAppResumeScreen(
+            userId = USER_ID,
+        )
+        assertNull(actualSettingsValue)
+    }
 }
 
 private const val USER_ID = "user_id"

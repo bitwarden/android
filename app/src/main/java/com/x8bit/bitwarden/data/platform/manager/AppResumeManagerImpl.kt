@@ -45,7 +45,7 @@ class AppResumeManagerImpl(
         ) ?: return null
 
         if (timeNowMinus5Min.isAfter(lastLockTimestamp)) {
-            clearResumeScreen()
+            settingsDiskSource.storeAppResumeScreen(userId = userId, screenData = null)
             return null
         }
         return when (val resumeScreenData = getResumeScreen()) {
