@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -60,7 +59,6 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Suppress("LongMethod")
 fun LandingScreen(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
@@ -121,18 +119,18 @@ fun LandingScreen(
         null -> Unit
     }
 
-    val isAppBarVisible = state.accountSummaries.isNotEmpty()
     var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
         canScroll = { !isAccountMenuVisible },
     )
+
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            if (isAppBarVisible) {
+            if (state.isAppBarVisible) {
                 BitwardenTopAppBar(
                     title = "",
                     scrollBehavior = scrollBehavior,
@@ -170,7 +168,6 @@ fun LandingScreen(
     ) {
         LandingScreenContent(
             state = state,
-            isAppBarVisible = isAppBarVisible,
             onEmailInputChange = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
             },
@@ -191,11 +188,9 @@ fun LandingScreen(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun LandingScreenContent(
     state: LandingState,
-    isAppBarVisible: Boolean,
     onEmailInputChange: (String) -> Unit,
     onEnvironmentTypeSelect: (Environment.Type) -> Unit,
     onRememberMeToggle: (Boolean) -> Unit,
@@ -209,37 +204,29 @@ private fun LandingScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-        val topPadding = if (isAppBarVisible) 40.dp else 104.dp
-        Spacer(modifier = Modifier.height(topPadding))
+        Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = rememberVectorPainter(id = R.drawable.logo),
-            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
+            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .width(220.dp)
-                .height(74.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(top = 16.dp),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = stringResource(id = R.string.login_or_create_new_account),
+            text = stringResource(id = R.string.login_to_bitwarden),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.headlineSmall,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .padding(top = 16.dp, bottom = 24.dp),
         )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Spacer(modifier = Modifier.height(40.dp))
 
         BitwardenTextField(
             modifier = Modifier
