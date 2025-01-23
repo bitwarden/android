@@ -286,13 +286,13 @@ private fun LandingScreenContent(
                 .wrapContentHeight(),
         ) {
             Text(
-                text = stringResource(id = R.string.new_around_here),
+                text = stringResource(id = R.string.new_to_bitwarden),
                 style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.primary,
+                color = BitwardenTheme.colorScheme.text.secondary,
             )
 
             BitwardenTextButton(
-                label = stringResource(id = R.string.create_account),
+                label = stringResource(id = R.string.create_an_account),
                 onClick = onCreateAccountClick,
                 modifier = Modifier
                     .testTag("CreateAccountLabel"),

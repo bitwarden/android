@@ -101,6 +101,7 @@
   <string name="close">Close</string>
   <string name="continue_text">Continue</string>
   <string name="create_account">Create account</string>
+  <string name="create_an_account">Create an account</string>
   <string name="creating_account">Creating account...</string>
   <string name="edit_item">Edit item</string>
   <string name="enable_automatic_syncing">Allow automatic syncing</string>
@@ -754,7 +755,7 @@ select Add TOTP to store the key safely</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login attempt from:
 %1$s
 Do you want to switch to this account?</string>
-  <string name="new_around_here">New around here?</string>
+  <string name="new_to_bitwarden">New to Bitwarden?</string>
   <string name="get_master_passwordword_hint">Get master password hint</string>
   <string name="logging_in_as_x_on_y">Logging in as %1$s on %2$s</string>
   <string name="not_you">Not you?</string>
