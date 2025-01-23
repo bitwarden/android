@@ -20,6 +20,7 @@ data class Fido2CreateCredentialRequest(
     val packageName: String,
     val signingInfo: SigningInfo,
     val origin: String?,
+    val isUserVerified: Boolean?,
 ) : Parcelable {
     val callingAppInfo: CallingAppInfo
         get() = CallingAppInfo(

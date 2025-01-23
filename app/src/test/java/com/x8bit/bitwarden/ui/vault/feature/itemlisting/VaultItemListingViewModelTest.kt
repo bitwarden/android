@@ -26,7 +26,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -204,6 +204,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             "com.x8bit.bitwarden",
             SigningInfo(),
             origin = null,
+            isUserVerified = true,
         )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -452,7 +453,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during FIDO 2 registration should show FIDO 2 error dialog when cipherView is null`() {
         val cipherView = createMockCipherView(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
         )
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
@@ -481,7 +482,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val cipherView = createMockCipherView(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
         )
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
@@ -516,7 +517,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -559,7 +560,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1, fido2Credentials = null)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -607,7 +608,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockFido2CredentialRequest,
             )
@@ -650,7 +651,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during FIDO 2 registration should skip user verification when user is verified`() {
         setupMockUri()
         val cipherView = createMockCipherView(number = 1)
-        val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+        val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = mockFido2CredentialRequest,
         )
@@ -1576,6 +1577,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = "mockOrigin",
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance =
@@ -2158,6 +2160,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             "com.x8bit.bitwarden",
             SigningInfo(),
             origin = "com.x8bit.bitwarden",
+            isUserVerified = true,
         )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest,
@@ -2208,6 +2211,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2239,6 +2243,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2270,6 +2275,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2301,6 +2307,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2332,6 +2339,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2363,6 +2371,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 packageName = "com.x8bit.bitwarden",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2464,7 +2473,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `DismissFido2ErrorDialogClick should clear the dialog state then complete FIDO 2 registration based on state`() =
         runTest {
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                createMockFido2CredentialRequest(number = 1),
+                createMockFido2CreateCredentialRequest(number = 1),
             )
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
@@ -3367,7 +3376,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `UserVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
         every { authRepository.activeUserId } returns null
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
+            SpecialCircumstance.Fido2Save(createMockFido2CreateCredentialRequest(number = 1))
 
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(
@@ -3390,7 +3399,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential when verification result is received`() =
         runTest {
-            val mockRequest = createMockFido2CredentialRequest(number = 1)
+            val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockRequest,
             )
@@ -4050,7 +4059,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -4084,7 +4093,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+                fido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(number = 1),
             )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(

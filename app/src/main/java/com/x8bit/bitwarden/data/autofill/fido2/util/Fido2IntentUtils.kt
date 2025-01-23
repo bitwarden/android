@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
  * Checks if this [Intent] contains a [Fido2CreateCredentialRequest] related to an ongoing FIDO 2
  * credential creation process.
  */
-fun Intent.getFido2CredentialRequestOrNull(): Fido2CreateCredentialRequest? {
+fun Intent.getFido2CreateCredentialRequestOrNull(): Fido2CreateCredentialRequest? {
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
@@ -39,6 +39,7 @@ fun Intent.getFido2CredentialRequestOrNull(): Fido2CreateCredentialRequest? {
         packageName = systemRequest.callingAppInfo.packageName,
         signingInfo = systemRequest.callingAppInfo.signingInfo,
         origin = systemRequest.callingAppInfo.origin,
+        isUserVerified = systemRequest.biometricPromptResult?.isSuccessful ?: false,
     )
 }
 
@@ -67,6 +68,9 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
     val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
+    val isUserVerified = systemRequest.biometricPromptResult?.isSuccessful
+        ?: false
+
     return Fido2CredentialAssertionRequest(
         userId = userId,
         cipherId = cipherId,
@@ -76,6 +80,7 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
         packageName = systemRequest.callingAppInfo.packageName,
         signingInfo = systemRequest.callingAppInfo.signingInfo,
         origin = systemRequest.callingAppInfo.origin,
+        isUserVerified = isUserVerified,
     )
 }
 

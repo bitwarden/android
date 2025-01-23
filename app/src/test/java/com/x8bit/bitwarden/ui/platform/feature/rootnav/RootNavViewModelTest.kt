@@ -670,6 +670,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.Fido2Save(fido2CreateCredentialRequest)
