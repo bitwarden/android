@@ -55,11 +55,11 @@ fun SearchScreen(
     val searchHandlers = remember(viewModel) { SearchHandlers.create(viewModel) }
     val context = LocalContext.current
 
-    RegisterScreenDataOnLifecycleEffect(
-        appResumeScreenData = AppResumeScreenData.SearchScreen(
+    RegisterScreenDataOnLifecycleEffect {
+        AppResumeScreenData.SearchScreen(
             searchTerm = state.searchTerm,
-        ),
-    )
+        )
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {

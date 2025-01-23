@@ -1442,21 +1442,11 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SearchAction.LifecycleResume)
+        createViewModel()
         verify(exactly = 1) {
             appResumeManager.setResumeScreen(
                 AppResumeScreenData.SearchScreen(""),
             )
-        }
-    }
-
-    @Test
-    fun `LifecycleStop Action should call AppResumeManager clearResumeScreen`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SearchAction.LifecycleStop)
-        verify(exactly = 1) {
-            appResumeManager.clearResumeScreen()
         }
     }
 
@@ -1518,7 +1508,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         accessibilitySelectionManager = accessibilitySelectionManager,
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
-        appResumeManager = appResumeManager,
     )
 
     /**

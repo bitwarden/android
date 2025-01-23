@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -12,11 +13,13 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
@@ -41,16 +44,19 @@ class VerificationCodeScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setUp() {
         composeTestRule.setContent {
-            VerificationCodeScreen(
-                viewModel = viewModel,
-                onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
-                onNavigateToSearch = { onNavigateToSearchCalled = true },
-            )
+            CompositionLocalProvider(LocalAppResumeStateManager provides appResumeStateManager) {
+                VerificationCodeScreen(
+                    viewModel = viewModel,
+                    onNavigateBack = { onNavigateBackCalled = true },
+                    onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
+                    onNavigateToSearch = { onNavigateToSearchCalled = true },
+                )
+            }
         }
     }
 
@@ -363,11 +369,6 @@ class VerificationCodeScreenTest : BaseComposeTest() {
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isPopup()))
-    }
-
-    @Test
-    fun `send LifecycleResumed action on screen resume`() {
-        verify { viewModel.trySendAction(VerificationCodeAction.LifecycleResume) }
     }
 }
 

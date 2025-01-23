@@ -486,21 +486,11 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VerificationCodeAction.LifecycleResume)
+        createViewModel()
         verify(exactly = 1) {
             appResumeManager.setResumeScreen(
                 AppResumeScreenData.VerificationCodeScreen,
             )
-        }
-    }
-
-    @Test
-    fun `LifecycleStop Action should call AppResumeManager clearResumeScreen`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VerificationCodeAction.LifecycleStop)
-        verify(exactly = 1) {
-            appResumeManager.clearResumeScreen()
         }
     }
 
@@ -518,7 +508,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
             authRepository = authRepository,
-            appResumeManager = appResumeManager,
         )
 
     @Suppress("MaxLineLength")

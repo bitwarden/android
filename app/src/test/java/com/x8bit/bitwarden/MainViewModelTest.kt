@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
@@ -126,6 +127,11 @@ class MainViewModelTest : BaseViewModelTest() {
         coEvery { validateOrigin(any(), any()) } returns Fido2ValidateOriginResult.Success(null)
     }
     private val savedStateHandle = SavedStateHandle()
+
+    private val appResumeManager: AppResumeManager = mockk {
+        every { setResumeScreen(any()) } just runs
+        every { clearResumeScreen() } just runs
+    }
 
     @BeforeEach
     fun setup() {
@@ -1036,6 +1042,7 @@ class MainViewModelTest : BaseViewModelTest() {
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
+        appResumeManager = appResumeManager,
     )
 }
 

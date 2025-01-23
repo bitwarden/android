@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
-import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
@@ -28,9 +28,11 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
@@ -57,16 +59,21 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setup() {
         composeTestRule.setContent {
-            GeneratorScreen(
-                viewModel = viewModel,
-                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
-                onNavigateBack = {},
-                intentManager = intentManager,
-            )
+            CompositionLocalProvider(LocalAppResumeStateManager provides appResumeStateManager) {
+                GeneratorScreen(
+                    viewModel = viewModel,
+                    onNavigateToPasswordHistory = {
+                        onNavigateToPasswordHistoryScreenCalled = true
+                    },
+                    onNavigateBack = {},
+                    intentManager = intentManager,
+                )
+            }
         }
     }
 

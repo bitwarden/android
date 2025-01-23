@@ -137,7 +137,6 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainType -> handleMainTypeAction(action)
             is GeneratorAction.Internal -> handleInternalAction(action)
             GeneratorAction.LifecycleResume -> handleOnResumed()
-            GeneratorAction.LifecycleStop -> handleOnStopped()
         }
     }
 
@@ -148,10 +147,6 @@ class GeneratorViewModel @Inject constructor(
         appResumeManager.setResumeScreen(
             AppResumeScreenData.GeneratorScreen,
         )
-    }
-
-    private fun handleOnStopped() {
-        appResumeManager.clearResumeScreen()
     }
 
     @Suppress("MaxLineLength")
@@ -2149,11 +2144,6 @@ sealed class GeneratorAction {
      * Indicates the UI has been entered a resumed lifecycle state.
      */
     data object LifecycleResume : GeneratorAction()
-
-    /**
-     * Indicates the UI has been entered a stopped lifecycle state.
-     */
-    data object LifecycleStop : GeneratorAction()
 
     /**
      * Indicates that the overflow option for password history has been clicked.

@@ -446,21 +446,11 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SendAction.LifecycleResume)
+        createViewModel()
         verify(exactly = 1) {
             appResumeManager.setResumeScreen(
                 AppResumeScreenData.SendScreen,
             )
-        }
-    }
-
-    @Test
-    fun `LifecycleStop Action should call AppResumeManager clearResumeScreen`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SendAction.LifecycleStop)
-        verify(exactly = 1) {
-            appResumeManager.clearResumeScreen()
         }
     }
 
@@ -481,7 +471,6 @@ class SendViewModelTest : BaseViewModelTest() {
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
         policyManager = policyManager,
-        appResumeManager = appResumeManager,
     )
 }
 

@@ -991,16 +991,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `LifecycleStopAction should call AppResumeManager clearResumeScreen`() {
-        val initialState = initialPasscodeState
-        val viewModel = createViewModel(initialState)
-        viewModel.trySendAction(GeneratorAction.LifecycleStop)
-        verify(exactly = 1) {
-            appResumeManager.clearResumeScreen()
-        }
-    }
-
     @Nested
     inner class PasswordActions {
         private val defaultPasswordState = createPasswordState()

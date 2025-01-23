@@ -5,10 +5,8 @@ import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -47,7 +45,6 @@ class SendViewModel @Inject constructor(
     settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
     policyManager: PolicyManager,
-    private val appResumeManager: AppResumeManager,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -96,8 +93,6 @@ class SendViewModel @Inject constructor(
         is SendAction.RemovePasswordClick -> handleRemovePasswordClick(action)
         SendAction.DismissDialog -> handleDismissDialog()
         SendAction.RefreshPull -> handleRefreshPull()
-        SendAction.LifecycleResume -> handleOnResumed()
-        SendAction.LifecycleStop -> handleOnStopped()
         is SendAction.Internal -> handleInternalAction(action)
     }
 
@@ -315,16 +310,6 @@ class SendViewModel @Inject constructor(
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepo.sync(forced = false)
     }
-
-    private fun handleOnResumed() {
-        appResumeManager.setResumeScreen(
-            AppResumeScreenData.SendScreen,
-        )
-    }
-
-    private fun handleOnStopped() {
-        appResumeManager.clearResumeScreen()
-    }
 }
 
 /**
@@ -536,16 +521,6 @@ sealed class SendAction {
      * User has triggered a pull to refresh.
      */
     data object RefreshPull : SendAction()
-
-    /**
-     * Indicates the UI has been entered a resumed lifecycle state.
-     */
-    data object LifecycleResume : SendAction()
-
-    /**
-     * Indicates the UI has been entered a stopped lifecycle state.
-     */
-    data object LifecycleStop : SendAction()
 
     /**
      * Models actions that the [SendViewModel] itself will send.

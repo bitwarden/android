@@ -33,6 +33,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
+import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
@@ -111,12 +113,11 @@ fun GeneratorScreen(
                 viewModel.trySendAction(GeneratorAction.LifecycleResume)
             }
 
-            Lifecycle.Event.ON_STOP -> {
-                viewModel.trySendAction(GeneratorAction.LifecycleStop)
-            }
-
             else -> Unit
         }
+    }
+    RegisterScreenDataOnLifecycleEffect {
+        AppResumeScreenData.GeneratorScreen
     }
 
     EventsEffect(viewModel = viewModel) { event ->
