@@ -59,6 +59,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("LongMethod")
 fun LandingScreen(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
@@ -188,6 +189,7 @@ fun LandingScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun LandingScreenContent(
     state: LandingState,
