@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
@@ -60,6 +61,8 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
+
+    private val mutableScrimClickState = mutableIntStateOf(0)
 
     @Before
     fun setup() {
@@ -1698,6 +1701,63 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("1 OF 6")
             .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `The full coach mark tour can be completed showing all steps`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("3 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("4 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("5 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("6 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Done")
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
     }
 
     //endregion Random Word Tests
