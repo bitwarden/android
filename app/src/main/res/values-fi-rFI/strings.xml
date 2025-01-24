@@ -54,8 +54,10 @@
   <string name="my_vault">Oma holvi</string>
   <string name="authenticator">Todentaja</string>
   <string name="name">Nimi</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Ei</string>
   <string name="notes">Merkinnät</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Ok</string>
   <string name="password">Salasana</string>
   <string name="save">Tallenna</string>
@@ -554,12 +556,12 @@ Koodi skannataan automaattisesti.</string>
   <string name="personal_ownership_submit_error">Yrityskäytännön vuoksi kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</string>
   <string name="personal_ownership_policy_in_effect">Organisaatiokäytäntö vaikuttaa omistajuusvalintoihisi.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Kaikki Sendit</string>
   <string name="sends">Sendit</string>
-  <string name="name_info">Kuvaava nimi Sendille.</string>
   <string name="text">Teksti</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Teksti</string>
-  <string name="type_text_info">Teksti, jonka haluat lähettää.</string>
   <string name="hide_text_by_default">Piilota teksti oletuksena kun Send avataan</string>
   <string name="type_file">Tiedosto</string>
   <string name="type_file_info">Tiedosto, jonka haluat lähettää.</string>
@@ -571,9 +573,6 @@ Koodi skannataan automaattisesti.</string>
   <string name="deletion_time">Poistoaika</string>
   <string name="deletion_date_info">Send poistuu pysyvästi määritettynä ajankohtana.</string>
   <string name="pending_delete">Odottaa poistoa</string>
-  <string name="expiration_date">Erääntymispäivä</string>
-  <string name="expiration_time">Voimassaolo päättyy</string>
-  <string name="expiration_date_info">Send erääntyy määritettynä ajankohtana.</string>
   <string name="expired">Erääntynyt</string>
   <string name="maximum_access_count">Käyttökertojen enimmäismäärä</string>
   <string name="maximum_access_count_info">Jos määritetty, käyttäjät eivät voi avata Sendiä käyttökertojen enimmäismäärän täytyttyä.</string>
@@ -586,7 +585,6 @@ Koodi skannataan automaattisesti.</string>
   <string name="removing_send_password">Poistetaan salasana</string>
   <string name="send_password_removed">Salasana poistettiin</string>
   <string name="notes_info">Yksityisiä merkintöjä tästä Sendistä.</string>
-  <string name="disable_send">Poista Send käytöstä, jottei kukaan voi avata sitä</string>
   <string name="no_sends">Tililläsi ei ole Sendejä.</string>
   <string name="add_a_send">Lisää Send</string>
   <string name="copy_link">Kopioi linkki</string>
@@ -1114,4 +1112,13 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

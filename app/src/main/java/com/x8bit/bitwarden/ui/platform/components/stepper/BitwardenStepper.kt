@@ -44,7 +44,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun BitwardenStepper(
-    label: String,
+    label: String?,
     value: Int?,
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -101,7 +101,7 @@ fun BitwardenStepper(
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun BitwardenStepper(
-    label: String,
+    label: String?,
     value: Int?,
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,

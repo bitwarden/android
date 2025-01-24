@@ -152,6 +152,7 @@ class SpecialCircumstanceExtensionsTest {
             packageName = "mockPackageName",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         assertEquals(
             fido2CreateCredentialRequest,

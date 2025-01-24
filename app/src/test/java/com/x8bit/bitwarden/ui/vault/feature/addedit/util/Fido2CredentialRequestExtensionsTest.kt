@@ -53,6 +53,7 @@ class Fido2CredentialRequestExtensionsTest {
                 packageName = "mockPackageName-1",
                 signingInfo = SigningInfo(),
                 origin = null,
+                isUserVerified = true,
             )
                 .toDefaultAddTypeContent(
                     attestationOptions = createMockPasskeyAttestationOptions(1),
@@ -89,6 +90,7 @@ class Fido2CredentialRequestExtensionsTest {
                 packageName = "mockPackageName-1",
                 signingInfo = SigningInfo(),
                 origin = "www.test.com",
+                isUserVerified = true,
             )
                 .toDefaultAddTypeContent(
                     attestationOptions = createMockPasskeyAttestationOptions(number = 1),

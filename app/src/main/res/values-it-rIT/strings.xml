@@ -54,8 +54,10 @@
   <string name="my_vault">Cassaforte</string>
   <string name="authenticator">Autenticatore</string>
   <string name="name">Nome</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">No</string>
   <string name="notes">Note</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">OK</string>
   <string name="password">Password</string>
   <string name="save">Salva</string>
@@ -554,12 +556,12 @@ La scansione è automatica.</string>
   <string name="personal_ownership_submit_error">A causa di una politica aziendale, non puoi salvare elementi nella tua cassaforte personale. Cambia l\'opzione di proprietà in un\'organizzazione e scegli tra le raccolte disponibili.</string>
   <string name="personal_ownership_policy_in_effect">Una politica dell\'organizzazione sta influenzando le tue opzioni di proprietà.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Tutti i Send</string>
   <string name="sends">Send</string>
-  <string name="name_info">Un nome per descrivere il Send.</string>
   <string name="text">Testo</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Testo</string>
-  <string name="type_text_info">Il testo che verrà inviato.</string>
   <string name="hide_text_by_default">Nascondi il testo per impostazione predefinita</string>
   <string name="type_file">File</string>
   <string name="type_file_info">Il file che verrà inviato.</string>
@@ -571,9 +573,6 @@ La scansione è automatica.</string>
   <string name="deletion_time">Orario</string>
   <string name="deletion_date_info">La data e l\'ora in cui verrà eliminato definitivamente il Send.</string>
   <string name="pending_delete">In attesa di eliminazione</string>
-  <string name="expiration_date">Scadenza programmata</string>
-  <string name="expiration_time">Orario</string>
-  <string name="expiration_date_info">La data e l\'ora in cui scadrà il Send. (opzionale)</string>
   <string name="expired">Scaduto</string>
   <string name="maximum_access_count">Numero massimo di accessi</string>
   <string name="maximum_access_count_info">Il numero di accessi complessivi consentiti al Send.</string>
@@ -586,7 +585,6 @@ La scansione è automatica.</string>
   <string name="removing_send_password">Rimozione della password in corso...</string>
   <string name="send_password_removed">La password è stata rimossa.</string>
   <string name="notes_info">Note riguardanti il Send che non verranno condivise.</string>
-  <string name="disable_send">Non consentire l\'accesso</string>
   <string name="no_sends">Nessun Send</string>
   <string name="add_a_send">Aggiungi un Send</string>
   <string name="copy_link">Copia il link</string>
@@ -1113,4 +1111,13 @@ Vuoi passare a questo account?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Credenziali di accesso</string>
   <string name="autofill_options">Opzioni di auto-compilazione</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Usa questo pulsante per generare una nuova parola d\'accesso univoca.</string>
+  <string name="coachmark_1_of_3">1 di 3</string>
+  <string name="coachmark_2_of_3">2 di 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Dovrai solo impostare la chiave di autenticazione per gli accessi che richiedono l\'autenticazione a due fattori con un codice. La chiave genera continuamente codici a sei cifre che puoi usare per accedere.</string>
+  <string name="coachmark_3_of_3">3 di 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Devi aggiungere un indirizzo web per usare l\'auto-riempimento per accedere a questo account.</string>
+  <string name="mutual_tls">TLS reciproco</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

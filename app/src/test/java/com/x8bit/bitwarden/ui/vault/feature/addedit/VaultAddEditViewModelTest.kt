@@ -21,15 +21,17 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -87,10 +89,13 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -163,6 +168,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { isNetworkConnected } returns true
     }
 
+    private val mutableShouldShowAddLoginCoachMarkFlow = MutableStateFlow(false)
+    private val firstTimeActionManager = mockk<FirstTimeActionManager> {
+        every { markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN) } just runs
+        every { shouldShowAddLoginCoachMarkFlow } returns mutableShouldShowAddLoginCoachMarkFlow
+    }
+
     @BeforeEach
     fun setup() {
         mockkStatic(CipherView::toViewState)
@@ -191,6 +202,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldExitOnSave = false,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
                 .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
+            shouldShowCoachMarkTour = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -273,6 +285,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 dialog = null,
                 supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
                     .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
+                shouldShowCoachMarkTour = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -359,6 +372,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             packageName = "mockPackageName-1",
             signingInfo = SigningInfo(),
             origin = null,
+            isUserVerified = true,
         )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -781,6 +795,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 packageName = "mockPackageName",
                 signingInfo = mockk<SigningInfo>(),
                 origin = null,
+                isUserVerified = true,
             )
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
@@ -860,6 +875,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 packageName = "mockPackageName",
                 signingInfo = mockk<SigningInfo>(),
                 origin = null,
+                isUserVerified = false,
             )
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
@@ -940,7 +956,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should skip user verification when user is verified`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -992,7 +1008,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should show fido2 error dialog when create options are null`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -1036,7 +1052,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should emit fido user verification as optional when verification is PREFERRED`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -1081,7 +1097,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should emit fido user verification as required when request user verification option is REQUIRED`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -1789,7 +1805,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                 ),
             )
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockFido2CredentialRequest,
@@ -1840,7 +1856,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 notes = "mockNotes-1",
             ),
         )
-        val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
+        val mockFidoRequest = createMockFido2CreateCredentialRequest(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = mockFidoRequest,
         )
@@ -1911,7 +1927,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     notes = "mockNotes-1",
                 ),
             )
-            val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
+            val mockFidoRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockFidoRequest,
             )
@@ -2598,6 +2614,90 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager should show logins tour value updates to false shouldShowLearnAboutNewLogins should update to false`() {
+        mutableShouldShowAddLoginCoachMarkFlow.update { true }
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
+                vaultAddEditType = VaultAddEditType.AddItem(
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            ),
+        )
+        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+        mutableShouldShowAddLoginCoachMarkFlow.update { false }
+        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager value is true, but type content is not login shouldShowLearnAboutNewLogins should be false`() {
+        mutableShouldShowAddLoginCoachMarkFlow.update { true }
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
+                vaultAddEditType = VaultAddEditType.AddItem(
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            ),
+        )
+        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+        viewModel.trySendAction(
+            VaultAddEditAction.Common.TypeOptionSelect(
+                VaultAddEditState.ItemTypeOption.SSH_KEYS,
+            ),
+        )
+        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager value is false, but edit type is EditItem shouldShowLearnAboutNewLogins should be false`() {
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "1234"),
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
+                vaultAddEditType = VaultAddEditType.EditItem(
+                    vaultItemId = "1234",
+                ),
+            ),
+        )
+        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LearnAboutLoginsDismissed action calls first time action manager hasSeenAddLoginCoachMarkTour called`() {
+        val viewModel = createAddVaultItemViewModel()
+
+        viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed)
+        verify(exactly = 1) {
+            firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `StartLearnAboutLogins action calls first time action manager hasSeenAddLoginCoachMarkTour called and show coach mark event sent`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins)
+                assertEquals(VaultAddEditEvent.StartAddLoginItemCoachMarkTour, awaitItem())
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN)
+            }
+        }
+
     @Nested
     inner class VaultAddEditIdentityTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
@@ -3123,6 +3223,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
                 networkConnectionManager = networkConnectionManager,
+                firstTimeActionManager = firstTimeActionManager,
             )
         }
 
@@ -4083,7 +4184,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `UserVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
             every { authRepository.activeUserId } returns null
             specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
+                SpecialCircumstance.Fido2Save(createMockFido2CreateCredentialRequest(number = 1))
 
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
@@ -4100,7 +4201,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
@@ -4144,7 +4245,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Error
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
@@ -4181,7 +4282,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
@@ -4220,7 +4321,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `Fido2RegisterCredentialResult Cancelled should emit CompleteFido2Registration result`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Cancelled
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
@@ -4273,6 +4374,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
             supportedItemTypes = supportedItemTypes,
+            shouldShowCoachMarkTour = false,
         )
 
     @Suppress("LongParameterList")
@@ -4382,6 +4484,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             clock = clock,
             organizationEventManager = organizationEventManager,
             networkConnectionManager = networkConnectionManager,
+            firstTimeActionManager = firstTimeActionManager,
         )
 
     private fun createVaultData(

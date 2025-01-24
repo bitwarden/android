@@ -10,9 +10,11 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -1521,6 +1523,89 @@ class GeneratorScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card shows when default mode and shouldShowCoachMarkTour is true`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = true),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card does not show when default mode and shouldShowCoachMarkTour is false`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = false),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card does not show when modal mode and shouldShowCoachMarkTour is true`() {
+        updateState(
+            state = DEFAULT_STATE.copy(
+                shouldShowCoachMarkTour = true,
+                generatorMode = GeneratorMode.Modal.Password,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card does not when default mode, shouldShowCoachMarkTour is true, and main type is not password`() {
+        updateState(
+            state = DEFAULT_STATE.copy(
+                shouldShowCoachMarkTour = true,
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Username(),
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Clicking close button on generator card send ExploreGeneratorCardDismissed action`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = true),
+        )
+        composeTestRule
+            .onNode(
+                hasContentDescription("Close")
+                    and hasAnySibling(hasText("Explore the generator")),
+            )
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(GeneratorAction.ExploreGeneratorCardDismissed)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Clicking call to action button on generator card send StartExploreGeneratorTour action`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = true),
+        )
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
+        }
+    }
+
     //endregion Random Word Tests
 
     private fun updateState(state: GeneratorState) {
@@ -1532,4 +1617,5 @@ private val DEFAULT_STATE = GeneratorState(
     generatedText = "",
     selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
+    shouldShowCoachMarkTour = false,
 )

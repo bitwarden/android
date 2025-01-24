@@ -54,8 +54,10 @@
   <string name="my_vault">Mi caja fuerte</string>
   <string name="authenticator">Autenticador</string>
   <string name="name">Nombre</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">No</string>
   <string name="notes">Notas</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Aceptar</string>
   <string name="password">Contraseña</string>
   <string name="save">Guardar</string>
@@ -554,12 +556,12 @@ El escaneo se realizará automáticamente.</string>
   <string name="personal_ownership_submit_error">Debido a una política empresarial, usted está restringido a guardar elementos en su caja fuerte personal. Cambie la opción Propiedad a una organización y elija de entre las colecciones disponibles.</string>
   <string name="personal_ownership_policy_in_effect">Una política de organización está afectando sus opciones de propiedad.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Todos los Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Un nombre amigable para describir este Send.</string>
   <string name="text">Texto</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Texto</string>
-  <string name="type_text_info">El texto que quieres enviar.</string>
   <string name="hide_text_by_default">Al acceder a este Envío, ocultar este texto por defecto</string>
   <string name="type_file">Archivo</string>
   <string name="type_file_info">El archivo que quieres enviar.</string>
@@ -571,9 +573,6 @@ El escaneo se realizará automáticamente.</string>
   <string name="deletion_time">Tiempo de eliminación</string>
   <string name="deletion_date_info">El Send se eliminará permanentemente en la fecha y hora especificada.</string>
   <string name="pending_delete">Eliminación pendiente</string>
-  <string name="expiration_date">Fecha de caducidad</string>
-  <string name="expiration_time">Tiempo de caducidad</string>
-  <string name="expiration_date_info">Si se configura, el acceso a este Send caducará en la fecha y hora especificada.</string>
   <string name="expired">Caducó</string>
   <string name="maximum_access_count">Número máximo de accesos</string>
   <string name="maximum_access_count_info">Si se configura, los usuarios ya no podrán acceder a este Send una vez que se alcance el número máximo de accesos.</string>
@@ -586,7 +585,6 @@ El escaneo se realizará automáticamente.</string>
   <string name="removing_send_password">Eliminando contraseña</string>
   <string name="send_password_removed">La contraseña ha sido eliminada.</string>
   <string name="notes_info">Notas privadas sobre este Send.</string>
-  <string name="disable_send">Desactivar este Send para que nadie pueda acceder a él</string>
   <string name="no_sends">No hay Sends en tu cuenta.</string>
   <string name="add_a_send">Añadir un Send</string>
   <string name="copy_link">Copiar enlace</string>
@@ -1115,4 +1113,13 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

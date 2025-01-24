@@ -219,9 +219,9 @@ fun CreateAccountScreen(
                         color = BitwardenTheme.colorScheme.text.secondary,
                     )
                 },
+                passwordFieldTestTag = "MasterPasswordEntry",
                 cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                 modifier = Modifier
-                    .testTag("MasterPasswordEntry")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
@@ -234,9 +234,9 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
                 },
                 showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
+                passwordFieldTestTag = "ConfirmMasterPasswordEntry",
                 cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
                 modifier = Modifier
-                    .testTag("ConfirmMasterPasswordEntry")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
