@@ -17,13 +17,11 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -124,11 +122,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         )
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
-    }
-
-    private val appResumeManager: AppResumeManager = mockk {
-        every { setResumeScreen(any()) } just runs
-        every { clearResumeScreen() } just runs
     }
 
     @BeforeEach
@@ -1438,16 +1431,6 @@ class SearchViewModelTest : BaseViewModelTest() {
 
         mutableIsIconLoadingDisabledFlow.value = true
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
-    }
-
-    @Test
-    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        createViewModel()
-        verify(exactly = 1) {
-            appResumeManager.setResumeScreen(
-                AppResumeScreenData.SearchScreen(""),
-            )
-        }
     }
 
     @Suppress("CyclomaticComplexMethod")

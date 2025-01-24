@@ -3,10 +3,8 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -55,11 +53,6 @@ class SendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
-    }
-
-    private val appResumeManager: AppResumeManager = mockk {
-        every { setResumeScreen(any()) } just runs
-        every { clearResumeScreen() } just runs
     }
 
     @BeforeEach
@@ -442,16 +435,6 @@ class SendViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(isPullToRefreshSettingEnabled = true),
             viewModel.stateFlow.value,
         )
-    }
-
-    @Test
-    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        createViewModel()
-        verify(exactly = 1) {
-            appResumeManager.setResumeScreen(
-                AppResumeScreenData.SendScreen,
-            )
-        }
     }
 
     @Suppress("LongParameterList")

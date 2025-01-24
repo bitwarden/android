@@ -6,9 +6,7 @@ import com.bitwarden.vault.CipherRepromptType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -80,11 +78,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
     }
     private val initialState = createVerificationCodeState()
-
-    private val appResumeManager: AppResumeManager = mockk {
-        every { setResumeScreen(any()) } just runs
-        every { clearResumeScreen() } just runs
-    }
 
     @AfterEach
     fun tearDown() {
@@ -482,16 +475,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             initialState.copy(isPullToRefreshSettingEnabled = true),
             viewModel.stateFlow.value,
         )
-    }
-
-    @Test
-    fun `LifecycleResumedAction should call AppResumeManager setResumeScreen`() {
-        createViewModel()
-        verify(exactly = 1) {
-            appResumeManager.setResumeScreen(
-                AppResumeScreenData.VerificationCodeScreen,
-            )
-        }
     }
 
     private fun setupMockUri() {
