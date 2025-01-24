@@ -21,7 +21,7 @@
   <string name="email_address">Adreça electrònica</string>
   <string name="email_us">Envieu-nos un correu electrònic</string>
   <string name="email_us_description">Envieu-nos un correu electrònic directament per obtenir ajuda o deixar comentaris.</string>
-  <string name="enter_pin">Introduïu el codi PIN.</string>
+  <string name="enter_pin">Introduïu el codi PIN</string>
   <string name="favorites">Preferits</string>
   <string name="file_bug_report">Envieu un informe d\'error</string>
   <string name="file_bug_report_description">Obri una incidéncia al nostre dipòsit de GitHub.</string>
@@ -40,7 +40,7 @@
   <string name="invalid_master_password">La contrasenya mestra no és vàlida. Torneu-ho a provar.</string>
   <string name="invalid_pin">El PIN no és vàlid. Torna-ho a provar.</string>
   <string name="launch">Inicia</string>
-  <string name="log_in_verb">Log in</string>
+  <string name="log_in_verb">Inicia sessió</string>
   <string name="log_in_noun">Inici de sessió</string>
   <string name="log_out">Tanca la sessió</string>
   <string name="logout_confirmation">Segur que voleu tancar la sessió?</string>
@@ -49,13 +49,15 @@
   <string name="account_already_added">El compte ja s\'ha afegit</string>
   <string name="switch_to_already_added_account_confirmation">T\'agradaria canviar-lo ara?</string>
   <string name="master_password">Contrasenya mestra</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Contrasenya mestra (obligatòria)</string>
   <string name="more">Més</string>
   <string name="my_vault">Caixa forta</string>
   <string name="authenticator">Autenticador</string>
   <string name="name">Nom</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">No</string>
   <string name="notes">Notes</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">D’acord</string>
   <string name="password">Contrasenya</string>
   <string name="save">Guarda</string>
@@ -92,7 +94,7 @@
   <string name="avoid_ambiguous_characters">Eviteu caràcters ambigus</string>
   <string name="bitwarden_app_extension">Extensió de l\'aplicació Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">La forma més senzilla d\'afegir nous inicis de sessió a la vostra caixa forta és amb l\'extensió d\'aplicació Bitwarden. Obteniu més informació sobre el seu ús en la pantalla \"Eines\".</string>
-  <string name="bitwarden_app_extension_description">Utilitzeu Bitwarden en Safari i altres aplicacions per omplir automàticament els vostres inicis de sessió.</string>
+  <string name="bitwarden_app_extension_description">Utilitzeu Bitwarden en Safari i altres aplicacions per omplir automàticament els inicis de sessió.</string>
   <string name="bitwarden_autofill_service">Servei d\'emplenament automàtic de Bitwarden</string>
   <string name="bitwarden_autofill_accessibility_service_description">Utilitzeu el servei d\'accessibilitat Bitwarden per omplir automàticament els inicis de sessió.</string>
   <string name="change_email">Canvia el correu electrònic</string>
@@ -206,7 +208,7 @@
   <string name="off" tools:override="true">No</string>
   <string name="on" tools:override="true">Sí</string>
   <string name="status">Estat</string>
-  <string name="bitwarden_autofill_service_alert2">La forma més senzilla d\'afegir nous inicis de sessió a la vostra caixa forta és amb el servei d\'emplenament automàtic de Bitwarden. Obteniu més informació sobre com utilitzar el servei en la pantalla \"Eines\".</string>
+  <string name="bitwarden_autofill_service_alert2">La forma més senzilla d\'afegir nous inicis de sessió a la caixa forta és amb el servei d\'emplenament automàtic de Bitwarden. Obteniu més informació sobre com utilitzar el servei en la pantalla \"Eines\".</string>
   <string name="autofill">Emplenament automàtic</string>
   <string name="autofill_or_view">Voleu omplir automàticament o visualitzar aquest element?</string>
   <string name="bitwarden_autofill_service_match_confirm">Esteu segur que voleu omplir aquest element automàticament? No coincideix completament amb \"%1$s\".</string>
@@ -333,8 +335,8 @@ L\'escaneig es farà automàticament.</string>
   <string name="no_items_trash">No hi ha elements a la paperera.</string>
   <string name="autofill_accessibility_service">Ompli automàticament el servei d\'accessibilitat</string>
   <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
-  <string name="autofill_service_description">El servei d\'emplenament automàtic de Bitwarden utilitza el marc d\'emplenament automàtic d\'Android per ajudar a omplir els inicis de sessió, les targetes de crèdit i la informació d\'identitat en altres aplicacions del dispositiu.</string>
-  <string name="bitwarden_autofill_service_description">Utilitzeu el servei d\'emplenament automàtic de Bitwarden per omplir els inicis de sessió, les targetes de crèdit i la informació d\'identitat en altres aplicacions.</string>
+  <string name="autofill_service_description">El servei d\'emplenament automàtic de Bitwarden utilitza el marc d\'emplenament automàtic d\'Android per ajudar-vos a omplir la informació d\'inici de sessió a altres aplicacions del vostre dispositiu.</string>
+  <string name="bitwarden_autofill_service_description">Utilitzeu el servei d\'emplenament automàtic de Bitwarden per omplir la informació d\'inici de sessió a altres aplicacions.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Configuració d\'emplenament automàtic</string>
   <string name="face_id">Face ID</string>
   <string name="face_id_direction">Utilitza Face ID per comprovar.</string>
@@ -375,7 +377,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="autofill_setup">Els inicis de sessió ara són fàcilment accessibles des del teclat mentre inicieu sessió a aplicacions i llocs web.</string>
   <string name="autofill_setup2">Recomanem que desactiveu qualsevol altra aplicació d\'emplenament automàtic a la Configuració si no heu d\'utilitzar-les.</string>
   <string name="bitwarden_autofill_description">Accediu a la vostra caixa forta directament des del teclat per omplir ràpidament les contrasenyes amb l\'emplenament automàtic.</string>
-  <string name="autofill_turn_on">Per activar l\'emplenament automàtic de contrasenyes al vostre dispositiu, seguiu aquestes instruccions:</string>
+  <string name="autofill_turn_on">Per configurar l\'emplenament automàtic de contrasenyes al dispositiu, seguiu aquestes instruccions:</string>
   <string name="autofill_turn_on1">1. Aneu a l\'aplicació \"Configuració\" de l\'iOS</string>
   <string name="autofill_turn_on2">2. Toqueu \"Contrasenyes\"</string>
   <string name="autofill_turn_on3">3. Toqueu \"Emplenament automàtic de contrasenyes\"</string>
@@ -466,7 +468,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="ask_to_add_login">Sol·licita afegir els inicis de sessió</string>
   <string name="ask_to_add_login_description">Sol·licita afegir un element si no se\'n troba cap a la caixa forta.</string>
   <string name="on_restart">En reiniciar l\'aplicació</string>
-  <string name="autofill_service_not_enabled">L\'emplenament automàtic facilita l\'accés de forma segura a la vostra caixa forta de Bitwarden des d\'altres llocs web i aplicacions. Sembla que no heu habilitat un servei d’emplenament automàtic per a Bitwarden. Habiliteu-lo a la pantalla \"Configuració\".</string>
+  <string name="autofill_service_not_enabled">L\'emplenament automàtic facilita l\'accés de forma segura a la vostra caixa forta de Bitwarden des d\'altres llocs web i aplicacions. Sembla que no heu configurat un servei d’emplenament automàtic per a Bitwarden. Configureu-lo a la pantalla \"Configuració\".</string>
   <string name="theme_applied_on_restart">Els canvis de tema s\'aplicaran quan es reinicie l’aplicació.</string>
   <string name="capitalize">Majúscules inicials</string>
   <string name="include_number">Inclou número</string>
@@ -500,7 +502,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="open">Obri</string>
   <string name="unable_to_save_attachment">S\'ha produït un problema en guardar aquest fitxer adjunt. Si el problema continua, podeu guardar-lo des del web.</string>
   <string name="save_attachment_success">L\'adjunt s\'ha guardat correctament</string>
-  <string name="autofill_tile_accessibility_required">Habiliteu \"Servei d\'accessibilitat d\'emplenament automàtic\" de la configuració de Bitwarden per utilitzar el mosaic d\'emplenament automàtic.</string>
+  <string name="autofill_tile_accessibility_required">Activeu \"Servei d\'accessibilitat d\'emplenament automàtic\" de la configuració de Bitwarden per utilitzar el mosaic d\'emplenament automàtic.</string>
   <string name="autofill_tile_uri_not_found">No s\'han detectat camps de contrasenya</string>
   <string name="soft_deleting">S\'està enviant a la paperera...</string>
   <string name="item_soft_deleted">L\'element s\'ha enviat a la paperera.</string>
@@ -554,12 +556,12 @@ L\'escaneig es farà automàticament.</string>
   <string name="personal_ownership_submit_error">A causa d\'una política empresarial, no podeu guardar elements a la vostra caixa forta personal. Canvieu l\'opció Propietat en organització i trieu entre les col·leccions disponibles.</string>
   <string name="personal_ownership_policy_in_effect">Una política d’organització afecta les vostres opcions de propietat.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Tots els Send</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Un nom apropiat per descriure aquest Send.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Text</string>
-  <string name="type_text_info">El text que voleu enviar.</string>
   <string name="hide_text_by_default">Quan accediu a Send, amaga el text per defecte</string>
   <string name="type_file">Fitxer</string>
   <string name="type_file_info">El fitxer que voleu enviar.</string>
@@ -571,9 +573,6 @@ L\'escaneig es farà automàticament.</string>
   <string name="deletion_time">Hora de supressió</string>
   <string name="deletion_date_info">El Send se suprimirà permanentment a la data i hora especificades.</string>
   <string name="pending_delete">Pendent de supressió</string>
-  <string name="expiration_date">Data de caducitat</string>
-  <string name="expiration_time">Hora de caducitat</string>
-  <string name="expiration_date_info">Si s\'estableix, l\'accés a aquest Send caducarà en la data i hora especificades.</string>
   <string name="expired">Caducat</string>
   <string name="maximum_access_count">Recompte màxim d\'accessos</string>
   <string name="maximum_access_count_info">Si s’estableix, els usuaris ja no podran accedir a aquest Send una vegada s’assolisca el nombre màxim d’accessos.</string>
@@ -586,9 +585,8 @@ L\'escaneig es farà automàticament.</string>
   <string name="removing_send_password">S\'està suprimint la contrasenya</string>
   <string name="send_password_removed">S\'ha suprimit la contrasenya</string>
   <string name="notes_info">Notes privades sobre aquest Send.</string>
-  <string name="disable_send">Deshabiliteu aquest Send perquè ningú no hi puga accedir</string>
   <string name="no_sends">No hi ha cap enviament al vostre compte.</string>
-  <string name="add_a_send">Afig Send</string>
+  <string name="add_a_send">Nou Send</string>
   <string name="copy_link">Copia l\'enllaç</string>
   <string name="share_link">Comparteix l\'enllaç</string>
   <string name="send_link">Enllaç Send</string>
@@ -942,10 +940,10 @@ Voleu canviar a aquest compte?</string>
   <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Set password</string>
-  <string name="unsubscribe">Unsubscribe</string>
-  <string name="check_your_email">Check your email</string>
-  <string name="open_email_app">Open email app</string>
-  <string name="go_back">Go back</string>
+  <string name="unsubscribe">Anul·la subscripció</string>
+  <string name="check_your_email">Comprova el correu</string>
+  <string name="open_email_app">Obri l\'aplicació de correu</string>
+  <string name="go_back">Torna arrere</string>
   <string name="email_verified">Email verified</string>
   <string name="no_email_go_back_to_edit_your_email_address">No email? <annotation link="goBack">Go back</annotation> to edit your email address.</string>
   <string name="or_log_in_you_may_already_have_an_account">Or <annotation link="logIn">log in</annotation>, you may already have an account.</string>
@@ -959,8 +957,8 @@ Voleu canviar a aquest compte?</string>
   <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>
   <string name="your_data_when_and_where_you_need_it">Your data, when and where you need it</string>
   <string name="welcome_message_4">Save unlimited passwords across unlimited devices with Bitwarden mobile, browser, and desktop apps.</string>
-  <string name="remove_passkey">Remove passkey</string>
-  <string name="passkey_removed">Passkey removed</string>
+  <string name="remove_passkey">Suprimeix la clau de pas</string>
+  <string name="passkey_removed">Clau de pas suprimida</string>
   <string name="what_makes_a_password_strong">What makes a password strong?</string>
   <string name="a_secure_memorable_password">A secure, memorable password</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">The longer your password, the more difficult it is to hack. The minimum for account creation is 12 characters but if you do 14 characters, the time to crack your password would be centuries!</string>
@@ -969,13 +967,13 @@ Voleu canviar a aquest compte?</string>
   <string name="random_and_complex_using_numbers_and_special_characters">Random and complex, using numbers and special characters</string>
   <string name="totally_different_from_your_other_passwords">Totally different from your other passwords</string>
   <string name="use_the_generator_to_create_a_strong_unique_password">Use the generator to create a strong, unique password</string>
-  <string name="try_it_out">Try it out</string>
-  <string name="account_setup">Account setup</string>
+  <string name="try_it_out">Prova-ho</string>
+  <string name="account_setup">Configuració del compte</string>
   <string name="set_up_unlock">Set up unlock</string>
   <string name="set_up_later">Set up later</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
-  <string name="confirm">Confirm</string>
+  <string name="confirm">Confirma-ho</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
@@ -992,13 +990,13 @@ Voleu canviar a aquest compte?</string>
   <string name="help_with_server_geolocations">Help with server geolocations.</string>
   <string name="email_address_required">Email address (required)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
-  <string name="change_email_address">Change email address</string>
-  <string name="next">Next</string>
+  <string name="change_email_address">Canvia l\'adreça de correu electrònic</string>
+  <string name="next">Següent</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
-  <string name="expired_link">Expired link</string>
+  <string name="expired_link">Enllaç caducat</string>
   <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
   <string name="restart_registration">Restart registration</string>
   <string name="authenticator_sync">Authenticator Sync</string>
@@ -1114,4 +1112,13 @@ Voleu canviar a aquest compte?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -44,11 +42,6 @@ class AppearanceViewModel @Inject constructor(
     private fun handleLanguageChanged(action: AppearanceAction.LanguageChange) {
         mutableStateFlow.update { it.copy(language = action.language) }
         settingsRepository.appLanguage = action.language
-
-        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(
-            action.language.localeName,
-        )
-        AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
     private fun handleShowWebsiteIconsToggled(action: AppearanceAction.ShowWebsiteIconsToggle) {

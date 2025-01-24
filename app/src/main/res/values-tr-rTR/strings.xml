@@ -54,8 +54,10 @@
   <string name="my_vault">Kasam</string>
   <string name="authenticator">Doğrulayıcı</string>
   <string name="name">Ad</string>
+  <string name="send_name_required">"Send adı (gerekli)"</string>
   <string name="no">Hayır</string>
   <string name="notes">Notlar</string>
+  <string name="private_notes">Özel notlar</string>
   <string name="ok">Tamam</string>
   <string name="password">Parola</string>
   <string name="save">Kaydet</string>
@@ -554,12 +556,12 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="personal_ownership_submit_error">Bir kuruluş ilkesi nedeniyle kişisel kasanıza hesap kaydetmeniz kısıtlanmış. Sahip seçeneğini bir kuruluş olarak değiştirin ve mevcut koleksiyonlar arasından seçim yapın.</string>
   <string name="personal_ownership_policy_in_effect">Bir kuruluş ilkesi sahiplik seçeneklerinizi etkiliyor.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send ayrıntıları</string>
   <string name="all_sends">Tüm Send\'ler</string>
   <string name="sends">Send\'ler</string>
-  <string name="name_info">Bu Send\'i açıklayan anlaşılır bir ad</string>
   <string name="text">Metin</string>
+  <string name="text_to_share">Paylaşılacak metin</string>
   <string name="type_text">Metin</string>
-  <string name="type_text_info">Göndermek istediğiniz metin.</string>
   <string name="hide_text_by_default">Send\'e erişirken varsayılan olarak metni gizle</string>
   <string name="type_file">Dosya</string>
   <string name="type_file_info">Göndermek istediğiniz dosya.</string>
@@ -571,9 +573,6 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="deletion_time">Silinme saati</string>
   <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
   <string name="pending_delete">Silinmesi bekleniyor</string>
-  <string name="expiration_date">Son kullanma tarihi</string>
-  <string name="expiration_time">Son kullanma saati</string>
-  <string name="expiration_date_info">Bunu ayarlarsanız belirtilen tarih ve saatten sonra bu Send\'e erişilemeyecektir.</string>
   <string name="expired">Süresi dolmuş</string>
   <string name="maximum_access_count">Maksimum erişim sayısı</string>
   <string name="maximum_access_count_info">Bunu ayarlarsanız maksimum erişim sayısına ulaşıldıktan sonra bu Send\'e erişilemeyecektir.</string>
@@ -586,7 +585,6 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="removing_send_password">Parola kaldırılıyor</string>
   <string name="send_password_removed">Parola kaldırıldı.</string>
   <string name="notes_info">Bu Send ile ilgili özel notlar.</string>
-  <string name="disable_send">Kimsenin erişememesi için bu Send\'i devre dışı bırak</string>
   <string name="no_sends">Hesabınızda hiç Send yok.</string>
   <string name="add_a_send">Send ekle</string>
   <string name="copy_link">Bağlantıyı kopyala</string>
@@ -1113,4 +1111,13 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Hesap e-postanızı Bitwarden web uygulamasında değiştirebilirsiniz.</string>
   <string name="login_credentials">Hesap Bilgileri</string>
   <string name="autofill_options">Otomatik Doldurma Seçenekleri</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Yeni ve benzersiz bir parola üretmek için bu düğmeyi kullanın.</string>
+  <string name="coachmark_1_of_3">1/3</string>
+  <string name="coachmark_2_of_3">2/3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3/3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

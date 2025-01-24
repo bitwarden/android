@@ -85,9 +85,9 @@ fun LazyListScope.vaultAddEditCardItems(
                 cardHandlers.onNumberVisibilityChange(showNumber)
             },
             showPasswordTestTag = "ShowCardNumberButton",
+            passwordFieldTestTag = "CardNumberEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("CardNumberEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
@@ -164,9 +164,9 @@ fun LazyListScope.vaultAddEditCardItems(
             },
             keyboardType = KeyboardType.NumberPassword,
             showPasswordTestTag = "CardShowSecurityCodeButton",
+            passwordFieldTestTag = "CardSecurityCodeEntry",
             cardStyle = CardStyle.Bottom,
             modifier = Modifier
-                .testTag("CardSecurityCodeEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )

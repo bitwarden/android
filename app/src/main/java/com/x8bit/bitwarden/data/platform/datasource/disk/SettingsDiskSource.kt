@@ -19,6 +19,11 @@ interface SettingsDiskSource {
     var appLanguage: AppLanguage?
 
     /**
+     * Emits updates that track [AppLanguage].
+     */
+    val appLanguageFlow: Flow<AppLanguage?>
+
+    /**
      * Has the initial autofill dialog been shown to the user.
      */
     var initialAutofillDialogShown: Boolean?
@@ -356,4 +361,34 @@ interface SettingsDiskSource {
      * Stores the given [count] completed create send actions for the device.
      */
     fun storeCreateSendActionCount(count: Int?)
+
+    /**
+     * Gets the Boolean value of if the Add Login CoachMark tour has been interacted with.
+     */
+    fun getShouldShowAddLoginCoachMark(): Boolean?
+
+    /**
+     * Stores a value for if the Add Login CoachMark tour has been interacted with
+     */
+    fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?)
+
+    /**
+     * Returns an [Flow] to observe updates to the "ShouldShowAddLoginCoachMark" value.
+     */
+    fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?>
+
+    /**
+     * Gets the Boolean value of if the Generator CoachMark tour has been interacted with.
+     */
+    fun getShouldShowGeneratorCoachMark(): Boolean?
+
+    /**
+     * Stores a value for if the Generator CoachMark tour has been interacted with
+     */
+    fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?)
+
+    /**
+     * Returns an [Flow] to observe updates to the "ShouldShowGeneratorCoachMark" value.
+     */
+    fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?>
 }

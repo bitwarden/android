@@ -54,8 +54,10 @@
   <string name="my_vault">Маё сховішча</string>
   <string name="authenticator">Аўтэнтыфікатар</string>
   <string name="name">Назва</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Не</string>
   <string name="notes">Нататкі</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Добра</string>
   <string name="password">Пароль</string>
   <string name="save">Захаваць</string>
@@ -553,12 +555,12 @@
   <string name="personal_ownership_submit_error">У адпаведнасці з палітыкай прадпрыемства вам забаронена захоўваць элементы ў асабістым сховішчы. Змяніце параметры ўласнасці на арганізацыю і выберыце з даступных калекцый.</string>
   <string name="personal_ownership_policy_in_effect">Палітыка арганізацыі ўплывае на вашы параметры ўласнасці.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Усе Send\'ы</string>
   <string name="sends">Send\'ы</string>
-  <string name="name_info">Зразумелая назва для апісання гэтага Send\'a.</string>
   <string name="text">Тэкст</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Тэкст</string>
-  <string name="type_text_info">Тэкст, які вы хочаце адправіць.</string>
   <string name="hide_text_by_default">Пры доступе да Send прадвызначана хаваць тэкст</string>
   <string name="type_file">Файл</string>
   <string name="type_file_info">Файл, які вы хочаце адправіць.</string>
@@ -570,9 +572,6 @@
   <string name="deletion_time">Час выдалення</string>
   <string name="deletion_date_info">Send будзе незваротна выдалены ў азначаныя дату і час.</string>
   <string name="pending_delete">Чаканне выдалення</string>
-  <string name="expiration_date">Дата завяршэння</string>
-  <string name="expiration_time">Час завяршэння</string>
-  <string name="expiration_date_info">Калі прызначана, доступ да гэтага адпраўлення завершыцца ў зададзеныя дату і час.</string>
   <string name="expired">Пратэрмінавана</string>
   <string name="maximum_access_count">Максімальная колькасць доступаў</string>
   <string name="maximum_access_count_info">Калі прызначана, то карыстальнікі больш не змогуць атрымаць доступ да гэтага Send пасля таго, як будзе дасягнута максімальная колькасць зваротаў.</string>
@@ -585,7 +584,6 @@
   <string name="removing_send_password">Выдаленне пароля</string>
   <string name="send_password_removed">Пароль быў выдалены.</string>
   <string name="notes_info">Прыватныя нататкі пра гэты Send.</string>
-  <string name="disable_send">Адключыць гэты Send, каб ніхто не змог атрымаць да яго доступ</string>
   <string name="no_sends">У вашым Send\'e адсутнічаюць уліковыя запісы.</string>
   <string name="add_a_send">Дадаць Send</string>
   <string name="copy_link">Скапіяваць спасылку</string>
@@ -1113,4 +1111,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

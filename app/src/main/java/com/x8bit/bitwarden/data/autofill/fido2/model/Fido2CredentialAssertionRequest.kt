@@ -18,6 +18,7 @@ data class Fido2CredentialAssertionRequest(
     val packageName: String,
     val signingInfo: SigningInfo,
     val origin: String?,
+    val isUserVerified: Boolean?,
 ) : Parcelable {
     val callingAppInfo: CallingAppInfo
         get() = CallingAppInfo(packageName, signingInfo, origin)

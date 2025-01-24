@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
@@ -50,6 +51,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     onPreviousCoachMark: () -> Unit,
     onCoachMarkTourComplete: () -> Unit,
     onCoachMarkDismissed: () -> Unit,
+    shouldShowLearnAboutLoginsCard: Boolean,
 ) {
     val launcher = permissionsManager.getLauncher(
         onResult = { isGranted ->
@@ -79,6 +81,23 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             }
         }
 
+        if (shouldShowLearnAboutLoginsCard) {
+            item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
+                BitwardenActionCard(
+                    cardTitle = stringResource(R.string.learn_about_new_logins),
+                    cardSubtitle = stringResource(
+                        R.string.we_ll_walk_you_through_the_key_features_to_add_a_new_login,
+                    ),
+                    actionText = stringResource(R.string.get_started),
+                    onActionClick = loginItemTypeHandlers.onStartLoginCoachMarkTour,
+                    onDismissClick = loginItemTypeHandlers.onDismissLearnAboutLoginsCard,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(

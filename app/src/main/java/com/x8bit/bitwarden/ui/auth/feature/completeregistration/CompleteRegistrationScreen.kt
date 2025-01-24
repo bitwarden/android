@@ -255,9 +255,9 @@ private fun CompleteRegistrationContent(
                     modifier = Modifier.fillMaxWidth(),
                 )
             },
+            passwordFieldTestTag = "MasterPasswordEntry",
             cardStyle = CardStyle.Top(dividerPadding = 0.dp),
             modifier = Modifier
-                .testTag("MasterPasswordEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
@@ -272,9 +272,9 @@ private fun CompleteRegistrationContent(
             showPasswordChange = { showPassword = it },
             onValueChange = handler.onConfirmPasswordInputChange,
             showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
+            passwordFieldTestTag = "ConfirmMasterPasswordEntry",
             cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
             modifier = Modifier
-                .testTag("ConfirmMasterPasswordEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )

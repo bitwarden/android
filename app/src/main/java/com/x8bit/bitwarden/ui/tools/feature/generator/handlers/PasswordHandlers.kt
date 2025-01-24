@@ -20,6 +20,8 @@ data class PasswordHandlers(
     val onPasswordMinNumbersCounterChange: (Int) -> Unit,
     val onPasswordMinSpecialCharactersChange: (Int) -> Unit,
     val onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
+    val onGeneratorActionCardClicked: () -> Unit,
+    val onGeneratorActionCardDismissed: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -27,6 +29,7 @@ data class PasswordHandlers(
          * Creates an instance of [PasswordHandlers] by binding actions to the provided
          * [GeneratorViewModel].
          */
+        @Suppress("LongMethod")
         fun create(
             viewModel: GeneratorViewModel,
         ): PasswordHandlers = PasswordHandlers(
@@ -85,6 +88,16 @@ data class PasswordHandlers(
                     GeneratorAction.MainType.Password.ToggleAvoidAmbiguousCharactersChange(
                         avoidAmbiguousChars = shouldAvoidAmbiguousChars,
                     ),
+                )
+            },
+            onGeneratorActionCardDismissed = {
+                viewModel.trySendAction(
+                    GeneratorAction.ExploreGeneratorCardDismissed,
+                )
+            },
+            onGeneratorActionCardClicked = {
+                viewModel.trySendAction(
+                    GeneratorAction.StartExploreGeneratorTour,
                 )
             },
         )

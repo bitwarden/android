@@ -54,8 +54,10 @@
   <string name="my_vault">My kluis</string>
   <string name="authenticator">Waarmerker</string>
   <string name="name">Naam</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Nee</string>
   <string name="notes">Notas</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Goed</string>
   <string name="password">Wagwoord</string>
   <string name="save">Bewaar</string>
@@ -554,12 +556,12 @@ Skandering gebeur outomaties.</string>
   <string name="personal_ownership_submit_error">Weens ’n ondernemingsbeleid mag u geen wagwoorde in u persoonlike kluis bewaar nie. Verander die eienaarskap na ’n organisasie en kies uit ’n van die beskikbare versamelings.</string>
   <string name="personal_ownership_policy_in_effect">’n Organisasiebeleid beïnvloed u eienaarskapopsies.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Alle Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">’n Vriendelike naam om hierdie Send te beskryf.</string>
   <string name="text">Teks</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Teks</string>
-  <string name="type_text_info">Die teks wat u wil verstuur.</string>
   <string name="hide_text_by_default">Versteek die teks be verstek wanneer die Send gebruik word</string>
   <string name="type_file">Lêer</string>
   <string name="type_file_info">Die lêer wat u wil verstuur.</string>
@@ -571,9 +573,6 @@ Skandering gebeur outomaties.</string>
   <string name="deletion_time">Skraptyd</string>
   <string name="deletion_date_info">Die Send sal outomaties op die aangewese datum en tyd geskrap word.</string>
   <string name="pending_delete">Word geskrap</string>
-  <string name="expiration_date">Vervaldatum</string>
-  <string name="expiration_time">Vervaldatum</string>
-  <string name="expiration_date_info">Indien ingestel sal toegang tot hierdie Send op die aangewese datum en tyd verstryk.</string>
   <string name="expired">Verstreke</string>
   <string name="maximum_access_count">Maksimum toegangsaantal</string>
   <string name="maximum_access_count_info">Indien ingestel het gebruikers ne meer toegang tot hierdie Send sodra die maksimum aantal toegang bereik is.</string>
@@ -586,7 +585,6 @@ Skandering gebeur outomaties.</string>
   <string name="removing_send_password">Verwyder tans wagwoord</string>
   <string name="send_password_removed">Wagwoord is verwyder.</string>
   <string name="notes_info">Privaat notas oor hierdie Send.</string>
-  <string name="disable_send">Deaktiveer hierdie Send sodat niemand toegang daartoe het nie.</string>
   <string name="no_sends">Daar is geen Sends in u rekening nie.</string>
   <string name="add_a_send">Voeg ’n Send toe</string>
   <string name="copy_link">Kopieer skakel</string>
@@ -1114,4 +1112,13 @@ Wil u na die rekening omskakel?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

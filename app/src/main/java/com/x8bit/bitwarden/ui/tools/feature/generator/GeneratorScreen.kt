@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItem
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -317,6 +318,22 @@ private fun ScrollContent(
             )
 
             Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        if (state.shouldShowExploreGeneratorCard) {
+            BitwardenActionCard(
+                cardTitle = stringResource(R.string.explore_the_generator),
+                cardSubtitle = stringResource(
+                    R.string.learn_more_about_generating_secure_login_credentials_with_guided_tour,
+                ),
+                actionText = stringResource(R.string.get_started),
+                onActionClick = passwordHandlers.onGeneratorActionCardClicked,
+                onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
         GeneratedStringItem(
@@ -910,10 +927,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiAccessToken,
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
 
@@ -937,10 +954,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -951,10 +968,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -965,10 +982,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiAccessToken,
                 onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -979,10 +996,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
 
@@ -1006,10 +1023,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1017,14 +1034,14 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
         null -> {
             var obfuscatedTextField by remember { mutableStateOf("") }
             BitwardenPasswordField(
-                label = "",
+                label = null,
                 value = obfuscatedTextField,
                 onValueChange = { obfuscatedTextField = it },
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                textFieldTestTag = "ForwardedEmailApiSecretEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()
-                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }

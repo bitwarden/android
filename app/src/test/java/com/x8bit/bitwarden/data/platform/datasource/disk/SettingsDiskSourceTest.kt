@@ -52,6 +52,20 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `appLanguageFlow should react to changes in appLanguage`() = runTest {
+        val appLanguage = AppLanguage.ENGLISH_BRITISH
+        settingsDiskSource.appLanguageFlow.test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(settingsDiskSource.appLanguage)
+            assertNull(awaitItem())
+
+            // Updating the repository updates shared preferences
+            settingsDiskSource.appLanguage = appLanguage
+            assertEquals(appLanguage, awaitItem())
+        }
+    }
+
+    @Test
     fun `setting appLanguage should update SharedPreferences`() {
         val appLanguageKey = "bwPreferencesStorage:appLocale"
         val appLanguage = AppLanguage.ENGLISH
@@ -1238,5 +1252,66 @@ class SettingsDiskSourceTest {
         val createActionCountKey = "bwPreferencesStorage:createActionCount"
         settingsDiskSource.storeCreateSendActionCount(count = 1)
         assertEquals(1, fakeSharedPreferences.getInt(createActionCountKey, 0))
+    }
+
+    @Test
+    fun `getShouldShowAddLoginCoachMark should pull value from SharedPreferences`() {
+        val hasSeenAddLoginCoachMarkKey = "bwPreferencesStorage:shouldShowAddLoginCoachMark"
+        fakeSharedPreferences.edit { putBoolean(hasSeenAddLoginCoachMarkKey, true) }
+        assertTrue(settingsDiskSource.getShouldShowAddLoginCoachMark() == true)
+    }
+
+    @Test
+    fun `storeShouldShowAddLoginCoachMark should update SharedPreferences`() {
+        val hasSeenAddLoginCoachMarkKey = "bwPreferencesStorage:shouldShowAddLoginCoachMark"
+        settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = true)
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                key = hasSeenAddLoginCoachMarkKey,
+                defaultValue = false,
+            ),
+        )
+    }
+
+    @Test
+    fun `getShouldShowAddLoginCoachMarkFlow emits changes to stored value`() = runTest {
+        settingsDiskSource.getShouldShowAddLoginCoachMarkFlow().test {
+            assertNull(awaitItem())
+            settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
+            assertFalse(awaitItem() ?: true)
+            settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = true)
+            assertTrue(awaitItem() ?: false)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getShouldShowGeneratorCoachMarkGeneratorCoachMark should pull value from SharedPreferences`() {
+        val hasSeenGeneratorCoachMarkKey = "bwPreferencesStorage:shouldShowGeneratorCoachMark"
+        fakeSharedPreferences.edit { putBoolean(hasSeenGeneratorCoachMarkKey, true) }
+        assertTrue(settingsDiskSource.getShouldShowGeneratorCoachMark() == true)
+    }
+
+    @Test
+    fun `storeShouldShowGeneratorCoachMarkGeneratorCoachMark should update SharedPreferences`() {
+        val hasSeenGeneratorCoachMarkKey = "bwPreferencesStorage:shouldShowGeneratorCoachMark"
+        settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = true)
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                key = hasSeenGeneratorCoachMarkKey,
+                defaultValue = false,
+            ),
+        )
+    }
+
+    @Test
+    fun `getShouldShowGeneratorCoachMarkFlow emits changes to stored value`() = runTest {
+        settingsDiskSource.getShouldShowGeneratorCoachMarkFlow().test {
+            assertNull(awaitItem())
+            settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
+            assertFalse(awaitItem() ?: true)
+            settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = true)
+            assertTrue(awaitItem() ?: false)
+        }
     }
 }

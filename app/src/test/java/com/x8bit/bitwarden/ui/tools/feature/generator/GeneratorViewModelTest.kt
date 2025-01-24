@@ -8,9 +8,11 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -37,11 +39,14 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -109,6 +114,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         every { registerGeneratedResultAction() } just runs
     }
 
+    private val mutableShouldShowGeneratorCoachMarkFlow = MutableStateFlow(true)
+    private val firstTimeActionManager: FirstTimeActionManager = mockk {
+        every { markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR) } just runs
+        every { shouldShowGeneratorCoachMarkFlow } returns mutableShouldShowGeneratorCoachMarkFlow
+    }
+
     @Test
     fun `initial state should be correct when there is no saved state`() {
         val viewModel = createViewModel(state = null)
@@ -139,6 +150,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             currentEmailAddress = "currentEmail",
             isUnderPolicy = false,
             website = "",
+            shouldShowCoachMarkTour = true,
         )
 
         val viewModel = createViewModel(
@@ -174,6 +186,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             currentEmailAddress = "currentEmail",
             isUnderPolicy = false,
             website = null,
+            shouldShowCoachMarkTour = true,
         )
 
         val viewModel = createViewModel(
@@ -2160,6 +2173,67 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
         assertEquals(10, password.computedMinimumLength)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager should show generator tour value updates to false shouldShowExploreGeneratorCard should update to false`() {
+        val viewModel = createViewModel()
+        assertTrue(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+        mutableShouldShowGeneratorCoachMarkFlow.update { false }
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldShowExploreGeneratorCard value should be false if generator screen is in modal mode`() {
+        mutableShouldShowGeneratorCoachMarkFlow.update { false }
+        val viewModel = createViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createPasswordState().copy(
+                    shouldShowCoachMarkTour = false,
+                    generatorMode = GeneratorMode.Modal.Password,
+                ),
+            ),
+        )
+
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldShowExploreGeneratorCard value should be false if generator screen selected type is not password`() {
+        mutableShouldShowGeneratorCoachMarkFlow.update { false }
+        val viewModel = createViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createUsernameModeState().copy(
+                    shouldShowCoachMarkTour = true,
+                ),
+            ),
+        )
+
+        assertFalse(viewModel.stateFlow.value.shouldShowExploreGeneratorCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ExploreGeneratorCardDismissed action calls first time action manager markCoachMarkTourCompleted with GENERATOR value called`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(GeneratorAction.ExploreGeneratorCardDismissed)
+        verify(exactly = 1) {
+            firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `StartExploreGeneratorTour action calls first time action manager hasSeenGeneratorCoachMarkTour called and show coach mark event sent`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
+        verify(exactly = 1) {
+            firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+        }
+    }
     //region Helper Functions
 
     @Suppress("LongParameterList")
@@ -2187,6 +2261,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 avoidAmbiguousChars = avoidAmbiguousChars,
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createPassphraseState(
@@ -2205,6 +2280,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 includeNumber = includeNumber,
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createUsernameModeState(
@@ -2220,6 +2296,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createForwardedEmailAliasState(
@@ -2235,6 +2312,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createAddyIoState(
@@ -2249,6 +2327,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createDuckDuckGoState(
@@ -2263,6 +2342,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createFastMailState(
@@ -2277,6 +2357,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createFirefoxRelayState(
@@ -2291,6 +2372,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createForwardEmailState(
@@ -2305,6 +2387,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createSimpleLoginState(
@@ -2319,6 +2402,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createPlusAddressedEmailState(
@@ -2333,6 +2417,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createCatchAllEmailState(
@@ -2347,6 +2432,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createRandomWordState(
@@ -2363,6 +2449,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             ),
             currentEmailAddress = "currentEmail",
+            shouldShowCoachMarkTour = true,
         )
 
     private fun createSavedStateHandleWithState(state: GeneratorState) =
@@ -2379,6 +2466,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         policyManager = policyManager,
         reviewPromptManager = reviewPromptManager,
+        firstTimeActionManager = firstTimeActionManager,
     )
 
     private fun createViewModel(

@@ -54,8 +54,10 @@
   <string name="my_vault">Brankas Saya</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">Nama</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Tidak</string>
   <string name="notes">Catatan</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Oke</string>
   <string name="password">Kata Sandi</string>
   <string name="save">Simpan</string>
@@ -554,12 +556,12 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="personal_ownership_submit_error">Karena Kebijakan Perusahaan, anda dilarang menyimpan item ke lemari besi pribadi anda. Ubah opsi Kepemilikan ke organisasi dan pilih dari Koleksi yang tersedia.</string>
   <string name="personal_ownership_policy_in_effect">Kebijakan organisasi memengaruhi opsi kepemilikan anda.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Semua Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Nama yang bersahabat untuk menggambarkan Send ini.</string>
   <string name="text">Teks</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Teks</string>
-  <string name="type_text_info">Teks yang ingin Anda kirim.</string>
   <string name="hide_text_by_default">Saat mengakses Send, sembunyikan teks secara default</string>
   <string name="type_file">Berkas</string>
   <string name="type_file_info">Berkas yang ingin Anda kirim.</string>
@@ -571,9 +573,6 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="deletion_time">Waktu Penghapusan</string>
   <string name="deletion_date_info">Send akan dihapus secara permanen pada tanggal dan waktu yang ditentukan.</string>
   <string name="pending_delete">Penghapusan menunggu keputusan</string>
-  <string name="expiration_date">Tanggal habis tempo</string>
-  <string name="expiration_time">Waktu kedaluwarsa</string>
-  <string name="expiration_date_info">Jika disetel, akses ke Send ini akan berakhir pada tanggal dan waktu yang ditentukan.</string>
   <string name="expired">Kedaluwarsa</string>
   <string name="maximum_access_count">Hitungan Akses Maksimum</string>
   <string name="maximum_access_count_info">Jika disetel, pengguna tidak dapat lagi mengakses Send ini setelah jumlah akses maksimum tercapai.</string>
@@ -586,7 +585,6 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="removing_send_password">Menghapus kata sandi...</string>
   <string name="send_password_removed">Kata sandi telah dihapus.</string>
   <string name="notes_info">Catatan pribadi tentang Send ini.</string>
-  <string name="disable_send">Nonaktifkan Send ini sehingga tidak ada yang dapat mengaksesnya.</string>
   <string name="no_sends">Tidak ada Send di akun Anda.</string>
   <string name="add_a_send">Tambahkan Send</string>
   <string name="copy_link">Salin Tautan</string>
@@ -1114,4 +1112,13 @@ Do you want to switch to this account?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

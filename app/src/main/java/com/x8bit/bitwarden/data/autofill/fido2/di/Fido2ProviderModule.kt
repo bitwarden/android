@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -44,6 +46,8 @@ object Fido2ProviderModule {
         fido2CredentialManager: Fido2CredentialManager,
         dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
+        featureFlagManager: FeatureFlagManager,
         clock: Clock,
     ): Fido2ProviderProcessor =
         Fido2ProviderProcessorImpl(
@@ -54,6 +58,8 @@ object Fido2ProviderModule {
             fido2CredentialManager,
             intentManager,
             clock,
+            biometricsEncryptionManager,
+            featureFlagManager,
             dispatcherManager,
         )
 

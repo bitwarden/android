@@ -66,9 +66,9 @@ fun BitwardenPinDialog(
                 value = pin,
                 onValueChange = { pin = it },
                 autoFocus = true,
+                textFieldTestTag = "AlertInputField",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("AlertInputField")
                     .fillMaxWidth()
                     .imePadding(),
             )

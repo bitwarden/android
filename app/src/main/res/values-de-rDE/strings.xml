@@ -54,8 +54,10 @@
   <string name="my_vault">Mein Tresor</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">Name</string>
+  <string name="send_name_required">"Send-Name (erforderlich)"</string>
   <string name="no">Nein</string>
   <string name="notes">Notizen</string>
+  <string name="private_notes">Private Notizen</string>
   <string name="ok">Ok</string>
   <string name="password">Passwort</string>
   <string name="save">Speichern</string>
@@ -554,12 +556,12 @@ Das Scannen erfolgt automatisch.</string>
   <string name="personal_ownership_submit_error">Aufgrund einer Unternehmensrichtlinie darfst du keine Einträge in deinem persönlichen Tresor speichern. Ändere die Eigentümer-Option in eine Organisation und wähle aus den verfügbaren Sammlungen.</string>
   <string name="personal_ownership_policy_in_effect">Eine Organisationsrichtlinie beeinflusst deine Eigentümer-Optionen.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send-Details</string>
   <string name="all_sends">Alle Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Ein eigener Name, um dieses Send zu beschreiben.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Zu teilender Text</string>
   <string name="type_text">Text</string>
-  <string name="type_text_info">Der Text, den du senden möchtest.</string>
   <string name="hide_text_by_default">Beim Zugriff auf diesen Send den Text standardmäßig ausblenden</string>
   <string name="type_file">Datei</string>
   <string name="type_file_info">Die Datei, die du senden möchtest.</string>
@@ -571,9 +573,6 @@ Das Scannen erfolgt automatisch.</string>
   <string name="deletion_time">Löschzeitpunkt</string>
   <string name="deletion_date_info">Das Send wird am angegebenen Datum zur angegebenen Uhrzeit dauerhaft gelöscht.</string>
   <string name="pending_delete">Ausstehende Löschung</string>
-  <string name="expiration_date">Ablaufdatum</string>
-  <string name="expiration_time">Ablaufzeitpunkt</string>
-  <string name="expiration_date_info">Falls aktiviert, verfällt der Zugriff auf diesen Send zur angegebenen Datum und Uhrzeit.</string>
   <string name="expired">Abgelaufen</string>
   <string name="maximum_access_count">Maximale Zugriffsanzahl</string>
   <string name="maximum_access_count_info">Falls aktiviert, können Benutzer nicht mehr auf dieses Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.</string>
@@ -586,7 +585,6 @@ Das Scannen erfolgt automatisch.</string>
   <string name="removing_send_password">Passwort wird entfernt</string>
   <string name="send_password_removed">Passwort wurde entfernt.</string>
   <string name="notes_info">Private Notizen zu diesem Send.</string>
-  <string name="disable_send">Dieses Send deaktivieren, damit niemand darauf zugreifen kann</string>
   <string name="no_sends">Es gibt keine Sends in deinem Konto.</string>
   <string name="add_a_send">Neues Send</string>
   <string name="copy_link">Link kopieren</string>
@@ -1113,4 +1111,13 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Du kannst deine E-Mail-Adresse in der Bitwarden Web-App ändern.</string>
   <string name="login_credentials">Anmeldedaten</string>
   <string name="autofill_options">Auto-Ausfüllen Optionen</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Verwende diesen Button um ein neues, einzigartiges Passwort zu gernerieren.</string>
+  <string name="coachmark_1_of_3">1 von 3</string>
+  <string name="coachmark_2_of_3">2 von 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Du musst den Authentifizierungsschlüssel nur für Zugangsdaten einrichten, die eine zwei-Faktor-Authentifizierung mit einem Code erfordern. Der Schlüssel generiert kontinuierlich sechsstellige Codes, mit denen du dich anmelden kannst.</string>
+  <string name="coachmark_3_of_3">3 von 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du musst eine Webseiten-Adresse hinzufügen, um automatisches Ausfüllen für den Zugriff auf dieses Konto benutzen zu können.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Passkey-Erstellung mit einem Tap</string>
+  <string name="single_tap_passkey_authentication">Passkey-Anmeldung mit einen Tap</string>
 </resources>

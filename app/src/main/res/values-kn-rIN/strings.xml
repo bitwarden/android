@@ -54,8 +54,10 @@
   <string name="my_vault">ನನ್ನ ವಾಲ್ಟ್</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">ಹೆಸರು</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">ಇಲ್ಲ</string>
   <string name="notes">ಟಿಪ್ಪಣಿಗಳು</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">ಸರಿ</string>
   <string name="password">ಪಾಸ್ವರ್ಡ್</string>
   <string name="save">ಉಳಿಸಿ</string>
@@ -554,12 +556,12 @@ Scanning will happen automatically.</string>
   <string name="personal_ownership_submit_error">Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</string>
   <string name="personal_ownership_policy_in_effect">ಸಂಸ್ಥೆಯ ನೀತಿಯು ನಿಮ್ಮ ಮಾಲೀಕತ್ವದ ಆಯ್ಕೆಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತಿದೆ.</string>
   <string name="send">ಕಳುಹಿಸಿ</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">ಎಲ್ಲಾ ಕಳುಹಿಸುತ್ತದೆ</string>
   <string name="sends">ಕಳುಹಿಸುತ್ತದೆ</string>
-  <string name="name_info">ಇದನ್ನು ಕಳುಹಿಸಲು ವಿವರಿಸಲು ಸ್ನೇಹಪರ ಹೆಸರು.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">ಪಠ್ಯ</string>
-  <string name="type_text_info">ನೀವು ಕಳುಹಿಸಲು ಬಯಸುವ ಪಠ್ಯ.</string>
   <string name="hide_text_by_default">ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸುವಾಗ, ಪಠ್ಯವನ್ನು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಮರೆಮಾಡಿ</string>
   <string name="type_file">ಫೈಲ್</string>
   <string name="type_file_info">ನೀವು ಕಳುಹಿಸಲು ಬಯಸುವ ಫೈಲ್.</string>
@@ -571,9 +573,6 @@ Scanning will happen automatically.</string>
   <string name="deletion_time">ಅಳಿಸುವ ಸಮಯ</string>
   <string name="deletion_date_info">ಕಳುಹಿಸಿದ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಮೇಲೆ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲಾಗುತ್ತದೆ.</string>
   <string name="pending_delete">ಅಳಿಸುವಿಕೆ ಬಾಕಿ ಉಳಿದಿದೆ</string>
-  <string name="expiration_date">ಮುಕ್ತಾಯ ದಿನಾಂಕ</string>
-  <string name="expiration_time">ಮುಕ್ತಾಯ ಸಮಯ</string>
-  <string name="expiration_date_info">ಹೊಂದಿಸಿದ್ದರೆ, ಈ ಕಳುಹಿಸುವಿಕೆಯ ಪ್ರವೇಶವು ನಿಗದಿತ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಮೇಲೆ ಮುಕ್ತಾಯಗೊಳ್ಳುತ್ತದೆ.</string>
   <string name="expired">ಅವಧಿ ಮೀರಿದೆ</string>
   <string name="maximum_access_count">ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ</string>
   <string name="maximum_access_count_info">ಹೊಂದಿಸಿದ್ದರೆ, ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ ತಲುಪಿದ ನಂತರ ಬಳಕೆದಾರರಿಗೆ ಈ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.</string>
@@ -586,7 +585,6 @@ Scanning will happen automatically.</string>
   <string name="removing_send_password">ಪಾಸ್ವರ್ಡ್ ತೆಗೆದುಹಾಕಲಾಗುತ್ತಿದೆ</string>
   <string name="send_password_removed">ಪಾಸ್ವರ್ಡ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ.</string>
   <string name="notes_info">ಈ ಕಳುಹಿಸುವ ಬಗ್ಗೆ ಖಾಸಗಿ ಟಿಪ್ಪಣಿಗಳು.</string>
-  <string name="disable_send">ಇದನ್ನು ಕಳುಹಿಸುವುದನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ ಇದರಿಂದ ಯಾರೂ ಅದನ್ನು ಪ್ರವೇಶಿಸಲಾಗುವುದಿಲ್ಲ.</string>
   <string name="no_sends">ನಿಮ್ಮ ಖಾತೆಯಲ್ಲಿ ಯಾವುದೇ ಕಳುಹಿಸುವಿಕೆಗಳಿಲ್ಲ.</string>
   <string name="add_a_send">ಕಳುಹಿಸು ಸೇರಿಸಿ</string>
   <string name="copy_link">ಲಿಂಕ್ ಕಾಪಿ ಮಾಡಿ</string>
@@ -1114,4 +1112,13 @@ Do you want to switch to this account?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

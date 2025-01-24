@@ -71,6 +71,8 @@ object VaultManagerModule {
     @Provides
     @Singleton
     fun provideVaultLockManager(
+        @ApplicationContext context: Context,
+        clock: Clock,
         authDiskSource: AuthDiskSource,
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
@@ -81,6 +83,8 @@ object VaultManagerModule {
         trustedDeviceManager: TrustedDeviceManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
+            context = context,
+            clock = clock,
             authDiskSource = authDiskSource,
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,

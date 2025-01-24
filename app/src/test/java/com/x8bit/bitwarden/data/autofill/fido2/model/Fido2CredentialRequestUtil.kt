@@ -5,7 +5,7 @@ import android.content.pm.SigningInfo
 /**
  * Creates a mock [Fido2CreateCredentialRequest] with a given [number].
  */
-fun createMockFido2CredentialRequest(
+fun createMockFido2CreateCredentialRequest(
     number: Int,
     origin: String? = null,
     signingInfo: SigningInfo = SigningInfo(),
@@ -16,4 +16,5 @@ fun createMockFido2CredentialRequest(
         packageName = "com.x8bit.bitwarden",
         signingInfo = signingInfo,
         origin = origin,
+        isUserVerified = true,
     )

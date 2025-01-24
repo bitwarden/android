@@ -141,7 +141,7 @@ private fun MasterPasswordGeneratorContent(
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
         BitwardenTextField(
-            label = "",
+            label = null,
             value = generatedPassword,
             onValueChange = {},
             readOnly = true,

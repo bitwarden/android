@@ -8,7 +8,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -17,10 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -50,7 +47,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -60,7 +56,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 /**
  * Content view for the [AddSendScreen].
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun AddSendContent(
@@ -102,15 +97,38 @@ fun AddSendContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        if (state.selectedType is AddSendState.ViewState.Content.SendType.Text) {
+            BitwardenTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+                label = stringResource(id = R.string.text_to_share),
+                readOnly = policyDisablesSend,
+                value = state.selectedType.input,
+                singleLine = false,
+                onValueChange = addSendHandlers.onTextChange,
+                textFieldTestTag = "SendTextContentEntry",
+                cardStyle = CardStyle.Full,
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
+
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.send_details),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            label = stringResource(id = R.string.name),
-            supportingText = stringResource(id = R.string.name_info),
+            label = stringResource(id = R.string.send_name_required),
             readOnly = policyDisablesSend,
             value = state.common.name,
-            onValueChange = addSendHandlers.onNamChange,
+            onValueChange = addSendHandlers.onNameChange,
             textFieldTestTag = "SendNameEntry",
             cardStyle = CardStyle.Full,
         )
@@ -126,6 +144,7 @@ fun AddSendContent(
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
+
                 if (isShared) {
                     Text(
                         text = type.name.orEmpty(),
@@ -222,20 +241,6 @@ fun AddSendContent(
 
             is AddSendState.ViewState.Content.SendType.Text -> {
                 Spacer(modifier = Modifier.height(height = 8.dp))
-                BitwardenTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                    label = stringResource(id = R.string.text),
-                    supportingText = stringResource(id = R.string.type_text_info),
-                    readOnly = policyDisablesSend,
-                    value = type.input,
-                    singleLine = false,
-                    onValueChange = addSendHandlers.onTextChange,
-                    textFieldTestTag = "SendTextContentEntry",
-                    cardStyle = CardStyle.Full,
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
                 BitwardenSwitch(
                     modifier = Modifier
                         .testTag(tag = "SendHideTextByDefaultToggle")
@@ -250,13 +255,61 @@ fun AddSendContent(
             }
         }
 
+        Spacer(modifier = Modifier.height(height = 8.dp))
+
+        if (isAddMode) {
+            SendDeletionDateChooser(
+                modifier = Modifier
+                    .testTag("SendDeletionOptionsPicker")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+                dateFormatPattern = state.common.dateFormatPattern,
+                timeFormatPattern = state.common.timeFormatPattern,
+                currentZonedDateTime = state.common.deletionDate,
+                onDateSelect = addSendHandlers.onDeletionDateChange,
+                isEnabled = !policyDisablesSend,
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .defaultMinSize(minHeight = 60.dp)
+                    .cardBackground(cardStyle = CardStyle.Full)
+                    .cardPadding(cardStyle = CardStyle.Full, vertical = 0.dp),
+            ) {
+                AddSendCustomDateChooser(
+                    modifier = Modifier
+                        .testTag("SendCustomDeletionDatePicker")
+                        .fillMaxWidth(),
+                    dateLabel = stringResource(id = R.string.deletion_date),
+                    timeLabel = stringResource(id = R.string.deletion_time),
+                    dateFormatPattern = state.common.dateFormatPattern,
+                    timeFormatPattern = state.common.timeFormatPattern,
+                    currentZonedDateTime = state.common.deletionDate,
+                    isEnabled = !policyDisablesSend,
+                    onDateSelect = { addSendHandlers.onDeletionDateChange(requireNotNull(it)) },
+                )
+                BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+                Spacer(modifier = Modifier.height(height = 12.dp))
+                Text(
+                    text = stringResource(id = R.string.deletion_date_info),
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(height = 12.dp))
+            }
+        }
+
         AddSendOptions(
             state = state,
             sendRestrictionPolicy = policyDisablesSend,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
-
         Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -296,6 +349,7 @@ private fun AddSendOptions(
             .minimumInteractiveComponentSize()
             .padding(top = 16.dp, bottom = 8.dp)
             .standardHorizontalMargin()
+            .padding(horizontal = 16.dp)
             .semantics(mergeDescendants = true) {},
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -325,115 +379,6 @@ private fun AddSendOptions(
         modifier = Modifier.clipToBounds(),
     ) {
         Column {
-            if (isAddMode) {
-                SendDeletionDateChooser(
-                    modifier = Modifier
-                        .testTag("SendDeletionOptionsPicker")
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                    dateFormatPattern = state.common.dateFormatPattern,
-                    timeFormatPattern = state.common.timeFormatPattern,
-                    currentZonedDateTime = state.common.deletionDate,
-                    onDateSelect = addSendHandlers.onDeletionDateChange,
-                    isEnabled = !sendRestrictionPolicy,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                SendExpirationDateChooser(
-                    modifier = Modifier
-                        .testTag("SendExpirationOptionsPicker")
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                    dateFormatPattern = state.common.dateFormatPattern,
-                    timeFormatPattern = state.common.timeFormatPattern,
-                    currentZonedDateTime = state.common.expirationDate,
-                    onDateSelect = addSendHandlers.onExpirationDateChange,
-                    isEnabled = !sendRestrictionPolicy,
-                )
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .defaultMinSize(minHeight = 60.dp)
-                        .cardBackground(cardStyle = CardStyle.Full)
-                        .cardPadding(cardStyle = CardStyle.Full, vertical = 0.dp),
-                ) {
-                    AddSendCustomDateChooser(
-                        modifier = Modifier
-                            .testTag("SendCustomDeletionDatePicker")
-                            .fillMaxWidth(),
-                        dateLabel = stringResource(id = R.string.deletion_date),
-                        timeLabel = stringResource(id = R.string.deletion_time),
-                        dateFormatPattern = state.common.dateFormatPattern,
-                        timeFormatPattern = state.common.timeFormatPattern,
-                        currentZonedDateTime = state.common.deletionDate,
-                        isEnabled = !sendRestrictionPolicy,
-                        onDateSelect = { addSendHandlers.onDeletionDateChange(requireNotNull(it)) },
-                    )
-                    BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-                    Spacer(modifier = Modifier.height(height = 12.dp))
-                    Text(
-                        text = stringResource(id = R.string.deletion_date_info),
-                        style = BitwardenTheme.typography.bodySmall,
-                        color = BitwardenTheme.colorScheme.text.secondary,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                    )
-                    Spacer(modifier = Modifier.height(height = 12.dp))
-                }
-                Spacer(modifier = Modifier.height(height = 8.dp))
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .defaultMinSize(minHeight = 60.dp)
-                        .cardBackground(cardStyle = CardStyle.Full)
-                        .cardPadding(cardStyle = CardStyle.Full, vertical = 0.dp),
-                ) {
-                    AddSendCustomDateChooser(
-                        modifier = Modifier
-                            .testTag("SendCustomExpirationDatePicker")
-                            .fillMaxWidth(),
-                        dateLabel = stringResource(id = R.string.expiration_date),
-                        timeLabel = stringResource(id = R.string.expiration_time),
-                        dateFormatPattern = state.common.dateFormatPattern,
-                        timeFormatPattern = state.common.timeFormatPattern,
-                        currentZonedDateTime = state.common.expirationDate,
-                        onDateSelect = addSendHandlers.onExpirationDateChange,
-                        isEnabled = !sendRestrictionPolicy,
-                    )
-                    BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-                    Spacer(modifier = Modifier.height(height = 12.dp))
-                    Row(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.expiration_date_info),
-                            style = BitwardenTheme.typography.bodySmall,
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            modifier = Modifier.weight(weight = 1f),
-                        )
-                        Spacer(modifier = Modifier.width(width = 4.dp))
-                        BitwardenClickableText(
-                            label = stringResource(id = R.string.clear),
-                            onClick = addSendHandlers.onClearExpirationDateClick,
-                            isEnabled = state.common.expirationDate != null &&
-                                !sendRestrictionPolicy,
-                            style = BitwardenTheme.typography.labelLarge,
-                            innerPadding = PaddingValues(vertical = 6.dp, horizontal = 16.dp),
-                            modifier = Modifier
-                                .testTag("SendClearExpirationDateButton")
-                                .wrapContentWidth(),
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(height = 12.dp))
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
             BitwardenStepper(
                 label = stringResource(id = R.string.maximum_access_count),
                 supportingTextContent = {
@@ -475,20 +420,7 @@ private fun AddSendOptions(
                 readOnly = sendRestrictionPolicy,
                 value = state.common.passwordInput,
                 onValueChange = addSendHandlers.onPasswordChange,
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .testTag("SendNewPasswordEntry")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextField(
-                label = stringResource(id = R.string.notes),
-                supportingText = stringResource(id = R.string.notes_info),
-                readOnly = sendRestrictionPolicy,
-                value = state.common.noteInput,
-                singleLine = false,
-                onValueChange = addSendHandlers.onNoteChange,
+                textFieldTestTag = "SendNewPasswordEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -507,17 +439,17 @@ private fun AddSendOptions(
                 enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
                 cardStyle = CardStyle.Full,
             )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenSwitch(
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.private_notes),
+                readOnly = sendRestrictionPolicy,
+                value = state.common.noteInput,
+                singleLine = false,
+                onValueChange = addSendHandlers.onNoteChange,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("SendDeactivateSwitch")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
-                label = stringResource(id = R.string.disable_send),
-                isChecked = state.common.isDeactivateChecked,
-                onCheckedChange = addSendHandlers.onDeactivateSendToggle,
-                readOnly = sendRestrictionPolicy,
-                cardStyle = CardStyle.Full,
             )
         }
     }
