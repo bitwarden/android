@@ -54,8 +54,10 @@
   <string name="my_vault">Meu cofre</string>
   <string name="authenticator">Autenticação</string>
   <string name="name">Nome</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Não</string>
   <string name="notes">Notas</string>
+  <string name="private_notes">Notas privadas</string>
   <string name="ok">OK</string>
   <string name="password">Senha</string>
   <string name="save">Salvar</string>
@@ -554,12 +556,12 @@ A leitura será feita automaticamente.</string>
   <string name="personal_ownership_submit_error">Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de propriedade para uma organização e escolha entre Coleções disponíveis.</string>
   <string name="personal_ownership_policy_in_effect">Uma política de organização está afetando suas opções de propriedade.</string>
   <string name="send">Enviar</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Todos os Sends</string>
   <string name="sends">Envios</string>
-  <string name="name_info">Um nome amigável para descrever este Send.</string>
   <string name="text">Texto</string>
+  <string name="text_to_share">Texto para compartilhar</string>
   <string name="type_text">Texto</string>
-  <string name="type_text_info">O texto que você deseja enviar.</string>
   <string name="hide_text_by_default">Ao acessar o Send, ocultar o texto por padrão</string>
   <string name="type_file">Arquivo</string>
   <string name="type_file_info">O arquivo que você deseja enviar.</string>
@@ -571,9 +573,6 @@ A leitura será feita automaticamente.</string>
   <string name="deletion_time">Hora da exclusão</string>
   <string name="deletion_date_info">O envio será eliminado permanentemente na data e hora especificadas.</string>
   <string name="pending_delete">Exclusão pendente</string>
-  <string name="expiration_date">Data de validade</string>
-  <string name="expiration_time">Hora da Expiração</string>
-  <string name="expiration_date_info">Se definido, o acesso a este Send expirará na data e hora especificadas.</string>
   <string name="expired">Expirado</string>
   <string name="maximum_access_count">Contagem Máxima de Acessos</string>
   <string name="maximum_access_count_info">Se atribuído, usuários não poderão mais acessar este Send assim que o número máximo de acessos for atingido.</string>
@@ -586,7 +585,6 @@ A leitura será feita automaticamente.</string>
   <string name="removing_send_password">Removendo senha</string>
   <string name="send_password_removed">A senha foi removida.</string>
   <string name="notes_info">Notas privadas sobre este Send.</string>
-  <string name="disable_send">Desabilite este Send para que ninguém possa acessá-lo</string>
   <string name="no_sends">Não existem Sends na sua conta.</string>
   <string name="add_a_send">Adicionar um Send</string>
   <string name="copy_link">Copiar link</string>
@@ -1112,6 +1110,15 @@ Você deseja mudar para esta conta?</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copiar chave privada</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Você pode alterar a sua senha mestra no aplicativo web do Bitwarden.</string>
-  <string name="login_credentials">Login Credentials</string>
-  <string name="autofill_options">Autofill Options</string>
+  <string name="login_credentials">Credenciais de Acesso</string>
+  <string name="autofill_options">Opções de Preenchimento Automático</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use este botão para gerar uma nova senha única.</string>
+  <string name="coachmark_1_of_3">1 de 3</string>
+  <string name="coachmark_2_of_3">2 de 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Você só precisará configurar a Chave de Autenticação para logins que exigem autenticação de dois fatores com um código. A chave irá gerar continuamente códigos de seis dígitos que você pode usar para entrar.</string>
+  <string name="coachmark_3_of_3">3 de 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Você deve adicionar um endereço web para usar o preenchimento automático para acessar esta conta.</string>
+  <string name="mutual_tls">TLS mútuo</string>
+  <string name="single_tap_passkey_creation">Criação de senha com um toque</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

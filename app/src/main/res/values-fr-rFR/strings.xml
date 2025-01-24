@@ -54,8 +54,10 @@
   <string name="my_vault">Mon coffre</string>
   <string name="authenticator">Authentificateur</string>
   <string name="name">Nom</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Non</string>
   <string name="notes">Notes</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Ok</string>
   <string name="password">Mot de passe</string>
   <string name="save">Enregistrer</string>
@@ -554,12 +556,12 @@ La numérisation se fera automatiquement.</string>
   <string name="personal_ownership_submit_error">En raison d\'une politique d\'entreprise, il vous est interdit d\'enregistrer des éléments dans votre coffre personnel. Changez l\'option Propriétaire au profit d\'une organisation et choisissez parmi les collections disponibles.</string>
   <string name="personal_ownership_policy_in_effect">Une politique d\'organisation affecte vos options de Propriétaire.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Tous les Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Un nom convivial pour décrire ce Send.</string>
   <string name="text">Texte</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Texte</string>
-  <string name="type_text_info">Le texte que vous voulez envoyer.</string>
   <string name="hide_text_by_default">Lors de l\'accès à ce Send, masquer le texte par défaut</string>
   <string name="type_file">Fichier</string>
   <string name="type_file_info">Le fichier que vous voulez envoyer.</string>
@@ -571,9 +573,6 @@ La numérisation se fera automatiquement.</string>
   <string name="deletion_time">Heure de suppression</string>
   <string name="deletion_date_info">Le Send sera définitivement supprimé à la date et heure spécifiées.</string>
   <string name="pending_delete">En attente de suppression</string>
-  <string name="expiration_date">Date d\'expiration</string>
-  <string name="expiration_time">Heure d\'expiration</string>
-  <string name="expiration_date_info">Si défini, l\'accès à ce Send expirera à la date et heure spécifiées.</string>
   <string name="expired">Expiré</string>
   <string name="maximum_access_count">Nombre maximum d\'accès</string>
   <string name="maximum_access_count_info">Si défini, les utilisateurs ne seront plus en mesure d\'accéder à ce Send une fois que le nombre maximum d\'accès sera atteint.</string>
@@ -586,7 +585,6 @@ La numérisation se fera automatiquement.</string>
   <string name="removing_send_password">Suppression du mot de passe en cours</string>
   <string name="send_password_removed">Le mot de passe a été supprimé.</string>
   <string name="notes_info">Notes privées à propos de ce Send.</string>
-  <string name="disable_send">Désactiver ce Send pour que personne ne puisse y accéder</string>
   <string name="no_sends">Il n\'y a aucun Send dans votre compte.</string>
   <string name="add_a_send">Ajouter un Send</string>
   <string name="copy_link">Copier le lien</string>
@@ -1114,4 +1112,13 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

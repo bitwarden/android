@@ -54,8 +54,10 @@
   <string name="my_vault">Mano tvarkyklė</string>
   <string name="authenticator">Autentifikavimas</string>
   <string name="name">Pavadinimas</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Ne</string>
   <string name="notes">Užrašai</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Gerai</string>
   <string name="password">Slaptažodis</string>
   <string name="save">Išsaugoti</string>
@@ -554,12 +556,12 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="personal_ownership_submit_error">Dėl įmonės politikos jums neleidžiama saugoti daiktų asmeninėje saugykloje. Pakeiskite nuosavybės parinktį į organizaciją ir pasirinkite iš galimų kolekcijų.</string>
   <string name="personal_ownership_policy_in_effect">Organizacijos politika turi įtakos jūsų nuosavybės galimybėms.</string>
   <string name="send">Siūsti</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Visi siuntimai</string>
   <string name="sends">Siuntimai</string>
-  <string name="name_info">Draugiškas pavadinimas, apibūdinantis šį siuntimą.</string>
   <string name="text">Tekstas</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Tekstas</string>
-  <string name="type_text_info">Tekstas, kurį norite siųsti.</string>
   <string name="hide_text_by_default">Kai pasiekiate Siųsti, pagal numatytuosius nustatymus paslėpkite tekstą</string>
   <string name="type_file">Failas</string>
   <string name="type_file_info">Failas, kurį norite siųsti.</string>
@@ -571,9 +573,6 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="deletion_time">Panaikinimo laikas</string>
   <string name="deletion_date_info">Nurodytą datą ir laiką siuntinys bus visam laikui ištrintas.</string>
   <string name="pending_delete">Laukiama ištrynimo</string>
-  <string name="expiration_date">Galiojimo laiko data</string>
-  <string name="expiration_time">Galiojimo laikas</string>
-  <string name="expiration_date_info">Jei nustatyta, prieiga prie šio siuntimo nustos galioti nurodytą datą ir laiką.</string>
   <string name="expired">Nebegalioja</string>
   <string name="maximum_access_count">Maksimalus prieigos skaičius</string>
   <string name="maximum_access_count_info">Jei nustatyta, vartotojai nebegalės pasiekti šio siuntimo, kai bus pasiektas maksimalus prieigos skaičius.</string>
@@ -586,7 +585,6 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="removing_send_password">Pašalinamas slaptažodis</string>
   <string name="send_password_removed">Slaptažodis pašalintas.</string>
   <string name="notes_info">Asmeninės pastabos apie šį Siuntinį.</string>
-  <string name="disable_send">Išjunkite šį siuntimą, kad niekas negalėtų jo pasiekti</string>
   <string name="no_sends">Jūsų paskyroje nėra siuntinių.</string>
   <string name="add_a_send">Pridėti siuntinį</string>
   <string name="copy_link">Kopijuoti nuorodą</string>
@@ -1114,4 +1112,13 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

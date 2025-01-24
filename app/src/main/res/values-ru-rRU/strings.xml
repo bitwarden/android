@@ -54,8 +54,10 @@
   <string name="my_vault">Хранилище</string>
   <string name="authenticator">Аутентификатор</string>
   <string name="name">Название</string>
+  <string name="send_name_required">"Название Send (требуется)"</string>
   <string name="no">Нет</string>
   <string name="notes">Заметки</string>
+  <string name="private_notes">Личные заметки</string>
   <string name="ok">OK</string>
   <string name="password">Пароль</string>
   <string name="save">Сохранить</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">В соответствии с корпоративной политикой вам запрещено сохранять элементы в личном хранилище. Измените владельца на организацию и выберите из доступных Коллекций.</string>
   <string name="personal_ownership_policy_in_effect">Политика организации влияет на ваши варианты владения.</string>
   <string name="send">Send</string>
+  <string name="send_details">Информация о Send</string>
   <string name="all_sends">Все Send’ы</string>
   <string name="sends">Send’ы</string>
-  <string name="name_info">Понятное имя для описания этой Send.</string>
   <string name="text">Текст</string>
+  <string name="text_to_share">Текст для отправки</string>
   <string name="type_text">Текст</string>
-  <string name="type_text_info">Текст, который вы хотите отправить.</string>
   <string name="hide_text_by_default">При доступе к Send скрывать текст по умолчанию</string>
   <string name="type_file">Файл</string>
   <string name="type_file_info">Файл, который вы хотите отправить.</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">Время удаления</string>
   <string name="deletion_date_info">Эта Send будет окончательно удалена в указанные дату и время.</string>
   <string name="pending_delete">Ожидание удаления</string>
-  <string name="expiration_date">Дата истечения</string>
-  <string name="expiration_time">Время истечения</string>
-  <string name="expiration_date_info">Если задано, доступ к этой Send истечет в указанные дату и время.</string>
   <string name="expired">Срок истек</string>
   <string name="maximum_access_count">Максимум обращений</string>
   <string name="maximum_access_count_info">Если задано, пользователи больше не смогут получить доступ к этой Send, как только будет достигнуто максимальное количество обращений.</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">Удаление пароля</string>
   <string name="send_password_removed">Пароль был удален.</string>
   <string name="notes_info">Личные заметки об этой Send.</string>
-  <string name="disable_send">Отключить эту Send, чтобы никто не мог получить к ней доступ</string>
   <string name="no_sends">В вашем хранилище нет Send.</string>
   <string name="add_a_send">Новая Send</string>
   <string name="copy_link">Скопировать ссылку</string>
@@ -1116,4 +1114,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Вы можете изменить email своего аккаунта в веб-приложении Bitwarden.</string>
   <string name="login_credentials">Данные для авторизации</string>
   <string name="autofill_options">Параметры автозаполнения</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Используйте эту кнопку для генерации нового уникального пароля.</string>
+  <string name="coachmark_1_of_3">1 из 3</string>
+  <string name="coachmark_2_of_3">2 из 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Вам нужно настроить ключ аутентификатора только для логинов, которые требуют двухфакторной аутентификации с помощью кода. Ключ будет постоянно генерировать шестизначные коды, которые можно использовать для авторизации.</string>
+  <string name="coachmark_3_of_3">3 из 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Вы должны добавить веб-адрес, чтобы использовать автозаполнение для доступа к этому аккаунту.</string>
+  <string name="mutual_tls">Взаимный TLS</string>
+  <string name="single_tap_passkey_creation">Создание passkey одним касанием</string>
+  <string name="single_tap_passkey_authentication">Авторизация с passkey одним касанием</string>
 </resources>

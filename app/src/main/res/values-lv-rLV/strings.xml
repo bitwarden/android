@@ -54,8 +54,10 @@
   <string name="my_vault">Mana glabātava</string>
   <string name="authenticator">Autentificētājs</string>
   <string name="name">Nosaukums</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Nē</string>
   <string name="notes">Piezīmes</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Labi</string>
   <string name="password">Parole</string>
   <string name="save">Saglabāt</string>
@@ -554,12 +556,12 @@ Nolasīšana notiks automātiski.</string>
   <string name="personal_ownership_submit_error">Uzņēmuma nosacījumi liedz saglabāt vienumus privātajā glabātavā. Ir jānorāda piederība apvienībai un jāizvēlas kāds no pieejamajiem krājumiem.</string>
   <string name="personal_ownership_policy_in_effect">Apvienības nosacījumi ietekmē Tavas īpašumtiesību iespējas.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Visi Send</string>
   <string name="sends">Send vienumi</string>
-  <string name="name_info">Lasāms nosaukums, kas apraksta šo Send.</string>
   <string name="text">Teksts</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Teksts</string>
-  <string name="type_text_info">Teksts, kuru ir vēlme nosūtīt.</string>
   <string name="hide_text_by_default">Piekļūstot Sūtījumam, pēc noklusējuma paslēpiet tekstu</string>
   <string name="type_file">Datne</string>
   <string name="type_file_info">Datne, kuru ir vēlme nosūtīt.</string>
@@ -571,9 +573,6 @@ Nolasīšana notiks automātiski.</string>
   <string name="deletion_time">Dzēšanas laiks</string>
   <string name="deletion_date_info">Send tiks neatgriezeniski izdzēsts norādītajā datumā un laikā.</string>
   <string name="pending_delete">Gaida dzēšanu</string>
-  <string name="expiration_date">Derīguma beigu datums</string>
-  <string name="expiration_time">Derīguma beigu laiks</string>
-  <string name="expiration_date_info">Ja iestatīts, piekļuve šim Send beigsies norādītajā datumā un laikā.</string>
   <string name="expired">Beidzies izmantošanas laiks</string>
   <string name="maximum_access_count">Lielākais pieļaujamais piekļuves reižu skaits</string>
   <string name="maximum_access_count_info">Ja iestatīts, lietotāji nevarēs piekļūt šim Send, kad tiks sasniegts lielākais pieļaujamais piekļūšanas reižu skaits.</string>
@@ -586,7 +585,6 @@ Nolasīšana notiks automātiski.</string>
   <string name="removing_send_password">Noņem paroli</string>
   <string name="send_password_removed">Parole ir noņemta</string>
   <string name="notes_info">Personīgas piezīmes par šo Send.</string>
-  <string name="disable_send">Izslēgt šo Send, lai neviens tam nevarētu piekļūt</string>
   <string name="no_sends">Kontā nav neviena Send.</string>
   <string name="add_a_send">Pievienot Send</string>
   <string name="copy_link">Ievietot saiti starpliktuvē</string>
@@ -1114,4 +1112,13 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Savu konta e-pasta adresi var mainīt Bitwarden tīmekļa lietotnē.</string>
   <string name="login_credentials">Pieteikšanās dati</string>
   <string name="autofill_options">Automātiskās aizpildes iespējas</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Šī poga ir izmantojama, lai izveidotu jaunu, neatkārtojamu paroli.</string>
+  <string name="coachmark_1_of_3">1. no 3</string>
+  <string name="coachmark_2_of_3">2. no 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Būs nepieciešams tikai uzstādīt autentificētāja atslēgu pieteikšanās vienumiem, kuriem ir nepieciešama divpakāpju pieteikšanāš ar kodu. Atslēga nepārtraukti izveidots sešciparu kodus, kurus izmantot, lai pieteiktos.</string>
+  <string name="coachmark_3_of_3">3. no 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Jāpievieno tīmekļa adrese, lai izmantotu automātisko aizpildi, lai piekļūtu šim kontam.</string>
+  <string name="mutual_tls">Savstarpējs TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

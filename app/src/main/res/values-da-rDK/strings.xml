@@ -54,8 +54,10 @@
   <string name="my_vault">Min boks</string>
   <string name="authenticator">Godkender</string>
   <string name="name">Navn</string>
+  <string name="send_name_required">"Send navn (obligatorisk)"</string>
   <string name="no">Nej</string>
   <string name="notes">Notater</string>
+  <string name="private_notes">Fortrolige notater</string>
   <string name="ok">OK</string>
   <string name="password">Adgangskode</string>
   <string name="save">Gem</string>
@@ -554,12 +556,12 @@ Skanning vil ske automatisk.</string>
   <string name="personal_ownership_submit_error">Grundet en virksomhedspolitik kan der ikke gemmes emner i den personlige boks. Skift ejerskabsindstillingen til en organisation, og vælg fra de tilgængelige samlinger.</string>
   <string name="personal_ownership_policy_in_effect">En organisationspolitik påvirker ejerskabsmulighederne.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send-detaljer</string>
   <string name="all_sends">Alle Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Et beskrivende navn til denne Send.</string>
   <string name="text">Tekst</string>
+  <string name="text_to_share">Tekst, der skal deles</string>
   <string name="type_text">Tekst</string>
-  <string name="type_text_info">Den tekst, der skal sendes.</string>
   <string name="hide_text_by_default">Når Send tilgås, skjul som standard teksten</string>
   <string name="type_file">Fil</string>
   <string name="type_file_info">Den fil, der skal sendes.</string>
@@ -571,9 +573,6 @@ Skanning vil ske automatisk.</string>
   <string name="deletion_time">Sletningstidspunkt</string>
   <string name="deletion_date_info">Denne Send slettes permanent på den angivne dato og tid.</string>
   <string name="pending_delete">Afventer sletning</string>
-  <string name="expiration_date">Udløbsdato</string>
-  <string name="expiration_time">Udløbstidspunkt</string>
-  <string name="expiration_date_info">Hvis angivet, vil adgangen til denne Send udløbe på den angivne dato og tid.</string>
   <string name="expired">Udløbet</string>
   <string name="maximum_access_count">Maksimalt antal tilgange</string>
   <string name="maximum_access_count_info">Hvis opsat, vil brugere ikke længere kunne tilgå denne Send, når det maksimale adgangsantal er nået.</string>
@@ -586,7 +585,6 @@ Skanning vil ske automatisk.</string>
   <string name="removing_send_password">Fjerner adgangskode</string>
   <string name="send_password_removed">Adgangskoden er fjernet.</string>
   <string name="notes_info">Private notater om denne Send.</string>
-  <string name="disable_send">Deaktivér denne Send, så ingen kan tilgå den</string>
   <string name="no_sends">Kontoen har ingen Sends.</string>
   <string name="add_a_send">Ny Send</string>
   <string name="copy_link">Kopiér link</string>
@@ -1114,4 +1112,13 @@ Skift til denne konto?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Kontoe-mailadressen kan ændres via Bitwarden web-appen.</string>
   <string name="login_credentials">Login-legitimationsoplysninger</string>
   <string name="autofill_options">Autoudfyldningsindstillinger</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Gensidig TLS</string>
+  <string name="single_tap_passkey_creation">Enkelt-tryk adgangsnøgleoprettelse</string>
+  <string name="single_tap_passkey_authentication">Enkelt-tryk adgangsnøgleindlogning</string>
 </resources>

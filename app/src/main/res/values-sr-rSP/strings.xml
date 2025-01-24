@@ -54,8 +54,10 @@
   <string name="my_vault">Мој Сеф</string>
   <string name="authenticator">Аутентификатор</string>
   <string name="name">Име</string>
+  <string name="send_name_required">"Назив пошиљке (неопходно)"</string>
   <string name="no">Не</string>
   <string name="notes">Белешке</string>
+  <string name="private_notes">Приватне белешке</string>
   <string name="ok">У реду</string>
   <string name="password">Лозинка</string>
   <string name="save">Сачувај</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">Због смерница за предузећа, ограничено вам је чување предмета у вашем личном трезору. Промените опцију власништва у организацију и изаберите из доступних колекција.</string>
   <string name="personal_ownership_policy_in_effect">Политика организације утичу на ваше могућности власништва.</string>
   <string name="send">Send</string>
+  <string name="send_details">Детаљи пошиљке</string>
   <string name="all_sends">Све „Send“</string>
   <string name="sends">„Send“-ови</string>
-  <string name="name_info">Име да се опише овај „Send“.</string>
   <string name="text">Текст</string>
+  <string name="text_to_share">Текст за дељење</string>
   <string name="type_text">Текст</string>
-  <string name="type_text_info">Текст који желиш да пошаљеш.</string>
   <string name="hide_text_by_default">На приступ „Send“-а, сакриј текст по дефаулту</string>
   <string name="type_file">Датотека</string>
   <string name="type_file_info">Датотека коју желиш да пошаљеш.</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">Време брисања</string>
   <string name="deletion_date_info">Слање ће бити трајно обрисано у наведени датум и време.</string>
   <string name="pending_delete">Брисање на чекању</string>
-  <string name="expiration_date">Рок употребе</string>
-  <string name="expiration_time">Време истека</string>
-  <string name="expiration_date_info">Ако је подешено, приступ овом слању истиче у наведени датум и време.</string>
   <string name="expired">Истекло</string>
   <string name="maximum_access_count">Максималан број приступа</string>
   <string name="maximum_access_count_info">Ако је постављено, корисници више неће моћи да приступе овом слању када се достигне максимални број приступа.</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">Уклањање лозинке</string>
   <string name="send_password_removed">Лозинка је уклоњена.</string>
   <string name="notes_info">Приватне белешке о овом слању.</string>
-  <string name="disable_send">Онемогући ово слање да нико други нема приступ.</string>
   <string name="no_sends">Нема слања на твом налогу.</string>
   <string name="add_a_send">Додај „Send“</string>
   <string name="copy_link">Копирај везу</string>
@@ -1110,9 +1108,18 @@
   <string name="check_out_the_passphrase_generator">"Испробајте генератор фраза"</string>
   <string name="copied_to_clipboard">Копирано у привремену меморију.</string>
   <string name="we_couldnt_verify_the_servers_certificate">Нисмо могли да верификујемо сертификат сервера. Ланац сертификата или подешавања проксија на вашем уређају или вашем Bitwarden серверу можда нису правилно подешени.</string>
-  <string name="review_flow_launched">Review flow launched!</string>
+  <string name="review_flow_launched">Рецензија тока је покренута!</string>
   <string name="copy_private_key">Копирај приватни кључ</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Можете да промените имејл свог налога у веб апликацији Bitwarden.</string>
-  <string name="login_credentials">Login Credentials</string>
-  <string name="autofill_options">Autofill Options</string>
+  <string name="login_credentials">Акредитиве за пријављивање</string>
+  <string name="autofill_options">Опције аутоматског попуњавања</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Користите ово дугме да би сте генерисали нову јединствену лозинку.</string>
+  <string name="coachmark_1_of_3">1 од 3</string>
+  <string name="coachmark_2_of_3">2 од 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Морате подесити само кључ аутентификатора за пријављивања која захтевају двофакторску аутентификацију са кодом. Кључ ће непрестано генерисати шестоцифрене кодове које можете користити за пријављивање.</string>
+  <string name="coachmark_3_of_3">3 од 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Морате додати веб адресу да би сте користили аутоматско попуњавање за приступ овом налогу.</string>
+  <string name="mutual_tls">Обострани TLS</string>
+  <string name="single_tap_passkey_creation">Прављење фразе једним додиром</string>
+  <string name="single_tap_passkey_authentication">Пријављивање фразом једним додиром</string>
 </resources>

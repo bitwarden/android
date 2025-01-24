@@ -54,8 +54,10 @@
   <string name="my_vault">Moj trezor</string>
   <string name="authenticator">Autentikator</string>
   <string name="name">Naziv</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Ne</string>
   <string name="notes">Bilješke</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">U redu</string>
   <string name="password">Lozinka</string>
   <string name="save">Spremi</string>
@@ -553,12 +555,12 @@
   <string name="personal_ownership_submit_error">Pravila tvrtke onemogućuju spremanje stavki u osobni trezor. Promijeni vlasništvo stavke na tvrtku i odaberi dostupnu Zbirku.</string>
   <string name="personal_ownership_policy_in_effect">Pravila organizacije utječu na tvoje mogućnosti vlasništva.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Svi Sendovi</string>
   <string name="sends">Sendovi</string>
-  <string name="name_info">Nadimak za ovaj Send</string>
   <string name="text">Tekst</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Tekst</string>
-  <string name="type_text_info">Tekst kojeg želiš poslati</string>
   <string name="hide_text_by_default">Zadano sakrij tekst pri pristupanju Sendu</string>
   <string name="type_file">Datoteka</string>
   <string name="type_file_info">Datoteka koju želiš poslati</string>
@@ -570,9 +572,6 @@
   <string name="deletion_time">Vrijeme brisanja</string>
   <string name="deletion_date_info">Send će nakon navedenog vremena biti trajno izbrisan.</string>
   <string name="pending_delete">Čeka brisanje</string>
-  <string name="expiration_date">Vremenski ograničeni pristup</string>
-  <string name="expiration_time">Vrijeme isteka</string>
-  <string name="expiration_date_info">Pristup ovom Sendu neće biti moguć nakon navednog roka.</string>
   <string name="expired">Isteklo</string>
   <string name="maximum_access_count">Ograničeni broj pristupanja</string>
   <string name="maximum_access_count_info">Ako je određeno, ovom Sendu će se moći pristupiti samo ograničeni broj puta.</string>
@@ -585,7 +584,6 @@
   <string name="removing_send_password">Lozinka uklonjena</string>
   <string name="send_password_removed">Lozinka uklonjena.</string>
   <string name="notes_info">Privatne bilješke o Sendu.</string>
-  <string name="disable_send">Onemogući ovaj Send da mu nitko ne može pristupiti</string>
   <string name="no_sends">Nema Sendova na tvojem računu.</string>
   <string name="add_a_send">Dodaj Send</string>
   <string name="copy_link">Kopiraj vezu</string>
@@ -1113,4 +1111,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">e-poštu svog računa možeš promijeniti u Bitwarden web aplikaciji.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>
