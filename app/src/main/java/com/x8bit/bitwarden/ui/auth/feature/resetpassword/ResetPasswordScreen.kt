@@ -185,9 +185,9 @@ private fun ResetPasswordScreenContent(
                 label = stringResource(id = R.string.current_master_password),
                 value = state.currentPasswordInput,
                 onValueChange = onCurrentPasswordInputChanged,
+                textFieldTestTag = "MasterPasswordField",
                 cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                 modifier = Modifier
-                    .testTag("MasterPasswordField")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
@@ -200,6 +200,7 @@ private fun ResetPasswordScreenContent(
             onValueChange = onPasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
+            passwordFieldTestTag = "NewPasswordField",
             cardStyle = if (
                 state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
                 CardStyle.Middle(dividerPadding = 0.dp)
@@ -207,7 +208,6 @@ private fun ResetPasswordScreenContent(
                 CardStyle.Top(dividerPadding = 0.dp)
             },
             modifier = Modifier
-                .testTag("NewPasswordField")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
@@ -218,9 +218,9 @@ private fun ResetPasswordScreenContent(
             onValueChange = onRetypePasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
+            passwordFieldTestTag = "RetypePasswordField",
             cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
             modifier = Modifier
-                .testTag("RetypePasswordField")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
