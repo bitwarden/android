@@ -78,10 +78,9 @@ fun BitwardenMasterPasswordDialog(
                     value = masterPassword,
                     onValueChange = { masterPassword = it },
                     autoFocus = true,
+                    textFieldTestTag = "AlertInputField",
                     cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .testTag("AlertInputField")
-                        .imePadding(),
+                    modifier = Modifier.imePadding(),
                 )
             }
         },

@@ -376,9 +376,9 @@ private fun PasswordField(
         BitwardenHiddenPasswordField(
             label = stringResource(id = R.string.password),
             value = passwordData.password,
+            passwordFieldTestTag = "LoginPasswordEntry",
             cardStyle = cardStyle,
-            modifier = modifier
-                .testTag("LoginPasswordEntry"),
+            modifier = modifier,
         )
     }
 }
