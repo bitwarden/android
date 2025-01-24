@@ -39,6 +39,7 @@ sealed class FlagKey<out T : Any> {
                 NewDevicePermanentDismiss,
                 NewDeviceTemporaryDismiss,
                 IgnoreEnvironmentCheck,
+                MutualTls,
             )
         }
     }
@@ -167,6 +168,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object IgnoreEnvironmentCheck : FlagKey<Boolean>() {
         override val keyName: String = "ignore-environment-check"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Mutual TLS feature.
+     */
+    data object MutualTls : FlagKey<Boolean>() {
+        override val keyName: String = "mutual-tls"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
     }

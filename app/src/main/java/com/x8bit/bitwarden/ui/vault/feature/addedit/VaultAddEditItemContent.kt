@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -31,7 +33,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
-fun VaultAddEditContent(
+fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
     typeOptions: List<VaultAddEditState.ItemTypeOption>,
@@ -42,7 +44,12 @@ fun VaultAddEditContent(
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState,
     permissionsManager: PermissionsManager,
+    onNextCoachMark: () -> Unit,
+    onPreviousCoachMark: () -> Unit,
+    onCoachMarkTourComplete: () -> Unit,
+    onCoachMarkDismissed: () -> Unit,
 ) {
     val launcher = permissionsManager.getLauncher(
         onResult = { isGranted ->
@@ -58,7 +65,7 @@ fun VaultAddEditContent(
         },
     )
 
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier, state = lazyListState) {
         if (state.isIndividualVaultDisabled && isAddItemMode) {
             item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
@@ -111,6 +118,11 @@ fun VaultAddEditContent(
                             launcher.launch(Manifest.permission.CAMERA)
                         }
                     },
+                    coachMarkScope = this@VaultAddEditContent,
+                    onPreviousCoachMark = onPreviousCoachMark,
+                    onNextCoachMark = onNextCoachMark,
+                    onCoachMarkTourComplete = onCoachMarkTourComplete,
+                    onCoachMarkDismissed = onCoachMarkDismissed,
                 )
             }
 
@@ -182,4 +194,13 @@ private fun TypeOptionsItem(
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )
+}
+
+/**
+ * Enumerated values representing the coach mark items to be shown.
+ */
+enum class AddEditItemCoachMark {
+    GENERATE_PASSWORD,
+    TOTP,
+    URI,
 }

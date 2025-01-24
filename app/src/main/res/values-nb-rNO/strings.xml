@@ -1089,7 +1089,7 @@ Vil du bytte til denne kontoen?</string>
   <string name="copy_address">Copy address</string>
   <string name="important_notice">Important notice</string>
   <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden will send a code to your account email to verify logins from new devices starting in February 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Do you have reliable access to your email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="do_you_have_reliable_access_to_your_email">Do you have reliable access to your email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
   <string name="yes_i_can_reliably_access_my_email">Yes, I can reliably access my email</string>
   <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
   <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
@@ -1112,4 +1112,6 @@ Vil du bytte til denne kontoen?</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copy private key</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

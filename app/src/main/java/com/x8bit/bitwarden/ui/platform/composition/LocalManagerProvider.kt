@@ -2,14 +2,13 @@
 
 package com.x8bit.bitwarden.ui.platform.composition
 
-import android.app.Activity
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.platform.LocalContext
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
@@ -35,14 +34,13 @@ import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManagerImpl
 fun LocalManagerProvider(
     content: @Composable () -> Unit,
 ) {
-    val activity = LocalContext.current as Activity
+    val activity = requireNotNull(LocalActivity.current)
     val fido2IntentManager: IntentManager = IntentManagerImpl(activity)
-    val fido2CompletionManager =
-        if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
-            Fido2CompletionManagerUnsupportedApiImpl
-        } else {
-            Fido2CompletionManagerImpl(activity, fido2IntentManager)
-        }
+    val fido2CompletionManager = if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+        Fido2CompletionManagerUnsupportedApiImpl
+    } else {
+        Fido2CompletionManagerImpl(activity, fido2IntentManager)
+    }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),
         LocalIntentManager provides fido2IntentManager,

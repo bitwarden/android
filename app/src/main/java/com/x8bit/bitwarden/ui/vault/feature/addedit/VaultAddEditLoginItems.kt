@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,10 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
+import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -46,14 +49,20 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod", "LongParameterList")
 fun LazyListScope.vaultAddEditLoginItems(
+    coachMarkScope: CoachMarkScope<AddEditItemCoachMark>,
     commonState: VaultAddEditState.ViewState.Content.Common,
     loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
     isAddItemMode: Boolean,
     commonActionHandler: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
-) {
+    onNextCoachMark: () -> Unit,
+    onPreviousCoachMark: () -> Unit,
+    onCoachMarkTourComplete: () -> Unit,
+    onCoachMarkDismissed: () -> Unit,
+) = coachMarkScope.run {
     item {
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.name),
             value = commonState.name,
@@ -77,11 +86,13 @@ fun LazyListScope.vaultAddEditLoginItems(
         )
     }
 
-    item {
+    item(key = AddEditItemCoachMark.GENERATE_PASSWORD) {
         PasswordRow(
             password = loginState.password,
             canViewPassword = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
+            onGenerateCoachMarkActionClick = onNextCoachMark,
+            onCoachMarkDismissed = onCoachMarkDismissed,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -114,12 +125,15 @@ fun LazyListScope.vaultAddEditLoginItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
-    item {
+    item(key = AddEditItemCoachMark.TOTP) {
         TotpRow(
             totpKey = loginState.totp,
             canViewTotp = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
             onTotpSetupClick = onTotpSetupClick,
+            onPreviousCoachMark = onPreviousCoachMark,
+            onNextCoachMark = onNextCoachMark,
+            onCoachMarkDismissed = onCoachMarkDismissed,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -138,27 +152,47 @@ fun LazyListScope.vaultAddEditLoginItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
-    itemsIndexed(loginState.uriList) { index, uriItem ->
+    coachMarkHighlightItems(
+        key = AddEditItemCoachMark.URI,
+        title = R.string.coachmark_3_of_3.asText(),
+        description = R.string.you_must_add_a_web_address_to_use_autofill_to_access_this_account
+            .asText(),
+        leftAction = {
+            CoachMarkActionText(
+                actionLabel = stringResource(R.string.back),
+                onActionClick = onPreviousCoachMark,
+            )
+        },
+        onDismiss = onCoachMarkDismissed,
+        rightAction = {
+            CoachMarkActionText(
+                actionLabel = stringResource(R.string.done_text),
+                onActionClick = onCoachMarkTourComplete,
+            )
+        },
+        trailingStaticContent = {
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
+                BitwardenOutlinedButton(
+                    label = stringResource(id = R.string.new_uri),
+                    onClick = loginItemTypeHandlers.onAddNewUriClick,
+                    modifier = Modifier
+                        .testTag("LoginAddNewUriButton")
+                        .fillMaxWidth(),
+                )
+            }
+        },
+        items = loginState.uriList,
+        modifier = Modifier
+            .standardHorizontalMargin(),
+    ) { uriItem, cardStyle ->
         VaultAddEditUriItem(
             uriItem = uriItem,
             onUriValueChange = loginItemTypeHandlers.onUriValueChange,
             onUriItemRemoved = loginItemTypeHandlers.onRemoveUriClick,
-            cardStyle = loginState.uriList.toListItemCardStyle(index = index),
+            cardStyle = cardStyle,
             modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenOutlinedButton(
-            label = stringResource(id = R.string.new_uri),
-            onClick = loginItemTypeHandlers.onAddNewUriClick,
-            modifier = Modifier
-                .testTag("LoginAddNewUriButton")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
+                .fillMaxWidth(),
         )
     }
 
@@ -407,10 +441,12 @@ private fun UsernameRow(
 
 @Suppress("LongMethod")
 @Composable
-private fun PasswordRow(
+private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
     password: String,
     canViewPassword: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    onGenerateCoachMarkActionClick: () -> Unit,
+    onCoachMarkDismissed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -437,18 +473,34 @@ private fun PasswordRow(
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                 modifier = Modifier.testTag(tag = "CheckPasswordButton"),
             )
-            BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_generate,
-                contentDescription = stringResource(id = R.string.generate_password),
-                onClick = {
-                    if (password.isEmpty()) {
-                        loginItemTypeHandlers.onOpenPasswordGeneratorClick()
-                    } else {
-                        shouldShowDialog = true
-                    }
+            CoachMarkHighlight(
+                key = AddEditItemCoachMark.GENERATE_PASSWORD,
+                title = stringResource(R.string.coachmark_1_of_3),
+                description = stringResource(
+                    R.string.use_this_button_to_generate_a_new_unique_password,
+                ),
+                shape = CoachMarkHighlightShape.OVAL,
+                onDismiss = onCoachMarkDismissed,
+                rightAction = {
+                    CoachMarkActionText(
+                        actionLabel = stringResource(R.string.next),
+                        onActionClick = onGenerateCoachMarkActionClick,
+                    )
                 },
-                modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
-            )
+            ) {
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_generate,
+                    contentDescription = stringResource(id = R.string.generate_password),
+                    onClick = {
+                        if (password.isEmpty()) {
+                            loginItemTypeHandlers.onOpenPasswordGeneratorClick()
+                        } else {
+                            shouldShowDialog = true
+                        }
+                    },
+                    modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                )
+            }
 
             if (shouldShowDialog) {
                 BitwardenTwoButtonDialog(
@@ -484,72 +536,95 @@ private fun PasswordRow(
 
 @Suppress("LongMethod")
 @Composable
-private fun TotpRow(
+private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
     totpKey: String?,
     canViewTotp: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
+    onPreviousCoachMark: () -> Unit,
+    onNextCoachMark: () -> Unit,
+    onCoachMarkDismissed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (totpKey != null) {
-        if (canViewTotp) {
-            BitwardenTextFieldWithActions(
+    CoachMarkHighlight(
+        key = AddEditItemCoachMark.TOTP,
+        title = stringResource(R.string.coachmark_2_of_3),
+        description = stringResource(R.string.you_ll_only_need_to_set_up_authenticator_key),
+        onDismiss = onCoachMarkDismissed,
+        leftAction = {
+            CoachMarkActionText(
+                actionLabel = stringResource(R.string.back),
+                onActionClick = onPreviousCoachMark,
+            )
+        },
+        rightAction = {
+            CoachMarkActionText(
+                actionLabel = stringResource(R.string.next),
+                onActionClick = onNextCoachMark,
+            )
+        },
+        modifier = Modifier.standardHorizontalMargin(),
+    ) {
+        if (totpKey != null) {
+            if (canViewTotp) {
+                BitwardenTextFieldWithActions(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                    label = stringResource(id = R.string.totp),
+                    value = totpKey,
+                    trailingIconContent = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_clear,
+                            contentDescription = stringResource(id = R.string.delete),
+                            onClick = loginItemTypeHandlers.onClearTotpKeyClick,
+                        )
+                    },
+                    onValueChange = {},
+                    readOnly = true,
+                    singleLine = true,
+                    actions = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_totp),
+                            onClick = {
+                                loginItemTypeHandlers.onCopyTotpKeyClick(totpKey)
+                            },
+                        )
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_camera,
+                            contentDescription = stringResource(id = R.string.camera),
+                            onClick = onTotpSetupClick,
+                        )
+                    },
+                    textFieldTestTag = "LoginTotpEntry",
+                    cardStyle = CardStyle.Full,
+                )
+            } else {
+                BitwardenTextField(
+                    label = stringResource(id = R.string.totp),
+                    value = totpKey,
+                    cardStyle = CardStyle.Full,
+                    modifier = modifier.testTag("LoginTotpEntry"),
+                    onValueChange = {},
+                    readOnly = true,
+                    enabled = false,
+                    singleLine = true,
+                )
+            }
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenOutlinedButton(
+                label = stringResource(id = R.string.setup_totp),
+                icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
+                onClick = onTotpSetupClick,
                 modifier = Modifier
+                    .testTag("SetupTotpButton")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
-                label = stringResource(id = R.string.totp),
-                value = totpKey,
-                trailingIconContent = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_clear,
-                        contentDescription = stringResource(id = R.string.delete),
-                        onClick = loginItemTypeHandlers.onClearTotpKeyClick,
-                    )
-                },
-                onValueChange = {},
-                readOnly = true,
-                singleLine = true,
-                actions = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_copy,
-                        contentDescription = stringResource(id = R.string.copy_totp),
-                        onClick = {
-                            loginItemTypeHandlers.onCopyTotpKeyClick(totpKey)
-                        },
-                    )
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_camera,
-                        contentDescription = stringResource(id = R.string.camera),
-                        onClick = onTotpSetupClick,
-                    )
-                },
-                textFieldTestTag = "LoginTotpEntry",
-                cardStyle = CardStyle.Full,
-            )
-        } else {
-            BitwardenTextField(
-                label = stringResource(id = R.string.totp),
-                value = totpKey,
-                cardStyle = CardStyle.Full,
-                modifier = modifier.testTag("LoginTotpEntry"),
-                onValueChange = {},
-                readOnly = true,
-                enabled = false,
-                singleLine = true,
+                isEnabled = canViewTotp,
             )
         }
-    } else {
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenOutlinedButton(
-            label = stringResource(id = R.string.setup_totp),
-            icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
-            onClick = onTotpSetupClick,
-            modifier = Modifier
-                .testTag("SetupTotpButton")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-            isEnabled = canViewTotp,
-        )
     }
 }
 

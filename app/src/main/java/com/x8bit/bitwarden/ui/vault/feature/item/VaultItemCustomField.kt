@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -38,7 +39,7 @@ fun CustomField(
                 readOnly = true,
                 onCheckedChange = { },
                 cardStyle = cardStyle,
-                modifier = modifier,
+                modifier = modifier.testTag("ViewCustomBooleanField"),
             )
         }
 
@@ -52,15 +53,18 @@ fun CustomField(
                     onValueChange = { },
                     readOnly = true,
                     singleLine = false,
+                    showPasswordTestTag = "CustomFieldShowPasswordButton",
+                    passwordFieldTestTag = "CustomFieldValue",
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomHiddenField(customField.value) },
+                            modifier = Modifier.testTag("CustomFieldCopyValueButton"),
                         )
                     },
                     cardStyle = cardStyle,
-                    modifier = modifier,
+                    modifier = modifier.testTag("ViewCustomHiddenField"),
                 )
             } else {
                 BitwardenPasswordField(
@@ -89,7 +93,8 @@ fun CustomField(
                 readOnly = true,
                 singleLine = false,
                 cardStyle = cardStyle,
-                modifier = modifier,
+                textFieldTestTag = "CustomFieldDropdown",
+                modifier = modifier.testTag("ViewCustomLinkedField"),
             )
         }
 
@@ -100,17 +105,19 @@ fun CustomField(
                 onValueChange = { },
                 readOnly = true,
                 singleLine = false,
+                textFieldTestTag = "CustomFieldValue",
                 actions = {
                     if (customField.isCopyable) {
                         BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomTextField(customField.value) },
+                            modifier = Modifier.testTag("CustomFieldCopyValueButton"),
                         )
                     }
                 },
                 cardStyle = cardStyle,
-                modifier = modifier,
+                modifier = modifier.testTag("ViewCustomTextField"),
             )
         }
     }

@@ -10,7 +10,9 @@ import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -33,7 +35,9 @@ fun BitwardenHiddenPasswordField(
 ) {
     CompositionLocalProvider(value = LocalTextToolbar provides BitwardenEmptyTextToolbar) {
         TextField(
-            modifier = modifier.cardBackground(cardStyle = cardStyle),
+            modifier = modifier
+                .cardBackground(cardStyle = cardStyle)
+                .cardPadding(cardStyle = cardStyle, vertical = 6.dp),
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             label = { Text(text = label) },
             value = value,

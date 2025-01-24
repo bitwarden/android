@@ -1113,4 +1113,6 @@
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Копирај приватни кључ</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Можете да промените имејл свог налога у веб апликацији Bitwarden.</string>
+  <string name="login_credentials">Login Credentials</string>
+  <string name="autofill_options">Autofill Options</string>
 </resources>

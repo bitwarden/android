@@ -1112,4 +1112,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="review_flow_launched">Reviewflow gelanceerd!</string>
   <string name="copy_private_key">Privésleutel kopiëren</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Je kunt het e-mailadres van je account wijzigen in de Bitwarden-webapp.</string>
+  <string name="login_credentials">Inloggegevens</string>
+  <string name="autofill_options">Opties voor automatisch aanvullen</string>
 </resources>
