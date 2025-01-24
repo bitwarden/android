@@ -39,6 +39,8 @@ private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
 private const val ADD_ACTION_COUNT = "addActionCount"
 private const val COPY_ACTION_COUNT = "copyActionCount"
 private const val CREATE_ACTION_COUNT = "createActionCount"
+private const val SHOULD_SHOW_ADD_LOGIN_COACH_MARK = "shouldShowAddLoginCoachMark"
+private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMark"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -77,6 +79,10 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableHasSeenAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableHasSeenGeneratorCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -185,6 +191,8 @@ class SettingsDiskSourceImpl(
         // - screen capture allowed
         // - show autofill setting badge
         // - show unlock setting badge
+        // - should show add login coach mark
+        // - should show generator coach mark
     }
 
     override fun getAccountBiometricIntegrityValidity(
@@ -485,6 +493,38 @@ class SettingsDiskSourceImpl(
             value = count,
         )
     }
+
+    override fun getShouldShowAddLoginCoachMark(): Boolean? =
+        getBoolean(key = SHOULD_SHOW_ADD_LOGIN_COACH_MARK)
+
+    override fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?) {
+        putBoolean(
+            key = SHOULD_SHOW_ADD_LOGIN_COACH_MARK,
+            value = shouldShow,
+        )
+        mutableHasSeenAddLoginCoachMarkFlow.tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?> =
+        mutableHasSeenAddLoginCoachMarkFlow.onSubscription {
+            emit(getBoolean(key = SHOULD_SHOW_ADD_LOGIN_COACH_MARK))
+        }
+
+    override fun getShouldShowGeneratorCoachMark(): Boolean? =
+        getBoolean(key = SHOULD_SHOW_GENERATOR_COACH_MARK)
+
+    override fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?) {
+        putBoolean(
+            key = SHOULD_SHOW_GENERATOR_COACH_MARK,
+            value = shouldShow,
+        )
+        mutableHasSeenGeneratorCoachMarkFlow.tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?> =
+        mutableHasSeenGeneratorCoachMarkFlow.onSubscription {
+            emit(getShouldShowGeneratorCoachMark())
+        }
 
     private fun getMutableLastSyncFlow(
         userId: String,

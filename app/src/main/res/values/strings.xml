@@ -1121,4 +1121,8 @@ Do you want to switch to this account?</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Single tap passkey creation</string>
   <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="learn_about_new_logins">Learn about new logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+  <string name="explore_the_generator">Explore the generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
 </resources>
