@@ -232,7 +232,8 @@ private fun StartRegistrationContent(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     EnvironmentSelector(
-                        labelText = stringResource(id = R.string.creating_on),
+                        labelText = stringResource(id = R.string.create_account_on_with_colon),
+                        dialogTitle = stringResource(id = R.string.create_account_on),
                         selectedOption = selectedEnvironmentType,
                         onOptionSelected = handler.onEnvironmentTypeSelect,
                         modifier = Modifier.testTag("RegionSelectorDropdown"),

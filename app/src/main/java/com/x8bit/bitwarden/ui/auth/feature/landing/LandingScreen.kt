@@ -253,7 +253,8 @@ private fun LandingScreenContent(
             cardStyle = CardStyle.Full,
             supportingTextContent = {
                 EnvironmentSelector(
-                    labelText = stringResource(id = R.string.logging_in_on),
+                    labelText = stringResource(id = R.string.logging_in_on_with_colon),
+                    dialogTitle = stringResource(id = R.string.logging_in_on),
                     selectedOption = state.selectedEnvironmentType,
                     onOptionSelected = onEnvironmentTypeSelect,
                     modifier = Modifier
