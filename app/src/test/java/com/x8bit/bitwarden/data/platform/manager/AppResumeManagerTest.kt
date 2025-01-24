@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
@@ -31,19 +32,16 @@ class AppResumeManagerTest {
         ZoneOffset.UTC,
     )
 
-    private val authDiskSource: AuthDiskSource = mockk {
-        every { getLastLockTimestamp(any()) } returns fixedClock.instant()
-    }
+    private val fakeAuthDiskSource = FakeAuthDiskSource()
 
     private val appResumeManager = AppResumeManagerImpl(
         settingsDiskSource = fakeSettingsDiskSource,
-        authDiskSource = authDiskSource,
+        authDiskSource = fakeAuthDiskSource,
         authRepository = authRepository,
         vaultLockManager = vaultLockManager,
         clock = fixedClock,
     )
 
-    @Suppress("MaxLineLength")
     @Test
     fun `setResumeScreen should update the app resume screen in the settings disk source`() =
         runTest {
@@ -54,7 +52,6 @@ class AppResumeManagerTest {
             assertEquals(expectedValue, actualValue)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getResumeScreen should return null when there is no app resume screen saved`() =
         runTest {
@@ -62,7 +59,6 @@ class AppResumeManagerTest {
             assertNull(actualValue)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getResumeScreen should return the saved AppResumeScreen`() =
         runTest {
@@ -75,7 +71,6 @@ class AppResumeManagerTest {
             assertEquals(expectedValue, actualValue)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clearResumeScreen should clear the app resume screen in the settings disk source`() =
         runTest {
@@ -96,6 +91,7 @@ class AppResumeManagerTest {
                 userId = USER_ID,
                 screenData = AppResumeScreenData.GeneratorScreen,
             )
+            fakeAuthDiskSource.storeLastLockTimestamp(USER_ID, fixedClock.instant())
             val expectedValue = SpecialCircumstance.GeneratorShortcut
             val actualValue = appResumeManager.getResumeSpecialCircumstance()
             assertEquals(expectedValue, actualValue)
@@ -109,6 +105,7 @@ class AppResumeManagerTest {
                 userId = USER_ID,
                 screenData = AppResumeScreenData.SendScreen,
             )
+            fakeAuthDiskSource.storeLastLockTimestamp(USER_ID, fixedClock.instant())
             val expectedValue = SpecialCircumstance.SendShortcut
             val actualValue = appResumeManager.getResumeSpecialCircumstance()
             assertEquals(expectedValue, actualValue)
@@ -122,6 +119,7 @@ class AppResumeManagerTest {
                 userId = USER_ID,
                 screenData = AppResumeScreenData.VerificationCodeScreen,
             )
+            fakeAuthDiskSource.storeLastLockTimestamp(USER_ID, fixedClock.instant())
             val expectedValue = SpecialCircumstance.VerificationCodeShortcut
             val actualValue = appResumeManager.getResumeSpecialCircumstance()
             assertEquals(expectedValue, actualValue)
@@ -135,6 +133,7 @@ class AppResumeManagerTest {
                 userId = USER_ID,
                 screenData = AppResumeScreenData.SearchScreen("test"),
             )
+            fakeAuthDiskSource.storeLastLockTimestamp(USER_ID, fixedClock.instant())
             val expectedValue = SpecialCircumstance.SearchShortcut("test")
             val actualValue = appResumeManager.getResumeSpecialCircumstance()
             assertEquals(expectedValue, actualValue)

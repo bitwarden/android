@@ -12,7 +12,6 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -78,7 +77,6 @@ class GeneratorViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
-    private val appResumeManager: AppResumeManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = GeneratorArgs(savedStateHandle).type

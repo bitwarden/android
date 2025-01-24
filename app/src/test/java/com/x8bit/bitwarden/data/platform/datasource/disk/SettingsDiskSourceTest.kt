@@ -1290,7 +1290,7 @@ class SettingsDiskSourceTest {
         val mockUserId = "mockUserId"
         val resumeScreenKey = "bwPreferencesStorage:resumeScreen_$mockUserId"
         val expectedData = AppResumeScreenData.GeneratorScreen
-            settingsDiskSource.storeAppResumeScreen(mockUserId, expectedData)
+        settingsDiskSource.storeAppResumeScreen(mockUserId, expectedData)
         assertEquals(
             expectedData,
             fakeSharedPreferences.getString(resumeScreenKey, "")?.let {

@@ -36,7 +36,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the send screen.
  */
-@Suppress("LongParameterList", "TooManyFunctions")
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,

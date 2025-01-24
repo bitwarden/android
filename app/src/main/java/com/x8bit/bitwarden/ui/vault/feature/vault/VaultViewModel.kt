@@ -214,6 +214,7 @@ class VaultViewModel @Inject constructor(
         when (specialCircumstanceManager.specialCircumstance) {
             is SpecialCircumstance.SearchShortcut -> {
                 sendEvent(VaultEvent.NavigateToVaultSearchScreen)
+                // not clearing SpecialCircumstance as it contains necessary data
                 return
             }
 

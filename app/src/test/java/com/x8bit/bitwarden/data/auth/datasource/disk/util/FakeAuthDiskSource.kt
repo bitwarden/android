@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import java.time.Instant
 
 class FakeAuthDiskSource : AuthDiskSource {
@@ -485,8 +484,8 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the [lastLockTimestamp] was stored successfully using the [userId].
      */
-    fun assertNotNullLastLockTimestamp(userId: String) {
-        assertNotNull(storedLastLockTimestampState[userId])
+    fun assertNotNullLastLockTimestamp(userId: String, expectedValue: Instant?) {
+        assertEquals(expectedValue, storedLastLockTimestampState[userId])
     }
 
     //region Private helper functions
