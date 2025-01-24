@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -27,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -209,18 +209,17 @@ private fun LandingScreenContent(
             .statusBarsPadding(),
     ) {
         Spacer(modifier = Modifier.weight(1f))
-
         Image(
             painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
+            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .fillMaxWidth()
-                .padding(top = 12.dp),
+                .fillMaxWidth(),
         )
-
         Spacer(modifier = Modifier.weight(1f))
 
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(id = R.string.login_to_bitwarden),
             textAlign = TextAlign.Center,
@@ -228,9 +227,9 @@ private fun LandingScreenContent(
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .wrapContentHeight()
-                .padding(top = 12.dp, bottom = 24.dp),
+                .wrapContentHeight(),
         )
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenTextField(
             modifier = Modifier
