@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -74,12 +75,13 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param imeAction the preferred IME action for the keyboard to have.
  * @param keyboardActions the callbacks of keyboard actions.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
+ * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
@@ -94,6 +96,7 @@ fun BitwardenPasswordField(
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
+    passwordFieldTestTag: String? = null,
     cardStyle: CardStyle? = null,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -129,7 +132,7 @@ fun BitwardenPasswordField(
             TextField(
                 colors = bitwardenTextFieldColors(),
                 textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-                label = { Text(text = label) },
+                label = label?.let { { Text(text = it) } },
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValueState = it
@@ -165,7 +168,9 @@ fun BitwardenPasswordField(
                         onClick = { showPasswordChange.invoke(!showPassword) },
                     )
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .run { passwordFieldTestTag?.let { testTag(tag = it) } ?: this }
+                    .fillMaxWidth(),
             )
             supportingTextContent?.let {
                 Spacer(modifier = Modifier.height(height = 8.dp))
@@ -211,11 +216,12 @@ fun BitwardenPasswordField(
  * @param imeAction the preferred IME action for the keyboard to have.
  * @param keyboardActions the callbacks of keyboard actions.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
+ * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
@@ -230,6 +236,7 @@ fun BitwardenPasswordField(
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
+    passwordFieldTestTag: String? = null,
     cardStyle: CardStyle? = null,
 ) {
     BitwardenPasswordField(
@@ -257,6 +264,7 @@ fun BitwardenPasswordField(
         imeAction = imeAction,
         keyboardActions = keyboardActions,
         textToolbarType = textToolbarType,
+        passwordFieldTestTag = passwordFieldTestTag,
         cardStyle = cardStyle,
     )
 }
@@ -285,11 +293,12 @@ fun BitwardenPasswordField(
  * @param imeAction the preferred IME action for the keyboard to have.
  * @param keyboardActions the callbacks of keyboard actions.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
+ * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -303,6 +312,7 @@ fun BitwardenPasswordField(
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
+    passwordFieldTestTag: String? = null,
     cardStyle: CardStyle? = null,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(value = initialShowPassword) }
@@ -322,6 +332,7 @@ fun BitwardenPasswordField(
         imeAction = imeAction,
         keyboardActions = keyboardActions,
         textToolbarType = textToolbarType,
+        passwordFieldTestTag = passwordFieldTestTag,
         cardStyle = cardStyle,
     )
 }
@@ -347,11 +358,12 @@ fun BitwardenPasswordField(
  * the password field.
  * @param imeAction the preferred IME action for the keyboard to have.
  * @param keyboardActions the callbacks of keyboard actions.
+ * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
 fun BitwardenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -364,6 +376,7 @@ fun BitwardenPasswordField(
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    textFieldTestTag: String? = null,
     cardStyle: CardStyle? = null,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
@@ -382,6 +395,7 @@ fun BitwardenPasswordField(
         keyboardType = keyboardType,
         imeAction = imeAction,
         keyboardActions = keyboardActions,
+        passwordFieldTestTag = textFieldTestTag,
         cardStyle = cardStyle,
     )
 }

@@ -24,6 +24,11 @@ interface SettingsRepository {
     var appLanguage: AppLanguage
 
     /**
+     * Tracks changes to the [AppLanguage].
+     */
+    val appLanguageStateFlow: StateFlow<AppLanguage>
+
+    /**
      * The currently stored [AppTheme].
      */
     var appTheme: AppTheme

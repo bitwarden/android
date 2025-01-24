@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -121,18 +121,18 @@ fun LandingScreen(
         null -> Unit
     }
 
-    val isAppBarVisible = state.accountSummaries.isNotEmpty()
     var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
         canScroll = { !isAccountMenuVisible },
     )
+
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            if (isAppBarVisible) {
+            if (state.isAppBarVisible) {
                 BitwardenTopAppBar(
                     title = "",
                     scrollBehavior = scrollBehavior,
@@ -170,7 +170,6 @@ fun LandingScreen(
     ) {
         LandingScreenContent(
             state = state,
-            isAppBarVisible = isAppBarVisible,
             onEmailInputChange = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
             },
@@ -195,7 +194,6 @@ fun LandingScreen(
 @Composable
 private fun LandingScreenContent(
     state: LandingState,
-    isAppBarVisible: Boolean,
     onEmailInputChange: (String) -> Unit,
     onEnvironmentTypeSelect: (Environment.Type) -> Unit,
     onRememberMeToggle: (Boolean) -> Unit,
@@ -207,28 +205,26 @@ private fun LandingScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .imePadding()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .statusBarsPadding(),
     ) {
-        val topPadding = if (isAppBarVisible) 40.dp else 104.dp
-        Spacer(modifier = Modifier.height(topPadding))
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = rememberVectorPainter(id = R.drawable.logo),
+            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
             colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .width(220.dp)
-                .height(74.dp)
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
-            text = stringResource(id = R.string.login_or_create_new_account),
+            text = stringResource(id = R.string.login_to_bitwarden),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.headlineSmall,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -237,9 +233,7 @@ private fun LandingScreenContent(
                 .wrapContentHeight(),
         )
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenTextField(
             modifier = Modifier
@@ -299,20 +293,20 @@ private fun LandingScreenContent(
                 .wrapContentHeight(),
         ) {
             Text(
-                text = stringResource(id = R.string.new_around_here),
+                text = stringResource(id = R.string.new_to_bitwarden),
                 style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.primary,
+                color = BitwardenTheme.colorScheme.text.secondary,
             )
 
             BitwardenTextButton(
-                label = stringResource(id = R.string.create_account),
+                label = stringResource(id = R.string.create_an_account),
                 onClick = onCreateAccountClick,
                 modifier = Modifier
                     .testTag("CreateAccountLabel"),
             )
         }
 
-        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

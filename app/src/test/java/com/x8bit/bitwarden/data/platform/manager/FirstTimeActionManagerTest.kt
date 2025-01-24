@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOpti
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
@@ -35,8 +37,10 @@ class FirstTimeActionManagerTest {
     }
 
     private val mutableImportLoginsFlow = MutableStateFlow(false)
+    private val mutableOnboardingFeatureFlow = MutableStateFlow(false)
     private val featureFlagManager = mockk<FeatureFlagManager> {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlow
+        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableOnboardingFeatureFlow
     }
 
     private val mutableAutofillEnabledFlow = MutableStateFlow(false)
@@ -295,6 +299,70 @@ class FirstTimeActionManagerTest {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `shouldShowAddLoginCoachMarkFlow updates when disk source updates`() = runTest {
+        // Enable the feature for this test.
+        mutableOnboardingFeatureFlow.update { true }
+        firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
+            // Null will be mapped to false.
+            assertTrue(awaitItem())
+            fakeSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowAddLoginCoachMarkFlow updates when feature flag for onboarding updates`() =
+        runTest {
+            firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
+                // Null will be mapped to false but feature being "off" will override to true.
+                assertFalse(awaitItem())
+                mutableOnboardingFeatureFlow.update { true }
+                // Will use the value from disk source (null ?: false).
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `markCoachMarkTourCompleted for the ADD_LOGIN type sets the value to true in the disk source for should show add logins coach mark`() {
+        assertNull(fakeSettingsDiskSource.getShouldShowAddLoginCoachMark())
+        firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN)
+        assertTrue(fakeSettingsDiskSource.getShouldShowAddLoginCoachMark() == false)
+    }
+
+    @Test
+    fun `shouldShowGeneratorCoachMarkFlow updates when disk source updates`() = runTest {
+        // Enable feature flag so flow emits updates from disk.
+        mutableOnboardingFeatureFlow.update { true }
+        firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
+            // Null will be mapped to false.
+            assertTrue(awaitItem())
+            fakeSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowGeneratorCoachMarkFlow updates when onboarding feature value changes`() =
+        runTest {
+            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
+            // Null will be mapped to false
+                assertFalse(awaitItem())
+                mutableOnboardingFeatureFlow.update { true }
+            // Take the value from disk.
+                assertTrue(awaitItem())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `markCoachMarkTourCompleted for the GENERATOR type sets the value to true in the disk source for should show generator coach mark`() {
+        assertNull(fakeSettingsDiskSource.getShouldShowGeneratorCoachMark())
+        firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+        assertTrue(fakeSettingsDiskSource.getShouldShowGeneratorCoachMark() == false)
     }
 }
 

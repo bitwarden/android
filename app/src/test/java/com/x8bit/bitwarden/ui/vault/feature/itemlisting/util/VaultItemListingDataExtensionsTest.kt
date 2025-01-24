@@ -828,6 +828,7 @@ class VaultItemListingDataExtensionsTest {
                     packageName = "",
                     signingInfo = SigningInfo(),
                     origin = "https://www.test.com",
+                    isUserVerified = true,
                 ),
                 fido2CredentialAutofillViews = null,
                 totpData = null,

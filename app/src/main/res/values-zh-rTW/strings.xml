@@ -54,8 +54,10 @@
   <string name="my_vault">我的密碼庫</string>
   <string name="authenticator">驗證器</string>
   <string name="name">名稱</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">否</string>
   <string name="notes">備註</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">確定</string>
   <string name="password">密碼</string>
   <string name="save">儲存</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">由於某個企業原則，您被限制為儲存項目至您的個人密碼庫。將擁有權變更為組織，並從可用的集合中選擇。</string>
   <string name="personal_ownership_policy_in_effect">組織原則正在影響您的擁有權選項。</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">所有 Send</string>
   <string name="sends">Send</string>
-  <string name="name_info">用於描述此 Send 的易記名稱。</string>
   <string name="text">文字</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">文字</string>
-  <string name="type_text_info">您想要傳送的文字。</string>
   <string name="hide_text_by_default">存取此 Send 時，將預設隱藏文字</string>
   <string name="type_file">檔案</string>
   <string name="type_file_info">您想要傳送的檔案。</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">刪除時間</string>
   <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
   <string name="pending_delete">等待刪除</string>
-  <string name="expiration_date">逾期日期</string>
-  <string name="expiration_time">逾期時間</string>
-  <string name="expiration_date_info">如果設定此選項，對此 Send 的存取將在指定的日期和時間後逾期。</string>
   <string name="expired">已逾期</string>
   <string name="maximum_access_count">最大存取次數</string>
   <string name="maximum_access_count_info">如果設定此選項，當達到最大存取次數時，使用者將無法再次存取此 Send。</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">正在移除密碼</string>
   <string name="send_password_removed">已移除密碼。</string>
   <string name="notes_info">關於此 Send 的私人備註。</string>
-  <string name="disable_send">停用此 Send 以阻止任何人存取</string>
   <string name="no_sends">您的帳戶中沒有 Send。</string>
   <string name="add_a_send">新增 Send</string>
   <string name="copy_link">複製連結</string>
@@ -1112,6 +1110,15 @@
   <string name="review_flow_launched">已推出審核流程檢視！</string>
   <string name="copy_private_key">複製私密金鑰</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">您可以在 Bitwarden 網頁應用程式上變更帳號電子郵件位址。</string>
-  <string name="login_credentials">Login Credentials</string>
-  <string name="autofill_options">Autofill Options</string>
+  <string name="login_credentials">登入憑證</string>
+  <string name="autofill_options">自動填入選項</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

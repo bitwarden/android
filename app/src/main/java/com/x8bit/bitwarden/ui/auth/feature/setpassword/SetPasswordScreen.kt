@@ -146,9 +146,9 @@ private fun SetPasswordScreenContent(
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
             supportingText = stringResource(id = R.string.master_password_description),
+            passwordFieldTestTag = "NewPasswordField",
             cardStyle = CardStyle.Top(dividerPadding = 0.dp),
             modifier = Modifier
-                .testTag("NewPasswordField")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
@@ -159,9 +159,9 @@ private fun SetPasswordScreenContent(
             onValueChange = onRetypePasswordInputChanged,
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
+            passwordFieldTestTag = "RetypePasswordField",
             cardStyle = CardStyle.Middle(dividerPadding = 0.dp),
             modifier = Modifier
-                .testTag("RetypePasswordField")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )

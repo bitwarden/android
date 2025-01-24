@@ -54,8 +54,10 @@
   <string name="my_vault">என் பெட்டகம்</string>
   <string name="authenticator">அங்கீகரிப்பாளர்</string>
   <string name="name">பெயர்</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">இல்லை</string>
   <string name="notes">குறிப்புகள்</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">சரி</string>
   <string name="password">கடவுச்சொல்</string>
   <string name="save">சேமி</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">முனைவகக் கொள்கை காரணமாக, உருப்படிகளை உம் சொந்த பெட்டகத்தில் சேமிப்பதிலிருந்து கட்டுப்படுத்தப்படுகிறீர். உரிமை விருப்பத்தை நிறுவனத்திற்கு மாற்றிக் கிடைக்கும் தொகுப்புகளிலிருந்து தேர்வுசெய்க.</string>
   <string name="personal_ownership_policy_in_effect">ஒரு நிறுவன கொள்கை உம் உரிமை விருப்பங்களைப் பாதிக்கிறது.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">எல்லா Sends</string>
   <string name="sends">Sendகள்</string>
-  <string name="name_info">இந்த Send ஐ விளக்க ஒரு நட்பார்ந்த பெயர்.</string>
   <string name="text">சொற்சரம்</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">சொற்சரம்</string>
-  <string name="type_text_info">நீங்கள் அனுப்ப விரும்பும் சொற்சரம்.</string>
   <string name="hide_text_by_default">Send ஐ அணுகும்போது, இயல்புநிலையில் சொற்சரத்தை மறை</string>
   <string name="type_file">கோப்பு</string>
   <string name="type_file_info">நீங்கள் அனுப்ப விரும்பும் கோப்பு.</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">அழிக்கும் நேரம்</string>
   <string name="deletion_date_info">குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் Send நிரந்தரமாக அழிக்கப்படும்.</string>
   <string name="pending_delete">அழித்தல் நிலுவையில்</string>
-  <string name="expiration_date">காலாவதி தேதி</string>
-  <string name="expiration_time">காலாவதி நேரம்</string>
-  <string name="expiration_date_info">அமைத்தால், குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் இந்த Send க்கான அணுகல் காலாவதியாகும்.</string>
   <string name="expired">காலாவதியானது</string>
   <string name="maximum_access_count">அதிகபட்ச அணுகல் எண்ணிக்கை</string>
   <string name="maximum_access_count_info">அமைத்தால், அதிகபட்ச அணுகலெண்ணிக்கை எட்டப்பட்டவுடன் பயனர்கள் இந்த Sendஐ இனி அணுகவியலாது.</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">கடவுச்சொல்லை அகற்றுகிறது</string>
   <string name="send_password_removed">கடவுச்சொல் அகற்றப்பட்டது.</string>
   <string name="notes_info">இந்த Send பற்றிய தனிப்பட்ட குறிப்புகள்.</string>
-  <string name="disable_send">இந்த Send-ஐ முடக்குக எனவே யாருமிதை அணுகவியலாது</string>
   <string name="no_sends">உம் கணக்கில் Sends எவையுமில்லை.</string>
   <string name="add_a_send">ஒரு Send-ஐச் சேர்</string>
   <string name="copy_link">தொடுப்பை நகலெடு</string>
@@ -1114,4 +1112,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

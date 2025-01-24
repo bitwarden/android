@@ -270,9 +270,9 @@ fun VaultUnlockScreen(
                         },
                     ),
                     supportingText = state.vaultUnlockType.unlockScreenMessage(),
+                    textFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
                     cardStyle = CardStyle.Top(hasDivider = false),
                     modifier = Modifier
-                        .testTag(tag = state.vaultUnlockType.unlockScreenInputTestTag)
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )

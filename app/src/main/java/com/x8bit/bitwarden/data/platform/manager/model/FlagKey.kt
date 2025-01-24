@@ -40,6 +40,8 @@ sealed class FlagKey<out T : Any> {
                 NewDeviceTemporaryDismiss,
                 IgnoreEnvironmentCheck,
                 MutualTls,
+                SingleTapPasskeyCreation,
+                SingleTapPasskeyAuthentication,
             )
         }
     }
@@ -177,6 +179,24 @@ sealed class FlagKey<out T : Any> {
      */
     data object MutualTls : FlagKey<Boolean>() {
         override val keyName: String = "mutual-tls"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key to enable single tap passkey creation.
+     */
+    data object SingleTapPasskeyCreation : FlagKey<Boolean>() {
+        override val keyName: String = "single-tap-passkey-creation"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key to enable single tap passkey authentication.
+     */
+    data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
+        override val keyName: String = "single-tap-passkey-authentication"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
     }

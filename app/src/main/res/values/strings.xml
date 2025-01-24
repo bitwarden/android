@@ -54,8 +54,10 @@
   <string name="my_vault">My vault</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">Name</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">No</string>
   <string name="notes">Notes</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Ok</string>
   <string name="password">Password</string>
   <string name="save">Save</string>
@@ -101,6 +103,7 @@
   <string name="close">Close</string>
   <string name="continue_text">Continue</string>
   <string name="create_account">Create account</string>
+  <string name="create_an_account">Create an account</string>
   <string name="creating_account">Creating account...</string>
   <string name="edit_item">Edit item</string>
   <string name="enable_automatic_syncing">Allow automatic syncing</string>
@@ -134,7 +137,7 @@
   <string name="vault_timeout_action">Vault timeout action</string>
   <string name="vault_timeout_log_out_confirmation">Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</string>
   <string name="logging_in">Logging in...</string>
-  <string name="login_or_create_new_account">Log in or create a new account to access your secure vault.</string>
+  <string name="login_to_bitwarden">Log in to Bitwarden</string>
   <string name="manage">Manage</string>
   <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
   <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
@@ -554,12 +557,12 @@ Scanning will happen automatically.</string>
   <string name="personal_ownership_submit_error">Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections.</string>
   <string name="personal_ownership_policy_in_effect">An organization policy is affecting your ownership options.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">All Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">A friendly name to describe this Send.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Text</string>
-  <string name="type_text_info">The text you want to send.</string>
   <string name="hide_text_by_default">When accessing the Send, hide the text by default</string>
   <string name="type_file">File</string>
   <string name="type_file_info">The file you want to send.</string>
@@ -571,22 +574,18 @@ Scanning will happen automatically.</string>
   <string name="deletion_time">Deletion time</string>
   <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
   <string name="pending_delete">Pending deletion</string>
-  <string name="expiration_date">Expiration date</string>
-  <string name="expiration_time">Expiration time</string>
-  <string name="expiration_date_info">If set, access to this Send will expire on the specified date and time.</string>
   <string name="expired">Expired</string>
   <string name="maximum_access_count">Maximum access count</string>
   <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
   <string name="maximum_access_count_reached">Max access count reached</string>
   <string name="current_access_count">Current access count</string>
   <string name="new_password">New password</string>
-  <string name="password_info">Optionally require a password for users to access this Send.</string>
+  <string name="password_info">Require this password to view the Send.</string>
   <string name="remove_password">Remove password</string>
   <string name="are_you_sure_remove_send_password">Are you sure you want to remove the password?</string>
   <string name="removing_send_password">Removing password</string>
   <string name="send_password_removed">Password has been removed.</string>
   <string name="notes_info">Private notes about this Send.</string>
-  <string name="disable_send">Deactivate this Send so that no one can access it</string>
   <string name="no_sends">There are no Sends in your account.</string>
   <string name="add_a_send">New send</string>
   <string name="copy_link">Copy link</string>
@@ -754,7 +753,7 @@ select Add TOTP to store the key safely</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login attempt from:
 %1$s
 Do you want to switch to this account?</string>
-  <string name="new_around_here">New around here?</string>
+  <string name="new_to_bitwarden">New to Bitwarden?</string>
   <string name="get_master_passwordword_hint">Get master password hint</string>
   <string name="logging_in_as_x_on_y">Logging in as %1$s on %2$s</string>
   <string name="not_you">Not you?</string>
@@ -1114,11 +1113,20 @@ Do you want to switch to this account?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
-    <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
   <string name="coachmark_1_of_3">1 of 3</string>
   <string name="coachmark_2_of_3">2 of 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
   <string name="coachmark_3_of_3">3 of 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="learn_about_new_logins">Learn about new logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+  <string name="explore_the_generator">Explore the generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+  <string name="import_client_certificate">Import client certificate</string>
+  <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
+  <string name="alias">Alias</string>
 </resources>

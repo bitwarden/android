@@ -528,8 +528,9 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
         BitwardenHiddenPasswordField(
             label = stringResource(id = R.string.password),
             value = password,
+            passwordFieldTestTag = "LoginPasswordEntry",
             cardStyle = CardStyle.Bottom,
-            modifier = modifier.testTag("LoginPasswordEntry"),
+            modifier = modifier,
         )
     }
 }

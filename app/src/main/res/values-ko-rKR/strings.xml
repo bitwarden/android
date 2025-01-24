@@ -54,8 +54,10 @@
   <string name="my_vault">내 보관함</string>
   <string name="authenticator">인증기</string>
   <string name="name">이름</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">아니오</string>
   <string name="notes">메모</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">확인</string>
   <string name="password">비밀번호</string>
   <string name="save">저장</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">엔터프라이즈 정책으로 인해 개인 보관함에 항목을 저장할 수 없습니다. 조직에서 소유권 설정을 변경한 다음, 사용 가능한 컬렉션 중에서 선택해주세요.</string>
   <string name="personal_ownership_policy_in_effect">조직의 정책이 소유권 설정에 영향을 미치고 있습니다.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">모든 Send</string>
   <string name="sends">Send</string>
-  <string name="name_info">이 Send의 이름</string>
   <string name="text">텍스트</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">텍스트</string>
-  <string name="type_text_info">전송하려는 텍스트</string>
   <string name="hide_text_by_default">Send에 접근할 때 기본적으로 텍스트를 숨김</string>
   <string name="type_file">파일</string>
   <string name="type_file_info">전송하려는 파일</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">삭제 시간</string>
   <string name="deletion_date_info">이 Send가 정해진 일시에 영구적으로 삭제됩니다.</string>
   <string name="pending_delete">삭제 대기 중</string>
-  <string name="expiration_date">만료 날짜</string>
-  <string name="expiration_time">만료 시간</string>
-  <string name="expiration_date_info">설정할 경우, 이 Send에 대한 접근 권한이 정해진 일시에 만료됩니다.</string>
   <string name="expired">만료됨</string>
   <string name="maximum_access_count">최대 접근 횟수</string>
   <string name="maximum_access_count_info">설정할 경우, 최대 접근 횟수에 도달할 때 이 Send에 접근할 수 없게 됩니다.</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">비밀번호 제거 중</string>
   <string name="send_password_removed">비밀번호가 제거되었습니다.</string>
   <string name="notes_info">이 Send에 대한 비공개 메모</string>
-  <string name="disable_send">이 Send를 비활성화하여 아무도 접근할 수 없게 합니다.</string>
   <string name="no_sends">계정에 Send가 없습니다.</string>
   <string name="add_a_send">Send 추가</string>
   <string name="copy_link">링크 복사</string>
@@ -1114,4 +1112,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

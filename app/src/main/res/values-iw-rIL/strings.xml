@@ -54,8 +54,10 @@
   <string name="my_vault">הכספת שלי</string>
   <string name="authenticator">מאמת</string>
   <string name="name">שם</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">לא</string>
   <string name="notes">הערות</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">אישור</string>
   <string name="password">סיסמה</string>
   <string name="save">שמור</string>
@@ -556,12 +558,12 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="personal_ownership_submit_error">מדיניות הארגון מונעת ממך לשמור פריטים בכספת האישית. שנה את אפשרות הבעלות לארגוניות ובחר מתוך האוספים הזמינים.</string>
   <string name="personal_ownership_policy_in_effect">מדיניות ארגונית משפיעה על אפשרויות הבעלות שלך.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">כל הSendים</string>
   <string name="sends">Sendים</string>
-  <string name="name_info">שם ידידותי לתיאור Send זה.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">טקסט</string>
-  <string name="type_text_info">הטקסט שברצונך לשים בSend.</string>
   <string name="hide_text_by_default">בעת גישה לSend, הסתר את הטקסט כברירת מחדל</string>
   <string name="type_file">קובץ</string>
   <string name="type_file_info">הקובץ שברצונך לשים בSend.</string>
@@ -573,9 +575,6 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="deletion_time">זמן המחיקה</string>
   <string name="deletion_date_info">הSend ימחק לצמיתות בתאריך ובשעה שצוינו.</string>
   <string name="pending_delete">ממתין להסרה</string>
-  <string name="expiration_date">תאריך תפוגה</string>
-  <string name="expiration_time">זמן תפוגה</string>
-  <string name="expiration_date_info">במידה ויוגדר, הגישה ל Send זה תפקע בתאריך ובשעה שהוגדרו.</string>
   <string name="expired">פג תוקף</string>
   <string name="maximum_access_count">כמות גישות מקסימלית</string>
   <string name="maximum_access_count_info">במידה ויוגדר, משתמשים לא יוכלו יותר לגשת לSend זה לאחר שמספר הגישות המרבי יושג.</string>
@@ -588,7 +587,6 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="removing_send_password">מסיר סיסמה</string>
   <string name="send_password_removed">הסיסמה הוסרה.</string>
   <string name="notes_info">הערות פרטיות לגבי Send זה.</string>
-  <string name="disable_send">בטל את הSend הזה כך שאף אחד לא יוכל לגשת אליו</string>
   <string name="no_sends">אין Sendים בחשבון שלך.</string>
   <string name="add_a_send">הוסף Send</string>
   <string name="copy_link">העתק קישור</string>
@@ -1117,4 +1115,13 @@ Do you want to switch to this account?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>
