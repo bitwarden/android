@@ -40,12 +40,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableHasUserLoggedInOrCreatedAccount =
         bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableHasSeenAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
+    private val mutableShouldShowAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
-    private val mutableHasSeenGeneratorCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
+    private val mutableShouldShowGeneratorCoachMarkFlow =
+        bufferedMutableSharedFlow<Boolean?>()
 
     private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
@@ -402,11 +403,11 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?) {
         hasSeenAddLoginCoachMark = shouldShow
-        mutableHasSeenAddLoginCoachMarkFlow.tryEmit(shouldShow)
+        mutableShouldShowAddLoginCoachMarkFlow.tryEmit(shouldShow)
     }
 
     override fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?> =
-        mutableHasSeenAddLoginCoachMarkFlow.onSubscription {
+        mutableShouldShowAddLoginCoachMarkFlow.onSubscription {
             emit(getShouldShowAddLoginCoachMark())
         }
 
@@ -415,11 +416,11 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?) {
         hasSeenGeneratorCoachMark = shouldShow
-        mutableHasSeenGeneratorCoachMarkFlow.tryEmit(shouldShow)
+        mutableShouldShowGeneratorCoachMarkFlow.tryEmit(shouldShow)
     }
 
     override fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?> =
-        mutableHasSeenGeneratorCoachMarkFlow.onSubscription {
+        mutableShouldShowGeneratorCoachMarkFlow.onSubscription {
             emit(hasSeenGeneratorCoachMark)
         }
 

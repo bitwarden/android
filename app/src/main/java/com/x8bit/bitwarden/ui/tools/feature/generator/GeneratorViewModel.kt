@@ -128,9 +128,9 @@ class GeneratorViewModel @Inject constructor(
 
         firstTimeActionManager
             .shouldShowGeneratorCoachMarkFlow
-            .map { hasSeenCoachMarkTour ->
+            .map { shouldShowCoachMarkTour ->
                 GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive(
-                    shouldShowCoachMarkTour = hasSeenCoachMarkTour,
+                    shouldShowCoachMarkTour = shouldShowCoachMarkTour,
                 )
             }
             .onEach(::sendAction)
@@ -266,7 +266,7 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive -> {
-                handleHasSeenCoachMarkValueChange(action)
+                handleShouldShowCoachMarkValueChange(action)
             }
         }
     }
@@ -781,7 +781,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleHasSeenCoachMarkValueChange(
+    private fun handleShouldShowCoachMarkValueChange(
         action: GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive,
     ) {
         mutableStateFlow.update {
@@ -2610,7 +2610,7 @@ sealed class GeneratorAction {
         ) : Internal()
 
         /**
-         * The value for the hasSeenGeneratorCoachMark has changed.
+         * The value for the shouldShowGeneratorCoachMark has changed.
          */
         data class ShouldShowGeneratorCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,

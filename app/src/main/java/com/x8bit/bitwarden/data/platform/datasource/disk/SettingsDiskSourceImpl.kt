@@ -191,8 +191,8 @@ class SettingsDiskSourceImpl(
         // - screen capture allowed
         // - show autofill setting badge
         // - show unlock setting badge
-        // - has seen add login coach mark
-        // - has seen generator coach mark
+        // - should show add login coach mark
+        // - should show generator coach mark
     }
 
     override fun getAccountBiometricIntegrityValidity(

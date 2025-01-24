@@ -1484,12 +1484,12 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive -> {
-                handleHasSeenAddLoginCoachMarkValueChange(action)
+                handleShouldShowAddLoginCoachMarkValueChange(action)
             }
         }
     }
 
-    private fun handleHasSeenAddLoginCoachMarkValueChange(
+    private fun handleShouldShowAddLoginCoachMarkValueChange(
         action: VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive,
     ) {
         mutableStateFlow.update {
@@ -3207,7 +3207,7 @@ sealed class VaultAddEditAction {
         ) : Internal()
 
         /**
-         * The value for the hasSeenAddLoginCoachMark has changed.
+         * The value for the shouldShowAddLoginCoachMark has changed.
          */
         data class ShouldShowAddLoginCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,

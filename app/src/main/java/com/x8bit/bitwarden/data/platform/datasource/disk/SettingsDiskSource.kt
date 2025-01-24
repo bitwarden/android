@@ -373,7 +373,7 @@ interface SettingsDiskSource {
     fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?)
 
     /**
-     * Returns an [Flow] to observe updates to the "HasSeenAddLoginCoachMark" value.
+     * Returns an [Flow] to observe updates to the "ShouldShowAddLoginCoachMark" value.
      */
     fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?>
 
@@ -388,7 +388,7 @@ interface SettingsDiskSource {
     fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?)
 
     /**
-     * Returns an [Flow] to observe updates to the "HasSeenGeneratorCoachMark" value.
+     * Returns an [Flow] to observe updates to the "ShouldShowGeneratorCoachMark" value.
      */
     fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?>
 }

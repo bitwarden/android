@@ -1274,7 +1274,7 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `getHasSeenAddLoginCoachMarkFlow emits changes to stored value`() = runTest {
+    fun `getShouldShowAddLoginCoachMarkFlow emits changes to stored value`() = runTest {
         settingsDiskSource.getShouldShowAddLoginCoachMarkFlow().test {
             assertNull(awaitItem())
             settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
@@ -1305,7 +1305,7 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `getHasSeenGeneratorCoachMarkFlow emits changes to stored value`() = runTest {
+    fun `getShouldShowGeneratorCoachMarkFlow emits changes to stored value`() = runTest {
         settingsDiskSource.getShouldShowGeneratorCoachMarkFlow().test {
             assertNull(awaitItem())
             settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)

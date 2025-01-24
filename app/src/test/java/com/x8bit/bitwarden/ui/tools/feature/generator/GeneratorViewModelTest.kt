@@ -2216,7 +2216,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ExploreGeneratorCardDismissed action calls first time action manager hasSeenGeneratorCoachMarkTour called`() {
+    fun `ExploreGeneratorCardDismissed action calls first time action manager markCoachMarkTourCompleted with GENERATOR value called`() {
         val viewModel = createViewModel()
 
         viewModel.trySendAction(GeneratorAction.ExploreGeneratorCardDismissed)
