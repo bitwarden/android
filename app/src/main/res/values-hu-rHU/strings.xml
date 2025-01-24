@@ -54,8 +54,10 @@
   <string name="my_vault">Saját széf</string>
   <string name="authenticator">Hitelesítő</string>
   <string name="name">Név</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Nem</string>
   <string name="notes">Jegyzetek</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Ok</string>
   <string name="password">Jelszó</string>
   <string name="save">Mentés</string>
@@ -553,12 +555,12 @@
   <string name="personal_ownership_submit_error">Egy vállalati házirend miatt korlátozható az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül.</string>
   <string name="personal_ownership_policy_in_effect">Egy szervezeti házirend befolyásolja a tulajdonjog beállításait.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Összes Send</string>
   <string name="sends">Küldések</string>
-  <string name="name_info">Barátságos név a Send elem leírására.</string>
   <string name="text">Szöveg</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Szöveg</string>
-  <string name="type_text_info">A küldendő szöveg.</string>
   <string name="hide_text_by_default">A Send elérésekor alapértelmezés szerint a szöveg elrejtése</string>
   <string name="type_file">Fájl</string>
   <string name="type_file_info">A küldendő fájl.</string>
@@ -570,9 +572,6 @@
   <string name="deletion_time">Törlési időpont</string>
   <string name="deletion_date_info">A Send véglegesen törlésre kerül a meghatározott időpontban.</string>
   <string name="pending_delete">Függőben lévő törlés</string>
-  <string name="expiration_date">Lejárati dátum</string>
-  <string name="expiration_time">Lejárati időpont</string>
-  <string name="expiration_date_info">Beállítva a hozzáférés ehhez a Send elemhez lejár a meghatározott időpontban.</string>
   <string name="expired">Lejárt</string>
   <string name="maximum_access_count">Maximális elérési szám</string>
   <string name="maximum_access_count_info">Beállítva a Send elérhetetlen lesz a meghatározott hozzáférések számának elérése után.</string>
@@ -585,7 +584,6 @@
   <string name="removing_send_password">Jelszó eltávolítása..</string>
   <string name="send_password_removed">A jelszó eltávolításra került.</string>
   <string name="notes_info">Személyes megjegyzések erről a Sendről.</string>
-  <string name="disable_send">A Send letiltásával mindenki hozzáférése megvonható.</string>
   <string name="no_sends">A fiókban nincsenek Send elemek.</string>
   <string name="add_a_send">Send hozzáadása</string>
   <string name="copy_link">Hivatkozás másolása</string>
@@ -1113,4 +1111,13 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">A fiók email cím a Bitwarden webalkalmazásban módosítható.</string>
   <string name="login_credentials">Bejelentkezési hitelesítő adatok</string>
   <string name="autofill_options">Automatikus kitöltés opciók</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Ezzel a gombbal új egyedi jelszót hozhatunk létre.</string>
+  <string name="coachmark_1_of_3">1/3</string>
+  <string name="coachmark_2_of_3">2/3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Csak azokhoz a bejelentkezésekhez kell beállítani a Hitelesítő kulcsot, amelyek kétlépcsős hitelesítést igényelnek kóddal. A kulcs folyamatosan hatjegyű kódokat generál, amelyek segítségével bejelentkezhetümk.</string>
+  <string name="coachmark_3_of_3">3/3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Meg kell adnia egy webcímet, hogy az automatikus kitöltést használjunk a fiók eléréséhez.</string>
+  <string name="mutual_tls">Kölcsönös TLS</string>
+  <string name="single_tap_passkey_creation">Jelszó létrehozása egyetlen érintéssel</string>
+  <string name="single_tap_passkey_authentication">Belépőkulcs létrhozása egyetlen érintéssel</string>
 </resources>

@@ -54,8 +54,10 @@
   <string name="my_vault">Seiful meu</string>
   <string name="authenticator">Autentificator</string>
   <string name="name">Denumire</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Nu</string>
   <string name="notes">Note</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Ok</string>
   <string name="password">Parolă</string>
   <string name="save">Salvare</string>
@@ -554,12 +556,12 @@ Scanarea se va face automat.</string>
   <string name="personal_ownership_submit_error">Din cauza unei politici de întreprindere, nu puteți salva articole în seiful dvs. individual. Schimbați opțiunea de proprietate la o organizație și alegeți din colecțiile disponibile.</string>
   <string name="personal_ownership_policy_in_effect">O politică de organizație vă afectează opțiunile de proprietate.</string>
   <string name="send">Trimite</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Toate Send-urile</string>
   <string name="sends">Send-uri</string>
-  <string name="name_info">Un nume prietenos pentru a descrie acest Send.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Text</string>
-  <string name="type_text_info">Textul pe care doriți să-l trimiteți.</string>
   <string name="hide_text_by_default">Când Send-ul este accesat, ascundeți textul în mod implicit</string>
   <string name="type_file">Fişier</string>
   <string name="type_file_info">Fișierul pe care doriți să-l trimiteți.</string>
@@ -571,9 +573,6 @@ Scanarea se va face automat.</string>
   <string name="deletion_time">Ora ștergerii</string>
   <string name="deletion_date_info">Send-ul va fi șters definitiv la data și ora specificate.</string>
   <string name="pending_delete">Ștergere în așteptare</string>
-  <string name="expiration_date">Data expirării</string>
-  <string name="expiration_time">Ora expirării</string>
-  <string name="expiration_date_info">Dacă este setat, accesul la acest Send va expira la data și ora specificate.</string>
   <string name="expired">Expirat</string>
   <string name="maximum_access_count">Numărul maxim de accesări</string>
   <string name="maximum_access_count_info">Dacă este configurat, utilizatorii nu vor mai putea accesa acest Send când a fost atins numărul maxim de accesări.</string>
@@ -586,7 +585,6 @@ Scanarea se va face automat.</string>
   <string name="removing_send_password">Se elimină parola</string>
   <string name="send_password_removed">Parola a fost eliminată.</string>
   <string name="notes_info">Note private despre acest Send.</string>
-  <string name="disable_send">Dezactivați acest Send pentru ca nimeni să nu-l poată accesa</string>
   <string name="no_sends">Nu există niciun Send în contul dvs.</string>
   <string name="add_a_send">Adăugați un Send</string>
   <string name="copy_link">Copiere link</string>
@@ -1114,4 +1112,13 @@ Doriți să comutați la acest cont?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

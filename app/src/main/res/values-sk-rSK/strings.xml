@@ -54,8 +54,10 @@
   <string name="my_vault">Môj trezor</string>
   <string name="authenticator">Overovateľ</string>
   <string name="name">Meno</string>
+  <string name="send_name_required">"Názov Sendu (povinné)"</string>
   <string name="no">Nie</string>
   <string name="notes">Poznámky</string>
+  <string name="private_notes">Súkromné ​​poznámky</string>
   <string name="ok">Ok</string>
   <string name="password">Heslo</string>
   <string name="save">Uložiť</string>
@@ -539,7 +541,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="accessibility_draw_over_permission_alert">Bitwarden vyžaduje vašu pozornosť - z nastavení aplikácie Bitwarden povoľte \"Zobrazenie cez iné aplikácie\" v \"Služba automatického vypĺňania\"</string>
   <string name="passkey_management">Správa prístupových kľúčov</string>
   <string name="autofill_services">Služba automatického vypĺňania</string>
-  <string name="inline_autofill">Použite vnorené automatické vypĺňanie</string>
+  <string name="inline_autofill">Použiť vnorené automatické vypĺňanie</string>
   <string name="inline_autofill_description">Ak to podporuje váš vybratý editor IME (klávesnica), použite vnorené automatické vypĺňanie. Ak to vaša konfigurácia nepodporuje (alebo je táto voľba zakázaná), bude použité predvolené automatické vyplnenie.</string>
   <string name="accessibility">Použiť dostupnosť</string>
   <string name="accessibility_description">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. Ak je táto možnosť povolená, pri výbere prihlasovacích polí sa zobrazí vyskakovacie okno.</string>
@@ -554,12 +556,12 @@ Skenovanie prebehne automaticky.</string>
   <string name="personal_ownership_submit_error">Z dôvodu podnikovej politiky máte obmedzené ukladanie položiek do osobného trezora. Zmeňte možnosť vlastníctvo na organizáciu a vyberte si z dostupných zbierok.</string>
   <string name="personal_ownership_policy_in_effect">Politika organizácie ovplyvňuje vaše možnosti vlastníctva.</string>
   <string name="send">Send</string>
+  <string name="send_details">Podrobnosti o Sende</string>
   <string name="all_sends">Všetky Sendy</string>
   <string name="sends">Sendy</string>
-  <string name="name_info">Priateľský názov pre popísanie tohto Sendu.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text na zdieľanie</string>
   <string name="type_text">Text</string>
-  <string name="type_text_info">Text, ktorý chcete odoslať.</string>
   <string name="hide_text_by_default">Pri prístupe k Sendu, predvolene skryť text</string>
   <string name="type_file">Súbor</string>
   <string name="type_file_info">Súbor, ktorý chcete odoslať.</string>
@@ -571,9 +573,6 @@ Skenovanie prebehne automaticky.</string>
   <string name="deletion_time">Čas odstránenia</string>
   <string name="deletion_date_info">Send bude natrvalo odstránený v zadaný dátum a čas.</string>
   <string name="pending_delete">Čakajúce odstránenie</string>
-  <string name="expiration_date">Dátum exspirácie</string>
-  <string name="expiration_time">Čas exspirácie</string>
-  <string name="expiration_date_info">Ak je nastavené, prístup k tomuto Sendu vyprší v zadaný dátum a čas.</string>
   <string name="expired">Expirované</string>
   <string name="maximum_access_count">Maximálny počet prístupov</string>
   <string name="maximum_access_count_info">Ak je nastavené, používatelia už nebudú mať prístup k tomuto Sendu po dosiahnutí maximálneho počtu prístupov.</string>
@@ -586,7 +585,6 @@ Skenovanie prebehne automaticky.</string>
   <string name="removing_send_password">Odstraňuje sa heslo</string>
   <string name="send_password_removed">Heslo bolo odstránené.</string>
   <string name="notes_info">Zabezpečená poznámka o tomto Sende.</string>
-  <string name="disable_send">Vypnúť tento Send, aby k nemu nikto nemal prístup</string>
   <string name="no_sends">Vo vašom účte nie je žiadny Send.</string>
   <string name="add_a_send">Pridať Send</string>
   <string name="copy_link">Kopírovať odkaz</string>
@@ -1114,4 +1112,13 @@ Chcete prepnúť na tento účet?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu môžete zmeniť vo webovej aplikácii Bitwarden.</string>
   <string name="login_credentials">Prihlasovacie údaje</string>
   <string name="autofill_options">Možnosti automatického vypĺňania</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Toto tlačidlo použite na vygenerovanie nového jedinečného hesla.</string>
+  <string name="coachmark_1_of_3">1 z 3</string>
+  <string name="coachmark_2_of_3">2 z 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Kľúč overovateľa budete musieť nastaviť pre prihlásenia, ktoré vyžadujú dvojstupňové overenie kódom. Tento kľúč bude neustále generovať 6-ciferné kódy, ktoré môžete použiť na prihlásenie.</string>
+  <string name="coachmark_3_of_3">3 z 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Ak chcete používať automatické vypĺňanie na prístup k tomuto účtu, musíte pridať webovú adresu.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Vytvorenie prístupového kľúča jedným klepnutím</string>
+  <string name="single_tap_passkey_authentication">Prihlásenie prístupovým kľúčom jedným klepnutím</string>
 </resources>
