@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
  * and displays the currently selected region on the UI.
  *
  * @param labelText The text displayed near the selector button.
+ * @param dialogTitle The title displayed in the selection dialog.
  * @param selectedOption The currently selected environment option.
  * @param onOptionSelected A callback that gets invoked when an environment option is selected
  * and passes the selected option as an argument.
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
 @Composable
 fun EnvironmentSelector(
     labelText: String,
+    dialogTitle: String,
     selectedOption: Environment.Type,
     onOptionSelected: (Environment.Type) -> Unit,
     modifier: Modifier = Modifier,
@@ -64,12 +66,12 @@ fun EnvironmentSelector(
         Text(
             text = labelText,
             style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.padding(end = 12.dp),
+            color = BitwardenTheme.colorScheme.text.secondary,
+            modifier = Modifier.padding(end = 4.dp),
         )
         Text(
             text = selectedOption.displayLabel(),
-            style = BitwardenTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.interaction,
             modifier = Modifier.padding(end = 8.dp),
         )
@@ -82,7 +84,7 @@ fun EnvironmentSelector(
 
     if (shouldShowDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.logging_in_on),
+            title = dialogTitle,
             onDismissRequest = { shouldShowDialog = false },
         ) {
             options.forEach {
