@@ -60,7 +60,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     emailInput = rememberedEmail,
                     isContinueButtonEnabled = true,
-                    isRememberMeEnabled = true,
+                    isRememberEmailEnabled = true,
                 ),
                 awaitItem(),
             )
@@ -107,7 +107,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = "test",
             isContinueButtonEnabled = false,
-            isRememberMeEnabled = true,
+            isRememberEmailEnabled = true,
         )
         val handle = SavedStateHandle(mapOf("state" to expectedState))
         val viewModel = createViewModel(savedStateHandle = handle)
@@ -242,7 +242,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             emailInput = rememberedEmail,
             isContinueButtonEnabled = true,
-            isRememberMeEnabled = true,
+            isRememberEmailEnabled = true,
             accountSummaries = accountSummaries,
         )
         assertEquals(
@@ -298,7 +298,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             val initialState = DEFAULT_STATE.copy(
                 emailInput = rememberedEmail,
                 isContinueButtonEnabled = true,
-                isRememberMeEnabled = true,
+                isRememberEmailEnabled = true,
                 accountSummaries = accountSummaries,
             )
             assertEquals(
@@ -359,7 +359,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             val initialState = DEFAULT_STATE.copy(
                 emailInput = rememberedEmail,
                 isContinueButtonEnabled = true,
-                isRememberMeEnabled = true,
+                isRememberEmailEnabled = true,
                 accountSummaries = accountSummaries,
             )
             assertEquals(
@@ -434,7 +434,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(LandingAction.RememberMeToggle(true))
             assertEquals(
                 viewModel.stateFlow.value,
-                DEFAULT_STATE.copy(isRememberMeEnabled = true),
+                DEFAULT_STATE.copy(isRememberEmailEnabled = true),
             )
         }
     }
@@ -599,7 +599,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = LandingState(
             emailInput = "",
             isContinueButtonEnabled = false,
-            isRememberMeEnabled = false,
+            isRememberEmailEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             selectedEnvironmentLabel = Environment.Us.label,
             dialog = null,

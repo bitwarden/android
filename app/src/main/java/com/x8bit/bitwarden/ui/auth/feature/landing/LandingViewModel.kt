@@ -43,7 +43,7 @@ class LandingViewModel @Inject constructor(
         ?: LandingState(
             emailInput = authRepository.rememberedEmailAddress.orEmpty(),
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
-            isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
+            isRememberEmailEnabled = authRepository.rememberedEmailAddress != null,
             selectedEnvironmentType = environmentRepository.environment.type,
             selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
@@ -185,7 +185,7 @@ class LandingViewModel @Inject constructor(
         }
 
         val email = state.emailInput
-        val isRememberMeEnabled = state.isRememberMeEnabled
+        val isRememberMeEnabled = state.isRememberEmailEnabled
 
         // Update the remembered email address
         authRepository.rememberedEmailAddress = email.takeUnless { !isRememberMeEnabled }
@@ -210,7 +210,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleRememberMeToggled(action: LandingAction.RememberMeToggle) {
-        mutableStateFlow.update { it.copy(isRememberMeEnabled = action.isChecked) }
+        mutableStateFlow.update { it.copy(isRememberEmailEnabled = action.isChecked) }
     }
 
     private fun handleEnvironmentTypeSelect(action: LandingAction.EnvironmentTypeSelect) {
@@ -261,7 +261,7 @@ class LandingViewModel @Inject constructor(
 data class LandingState(
     val emailInput: String,
     val isContinueButtonEnabled: Boolean,
-    val isRememberMeEnabled: Boolean,
+    val isRememberEmailEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
     val selectedEnvironmentLabel: String,
     val dialog: DialogState?,

@@ -260,8 +260,8 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenSwitch(
-            label = stringResource(id = R.string.remember_me),
-            isChecked = state.isRememberMeEnabled,
+            label = stringResource(id = R.string.remember_email),
+            isChecked = state.isRememberEmailEnabled,
             onCheckedChange = onRememberMeToggle,
             cardStyle = CardStyle.Full,
             modifier = Modifier

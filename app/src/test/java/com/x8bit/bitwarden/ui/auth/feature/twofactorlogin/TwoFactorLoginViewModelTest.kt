@@ -118,7 +118,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 twoFactorData = TwoFactorDataModel(
                     code = token,
                     method = TwoFactorAuthMethod.YUBI_KEY.value.toString(),
-                    remember = DEFAULT_STATE.isRememberMeEnabled,
+                    remember = DEFAULT_STATE.isRememberEnabled,
                 ),
                 captchaToken = DEFAULT_STATE.captchaToken,
                 orgIdentifier = DEFAULT_STATE.orgIdentifier,
@@ -786,7 +786,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
         assertEquals(
             DEFAULT_STATE.copy(
-                isRememberMeEnabled = true,
+                isRememberEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -1045,7 +1045,7 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     displayEmail = "ex***@email.com",
     dialogState = null,
     isContinueButtonEnabled = false,
-    isRememberMeEnabled = false,
+    isRememberEnabled = false,
     captchaToken = null,
     email = DEFAULT_EMAIL_ADDRESS,
     password = DEFAULT_PASSWORD,
