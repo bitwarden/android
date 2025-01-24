@@ -268,6 +268,12 @@ data class LandingState(
     val accountSummaries: List<AccountSummary>,
 ) : Parcelable {
     /**
+     * Determines whether the app bar should be visible based on the presence of account summaries.
+     */
+    val isAppBarVisible: Boolean
+        get() = accountSummaries.isNotEmpty()
+
+    /**
      * Represents the current state of any dialogs on screen.
      */
     sealed class DialogState : Parcelable {

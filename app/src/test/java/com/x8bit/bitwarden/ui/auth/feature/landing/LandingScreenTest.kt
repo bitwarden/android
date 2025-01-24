@@ -264,7 +264,7 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `create account click should send CreateAccountClick action`() {
-        composeTestRule.onNodeWithText("Create account").performScrollTo().performClick()
+        composeTestRule.onNodeWithText("Create an account").performScrollTo().performClick()
         verify {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
         }
