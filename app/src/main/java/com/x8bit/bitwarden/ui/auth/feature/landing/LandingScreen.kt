@@ -208,7 +208,9 @@ private fun LandingScreenContent(
             .verticalScroll(rememberScrollState())
             .statusBarsPadding(),
     ) {
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.weight(1f))
+
         Image(
             painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
             colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
@@ -217,9 +219,10 @@ private fun LandingScreenContent(
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.weight(1f))
 
+        Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.height(height = 12.dp))
+
         Text(
             text = stringResource(id = R.string.login_to_bitwarden),
             textAlign = TextAlign.Center,
@@ -229,6 +232,7 @@ private fun LandingScreenContent(
                 .standardHorizontalMargin()
                 .wrapContentHeight(),
         )
+
         Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenTextField(
