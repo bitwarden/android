@@ -54,8 +54,10 @@
   <string name="my_vault">Můj trezor</string>
   <string name="authenticator">Ověřovací aplikace</string>
   <string name="name">Název</string>
+  <string name="send_name_required">"Název Send (vyžadován)"</string>
   <string name="no">Ne</string>
   <string name="notes">Poznámky</string>
+  <string name="private_notes">Soukromé poznámky</string>
   <string name="ok">OK</string>
   <string name="password">Heslo</string>
   <string name="save">Uložit</string>
@@ -554,12 +556,12 @@ Načtení proběhne automaticky.</string>
   <string name="personal_ownership_submit_error">Z důvodu podnikových zásad nemůžete ukládat položky do svého osobního trezoru. Změňte vlastnictví položky na organizaci a poté si vyberte z dostupných kolekcí.</string>
   <string name="personal_ownership_policy_in_effect">Zásady organizace ovlivňují možnosti vlastnictví.</string>
   <string name="send">Send</string>
+  <string name="send_details">Podrobnosti Send</string>
   <string name="all_sends">Všechny Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Přátelský název pro popis tohoto Send.</string>
   <string name="text">Text</string>
+  <string name="text_to_share">Text ke sdílení</string>
   <string name="type_text">Text</string>
-  <string name="type_text_info">Text, který chcete odeslat.</string>
   <string name="hide_text_by_default">Při přístupu k Send, ve výchozím nastavení skrýt text</string>
   <string name="type_file">Soubor</string>
   <string name="type_file_info">Soubor, který chcete odeslat.</string>
@@ -571,9 +573,6 @@ Načtení proběhne automaticky.</string>
   <string name="deletion_time">Čas smazání</string>
   <string name="deletion_date_info">Tento Send bude trvale smazán v určený datum a čas.</string>
   <string name="pending_delete">Čeká na smazání</string>
-  <string name="expiration_date">Datum vypršení platnosti</string>
-  <string name="expiration_time">Čas vypršení platnosti</string>
-  <string name="expiration_date_info">Je-li nastaveno, přístup k tomuto Send vyprší v daný datum a čas.</string>
   <string name="expired">Vypršela platnost</string>
   <string name="maximum_access_count">Maximální počet přístupů</string>
   <string name="maximum_access_count_info">Je-li nastaveno, uživatelé již nebudou mít přístup k tomuto Send, jakmile bude dosaženo maximálního počtu přístupů.</string>
@@ -586,7 +585,6 @@ Načtení proběhne automaticky.</string>
   <string name="removing_send_password">Odebírání hesla</string>
   <string name="send_password_removed">Heslo bylo odebráno.</string>
   <string name="notes_info">Soukromé poznámky k tomuto Send.</string>
-  <string name="disable_send">Deaktivovat tento Send (nikdo k němu nebude mít přístup)</string>
   <string name="no_sends">Ve Vašem účtu nejsou žádné Sends.</string>
   <string name="add_a_send">Nový Send</string>
   <string name="copy_link">Kopírovat odkaz</string>
@@ -1113,4 +1111,13 @@ Chcete se přepnout na tento účet?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu můžete změnit ve webové aplikaci Bitwarden.</string>
   <string name="login_credentials">Přihlašovací údaje</string>
   <string name="autofill_options">Volby automatického vyplňování</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Použijte toto tlačítko pro vytvoření nového jedinečného hesla.</string>
+  <string name="coachmark_1_of_3">1 ze 3</string>
+  <string name="coachmark_2_of_3">2 ze 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Budete jen muset nastavit Authenticator pro přihlášení, která vyžadují dvoufaktorové ověření s kódem. Klíč průběžně generuje šestimístné kódy, které můžete použít pro přihlášení.</string>
+  <string name="coachmark_3_of_3">3 ze 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Pro přístup k tomuto účtu musíte přidat webovou adresu pro automatické vyplnění.</string>
+  <string name="mutual_tls">Vzájemné TLS</string>
+  <string name="single_tap_passkey_creation">Vytvoření přístupového hesla jedním klepnutím</string>
+  <string name="single_tap_passkey_authentication">Přihlášení přístupovým heslem jedním klepnutím</string>
 </resources>

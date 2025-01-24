@@ -78,6 +78,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
+ * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
@@ -161,6 +162,7 @@ fun BitwardenTextField(
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
+ * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
 @Suppress("LongMethod", "CyclomaticComplexMethod")

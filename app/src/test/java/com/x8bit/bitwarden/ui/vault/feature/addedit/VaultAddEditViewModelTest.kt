@@ -25,11 +25,13 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCreden
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -87,10 +89,13 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -163,6 +168,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { isNetworkConnected } returns true
     }
 
+    private val mutableShouldShowAddLoginCoachMarkFlow = MutableStateFlow(false)
+    private val firstTimeActionManager = mockk<FirstTimeActionManager> {
+        every { markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN) } just runs
+        every { shouldShowAddLoginCoachMarkFlow } returns mutableShouldShowAddLoginCoachMarkFlow
+    }
+
     @BeforeEach
     fun setup() {
         mockkStatic(CipherView::toViewState)
@@ -191,6 +202,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldExitOnSave = false,
             supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
                 .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
+            shouldShowCoachMarkTour = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -273,6 +285,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 dialog = null,
                 supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
                     .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
+                shouldShowCoachMarkTour = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -2601,6 +2614,90 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager should show logins tour value updates to false shouldShowLearnAboutNewLogins should update to false`() {
+        mutableShouldShowAddLoginCoachMarkFlow.update { true }
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
+                vaultAddEditType = VaultAddEditType.AddItem(
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            ),
+        )
+        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+        mutableShouldShowAddLoginCoachMarkFlow.update { false }
+        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager value is true, but type content is not login shouldShowLearnAboutNewLogins should be false`() {
+        mutableShouldShowAddLoginCoachMarkFlow.update { true }
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
+                vaultAddEditType = VaultAddEditType.AddItem(
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            ),
+        )
+        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+        viewModel.trySendAction(
+            VaultAddEditAction.Common.TypeOptionSelect(
+                VaultAddEditState.ItemTypeOption.SSH_KEYS,
+            ),
+        )
+        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when first time action manager value is false, but edit type is EditItem shouldShowLearnAboutNewLogins should be false`() {
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "1234"),
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
+                vaultAddEditType = VaultAddEditType.EditItem(
+                    vaultItemId = "1234",
+                ),
+            ),
+        )
+        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LearnAboutLoginsDismissed action calls first time action manager hasSeenAddLoginCoachMarkTour called`() {
+        val viewModel = createAddVaultItemViewModel()
+
+        viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed)
+        verify(exactly = 1) {
+            firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `StartLearnAboutLogins action calls first time action manager hasSeenAddLoginCoachMarkTour called and show coach mark event sent`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins)
+                assertEquals(VaultAddEditEvent.StartAddLoginItemCoachMarkTour, awaitItem())
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN)
+            }
+        }
+
     @Nested
     inner class VaultAddEditIdentityTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
@@ -3126,6 +3223,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
                 networkConnectionManager = networkConnectionManager,
+                firstTimeActionManager = firstTimeActionManager,
             )
         }
 
@@ -4276,6 +4374,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
             supportedItemTypes = supportedItemTypes,
+            shouldShowCoachMarkTour = false,
         )
 
     @Suppress("LongParameterList")
@@ -4385,6 +4484,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             clock = clock,
             organizationEventManager = organizationEventManager,
             networkConnectionManager = networkConnectionManager,
+            firstTimeActionManager = firstTimeActionManager,
         )
 
     private fun createVaultData(

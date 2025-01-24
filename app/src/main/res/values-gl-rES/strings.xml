@@ -54,8 +54,10 @@
   <string name="my_vault">Caixa forte</string>
   <string name="authenticator">Autenticador</string>
   <string name="name">Nome</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Non</string>
   <string name="notes">Notas</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">Aceptar</string>
   <string name="password">Contrasinal</string>
   <string name="save">Gardar</string>
@@ -554,12 +556,12 @@ Escanearase automaticamente.</string>
   <string name="personal_ownership_submit_error">Debido a unha directiva da empresa, non podes gardar entradas na túa caixa forte. Cambia a opción de propiedade a unha organización e elixe unha das coleccións dispoñibles.</string>
   <string name="personal_ownership_policy_in_effect">Unha directiva da empresa está a afectar ás túas opcións de propiedade.</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Todos os Sends</string>
   <string name="sends">Sends</string>
-  <string name="name_info">Un título simpático que describa este Send.</string>
   <string name="text">Texto</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Texto</string>
-  <string name="type_text_info">O texto que queres enviar.</string>
   <string name="hide_text_by_default">Cando se acceda ó Send, amosar o texto agochado</string>
   <string name="type_file">Arquivo</string>
   <string name="type_file_info">O arquivo que queres enviar.</string>
@@ -571,9 +573,6 @@ Escanearase automaticamente.</string>
   <string name="deletion_time">Hora de eliminación</string>
   <string name="deletion_date_info">Este Send será permanente eliminado na data e hora especificadas.</string>
   <string name="pending_delete">Eliminación pendente</string>
-  <string name="expiration_date">Data de vencemento</string>
-  <string name="expiration_time">Hora de vencemento</string>
-  <string name="expiration_date_info">Se están definidas, o acceso ó Send expirará na festa e hora especificadas.</string>
   <string name="expired">Vencido</string>
   <string name="maximum_access_count">Número máximo de accesos</string>
   <string name="maximum_access_count_info">Se está activado, o Send non será accesible unha vez se alcance o máximo de accesos permitido.</string>
@@ -586,7 +585,6 @@ Escanearase automaticamente.</string>
   <string name="removing_send_password">Eliminando contrasinal</string>
   <string name="send_password_removed">O contrasinal foi eliminado.</string>
   <string name="notes_info">Notas privadas sobre este Send.</string>
-  <string name="disable_send">Desactivar este Send para que niguén poida acceder a el</string>
   <string name="no_sends">Non hai Sends na túa conta.</string>
   <string name="add_a_send">Novo Send</string>
   <string name="copy_link">Copiar ligazón</string>
@@ -1114,4 +1112,13 @@ Queres comprobalo dende esa conta?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Podes mudar o teu correo electrónico na aplicación web de Bitwarden.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -154,6 +155,30 @@ class FirstTimeActionManagerImpl @Inject constructor(
             }
             .distinctUntilChanged()
 
+    override val shouldShowAddLoginCoachMarkFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .getShouldShowAddLoginCoachMarkFlow()
+            .map { it ?: true }
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { shouldShow, featureIsEnabled ->
+                // If the feature flag is off always return true so observers know
+                // the card has not been shown.
+                shouldShow && featureIsEnabled
+            }
+            .distinctUntilChanged()
+
+    override val shouldShowGeneratorCoachMarkFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .getShouldShowGeneratorCoachMarkFlow()
+            .map { it ?: true }
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { shouldShow, featureFlagEnabled ->
+                shouldShow && featureFlagEnabled
+            }
+            .distinctUntilChanged()
+
     /**
      * Get the current [FirstTimeState] of the active user if available, otherwise return
      * a default configuration.
@@ -209,6 +234,18 @@ class FirstTimeActionManagerImpl @Inject constructor(
             userId = activeUserId,
             showBadge = showBadge,
         )
+    }
+
+    override fun markCoachMarkTourCompleted(tourCompleted: CoachMarkTourType) {
+        when (tourCompleted) {
+            CoachMarkTourType.ADD_LOGIN -> {
+                settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
+            }
+
+            CoachMarkTourType.GENERATOR -> {
+                settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
+            }
+        }
     }
 
     /**

@@ -54,8 +54,10 @@
   <string name="my_vault">Kho của tôi</string>
   <string name="authenticator">Xác thực</string>
   <string name="name">Tên mục</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Không</string>
   <string name="notes">Ghi chú</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">OK</string>
   <string name="password">Mật khẩu</string>
   <string name="save">Lưu</string>
@@ -554,12 +556,12 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="personal_ownership_submit_error">Do chính sách của tổ chức, bạn không được lưu trữ mục trong kho mật khẩu cá nhân.</string>
   <string name="personal_ownership_policy_in_effect">Chính sách của tổ chức đang ảnh hưởng đến các tùy chọn quyền sở hữu của bạn.</string>
   <string name="send">Gửi</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">Tất cả mục Gửi</string>
   <string name="sends">Gửi</string>
-  <string name="name_info">Một tên gợi nhớ để mô tả mục Gửi này.</string>
   <string name="text">Văn bản</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">Văn bản</string>
-  <string name="type_text_info">Văn bản bạn muốn gửi.</string>
   <string name="hide_text_by_default">Khi truy cập vào phần Gửi, văn bản sẽ được ẩn theo mặc định</string>
   <string name="type_file">Tập tin</string>
   <string name="type_file_info">Tập tin bạn muốn gửi.</string>
@@ -571,9 +573,6 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="deletion_time">Thời gian xóa</string>
   <string name="deletion_date_info">Mục Gửi sẽ được xóa vĩnh viễn vào ngày và giờ chỉ định.</string>
   <string name="pending_delete">Đang chờ xóa</string>
-  <string name="expiration_date">Ngày hết hạn</string>
-  <string name="expiration_time">Thời hạn</string>
-  <string name="expiration_date_info">Nếu được thiết lập, mục Gửi này sẽ hết hạn vào ngày và giờ được chỉ định.</string>
   <string name="expired">Đã hết hạn</string>
   <string name="maximum_access_count">Số lần truy cập tối đa</string>
   <string name="maximum_access_count_info">Nếu được thiết lập, khi đã đạt tới số lượng truy cập tối đa, người dùng sẽ không thể truy cập mục Gửi này nữa.</string>
@@ -586,7 +585,6 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="removing_send_password">Đang xóa mật khẩu</string>
   <string name="send_password_removed">Mật khẩu đã được xóa.</string>
   <string name="notes_info">Ghi chú riêng tư về mục Gửi này.</string>
-  <string name="disable_send">Vô hiệu hoá mục Gửi này để không ai có thể truy cập nó</string>
   <string name="no_sends">Không có mục Gửi trong tài khoản của bạn.</string>
   <string name="add_a_send">Thêm mục Gửi</string>
   <string name="copy_link">Sao chép liên kết</string>
@@ -1114,4 +1112,13 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Bạn có thể thay đổi email trên Bitwarden bản web.</string>
   <string name="login_credentials">Thông tin đăng nhập</string>
   <string name="autofill_options">Tùy chọn tự động điền</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Sử dụng nút này để tạo mật khẩu mới duy nhất.</string>
+  <string name="coachmark_1_of_3">1 trong 3</string>
+  <string name="coachmark_2_of_3">2 trong 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Bạn chỉ cần thiết lập Mã Xác Thực cho các lần đăng nhập yêu cầu xác thực hai bước bằng mã. Sáu chữ số sẽ liên tục được tạo để bạn có thể dùng đăng nhập.</string>
+  <string name="coachmark_3_of_3">3 trong 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Bạn phải thêm địa chỉ web để sử dụng tính năng tự động điền khi truy cập tài khoản này.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

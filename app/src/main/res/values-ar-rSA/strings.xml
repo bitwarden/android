@@ -54,8 +54,10 @@
   <string name="my_vault">خزانتي</string>
   <string name="authenticator">المصادقة</string>
   <string name="name">الاسم</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">لا</string>
   <string name="notes">ملاحظات</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">موافق</string>
   <string name="password">كلمة المرور</string>
   <string name="save">حفظ</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">بسبب سياسة المؤسسة، أنت محظور عليك حفظ العناصر في خزانتك الشخصية. تغيير خيار الملكية إلى مؤسسة واختيار من المجموعات المتاحة.</string>
   <string name="personal_ownership_policy_in_effect">تؤثر سياسة مؤسسة على خيارات الملكية الخاصة بك.</string>
   <string name="send">إرسال</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">كل الإرسالات</string>
   <string name="sends">إرسالات</string>
-  <string name="name_info">اسم ودي لوصف هذا الإرسال.</string>
   <string name="text">نص</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">نص</string>
-  <string name="type_text_info">النص الذي تريد إرساله.</string>
   <string name="hide_text_by_default">عند الوصول إلى الإرسال، إخفاء النص بشكل افتراضي</string>
   <string name="type_file">ملف</string>
   <string name="type_file_info">الملف الذي تريد إرساله.</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">وقت الحذف</string>
   <string name="deletion_date_info">سيتم حذف الإرسال بشكل دائم في التاريخ والوقت المحددين.</string>
   <string name="pending_delete">في انتظار الحذف</string>
-  <string name="expiration_date">تاريخ انتهاء الصلاحية</string>
-  <string name="expiration_time">وقت انتهاء الصلاحية</string>
-  <string name="expiration_date_info">في حالة التعيين، ستنتهي صلاحية الوصول إلى هذا الإرسال في التاريخ والوقت المحددين.</string>
   <string name="expired">منتهية الصلاحية</string>
   <string name="maximum_access_count">الحد الأقصى لعدد الوصول</string>
   <string name="maximum_access_count_info">في حالة التعيين، لن يتمكن المستخدمون من الوصول إلى هذا الإرسال بمجرد الوصول إلى الحد الأقصى لعدد الوصول.</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">إزالة كلمة المرور</string>
   <string name="send_password_removed">تم إزالة كلمة المرور</string>
   <string name="notes_info">ملاحظات خاصة حول هذا الإرسال.</string>
-  <string name="disable_send">قم بتعطيل هذا الإرسال حتى لا يتمكن أي شخص من الوصول إليه</string>
   <string name="no_sends">لا توجد إرسالات في حسابك.</string>
   <string name="add_a_send">إضافة إرسال</string>
   <string name="copy_link">نسخ الرابط</string>
@@ -1114,4 +1112,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">يمكنك تغيير البريد الإلكتروني لحسابك على تطبيق ويب Bitwarden.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

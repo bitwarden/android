@@ -54,8 +54,10 @@
   <string name="my_vault">保管庫</string>
   <string name="authenticator">認証システム</string>
   <string name="name">名前</string>
+  <string name="send_name_required">"Send name (required)"</string>
   <string name="no">いいえ</string>
   <string name="notes">メモ</string>
+  <string name="private_notes">Private notes</string>
   <string name="ok">OK</string>
   <string name="password">パスワード</string>
   <string name="save">保存</string>
@@ -554,12 +556,12 @@
   <string name="personal_ownership_submit_error">組織のポリシーにより、個人保管庫へのアイテムの保存が制限されています。 所有権を組織に変更し、利用可能なコレクションから選択してください。</string>
   <string name="personal_ownership_policy_in_effect">組織のポリシーが所有者のオプションに影響を与えています。</string>
   <string name="send">Send</string>
+  <string name="send_details">Send Details</string>
   <string name="all_sends">すべての Send</string>
   <string name="sends">Send</string>
-  <string name="name_info">この Send を説明するわかりやすい名前</string>
   <string name="text">テキスト</string>
+  <string name="text_to_share">Text to share</string>
   <string name="type_text">テキスト</string>
-  <string name="type_text_info">送信したいテキスト</string>
   <string name="hide_text_by_default">Send へのアクセス時に既定でテキストを非表示にする</string>
   <string name="type_file">ファイル</string>
   <string name="type_file_info">送信するファイル</string>
@@ -571,9 +573,6 @@
   <string name="deletion_time">削除時刻</string>
   <string name="deletion_date_info">Send は指定された日時に完全に削除されます。</string>
   <string name="pending_delete">削除の保留中</string>
-  <string name="expiration_date">有効期限日</string>
-  <string name="expiration_time">有効期限時刻</string>
-  <string name="expiration_date_info">設定されている場合、この Send へのアクセスは指定された日時に失効します。</string>
   <string name="expired">有効期限切れ</string>
   <string name="maximum_access_count">最大アクセス数</string>
   <string name="maximum_access_count_info">設定されている場合、最大アクセス数に達するとユーザーはこの Send にアクセスできなくなります。</string>
@@ -586,7 +585,6 @@
   <string name="removing_send_password">パスワードを削除中</string>
   <string name="send_password_removed">パスワードを削除しました。</string>
   <string name="notes_info">この Send に関するプライベートメモ</string>
-  <string name="disable_send">誰もアクセスできないように、この Send を無効にする</string>
   <string name="no_sends">あなたのアカウントには Send がありません。</string>
   <string name="add_a_send">Send を追加</string>
   <string name="copy_link">リンクをコピー</string>
@@ -1114,4 +1112,13 @@
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="coachmark_1_of_3">1 of 3</string>
+  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
+  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="mutual_tls">Mutual TLS</string>
+  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
+  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
 </resources>

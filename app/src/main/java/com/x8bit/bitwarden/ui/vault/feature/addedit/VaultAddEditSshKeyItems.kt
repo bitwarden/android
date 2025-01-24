@@ -77,9 +77,9 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             showPassword = sshKeyState.showPrivateKey,
             showPasswordChange = { sshKeyTypeHandlers.onPrivateKeyVisibilityChange(it) },
             showPasswordTestTag = "ViewPrivateKeyButton",
+            passwordFieldTestTag = "PrivateKeyEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("PrivateKeyEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )

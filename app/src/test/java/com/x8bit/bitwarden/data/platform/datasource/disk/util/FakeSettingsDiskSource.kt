@@ -43,8 +43,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableHasUserLoggedInOrCreatedAccount =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableShouldShowAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
+
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShouldShowGeneratorCoachMarkFlow =
+        bufferedMutableSharedFlow<Boolean?>()
 
     private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
@@ -74,6 +79,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var addCipherActionCount: Int? = null
     private var generatedActionCount: Int? = null
     private var createSendActionCount: Int? = null
+    private var hasSeenAddLoginCoachMark: Boolean? = null
+    private var hasSeenGeneratorCoachMark: Boolean? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -393,6 +400,33 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun storeCreateSendActionCount(count: Int?) {
         createSendActionCount = count
     }
+
+    override fun getShouldShowAddLoginCoachMark(): Boolean? {
+        return hasSeenAddLoginCoachMark
+    }
+
+    override fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?) {
+        hasSeenAddLoginCoachMark = shouldShow
+        mutableShouldShowAddLoginCoachMarkFlow.tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?> =
+        mutableShouldShowAddLoginCoachMarkFlow.onSubscription {
+            emit(getShouldShowAddLoginCoachMark())
+        }
+
+    override fun getShouldShowGeneratorCoachMark(): Boolean? =
+        hasSeenGeneratorCoachMark
+
+    override fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?) {
+        hasSeenGeneratorCoachMark = shouldShow
+        mutableShouldShowGeneratorCoachMarkFlow.tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?> =
+        mutableShouldShowGeneratorCoachMarkFlow.onSubscription {
+            emit(hasSeenGeneratorCoachMark)
+        }
 
     override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
         storedAppResumeScreenData[userId] = screenData.let { Json.encodeToString(it) }
