@@ -20,6 +20,11 @@ interface SettingsDiskSource {
     var appLanguage: AppLanguage?
 
     /**
+     * Emits updates that track [AppLanguage].
+     */
+    val appLanguageFlow: Flow<AppLanguage?>
+
+    /**
      * Has the initial autofill dialog been shown to the user.
      */
     var initialAutofillDialogShown: Boolean?

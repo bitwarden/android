@@ -28,7 +28,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun BitwardenHiddenPasswordField(
-    label: String,
+    label: String?,
     value: String,
     modifier: Modifier = Modifier,
     cardStyle: CardStyle? = null,
@@ -39,7 +39,7 @@ fun BitwardenHiddenPasswordField(
                 .cardBackground(cardStyle = cardStyle)
                 .cardPadding(cardStyle = cardStyle, vertical = 6.dp),
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-            label = { Text(text = label) },
+            label = label?.let { { Text(text = it) } },
             value = value,
             onValueChange = { },
             visualTransformation = PasswordVisualTransformation(),

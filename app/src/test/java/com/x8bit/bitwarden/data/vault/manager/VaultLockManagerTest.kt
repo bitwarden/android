@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import app.cash.turbine.test
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -36,6 +39,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -57,6 +61,10 @@ import java.time.ZonedDateTime
 @OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LargeClass")
 class VaultLockManagerTest {
+    private val broadcastReceiver = slot<BroadcastReceiver>()
+    private val context: Context = mockk {
+        every { registerReceiver(capture(broadcastReceiver), any()) } returns null
+    }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeAppStateManager = FakeAppStateManager()
     private val authSdkSource: AuthSdkSource = mockk {
@@ -90,12 +98,9 @@ class VaultLockManagerTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val fakeDispatcherManager = FakeDispatcherManager(unconfined = testDispatcher)
 
-    private val fixedClock: Clock = Clock.fixed(
-        Instant.parse("2021-01-01T00:00:00Z"),
-        ZoneOffset.UTC,
-    )
-
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
+        context = context,
+        clock = FIXED_CLOCK,
         authDiskSource = fakeAuthDiskSource,
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
@@ -104,8 +109,54 @@ class VaultLockManagerTest {
         userLogoutManager = userLogoutManager,
         trustedDeviceManager = trustedDeviceManager,
         dispatcherManager = fakeDispatcherManager,
-        clock = fixedClock,
     )
+
+    @Test
+    fun `broadcast receiver should be registered on initialization`() {
+        verify(exactly = 1) {
+            context.registerReceiver(any(), any())
+        }
+    }
+
+    @Test
+    fun `broadcast intent should reset active job`() {
+        setAccountTokens()
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Setup state as unlocked
+        mutableVaultTimeoutStateFlow.value = VaultTimeout.OneMinute
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
+        fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
+        verifyUnlockedVaultBlocking(userId = USER_ID)
+        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+
+        // Background the app
+        fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
+
+        // Advance by 30 seconds (half of what is required to lock the app)
+        testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 30 * 1000L)
+
+        // Still unlocked
+        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+
+        // Receive the screen on event
+        broadcastReceiver.captured.onReceive(context, Intent())
+
+        // Still unlocked
+        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+
+        // Because the test clock is fixed, this should mean that we need to advance the clock a
+        // full minute to get the vault to lock.
+        testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 30 * 1000L)
+
+        // Still unlocked
+        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+
+        testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 31 * 1000L)
+
+        // Finally locked
+        assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
+    }
 
     @Test
     fun `vaultStateEventFlow should emit Locked event when vault state changes to locked`() =
@@ -1596,6 +1647,11 @@ class VaultLockManagerTest {
         }
     }
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)
 
 private const val USER_ID = "mockId-1"
 

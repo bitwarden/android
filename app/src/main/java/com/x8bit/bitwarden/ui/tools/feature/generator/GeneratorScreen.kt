@@ -1022,7 +1022,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
         null -> {
             var obfuscatedTextField by remember { mutableStateOf("") }
             BitwardenPasswordField(
-                label = "",
+                label = null,
                 value = obfuscatedTextField,
                 onValueChange = { obfuscatedTextField = it },
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",

@@ -1,5 +1,9 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
@@ -51,6 +55,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Clock
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.minutes
 
 /**
@@ -63,6 +68,7 @@ private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
  */
 @Suppress("TooManyFunctions", "LongParameterList")
 class VaultLockManagerImpl(
+    private val clock: Clock,
     private val authDiskSource: AuthDiskSource,
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -71,14 +77,15 @@ class VaultLockManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     dispatcherManager: DispatcherManager,
-    private val clock: Clock,
+    context: Context,
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     /**
-     * This [Map] tracks all active timeout [Job]s that are running using the user ID as the key.
+     * This [Map] tracks all active timeout [Job]s that are running and their associated data using
+     * the user ID as the key.
      */
-    private val userIdTimerJobMap = mutableMapOf<String, Job>()
+    private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = ConcurrentHashMap()
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -98,6 +105,10 @@ class VaultLockManagerImpl(
         observeUserSwitchingChanges()
         observeVaultTimeoutChanges()
         observeUserLogoutResults()
+        context.registerReceiver(
+            ScreenStateBroadcastReceiver(),
+            IntentFilter(Intent.ACTION_SCREEN_ON),
+        )
     }
 
     override fun isVaultUnlocked(userId: String): Boolean =
@@ -369,7 +380,7 @@ class VaultLockManagerImpl(
 
     private fun handleOnForeground() {
         val userId = activeUserId ?: return
-        userIdTimerJobMap[userId]?.cancel()
+        userIdTimerJobMap.remove(key = userId)?.job?.cancel()
     }
 
     private fun observeUserSwitchingChanges() {
@@ -465,7 +476,7 @@ class VaultLockManagerImpl(
         currentActiveUserId: String,
     ) {
         // Make sure to clear the now-active user's timeout job.
-        userIdTimerJobMap[currentActiveUserId]?.cancel()
+        userIdTimerJobMap.remove(key = currentActiveUserId)?.job?.cancel()
         // Check if the user's timeout action should be performed as we switch away.
         checkForVaultTimeout(
             userId = previousActiveUserId,
@@ -535,7 +546,7 @@ class VaultLockManagerImpl(
                         handleTimeoutActionWithDelay(
                             userId = userId,
                             vaultTimeoutAction = vaultTimeoutAction,
-                            delayInMs = vaultTimeout
+                            delayMs = vaultTimeout
                                 .vaultTimeoutInMinutes
                                 ?.minutes
                                 ?.inWholeMilliseconds
@@ -548,20 +559,26 @@ class VaultLockManagerImpl(
     }
 
     /**
-     * Performs the [VaultTimeoutAction] for the given [userId] after the [delayInMs] has passed.
+     * Performs the [VaultTimeoutAction] for the given [userId] after the [delayMs] has passed.
      *
      * @see handleTimeoutAction
      */
     private fun handleTimeoutActionWithDelay(
         userId: String,
         vaultTimeoutAction: VaultTimeoutAction,
-        delayInMs: Long,
+        delayMs: Long,
     ) {
-        userIdTimerJobMap[userId]?.cancel()
-        userIdTimerJobMap[userId] = unconfinedScope.launch {
-            delay(timeMillis = delayInMs)
-            handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
-        }
+        userIdTimerJobMap.remove(key = userId)?.job?.cancel()
+        userIdTimerJobMap[userId] = TimeoutJobData(
+            job = unconfinedScope.launch {
+                delay(timeMillis = delayMs)
+                userIdTimerJobMap.remove(key = userId)
+                handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+            },
+            vaultTimeoutAction = vaultTimeoutAction,
+            startTimeMs = clock.millis(),
+            durationMs = delayMs,
+        )
     }
 
     /**
@@ -606,6 +623,37 @@ class VaultLockManagerImpl(
         val accounts = authDiskSource.userAccountTokens
         return (accounts.find { it.userId == userId }?.isLoggedIn) == false
     }
+
+    /**
+     * A custom [BroadcastReceiver] that listens for when the screen is powered on and restarts the
+     * vault timeout jobs to ensure they complete at the correct time.
+     *
+     * This is necessary because the [delay] function in a coroutine will not keep accurate time
+     * when the screen is off. We do not cancel the job when the screen is off, this allows the
+     * job to complete as-soon-as possible if the screen is powered off for an extended period.
+     */
+    private inner class ScreenStateBroadcastReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            userIdTimerJobMap.map { (userId, data) ->
+                handleTimeoutActionWithDelay(
+                    userId = userId,
+                    vaultTimeoutAction = data.vaultTimeoutAction,
+                    delayMs = data.durationMs - (clock.millis() - data.startTimeMs)
+                        .coerceAtLeast(minimumValue = 0L),
+                )
+            }
+        }
+    }
+
+    /**
+     * A wrapper class containing all relevant data concerning a timeout action [Job].
+     */
+    private data class TimeoutJobData(
+        val job: Job,
+        val vaultTimeoutAction: VaultTimeoutAction,
+        val startTimeMs: Long,
+        val durationMs: Long,
+    )
 
     /**
      * Helper sealed class which denotes the reason to check the vault timeout.

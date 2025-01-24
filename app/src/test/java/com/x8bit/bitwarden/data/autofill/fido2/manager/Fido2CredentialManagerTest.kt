@@ -16,7 +16,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -170,7 +170,7 @@ class Fido2CredentialManagerTest {
     @Test
     fun `registerFido2Credential should construct ClientData DefaultWithCustomHash when callingAppInfo origin is populated`() =
         runTest {
-            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 origin = "origin",
                 signingInfo = mockSigningInfo,
@@ -210,7 +210,7 @@ class Fido2CredentialManagerTest {
                 every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
                 every { hasMultipleSigners() } returns false
             }
-            val mockFido2Request = createMockFido2CredentialRequest(
+            val mockFido2Request = createMockFido2CreateCredentialRequest(
                 number = 1,
                 signingInfo = mockSigningInfo,
             )
@@ -243,7 +243,7 @@ class Fido2CredentialManagerTest {
                 every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
                 every { hasMultipleSigners() } returns false
             }
-            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 origin = "origin",
                 signingInfo = mockSigningInfo,
@@ -283,7 +283,7 @@ class Fido2CredentialManagerTest {
                 every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
                 every { hasMultipleSigners() } returns false
             }
-            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CreateCredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 origin = "origin",
                 signingInfo = mockSigningInfo,
@@ -328,7 +328,7 @@ class Fido2CredentialManagerTest {
             val mockSigningInfo = mockk<SigningInfo> {
                 every { hasMultipleSigners() } returns true
             }
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 origin = "origin",
                 signingInfo = mockSigningInfo,
@@ -353,7 +353,7 @@ class Fido2CredentialManagerTest {
             val mockSigningInfo = mockk<SigningInfo> {
                 every { hasMultipleSigners() } returns true
             }
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 signingInfo = mockSigningInfo,
             )
@@ -377,7 +377,7 @@ class Fido2CredentialManagerTest {
                 every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
                 every { hasMultipleSigners() } returns false
             }
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 origin = "illegal empty spaces",
                 signingInfo = mockSigningInfo,
@@ -402,7 +402,7 @@ class Fido2CredentialManagerTest {
                 every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
                 every { hasMultipleSigners() } returns false
             }
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(
                 number = 1,
                 origin = "origin",
                 signingInfo = mockSigningInfo,
@@ -440,7 +440,7 @@ class Fido2CredentialManagerTest {
 
     @Test
     fun `registerFido2Credential should return Error when origin is null`() = runTest {
-        val mockAssertionRequest = createMockFido2CredentialRequest(
+        val mockAssertionRequest = createMockFido2CreateCredentialRequest(
             number = 1,
             origin = null,
             signingInfo = mockSigningInfo,

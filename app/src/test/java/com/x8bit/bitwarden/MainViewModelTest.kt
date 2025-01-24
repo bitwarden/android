@@ -22,10 +22,10 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionReq
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -86,10 +87,12 @@ class MainViewModelTest : BaseViewModelTest() {
     private val addTotpItemAuthenticatorManager = AddTotpItemFromAuthenticatorManagerImpl()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
+    private val mutableAppLanguageFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
+        every { appLanguageStateFlow } returns mutableAppLanguageFlow
         every { isScreenCaptureAllowed } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
         every { storeUserHasLoggedInValue(any()) } just runs
@@ -142,7 +145,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
-            Intent::getFido2CredentialRequestOrNull,
+            Intent::getFido2CreateCredentialRequestOrNull,
             Intent::getFido2GetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
         )
@@ -162,7 +165,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
-            Intent::getFido2CredentialRequestOrNull,
+            Intent::getFido2CreateCredentialRequestOrNull,
             Intent::getFido2GetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
         )
@@ -196,6 +199,10 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
             mutableUserStateFlow.value = UserState(
                 activeUserId = userId1,
                 accounts = listOf(
@@ -243,6 +250,10 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
                 mutableVaultStateEventFlow.tryEmit(VaultStateEvent.Unlocked(userId = "userId"))
                 expectNoEvents()
 
@@ -260,6 +271,10 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val cipherView = mockk<CipherView>()
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
                 accessibilitySelectionManager.emitAccessibilitySelection(cipherView = cipherView)
                 assertEquals(
                     MainEvent.CompleteAccessibilityAutofill(cipherView = cipherView),
@@ -273,6 +288,10 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val cipherView = mockk<CipherView>()
         viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
             autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
             assertEquals(
                 MainEvent.CompleteAutofill(cipherView = cipherView),
@@ -297,28 +316,44 @@ class MainViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on AppThemeChanged should update state`() {
+    fun `on AppThemeChanged should update state and send event`() = runTest {
+        val theme = AppTheme.DARK
         val viewModel = createViewModel()
 
-        assertEquals(
-            DEFAULT_STATE,
-            viewModel.stateFlow.value,
-        )
-        viewModel.trySendAction(
-            MainAction.Internal.ThemeUpdate(
-                theme = AppTheme.DARK,
-            ),
-        )
-        assertEquals(
-            DEFAULT_STATE.copy(
-                theme = AppTheme.DARK,
-            ),
-            viewModel.stateFlow.value,
-        )
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            eventFlow.awaitItem()
+            eventFlow.awaitItem()
+
+            assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+            mutableAppThemeFlow.value = theme
+            assertEquals(DEFAULT_STATE.copy(theme = theme), stateFlow.awaitItem())
+            assertEquals(MainEvent.UpdateAppTheme(osTheme = theme.osValue), eventFlow.awaitItem())
+        }
 
         verify {
             settingsRepository.appTheme
             settingsRepository.appThemeStateFlow
+            settingsRepository.appLanguageStateFlow
+        }
+    }
+
+    @Test
+    fun `on AppLanguageChanged should send UpdateAppLocale event`() = runTest {
+        val language = AppLanguage.ENGLISH_BRITISH
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
+            mutableAppLanguageFlow.value = language
+            assertEquals(MainEvent.UpdateAppLocale(localeName = language.localeName), awaitItem())
+        }
+
+        verify(exactly = 1) {
+            settingsRepository.appLanguageStateFlow
         }
     }
 
@@ -517,12 +552,12 @@ class MainViewModelTest : BaseViewModelTest() {
                 )
             } returns EmailTokenResult.Error(message = null)
 
-            viewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = mockIntent,
-                ),
-            )
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
+                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
                     MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
                     awaitItem(),
@@ -554,12 +589,12 @@ class MainViewModelTest : BaseViewModelTest() {
                 )
             } returns EmailTokenResult.Error(message = expectedMessage)
 
-            viewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = mockIntent,
-                ),
-            )
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
+                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
                     MainEvent.ShowToast(expectedMessage.asText()),
                     awaitItem(),
@@ -618,6 +653,7 @@ class MainViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         val fido2Intent = createMockIntent(
             mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -644,11 +680,13 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 request data should set the user to unverified`() {
+    fun `on ReceiveFirstIntent with fido2 create request data should set the user verification based on request`() {
         val viewModel = createViewModel()
+        val createCredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
         val fido2Intent = createMockIntent(
-            mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            mockFido2CreateCredentialRequest = createCredentialRequest,
         )
 
         viewModel.trySendAction(
@@ -658,7 +696,7 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         verify {
-            fido2CredentialManager.isUserVerified = false
+            fido2CredentialManager.isUserVerified = createCredentialRequest.isUserVerified ?: false
         }
     }
 
@@ -673,6 +711,7 @@ class MainViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         val mockIntent = createMockIntent(
             mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -703,6 +742,7 @@ class MainViewModelTest : BaseViewModelTest() {
             packageName = "com.x8bit.bitwarden",
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
+            isUserVerified = true,
         )
         val mockIntent = createMockIntent(
             mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -963,9 +1003,12 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(MainAction.OpenDebugMenu)
-
         viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
+            viewModel.trySendAction(MainAction.OpenDebugMenu)
             assertEquals(MainEvent.NavigateToDebugMenu, awaitItem())
         }
     }
@@ -1108,7 +1151,7 @@ private fun createMockIntent(
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
     every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
-    every { getFido2CredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
+    every { getFido2CreateCredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
     every { getFido2GetCredentialsRequestOrNull() } returns mockFido2GetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut

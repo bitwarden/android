@@ -224,7 +224,6 @@ fun BitwardenTextField(
         Box(modifier = modifier.defaultMinSize(minHeight = 60.dp)) {
             Column(
                 modifier = Modifier
-                    .testTag(textFieldTestTag.orEmpty())
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
                     .focusRequester(focusRequester)
@@ -269,7 +268,9 @@ fun BitwardenTextField(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     isError = isError,
                     visualTransformation = visualTransformation,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .run { textFieldTestTag?.let { testTag(tag = it) } ?: this }
+                        .fillMaxWidth(),
                 )
                 supportingTextContent?.let {
                     Spacer(modifier = Modifier.height(height = 8.dp))

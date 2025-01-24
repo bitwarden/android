@@ -21,7 +21,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -359,6 +359,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             packageName = "mockPackageName-1",
             signingInfo = SigningInfo(),
             origin = null,
+            isUserVerified = true,
         )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = fido2CreateCredentialRequest,
@@ -781,6 +782,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 packageName = "mockPackageName",
                 signingInfo = mockk<SigningInfo>(),
                 origin = null,
+                isUserVerified = true,
             )
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
@@ -860,6 +862,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 packageName = "mockPackageName",
                 signingInfo = mockk<SigningInfo>(),
                 origin = null,
+                isUserVerified = false,
             )
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
@@ -940,7 +943,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should skip user verification when user is verified`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -992,7 +995,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should show fido2 error dialog when create options are null`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -1036,7 +1039,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should emit fido user verification as optional when verification is PREFERRED`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -1081,7 +1084,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in add mode during fido2, SaveClick should emit fido user verification as required when request user verification option is REQUIRED`() =
         runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val fido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = fido2CredentialRequest,
@@ -1789,7 +1792,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                 ),
             )
-            val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            val mockFido2CredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
 
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockFido2CredentialRequest,
@@ -1840,7 +1843,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 notes = "mockNotes-1",
             ),
         )
-        val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
+        val mockFidoRequest = createMockFido2CreateCredentialRequest(number = 1)
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
             fido2CreateCredentialRequest = mockFidoRequest,
         )
@@ -1911,7 +1914,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     notes = "mockNotes-1",
                 ),
             )
-            val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
+            val mockFidoRequest = createMockFido2CreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CreateCredentialRequest = mockFidoRequest,
             )
@@ -4083,7 +4086,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `UserVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
             every { authRepository.activeUserId } returns null
             specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
+                SpecialCircumstance.Fido2Save(createMockFido2CreateCredentialRequest(number = 1))
 
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
@@ -4100,7 +4103,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
@@ -4144,7 +4147,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Error
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
@@ -4181,7 +4184,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
@@ -4220,7 +4223,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `Fido2RegisterCredentialResult Cancelled should emit CompleteFido2Registration result`() =
             runTest {
-                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Cancelled
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,

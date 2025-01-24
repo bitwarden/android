@@ -69,13 +69,14 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        // Within the app the language will change dynamically and will be managed
-        // by the OS, but we need to ensure we properly set the language when
-        // upgrading from older versions that handle this differently.
+        // Within the app the language and theme will change dynamically and will be managed by the
+        // OS, but we need to ensure we properly set the values when upgrading from older versions
+        // that handle this differently or when the activity restarts.
         settingsRepository.appLanguage.localeName?.let { localeName ->
             val localeList = LocaleListCompat.forLanguageTags(localeName)
             AppCompatDelegate.setApplicationLocales(localeList)
         }
+        AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberNavController()
@@ -96,6 +97,16 @@ class MainActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT,
                             )
                             .show()
+                    }
+
+                    is MainEvent.UpdateAppLocale -> {
+                        AppCompatDelegate.setApplicationLocales(
+                            LocaleListCompat.forLanguageTags(event.localeName),
+                        )
+                    }
+
+                    is MainEvent.UpdateAppTheme -> {
+                        AppCompatDelegate.setDefaultNightMode(event.osTheme)
                     }
                 }
             }

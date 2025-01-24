@@ -264,6 +264,15 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `appLanguageStateFlow should react to changes in SettingsDiskSource`() = runTest {
+        settingsRepository.appLanguageStateFlow.test {
+            assertEquals(AppLanguage.DEFAULT, awaitItem())
+            fakeSettingsDiskSource.appLanguage = AppLanguage.DUTCH
+            assertEquals(AppLanguage.DUTCH, awaitItem())
+        }
+    }
+
+    @Test
     fun `vaultLastSync should pull from and update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertNull(settingsRepository.vaultLastSync)

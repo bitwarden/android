@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
@@ -110,6 +110,11 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
+            .launchIn(viewModelScope)
+        settingsRepository
+            .appLanguageStateFlow
+            .map { MainEvent.UpdateAppLocale(it.localeName) }
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
 
         settingsRepository
@@ -222,6 +227,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
         mutableStateFlow.update { it.copy(theme = action.theme) }
+        sendEvent(MainEvent.UpdateAppTheme(osTheme = action.theme.osValue))
     }
 
     private fun handleVaultUnlockStateChange() {
@@ -268,7 +274,7 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
-        val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
+        val fido2CreateCredentialRequestData = intent.getFido2CreateCredentialRequestOrNull()
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
         val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
         val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
@@ -329,25 +335,30 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            fido2CredentialRequestData != null -> {
+            fido2CreateCredentialRequestData != null -> {
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
-                fido2CredentialManager.isUserVerified = false
+                fido2CredentialManager.isUserVerified =
+                    fido2CreateCredentialRequestData.isUserVerified
+                        ?: fido2CredentialManager.isUserVerified
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
-                        fido2CreateCredentialRequest = fido2CredentialRequestData,
+                        fido2CreateCredentialRequest = fido2CreateCredentialRequestData,
                     )
 
                 // Switch accounts if the selected user is not the active user.
                 if (authRepository.activeUserId != null &&
-                    authRepository.activeUserId != fido2CredentialRequestData.userId
+                    authRepository.activeUserId != fido2CreateCredentialRequestData.userId
                 ) {
-                    authRepository.switchAccount(fido2CredentialRequestData.userId)
+                    authRepository.switchAccount(fido2CreateCredentialRequestData.userId)
                 }
             }
 
             fido2CredentialAssertionRequest != null -> {
+                fido2CredentialManager.isUserVerified =
+                    fido2CredentialAssertionRequest.isUserVerified
+                        ?: false
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Assertion(
                         fido2AssertionRequest = fido2CredentialAssertionRequest,
@@ -534,4 +545,18 @@ sealed class MainEvent {
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : MainEvent()
+
+    /**
+     * Indicates that the app language has been updated.
+     */
+    data class UpdateAppLocale(
+        val localeName: String?,
+    ) : MainEvent()
+
+    /**
+     * Indicates that the app theme has been updated.
+     */
+    data class UpdateAppTheme(
+        val osTheme: Int,
+    ) : MainEvent()
 }

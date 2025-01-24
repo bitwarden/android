@@ -38,6 +38,9 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.NewDevicePermanentDismiss,
     FlagKey.NewDeviceTemporaryDismiss,
     FlagKey.IgnoreEnvironmentCheck,
+    FlagKey.MutualTls,
+    FlagKey.SingleTapPasskeyCreation,
+    FlagKey.SingleTapPasskeyAuthentication,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -90,4 +93,8 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.NewDevicePermanentDismiss -> stringResource(R.string.new_device_permanent_dismiss)
     FlagKey.NewDeviceTemporaryDismiss -> stringResource(R.string.new_device_temporary_dismiss)
     FlagKey.IgnoreEnvironmentCheck -> stringResource(R.string.ignore_environment_check)
+    FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
+    FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)
+    FlagKey.SingleTapPasskeyAuthentication ->
+        stringResource(R.string.single_tap_passkey_authentication)
 }

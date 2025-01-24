@@ -71,6 +71,8 @@ object VaultManagerModule {
     @Provides
     @Singleton
     fun provideVaultLockManager(
+        @ApplicationContext context: Context,
+        clock: Clock,
         authDiskSource: AuthDiskSource,
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
@@ -79,9 +81,10 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
-        clock: Clock,
     ): VaultLockManager =
         VaultLockManagerImpl(
+            context = context,
+            clock = clock,
             authDiskSource = authDiskSource,
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,
@@ -90,7 +93,6 @@ object VaultManagerModule {
             userLogoutManager = userLogoutManager,
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,
-            clock = clock,
         )
 
     @Provides
