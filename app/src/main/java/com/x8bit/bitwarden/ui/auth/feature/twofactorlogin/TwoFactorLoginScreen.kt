@@ -269,8 +269,8 @@ private fun TwoFactorLoginScreenContent(
         }
 
         BitwardenSwitch(
-            label = stringResource(id = R.string.remember_me),
-            isChecked = state.isRememberMeEnabled,
+            label = stringResource(id = R.string.remember),
+            isChecked = state.isRememberEnabled,
             onCheckedChange = onRememberMeToggle,
             cardStyle = CardStyle.Full,
             modifier = Modifier
@@ -317,7 +317,7 @@ private fun TwoFactorLoginScreenContentPreview() {
                 dialogState = null,
                 displayEmail = "email@dot.com",
                 isContinueButtonEnabled = true,
-                isRememberMeEnabled = true,
+                isRememberEnabled = true,
                 captchaToken = null,
                 email = "",
                 password = "",

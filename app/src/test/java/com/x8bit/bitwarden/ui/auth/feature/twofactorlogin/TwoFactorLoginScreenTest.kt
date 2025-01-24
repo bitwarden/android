@@ -155,7 +155,7 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `remember me click should send RememberMeToggle action`() {
-        composeTestRule.onNodeWithText("Remember me").performClick()
+        composeTestRule.onNodeWithText("Remember").performClick()
         verify {
             viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
         }
@@ -163,11 +163,11 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `remember me should be toggled on or off according to the state`() {
-        composeTestRule.onNodeWithText("Remember me").assertIsOff()
+        composeTestRule.onNodeWithText("Remember").assertIsOff()
 
-        mutableStateFlow.update { it.copy(isRememberMeEnabled = true) }
+        mutableStateFlow.update { it.copy(isRememberEnabled = true) }
 
-        composeTestRule.onNodeWithText("Remember me").assertIsOn()
+        composeTestRule.onNodeWithText("Remember").assertIsOn()
     }
 
     @Test
@@ -290,7 +290,7 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     displayEmail = "ex***@email.com",
     dialogState = null,
     isContinueButtonEnabled = false,
-    isRememberMeEnabled = false,
+    isRememberEnabled = false,
     captchaToken = null,
     email = "example@email.com",
     password = "password123",
