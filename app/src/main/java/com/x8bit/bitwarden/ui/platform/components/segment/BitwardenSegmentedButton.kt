@@ -33,7 +33,6 @@ import kotlinx.collections.immutable.ImmutableList
  * @param modifier Modifier.
  * @param windowInsets The insets to be applied to this composable.
  */
-@Suppress("MaxLineLength")
 @Composable
 fun BitwardenSegmentedButton(
     options: ImmutableList<SegmentedButtonState>,
