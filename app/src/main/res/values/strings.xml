@@ -1137,4 +1137,14 @@ Do you want to switch to this account?</string>
   <string name="alias">Alias</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
 </resources>

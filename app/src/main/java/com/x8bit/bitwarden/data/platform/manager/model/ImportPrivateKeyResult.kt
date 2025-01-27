@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.disk.model
+package com.x8bit.bitwarden.data.platform.manager.model
 
 /**
  * Models the result of importing a private key.

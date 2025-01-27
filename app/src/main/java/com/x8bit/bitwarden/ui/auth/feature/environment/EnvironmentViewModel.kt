@@ -7,18 +7,23 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.KeyManager
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidUri
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -31,6 +36,8 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
+    private val fileManager: FileManager,
+    private val keyManager: KeyManager,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -53,6 +60,7 @@ class EnvironmentViewModel @Inject constructor(
             shouldShowErrorDialog = false,
             keyAlias = keyAlias,
             keyHost = keyHost,
+            dialog = null,
         )
     },
 ) {
@@ -74,10 +82,36 @@ class EnvironmentViewModel @Inject constructor(
         is EnvironmentAction.ApiServerUrlChange -> handleApiServerUrlChangeAction(action)
         is EnvironmentAction.IdentityServerUrlChange -> handleIdentityServerUrlChangeAction(action)
         is EnvironmentAction.IconsServerUrlChange -> handleIconsServerUrlChangeAction(action)
-        is EnvironmentAction.UseSystemCertificateClick -> handleUseSystemCertificateClickAction()
+        is EnvironmentAction.ImportCertificateClick -> handleImportCertificateClick()
+        is EnvironmentAction.ImportCertificateFilePickerResultReceive -> {
+            handleCertificateFilePickerResultReceive(action)
+        }
+
+        is EnvironmentAction.SetCertificatePasswordDialogDismiss -> {
+            handleSetCertificatePasswordDialogDismiss()
+        }
+
+        is EnvironmentAction.CertificateInstallationResultReceive -> {
+            handleCertificateInstallationResultReceive(action)
+        }
+
+        is EnvironmentAction.SetCertificateInfoResultReceive -> {
+            handleSetCertificateInfoResultReceive(action)
+        }
+
+        is EnvironmentAction.ChooseSystemCertificateClick -> {
+            handleChooseSystemCertificateClickAction()
+        }
+
+        is EnvironmentAction.ConfirmChooseSystemCertificateClick -> {
+            handleConfirmChooseSystemCertificateClick()
+        }
+
         is EnvironmentAction.SystemCertificateSelectionResultReceive -> {
             handleSystemCertificateSelectionResultReceive(action)
         }
+
+        is EnvironmentAction.Internal -> handleInternalAction(action)
     }
 
     private fun handleCloseClickAction() {
@@ -98,7 +132,7 @@ class EnvironmentViewModel @Inject constructor(
             }
 
         if (!urlsAreAllNullOrValid) {
-            mutableStateFlow.update { it.copy(shouldShowErrorDialog = true) }
+            showErrorDialog(message = R.string.environment_page_urls_error.asText())
             return
         }
 
@@ -119,12 +153,12 @@ class EnvironmentViewModel @Inject constructor(
             ),
         )
 
-        sendEvent(EnvironmentEvent.ShowToast(message = R.string.environment_saved.asText()))
+        showToast(message = R.string.environment_saved.asText())
         sendEvent(EnvironmentEvent.NavigateBack)
     }
 
     private fun handleErrorDialogDismiss() {
-        mutableStateFlow.update { it.copy(shouldShowErrorDialog = false) }
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 
     private fun handleServerUrlChangeAction(
@@ -133,6 +167,41 @@ class EnvironmentViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(serverUrl = action.serverUrl)
         }
+    }
+
+    private fun handleCertificateInstallationResultReceive(
+        action: EnvironmentAction.CertificateInstallationResultReceive,
+    ) {
+        showToast(
+            message = if (action.success) {
+                R.string.certificate_installed.asText()
+            } else {
+                R.string.certificate_installation_failed.asText()
+            },
+        )
+    }
+
+    private fun handleSetCertificatePasswordDialogDismiss() {
+        mutableStateFlow.update { it.copy(dialog = null, keyAlias = "") }
+    }
+
+    private fun handleCertificateFilePickerResultReceive(
+        action: EnvironmentAction.ImportCertificateFilePickerResultReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = EnvironmentState.DialogState.SetCertificateData(
+                    certificateBytes = action.certificateFileData,
+                ),
+            )
+        }
+    }
+
+    private fun handleConfirmChooseSystemCertificateClick() {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+        sendEvent(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
     }
 
     private fun handleWebVaultServerUrlChangeAction(
@@ -167,14 +236,103 @@ class EnvironmentViewModel @Inject constructor(
         }
     }
 
-    private fun handleUseSystemCertificateClickAction() {
-        sendEvent(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+    private fun handleImportCertificateClick() {
+        sendEvent(EnvironmentEvent.ShowCertificateImportFileChooser)
+    }
+
+    private fun handleInternalAction(action: EnvironmentAction.Internal) {
+        when (action) {
+            is EnvironmentAction.Internal.ImportKeyResultReceive -> {
+                handleSaveKeyResultReceive(action)
+            }
+        }
+    }
+
+    private fun handleSetCertificateInfoResultReceive(
+        action: EnvironmentAction.SetCertificateInfoResultReceive,
+    ) {
+        if (action.password.isBlank()) {
+            showErrorDialog(
+                message = R.string.validation_field_required.asText(
+                    R.string.password.asText(),
+                ),
+            )
+            return
+        }
+
+        if (action.alias.isBlank()) {
+            showErrorDialog(
+                message = R.string.validation_field_required.asText(
+                    R.string.alias.asText(),
+                ),
+            )
+            return
+        }
+
+        mutableStateFlow.update { it.copy(dialog = null) }
+
+        viewModelScope.launch {
+            fileManager
+                .uriToByteArray(action.certificateFileData.uri)
+                .map { bytes ->
+                    keyManager.importMutualTlsCertificate(
+                        key = bytes,
+                        alias = action.alias,
+                        password = action.password,
+                    )
+                }
+                .map { result ->
+                    sendAction(
+                        EnvironmentAction.Internal.ImportKeyResultReceive(result),
+                    )
+                }
+        }
+    }
+
+    private fun handleSaveKeyResultReceive(
+        action: EnvironmentAction.Internal.ImportKeyResultReceive,
+    ) {
+        when (val result = action.result) {
+            is ImportPrivateKeyResult.Success -> {
+                mutableStateFlow.update { state ->
+                    state.copy(keyAlias = result.alias)
+                }
+            }
+
+            is ImportPrivateKeyResult.Error.UnsupportedKey -> {
+                showToast(message = R.string.unsupported_certificate_type.asText())
+            }
+
+            is ImportPrivateKeyResult.Error.KeyStoreOperationFailed -> {
+                showToast(message = R.string.certificate_installation_failed.asText())
+            }
+
+            is ImportPrivateKeyResult.Error.UnrecoverableKey -> {
+                showToast(message = R.string.certificate_password_incorrect.asText())
+            }
+
+            is ImportPrivateKeyResult.Error.InvalidCertificateChain -> {
+                showToast(R.string.invalid_certificate_chain.asText())
+            }
+
+            ImportPrivateKeyResult.Error.DuplicateAlias -> {
+                showToast(R.string.certificate_alias_already_exists.asText())
+            }
+        }
+    }
+
+    private fun handleChooseSystemCertificateClickAction() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = EnvironmentState.DialogState.SystemCertificateWarningDialog,
+            )
+        }
     }
 
     private fun handleSystemCertificateSelectionResultReceive(
         action: EnvironmentAction.SystemCertificateSelectionResultReceive,
     ) {
-        when (val result = action.result) {
+        when (val result = action.privateKeyAliasSelectionResult) {
             is PrivateKeyAliasSelectionResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -193,6 +351,16 @@ class EnvironmentViewModel @Inject constructor(
             }
         }
     }
+
+    private fun showToast(message: Text) {
+        sendEvent(EnvironmentEvent.ShowToast(message))
+    }
+
+    private fun showErrorDialog(message: Text) {
+        mutableStateFlow.update {
+            it.copy(dialog = EnvironmentState.DialogState.Error(message = message))
+        }
+    }
 }
 
 /**
@@ -207,12 +375,40 @@ data class EnvironmentState(
     val iconsServerUrl: String,
     val shouldShowErrorDialog: Boolean,
     val keyAlias: String,
+    val dialog: DialogState?,
     // internal
     val keyHost: MutualTlsKeyHost?,
 ) : Parcelable {
+
     val keyUri: String?
         get() = "cert://$keyHost/$keyAlias"
             .takeUnless { keyHost == null || keyAlias.isEmpty() }
+
+    /**
+     * Models the dialog states of the environment screen.
+     */
+    @Parcelize
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Show an error dialog.
+         */
+        data class Error(
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Show a dialog to capture the certificate alias and password.
+         */
+        data class SetCertificateData(
+            val certificateBytes: IntentManager.FileData,
+        ) : DialogState()
+
+        /**
+         * Show a dialog warning the user that system certificates are not as secure.
+         */
+        data object SystemCertificateWarningDialog : DialogState()
+    }
 }
 
 /**
@@ -223,6 +419,11 @@ sealed class EnvironmentEvent {
      * Navigate back.
      */
     data object NavigateBack : EnvironmentEvent()
+
+    /**
+     * Show the File chooser dialog for certificate import.
+     */
+    data object ShowCertificateImportFileChooser : EnvironmentEvent()
 
     /**
      * Show the system certificate selection dialog.
@@ -257,15 +458,37 @@ sealed class EnvironmentAction {
     data object ErrorDialogDismiss : EnvironmentAction()
 
     /**
-     * User clicked the use system certificate button.
+     * User clicked the import certificate button.
      */
-    data object UseSystemCertificateClick : EnvironmentAction()
+    data object ImportCertificateClick : EnvironmentAction()
+
+    /**
+     * User dismissed the set certificate password dialog without providing a password.
+     */
+    data object SetCertificatePasswordDialogDismiss : EnvironmentAction()
+
+    /**
+     * User clicked the choose system certificate button.
+     */
+    data object ChooseSystemCertificateClick : EnvironmentAction()
+
+    /**
+     * User confirmed choosing the system certificate.
+     */
+    data object ConfirmChooseSystemCertificateClick : EnvironmentAction()
 
     /**
      * Indicates that the overall server URL has changed.
      */
     data class ServerUrlChange(
         val serverUrl: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates that the certificate installation result was received.
+     */
+    data class CertificateInstallationResultReceive(
+        val success: Boolean,
     ) : EnvironmentAction()
 
     /**
@@ -297,11 +520,39 @@ sealed class EnvironmentAction {
     ) : EnvironmentAction()
 
     /**
-     * Indicates the result of system certificate selection has been received.
+     * Indicates that the certificate file selection result was received.
+     */
+    data class ImportCertificateFilePickerResultReceive(
+        val certificateFileData: IntentManager.FileData,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates the certificate info data was received.
+     */
+    data class SetCertificateInfoResultReceive(
+        val certificateFileData: IntentManager.FileData,
+        val password: String,
+        val alias: String,
+    ) : EnvironmentAction()
+
+    /**
+     * User has selected a system certificate alias.
      */
     data class SystemCertificateSelectionResultReceive(
-        val result: PrivateKeyAliasSelectionResult,
+        val privateKeyAliasSelectionResult: PrivateKeyAliasSelectionResult,
     ) : EnvironmentAction()
+
+    /**
+     * Models actions the EnvironmentViewModel itself may trigger.
+     */
+    sealed class Internal : EnvironmentAction() {
+        /**
+         * Indicates the result of importing a key was received.
+         */
+        data class ImportKeyResultReceive(
+            val result: ImportPrivateKeyResult,
+        ) : Internal()
+    }
 }
 
 /**

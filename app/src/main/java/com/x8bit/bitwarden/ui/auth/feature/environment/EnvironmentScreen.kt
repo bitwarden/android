@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
 import android.widget.Toast
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,13 +32,18 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenClientCertificateDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import kotlinx.collections.immutable.persistentListOf
@@ -45,7 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * Displays the about self-hosted/custom environment screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MaxLineLength")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnvironmentScreen(
@@ -55,6 +61,14 @@ fun EnvironmentScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val intentManager = LocalIntentManager.current
+    val certificateImportFilePickerLauncher = intentManager.getActivityResultLauncher { result ->
+        intentManager.getFileDataFromActivityResult(result)?.let {
+            viewModel.trySendAction(
+                EnvironmentAction.ImportCertificateFilePickerResultReceive(it),
+            )
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is EnvironmentEvent.NavigateBack -> onNavigateBack.invoke()
@@ -62,24 +76,73 @@ fun EnvironmentScreen(
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
 
+            is EnvironmentEvent.ShowCertificateImportFileChooser -> {
+                certificateImportFilePickerLauncher.launch(
+                    intentManager.createFileChooserIntent(withCameraIntents = false),
+                )
+            }
+
             is EnvironmentEvent.ShowSystemCertificateSelectionDialog -> {
                 viewModel.trySendAction(
                     EnvironmentAction.SystemCertificateSelectionResultReceive(
-                        result = keyChainManager.choosePrivateKeyAlias(state.serverUrl),
+                        keyChainManager.choosePrivateKeyAlias(
+                            currentServerUrl = state.serverUrl.takeUnless { it.isEmpty() },
+                        ),
                     ),
                 )
             }
         }
     }
 
-    if (state.shouldShowErrorDialog) {
-        BitwardenBasicDialog(
-            title = stringResource(id = R.string.an_error_has_occurred),
-            message = stringResource(id = R.string.environment_page_urls_error),
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
-            },
-        )
+    when (val dialog = state.dialog) {
+        is EnvironmentState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = stringResource(id = R.string.an_error_has_occurred),
+                message = dialog.message(),
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+                },
+            )
+        }
+
+        is EnvironmentState.DialogState.SetCertificateData -> {
+            BitwardenClientCertificateDialog(
+                onConfirmClick = { alias, password ->
+                    viewModel.trySendAction(
+                        EnvironmentAction.SetCertificateInfoResultReceive(
+                            certificateFileData = dialog.certificateBytes,
+                            password = password,
+                            alias = alias,
+                        ),
+                    )
+                },
+                onDismissRequest = {
+                    viewModel.trySendAction(
+                        action = EnvironmentAction.SetCertificatePasswordDialogDismiss,
+                    )
+                },
+            )
+        }
+
+        is EnvironmentState.DialogState.SystemCertificateWarningDialog -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.warning),
+                message = stringResource(R.string.system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden),
+                confirmButtonText = stringResource(R.string.continue_text),
+                onConfirmClick = {
+                    viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick)
+                },
+                dismissButtonText = stringResource(R.string.cancel),
+                onDismissClick = {
+                    viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss)
+                },
+                onDismissRequest = {
+                    viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss)
+                },
+            )
+        }
+
+        null -> Unit
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -155,8 +218,10 @@ fun EnvironmentScreen(
                 label = stringResource(id = R.string.client_certificate_mtls),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             BitwardenTextField(
                 label = stringResource(id = R.string.certificate_alias),
@@ -169,16 +234,33 @@ fun EnvironmentScreen(
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .focusable(false)
                     .testTag("KeyAliasEntry")
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-            BitwardenTextButton(
-                label = stringResource(id = R.string.use_system_certificate),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.UseSystemCertificateClick) }
+            BitwardenFilledButton(
+                label = stringResource(id = R.string.import_certificate),
+                onClick = {
+                    viewModel.trySendAction(EnvironmentAction.ImportCertificateClick)
                 },
-                modifier = Modifier.standardHorizontalMargin(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("ImportCertificateButton"),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            BitwardenOutlinedButton(
+                label = stringResource(id = R.string.choose_system_certificate),
+                onClick = {
+                    viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("ChooseSystemCertificateButton"),
             )
 
             Spacer(modifier = Modifier.height(height = 16.dp))
