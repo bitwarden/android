@@ -249,9 +249,9 @@ private fun ExportVaultScreenContent(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 },
+                showPasswordTestTag = "FilePasswordEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("FilePasswordEntry")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
@@ -264,9 +264,9 @@ private fun ExportVaultScreenContent(
                 onValueChange = onConfirmFilePasswordInputChanged,
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
+                passwordFieldTestTag = "ConfirmFilePasswordEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("ConfirmFilePasswordEntry")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
@@ -321,9 +321,9 @@ private fun ExportVaultScreenContent(
                 value = state.passwordInput,
                 readOnly = state.policyPreventsExport,
                 onValueChange = onPasswordInputChanged,
+                textFieldTestTag = "MasterPasswordEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("MasterPasswordEntry")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )

@@ -420,9 +420,9 @@ private fun AddSendOptions(
                 readOnly = sendRestrictionPolicy,
                 value = state.common.passwordInput,
                 onValueChange = addSendHandlers.onPasswordChange,
+                textFieldTestTag = "SendNewPasswordEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("SendNewPasswordEntry")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )

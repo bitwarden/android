@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param label Label for the text field.
  * @param value Current text on the text field.
  * @param modifier Modifier for the composable.
+ * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
@@ -31,13 +33,15 @@ fun BitwardenHiddenPasswordField(
     label: String?,
     value: String,
     modifier: Modifier = Modifier,
+    passwordFieldTestTag: String? = null,
     cardStyle: CardStyle? = null,
 ) {
     CompositionLocalProvider(value = LocalTextToolbar provides BitwardenEmptyTextToolbar) {
         TextField(
             modifier = modifier
                 .cardBackground(cardStyle = cardStyle)
-                .cardPadding(cardStyle = cardStyle, vertical = 6.dp),
+                .cardPadding(cardStyle = cardStyle, vertical = 6.dp)
+                .run { passwordFieldTestTag?.let { testTag(tag = it) } ?: this },
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             label = label?.let { { Text(text = it) } },
             value = value,

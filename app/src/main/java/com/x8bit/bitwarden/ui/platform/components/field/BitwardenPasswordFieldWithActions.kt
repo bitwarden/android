@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -95,10 +94,9 @@ fun BitwardenPasswordFieldWithActions(
                 readOnly = readOnly,
                 singleLine = singleLine,
                 showPasswordTestTag = showPasswordTestTag,
+                passwordFieldTestTag = passwordFieldTestTag,
                 textToolbarType = textToolbarType,
-                modifier = Modifier
-                    .semantics { passwordFieldTestTag?.let { testTag = it } }
-                    .weight(weight = 1f),
+                modifier = Modifier.weight(weight = 1f),
             )
             BitwardenRowOfActions(
                 modifier = Modifier.padding(paddingValues = actionsPadding),
