@@ -484,7 +484,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the [lastLockTimestamp] was stored successfully using the [userId].
      */
-    fun assertNotNullLastLockTimestamp(userId: String, expectedValue: Instant?) {
+    fun assertLastLockTimestamp(userId: String, expectedValue: Instant?) {
         assertEquals(expectedValue, storedLastLockTimestampState[userId])
     }
 
