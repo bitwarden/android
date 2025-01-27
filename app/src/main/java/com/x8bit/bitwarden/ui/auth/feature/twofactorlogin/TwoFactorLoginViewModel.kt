@@ -68,7 +68,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                     .twoFactorResponse
                     .preferredAuthMethod
                     .isContinueButtonEnabled,
-                isRememberMeEnabled = false,
+                isRememberEnabled = false,
                 captchaToken = null,
                 email = args.emailAddress,
                 password = args.password,
@@ -445,7 +445,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     private fun handleRememberMeToggle(action: TwoFactorLoginAction.RememberMeToggle) {
         mutableStateFlow.update {
             it.copy(
-                isRememberMeEnabled = action.isChecked,
+                isRememberEnabled = action.isChecked,
             )
         }
     }
@@ -561,7 +561,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 twoFactorData = TwoFactorDataModel(
                     code = code,
                     method = state.authMethod.value.toString(),
-                    remember = state.isRememberMeEnabled,
+                    remember = state.isRememberEnabled,
                 ),
                 captchaToken = state.captchaToken,
                 orgIdentifier = state.orgIdentifier,
@@ -586,7 +586,7 @@ data class TwoFactorLoginState(
     val dialogState: DialogState?,
     val displayEmail: String,
     val isContinueButtonEnabled: Boolean,
-    val isRememberMeEnabled: Boolean,
+    val isRememberEnabled: Boolean,
     // Internal
     val captchaToken: String?,
     val email: String,
