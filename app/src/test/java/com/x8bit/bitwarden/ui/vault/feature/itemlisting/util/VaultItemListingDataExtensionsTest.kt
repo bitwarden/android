@@ -464,7 +464,6 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -558,7 +557,6 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -645,7 +643,6 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -705,7 +702,6 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -730,7 +726,6 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -753,7 +748,6 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -776,7 +770,6 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -803,7 +796,6 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -833,7 +825,6 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
 
@@ -860,7 +851,6 @@ class VaultItemListingDataExtensionsTest {
                     every { issuer } returns "issuer"
                 },
                 isPremiumUser = true,
-                organizationPremiumStatusMap = emptyMap(),
             ),
         )
     }
@@ -1065,7 +1055,6 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -1110,7 +1099,6 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(

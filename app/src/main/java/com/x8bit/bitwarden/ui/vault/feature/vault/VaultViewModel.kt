@@ -38,7 +38,6 @@ import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.getOrganizationPremiumStatusMap
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -105,9 +104,6 @@ class VaultViewModel @Inject constructor(
             isRefreshing = false,
             showImportActionCard = false,
             showSshKeys = showSshKeys,
-            organizationPremiumStatusMap = userState
-                .activeAccount
-                .getOrganizationPremiumStatusMap(),
         )
     },
 ) {
@@ -634,7 +630,6 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     showSshKeys = showSshKeys,
-                    organizationPremiumStatusMap = state.organizationPremiumStatusMap,
                 ),
                 dialog = null,
                 isRefreshing = false,
@@ -673,7 +668,6 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     showSshKeys = state.showSshKeys,
-                    organizationPremiumStatusMap = state.organizationPremiumStatusMap,
                 ),
             )
         }
@@ -745,7 +739,6 @@ data class VaultState(
     val isRefreshing: Boolean,
     val showImportActionCard: Boolean,
     val showSshKeys: Boolean,
-    val organizationPremiumStatusMap: Map<String, Boolean>,
 ) : Parcelable {
 
     /**
@@ -1375,7 +1368,6 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     showSshKeys = it.showSshKeys,
-                    organizationPremiumStatusMap = it.organizationPremiumStatusMap,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

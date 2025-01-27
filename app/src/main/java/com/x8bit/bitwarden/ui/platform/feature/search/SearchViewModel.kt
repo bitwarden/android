@@ -46,7 +46,6 @@ import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalD
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.getOrganizationPremiumStatusMap
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.model.TotpData
@@ -108,9 +107,6 @@ class SearchViewModel @Inject constructor(
                 totpData = specialCircumstance?.toTotpDataOrNull(),
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
                 isPremium = userState.activeAccount.isPremium,
-                organizationPremiumStatusMap = userState
-                    .activeAccount
-                    .getOrganizationPremiumStatusMap(),
             )
         },
 ) {
@@ -691,7 +687,6 @@ class SearchViewModel @Inject constructor(
                                 isAutofill = state.isAutofill,
                                 isTotp = state.isTotp,
                                 isPremiumUser = state.isPremium,
-                                organizationPremiumStatusMap = state.organizationPremiumStatusMap,
                             )
                     }
 
@@ -738,7 +733,6 @@ data class SearchState(
     val totpData: TotpData?,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
-    val organizationPremiumStatusMap: Map<String, Boolean>,
 ) : Parcelable {
 
     /**

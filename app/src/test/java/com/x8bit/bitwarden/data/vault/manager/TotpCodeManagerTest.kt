@@ -48,7 +48,7 @@ class TotpCodeManagerTest {
             vaultSdkSource.generateTotp(any(), any(), any())
         } returns totpResponse.asSuccess()
 
-        val expected = createVerificationCodeItem().copy(orgId = "mockOrganizationId-1")
+        val expected = createVerificationCodeItem()
 
         totpCodeManager.getTotpCodesStateFlow(userId, cipherList).test {
             assertEquals(DataState.Loaded(listOf(expected)), awaitItem())
@@ -106,10 +106,7 @@ class TotpCodeManagerTest {
             repromptType = CipherRepromptType.PASSWORD,
         )
 
-        val expected = createVerificationCodeItem().copy(
-            hasPasswordReprompt = true,
-            orgId = cipherView.organizationId,
-        )
+        val expected = createVerificationCodeItem().copy(hasPasswordReprompt = true)
 
         totpCodeManager.getTotpCodeStateFlow(userId, cipherView).test {
             assertEquals(DataState.Loaded(expected), awaitItem())

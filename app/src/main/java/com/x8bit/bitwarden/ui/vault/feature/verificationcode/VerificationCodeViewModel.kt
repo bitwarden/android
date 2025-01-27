@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.getOrganizationPremiumStatusMap
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -320,11 +319,8 @@ class VerificationCodeViewModel @Inject constructor(
         authCodes: List<VerificationCodeItem>,
         userAccount: UserState.Account?,
     ): DataState<List<VerificationCodeItem>> {
-        val orgPremiumStatusMap = userAccount?.getOrganizationPremiumStatusMap().orEmpty()
         val filteredAuthCodes = authCodes.mapNotNull { authCode ->
-            val premiumStatus =
-                (authCode.orgId?.let { orgPremiumStatusMap[it] } ?: userAccount?.isPremium) == true
-            if (premiumStatus) {
+            if (userAccount?.isPremium == true) {
                 authCode
             } else {
                 authCode.takeIf { it.orgUsesTotp }

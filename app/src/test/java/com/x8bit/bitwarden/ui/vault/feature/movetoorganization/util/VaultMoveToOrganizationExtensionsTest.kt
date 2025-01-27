@@ -108,7 +108,6 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
-                            shouldUsersGetPremium = false,
                         ),
                         Organization(
                             id = "mockOrganizationId-2",
@@ -116,7 +115,6 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
-                            shouldUsersGetPremium = false,
                         ),
                         Organization(
                             id = "mockOrganizationId-3",
@@ -124,7 +122,6 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
-                            shouldUsersGetPremium = false,
                         ),
                     )
                 } else {

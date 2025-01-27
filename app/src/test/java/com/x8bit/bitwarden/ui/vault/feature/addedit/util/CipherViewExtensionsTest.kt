@@ -565,7 +565,6 @@ class CipherViewExtensionsTest {
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
-                    shouldUsersGetPremium = false,
                 ),
             ),
             isBiometricsEnabled = true,
