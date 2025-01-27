@@ -475,7 +475,6 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             isPremiumUser = true,
             isTotp = false,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
