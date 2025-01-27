@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -22,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -30,11 +34,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -116,8 +122,11 @@ fun ManualCodeEntryScreen(
         },
     )
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.authenticator_key_scanner),
@@ -126,16 +135,22 @@ fun ManualCodeEntryScreen(
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(ManualCodeEntryAction.CloseClick) }
                 },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+                scrollBehavior = scrollBehavior,
             )
         },
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .imePadding()
+                .verticalScroll(state = rememberScrollState())
+                .fillMaxSize(),
+        ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             Text(
                 text = stringResource(id = R.string.enter_key_manually),
                 style = BitwardenTheme.typography.titleMedium,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("EnterKeyManuallyButton"),
             )
 
@@ -151,10 +166,11 @@ fun ManualCodeEntryScreen(
                         )
                     }
                 },
+                textFieldTestTag = "AddManualTOTPField",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textFieldTestTag = "AddManualTOTPField",
+                    .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -165,32 +181,29 @@ fun ManualCodeEntryScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .testTag("AddManualTOTPButton"),
             )
 
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Text(
                 text = stringResource(id = R.string.once_the_key_is_successfully_entered),
                 style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        vertical = 16.dp,
-                        horizontal = 16.dp,
-                    ),
+                    .standardHorizontalMargin(),
             )
 
+            Spacer(modifier = Modifier.height(height = 24.dp))
             Text(
                 text = stringResource(id = R.string.cannot_add_authenticator_key),
                 style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        vertical = 8.dp,
-                        horizontal = 16.dp,
-                    ),
+                    .standardHorizontalMargin(),
             )
 
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenClickableText(
                 label = stringResource(id = R.string.scan_qr_code),
                 onClick = remember(viewModel) {
@@ -205,6 +218,9 @@ fun ManualCodeEntryScreen(
                 style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier.testTag("ScanQRCodeButton"),
             )
+
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
