@@ -253,9 +253,9 @@ private fun LoginScreenContent(
                     modifier = Modifier.testTag("GetMasterPasswordHintLabel"),
                 )
             },
+            passwordFieldTestTag = "MasterPasswordEntry",
             cardStyle = CardStyle.Full,
             modifier = Modifier
-                .testTag("MasterPasswordEntry")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
