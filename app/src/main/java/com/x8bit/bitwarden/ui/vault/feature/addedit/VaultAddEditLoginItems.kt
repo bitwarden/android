@@ -606,7 +606,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
                     label = stringResource(id = R.string.totp),
                     value = totpKey,
                     cardStyle = CardStyle.Full,
-                    modifier = modifier.testTag("LoginTotpEntry"),
+                    textFieldTestTag = "LoginTotpEntry",
                     onValueChange = {},
                     readOnly = true,
                     enabled = false,
