@@ -940,7 +940,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     totpData = null,
     autofillSelectionData = null,
     isPremium = true,
-    organizationPremiumStatusMap = emptyMap(),
 )
 
 private fun createStateForAutofill(

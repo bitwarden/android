@@ -40,7 +40,6 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
     showSshKeys: Boolean,
-    organizationPremiumStatusMap: Map<String, Boolean>,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
@@ -74,22 +73,14 @@ fun VaultData.toViewState(
     return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
-        val totpItemsGroupedByOwnership = filteredCipherViewList.groupBy {
-            !it.organizationId.isNullOrBlank()
-        }
-        val userOwnedTotpItems = totpItemsGroupedByOwnership[false]
-            ?.filter {
-                it.login?.totp != null && isPremium
-            }.orEmpty()
-        val organizationOwnedTotpItems = totpItemsGroupedByOwnership[true]
-            ?.filter {
-                it.login?.totp != null &&
-                    (organizationPremiumStatusMap[it.id] == true || it.organizationUseTotp)
-            }.orEmpty()
+        val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
-            totpItemsCount = userOwnedTotpItems.count() +
-                organizationOwnedTotpItems.count(),
+            totpItemsCount = if (isPremium) {
+                totpItems.count()
+            } else {
+                totpItems.count { it.organizationUseTotp }
+            },
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
             cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
             identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
@@ -103,8 +94,7 @@ fun VaultData.toViewState(
                         hasMasterPassword = hasMasterPassword,
                         isIconLoadingDisabled = isIconLoadingDisabled,
                         baseIconUrl = baseIconUrl,
-                        isPremiumUser = organizationPremiumStatusMap[it.organizationId]
-                            ?: isPremium,
+                        isPremiumUser = isPremium,
                     )
                 },
             folderItems = filteredFolderViewList
@@ -138,8 +128,7 @@ fun VaultData.toViewState(
                         hasMasterPassword = hasMasterPassword,
                         isIconLoadingDisabled = isIconLoadingDisabled,
                         baseIconUrl = baseIconUrl,
-                        isPremiumUser = organizationPremiumStatusMap[it.organizationId]
-                            ?: isPremium,
+                        isPremiumUser = isPremium,
                     )
                 }
                 .takeIf { it.size < NO_FOLDER_ITEM_THRESHOLD }

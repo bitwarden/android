@@ -71,7 +71,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toVaultItemCipherTy
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.getOrganizationPremiumStatusMap
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
@@ -106,8 +105,8 @@ class VaultItemListingViewModel @Inject constructor(
     private val cipherMatchingManager: CipherMatchingManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val policyManager: PolicyManager,
-    private val fido2CredentialManager: Fido2CredentialManager,
     private val fido2OriginManager: Fido2OriginManager,
+    private val fido2CredentialManager: Fido2CredentialManager,
     private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
@@ -141,9 +140,6 @@ class VaultItemListingViewModel @Inject constructor(
             fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
-            organizationPremiumStatusMap = userState
-                .activeAccount
-                .getOrganizationPremiumStatusMap(),
         )
     },
 ) {
@@ -1586,7 +1582,6 @@ class VaultItemListingViewModel @Inject constructor(
                                 .fido2CredentialAutofillViewList,
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
-                            organizationPremiumStatusMap = state.organizationPremiumStatusMap,
                         )
                     }
 
@@ -1752,7 +1747,6 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
-    val organizationPremiumStatusMap: Map<String, Boolean>,
 ) {
     /**
      * Whether or not the add FAB should be shown.

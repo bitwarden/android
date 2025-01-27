@@ -111,7 +111,6 @@ fun VaultData.toViewState(
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     totpData: TotpData?,
     isPremiumUser: Boolean,
-    organizationPremiumStatusMap: Map<String, Boolean>,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
         .filter { cipherView ->
@@ -143,7 +142,6 @@ fun VaultData.toViewState(
                 fido2CredentialAutofillViews = fido2CredentialAutofillViews,
                 isPremiumUser = isPremiumUser,
                 isTotp = totpData != null,
-                organizationPremiumStatusMap = organizationPremiumStatusMap,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -292,10 +290,8 @@ private fun List<CipherView>.toDisplayItemList(
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     isPremiumUser: Boolean,
     isTotp: Boolean,
-    organizationPremiumStatusMap: Map<String, Boolean>,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
-        val premiumStatus = organizationPremiumStatusMap[it.organizationId] ?: isPremiumUser
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
             hasMasterPassword = hasMasterPassword,
@@ -306,7 +302,7 @@ private fun List<CipherView>.toDisplayItemList(
                 ?.firstOrNull { fido2CredentialAutofillView ->
                     fido2CredentialAutofillView.cipherId == it.id
                 },
-            isPremiumUser = premiumStatus,
+            isPremiumUser = isPremiumUser,
             isTotp = isTotp,
         )
     }
