@@ -60,7 +60,6 @@ fun <T : Enum<T>> CoachMarkContainer(
     modifier: Modifier = Modifier,
     content: @Composable CoachMarkScope<T>.() -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -101,9 +100,8 @@ fun <T : Enum<T>> CoachMarkContainer(
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onTap = {
-                                scope.launch {
-                                    state.showToolTipForCurrentCoachMark()
-                                }
+                                // NO-OP, this consumes any touch events
+                                // while the scrim is showing.
                             },
                         )
                     }

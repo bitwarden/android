@@ -203,6 +203,23 @@ class DebugMenuRepositoryTest {
         }
         assertTrue(lambdaHasBeenCalled)
     }
+
+    @Test
+    fun `resetCoachMarkTourStatuses calls settings disk source setting values back to null`() {
+        every {
+            mockSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = any())
+        } just runs
+        every {
+            mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = any())
+        } just runs
+
+        debugMenuRepository.resetCoachMarkTourStatuses()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = null)
+            mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
+        }
+    }
 }
 
 private const val TEST_STRING_VALUE = "test"

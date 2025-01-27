@@ -78,14 +78,16 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(
             DebugMenuAction.UpdateFeatureFlag(FlagKey.EmailVerification, false),
         )
-        verify { mockDebugMenuRepository.updateFeatureFlag(FlagKey.EmailVerification, false) }
+        verify(exactly = 1) {
+            mockDebugMenuRepository.updateFeatureFlag(FlagKey.EmailVerification, false)
+        }
     }
 
     @Test
     fun `handleResetOnboardingStatus should reset the onboarding status`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(DebugMenuAction.RestartOnboarding)
-        verify { mockDebugMenuRepository.resetOnboardingStatusForCurrentUser() }
+        verify(exactly = 1) { mockDebugMenuRepository.resetOnboardingStatusForCurrentUser() }
     }
 
     @Suppress("MaxLineLength")
@@ -93,9 +95,18 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     fun `handleResetOnboardingCarousel should reset the onboarding carousel and update user state pending account action`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel)
-        verify {
+        verify(exactly = 1) {
             mockDebugMenuRepository.modifyStateToShowOnboardingCarousel(any())
             mockAuthRepository.hasPendingAccountAddition = true
+        }
+    }
+
+    @Test
+    fun `handleResetCoachMarkTourStatuses should call repository to reset values`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses)
+        verify(exactly = 1) {
+            mockDebugMenuRepository.resetCoachMarkTourStatuses()
         }
     }
 

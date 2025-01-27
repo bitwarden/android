@@ -115,6 +115,19 @@ fun DebugMenuScreen(
                     }
                 },
             )
+            Spacer(Modifier.height(16.dp))
+            BitwardenFilledButton(
+                label = stringResource(R.string.reset_coach_mark_tour_status),
+                onClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses)
+                    }
+                },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

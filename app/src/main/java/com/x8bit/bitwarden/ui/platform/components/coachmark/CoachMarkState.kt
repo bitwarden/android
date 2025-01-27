@@ -1,8 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components.coachmark
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -11,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.geometry.Rect
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightState
+import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max
 import kotlin.math.min
@@ -27,7 +27,7 @@ import kotlin.math.min
  * none should be highlighted at start.
  * @param isCoachMarkVisible is any coach mark currently visible.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@Stable
 open class CoachMarkState<T : Enum<T>>(
     val orderedList: List<T>,
     initialCoachMarkHighlight: T? = null,
@@ -58,7 +58,7 @@ open class CoachMarkState<T : Enum<T>>(
     fun updateHighlight(
         key: T,
         bounds: Rect?,
-        toolTipState: TooltipState,
+        toolTipState: BitwardenToolTipState,
         shape: CoachMarkHighlightShape = CoachMarkHighlightShape.SQUARE,
     ) {
         highlights[key] = CoachMarkHighlightState(
@@ -193,9 +193,9 @@ open class CoachMarkState<T : Enum<T>>(
     /**
      * Cleans up the tooltip state by dismissing it if visible and calling onDispose.
      */
-    private fun TooltipState.cleanUp() {
+    private fun BitwardenToolTipState.cleanUp() {
         if (isVisible) {
-            dismiss()
+            dismissBitwardenToolTip()
         }
         onDispose()
     }

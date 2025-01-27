@@ -89,7 +89,7 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .onNodeWithText("Email Verification", ignoreCase = true)
             .performClick()
 
-        verify {
+        verify(exactly = 1) {
             viewModel.trySendAction(
                 DebugMenuAction.UpdateFeatureFlag(
                     FlagKey.EmailVerification,
@@ -106,7 +106,7 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
 
-        verify { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
+        verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
     }
 
     @Test
@@ -124,7 +124,7 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .assertIsEnabled()
             .performClick()
 
-        verify { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) }
+        verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) }
     }
 
     @Test
@@ -161,7 +161,7 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .assertIsEnabled()
             .performClick()
 
-        verify { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
+        verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
     }
 
     @Test
@@ -181,5 +181,15 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .performClick()
 
         verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
+    }
+
+    @Test
+    fun `reset all coach mark tours should send ResetCoachMarkTourStatuses action`() {
+        composeTestRule
+            .onNodeWithText("Reset all coach mark tours")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses) }
     }
 }
