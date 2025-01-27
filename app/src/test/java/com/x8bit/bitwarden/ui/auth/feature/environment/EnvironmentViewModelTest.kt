@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -60,6 +62,8 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             apiServerUrl = "saved-api",
             identityServerUrl = "saved-identity",
             iconsServerUrl = "saved-icons",
+            keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
+            keyAlias = "saved-key-alias",
         )
         val viewModel = createViewModel(
             savedStateHandle = SavedStateHandle(
@@ -75,6 +79,8 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 apiServerUrl = "saved-api",
                 identityServerUrl = "saved-identity",
                 iconsServerUrl = "saved-icons",
+                keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
+                keyAlias = "saved-key-alias",
             ),
             viewModel.stateFlow.value,
         )
@@ -154,6 +160,11 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 EnvironmentAction.IconsServerUrlChange(
                     iconsServerUrl = "icons-url",
                 ),
+                EnvironmentAction.SystemCertificateSelectionResultReceive(
+                    result = PrivateKeyAliasSelectionResult.Success(
+                        alias = "mockAlias",
+                    ),
+                ),
             )
                 .forEach { viewModel.trySendAction(it) }
 
@@ -173,13 +184,13 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     Environment.SelfHosted(
                         environmentUrlData = EnvironmentUrlDataJson(
                             base = "https://server-url",
-                            keyAlias = "",
                             api = "https://api-url",
                             identity = "https://identity-url",
                             icon = "https://icons-url",
                             notifications = null,
                             webVault = "http://web-vault-url",
                             events = null,
+                            keyUri = "cert://KEY_CHAIN/mockAlias",
                         ),
                     ),
                     fakeEnvironmentRepository.environment,
@@ -221,13 +232,13 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     Environment.SelfHosted(
                         environmentUrlData = EnvironmentUrlDataJson(
                             base = "",
-                            keyAlias = "",
                             api = null,
                             identity = null,
                             icon = null,
                             notifications = null,
                             webVault = "http://web-vault-url",
                             events = null,
+                            keyUri = null,
                         ),
                     ),
                     fakeEnvironmentRepository.environment,
@@ -295,6 +306,67 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SystemCertificateSelectionResultReceive should update key alias and key host when successful`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            EnvironmentAction.SystemCertificateSelectionResultReceive(
+                result = PrivateKeyAliasSelectionResult.Success(
+                    alias = "mockAlias",
+                ),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                keyAlias = "mockAlias",
+                keyHost = MutualTlsKeyHost.KEY_CHAIN,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        viewModel.trySendAction(
+            EnvironmentAction.SystemCertificateSelectionResultReceive(
+                result = PrivateKeyAliasSelectionResult.Success(
+                    alias = null,
+                ),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                keyAlias = "",
+                keyHost = null,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SystemCertificateSelectionResultReceive should show toast when error`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            EnvironmentAction.SystemCertificateSelectionResultReceive(
+                result = PrivateKeyAliasSelectionResult.Error,
+            ),
+        )
+        viewModel.eventFlow.test {
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.error_loading_certificate.asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `UseSystemCertificateClick should emit ShowSystemCertificateSelectionDialog`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(EnvironmentAction.UseSystemCertificateClick)
+                assertEquals(EnvironmentEvent.ShowSystemCertificateSelectionDialog, awaitItem())
+            }
+        }
+
     //region Helper methods
 
     private fun createViewModel(
@@ -316,6 +388,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             identityServerUrl = "",
             iconsServerUrl = "",
             shouldShowErrorDialog = false,
+            keyHost = null,
         )
     }
 }

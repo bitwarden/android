@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
-import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
@@ -16,13 +14,13 @@ import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.util.TLSHelper
-import com.x8bit.bitwarden.data.platform.repository.KeyChainRepository
-import com.x8bit.bitwarden.data.platform.repository.KeyChainRepositoryImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
+import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.KeyManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -78,16 +76,14 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun providesKeyChainRepository(
-        environmentDiskSource: EnvironmentDiskSource,
-        @ApplicationContext context: Context,
-    ): KeyChainRepository =
-        KeyChainRepositoryImpl(environmentDiskSource = environmentDiskSource, context = context)
-
-    @Provides
-    @Singleton
-    fun providesTlsHelper(keyChainRepository: KeyChainRepository): TLSHelper =
-        TLSHelper(keyChainRepository = keyChainRepository)
+    fun provideSslManager(
+        keyManager: KeyManager,
+        environmentRepository: EnvironmentRepository,
+    ): SslManager =
+        SslManagerImpl(
+            keyManager = keyManager,
+            environmentRepository = environmentRepository,
+        )
 
     @Provides
     @Singleton
@@ -96,16 +92,16 @@ object PlatformNetworkModule {
         baseUrlInterceptors: BaseUrlInterceptors,
         headersInterceptor: HeadersInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
+        sslManager: SslManager,
         json: Json,
-        tlsHelper: TLSHelper,
     ): Retrofits =
         RetrofitsImpl(
             authTokenInterceptor = authTokenInterceptor,
             baseUrlInterceptors = baseUrlInterceptors,
             headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
+            sslManager = sslManager,
             json = json,
-            tlsHelper = tlsHelper,
         )
 
     @Provides

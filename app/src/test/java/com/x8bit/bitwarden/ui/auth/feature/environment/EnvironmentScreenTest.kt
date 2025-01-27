@@ -306,6 +306,7 @@ class EnvironmentScreenTest : BaseComposeTest() {
             identityServerUrl = "",
             iconsServerUrl = "",
             shouldShowErrorDialog = false,
+            keyHost = null,
         )
     }
 }

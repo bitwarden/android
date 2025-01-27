@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
 import android.os.Parcelable
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -39,14 +41,18 @@ class EnvironmentViewModel @Inject constructor(
 
             is Environment.SelfHosted -> environment.environmentUrlData
         }
+        val keyUri = environmentUrlData.keyUri?.toUri()
+        val keyAlias = keyUri?.path?.trim('/').orEmpty()
+        val keyHost = MutualTlsKeyHost.entries.find { it.name == keyUri?.authority }
         EnvironmentState(
             serverUrl = environmentUrlData.base,
-            keyAlias = environmentUrlData.keyAlias.orEmpty(),
             webVaultServerUrl = environmentUrlData.webVault.orEmpty(),
             apiServerUrl = environmentUrlData.api.orEmpty(),
             identityServerUrl = environmentUrlData.identity.orEmpty(),
             iconsServerUrl = environmentUrlData.icon.orEmpty(),
             shouldShowErrorDialog = false,
+            keyAlias = keyAlias,
+            keyHost = keyHost,
         )
     },
 ) {
@@ -98,20 +104,18 @@ class EnvironmentViewModel @Inject constructor(
 
         // Ensure all non-null/non-empty values have "http(s)://" prefixed.
         val updatedServerUrl = state.serverUrl.prefixHttpsIfNecessaryOrNull() ?: ""
-        val updatedKeyAlias = state.keyAlias
         val updatedWebVaultServerUrl = state.webVaultServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedApiServerUrl = state.apiServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIdentityServerUrl = state.identityServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIconsServerUrl = state.iconsServerUrl.prefixHttpsIfNecessaryOrNull()
-
         environmentRepository.environment = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson(
                 base = updatedServerUrl,
-                keyAlias = updatedKeyAlias,
                 api = updatedApiServerUrl,
                 identity = updatedIdentityServerUrl,
                 icon = updatedIconsServerUrl,
                 webVault = updatedWebVaultServerUrl,
+                keyUri = state.keyUri,
             ),
         )
 
@@ -173,7 +177,10 @@ class EnvironmentViewModel @Inject constructor(
         when (val result = action.result) {
             is PrivateKeyAliasSelectionResult.Success -> {
                 mutableStateFlow.update {
-                    it.copy(keyAlias = result.alias.orEmpty())
+                    it.copy(
+                        keyAlias = result.alias.orEmpty(),
+                        keyHost = result.alias?.let { MutualTlsKeyHost.KEY_CHAIN },
+                    )
                 }
             }
 
@@ -194,13 +201,19 @@ class EnvironmentViewModel @Inject constructor(
 @Parcelize
 data class EnvironmentState(
     val serverUrl: String,
-    val keyAlias: String,
     val webVaultServerUrl: String,
     val apiServerUrl: String,
     val identityServerUrl: String,
     val iconsServerUrl: String,
     val shouldShowErrorDialog: Boolean,
-) : Parcelable
+    val keyAlias: String,
+    // internal
+    val keyHost: MutualTlsKeyHost?,
+) : Parcelable {
+    val keyUri: String?
+        get() = "cert://$keyHost/$keyAlias"
+            .takeUnless { keyHost == null || keyAlias.isEmpty() }
+}
 
 /**
  * Models events for the environment screen.
