@@ -4424,7 +4424,6 @@ class AuthRepositoryTest {
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
-                every { shouldUsersGetPremium } returns false
             },
         )
         fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4450,7 +4449,6 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
-                    every { shouldUsersGetPremium } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4487,7 +4485,6 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
-                    every { shouldUsersGetPremium } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)

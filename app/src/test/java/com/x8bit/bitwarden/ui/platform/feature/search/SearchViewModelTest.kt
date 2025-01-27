@@ -1016,7 +1016,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isPremiumUser = true,
                 isTotp = false,
-                organizationPremiumStatusMap = emptyMap(),
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1120,7 +1119,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isPremiumUser = true,
                 isTotp = false,
-                organizationPremiumStatusMap = emptyMap(),
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1234,7 +1232,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isPremiumUser = true,
                 isTotp = false,
-                organizationPremiumStatusMap = emptyMap(),
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1351,7 +1348,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isPremiumUser = true,
                 isTotp = false,
-                organizationPremiumStatusMap = emptyMap(),
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1530,7 +1526,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 isPremiumUser = true,
                 isTotp = false,
-                organizationPremiumStatusMap = emptyMap(),
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1566,7 +1561,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     totpData = null,
     autofillSelectionData = null,
     isPremium = true,
-    organizationPremiumStatusMap = emptyMap(),
 )
 
 private val DEFAULT_USER_STATE = UserState(
