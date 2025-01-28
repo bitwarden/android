@@ -199,8 +199,8 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         anchorContent: @Composable () -> Unit,
     ) {
         TooltipBox(
-            positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(
-                spacingBetweenTooltipAndAnchor = 12.dp,
+            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(
+                spacingBetweenTooltipAndAnchor = 10.dp,
             ),
             tooltip = {
                 BitwardenToolTip(
@@ -213,7 +213,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                     leftAction = leftAction,
                     rightAction = rightAction,
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)
+                        .padding(horizontal = 6.dp)
                         .semantics { isCoachMarkToolTip = true },
                 )
             },

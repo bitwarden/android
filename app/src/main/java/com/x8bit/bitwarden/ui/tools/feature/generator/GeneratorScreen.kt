@@ -947,7 +947,8 @@ private fun PassphraseTypeContent(
     Column(modifier = modifier) {
         PassphraseNumWordsCounterItem(
             numWords = passphraseTypeState.numWords,
-            onPassphraseNumWordsCounterChange = passphraseHandlers.onPassphraseNumWordsCounterChange,
+            onPassphraseNumWordsCounterChange = passphraseHandlers
+                .onPassphraseNumWordsCounterChange,
             minValue = passphraseTypeState.minNumWords,
             maxValue = passphraseTypeState.maxNumWords,
             modifier = Modifier
