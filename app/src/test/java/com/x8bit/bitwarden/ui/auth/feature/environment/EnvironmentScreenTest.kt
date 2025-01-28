@@ -190,7 +190,6 @@ class EnvironmentScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `key alias should change according to the state`() {
         composeTestRule

@@ -398,9 +398,9 @@ data class EnvironmentState(
     val iconsServerUrl: String,
     val keyAlias: String,
     val dialog: DialogState?,
-    // internal
-    val keyHost: MutualTlsKeyHost?,
     val showMutualTlsOptions: Boolean,
+    // internal
+    private val keyHost: MutualTlsKeyHost?,
 ) : Parcelable {
 
     val keyUri: String?

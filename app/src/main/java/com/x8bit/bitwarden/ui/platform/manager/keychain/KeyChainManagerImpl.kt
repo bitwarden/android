@@ -17,25 +17,26 @@ class KeyChainManagerImpl(
 
     override suspend fun choosePrivateKeyAlias(
         currentServerUrl: String?,
-    ) = callbackFlow<PrivateKeyAliasSelectionResult> {
-        try {
-            KeyChain.choosePrivateKeyAlias(
-                activity,
-                { alias ->
-                    trySend(PrivateKeyAliasSelectionResult.Success(alias))
-                    close()
-                },
-                null,
-                null,
-                currentServerUrl?.toUri(),
-                null,
-            )
-        } catch (_: IllegalArgumentException) {
-            trySend(PrivateKeyAliasSelectionResult.Error)
-            close()
-        }
+    ): PrivateKeyAliasSelectionResult =
+        callbackFlow<PrivateKeyAliasSelectionResult> {
+            try {
+                KeyChain.choosePrivateKeyAlias(
+                    activity,
+                    { alias ->
+                        trySend(PrivateKeyAliasSelectionResult.Success(alias))
+                        close()
+                    },
+                    null,
+                    null,
+                    currentServerUrl?.toUri(),
+                    null,
+                )
+            } catch (_: IllegalArgumentException) {
+                trySend(PrivateKeyAliasSelectionResult.Error)
+                close()
+            }
 
-        awaitClose()
-    }
-        .first()
+            awaitClose()
+        }
+            .first()
 }

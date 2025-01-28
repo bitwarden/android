@@ -53,8 +53,10 @@ class KeyChainManagerTest {
 
         val result = keyChainManager.choosePrivateKeyAlias(currentServerUrl = null)
 
-        assertInstanceOf<PrivateKeyAliasSelectionResult.Success>(result)
-            .also { assertEquals("mockAlias", it.alias) }
+        assertEquals(
+            PrivateKeyAliasSelectionResult.Success("mockAlias"),
+            result,
+        )
     }
 
     @Test
