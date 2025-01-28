@@ -135,7 +135,8 @@ fun LazyListScope.vaultAddEditLoginItems(
             onNextCoachMark = onNextCoachMark,
             onCoachMarkDismissed = onCoachMarkDismissed,
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
@@ -563,7 +564,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
                 onActionClick = onNextCoachMark,
             )
         },
-        modifier = Modifier.standardHorizontalMargin(),
+        modifier = modifier,
     ) {
         if (totpKey != null) {
             if (canViewTotp) {
@@ -596,7 +597,8 @@ private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
                     },
                     textFieldTestTag = "LoginTotpEntry",
                     cardStyle = CardStyle.Full,
-                    modifier = modifier,
+                    modifier = Modifier
+                        .fillMaxWidth(),
                 )
             } else {
                 BitwardenTextField(
@@ -608,7 +610,8 @@ private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
                     readOnly = true,
                     enabled = false,
                     singleLine = true,
-                    modifier = modifier,
+                    modifier = Modifier
+                        .fillMaxWidth(),
                 )
             }
         } else {
@@ -617,11 +620,10 @@ private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
                 label = stringResource(id = R.string.setup_totp),
                 icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
+                isEnabled = canViewTotp,
                 modifier = Modifier
                     .testTag("SetupTotpButton")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-                isEnabled = canViewTotp,
+                    .fillMaxWidth(),
             )
         }
     }
