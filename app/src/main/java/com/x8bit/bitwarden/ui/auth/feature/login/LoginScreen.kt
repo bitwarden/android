@@ -307,8 +307,8 @@ private fun LoginScreenContent(
                 state.environmentLabel,
             ),
             textAlign = TextAlign.Center,
-            style = BitwardenTheme.typography.bodyMedium,
-            color = BitwardenTheme.colorScheme.text.primary,
+            style = BitwardenTheme.typography.bodySmall,
+            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier
                 .testTag("LoggingInAsLabel")
                 .standardHorizontalMargin()
@@ -318,7 +318,7 @@ private fun LoginScreenContent(
         BitwardenClickableText(
             label = stringResource(id = R.string.not_you),
             onClick = onNotYouButtonClick,
-            style = BitwardenTheme.typography.labelLarge,
+            style = BitwardenTheme.typography.labelMedium,
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
             modifier = Modifier
                 .standardHorizontalMargin()
