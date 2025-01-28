@@ -15,6 +15,7 @@ class AccessibilityEnabledManagerTest {
     private val accessibilityStateChangeListener =
         slot<AccessibilityManager.AccessibilityStateChangeListener>()
     private val accessibilityManager = mockk<AccessibilityManager> {
+        every { isEnabled } returns false
         every {
             addAccessibilityStateChangeListener(capture(accessibilityStateChangeListener))
         } returns true
