@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
@@ -61,8 +60,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
-
-    private val mutableScrimClickState = mutableIntStateOf(0)
 
     @Before
     fun setup() {
