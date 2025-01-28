@@ -48,8 +48,8 @@ fun bitwardenTextFieldColors(
     unfocusedContainerColor = Color.Transparent,
     disabledContainerColor = Color.Transparent,
     errorContainerColor = Color.Transparent,
-    cursorColor = BitwardenTheme.colorScheme.icon.primary,
-    errorCursorColor = BitwardenTheme.colorScheme.icon.primary,
+    cursorColor = BitwardenTheme.colorScheme.text.interaction,
+    errorCursorColor = BitwardenTheme.colorScheme.text.interaction,
     textSelectionColors = TextSelectionColors(
         handleColor = BitwardenTheme.colorScheme.stroke.border,
         backgroundColor = BitwardenTheme.colorScheme.stroke.border.copy(alpha = 0.4f),
