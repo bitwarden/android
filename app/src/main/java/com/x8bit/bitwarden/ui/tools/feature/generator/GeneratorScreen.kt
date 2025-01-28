@@ -22,9 +22,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -118,7 +116,6 @@ fun GeneratorScreen(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateBack: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
-    scrimClickCount: State<Int>,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -139,13 +136,8 @@ fun GeneratorScreen(
         lazyListState = lazyListState,
     )
 
-    LaunchedEffect(key1 = scrimClickCount.value, key2 = coachMarkState.isVisible.value) {
+    LaunchedEffect(key1 = coachMarkState.isVisible.value) {
         onDimNavBarRequest(coachMarkState.isVisible.value)
-        // If the scrim click count increases we want to ensure the tool tip is
-        // showing.
-        if (scrimClickCount.value > 0) {
-            coachMarkState.showToolTipForCurrentCoachMark()
-        }
     }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -1359,7 +1351,6 @@ private fun Generator_preview() {
             onNavigateToPasswordHistory = {},
             onNavigateBack = {},
             onDimNavBarRequest = {},
-            scrimClickCount = remember { mutableIntStateOf(0) },
         )
     }
 }

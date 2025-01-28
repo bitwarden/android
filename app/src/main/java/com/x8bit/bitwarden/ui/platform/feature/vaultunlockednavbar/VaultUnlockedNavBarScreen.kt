@@ -174,10 +174,6 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(false) }
-    // This does not need to be saved as we only want to capture click for the current composition.
-    val navBarScrimClickCount = remember {
-        mutableIntStateOf(0)
-    }
 
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the all insets here and let the content screens handle it themselves.
@@ -202,7 +198,7 @@ private fun VaultUnlockedNavBarScaffold(
                 BitwardenAnimatedScrim(
                     isVisible = shouldDimNavBar,
                     onClick = {
-                        navBarScrimClickCount.value += 1
+                        // Do nothing
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -247,7 +243,6 @@ private fun VaultUnlockedNavBarScaffold(
                 onDimNavBarRequest = { shouldDim ->
                     shouldDimNavBar = shouldDim
                 },
-                scrimClickCount = navBarScrimClickCount,
             )
             settingsGraph(
                 navController = navController,
