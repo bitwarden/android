@@ -60,8 +60,10 @@ fun ObserveScreenDataEffect(onDataUpdate: (AppResumeScreenData?) -> Unit) {
  * Add to screen where needed and pass in the necessary instance of [AppResumeScreenData]
  */
 @Composable
-fun RegisterScreenDataOnLifecycleEffect(appResumeStateProvider: () -> AppResumeScreenData) {
-    val appResumeStateManager = LocalAppResumeStateManager.current
+fun RegisterScreenDataOnLifecycleEffect(
+    appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
+    appResumeStateProvider: () -> AppResumeScreenData,
+) {
     LivecycleEventEffect { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {

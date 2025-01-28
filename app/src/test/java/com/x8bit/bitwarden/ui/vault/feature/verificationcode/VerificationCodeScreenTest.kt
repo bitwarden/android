@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -19,7 +18,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
@@ -49,14 +47,13 @@ class VerificationCodeScreenTest : BaseComposeTest() {
     @Before
     fun setUp() {
         composeTestRule.setContent {
-            CompositionLocalProvider(LocalAppResumeStateManager provides appResumeStateManager) {
-                VerificationCodeScreen(
-                    viewModel = viewModel,
-                    onNavigateBack = { onNavigateBackCalled = true },
-                    onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
-                    onNavigateToSearch = { onNavigateToSearchCalled = true },
-                )
-            }
+            VerificationCodeScreen(
+                viewModel = viewModel,
+                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
+                onNavigateToSearch = { onNavigateToSearchCalled = true },
+                appResumeStateManager = appResumeStateManager,
+            )
         }
     }
 

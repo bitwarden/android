@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.search
 
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -23,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
@@ -68,16 +66,15 @@ class SearchScreenTest : BaseComposeTest() {
     @Before
     fun setup() {
         composeTestRule.setContent {
-            CompositionLocalProvider(LocalAppResumeStateManager provides appResumeStateManager) {
-                SearchScreen(
-                    viewModel = viewModel,
-                    intentManager = intentManager,
-                    onNavigateBack = { onNavigateBackCalled = true },
-                    onNavigateToEditSend = { onNavigateToEditSendId = it },
-                    onNavigateToEditCipher = { onNavigateToEditCipherId = it },
-                    onNavigateToViewCipher = { onNavigateToViewCipherId = it },
-                )
-            }
+            SearchScreen(
+                viewModel = viewModel,
+                intentManager = intentManager,
+                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToEditSend = { onNavigateToEditSendId = it },
+                onNavigateToEditCipher = { onNavigateToEditCipherId = it },
+                onNavigateToViewCipher = { onNavigateToViewCipherId = it },
+                appResumeStateManager = appResumeStateManager,
+            )
         }
     }
 
