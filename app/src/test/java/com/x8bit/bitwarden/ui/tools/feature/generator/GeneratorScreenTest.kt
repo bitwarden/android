@@ -1700,7 +1700,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `The full coach mark tour can be completed showing all steps`() {
         mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)

@@ -942,47 +942,50 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
 private fun PassphraseTypeContent(
     passphraseTypeState: GeneratorState.MainType.Passphrase,
     passphraseHandlers: PassphraseHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    PassphraseNumWordsCounterItem(
-        numWords = passphraseTypeState.numWords,
-        onPassphraseNumWordsCounterChange = passphraseHandlers.onPassphraseNumWordsCounterChange,
-        minValue = passphraseTypeState.minNumWords,
-        maxValue = passphraseTypeState.maxNumWords,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+    Column(modifier = modifier) {
+        PassphraseNumWordsCounterItem(
+            numWords = passphraseTypeState.numWords,
+            onPassphraseNumWordsCounterChange = passphraseHandlers.onPassphraseNumWordsCounterChange,
+            minValue = passphraseTypeState.minNumWords,
+            maxValue = passphraseTypeState.maxNumWords,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PassphraseWordSeparatorInputItem(
-        wordSeparator = passphraseTypeState.wordSeparator,
-        onPassphraseWordSeparatorChange = passphraseHandlers.onPassphraseWordSeparatorChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PassphraseWordSeparatorInputItem(
+            wordSeparator = passphraseTypeState.wordSeparator,
+            onPassphraseWordSeparatorChange = passphraseHandlers.onPassphraseWordSeparatorChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PassphraseCapitalizeToggleItem(
-        capitalize = passphraseTypeState.capitalize,
-        onPassphraseCapitalizeToggleChange = passphraseHandlers
-            .onPassphraseCapitalizeToggleChange,
-        enabled = passphraseTypeState.capitalizeEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
-    PassphraseIncludeNumberToggleItem(
-        includeNumber = passphraseTypeState.includeNumber,
-        onPassphraseIncludeNumberToggleChange = passphraseHandlers
-            .onPassphraseIncludeNumberToggleChange,
-        enabled = passphraseTypeState.includeNumberEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PassphraseCapitalizeToggleItem(
+            capitalize = passphraseTypeState.capitalize,
+            onPassphraseCapitalizeToggleChange = passphraseHandlers
+                .onPassphraseCapitalizeToggleChange,
+            enabled = passphraseTypeState.capitalizeEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        PassphraseIncludeNumberToggleItem(
+            includeNumber = passphraseTypeState.includeNumber,
+            onPassphraseIncludeNumberToggleChange = passphraseHandlers
+                .onPassphraseIncludeNumberToggleChange,
+            enabled = passphraseTypeState.includeNumberEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -1075,43 +1078,46 @@ private fun UsernameTypeItems(
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    UsernameOptionsItem(
-        currentSubState = usernameState,
-        onSubStateOptionClicked = onSubStateOptionClicked,
-        usernameTypeHandlers = usernameTypeHandlers,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+    Column(modifier = modifier) {
+        UsernameOptionsItem(
+            currentSubState = usernameState,
+            onSubStateOptionClicked = onSubStateOptionClicked,
+            usernameTypeHandlers = usernameTypeHandlers,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    when (val selectedType = usernameState.selectedType) {
-        is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
-            PlusAddressedEmailTypeContent(
-                usernameTypeState = selectedType,
-                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-            )
-        }
+        when (val selectedType = usernameState.selectedType) {
+            is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
+                PlusAddressedEmailTypeContent(
+                    usernameTypeState = selectedType,
+                    plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                )
+            }
 
-        is GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias -> {
-            ForwardedEmailAliasTypeContent(
-                usernameTypeState = selectedType,
-                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-            )
-        }
+            is GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias -> {
+                ForwardedEmailAliasTypeContent(
+                    usernameTypeState = selectedType,
+                    forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                )
+            }
 
-        is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
-            CatchAllEmailTypeContent(
-                usernameTypeState = selectedType,
-                catchAllEmailHandlers = catchAllEmailHandlers,
-            )
-        }
+            is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
+                CatchAllEmailTypeContent(
+                    usernameTypeState = selectedType,
+                    catchAllEmailHandlers = catchAllEmailHandlers,
+                )
+            }
 
-        is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
-            RandomWordTypeContent(
-                randomWordTypeState = selectedType,
-                randomWordHandlers = randomWordHandlers,
-            )
+            is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
+                RandomWordTypeContent(
+                    randomWordTypeState = selectedType,
+                    randomWordHandlers = randomWordHandlers,
+                )
+            }
         }
     }
 }
@@ -1156,143 +1162,146 @@ private fun UsernameOptionsItem(
 private fun ForwardedEmailAliasTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    ServiceTypeOptionsItem(
-        currentSubState = usernameTypeState,
-        onSubStateOptionClicked = forwardedEmailAliasHandlers.onServiceChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        ServiceTypeOptionsItem(
+            currentSubState = usernameTypeState,
+            onSubStateOptionClicked = forwardedEmailAliasHandlers.onServiceChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    when (usernameTypeState.selectedServiceType) {
-        is ServiceType.AddyIo -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_access_token),
-                value = usernameTypeState.selectedServiceType.apiAccessToken,
-                onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+        when (usernameTypeState.selectedServiceType) {
+            is ServiceType.AddyIo -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_access_token),
+                    value = usernameTypeState.selectedServiceType.apiAccessToken,
+                    onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            BitwardenTextField(
-                label = stringResource(id = R.string.domain_name_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.domainName,
-                onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
-                textFieldTestTag = "AnonAddyDomainNameEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+                BitwardenTextField(
+                    label = stringResource(id = R.string.domain_name_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.domainName,
+                    onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
+                    textFieldTestTag = "AnonAddyDomainNameEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.DuckDuckGo -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.DuckDuckGo -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.FastMail -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.FastMail -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.FirefoxRelay -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_access_token),
-                value = usernameTypeState.selectedServiceType.apiAccessToken,
-                onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.FirefoxRelay -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_access_token),
+                    value = usernameTypeState.selectedServiceType.apiAccessToken,
+                    onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.ForwardEmail -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+            is ServiceType.ForwardEmail -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            BitwardenTextField(
-                label = stringResource(id = R.string.domain_name_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.domainName,
-                onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
-                textFieldTestTag = "ForwardedEmailDomainNameEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+                BitwardenTextField(
+                    label = stringResource(id = R.string.domain_name_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.domainName,
+                    onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
+                    textFieldTestTag = "ForwardedEmailDomainNameEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.SimpleLogin -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.SimpleLogin -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        null -> {
-            var obfuscatedTextField by remember { mutableStateOf("") }
-            BitwardenPasswordField(
-                label = null,
-                value = obfuscatedTextField,
-                onValueChange = { obfuscatedTextField = it },
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+            null -> {
+                var obfuscatedTextField by remember { mutableStateOf("") }
+                BitwardenPasswordField(
+                    label = null,
+                    value = obfuscatedTextField,
+                    onValueChange = { obfuscatedTextField = it },
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
         }
     }
 }
@@ -1328,16 +1337,19 @@ private fun ServiceTypeOptionsItem(
 private fun PlusAddressedEmailTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PlusAddressedEmailTextInputItem(
-        email = usernameTypeState.email,
-        onPlusAddressedEmailTextChange = plusAddressedEmailHandlers.onEmailChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PlusAddressedEmailTextInputItem(
+            email = usernameTypeState.email,
+            onPlusAddressedEmailTextChange = plusAddressedEmailHandlers.onEmailChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -1364,16 +1376,19 @@ private fun PlusAddressedEmailTextInputItem(
 private fun CatchAllEmailTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.CatchAllEmail,
     catchAllEmailHandlers: CatchAllEmailHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    CatchAllEmailTextInputItem(
-        domain = usernameTypeState.domainName,
-        onDomainTextChange = catchAllEmailHandlers.onDomainChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        CatchAllEmailTextInputItem(
+            domain = usernameTypeState.domainName,
+            onDomainTextChange = catchAllEmailHandlers.onDomainChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -1400,24 +1415,27 @@ private fun CatchAllEmailTextInputItem(
 private fun RandomWordTypeContent(
     randomWordTypeState: GeneratorState.MainType.Username.UsernameType.RandomWord,
     randomWordHandlers: RandomWordHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    RandomWordCapitalizeToggleItem(
-        capitalize = randomWordTypeState.capitalize,
-        onRandomWordCapitalizeToggleChange = randomWordHandlers.onCapitalizeChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        RandomWordCapitalizeToggleItem(
+            capitalize = randomWordTypeState.capitalize,
+            onRandomWordCapitalizeToggleChange = randomWordHandlers.onCapitalizeChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    RandomWordIncludeNumberToggleItem(
-        includeNumber = randomWordTypeState.includeNumber,
-        onRandomWordIncludeNumberToggleChange = randomWordHandlers.onIncludeNumberChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        RandomWordIncludeNumberToggleItem(
+            includeNumber = randomWordTypeState.includeNumber,
+            onRandomWordIncludeNumberToggleChange = randomWordHandlers.onIncludeNumberChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
