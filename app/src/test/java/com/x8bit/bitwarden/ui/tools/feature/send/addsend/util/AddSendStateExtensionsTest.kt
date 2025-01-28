@@ -58,6 +58,31 @@ class AddSendStateExtensionsTest {
 
         assertEquals(sendView, result)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSendView should create an appropriate SendView with expiration date set to deletion date`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
+            id = null,
+            accessId = null,
+            key = null,
+            accessCount = 0U,
+            hasPassword = false,
+            deletionDate = ZonedDateTime.parse("2030-10-27T12:00:00Z").toInstant(),
+            expirationDate = ZonedDateTime.parse("2030-10-27T12:00:00Z").toInstant(),
+        )
+
+        val result = DEFAULT_VIEW_STATE
+            .copy(
+                common = DEFAULT_COMMON_STATE.copy(
+                    deletionDate = ZonedDateTime.parse("2030-10-27T12:00:00Z"),
+                    expirationDate = ZonedDateTime.parse("2026-10-27T12:00:00Z"),
+                ),
+            )
+            .toSendView(FIXED_CLOCK)
+
+        assertEquals(sendView, result)
+    }
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(
