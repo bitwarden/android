@@ -12,6 +12,7 @@ const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
  */
 fun NavGraphBuilder.generatorGraph(
     onNavigateToPasswordHistory: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
 ) {
     navigation(
         route = GENERATOR_GRAPH_ROUTE,
@@ -19,6 +20,7 @@ fun NavGraphBuilder.generatorGraph(
     ) {
         generatorDestination(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+            onDimNavBarRequest = onDimNavBarRequest,
         )
     }
 }

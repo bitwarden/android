@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -172,7 +173,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
-    var shouldDimNavBar by remember { mutableStateOf(false) }
+    var shouldDimNavBar by rememberSaveable { mutableStateOf(false) }
 
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the all insets here and let the content screens handle it themselves.
@@ -239,6 +240,9 @@ private fun VaultUnlockedNavBarScaffold(
             )
             generatorGraph(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },
+                onDimNavBarRequest = { shouldDim ->
+                    shouldDimNavBar = shouldDim
+                },
             )
             settingsGraph(
                 navController = navController,

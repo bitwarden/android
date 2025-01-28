@@ -3458,7 +3458,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
         mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsDisplayed()
     }
 
@@ -3467,18 +3467,18 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
         mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("Next")
             .performClick()
 
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsNotDisplayed()
 
         composeTestRule
-            .onNodeWithText("2 of 3")
+            .onNodeWithText("2 OF 3")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3486,11 +3486,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("2 of 3")
+            .onNodeWithText("2 OF 3")
             .assertIsNotDisplayed()
 
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsDisplayed()
     }
 
@@ -3499,14 +3499,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
         mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("Next")
             .performClick()
 
         composeTestRule
-            .onNodeWithText("2 of 3")
+            .onNodeWithText("2 OF 3")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3526,18 +3526,18 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
         mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("Next")
             .performClick()
 
         composeTestRule
-            .onNodeWithText("1 of 3")
+            .onNodeWithText("1 OF 3")
             .assertIsNotDisplayed()
 
         composeTestRule
-            .onNodeWithText("2 of 3")
+            .onNodeWithText("2 OF 3")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3545,11 +3545,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("2 of 3")
+            .onNodeWithText("2 OF 3")
             .assertIsNotDisplayed()
 
         composeTestRule
-            .onNodeWithText("3 of 3")
+            .onNodeWithText("3 OF 3")
             .assertIsDisplayed()
 
         composeTestRule

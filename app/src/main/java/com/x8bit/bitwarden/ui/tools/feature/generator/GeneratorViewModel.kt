@@ -159,7 +159,7 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handleStartExploreGeneratorTour() {
         coachMarkTourCompleted()
-        // TODO: PM-16622 send show coach mark event.
+        sendEvent(GeneratorEvent.StartCoachMarkTour)
     }
 
     private fun coachMarkTourCompleted() {
@@ -2647,6 +2647,11 @@ sealed class GeneratorEvent {
     data class ShowSnackbar(
         val message: Text,
     ) : GeneratorEvent()
+
+    /**
+     * Triggers the start of showing the coach mark tour.
+     */
+    data object StartCoachMarkTour : GeneratorEvent()
 }
 
 @Suppress("ComplexCondition", "MaxLineLength")
