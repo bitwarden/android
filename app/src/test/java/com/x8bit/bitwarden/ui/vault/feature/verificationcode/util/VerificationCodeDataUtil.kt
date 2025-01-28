@@ -16,5 +16,4 @@ fun createVerificationCodeItem(number: Int = 1) =
         username = "mockUsername-$number",
         hasPasswordReprompt = false,
         orgUsesTotp = false,
-        orgId = null,
     )

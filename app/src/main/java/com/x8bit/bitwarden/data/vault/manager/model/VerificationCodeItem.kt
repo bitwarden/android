@@ -29,5 +29,4 @@ data class VerificationCodeItem(
     val username: String?,
     val hasPasswordReprompt: Boolean,
     val orgUsesTotp: Boolean,
-    val orgId: String?,
 )

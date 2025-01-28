@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.getOrganizationPremiumStatusMap
 import java.time.Clock
 
 /**
@@ -25,15 +24,8 @@ class AutofillTotpManagerImpl(
 ) : AutofillTotpManager {
     override suspend fun tryCopyTotpToClipboard(cipherView: CipherView) {
         if (settingsRepository.isAutoCopyTotpDisabled) return
-        val organizationPremiumStatusMap = authRepository
-            .userStateFlow
-            .value
-            ?.activeAccount
-            ?.getOrganizationPremiumStatusMap()
-            .orEmpty()
         val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
-        val premiumStatus = organizationPremiumStatusMap[cipherView.organizationId] ?: isPremium
-        if (!premiumStatus && !cipherView.organizationUseTotp) return
+        if (!isPremium && !cipherView.organizationUseTotp) return
         val totpCode = cipherView.login?.totp ?: return
 
         val totpResult = vaultRepository.generateTotp(

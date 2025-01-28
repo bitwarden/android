@@ -387,7 +387,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
-                                shouldUsersGetPremium = false,
                             ),
                         ),
                         needsMasterPassword = false,
