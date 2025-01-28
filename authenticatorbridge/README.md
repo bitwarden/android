@@ -6,7 +6,7 @@
 - [Building](#building)
 - [Versioning](#versioning)
 - [Dependencies](#dependencies)
- 
+
 ## Other Documents
 
 - [Changelog](CHANGELOG.md)
@@ -21,9 +21,9 @@
 
 To build an AAR for inclusion in consumer applications, run:
 
-    ```sh
-    $ ./gradlew authenticatorbridge:assembleRelease
-    ```
+```sh
+$ ./gradlew authenticatorbridge:assembleRelease
+```
 
 ## Versioning
 This repository conforms to the following versioning convention:
@@ -49,7 +49,7 @@ Some things to note:
 
 ### Application Dependencies
 
-The following is a list of all third-party dependencies required by the SDK. 
+The following is a list of all third-party dependencies required by the SDK.
 
 > [!IMPORTANT]
 > The SDK does not come packaged with these dependencies, so consumers of the SDK must provide them.
