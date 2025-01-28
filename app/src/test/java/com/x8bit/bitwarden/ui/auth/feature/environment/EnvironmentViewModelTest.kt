@@ -5,11 +5,18 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.KeyManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -17,6 +24,13 @@ import org.junit.jupiter.api.Test
 class EnvironmentViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
+    private val mutableMutualTlsFeatureFlagFlow = MutableStateFlow(true)
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag(FlagKey.MutualTls) } returns true
+        every { getFeatureFlagFlow(FlagKey.MutualTls) } returns mutableMutualTlsFeatureFlagFlow
+    }
+    private val mockKeyManager = mockk<KeyManager>()
+    private val mockFileManager = mockk<FileManager>()
 
     @Suppress("MaxLineLength")
     @Test
@@ -121,7 +135,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             initialState.copy(
-                shouldShowErrorDialog = true,
+                dialog = EnvironmentState.DialogState.Error(
+                    message = R.string.environment_page_urls_error.asText(),
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -161,7 +177,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     iconsServerUrl = "icons-url",
                 ),
                 EnvironmentAction.SystemCertificateSelectionResultReceive(
-                    result = PrivateKeyAliasSelectionResult.Success(
+                    privateKeyAliasSelectionResult = PrivateKeyAliasSelectionResult.Success(
                         alias = "mockAlias",
                     ),
                 ),
@@ -312,7 +328,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
             EnvironmentAction.SystemCertificateSelectionResultReceive(
-                result = PrivateKeyAliasSelectionResult.Success(
+                privateKeyAliasSelectionResult = PrivateKeyAliasSelectionResult.Success(
                     alias = "mockAlias",
                 ),
             ),
@@ -327,7 +343,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(
             EnvironmentAction.SystemCertificateSelectionResultReceive(
-                result = PrivateKeyAliasSelectionResult.Success(
+                privateKeyAliasSelectionResult = PrivateKeyAliasSelectionResult.Success(
                     alias = null,
                 ),
             ),
@@ -346,7 +362,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
             EnvironmentAction.SystemCertificateSelectionResultReceive(
-                result = PrivateKeyAliasSelectionResult.Error,
+                privateKeyAliasSelectionResult = PrivateKeyAliasSelectionResult.Error,
             ),
         )
         viewModel.eventFlow.test {
@@ -358,13 +374,16 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UseSystemCertificateClick should emit ShowSystemCertificateSelectionDialog`() =
+    fun `ChooseSystemCertificate should show system certificate warning dialog`() =
         runTest {
             val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(EnvironmentAction.UseSystemCertificateClick)
-                assertEquals(EnvironmentEvent.ShowSystemCertificateSelectionDialog, awaitItem())
-            }
+
+            viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick)
+
+            assertEquals(
+                EnvironmentState.DialogState.SystemCertificateWarningDialog,
+                viewModel.stateFlow.value.dialog,
+            )
         }
 
     //region Helper methods
@@ -374,6 +393,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     ): EnvironmentViewModel =
         EnvironmentViewModel(
             environmentRepository = fakeEnvironmentRepository,
+            featureFlagManager = mockFeatureFlagManager,
+            keyManager = mockKeyManager,
+            fileManager = mockFileManager,
             savedStateHandle = savedStateHandle,
         )
 
@@ -387,8 +409,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             apiServerUrl = "",
             identityServerUrl = "",
             iconsServerUrl = "",
-            shouldShowErrorDialog = false,
             keyHost = null,
+            dialog = null,
+            showMutualTlsOptions = true,
         )
     }
 }

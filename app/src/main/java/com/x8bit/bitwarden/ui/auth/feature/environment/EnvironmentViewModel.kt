@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.KeyManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -21,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -38,6 +41,7 @@ class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val fileManager: FileManager,
     private val keyManager: KeyManager,
+    private val featureFlagManager: FeatureFlagManager,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -57,10 +61,10 @@ class EnvironmentViewModel @Inject constructor(
             apiServerUrl = environmentUrlData.api.orEmpty(),
             identityServerUrl = environmentUrlData.identity.orEmpty(),
             iconsServerUrl = environmentUrlData.icon.orEmpty(),
-            shouldShowErrorDialog = false,
             keyAlias = keyAlias,
             keyHost = keyHost,
             dialog = null,
+            showMutualTlsOptions = featureFlagManager.getFeatureFlag(FlagKey.MutualTls),
         )
     },
 ) {
@@ -70,6 +74,11 @@ class EnvironmentViewModel @Inject constructor(
             .onEach {
                 savedStateHandle[KEY_STATE] = it
             }
+            .launchIn(viewModelScope)
+
+        featureFlagManager.getFeatureFlagFlow(FlagKey.MutualTls)
+            .map { EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate(it) }
+            .onEach(::handleAction)
             .launchIn(viewModelScope)
     }
 
@@ -245,6 +254,10 @@ class EnvironmentViewModel @Inject constructor(
             is EnvironmentAction.Internal.ImportKeyResultReceive -> {
                 handleSaveKeyResultReceive(action)
             }
+
+            is EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate -> {
+                handleMutualTlsFeatureFlagUpdate(action)
+            }
         }
     }
 
@@ -321,6 +334,16 @@ class EnvironmentViewModel @Inject constructor(
         }
     }
 
+    private fun handleMutualTlsFeatureFlagUpdate(
+        action: EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                showMutualTlsOptions = action.enabled,
+            )
+        }
+    }
+
     private fun handleChooseSystemCertificateClickAction() {
         mutableStateFlow.update {
             it.copy(
@@ -373,11 +396,11 @@ data class EnvironmentState(
     val apiServerUrl: String,
     val identityServerUrl: String,
     val iconsServerUrl: String,
-    val shouldShowErrorDialog: Boolean,
     val keyAlias: String,
     val dialog: DialogState?,
     // internal
     val keyHost: MutualTlsKeyHost?,
+    val showMutualTlsOptions: Boolean,
 ) : Parcelable {
 
     val keyUri: String?
@@ -551,6 +574,13 @@ sealed class EnvironmentAction {
          */
         data class ImportKeyResultReceive(
             val result: ImportPrivateKeyResult,
+        ) : Internal()
+
+        /**
+         * Indicates the mutual TLS feature flag was updated.
+         */
+        data class MutualTlsFeatureFlagUpdate(
+            val enabled: Boolean,
         ) : Internal()
     }
 }
