@@ -104,7 +104,9 @@ class RootNavViewModel @Inject constructor(
             }
 
             userState.activeAccount.isVaultUnlocked &&
-                authRepository.checkUserNeedsNewDeviceTwoFactorNotice() -> RootNavState.NewDeviceTwoFactorNotice(userState.activeAccount.email)
+                authRepository.checkUserNeedsNewDeviceTwoFactorNotice() -> RootNavState.NewDeviceTwoFactorNotice(
+                userState.activeAccount.email,
+            )
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
@@ -157,6 +159,9 @@ class RootNavViewModel @Inject constructor(
                     SpecialCircumstance.AccountSecurityShortcut,
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
+                    SpecialCircumstance.SendShortcut,
+                    is SpecialCircumstance.SearchShortcut,
+                    SpecialCircumstance.VerificationCodeShortcut,
                     null,
                         -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 

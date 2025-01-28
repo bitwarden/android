@@ -281,6 +281,10 @@ class VaultLockManagerImpl(
         )
         if (!wasVaultLocked) {
             mutableVaultStateEventSharedFlow.tryEmit(VaultStateEvent.Locked(userId = userId))
+            authDiskSource.storeLastLockTimestamp(
+                userId = userId,
+                lastLockTimestamp = clock.instant(),
+            )
         }
     }
 

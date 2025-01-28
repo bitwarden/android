@@ -762,40 +762,52 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.Fido2GetCredentials(fido2GetCredentialsRequest)
-        mutableUserStateFlow.tryEmit(
-            UserState(
-                activeUserId = "activeUserId",
-                accounts = listOf(
-                    UserState.Account(
-                        userId = "activeUserId",
-                        name = "name",
-                        email = "email",
-                        avatarColorHex = "avatarHexColor",
-                        environment = Environment.Us,
-                        isPremium = true,
-                        isLoggedIn = true,
-                        isVaultUnlocked = true,
-                        needsPasswordReset = false,
-                        isBiometricsEnabled = false,
-                        organizations = emptyList(),
-                        needsMasterPassword = false,
-                        trustedDevice = null,
-                        hasMasterPassword = true,
-                        isUsingKeyConnector = false,
-                        onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = FirstTimeState(
-                            showImportLoginsCard = true,
-                        ),
-                    ),
-                ),
-            ),
-        )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlockedForFido2GetCredentials(
                 activeUserId = "activeUserId",
                 fido2GetCredentialsRequest = fido2GetCredentialsRequest,
             ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is an SendShortcut special circumstance the nav state should be VaultUnlocked`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.SendShortcut
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is an VerificationCodeShortcut special circumstance the nav state should be VaultUnlocked`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.VerificationCodeShortcut
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is an SearchShortcut special circumstance the nav state should be VaultUnlocked`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.SearchShortcut("")
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
             viewModel.stateFlow.value,
         )
     }
@@ -1386,3 +1398,28 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
 )
 
 private const val ACCESS_TOKEN: String = "access_token"
+
+private val MOCK_VAULT_UNLOCKED_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "name",
+            email = "email",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            firstTimeState = FirstTimeState(false),
+            onboardingStatus = OnboardingStatus.COMPLETE,
+        ),
+    ),
+)

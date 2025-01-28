@@ -27,13 +27,13 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
@@ -1334,6 +1334,62 @@ class AuthDiskSourceTest {
             json.encodeToString(mockStatus),
             actual,
         )
+    }
+
+    @Test
+    fun `getLastLockTimestamp should pull from SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:lastLockTimestamp"
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+        fakeSharedPreferences.edit {
+            putLong(
+                "${storeKey}_$mockUserId",
+                expectedState.toEpochMilli(),
+            )
+        }
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getLastLockTimestamp should pull null from SharedPreferences if there is no data`() {
+        val mockUserId = "mockUserId"
+        val expectedState = null
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `setLastLockTimestamp should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+        authDiskSource.storeLastLockTimestamp(
+            userId = mockUserId,
+            expectedState,
+        )
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertEquals(
+            expectedState,
+            actual,
+        )
+    }
+
+    @Test
+    fun `setLastLockTimestamp should clear SharedPreferences when null is passed`() {
+        val mockUserId = "mockUserId"
+        val expectedState = null
+        authDiskSource.storeLastLockTimestamp(
+            userId = mockUserId,
+            expectedState,
+        )
+        val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
+        assertNull(actual)
     }
 }
 

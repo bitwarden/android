@@ -13,11 +13,13 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -145,6 +147,11 @@ class VaultViewModelTest : BaseViewModelTest() {
         } returns mutableSshKeyVaultItemsEnabledFlow.value
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
+
+    private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
+        every { specialCircumstance } returns null
+    }
 
     @Test
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
@@ -1841,6 +1848,41 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init should send NavigateToVerificationCodeScreen when special circumstance is VerificationCodeShortcut`() =
+        runTest {
+            every {
+                specialCircumstanceManager.specialCircumstance
+            } returns SpecialCircumstance.VerificationCodeShortcut
+            every { specialCircumstanceManager.specialCircumstance = null } just runs
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                assertEquals(
+                    VaultEvent.NavigateToVerificationCodeScreen, awaitItem(),
+                )
+            }
+            verify { specialCircumstanceManager.specialCircumstance = null }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init should send NavigateToVaultSearchScreen when special circumstance is SearchShortcut`() =
+        runTest {
+            every {
+                specialCircumstanceManager.specialCircumstance
+            } returns SpecialCircumstance.SearchShortcut("")
+            every { specialCircumstanceManager.specialCircumstance = null } just runs
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                assertEquals(
+                    VaultEvent.NavigateToVaultSearchScreen, awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1854,6 +1896,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
+            specialCircumstanceManager = specialCircumstanceManager,
         )
 }
 

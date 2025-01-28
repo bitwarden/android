@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -86,9 +87,15 @@ class SearchViewModel @Inject constructor(
             val searchType = SearchArgs(savedStateHandle).type
             val userState = requireNotNull(authRepo.userStateFlow.value)
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
+            val searchTerm = (specialCircumstance as? SpecialCircumstance.SearchShortcut)
+                ?.searchTerm
+                ?.also {
+                    specialCircumstanceManager.specialCircumstance = null
+                }
+                .orEmpty()
 
             SearchState(
-                searchTerm = "",
+                searchTerm = searchTerm,
                 searchType = searchType.toSearchTypeData(),
                 viewState = SearchState.ViewState.Loading,
                 dialogState = null,

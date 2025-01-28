@@ -1,14 +1,17 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
+import kotlinx.serialization.json.Json
 import java.time.Instant
 
 /**
@@ -67,6 +70,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
+    private val storedAppResumeScreenData = mutableMapOf<String, String?>()
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
@@ -423,6 +427,14 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         mutableShouldShowGeneratorCoachMarkFlow.onSubscription {
             emit(hasSeenGeneratorCoachMark)
         }
+
+    override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
+        storedAppResumeScreenData[userId] = screenData.let { Json.encodeToString(it) }
+    }
+
+    override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
+        return storedAppResumeScreenData[userId]?.let { Json.decodeFromStringOrNull(it) }
+    }
 
     //region Private helper functions
     private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {

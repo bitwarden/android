@@ -29,6 +29,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -60,16 +61,20 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setup() {
         composeTestRule.setContent {
             GeneratorScreen(
                 viewModel = viewModel,
-                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
+                onNavigateToPasswordHistory = {
+                    onNavigateToPasswordHistoryScreenCalled = true
+                },
                 onNavigateBack = {},
                 onDimNavBarRequest = { onDimNavBarRequest = it },
                 intentManager = intentManager,
+                appResumeStateManager = appResumeStateManager,
             )
         }
     }

@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 /**
  * Primary access point for disk information.
@@ -352,4 +353,14 @@ interface AuthDiskSource {
      * Stores the new device notice state for the given [userId].
      */
     fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?)
+
+    /**
+     * Gets the last lock timestamp for the given [userId].
+     */
+    fun getLastLockTimestamp(userId: String): Instant?
+
+    /**
+     * Stores the last lock timestamp for the given [userId].
+     */
+    fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?)
 }
