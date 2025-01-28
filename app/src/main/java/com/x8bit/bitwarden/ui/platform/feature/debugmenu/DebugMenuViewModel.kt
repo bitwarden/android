@@ -48,7 +48,12 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ResetFeatureFlagValues -> handleResetFeatureFlagValues()
             DebugMenuAction.RestartOnboarding -> handleResetOnboardingStatus()
             DebugMenuAction.RestartOnboardingCarousel -> handleResetOnboardingCarousel()
+            DebugMenuAction.ResetCoachMarkTourStatuses -> handleResetCoachMarkTourStatuses()
         }
+    }
+
+    private fun handleResetCoachMarkTourStatuses() {
+        debugMenuRepository.resetCoachMarkTourStatuses()
     }
 
     private fun handleResetOnboardingCarousel() {
@@ -132,6 +137,11 @@ sealed class DebugMenuAction {
      * The user has clicked the restart onboarding button for the onboarding section.
      */
     data object RestartOnboardingCarousel : DebugMenuAction()
+
+    /**
+     * User has clicked to reset coach mark values.
+     */
+    data object ResetCoachMarkTourStatuses : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.
