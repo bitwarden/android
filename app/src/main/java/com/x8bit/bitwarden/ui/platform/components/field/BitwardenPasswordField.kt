@@ -2,10 +2,8 @@ package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -173,18 +171,18 @@ fun BitwardenPasswordField(
                     .fillMaxWidth(),
             )
             supportingTextContent?.let {
-                Spacer(modifier = Modifier.height(height = 8.dp))
+                // Spacer(modifier = Modifier.height(height = 8.dp))
                 BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                 )
-                Spacer(modifier = Modifier.height(height = 12.dp))
+                // Spacer(modifier = Modifier.height(height = 12.dp))
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     content = it,
                 )
-                Spacer(modifier = Modifier.height(height = 6.dp))
+                // Spacer(modifier = Modifier.height(height = 6.dp))
             }
         }
     }
