@@ -158,7 +158,7 @@ fun StartRegistrationScreen(
                 title = stringResource(id = R.string.create_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = handler.onBackClick,
             )
         },
