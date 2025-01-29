@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
+import android.content.res.Resources
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,15 +40,14 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the other screen.
@@ -169,7 +169,7 @@ fun OtherScreen(
                     .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             ScreenCaptureRow(
                 currentValue = state.allowScreenCapture,
@@ -182,6 +182,7 @@ fun OtherScreen(
                     .standardHorizontalMargin(),
             )
 
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -230,43 +231,24 @@ private fun ClearClipboardFrequencyRow(
     currentSelection: ClearClipboardFrequency,
     onFrequencySelection: (ClearClipboardFrequency) -> Unit,
     modifier: Modifier = Modifier,
+    resources: Resources = LocalContext.current.resources,
 ) {
-    var shouldShowClearClipboardDialog by remember { mutableStateOf(false) }
-
-    BitwardenTextRow(
-        text = stringResource(id = R.string.clear_clipboard),
-        description = stringResource(id = R.string.clear_clipboard_description),
-        onClick = { shouldShowClearClipboardDialog = true },
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.clear_clipboard),
+        supportingText = stringResource(id = R.string.clear_clipboard_description),
+        options = ClearClipboardFrequency.entries.map { it.displayLabel() }.toImmutableList(),
+        selectedOption = currentSelection.displayLabel(),
+        onOptionSelected = { selectedFrequency ->
+            onFrequencySelection(
+                ClearClipboardFrequency
+                    .entries
+                    .first { it.displayLabel.toString(resources) == selectedFrequency },
+            )
+        },
+        textFieldTestTag = "ClearClipboardAfterLabel",
         cardStyle = CardStyle.Full,
         modifier = modifier,
-    ) {
-        Text(
-            text = currentSelection.displayLabel.invoke(),
-            style = BitwardenTheme.typography.labelSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.testTag("ClearClipboardAfterLabel"),
-        )
-    }
-
-    if (shouldShowClearClipboardDialog) {
-        BitwardenSelectionDialog(
-            title = stringResource(id = R.string.clear_clipboard),
-            onDismissRequest = { shouldShowClearClipboardDialog = false },
-        ) {
-            ClearClipboardFrequency.entries.forEach { option ->
-                BitwardenSelectionRow(
-                    text = option.displayLabel,
-                    isSelected = option == currentSelection,
-                    onClick = {
-                        shouldShowClearClipboardDialog = false
-                        onFrequencySelection(
-                            ClearClipboardFrequency.entries.first { it == option },
-                        )
-                    },
-                )
-            }
-        }
-    }
+    )
 }
 
 @Composable
