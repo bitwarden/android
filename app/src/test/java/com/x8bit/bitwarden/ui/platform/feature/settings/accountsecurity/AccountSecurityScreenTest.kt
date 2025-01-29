@@ -5,10 +5,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
@@ -552,16 +550,14 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     @Test
     fun `session timeout should be updated on or off according to state`() {
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
-            .assertTextEquals("Session timeout", "30 minutes")
+            .assertIsDisplayed()
         mutableStateFlow.update { it.copy(vaultTimeout = VaultTimeout.FourHours) }
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "4 hours. Session timeout")
             .performScrollTo()
-            .assertTextEquals("Session timeout", "4 hours")
+            .assertIsDisplayed()
     }
 
     @Test
@@ -569,8 +565,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -634,8 +629,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -688,8 +682,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -707,8 +700,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -731,8 +723,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -769,8 +760,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -799,8 +789,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onAllNodesWithText("Session timeout")
-            .filterToOne(hasClickAction())
+            .onNodeWithContentDescription(label = "30 minutes. Session timeout")
             .performScrollTo()
             .performClick()
 
@@ -981,12 +970,12 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Vault timeout action")
+            .onAllNodesWithText("Session timeout action")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -1009,12 +998,12 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Vault timeout action")
+            .onAllNodesWithText("Session timeout action")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -1033,12 +1022,11 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on session timeout action dialog Logout click should open a confirmation dialog`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
             .performClick()
 
@@ -1077,7 +1065,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     fun `on session timeout action Logout confirmation dialog cancel click should dismiss the dialog`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
             .performClick()
 
@@ -1106,7 +1094,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     fun `on session timeout action Logout confirmation dialog Yes click should dismiss the dialog and send VaultTimeoutActionSelect`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
             .performClick()
 
@@ -1136,18 +1124,17 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on session timeout action dialog cancel click should close the dialog`() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Vault timeout action")
+            .onAllNodesWithText("Session timeout action")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -1163,14 +1150,14 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     @Test
     fun `session timeout action should be updated according to state`() {
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Lock. Session timeout action")
             .performScrollTo()
-            .assertTextEquals("Session timeout action", "Lock")
+            .assertIsDisplayed()
         mutableStateFlow.update { it.copy(vaultTimeoutAction = VaultTimeoutAction.LOGOUT) }
         composeTestRule
-            .onNodeWithText("Session timeout action")
+            .onNodeWithContentDescription(label = "Log out. Session timeout action")
             .performScrollTo()
-            .assertTextEquals("Session timeout action", "Log out")
+            .assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
