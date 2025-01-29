@@ -40,7 +40,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -55,7 +55,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun CheckEmailScreen(
     onNavigateBack: () -> Unit,
-    onNavigateBackToLanding: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: CheckEmailViewModel = hiltViewModel(),
 ) {
@@ -70,8 +69,6 @@ fun CheckEmailScreen(
             is CheckEmailEvent.NavigateToEmailApp -> {
                 intentManager.startDefaultEmailApplication()
             }
-
-            CheckEmailEvent.NavigateBackToLanding -> onNavigateBackToLanding()
         }
     }
 
@@ -101,14 +98,12 @@ fun CheckEmailScreen(
                     email = state.email,
                     onOpenEmailAppClick = handler.onOpenEmailAppClick,
                     onChangeEmailClick = handler.onChangeEmailClick,
-                    modifier = Modifier.standardHorizontalMargin(),
                 )
             } else {
                 CheckEmailLegacyContent(
                     email = state.email,
                     onOpenEmailAppClick = handler.onOpenEmailAppClick,
                     onChangeEmailClick = handler.onChangeEmailClick,
-                    onLoginClick = handler.onLoginClick,
                 )
             }
             Spacer(modifier = Modifier.navigationBarsPadding())
@@ -133,9 +128,11 @@ private fun CheckEmailContent(
         Image(
             painter = rememberVectorPainter(id = R.drawable.open_email),
             contentDescription = null,
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.FillHeight,
             modifier = Modifier
-                .size(100.dp),
+                .standardHorizontalMargin()
+                .size(100.dp)
+                .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(32.dp))
         Text(
@@ -146,7 +143,8 @@ private fun CheckEmailContent(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .wrapContentHeight()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -165,7 +163,8 @@ private fun CheckEmailContent(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(16.dp))
         @Suppress("MaxLineLength")
@@ -177,7 +176,8 @@ private fun CheckEmailContent(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(32.dp))
         BitwardenFilledButton(
@@ -185,12 +185,16 @@ private fun CheckEmailContent(
             onClick = onOpenEmailAppClick,
             modifier = Modifier
                 .testTag("OpenEmailApp")
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenTextButton(
+        BitwardenOutlinedButton(
             label = stringResource(R.string.change_email_address),
             onClick = onChangeEmailClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 }
@@ -201,7 +205,6 @@ private fun CheckEmailLegacyContent(
     email: String,
     onOpenEmailAppClick: () -> Unit,
     onChangeEmailClick: () -> Unit,
-    onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -216,7 +219,7 @@ private fun CheckEmailLegacyContent(
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .height(112.dp)
                 .fillMaxWidth(),
         )
@@ -227,7 +230,7 @@ private fun CheckEmailLegacyContent(
             style = BitwardenTheme.typography.headlineSmall,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .standardHorizontalMargin()
                 .wrapContentHeight()
                 .fillMaxWidth(),
         )
@@ -236,7 +239,7 @@ private fun CheckEmailLegacyContent(
         @Suppress("MaxLineLength")
         val descriptionAnnotatedString =
             R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account.toAnnotatedString(
-                email,
+                args = arrayOf(email),
                 emphasisHighlightStyle = SpanStyle(
                 color = BitwardenTheme.colorScheme.text.primary,
                 fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
@@ -257,27 +260,18 @@ private fun CheckEmailLegacyContent(
             onClick = onOpenEmailAppClick,
             modifier = Modifier
                 .testTag("OpenEmailApp")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(32.dp))
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = R.string.no_email_go_back_to_edit_your_email_address.toAnnotatedString {
-                    onChangeEmailClick()
-                },
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = R.string.or_log_in_you_may_already_have_an_account
-                    .toAnnotatedString {
-                        onLoginClick()
-                    },
-            )
-        }
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BitwardenOutlinedButton(
+            label = stringResource(R.string.change_email_address),
+            onClick = onChangeEmailClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
     }
 }
 
@@ -289,7 +283,6 @@ private fun CheckEmailScreenNewUi_preview() {
             email = "email@fake.com",
             onOpenEmailAppClick = { },
             onChangeEmailClick = { },
-            modifier = Modifier.standardHorizontalMargin(),
         )
     }
 }
@@ -302,7 +295,6 @@ private fun CheckEmailScreenLegacy_preview() {
             email = "email@fake.com",
             onOpenEmailAppClick = { },
             onChangeEmailClick = { },
-            onLoginClick = {},
         )
     }
 }

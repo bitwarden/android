@@ -84,18 +84,6 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
-    @Test
-    fun `OnLoginClick action should send NavigateToLanding event`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.LoginClick)
-            assertEquals(
-                CheckEmailEvent.NavigateBackToLanding,
-                awaitItem(),
-            )
-        }
-    }
-
     private fun createViewModel(state: CheckEmailState? = null): CheckEmailViewModel =
         CheckEmailViewModel(
             featureFlagManager = featureFlagManager,
