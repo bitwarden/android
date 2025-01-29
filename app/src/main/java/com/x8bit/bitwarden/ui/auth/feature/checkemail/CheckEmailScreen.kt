@@ -106,6 +106,7 @@ fun CheckEmailScreen(
                     onChangeEmailClick = handler.onChangeEmailClick,
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -141,7 +142,6 @@ private fun CheckEmailContent(
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 8.dp)
                 .wrapContentHeight()
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -161,7 +161,6 @@ private fun CheckEmailContent(
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             modifier = Modifier
-                .padding(horizontal = 8.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .standardHorizontalMargin(),
@@ -174,7 +173,6 @@ private fun CheckEmailContent(
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(horizontal = 8.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .standardHorizontalMargin(),
@@ -252,6 +250,7 @@ private fun CheckEmailLegacyContent(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .wrapContentHeight(),
         )
         Spacer(modifier = Modifier.height(32.dp))
