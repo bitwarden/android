@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseButtonClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -69,9 +69,9 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `close click should send BackClick action`() {
-        composeTestRule.onNodeWithContentDescription("Back").performClick()
-        verify { viewModel.trySendAction(BackClick) }
+    fun `close click should send CloseClick action`() {
+        composeTestRule.onNodeWithContentDescription("Close").performClick()
+        verify { viewModel.trySendAction(CloseButtonClick) }
     }
 
     @Test

@@ -20,7 +20,7 @@ data class StartRegistrationHandler(
     val onReceiveMarketingEmailsToggle: (Boolean) -> Unit,
     val onUnsubscribeMarketingEmailsClick: () -> Unit,
     val onServerGeologyHelpClick: () -> Unit,
-    val onBackClick: () -> Unit,
+    val onCloseButtonClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -71,7 +71,9 @@ data class StartRegistrationHandler(
                 onServerGeologyHelpClick = {
                     viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick)
                 },
-                onBackClick = { viewModel.trySendAction(StartRegistrationAction.BackClick) },
+                onCloseButtonClick = {
+                    viewModel.trySendAction(StartRegistrationAction.CloseButtonClick)
+                },
             )
         }
     }
