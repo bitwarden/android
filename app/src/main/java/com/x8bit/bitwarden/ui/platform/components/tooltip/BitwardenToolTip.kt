@@ -78,9 +78,9 @@ fun TooltipScope.BitwardenToolTip(
                 text = description,
                 style = BitwardenTheme.typography.bodyMedium,
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
-                Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 leftAction?.invoke(this)
                 Spacer(modifier = Modifier.weight(1f))
