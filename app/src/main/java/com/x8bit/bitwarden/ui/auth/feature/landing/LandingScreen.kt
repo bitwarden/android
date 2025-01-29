@@ -185,7 +185,6 @@ fun LandingScreen(
             onCreateAccountClick = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.CreateAccountClick) }
             },
-            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -204,6 +203,7 @@ private fun LandingScreenContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .fillMaxSize()
             .imePadding()
             .verticalScroll(rememberScrollState())
             .statusBarsPadding(),

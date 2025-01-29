@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.model.Environment.Type
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
@@ -94,7 +94,7 @@ class StartRegistrationViewModel @Inject constructor(
             is ContinueClick -> handleContinueClick()
             is EmailInputChange -> handleEmailInputChanged(action)
             is NameInputChange -> handleNameInputChanged(action)
-            is BackClick -> handleBackClick()
+            is CloseClick -> handleCloseClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
             is ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
                 action,
@@ -173,7 +173,7 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleBackClick() {
+    private fun handleCloseClick() {
         sendEvent(StartRegistrationEvent.NavigateBack)
     }
 
@@ -383,9 +383,9 @@ sealed class StartRegistrationAction {
     data object ContinueClick : StartRegistrationAction()
 
     /**
-     * User clicked back.
+     * Indicates that the top-bar close button was clicked.
      */
-    data object BackClick : StartRegistrationAction()
+    data object CloseClick : StartRegistrationAction()
 
     /**
      * Email input changed.
