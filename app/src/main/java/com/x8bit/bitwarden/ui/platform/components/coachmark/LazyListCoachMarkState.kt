@@ -28,7 +28,7 @@ class LazyListCoachMarkState<T : Enum<T>>(
     }
 
     private suspend fun LazyListState.searchForKey(keyToFind: T) {
-        layoutInfo
+        val keyFound = layoutInfo
             .visibleItemsInfo
             .any { it.key == keyToFind }
             .takeIf { itemAlreadyVisible ->
@@ -59,6 +59,10 @@ class LazyListCoachMarkState<T : Enum<T>>(
             }
             ?: scrollUpToKey(keyToFind).takeIf { it }
             ?: scrollDownToKey(keyToFind)
+        if (!keyFound) {
+            // if key not found scroll back to the top.
+            scrollToItem(index = 0)
+        }
     }
 
     private suspend fun LazyListState.scrollUpToKey(

@@ -13,6 +13,10 @@ import kotlinx.coroutines.withTimeout
 
 /**
  * Default implementation of [BitwardenToolTipState]
+ *
+ * This is making use of the implementation of [TooltipState] provided via
+ * [androidx.compose.material3.rememberTooltipState] but overriding [dismiss] to be
+ * no-op.
  */
 class BitwardenToolTipStateImpl(
     initialIsVisible: Boolean,

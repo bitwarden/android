@@ -1705,6 +1705,62 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `The full coach mark tour can be completed showing all steps`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("3 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("4 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("5 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("6 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Done")
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+    }
+
     //endregion Random Word Tests
 
     private fun updateState(state: GeneratorState) {
