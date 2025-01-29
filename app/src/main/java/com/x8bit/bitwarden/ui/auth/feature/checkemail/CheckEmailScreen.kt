@@ -248,7 +248,6 @@ private fun CheckEmailLegacyContent(
             text = descriptionAnnotatedString,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(horizontal = 24.dp)
                 .fillMaxWidth()
                 .standardHorizontalMargin()
                 .wrapContentHeight(),
