@@ -53,13 +53,7 @@ class CheckEmailViewModel @Inject constructor(
             is CheckEmailAction.Internal.OnboardingFeatureFlagUpdated -> {
                 handleOnboardingFeatureFlagUpdated(action)
             }
-
-            CheckEmailAction.LoginClick -> handleLoginClick()
         }
-    }
-
-    private fun handleLoginClick() {
-        sendEvent(CheckEmailEvent.NavigateBackToLanding)
     }
 
     private fun handleOnboardingFeatureFlagUpdated(
@@ -100,11 +94,6 @@ sealed class CheckEmailEvent {
      * Navigate to email app.
      */
     data object NavigateToEmailApp : CheckEmailEvent()
-
-    /**
-     * Navigate back to Landing
-     */
-    data object NavigateBackToLanding : CheckEmailEvent()
 }
 
 /**
@@ -125,11 +114,6 @@ sealed class CheckEmailAction {
      * User clicked open email.
      */
     data object OpenEmailClick : CheckEmailAction()
-
-    /**
-     * User clicked log in.
-     */
-    data object LoginClick : CheckEmailAction()
 
     /**
      * Denotes an internal action.
