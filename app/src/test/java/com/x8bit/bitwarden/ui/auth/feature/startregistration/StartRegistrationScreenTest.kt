@@ -133,7 +133,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `email input change should send EmailInputChange action`() {
-        composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
+        composeTestRule.onNodeWithText("Email address (required)").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
     }
 
