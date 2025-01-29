@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseButtonClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
@@ -308,7 +308,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CloseButtonClick)
+            viewModel.trySendAction(CloseClick)
             assertEquals(NavigateBack, awaitItem())
         }
     }

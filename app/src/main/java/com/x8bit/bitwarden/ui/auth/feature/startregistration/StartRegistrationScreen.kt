@@ -159,7 +159,7 @@ fun StartRegistrationScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = handler.onCloseButtonClick,
+                onNavigationIconClick = handler.onCloseClick,
             )
         },
     ) {
@@ -404,7 +404,7 @@ private fun StartRegistrationContentFilledOut_preview() {
                 onReceiveMarketingEmailsToggle = {},
                 onUnsubscribeMarketingEmailsClick = {},
                 onServerGeologyHelpClick = {},
-                onCloseButtonClick = {},
+                onCloseClick = {},
             ),
         )
     }
@@ -431,7 +431,7 @@ private fun StartRegistrationContentEmpty_preview() {
                 onReceiveMarketingEmailsToggle = {},
                 onUnsubscribeMarketingEmailsClick = {},
                 onServerGeologyHelpClick = {},
-                onCloseButtonClick = {},
+                onCloseClick = {},
             ),
         )
     }
@@ -458,7 +458,7 @@ private fun StartRegistrationContentNewOnboardingUi_preview() {
                 onReceiveMarketingEmailsToggle = {},
                 onUnsubscribeMarketingEmailsClick = {},
                 onServerGeologyHelpClick = {},
-                onCloseButtonClick = {},
+                onCloseClick = {},
             ),
         )
     }
