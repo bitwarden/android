@@ -133,7 +133,7 @@
     <string name="sync_with_bitwarden_action_card_message">Permitir a sincronização do app Autenticador em configurações para ver todos os seus códigos de verificação aqui.</string>
     <string name="something_went_wrong">Algo deu errado</string>
     <string name="please_try_again">Por favor, tente novamente</string>
-    <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="move_to_bitwarden">Mover para o Bitwarden</string>
     <string name="default_save_option">Opção padrão de salvar</string>
     <string name="save_to_bitwarden">Salvar no Bitwarden</string>
     <string name="save_here">Salvar aqui</string>
@@ -147,9 +147,9 @@
     <string name="add_code_to_bitwarden">Adicionar o código ao Bitwarden</string>
     <string name="add_code_locally">Adicionar código localmente</string>
     <string name="local_codes">Códigos locais</string>
-    <string name="required_information_missing">Required Information Missing</string>
-    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
-    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
-    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
-    <string name="get_help">Get Help</string>
+    <string name="required_information_missing">Informações necessárias faltando</string>
+    <string name="required_information_missing_message">"As informações necessárias estão faltando (ex.: 'serviços' ou 'segredo'). Verifique o seu arquivo e tente novamente. Visite bitwarden.com/help para obter suporte"</string>
+    <string name="file_could_not_be_processed">"O arquivo não pode ser processado"</string>
+    <string name="file_could_not_be_processed_message">"O arquivo não pôde ser processado. Certifique-se de que é um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help"</string>
+    <string name="get_help">Obter Ajuda</string>
 </resources>

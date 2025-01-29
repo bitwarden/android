@@ -76,7 +76,7 @@
     <string name="unique_codes">Unikátní kódy</string>
     <string name="help">Nápověda</string>
     <string name="launch_tutorial">Spustit tutoriál</string>
-    <string name="value_has_been_copied">%1$s zkopírován</string>
+    <string name="value_has_been_copied">%1$s zkopírována</string>
     <string name="delete_item">Smazat položku</string>
     <string name="item_deleted">Položka byla smazána</string>
     <string name="delete">Smazat</string>
