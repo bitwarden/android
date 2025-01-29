@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
+import android.content.res.Resources
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -37,9 +37,8 @@ import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
@@ -50,7 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the auto-fill screen.
@@ -336,41 +335,21 @@ private fun DefaultUriMatchTypeRow(
     selectedUriMatchType: UriMatchType,
     onUriMatchTypeSelect: (UriMatchType) -> Unit,
     modifier: Modifier = Modifier,
+    resources: Resources = LocalContext.current.resources,
 ) {
-    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
-
-    BitwardenTextRow(
-        text = stringResource(id = R.string.default_uri_match_detection),
-        description = stringResource(id = R.string.default_uri_match_detection_description),
-        onClick = { shouldShowDialog = true },
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.default_uri_match_detection),
+        options = UriMatchType.entries.map { it.displayLabel() }.toImmutableList(),
+        selectedOption = selectedUriMatchType.displayLabel(),
+        onOptionSelected = { selectedOption ->
+            onUriMatchTypeSelect(
+                UriMatchType
+                    .entries
+                    .first { it.displayLabel.toString(resources) == selectedOption },
+            )
+        },
+        supportingText = stringResource(id = R.string.default_uri_match_detection_description),
         cardStyle = CardStyle.Full,
         modifier = modifier,
-    ) {
-        Text(
-            text = selectedUriMatchType.displayLabel(),
-            style = BitwardenTheme.typography.labelSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
-    }
-
-    if (shouldShowDialog) {
-        BitwardenSelectionDialog(
-            title = stringResource(id = R.string.default_uri_match_detection),
-            onDismissRequest = { shouldShowDialog = false },
-        ) {
-            val uriMatchTypes = UriMatchType.entries
-            uriMatchTypes.forEach { option ->
-                BitwardenSelectionRow(
-                    text = option.displayLabel,
-                    isSelected = option == selectedUriMatchType,
-                    onClick = {
-                        shouldShowDialog = false
-                        onUriMatchTypeSelect(
-                            uriMatchTypes.first { it == option },
-                        )
-                    },
-                )
-            }
-        }
-    }
+    )
 }

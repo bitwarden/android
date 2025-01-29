@@ -369,7 +369,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     fun `on default URI match type click should display dialog`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithText("Default URI match detection")
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
             .assert(!hasAnyAncestor(isDialog()))
             .performClick()
@@ -383,7 +383,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `on default URI match type dialog item click should send DefaultUriMatchTypeSelect and close the dialog`() {
         composeTestRule
-            .onNodeWithText("Default URI match detection")
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -402,11 +402,10 @@ class AutoFillScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on default URI match type dialog cancel click should close the dialog`() {
         composeTestRule
-            .onNodeWithText("Default URI match detection")
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -422,19 +421,19 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `default URI match type should update according to state`() {
         composeTestRule
-            .onNodeWithText("Base domain")
+            .onNodeWithContentDescription(label = "Base domain", substring = true)
             .assertExists()
         composeTestRule
-            .onNodeWithText("Starts with")
+            .onNodeWithContentDescription(label = "Starts with", substring = true)
             .assertDoesNotExist()
         mutableStateFlow.update {
             it.copy(defaultUriMatchType = UriMatchType.STARTS_WITH)
         }
         composeTestRule
-            .onNodeWithText("Base domain")
+            .onNodeWithContentDescription(label = "Base domain", substring = true)
             .assertDoesNotExist()
         composeTestRule
-            .onNodeWithText("Starts with")
+            .onNodeWithContentDescription(label = "Starts with", substring = true)
             .assertExists()
     }
 

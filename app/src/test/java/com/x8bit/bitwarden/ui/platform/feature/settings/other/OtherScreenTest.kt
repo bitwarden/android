@@ -88,7 +88,13 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on clear clipboard row click should show show clipboard selection dialog`() {
-        composeTestRule.onNodeWithText("Clear clipboard").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Never. Clear clipboard. " +
+                    "Automatically clear copied values from your clipboard.",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Clear clipboard")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -97,7 +103,13 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on clear clipboard dialog item click should send ClearClipboardFrequencyChange`() {
-        composeTestRule.onNodeWithText("Clear clipboard").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Never. Clear clipboard. " +
+                    "Automatically clear copied values from your clipboard.",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("10 seconds")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -115,7 +127,13 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on clear clipboard dialog cancel should dismiss dialog`() {
-        composeTestRule.onNodeWithText("Clear clipboard").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Never. Clear clipboard. " +
+                    "Automatically clear copied values from your clipboard.",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule.onNodeWithText("Cancel").performClick()
         composeTestRule.assertNoDialogExists()
     }
