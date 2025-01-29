@@ -79,17 +79,6 @@ class CheckEmailScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `go back and update email text click should send ChangeEmailClick action`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = false)
-        val mainString = "No email? Go back to edit your email address."
-        composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
-            mainString = mainString,
-        )
-
-        verify { viewModel.trySendAction(CheckEmailAction.ChangeEmailClick) }
-    }
-
-    @Test
     fun `change email button click should send ChangeEmailClick action`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = true)
         composeTestRule
