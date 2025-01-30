@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -245,12 +246,15 @@ private fun LandingScreenContent(
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
             cardStyle = CardStyle.Full,
-            supportingTextContent = {
+            supportingContentPadding = PaddingValues(),
+            supportingContent = {
                 EnvironmentSelector(
                     labelText = stringResource(id = R.string.logging_in_on_with_colon),
                     dialogTitle = stringResource(id = R.string.logging_in_on),
                     selectedOption = state.selectedEnvironmentType,
                     onOptionSelected = onEnvironmentTypeSelect,
+                    isHelpEnabled = false,
+                    onHelpClick = {},
                     modifier = Modifier
                         .testTag("RegionSelectorDropdown")
                         .fillMaxWidth(),

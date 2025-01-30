@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
 import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
@@ -43,8 +45,8 @@ import java.time.ZonedDateTime
  * @param formatPattern The pattern to format the displayed time.
  * @param onTimeSelect The callback to be invoked when a new time is selected.
  * @param isEnabled Whether the button is enabled.
- * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param is24Hour Indicates if the time selector should use a 24 hour format or a 12 hour format
  * with AM/PM.
  */
@@ -55,8 +57,8 @@ fun BitwardenTimeSelectButton(
     formatPattern: String,
     onTimeSelect: (hour: Int, minute: Int) -> Unit,
     isEnabled: Boolean,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
-    cardStyle: CardStyle? = null,
     is24Hour: Boolean = false,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -90,10 +92,15 @@ fun BitwardenTimeSelectButton(
         onValueChange = { },
         enabled = shouldShowDialog,
         trailingIcon = {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
-                contentDescription = null,
-            )
+            BitwardenRowOfActions(
+                modifier = Modifier.padding(end = 4.dp),
+            ) {
+                Icon(
+                    painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
+                    contentDescription = null,
+                    modifier = Modifier.minimumInteractiveComponentSize(),
+                )
+            }
         },
         colors = bitwardenTextFieldButtonColors(),
     )

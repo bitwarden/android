@@ -33,10 +33,10 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param supportingLabel The secondary supporting text label to be displayed beside the label.
  * @param startIcon The [Painter] object used to draw the icon at the start of the group item.
  * @param onClick A lambda function that is invoked when the group is clicked.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The [Modifier] to be applied to the [Row] composable that holds the list item.
  * @param showDivider Indicates whether the divider should be shown or not.
  * @param startIconTestTag The optional test tag for the [startIcon].
- * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
 fun BitwardenGroupItem(
@@ -44,10 +44,10 @@ fun BitwardenGroupItem(
     supportingLabel: String,
     startIcon: Painter,
     onClick: () -> Unit,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     showDivider: Boolean = true,
     startIconTestTag: String? = null,
-    cardStyle: CardStyle?,
 ) {
     Row(
         modifier = modifier

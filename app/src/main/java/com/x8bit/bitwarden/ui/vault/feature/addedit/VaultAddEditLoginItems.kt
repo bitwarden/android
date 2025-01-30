@@ -29,9 +29,8 @@ import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighl
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -393,7 +392,7 @@ private fun UsernameRow(
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = stringResource(id = R.string.username),
         value = username,
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
@@ -453,7 +452,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
 
     if (canViewPassword) {
         var shouldShowPassword by remember { mutableStateOf(false) }
-        BitwardenPasswordFieldWithActions(
+        BitwardenPasswordField(
             label = stringResource(id = R.string.password),
             value = password,
             onValueChange = loginItemTypeHandlers.onPasswordTextChange,
@@ -568,20 +567,18 @@ private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
     ) {
         if (totpKey != null) {
             if (canViewTotp) {
-                BitwardenTextFieldWithActions(
+                BitwardenTextField(
                     label = stringResource(id = R.string.totp),
                     value = totpKey,
-                    trailingIconContent = {
+                    onValueChange = {},
+                    readOnly = true,
+                    singleLine = true,
+                    actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_clear,
                             contentDescription = stringResource(id = R.string.delete),
                             onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                         )
-                    },
-                    onValueChange = {},
-                    readOnly = true,
-                    singleLine = true,
-                    actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_totp),
@@ -636,7 +633,7 @@ private fun PasskeyField(
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = stringResource(id = R.string.passkey),
         value = creationDateTime.invoke(),
         onValueChange = { },

@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -54,7 +54,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
@@ -216,32 +215,19 @@ private fun StartRegistrationContent(
             onValueChange = handler.onEmailInputChange,
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
-            supportingTextContent = {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    EnvironmentSelector(
-                        labelText = stringResource(id = R.string.create_account_on_with_colon),
-                        dialogTitle = stringResource(id = R.string.create_account_on),
-                        selectedOption = selectedEnvironmentType,
-                        onOptionSelected = handler.onEnvironmentTypeSelect,
-                        modifier = Modifier.testTag("RegionSelectorDropdown"),
-                    )
-                    if (isNewOnboardingUiEnabled) {
-                        BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_question_circle_small,
-                            contentDescription = stringResource(
-                                R.string.help_with_server_geolocations,
-                            ),
-                            onClick = handler.onServerGeologyHelpClick,
-                            contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                            // Align with design but keep accessible touch target of IconButton.
-                            modifier = Modifier.offset(x = 16.dp),
-                        )
-                    }
-                }
+            supportingContentPadding = PaddingValues(),
+            supportingContent = {
+                EnvironmentSelector(
+                    labelText = stringResource(id = R.string.create_account_on_with_colon),
+                    dialogTitle = stringResource(id = R.string.create_account_on),
+                    selectedOption = selectedEnvironmentType,
+                    onOptionSelected = handler.onEnvironmentTypeSelect,
+                    onHelpClick = handler.onServerGeologyHelpClick,
+                    isHelpEnabled = isNewOnboardingUiEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(tag = "RegionSelectorDropdown"),
+                )
             },
             cardStyle = CardStyle.Full,
             modifier = Modifier

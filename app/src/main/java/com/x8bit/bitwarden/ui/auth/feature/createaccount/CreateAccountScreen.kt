@@ -1,19 +1,13 @@
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +25,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -54,6 +52,7 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.Navi
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -63,7 +62,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -206,7 +204,7 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(PasswordInputChange(it)) }
                 },
                 showPasswordTestTag = "PasswordVisibilityToggle",
-                supportingTextContent = {
+                supportingContent = {
                     PasswordStrengthIndicator(
                         modifier = Modifier.fillMaxWidth(),
                         state = state.passwordStrengthState,
@@ -289,7 +287,6 @@ fun CreateAccountScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TermsAndPrivacySwitch(
     isChecked: Boolean,
@@ -298,38 +295,39 @@ private fun TermsAndPrivacySwitch(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val strTerms = stringResource(id = R.string.terms_of_service)
+    val strPrivacy = stringResource(id = R.string.privacy_policy)
+    val annotatedLinkString: AnnotatedString = R.string
+        .by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy
+        .toAnnotatedString {
+            when (it) {
+                "termsOfService" -> onTermsClick()
+                "privacyPolicy" -> onPrivacyPolicyClick()
+            }
+        }
     BitwardenSwitch(
-        modifier = modifier,
-        label = stringResource(id = R.string.accept_policies),
+        modifier = modifier.semantics(mergeDescendants = true) {
+            customActions = listOf(
+                CustomAccessibilityAction(
+                    label = strTerms,
+                    action = {
+                        onTermsClick()
+                        true
+                    },
+                ),
+                CustomAccessibilityAction(
+                    label = strPrivacy,
+                    action = {
+                        onPrivacyPolicyClick()
+                        true
+                    },
+                ),
+            )
+        },
+        label = annotatedLinkString,
         isChecked = isChecked,
         contentDescription = "AcceptPoliciesToggle",
         onCheckedChange = onCheckedChange,
-        supportingTextContent = {
-            FlowRow(
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                BitwardenClickableText(
-                    label = stringResource(id = R.string.terms_of_service),
-                    onClick = onTermsClick,
-                    style = BitwardenTheme.typography.bodyMedium,
-                    innerPadding = PaddingValues(vertical = 8.dp, horizontal = 0.dp),
-                )
-                Text(
-                    text = ",",
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                    modifier = Modifier.padding(vertical = 4.dp),
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                BitwardenClickableText(
-                    label = stringResource(id = R.string.privacy_policy),
-                    onClick = onPrivacyPolicyClick,
-                    style = BitwardenTheme.typography.bodyMedium,
-                    innerPadding = PaddingValues(vertical = 8.dp, horizontal = 0.dp),
-                )
-            }
-        },
         cardStyle = CardStyle.Bottom,
     )
 }
