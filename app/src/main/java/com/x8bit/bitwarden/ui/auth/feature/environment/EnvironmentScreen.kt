@@ -216,7 +216,7 @@ fun EnvironmentScreen(
                     .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.custom_environment),
@@ -292,7 +292,7 @@ fun EnvironmentScreen(
             )
 
             if (state.showMutualTlsOptions) {
-                Spacer(modifier = Modifier.height(height = 8.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
 
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.client_certificate_mtls),
@@ -301,7 +301,7 @@ fun EnvironmentScreen(
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
-                Spacer(modifier = Modifier.height(height = 16.dp))
+                Spacer(modifier = Modifier.height(height = 8.dp))
 
                 BitwardenTextField(
                     label = stringResource(id = R.string.certificate_alias),
@@ -343,10 +343,8 @@ fun EnvironmentScreen(
                         .standardHorizontalMargin()
                         .testTag("ChooseSystemCertificateButton"),
                 )
-
-                Spacer(modifier = Modifier.height(height = 16.dp))
             }
-
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
