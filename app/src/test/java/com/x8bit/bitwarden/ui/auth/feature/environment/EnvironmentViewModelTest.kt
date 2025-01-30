@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
@@ -8,12 +9,17 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.KeyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -381,10 +387,270 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick)
 
             assertEquals(
-                EnvironmentState.DialogState.SystemCertificateWarningDialog,
-                viewModel.stateFlow.value.dialog,
+                DEFAULT_STATE.copy(
+                    dialog = EnvironmentState.DialogState.SystemCertificateWarningDialog,
+                ),
+                viewModel.stateFlow.value,
             )
         }
+
+    @Test
+    fun `ErrorDialogDismiss should clear the dialog`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss)
+        assertEquals(
+            DEFAULT_STATE.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ImportCertificateClick should emit ShowCertificateImportFileChooser`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(EnvironmentAction.ImportCertificateClick)
+            assertEquals(EnvironmentEvent.ShowCertificateImportFileChooser, awaitItem())
+        }
+    }
+
+    @Test
+    fun `ImportCertificateFilePickerResultReceive should show SetCertificateData dialog`() =
+        runTest {
+            val viewModel = createViewModel()
+            val mockFileData = mockk<IntentManager.FileData>()
+            viewModel.trySendAction(
+                EnvironmentAction.ImportCertificateFilePickerResultReceive(
+                    certificateFileData = mockFileData,
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = EnvironmentState.DialogState.SetCertificateData(
+                        certificateBytes = mockFileData,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `SetCertificatePasswordDialogDismiss should clear the dialog`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(EnvironmentAction.SetCertificatePasswordDialogDismiss)
+        assertEquals(
+            DEFAULT_STATE.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `CertificateInstallationResultReceive should show toast based on result`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                EnvironmentAction.CertificateInstallationResultReceive(
+                    success = true,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.certificate_installed.asText()),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                EnvironmentAction.CertificateInstallationResultReceive(
+                    success = false,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.certificate_installation_failed.asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmChooseSystemCertificateClick should clear the dialog and emit ShowSystemCertificateSelectionDialog`() =
+        runTest {
+            val viewModel = createViewModel(
+                savedStateHandle = SavedStateHandle(
+                    initialState = mapOf(
+                        "state" to DEFAULT_STATE.copy(serverUrl = "https://mockServerUrl"),
+                    ),
+                ),
+            )
+            viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick)
+            assertEquals(
+                DEFAULT_STATE.copy(dialog = null, serverUrl = "https://mockServerUrl"),
+                viewModel.stateFlow.value,
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    EnvironmentEvent.ShowSystemCertificateSelectionDialog(
+                        serverUrl = "https://mockServerUrl",
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ImportKeyResultReceive should update key alias on success`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            EnvironmentAction.Internal.ImportKeyResultReceive(
+                result = ImportPrivateKeyResult.Success(alias = "mockAlias"),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(keyAlias = "mockAlias"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ImportKeyResultReceive should show toast with correct message on error`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                EnvironmentAction.Internal.ImportKeyResultReceive(
+                    result = ImportPrivateKeyResult.Error.UnsupportedKey,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.unsupported_certificate_type.asText()),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                EnvironmentAction.Internal.ImportKeyResultReceive(
+                    result = ImportPrivateKeyResult.Error.KeyStoreOperationFailed,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.certificate_installation_failed.asText()),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                EnvironmentAction.Internal.ImportKeyResultReceive(
+                    result = ImportPrivateKeyResult.Error.UnrecoverableKey,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.certificate_password_incorrect.asText()),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                EnvironmentAction.Internal.ImportKeyResultReceive(
+                    result = ImportPrivateKeyResult.Error.InvalidCertificateChain,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.invalid_certificate_chain.asText()),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                EnvironmentAction.Internal.ImportKeyResultReceive(
+                    result = ImportPrivateKeyResult.Error.DuplicateAlias,
+                ),
+            )
+            assertEquals(
+                EnvironmentEvent.ShowToast(R.string.certificate_alias_already_exists.asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SetCertificateInfoResultReceive should clear the dialog import the key and send ImportKeyResultReceive`() =
+        runTest {
+            val viewModel = createViewModel()
+            val mockUri = mockk<Uri>()
+            val mockFileData = IntentManager.FileData(
+                fileName = "mockFileName",
+                uri = mockUri,
+                sizeBytes = 0,
+            )
+            val keyBytes = byteArrayOf()
+            coEvery {
+                mockFileManager.uriToByteArray(mockFileData.uri)
+            } returns keyBytes.asSuccess()
+            coEvery {
+                mockKeyManager.importMutualTlsCertificate(
+                    key = keyBytes,
+                    alias = "mockAlias",
+                    password = "mockPassword",
+                )
+            } returns ImportPrivateKeyResult.Success(alias = "mockAlias")
+
+            viewModel.trySendAction(
+                EnvironmentAction.SetCertificateInfoResultReceive(
+                    certificateFileData = mockFileData,
+                    alias = "mockAlias",
+                    password = "mockPassword",
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(dialog = null, keyAlias = "mockAlias"),
+                viewModel.stateFlow.value,
+            )
+
+            coVerify {
+                mockFileManager.uriToByteArray(mockFileData.uri)
+                mockKeyManager.importMutualTlsCertificate(
+                    key = byteArrayOf(),
+                    alias = "mockAlias",
+                    password = "mockPassword",
+                )
+            }
+        }
+
+    @Test
+    fun `SetCertificateInfoResultReceive should show error dialog if input is invalid`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            EnvironmentAction.SetCertificateInfoResultReceive(
+                certificateFileData = mockk(),
+                alias = "mockAlias",
+                password = "",
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = EnvironmentState.DialogState.Error(
+                    R.string.validation_field_required.asText(
+                        R.string.password.asText(),
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        viewModel.trySendAction(
+            EnvironmentAction.SetCertificateInfoResultReceive(
+                certificateFileData = mockk(),
+                alias = "",
+                password = "mockPassword",
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = EnvironmentState.DialogState.Error(
+                    R.string.validation_field_required.asText(
+                        R.string.alias.asText(),
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     //region Helper methods
 

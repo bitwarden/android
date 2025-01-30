@@ -191,7 +191,7 @@ class EnvironmentViewModel @Inject constructor(
     }
 
     private fun handleSetCertificatePasswordDialogDismiss() {
-        mutableStateFlow.update { it.copy(dialog = null, keyAlias = "") }
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 
     private fun handleCertificateFilePickerResultReceive(
