@@ -304,7 +304,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -312,7 +312,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -435,7 +435,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -456,7 +456,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -481,7 +481,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -501,7 +501,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -517,7 +517,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -538,7 +538,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -564,7 +564,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -584,7 +584,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -677,7 +677,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "5")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -708,7 +708,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "7")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -728,7 +728,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "5")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -758,7 +758,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "7")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -808,7 +808,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "5")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -838,7 +838,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -865,7 +865,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -886,7 +886,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -907,7 +907,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "3")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()

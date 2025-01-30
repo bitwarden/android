@@ -1,12 +1,18 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.platform.base.util
 
 import android.os.Build
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +39,7 @@ import androidx.compose.ui.node.currentValueOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -86,6 +93,38 @@ fun Modifier.scrolledContainerBottomDivider(
         alpha = topAppBarScrollBehavior.toScrolledContainerDividerAlpha(),
         enabled = enabled,
     )
+
+/**
+ * This is a [Modifier] extension for adding an optional click listener to a composable.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.nullableClickable(
+    indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
+    enabled: Boolean = true,
+    onClick: (() -> Unit)?,
+): Modifier =
+    onClick
+        ?.let {
+            this.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = indicationColor),
+                onClick = it,
+                enabled = enabled,
+            )
+        }
+        ?: this
+
+/**
+ * This is a [Modifier] extension for adding an optional test tag to the composable.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.nullableTestTag(
+    tag: String?,
+): Modifier = this.run { tag?.let { testTag(tag = it) } ?: this }
 
 /**
  * This is a [Modifier] extension for drawing a divider at the bottom of the composable.

@@ -1,10 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.components.toggle
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -31,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
 import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.nullableClickable
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
@@ -44,13 +42,13 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param label The descriptive text label to be displayed adjacent to the switch.
  * @param isChecked The current state of the switch (either checked or unchecked).
  * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param supportingText An optional supporting text to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
  * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
- * @param cardStyle Indicates the type of card style to be applied.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -60,12 +58,12 @@ fun BitwardenSwitch(
     label: String,
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     contentDescription: String? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
-    cardStyle: CardStyle? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
 ) {
     BitwardenSwitch(
@@ -78,7 +76,7 @@ fun BitwardenSwitch(
         enabled = enabled,
         cardStyle = cardStyle,
         actions = actions,
-        supportingTextContent = supportingText?.let {
+        supportingContent = supportingText?.let {
             {
                 Text(
                     text = it,
@@ -100,13 +98,13 @@ fun BitwardenSwitch(
  * @param label The descriptive text label to be displayed adjacent to the switch.
  * @param isChecked The current state of the switch (either checked or unchecked).
  * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param supportingText An optional supporting text to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
  * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
- * @param cardStyle Indicates the type of card style to be applied.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -116,12 +114,12 @@ fun BitwardenSwitch(
     label: AnnotatedString,
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     contentDescription: String? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
-    cardStyle: CardStyle? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
 ) {
     BitwardenSwitch(
@@ -134,7 +132,7 @@ fun BitwardenSwitch(
         enabled = enabled,
         cardStyle = cardStyle,
         actions = actions,
-        supportingTextContent = supportingText?.let {
+        supportingContent = supportingText?.let {
             {
                 Text(
                     text = it,
@@ -156,29 +154,29 @@ fun BitwardenSwitch(
  * @param label The descriptive text label to be displayed adjacent to the switch.
  * @param isChecked The current state of the switch (either checked or unchecked).
  * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
  * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
- * @param cardStyle Indicates the type of card style to be applied.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
- * @param supportingTextContent A lambda containing content directly below the label.
+ * @param supportingContent A lambda containing content directly below the label.
  */
 @Composable
 fun BitwardenSwitch(
     label: String,
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
-    cardStyle: CardStyle? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
-    supportingTextContent: (@Composable ColumnScope.() -> Unit)?,
+    supportingContent: (@Composable ColumnScope.() -> Unit)?,
 ) {
     BitwardenSwitch(
         modifier = modifier,
@@ -190,7 +188,7 @@ fun BitwardenSwitch(
         enabled = enabled,
         cardStyle = cardStyle,
         actions = actions,
-        supportingTextContent = supportingTextContent,
+        supportingContent = supportingContent,
     )
 }
 
@@ -200,16 +198,16 @@ fun BitwardenSwitch(
  * @param label The descriptive text label to be displayed adjacent to the switch.
  * @param isChecked The current state of the switch (either checked or unchecked).
  * @param onCheckedChange A lambda that is invoked when the switch's state changes.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
  * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
  * comes with some additional visual changes.
- * @param cardStyle Indicates the type of card style to be applied.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in between the [label] and the toggle. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
- * @param supportingTextContent A lambda containing content directly below the label.
+ * @param supportingContent A lambda containing content directly below the label.
  */
 @Suppress("LongMethod")
 @Composable
@@ -217,34 +215,25 @@ fun BitwardenSwitch(
     label: AnnotatedString,
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
-    cardStyle: CardStyle? = null,
+    supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     actions: (@Composable RowScope.() -> Unit)? = null,
-    supportingTextContent: @Composable (ColumnScope.() -> Unit)?,
+    supportingContent: @Composable (ColumnScope.() -> Unit)?,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
             .cardBackground(cardStyle = cardStyle)
-            .run {
-                onCheckedChange
-                    ?.let {
-                        this.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(
-                                color = BitwardenTheme.colorScheme.background.pressed,
-                            ),
-                            onClick = { it(!isChecked) },
-                            enabled = !readOnly && enabled,
-                        )
-                    }
-                    ?: this
-            }
-            .cardPadding(cardStyle = cardStyle)
+            .nullableClickable(
+                onClick = onCheckedChange?.let { { it(!isChecked) } },
+                enabled = !readOnly && enabled,
+            )
+            .cardPadding(cardStyle = cardStyle, top = 6.dp, bottom = 0.dp)
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
                 contentDescription?.let { this.contentDescription = it }
@@ -284,23 +273,27 @@ fun BitwardenSwitch(
                 colors = bitwardenSwitchColors(),
             )
         }
-        supportingTextContent?.let {
-            Spacer(modifier = Modifier.height(height = 12.dp))
-            BitwardenHorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 12.dp))
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                content = it,
-            )
-        }
+        supportingContent
+            ?.let { content ->
+                Spacer(modifier = Modifier.height(height = 6.dp))
+                BitwardenHorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
+                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 48.dp)
+                        .padding(paddingValues = supportingContentPadding),
+                    content = content,
+                )
+            }
+            ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun BitwardenSwitch_preview() {
     Column {
@@ -309,11 +302,13 @@ private fun BitwardenSwitch_preview() {
             supportingText = "description",
             isChecked = true,
             onCheckedChange = {},
+            cardStyle = CardStyle.Top(),
         )
         BitwardenSwitch(
             label = "Label",
             isChecked = false,
             onCheckedChange = {},
+            cardStyle = CardStyle.Middle(),
         )
         BitwardenSwitch(
             label = "Label",
@@ -327,6 +322,7 @@ private fun BitwardenSwitch_preview() {
                     onClick = {},
                 )
             },
+            cardStyle = CardStyle.Middle(),
         )
         BitwardenSwitch(
             label = "Label",
@@ -339,6 +335,7 @@ private fun BitwardenSwitch_preview() {
                     onClick = {},
                 )
             },
+            cardStyle = CardStyle.Bottom,
         )
     }
 }

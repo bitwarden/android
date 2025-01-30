@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.orNow
@@ -58,8 +60,8 @@ import java.time.ZonedDateTime
  * @param formatPattern The pattern to format the displayed time.
  * @param onDateSelect The callback to be invoked when a new date is selected.
  * @param isEnabled Whether the button is enabled.
- * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  */
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -70,8 +72,8 @@ fun BitwardenDateSelectButton(
     formatPattern: String,
     onDateSelect: (ZonedDateTime) -> Unit,
     isEnabled: Boolean,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
-    cardStyle: CardStyle? = null,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     val formattedDate by remember(currentZonedDateTime) {
@@ -105,10 +107,15 @@ fun BitwardenDateSelectButton(
         onValueChange = { },
         enabled = shouldShowDialog,
         trailingIcon = {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
-                contentDescription = null,
-            )
+            BitwardenRowOfActions(
+                modifier = Modifier.padding(end = 4.dp),
+            ) {
+                Icon(
+                    painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
+                    contentDescription = null,
+                    modifier = Modifier.minimumInteractiveComponentSize(),
+                )
+            }
         },
         colors = bitwardenTextFieldButtonColors(),
     )

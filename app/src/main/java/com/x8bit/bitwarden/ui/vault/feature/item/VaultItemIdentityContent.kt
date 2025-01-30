@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -359,7 +358,7 @@ private fun IdentityCopyField(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = label,
         value = value,
         onValueChange = { },

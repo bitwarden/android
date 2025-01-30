@@ -51,6 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param onClick The lambda to be invoked when the item is clicked.
  * @param selectionDataList A list of all the selection items to be displayed in the overflow
  * dialog.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
  * This allows the caller to specify things like padding, size, etc.
  * @param labelTestTag The optional test tag for the [label].
@@ -62,7 +63,6 @@ import kotlinx.collections.immutable.persistentListOf
  * @param supportingLabelTestTag The optional test tag for the [supportingLabel].
  * @param startIconTestTag The optional test tag for the [startIcon].
  * @param trailingLabelIcons An optional list of small icons to be displayed after the [label].
- * @param cardStyle Indicates the type of card style to be applied.
  */
 @Suppress("LongMethod")
 @Composable
@@ -71,6 +71,7 @@ fun BitwardenListItem(
     startIcon: IconData,
     onClick: () -> Unit,
     selectionDataList: ImmutableList<SelectionItemData>,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     labelTestTag: String? = null,
     optionsTestTag: String? = null,
@@ -80,7 +81,6 @@ fun BitwardenListItem(
     supportingLabelTestTag: String? = null,
     startIconTestTag: String? = null,
     trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
-    cardStyle: CardStyle? = null,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     Row(
@@ -199,7 +199,7 @@ data class SelectionItemData(
     val testTag: String? = null,
 )
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun BitwardenListItem_preview() {
     BitwardenTheme {
@@ -209,6 +209,7 @@ private fun BitwardenListItem_preview() {
             startIcon = IconData.Local(R.drawable.ic_file_text),
             onClick = {},
             selectionDataList = persistentListOf(),
+            cardStyle = CardStyle.Full,
         )
     }
 }

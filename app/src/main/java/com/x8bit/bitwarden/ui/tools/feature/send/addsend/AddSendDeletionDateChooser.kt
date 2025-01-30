@@ -69,6 +69,7 @@ fun SendDeletionDateChooser(
                 }
             },
             insets = PaddingValues(top = 6.dp, bottom = 4.dp),
+            cardStyle = null,
         )
         AnimatedVisibility(visible = selectedOption == DeletionOptions.CUSTOM) {
             Column {

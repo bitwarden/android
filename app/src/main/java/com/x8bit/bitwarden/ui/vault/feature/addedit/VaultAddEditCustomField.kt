@@ -26,8 +26,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -176,6 +176,7 @@ private fun CustomFieldBoolean(
             label = label,
             isChecked = value,
             onCheckedChange = null,
+            cardStyle = null,
             modifier = Modifier.weight(1f),
         )
 
@@ -206,7 +207,7 @@ private fun CustomFieldHiddenField(
     modifier: Modifier = Modifier,
 ) {
     var shouldShowPassword by remember { mutableStateOf(value = false) }
-    BitwardenPasswordFieldWithActions(
+    BitwardenPasswordField(
         label = label,
         value = value,
         onValueChange = onValueChanged,
@@ -243,7 +244,7 @@ private fun CustomFieldTextField(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = label,
         value = value,
         onValueChange = onValueChanged,

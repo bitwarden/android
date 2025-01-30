@@ -17,9 +17,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -67,7 +66,7 @@ fun VaultItemSshKeyContent(
 
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextFieldWithActions(
+            BitwardenTextField(
                 label = stringResource(id = R.string.public_key),
                 value = sshKeyItemState.publicKey,
                 onValueChange = { },
@@ -90,7 +89,7 @@ fun VaultItemSshKeyContent(
         }
 
         item {
-            BitwardenPasswordFieldWithActions(
+            BitwardenPasswordField(
                 label = stringResource(id = R.string.private_key),
                 value = sshKeyItemState.privateKey,
                 onValueChange = { },
@@ -116,7 +115,7 @@ fun VaultItemSshKeyContent(
         }
 
         item {
-            BitwardenTextFieldWithActions(
+            BitwardenTextField(
                 label = stringResource(id = R.string.fingerprint),
                 value = sshKeyItemState.fingerprint,
                 onValueChange = { },
@@ -149,7 +148,7 @@ fun VaultItemSshKeyContent(
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextFieldWithActions(
+                BitwardenTextField(
                     label = stringResource(id = R.string.notes),
                     value = notes,
                     onValueChange = { },

@@ -52,10 +52,10 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param range The range of values allowed.
  * @param onValueChange Lambda callback for when the value changes and whether the change was from
  * user interaction or not.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The [Modifier] to be applied to this radio button.
  * @param sliderTag The option test tag for the slider component.
  * @param valueTag The option test tag for the value field component.
- * @param cardStyle Indicates the type of card style to be applied.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
@@ -64,10 +64,10 @@ fun BitwardenSlider(
     value: Int,
     range: ClosedRange<Int>,
     onValueChange: (value: Int, isUserInteracting: Boolean) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     sliderTag: String? = null,
     valueTag: String? = null,
-    cardStyle: CardStyle? = null,
 ) {
     val sliderValue by rememberUpdatedState(newValue = value.coerceIn(range = range))
     var labelTextWidth by remember { mutableStateOf(value = Dp.Unspecified) }
@@ -153,7 +153,7 @@ fun BitwardenSlider(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun BitwardenSlider_preview() {
     BitwardenTheme {
@@ -161,6 +161,7 @@ private fun BitwardenSlider_preview() {
             value = 6,
             range = 0..10,
             onValueChange = { _, _ -> },
+            cardStyle = CardStyle.Full,
         )
     }
 }

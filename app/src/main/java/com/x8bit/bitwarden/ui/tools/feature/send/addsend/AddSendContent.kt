@@ -381,7 +381,7 @@ private fun AddSendOptions(
         Column {
             BitwardenStepper(
                 label = stringResource(id = R.string.maximum_access_count),
-                supportingTextContent = {
+                supportingContent = {
                     Text(
                         text = stringResource(id = R.string.maximum_access_count_info),
                         style = BitwardenTheme.typography.bodySmall,

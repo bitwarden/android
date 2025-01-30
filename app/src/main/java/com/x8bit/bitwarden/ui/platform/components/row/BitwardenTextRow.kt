@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param text The label for the row as a [String].
  * @param onClick The callback when the row is clicked.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The modifier to be applied to the layout.
  * @param description An optional description label to be displayed below the [text].
  * @param textTestTag The optional test tag for the inner text component.
@@ -37,19 +38,18 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * and it's contents will be dimmed.
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
- * @param cardStyle Indicates the type of card style to be applied.
  * @param content The content of the [BitwardenTextRow].
  */
 @Composable
 fun BitwardenTextRow(
     text: String,
     onClick: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     description: String? = null,
     textTestTag: String? = null,
     isEnabled: Boolean = true,
     withDivider: Boolean = false,
-    cardStyle: CardStyle? = null,
     content: (@Composable () -> Unit)? = null,
 ) {
     Box(
