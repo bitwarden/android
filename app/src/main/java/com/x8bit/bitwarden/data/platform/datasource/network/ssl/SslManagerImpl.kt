@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.ssl
 
+import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
@@ -34,11 +35,7 @@ class SslManagerImpl(
     @get:WorkerThread
     internal val mutualTlsCertificate: MutualTlsCertificate?
         get() {
-            val keyUri = environmentRepository
-                .environment
-                .environmentUrlData
-                .keyUri
-                ?.toUri()
+            val keyUri = getKeyUri()
                 ?: return null
 
             val host = MutualTlsKeyHost
@@ -64,8 +61,9 @@ class SslManagerImpl(
             .trustManagers
 
     override val sslContext: SSLContext?
-        get() =
-            SSLContext.getInstance("TLS")
+        get() = getKeyUri()?.run {
+            SSLContext
+                .getInstance("TLS")
                 .apply {
                     init(
                         arrayOf(X509ExtendedKeyManagerImpl()),
@@ -73,6 +71,13 @@ class SslManagerImpl(
                         null,
                     )
                 }
+        }
+
+    private fun getKeyUri(): Uri? = environmentRepository
+        .environment
+        .environmentUrlData
+        .keyUri
+        ?.toUri()
 
     private inner class X509ExtendedKeyManagerImpl : X509ExtendedKeyManager() {
         override fun chooseClientAlias(

@@ -166,7 +166,9 @@ class EnvironmentScreenTest : BaseComposeTest() {
 
     @Test
     fun `ShowSystemCertificateSelection event should show system certificate selection dialog`() {
-        mutableEventFlow.tryEmit(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+        mutableEventFlow.tryEmit(
+            EnvironmentEvent.ShowSystemCertificateSelectionDialog(serverUrl = ""),
+        )
         coVerify { mockKeyChainManager.choosePrivateKeyAlias(null) }
     }
 
@@ -177,7 +179,9 @@ class EnvironmentScreenTest : BaseComposeTest() {
             mockKeyChainManager.choosePrivateKeyAlias(null)
         } returns PrivateKeyAliasSelectionResult.Success("alias")
 
-        mutableEventFlow.tryEmit(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+        mutableEventFlow.tryEmit(
+            EnvironmentEvent.ShowSystemCertificateSelectionDialog(serverUrl = ""),
+        )
 
         verify {
             viewModel.trySendAction(
