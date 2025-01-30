@@ -745,7 +745,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `MainTypeOptionSelect PASSWORD should switch to Passcode`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(
-            GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.USERNAME)
+            GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.USERNAME),
         )
 
         fakeGeneratorRepository.setMockGeneratePasswordResult(
