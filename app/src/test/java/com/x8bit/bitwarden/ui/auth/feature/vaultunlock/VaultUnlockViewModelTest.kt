@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -80,8 +81,14 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { isUserVerified } returns true
         every { isUserVerified = any() } just runs
     }
+
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
+        every { specialCircumstance = any() } answers { }
+    }
+
+    private val appResumeManager: AppResumeManager = mockk {
+        every { getResumeSpecialCircumstance() } returns null
     }
 
     @Test
@@ -1248,6 +1255,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         biometricsEncryptionManager = biometricsEncryptionManager,
         fido2CredentialManager = fido2CredentialManager,
         specialCircumstanceManager = specialCircumstanceManager,
+        appResumeManager = appResumeManager,
     )
 }
 

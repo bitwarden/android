@@ -327,7 +327,6 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isPremiumUser = true,
             isTotp = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -354,7 +353,6 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isPremiumUser = true,
             isTotp = false,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -396,7 +394,6 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isPremiumUser = true,
             isTotp = false,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -448,7 +445,6 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isPremiumUser = true,
             isTotp = true,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(
@@ -479,7 +475,6 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             isPremiumUser = true,
             isTotp = false,
-            organizationPremiumStatusMap = emptyMap(),
         )
 
         assertEquals(

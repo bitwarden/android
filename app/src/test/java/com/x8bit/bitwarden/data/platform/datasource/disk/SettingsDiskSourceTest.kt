@@ -4,12 +4,15 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
@@ -1313,5 +1316,53 @@ class SettingsDiskSourceTest {
             settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = true)
             assertTrue(awaitItem() ?: false)
         }
+    }
+
+    @Test
+    fun `getAppResumeScreen should pull from SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val resumeScreenKey = "bwPreferencesStorage:resumeScreen_$mockUserId"
+        val expectedData = AppResumeScreenData.GeneratorScreen
+        fakeSharedPreferences.edit {
+            putString(
+                resumeScreenKey,
+                json.encodeToString<AppResumeScreenData>(expectedData),
+            )
+        }
+        assertEquals(expectedData, settingsDiskSource.getAppResumeScreen(mockUserId))
+    }
+
+    @Test
+    fun `storeAppResumeScreen should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val resumeScreenKey = "bwPreferencesStorage:resumeScreen_$mockUserId"
+        val expectedData = AppResumeScreenData.GeneratorScreen
+        settingsDiskSource.storeAppResumeScreen(mockUserId, expectedData)
+        assertEquals(
+            expectedData,
+            fakeSharedPreferences.getString(resumeScreenKey, "")?.let {
+                Json.decodeFromStringOrNull<AppResumeScreenData>(it)
+            },
+        )
+    }
+
+    @Test
+    fun `storeAppResumeScreen should save null when passed`() {
+        val mockUserId = "mockUserId"
+        val resumeScreenKey = "bwPreferencesStorage:resumeScreen_$mockUserId"
+        val expectedData = AppResumeScreenData.GeneratorScreen
+        settingsDiskSource.storeAppResumeScreen(mockUserId, expectedData)
+        assertEquals(
+            expectedData,
+            fakeSharedPreferences.getString(resumeScreenKey, "")?.let {
+                Json.decodeFromStringOrNull<AppResumeScreenData>(it)
+            },
+        )
+        settingsDiskSource.storeAppResumeScreen(mockUserId, null)
+        assertNull(
+            fakeSharedPreferences.getString(resumeScreenKey, "")?.let {
+                Json.decodeFromStringOrNull<AppResumeScreenData>(it)
+            },
+        )
     }
 }

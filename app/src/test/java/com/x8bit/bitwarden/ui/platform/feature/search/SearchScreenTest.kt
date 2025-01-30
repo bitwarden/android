@@ -18,6 +18,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -55,6 +56,8 @@ class SearchScreenTest : BaseComposeTest() {
         every { launchUri(any()) } just runs
     }
 
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
+
     private var onNavigateBackCalled = false
     private var onNavigateToEditSendId: String? = null
     private var onNavigateToEditCipherId: String? = null
@@ -70,6 +73,7 @@ class SearchScreenTest : BaseComposeTest() {
                 onNavigateToEditSend = { onNavigateToEditSendId = it },
                 onNavigateToEditCipher = { onNavigateToEditCipherId = it },
                 onNavigateToViewCipher = { onNavigateToViewCipherId = it },
+                appResumeStateManager = appResumeStateManager,
             )
         }
     }
@@ -940,7 +944,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     totpData = null,
     autofillSelectionData = null,
     isPremium = true,
-    organizationPremiumStatusMap = emptyMap(),
 )
 
 private fun createStateForAutofill(

@@ -56,6 +56,11 @@ class DebugMenuRepositoryImpl(
         )
     }
 
+    override fun resetCoachMarkTourStatuses() {
+        settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = null)
+        settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
+    }
+
     override fun modifyStateToShowOnboardingCarousel(
         userStateUpdateTrigger: () -> Unit,
     ) {

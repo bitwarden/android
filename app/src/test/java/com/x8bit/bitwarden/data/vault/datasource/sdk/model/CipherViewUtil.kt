@@ -49,12 +49,10 @@ fun createMockCipherView(
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
-    organizationUsesTotp: Boolean = false,
-    organizationId: String? = "mockOrganizationId-$number",
 ): CipherView =
     CipherView(
         id = "mockId-$number",
-        organizationId = organizationId,
+        organizationId = "mockOrganizationId-$number",
         folderId = folderId,
         collectionIds = listOf("mockId-$number"),
         key = "mockKey-$number",
@@ -87,7 +85,7 @@ fun createMockCipherView(
         reprompt = repromptType,
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
         edit = true,
-        organizationUseTotp = organizationUsesTotp,
+        organizationUseTotp = false,
         viewPassword = true,
         localData = null,
     )

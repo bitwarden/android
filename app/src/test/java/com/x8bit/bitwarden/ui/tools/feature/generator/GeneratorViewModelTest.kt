@@ -2227,9 +2227,13 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `StartExploreGeneratorTour action calls first time action manager hasSeenGeneratorCoachMarkTour called and show coach mark event sent`() {
+    fun `StartExploreGeneratorTour action calls first time action manager markCoachMarkTourCompleted called and show coach mark event sent`() =
+        runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
+                assertEquals(GeneratorEvent.StartCoachMarkTour, awaitItem())
+            }
         verify(exactly = 1) {
             firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
         }

@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 class AccessibilityEnabledManagerImpl(
     accessibilityManager: AccessibilityManager,
 ) : AccessibilityEnabledManager {
-    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(value = false)
+    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(
+        value = accessibilityManager.isEnabled,
+    )
 
     init {
         accessibilityManager.addAccessibilityStateChangeListener(

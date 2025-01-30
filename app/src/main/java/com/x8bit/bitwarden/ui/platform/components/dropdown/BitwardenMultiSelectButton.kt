@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -68,6 +69,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param supportingText A optional supporting text that will appear below the text field.
  * @param tooltip A nullable [TooltipData], representing the tooltip icon.
  * @param insets Inner padding to be applied withing the card.
+ * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param actionsPadding Padding to be applied to the [actions] block.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
@@ -86,6 +88,7 @@ fun BitwardenMultiSelectButton(
     supportingText: String? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
+    textFieldTestTag: String? = null,
     cardStyle: CardStyle? = null,
     actionsPadding: PaddingValues = PaddingValues(),
     actions: @Composable RowScope.() -> Unit = {},
@@ -161,6 +164,7 @@ fun BitwardenMultiSelectButton(
                 },
                 colors = bitwardenTextFieldButtonColors(),
                 modifier = Modifier
+                    .run { textFieldTestTag?.let { testTag(tag = it) } ?: this }
                     .weight(weight = 1f)
                     .fillMaxWidth(),
             )

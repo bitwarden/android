@@ -161,7 +161,6 @@ private val DEFAULT_ACCOUNT = UserState.Account(
             shouldManageResetPassword = false,
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
-            shouldUsersGetPremium = false,
         ),
     ),
     needsMasterPassword = false,

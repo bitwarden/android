@@ -15,6 +15,8 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterM
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -66,6 +68,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -337,4 +340,22 @@ object PlatformManagerModule {
     fun provideKeyManager(
         @ApplicationContext context: Context,
     ): KeyManager = KeyManagerImpl(context = context)
+
+    @Provides
+    @Singleton
+    fun provideAppResumeManager(
+        settingsDiskSource: SettingsDiskSource,
+        authDiskSource: AuthDiskSource,
+        authRepository: AuthRepository,
+        vaultLockManager: VaultLockManager,
+        clock: Clock,
+    ): AppResumeManager {
+        return AppResumeManagerImpl(
+            settingsDiskSource = settingsDiskSource,
+            authDiskSource = authDiskSource,
+            authRepository = authRepository,
+            vaultLockManager = vaultLockManager,
+            clock = clock,
+        )
+    }
 }

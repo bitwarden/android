@@ -36,7 +36,6 @@ data class CheckEmailArgs(
  */
 fun NavGraphBuilder.checkEmailDestination(
     onNavigateBack: () -> Unit,
-    onNavigateBackToLanding: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = CHECK_EMAIL_ROUTE,
@@ -46,7 +45,6 @@ fun NavGraphBuilder.checkEmailDestination(
     ) {
         CheckEmailScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateBackToLanding = onNavigateBackToLanding,
         )
     }
 }

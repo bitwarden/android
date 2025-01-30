@@ -21,6 +21,9 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -34,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionBut
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -54,6 +58,7 @@ fun SendScreen(
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -64,6 +69,12 @@ fun SendScreen(
             { viewModel.trySendAction(SendAction.RefreshPull) }
         },
     )
+
+    RegisterScreenDataOnLifecycleEffect(
+        appResumeStateManager = appResumeStateManager,
+    ) {
+        AppResumeScreenData.SendScreen
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {

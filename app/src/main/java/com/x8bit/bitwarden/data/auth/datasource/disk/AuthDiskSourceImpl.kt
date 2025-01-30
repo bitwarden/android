@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.json.Json
+import java.time.Instant
 import java.util.UUID
 
 // These keys should be encrypted
@@ -49,6 +50,7 @@ private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val NEW_DEVICE_NOTICE_STATE = "newDeviceNoticeState"
+private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -154,6 +156,7 @@ class AuthDiskSourceImpl(
         storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = null)
         storeAuthenticatorSyncUnlockKey(userId = userId, authenticatorSyncUnlockKey = null)
         storeShowImportLogins(userId = userId, showImportLogins = null)
+        storeLastLockTimestamp(userId = userId, lastLockTimestamp = null)
 
         // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
         // indefinitely unless the TDE flow explicitly removes them.
@@ -499,6 +502,19 @@ class AuthDiskSourceImpl(
         putString(
             key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId),
             value = newState?.let { json.encodeToString(it) },
+        )
+    }
+
+    override fun getLastLockTimestamp(userId: String): Instant? {
+        return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId))?.let {
+            Instant.ofEpochMilli(it)
+        }
+    }
+
+    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {
+        putLong(
+            key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId),
+            value = lastLockTimestamp?.toEpochMilli(),
         )
     }
 

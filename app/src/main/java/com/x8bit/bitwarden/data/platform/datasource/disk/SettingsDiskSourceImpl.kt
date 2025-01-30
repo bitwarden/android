@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -41,6 +42,7 @@ private const val COPY_ACTION_COUNT = "copyActionCount"
 private const val CREATE_ACTION_COUNT = "createActionCount"
 private const val SHOULD_SHOW_ADD_LOGIN_COACH_MARK = "shouldShowAddLoginCoachMark"
 private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMark"
+private const val RESUME_SCREEN = "resumeScreen"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -185,6 +187,7 @@ class SettingsDiskSourceImpl(
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
         storeVaultRegisteredForExport(userId = userId, isRegistered = null)
+        storeAppResumeScreen(userId = userId, screenData = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -525,6 +528,16 @@ class SettingsDiskSourceImpl(
         mutableHasSeenGeneratorCoachMarkFlow.onSubscription {
             emit(getShouldShowGeneratorCoachMark())
         }
+
+    override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
+        putString(
+            key = RESUME_SCREEN.appendIdentifier(userId),
+            value = screenData?.let { json.encodeToString(it) },
+        )
+    }
+
+    override fun getAppResumeScreen(userId: String): AppResumeScreenData? =
+        getString(RESUME_SCREEN.appendIdentifier(userId))?.let { json.decodeFromStringOrNull(it) }
 
     private fun getMutableLastSyncFlow(
         userId: String,

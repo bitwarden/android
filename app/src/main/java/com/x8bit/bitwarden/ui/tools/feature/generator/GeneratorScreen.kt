@@ -3,24 +3,28 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -33,8 +37,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
@@ -46,6 +54,11 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
+import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
+import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -56,6 +69,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
+import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -65,6 +79,7 @@ import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -86,10 +101,12 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPasswordH
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberPlusAddressedEmailHandlers
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberRandomWordHandlers
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberUsernameTypeHandlers
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.ExploreGeneratorCoachMark
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 import kotlin.math.max
 
 /**
@@ -102,7 +119,9 @@ fun GeneratorScreen(
     viewModel: GeneratorViewModel = hiltViewModel(),
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateBack: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
+    appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = rememberBitwardenSnackbarHostState()
@@ -115,7 +134,21 @@ fun GeneratorScreen(
             else -> Unit
         }
     }
+    RegisterScreenDataOnLifecycleEffect(
+        appResumeStateManager = appResumeStateManager,
+    ) {
+        AppResumeScreenData.GeneratorScreen
+    }
 
+    val lazyListState = rememberLazyListState()
+    val coachMarkState = rememberLazyListCoachMarkState(
+        orderedList = ExploreGeneratorCoachMark.entries,
+        lazyListState = lazyListState,
+    )
+
+    LaunchedEffect(key1 = coachMarkState.isVisible.value) {
+        onDimNavBarRequest(coachMarkState.isVisible.value)
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             GeneratorEvent.NavigateToPasswordHistory -> onNavigateToPasswordHistory()
@@ -134,9 +167,11 @@ fun GeneratorScreen(
             }
 
             GeneratorEvent.NavigateBack -> onNavigateBack.invoke()
+            GeneratorEvent.StartCoachMarkTour -> {
+                coachMarkState.showCoachMark(ExploreGeneratorCoachMark.PASSWORD_MODE)
+            }
         }
     }
-
     val onRegenerateClick: () -> Unit = remember(viewModel) {
         { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
     }
@@ -158,6 +193,25 @@ fun GeneratorScreen(
             }
         }
 
+    val scope = rememberCoroutineScope()
+    val onShowNextCoachMark: () -> Unit = remember {
+        {
+            scope.launch { coachMarkState.showNextCoachMark() }
+        }
+    }
+
+    val onShowPreviousCoachMark: () -> Unit = remember {
+        {
+            scope.launch { coachMarkState.showPreviousCoachMark() }
+        }
+    }
+
+    val onDismissCoachMark: () -> Unit = remember {
+        {
+            scope.launch { lazyListState.animateScrollToItem(index = 0) }
+        }
+    }
+
     val passwordHandlers = rememberPasswordHandlers(viewModel)
     val passphraseHandlers = rememberPassphraseHandlers(viewModel)
     val usernameTypeHandlers = rememberUsernameTypeHandlers(viewModel)
@@ -167,60 +221,83 @@ fun GeneratorScreen(
     val randomWordHandlers = rememberRandomWordHandlers(viewModel)
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    BitwardenScaffold(
-        topBar = {
-            when (val generatorMode = state.generatorMode) {
-                is GeneratorMode.Modal -> {
-                    ModalAppBar(
-                        generatorMode = generatorMode,
-                        scrollBehavior = scrollBehavior,
-                        onCloseClick = remember(viewModel) {
-                            { viewModel.trySendAction(GeneratorAction.CloseClick) }
-                        },
-                        onSelectClick = remember(viewModel) {
-                            { viewModel.trySendAction(GeneratorAction.SelectClick) }
-                        },
-                    )
-                }
-
-                GeneratorMode.Default -> {
-                    DefaultAppBar(
-                        scrollBehavior = scrollBehavior,
-                        onPasswordHistoryClick = remember(viewModel) {
-                            { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
-                        },
-                    )
-                }
-            }
-        },
-        utilityBar = {
-            MainStateOptionsItem(
-                selectedType = state.selectedType,
-                passcodePolicyOverride = state.passcodePolicyOverride,
-                possibleMainStates = state.typeOptions.toImmutableList(),
-                onMainStateOptionClicked = onMainStateOptionClicked,
-                modifier = Modifier
-                    .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
-            )
-        },
-        snackbarHost = {
-            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    CoachMarkContainer(
+        state = coachMarkState,
+        modifier = Modifier.fillMaxSize(),
     ) {
-        ScrollContent(
-            state = state,
-            onRegenerateClick = onRegenerateClick,
-            onCopyClick = onCopyClick,
-            onUsernameSubStateOptionClicked = onUsernameOptionClicked,
-            passwordHandlers = passwordHandlers,
-            passphraseHandlers = passphraseHandlers,
-            usernameTypeHandlers = usernameTypeHandlers,
-            forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-            plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-            catchAllEmailHandlers = catchAllEmailHandlers,
-            randomWordHandlers = randomWordHandlers,
-        )
+        BitwardenScaffold(
+            topBar = {
+                when (val generatorMode = state.generatorMode) {
+                    is GeneratorMode.Modal -> {
+                        ModalAppBar(
+                            generatorMode = generatorMode,
+                            scrollBehavior = scrollBehavior,
+                            onCloseClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.CloseClick) }
+                            },
+                            onSelectClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.SelectClick) }
+                            },
+                        )
+                    }
+
+                    GeneratorMode.Default -> {
+                        DefaultAppBar(
+                            scrollBehavior = scrollBehavior,
+                            onPasswordHistoryClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
+                            },
+                        )
+                    }
+                }
+            },
+            utilityBar = {
+                MainStateOptionsItem(
+                    selectedType = state.selectedType,
+                    passcodePolicyOverride = state.passcodePolicyOverride,
+                    possibleMainStates = state.typeOptions.toImmutableList(),
+                    onMainStateOptionClicked = onMainStateOptionClicked,
+                    onShowNextCoachMark = onShowNextCoachMark,
+                    onShowPreviousCoachMark = onShowPreviousCoachMark,
+                    onDismissCoachMark = onDismissCoachMark,
+                    modifier = Modifier
+                        .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior),
+                )
+            },
+            snackbarHost = {
+                BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+            },
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        ) {
+            ScrollContent(
+                state = state,
+                onRegenerateClick = onRegenerateClick,
+                onCopyClick = onCopyClick,
+                onUsernameSubStateOptionClicked = onUsernameOptionClicked,
+                passwordHandlers = passwordHandlers,
+                passphraseHandlers = passphraseHandlers,
+                usernameTypeHandlers = usernameTypeHandlers,
+                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                catchAllEmailHandlers = catchAllEmailHandlers,
+                randomWordHandlers = randomWordHandlers,
+                onShowNextCoachMark = onShowNextCoachMark,
+                onShowPreviousCoachMark = onShowPreviousCoachMark,
+                onDismissCoachMark = onDismissCoachMark,
+                onCoachMarkComplete = {
+                    coachMarkState.coachingComplete(
+                        onComplete = onDismissCoachMark,
+                    )
+                },
+                lazyListState = lazyListState,
+            )
+        }
+    }
+    // Remove dim nav bar effect when we leave this screen.
+    DisposableEffect(Unit) {
+        onDispose {
+            onDimNavBarRequest(false)
+        }
     }
 }
 
@@ -287,7 +364,7 @@ private fun ModalAppBar(
 
 @Suppress("LongMethod")
 @Composable
-private fun ScrollContent(
+private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     state: GeneratorState,
     onRegenerateClick: () -> Unit,
     onCopyClick: () -> Unit,
@@ -299,20 +376,64 @@ private fun ScrollContent(
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
+    lazyListState: LazyListState,
+    onShowNextCoachMark: () -> Unit,
+    onShowPreviousCoachMark: () -> Unit,
+    onDismissCoachMark: () -> Unit,
+    onCoachMarkComplete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    LazyColumn(
+        state = lazyListState,
         modifier = modifier
             .fillMaxHeight()
-            .imePadding()
-            .verticalScroll(rememberScrollState()),
+            .imePadding(),
     ) {
-        Spacer(modifier = Modifier.height(12.dp))
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
         if (state.isUnderPolicy) {
-            BitwardenInfoCalloutCard(
-                text = stringResource(id = R.string.password_generator_policy_in_effect),
+            item {
+                BitwardenInfoCalloutCard(
+                    text = stringResource(id = R.string.password_generator_policy_in_effect),
+                    modifier = Modifier
+                        .testTag("PasswordGeneratorPolicyInEffectLabel")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+
+        if (state.shouldShowExploreGeneratorCard) {
+            item {
+                @Suppress("MaxLineLength")
+                BitwardenActionCard(
+                    cardTitle = stringResource(R.string.explore_the_generator),
+                    cardSubtitle = stringResource(
+                        R.string.learn_more_about_generating_secure_login_credentials_with_guided_tour,
+                    ),
+                    actionText = stringResource(R.string.get_started),
+                    onActionClick = passwordHandlers.onGeneratorActionCardClicked,
+                    onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+        }
+
+        item(key = ExploreGeneratorCoachMark.GENERATE_BUTTON) {
+            GeneratedStringItem(
+                generatedText = state.generatedText,
+                onRegenerateClick = onRegenerateClick,
+                onShowPreviousCoachMark = onShowPreviousCoachMark,
+                onDismissCoachMark = onDismissCoachMark,
+                onShowNextCoachMark = onShowNextCoachMark,
                 modifier = Modifier
-                    .testTag("PasswordGeneratorPolicyInEffectLabel")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
@@ -320,79 +441,112 @@ private fun ScrollContent(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        if (state.shouldShowExploreGeneratorCard) {
-            BitwardenActionCard(
-                cardTitle = stringResource(R.string.explore_the_generator),
-                cardSubtitle = stringResource(
-                    R.string.learn_more_about_generating_secure_login_credentials_with_guided_tour,
-                ),
-                actionText = stringResource(R.string.get_started),
-                onActionClick = passwordHandlers.onGeneratorActionCardClicked,
-                onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
+        @Suppress("MaxLineLength")
+        coachMarkHighlightItem(
+            key = ExploreGeneratorCoachMark.COPY_PASSWORD_BUTTON,
+            title = R.string.coachmark_6_of_6.asText(),
+            description = R
+                .string
+                .after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website
+                .asText(),
+            shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+            onDismiss = onDismissCoachMark,
+            leftAction = {
+                CoachMarkActionText(
+                    actionLabel = stringResource(R.string.back),
+                    onActionClick = onShowPreviousCoachMark,
+                )
+            },
+            rightAction = {
+                CoachMarkActionText(
+                    actionLabel = stringResource(R.string.done_text),
+                    onActionClick = onCoachMarkComplete,
+                )
+            },
+            modifier = Modifier.standardHorizontalMargin(),
+        ) {
+            BitwardenFilledButton(
+                label = stringResource(id = R.string.copy),
+                onClick = onCopyClick,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .testTag(tag = "CopyValueButton")
+                    .fillMaxWidth(),
             )
+        }
+
+        item {
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        GeneratedStringItem(
-            generatedText = state.generatedText,
-            onRegenerateClick = onRegenerateClick,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        BitwardenFilledButton(
-            label = stringResource(id = R.string.copy),
-            onClick = onCopyClick,
-            modifier = Modifier
-                .testTag(tag = "CopyValueButton")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         when (val selectedType = state.selectedType) {
             is GeneratorState.MainType.Passphrase -> {
-                PassphraseTypeContent(
-                    passphraseTypeState = selectedType,
-                    passphraseHandlers = passphraseHandlers,
-                )
+                item {
+                    PassphraseTypeContent(
+                        passphraseTypeState = selectedType,
+                        passphraseHandlers = passphraseHandlers,
+                    )
+                }
             }
 
             is GeneratorState.MainType.Password -> {
-                PasswordTypeContent(
-                    passwordTypeState = selectedType,
-                    passwordHandlers = passwordHandlers,
-                )
+                coachMarkHighlightItem(
+                    key = ExploreGeneratorCoachMark.PASSWORD_OPTIONS,
+                    title = R.string.coachmark_4_of_6.asText(),
+                    description = R
+                        .string
+                        .use_these_options_to_adjust_your_password_to_your_account_requirements
+                        .asText(),
+                    onDismiss = onDismissCoachMark,
+                    leftAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.back),
+                            onActionClick = onShowPreviousCoachMark,
+                        )
+                    },
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    modifier = Modifier.standardHorizontalMargin(),
+                ) {
+                    PasswordTypeContent(
+                        passwordTypeState = selectedType,
+                        passwordHandlers = passwordHandlers,
+                    )
+                }
             }
 
             is GeneratorState.MainType.Username -> {
-                UsernameTypeItems(
-                    usernameState = selectedType,
-                    usernameTypeHandlers = usernameTypeHandlers,
-                    onSubStateOptionClicked = onUsernameSubStateOptionClicked,
-                    forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-                    plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-                    catchAllEmailHandlers = catchAllEmailHandlers,
-                    randomWordHandlers = randomWordHandlers,
-                )
+                item {
+                    UsernameTypeItems(
+                        usernameState = selectedType,
+                        usernameTypeHandlers = usernameTypeHandlers,
+                        onSubStateOptionClicked = onUsernameSubStateOptionClicked,
+                        forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                        plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                        catchAllEmailHandlers = catchAllEmailHandlers,
+                        randomWordHandlers = randomWordHandlers,
+                    )
+                }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Spacer(modifier = Modifier.navigationBarsPadding())
+
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
     }
 }
 
 @Composable
-private fun GeneratedStringItem(
+private fun CoachMarkScope<ExploreGeneratorCoachMark>.GeneratedStringItem(
     generatedText: String,
     onRegenerateClick: () -> Unit,
+    onShowPreviousCoachMark: () -> Unit,
+    onDismissCoachMark: () -> Unit,
+    onShowNextCoachMark: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
@@ -401,12 +555,34 @@ private fun GeneratedStringItem(
         value = generatedText,
         singleLine = false,
         actions = {
-            BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_generate,
-                contentDescription = stringResource(id = R.string.generate_password),
-                onClick = onRegenerateClick,
-                modifier = Modifier.testTag("RegenerateValueButton"),
-            )
+            CoachMarkHighlight(
+                key = ExploreGeneratorCoachMark.GENERATE_BUTTON,
+                title = stringResource(R.string.coachmark_5_of_6),
+                description = stringResource(
+                    R.string.use_this_button_to_generate_a_new_unique_password,
+                ),
+                shape = CoachMarkHighlightShape.Oval,
+                onDismiss = onDismissCoachMark,
+                leftAction = {
+                    CoachMarkActionText(
+                        actionLabel = stringResource(R.string.back),
+                        onActionClick = onShowPreviousCoachMark,
+                    )
+                },
+                rightAction = {
+                    CoachMarkActionText(
+                        actionLabel = stringResource(R.string.next),
+                        onActionClick = onShowNextCoachMark,
+                    )
+                },
+            ) {
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_generate,
+                    contentDescription = stringResource(id = R.string.generate_password),
+                    onClick = onRegenerateClick,
+                    modifier = Modifier.testTag("RegenerateValueButton"),
+                )
+            }
         },
         onValueChange = {},
         readOnly = true,
@@ -419,12 +595,16 @@ private fun GeneratedStringItem(
     )
 }
 
+@Suppress("MaxLineLength", "LongMethod")
 @Composable
-private fun MainStateOptionsItem(
+private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
     selectedType: GeneratorState.MainType,
     passcodePolicyOverride: GeneratorState.PasscodePolicyOverride?,
     possibleMainStates: ImmutableList<GeneratorState.MainTypeOption>,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
+    onShowNextCoachMark: () -> Unit,
+    onShowPreviousCoachMark: () -> Unit,
+    onDismissCoachMark: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenSegmentedButton(
@@ -460,7 +640,85 @@ private fun MainStateOptionsItem(
         modifier = modifier
             .fillMaxWidth()
             .testTag(tag = "GeneratorTypePicker"),
-    )
+    ) { index, option ->
+        when (index) {
+            0 -> {
+                CoachMarkHighlight(
+                    key = ExploreGeneratorCoachMark.PASSWORD_MODE,
+                    title = stringResource(R.string.coachmark_1_of_6),
+                    description = stringResource(
+                        R.string.use_the_generator_to_create_secure_passwords_passphrases_and_usernames,
+                    ),
+                    onDismiss = onDismissCoachMark,
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                ) {
+                    SegmentedButtonOptionContent(option = option)
+                }
+            }
+
+            1 -> {
+                CoachMarkHighlight(
+                    key = ExploreGeneratorCoachMark.PASSPHRASE_MODE,
+                    title = stringResource(R.string.coachmark_2_of_6),
+                    description = stringResource(
+                        R.string.passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords,
+                    ),
+                    onDismiss = onDismissCoachMark,
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    leftAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.back),
+                            onActionClick = onShowPreviousCoachMark,
+                        )
+                    },
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                ) {
+                    SegmentedButtonOptionContent(option = option)
+                }
+            }
+
+            2 -> {
+                CoachMarkHighlight(
+                    key = ExploreGeneratorCoachMark.USERNAME_MODE,
+                    title = stringResource(R.string.coachmark_3_of_6),
+                    description = stringResource(
+                        R.string.unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts,
+                    ),
+                    onDismiss = onDismissCoachMark,
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.next),
+                            onActionClick = onShowNextCoachMark,
+                        )
+                    },
+                    leftAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(R.string.back),
+                            onActionClick = onShowPreviousCoachMark,
+                        )
+                    },
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                ) {
+                    SegmentedButtonOptionContent(option = option)
+                }
+            }
+
+            else -> {
+                SegmentedButtonOptionContent(option = option)
+            }
+        }
+    }
 }
 
 //endregion ScrollContent and Static Items
@@ -469,95 +727,96 @@ private fun MainStateOptionsItem(
 
 @Suppress("LongMethod")
 @Composable
-private fun ColumnScope.PasswordTypeContent(
+private fun PasswordTypeContent(
     passwordTypeState: GeneratorState.MainType.Password,
     passwordHandlers: PasswordHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    BitwardenSlider(
-        value = passwordTypeState.length,
-        onValueChange = { newValue, isUserInteracting ->
-            if (newValue >= passwordTypeState.computedMinimumLength) {
-                passwordHandlers.onPasswordSliderLengthChange(newValue, isUserInteracting)
-            }
-        },
-        range = passwordTypeState.minLength..passwordTypeState.maxLength,
-        sliderTag = "PasswordLengthSlider",
-        valueTag = "PasswordLengthLabel",
-        cardStyle = CardStyle.Full,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+    Column(modifier = modifier) {
+        BitwardenSlider(
+            value = passwordTypeState.length,
+            onValueChange = { newValue, isUserInteracting ->
+                if (newValue >= passwordTypeState.computedMinimumLength) {
+                    passwordHandlers.onPasswordSliderLengthChange(newValue, isUserInteracting)
+                }
+            },
+            range = passwordTypeState.minLength..passwordTypeState.maxLength,
+            sliderTag = "PasswordLengthSlider",
+            valueTag = "PasswordLengthLabel",
+            cardStyle = CardStyle.Full,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PasswordCapitalLettersToggleItem(
-        useCapitals = passwordTypeState.useCapitals,
-        onPasswordToggleCapitalLettersChange = passwordHandlers
-            .onPasswordToggleCapitalLettersChange,
-        enabled = passwordTypeState.capitalsEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
-    PasswordLowercaseLettersToggleItem(
-        useLowercase = passwordTypeState.useLowercase,
-        onPasswordToggleLowercaseLettersChange = passwordHandlers
-            .onPasswordToggleLowercaseLettersChange,
-        enabled = passwordTypeState.lowercaseEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
-    PasswordNumbersToggleItem(
-        useNumbers = passwordTypeState.useNumbers,
-        onPasswordToggleNumbersChange = passwordHandlers.onPasswordToggleNumbersChange,
-        enabled = passwordTypeState.numbersEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
-    PasswordSpecialCharactersToggleItem(
-        useSpecialChars = passwordTypeState.useSpecialChars,
-        onPasswordToggleSpecialCharactersChange = passwordHandlers
-            .onPasswordToggleSpecialCharactersChange,
-        enabled = passwordTypeState.specialCharsEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
-    PasswordAvoidAmbiguousCharsToggleItem(
-        avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
-        onPasswordToggleAvoidAmbiguousCharsChange = passwordHandlers
-            .onPasswordToggleAvoidAmbiguousCharsChange,
-        enabled = passwordTypeState.ambiguousCharsEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PasswordCapitalLettersToggleItem(
+            useCapitals = passwordTypeState.useCapitals,
+            onPasswordToggleCapitalLettersChange = passwordHandlers
+                .onPasswordToggleCapitalLettersChange,
+            enabled = passwordTypeState.capitalsEnabled,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+        PasswordLowercaseLettersToggleItem(
+            useLowercase = passwordTypeState.useLowercase,
+            onPasswordToggleLowercaseLettersChange = passwordHandlers
+                .onPasswordToggleLowercaseLettersChange,
+            enabled = passwordTypeState.lowercaseEnabled,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+        PasswordNumbersToggleItem(
+            useNumbers = passwordTypeState.useNumbers,
+            onPasswordToggleNumbersChange = passwordHandlers.onPasswordToggleNumbersChange,
+            enabled = passwordTypeState.numbersEnabled,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+        PasswordSpecialCharactersToggleItem(
+            useSpecialChars = passwordTypeState.useSpecialChars,
+            onPasswordToggleSpecialCharactersChange = passwordHandlers
+                .onPasswordToggleSpecialCharactersChange,
+            enabled = passwordTypeState.specialCharsEnabled,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+        PasswordAvoidAmbiguousCharsToggleItem(
+            avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
+            onPasswordToggleAvoidAmbiguousCharsChange = passwordHandlers
+                .onPasswordToggleAvoidAmbiguousCharsChange,
+            enabled = passwordTypeState.ambiguousCharsEnabled,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PasswordMinNumbersCounterItem(
-        minNumbers = passwordTypeState.minNumbers,
-        onPasswordMinNumbersCounterChange = passwordHandlers.onPasswordMinNumbersCounterChange,
-        maxValue = max(passwordTypeState.maxNumbersAllowed, passwordTypeState.minNumbersAllowed),
-        minValue = passwordTypeState.minNumbersAllowed,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PasswordMinNumbersCounterItem(
+            minNumbers = passwordTypeState.minNumbers,
+            onPasswordMinNumbersCounterChange = passwordHandlers.onPasswordMinNumbersCounterChange,
+            maxValue = max(
+                passwordTypeState.maxNumbersAllowed,
+                passwordTypeState.minNumbersAllowed,
+            ),
+            minValue = passwordTypeState.minNumbersAllowed,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
 
-    PasswordMinSpecialCharactersCounterItem(
-        minSpecial = passwordTypeState.minSpecial,
-        onPasswordMinSpecialCharactersChange = passwordHandlers
-            .onPasswordMinSpecialCharactersChange,
-        maxValue = max(passwordTypeState.maxSpecialAllowed, passwordTypeState.minSpecialAllowed),
-        minValue = passwordTypeState.minSpecialAllowed,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PasswordMinSpecialCharactersCounterItem(
+            minSpecial = passwordTypeState.minSpecial,
+            onPasswordMinSpecialCharactersChange = passwordHandlers
+                .onPasswordMinSpecialCharactersChange,
+            maxValue = max(
+                passwordTypeState.maxSpecialAllowed,
+                passwordTypeState.minSpecialAllowed,
+            ),
+            minValue = passwordTypeState.minSpecialAllowed,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
 }
 
 @Composable
@@ -690,50 +949,54 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
 //region PassphraseType Composables
 
 @Composable
-private fun ColumnScope.PassphraseTypeContent(
+private fun PassphraseTypeContent(
     passphraseTypeState: GeneratorState.MainType.Passphrase,
     passphraseHandlers: PassphraseHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    PassphraseNumWordsCounterItem(
-        numWords = passphraseTypeState.numWords,
-        onPassphraseNumWordsCounterChange = passphraseHandlers.onPassphraseNumWordsCounterChange,
-        minValue = passphraseTypeState.minNumWords,
-        maxValue = passphraseTypeState.maxNumWords,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+    Column(modifier = modifier) {
+        PassphraseNumWordsCounterItem(
+            numWords = passphraseTypeState.numWords,
+            onPassphraseNumWordsCounterChange = passphraseHandlers
+                .onPassphraseNumWordsCounterChange,
+            minValue = passphraseTypeState.minNumWords,
+            maxValue = passphraseTypeState.maxNumWords,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PassphraseWordSeparatorInputItem(
-        wordSeparator = passphraseTypeState.wordSeparator,
-        onPassphraseWordSeparatorChange = passphraseHandlers.onPassphraseWordSeparatorChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PassphraseWordSeparatorInputItem(
+            wordSeparator = passphraseTypeState.wordSeparator,
+            onPassphraseWordSeparatorChange = passphraseHandlers.onPassphraseWordSeparatorChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PassphraseCapitalizeToggleItem(
-        capitalize = passphraseTypeState.capitalize,
-        onPassphraseCapitalizeToggleChange = passphraseHandlers
-            .onPassphraseCapitalizeToggleChange,
-        enabled = passphraseTypeState.capitalizeEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
-    PassphraseIncludeNumberToggleItem(
-        includeNumber = passphraseTypeState.includeNumber,
-        onPassphraseIncludeNumberToggleChange = passphraseHandlers
-            .onPassphraseIncludeNumberToggleChange,
-        enabled = passphraseTypeState.includeNumberEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PassphraseCapitalizeToggleItem(
+            capitalize = passphraseTypeState.capitalize,
+            onPassphraseCapitalizeToggleChange = passphraseHandlers
+                .onPassphraseCapitalizeToggleChange,
+            enabled = passphraseTypeState.capitalizeEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        PassphraseIncludeNumberToggleItem(
+            includeNumber = passphraseTypeState.includeNumber,
+            onPassphraseIncludeNumberToggleChange = passphraseHandlers
+                .onPassphraseIncludeNumberToggleChange,
+            enabled = passphraseTypeState.includeNumberEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -818,7 +1081,7 @@ private fun PassphraseIncludeNumberToggleItem(
 //region UsernameType Composables
 
 @Composable
-private fun ColumnScope.UsernameTypeItems(
+private fun UsernameTypeItems(
     usernameState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     usernameTypeHandlers: UsernameTypeHandlers,
@@ -826,43 +1089,46 @@ private fun ColumnScope.UsernameTypeItems(
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    UsernameOptionsItem(
-        currentSubState = usernameState,
-        onSubStateOptionClicked = onSubStateOptionClicked,
-        usernameTypeHandlers = usernameTypeHandlers,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+    Column(modifier = modifier) {
+        UsernameOptionsItem(
+            currentSubState = usernameState,
+            onSubStateOptionClicked = onSubStateOptionClicked,
+            usernameTypeHandlers = usernameTypeHandlers,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    when (val selectedType = usernameState.selectedType) {
-        is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
-            PlusAddressedEmailTypeContent(
-                usernameTypeState = selectedType,
-                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
-            )
-        }
+        when (val selectedType = usernameState.selectedType) {
+            is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
+                PlusAddressedEmailTypeContent(
+                    usernameTypeState = selectedType,
+                    plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                )
+            }
 
-        is GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias -> {
-            ForwardedEmailAliasTypeContent(
-                usernameTypeState = selectedType,
-                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-            )
-        }
+            is GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias -> {
+                ForwardedEmailAliasTypeContent(
+                    usernameTypeState = selectedType,
+                    forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                )
+            }
 
-        is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
-            CatchAllEmailTypeContent(
-                usernameTypeState = selectedType,
-                catchAllEmailHandlers = catchAllEmailHandlers,
-            )
-        }
+            is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
+                CatchAllEmailTypeContent(
+                    usernameTypeState = selectedType,
+                    catchAllEmailHandlers = catchAllEmailHandlers,
+                )
+            }
 
-        is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
-            RandomWordTypeContent(
-                randomWordTypeState = selectedType,
-                randomWordHandlers = randomWordHandlers,
-            )
+            is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
+                RandomWordTypeContent(
+                    randomWordTypeState = selectedType,
+                    randomWordHandlers = randomWordHandlers,
+                )
+            }
         }
     }
 }
@@ -904,146 +1170,149 @@ private fun UsernameOptionsItem(
 
 @Suppress("LongMethod")
 @Composable
-private fun ColumnScope.ForwardedEmailAliasTypeContent(
+private fun ForwardedEmailAliasTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    ServiceTypeOptionsItem(
-        currentSubState = usernameTypeState,
-        onSubStateOptionClicked = forwardedEmailAliasHandlers.onServiceChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        ServiceTypeOptionsItem(
+            currentSubState = usernameTypeState,
+            onSubStateOptionClicked = forwardedEmailAliasHandlers.onServiceChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    when (usernameTypeState.selectedServiceType) {
-        is ServiceType.AddyIo -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_access_token),
-                value = usernameTypeState.selectedServiceType.apiAccessToken,
-                onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+        when (usernameTypeState.selectedServiceType) {
+            is ServiceType.AddyIo -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_access_token),
+                    value = usernameTypeState.selectedServiceType.apiAccessToken,
+                    onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            BitwardenTextField(
-                label = stringResource(id = R.string.domain_name_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.domainName,
-                onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
-                textFieldTestTag = "AnonAddyDomainNameEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+                BitwardenTextField(
+                    label = stringResource(id = R.string.domain_name_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.domainName,
+                    onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
+                    textFieldTestTag = "AnonAddyDomainNameEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.DuckDuckGo -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.DuckDuckGo -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.FastMail -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.FastMail -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.FirefoxRelay -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_access_token),
-                value = usernameTypeState.selectedServiceType.apiAccessToken,
-                onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.FirefoxRelay -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_access_token),
+                    value = usernameTypeState.selectedServiceType.apiAccessToken,
+                    onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.ForwardEmail -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+            is ServiceType.ForwardEmail -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            BitwardenTextField(
-                label = stringResource(id = R.string.domain_name_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.domainName,
-                onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
-                textFieldTestTag = "ForwardedEmailDomainNameEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+                BitwardenTextField(
+                    label = stringResource(id = R.string.domain_name_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.domainName,
+                    onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
+                    textFieldTestTag = "ForwardedEmailDomainNameEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        is ServiceType.SimpleLogin -> {
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.api_key_required_parenthesis),
-                value = usernameTypeState.selectedServiceType.apiKey,
-                onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+            is ServiceType.SimpleLogin -> {
+                BitwardenPasswordField(
+                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    value = usernameTypeState.selectedServiceType.apiKey,
+                    onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
-        null -> {
-            var obfuscatedTextField by remember { mutableStateOf("") }
-            BitwardenPasswordField(
-                label = null,
-                value = obfuscatedTextField,
-                onValueChange = { obfuscatedTextField = it },
-                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
-                textFieldTestTag = "ForwardedEmailApiSecretEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+            null -> {
+                var obfuscatedTextField by remember { mutableStateOf("") }
+                BitwardenPasswordField(
+                    label = null,
+                    value = obfuscatedTextField,
+                    onValueChange = { obfuscatedTextField = it },
+                    showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                    textFieldTestTag = "ForwardedEmailApiSecretEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
         }
     }
 }
@@ -1076,19 +1345,22 @@ private fun ServiceTypeOptionsItem(
 //region PlusAddressedEmailType Composables
 
 @Composable
-private fun ColumnScope.PlusAddressedEmailTypeContent(
+private fun PlusAddressedEmailTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    PlusAddressedEmailTextInputItem(
-        email = usernameTypeState.email,
-        onPlusAddressedEmailTextChange = plusAddressedEmailHandlers.onEmailChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        PlusAddressedEmailTextInputItem(
+            email = usernameTypeState.email,
+            onPlusAddressedEmailTextChange = plusAddressedEmailHandlers.onEmailChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -1112,19 +1384,22 @@ private fun PlusAddressedEmailTextInputItem(
 //region CatchAllEmailType Composables
 
 @Composable
-private fun ColumnScope.CatchAllEmailTypeContent(
+private fun CatchAllEmailTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.CatchAllEmail,
     catchAllEmailHandlers: CatchAllEmailHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    CatchAllEmailTextInputItem(
-        domain = usernameTypeState.domainName,
-        onDomainTextChange = catchAllEmailHandlers.onDomainChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        CatchAllEmailTextInputItem(
+            domain = usernameTypeState.domainName,
+            onDomainTextChange = catchAllEmailHandlers.onDomainChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -1148,27 +1423,30 @@ private fun CatchAllEmailTextInputItem(
 //region Random Word Composables
 
 @Composable
-private fun ColumnScope.RandomWordTypeContent(
+private fun RandomWordTypeContent(
     randomWordTypeState: GeneratorState.MainType.Username.UsernameType.RandomWord,
     randomWordHandlers: RandomWordHandlers,
+    modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    RandomWordCapitalizeToggleItem(
-        capitalize = randomWordTypeState.capitalize,
-        onRandomWordCapitalizeToggleChange = randomWordHandlers.onCapitalizeChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        RandomWordCapitalizeToggleItem(
+            capitalize = randomWordTypeState.capitalize,
+            onRandomWordCapitalizeToggleChange = randomWordHandlers.onCapitalizeChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
-    RandomWordIncludeNumberToggleItem(
-        includeNumber = randomWordTypeState.includeNumber,
-        onRandomWordIncludeNumberToggleChange = randomWordHandlers.onIncludeNumberChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin(),
-    )
+        RandomWordIncludeNumberToggleItem(
+            includeNumber = randomWordTypeState.includeNumber,
+            onRandomWordIncludeNumberToggleChange = randomWordHandlers.onIncludeNumberChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
 }
 
 @Composable
@@ -1210,6 +1488,7 @@ private fun Generator_preview() {
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
             onNavigateBack = {},
+            onDimNavBarRequest = {},
         )
     }
 }

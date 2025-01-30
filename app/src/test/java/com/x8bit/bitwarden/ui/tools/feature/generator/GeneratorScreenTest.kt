@@ -29,11 +29,13 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -47,6 +49,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 @Suppress("LargeClass")
 class GeneratorScreenTest : BaseComposeTest() {
     private var onNavigateToPasswordHistoryScreenCalled = false
+    private var onDimNavBarRequest: Boolean? = null
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
@@ -58,15 +61,20 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setup() {
         composeTestRule.setContent {
             GeneratorScreen(
                 viewModel = viewModel,
-                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
+                onNavigateToPasswordHistory = {
+                    onNavigateToPasswordHistoryScreenCalled = true
+                },
                 onNavigateBack = {},
+                onDimNavBarRequest = { onDimNavBarRequest = it },
                 intentManager = intentManager,
+                appResumeStateManager = appResumeStateManager,
             )
         }
     }
@@ -1604,6 +1612,153 @@ class GeneratorScreenTest : BaseComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when StartCoachMarkTour event is received the first coach mark is shown and onDimNavBarRequest sends value of true `() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        assertTrue(onDimNavBarRequest == true)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when a coach mark close button is clicked no coach mark should be showing and onDimNavBarRequest sends the value of false`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNode(
+                hasContentDescription("Close") and
+                    hasAnyAncestor(isCoachMarkToolTip),
+            )
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+
+        assertTrue(onDimNavBarRequest == false)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when a coach mark next button is clicked should progress to the next coach mark`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when a coach mark back button is clicked should return to previous coach mark`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Back")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `The full coach mark tour can be completed showing all steps`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("3 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("4 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("5 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("6 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Done")
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
     }
 
     //endregion Random Word Tests

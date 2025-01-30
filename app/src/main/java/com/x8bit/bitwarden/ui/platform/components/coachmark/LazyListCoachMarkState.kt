@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
  * A [CoachMarkState] that depends on a [LazyListState] to automatically scroll to the current
  * Coach Mark if not on currently on the screen.
  */
+@Stable
 class LazyListCoachMarkState<T : Enum<T>>(
     private val lazyListState: LazyListState,
     orderedList: List<T>,
@@ -26,7 +28,7 @@ class LazyListCoachMarkState<T : Enum<T>>(
     }
 
     private suspend fun LazyListState.searchForKey(keyToFind: T) {
-        layoutInfo
+        val keyFound = layoutInfo
             .visibleItemsInfo
             .any { it.key == keyToFind }
             .takeIf { itemAlreadyVisible ->
@@ -57,6 +59,10 @@ class LazyListCoachMarkState<T : Enum<T>>(
             }
             ?: scrollUpToKey(keyToFind).takeIf { it }
             ?: scrollDownToKey(keyToFind)
+        if (!keyFound) {
+            // if key not found scroll back to the top.
+            scrollToItem(index = 0)
+        }
     }
 
     private suspend fun LazyListState.scrollUpToKey(

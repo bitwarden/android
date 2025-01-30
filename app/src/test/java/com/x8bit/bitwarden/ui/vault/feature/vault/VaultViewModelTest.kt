@@ -13,11 +13,13 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -145,6 +147,11 @@ class VaultViewModelTest : BaseViewModelTest() {
         } returns mutableSshKeyVaultItemsEnabledFlow.value
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
+    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
+
+    private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
+        every { specialCircumstance } returns null
+    }
 
     @Test
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
@@ -232,7 +239,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
-                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -319,7 +325,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
-                                shouldUsersGetPremium = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -530,7 +535,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
-                                shouldUsersGetPremium = true,
                             ),
                         ),
                     ),
@@ -546,9 +550,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
                 showSshKeys = false,
-                organizationPremiumStatusMap = mapOf("testOrganizationId" to true),
             ),
-            organizationPremiumStatusMap = mapOf("testOrganizationId" to true),
         )
             .copy(
                 appBarTitle = R.string.vaults.asText(),
@@ -561,22 +563,20 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(VaultFilterType.MyVault))
 
-        val resultingState = initialState.copy(
-            vaultFilterData = VAULT_FILTER_DATA.copy(
-                selectedVaultFilterType = VaultFilterType.MyVault,
-            ),
-            viewState = vaultData.toViewState(
-                isPremium = true,
-                vaultFilterType = VaultFilterType.MyVault,
-                isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
-                baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
-                hasMasterPassword = true,
-                showSshKeys = false,
-                organizationPremiumStatusMap = mapOf("testOrganizationId" to true),
-            ),
-        )
         assertEquals(
-            resultingState,
+            initialState.copy(
+                vaultFilterData = VAULT_FILTER_DATA.copy(
+                    selectedVaultFilterType = VaultFilterType.MyVault,
+                ),
+                viewState = vaultData.toViewState(
+                    isPremium = true,
+                    vaultFilterType = VaultFilterType.MyVault,
+                    isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
+                    baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
+                    hasMasterPassword = true,
+                    showSshKeys = false,
+                ),
+            ),
             viewModel.stateFlow.value,
         )
         verify { vaultRepository.vaultFilterType = VaultFilterType.MyVault }
@@ -680,7 +680,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 0,
+                    totpItemsCount = 1,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
                 ),
@@ -705,7 +705,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     collectionItems = listOf(),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 0,
+                    totpItemsCount = 1,
                     itemTypesCount = 4,
                     sshKeyItemsCount = 0,
                 ),
@@ -819,7 +819,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 0,
+                    totpItemsCount = 1,
                     itemTypesCount = 4,
                     sshKeyItemsCount = 0,
                 ),
@@ -919,7 +919,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 0,
+                        totpItemsCount = 1,
                         itemTypesCount = 4,
                         sshKeyItemsCount = 0,
                     ),
@@ -983,12 +983,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.NoNetwork(
                     data = VaultData(
-                        cipherViewList = listOf(
-                            createMockCipherView(
-                                number = 1,
-                                organizationUsesTotp = true,
-                            ),
-                        ),
+                        cipherViewList = listOf(createMockCipherView(number = 1)),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         sendViewList = listOf(createMockSendView(number = 1)),
@@ -1098,7 +1093,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 0,
+                        totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size - 1,
                         sshKeyItemsCount = 0,
                     ),
@@ -1139,7 +1134,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 0,
+                        totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
                     ),
@@ -1853,6 +1848,41 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init should send NavigateToVerificationCodeScreen when special circumstance is VerificationCodeShortcut`() =
+        runTest {
+            every {
+                specialCircumstanceManager.specialCircumstance
+            } returns SpecialCircumstance.VerificationCodeShortcut
+            every { specialCircumstanceManager.specialCircumstance = null } just runs
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                assertEquals(
+                    VaultEvent.NavigateToVerificationCodeScreen, awaitItem(),
+                )
+            }
+            verify { specialCircumstanceManager.specialCircumstance = null }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init should send NavigateToVaultSearchScreen when special circumstance is SearchShortcut`() =
+        runTest {
+            every {
+                specialCircumstanceManager.specialCircumstance
+            } returns SpecialCircumstance.SearchShortcut("")
+            every { specialCircumstanceManager.specialCircumstance = null } just runs
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+                assertEquals(
+                    VaultEvent.NavigateToVaultSearchScreen, awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1866,6 +1896,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
+            specialCircumstanceManager = specialCircumstanceManager,
         )
 }
 
@@ -1938,7 +1969,6 @@ private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
     showSshKeys: Boolean = false,
-    organizationPremiumStatusMap: Map<String, Boolean> = emptyMap(),
 ): VaultState =
     VaultState(
         appBarTitle = R.string.my_vault.asText(),
@@ -1977,5 +2007,4 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         showSshKeys = showSshKeys,
-        organizationPremiumStatusMap = organizationPremiumStatusMap,
     )

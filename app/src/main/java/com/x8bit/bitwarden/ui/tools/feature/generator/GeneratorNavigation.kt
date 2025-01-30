@@ -48,11 +48,13 @@ data class GeneratorArgs(
  */
 fun NavGraphBuilder.generatorDestination(
     onNavigateToPasswordHistory: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
 ) {
     composable(GENERATOR_ROUTE) {
         GeneratorScreen(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateBack = {},
+            onDimNavBarRequest = onDimNavBarRequest,
         )
     }
 }
@@ -76,6 +78,7 @@ fun NavGraphBuilder.generatorModalDestination(
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
             onNavigateBack = onNavigateBack,
+            onDimNavBarRequest = {},
         )
     }
 }

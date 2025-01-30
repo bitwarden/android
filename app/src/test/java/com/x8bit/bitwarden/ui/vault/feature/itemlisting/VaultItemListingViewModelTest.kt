@@ -4206,7 +4206,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             fido2CreateCredentialRequest = null,
             isPremium = true,
             isRefreshing = false,
-            organizationPremiumStatusMap = emptyMap(),
         )
 }
 

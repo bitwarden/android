@@ -529,7 +529,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
                 description = stringResource(
                     R.string.use_this_button_to_generate_a_new_unique_password,
                 ),
-                shape = CoachMarkHighlightShape.OVAL,
+                shape = CoachMarkHighlightShape.Oval,
                 onDismiss = onCoachMarkDismissed,
                 rightAction = {
                     CoachMarkActionText(

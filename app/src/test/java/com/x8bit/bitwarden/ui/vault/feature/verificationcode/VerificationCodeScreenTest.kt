@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -41,6 +42,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setUp() {
@@ -50,6 +52,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
                 onNavigateToSearch = { onNavigateToSearchCalled = true },
+                appResumeStateManager = appResumeStateManager,
             )
         }
     }

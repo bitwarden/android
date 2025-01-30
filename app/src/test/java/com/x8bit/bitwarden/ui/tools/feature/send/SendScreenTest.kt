@@ -22,6 +22,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -60,6 +61,7 @@ class SendScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setUp() {
@@ -72,6 +74,7 @@ class SendScreenTest : BaseComposeTest() {
                 onNavigateToSendTextList = { onNavigateToSendTextListCalled = true },
                 onNavigateToSearchSend = { onNavigateToSendSearchCalled = true },
                 intentManager = intentManager,
+                appResumeStateManager = appResumeStateManager,
             )
         }
     }

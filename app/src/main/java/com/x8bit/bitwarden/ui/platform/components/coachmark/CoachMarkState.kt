@@ -1,8 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components.coachmark
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -11,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.geometry.Rect
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightState
+import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max
 import kotlin.math.min
@@ -27,7 +27,7 @@ import kotlin.math.min
  * none should be highlighted at start.
  * @param isCoachMarkVisible is any coach mark currently visible.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@Stable
 open class CoachMarkState<T : Enum<T>>(
     val orderedList: List<T>,
     initialCoachMarkHighlight: T? = null,
@@ -38,7 +38,9 @@ open class CoachMarkState<T : Enum<T>>(
     val currentHighlight: State<T?> = mutableCurrentHighlight
     private val mutableCurrentHighlightBounds = mutableStateOf(Rect.Zero)
     val currentHighlightBounds: State<Rect> = mutableCurrentHighlightBounds
-    private val mutableCurrentHighlightShape = mutableStateOf(CoachMarkHighlightShape.SQUARE)
+    private val mutableCurrentHighlightShape = mutableStateOf<CoachMarkHighlightShape>(
+        CoachMarkHighlightShape.RoundedRectangle(),
+    )
     val currentHighlightShape: State<CoachMarkHighlightShape> = mutableCurrentHighlightShape
 
     private val mutableIsVisible = mutableStateOf(isCoachMarkVisible)
@@ -53,13 +55,13 @@ open class CoachMarkState<T : Enum<T>>(
      * Rect.Zero.
      * @param toolTipState The state of the tooltip associated with this highlight.
      * @param shape The shape of the highlight (e.g., square, oval). Defaults to
-     * [CoachMarkHighlightShape.SQUARE].
+     * [CoachMarkHighlightShape.RoundedRectangle].
      */
     fun updateHighlight(
         key: T,
         bounds: Rect?,
-        toolTipState: TooltipState,
-        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.SQUARE,
+        toolTipState: BitwardenToolTipState,
+        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.RoundedRectangle(),
     ) {
         highlights[key] = CoachMarkHighlightState(
             key = key,
@@ -168,7 +170,7 @@ open class CoachMarkState<T : Enum<T>>(
         getCurrentHighlight()?.toolTipState?.cleanUp()
         mutableCurrentHighlight.value = null
         mutableCurrentHighlightBounds.value = Rect.Zero
-        mutableCurrentHighlightShape.value = CoachMarkHighlightShape.SQUARE
+        mutableCurrentHighlightShape.value = CoachMarkHighlightShape.RoundedRectangle()
         mutableIsVisible.value = false
         onComplete?.invoke()
     }
@@ -184,7 +186,8 @@ open class CoachMarkState<T : Enum<T>>(
 
     private fun updateCoachMarkStateInternal(highlight: CoachMarkHighlightState<T>?) {
         mutableIsVisible.value = highlight != null
-        mutableCurrentHighlightShape.value = highlight?.shape ?: CoachMarkHighlightShape.SQUARE
+        mutableCurrentHighlightShape.value =
+            highlight?.shape ?: CoachMarkHighlightShape.RoundedRectangle()
         if (currentHighlightBounds.value != highlight?.highlightBounds) {
             mutableCurrentHighlightBounds.value = highlight?.highlightBounds ?: Rect.Zero
         }
@@ -193,9 +196,9 @@ open class CoachMarkState<T : Enum<T>>(
     /**
      * Cleans up the tooltip state by dismissing it if visible and calling onDispose.
      */
-    private fun TooltipState.cleanUp() {
+    private fun BitwardenToolTipState.cleanUp() {
         if (isVisible) {
-            dismiss()
+            dismissBitwardenToolTip()
         }
         onDispose()
     }

@@ -9,8 +9,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.TooltipState
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +30,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTip
+import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
+import com.x8bit.bitwarden.ui.platform.components.tooltip.rememberBitwardenToolTipState
 import okhttp3.internal.toImmutableList
 import org.jetbrains.annotations.VisibleForTesting
 
@@ -55,7 +55,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         rightAction: @Composable() (RowScope.() -> Unit)?,
         anchorContent: @Composable () -> Unit,
     ) {
-        val toolTipState = rememberTooltipState(
+        val toolTipState = rememberBitwardenToolTipState(
             initialIsVisible = false,
             isPersistent = true,
         )
@@ -192,15 +192,15 @@ class CoachMarkScopeInstance<T : Enum<T>>(
         leftAction: @Composable() (RowScope.() -> Unit)?,
         rightAction: @Composable() (RowScope.() -> Unit)?,
         modifier: Modifier = Modifier,
-        toolTipState: TooltipState = rememberTooltipState(
+        toolTipState: BitwardenToolTipState = rememberBitwardenToolTipState(
             initialIsVisible = false,
             isPersistent = true,
         ),
         anchorContent: @Composable () -> Unit,
     ) {
         TooltipBox(
-            positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(
-                spacingBetweenTooltipAndAnchor = 12.dp,
+            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(
+                spacingBetweenTooltipAndAnchor = 10.dp,
             ),
             tooltip = {
                 BitwardenToolTip(
@@ -213,7 +213,7 @@ class CoachMarkScopeInstance<T : Enum<T>>(
                     leftAction = leftAction,
                     rightAction = rightAction,
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)
+                        .padding(horizontal = 6.dp)
                         .semantics { isCoachMarkToolTip = true },
                 )
             },

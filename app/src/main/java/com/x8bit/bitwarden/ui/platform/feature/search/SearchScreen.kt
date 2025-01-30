@@ -20,6 +20,9 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
@@ -29,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -48,10 +52,20 @@ fun SearchScreen(
     onNavigateToViewCipher: (cipherId: String) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SearchViewModel = hiltViewModel(),
+    appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val searchHandlers = remember(viewModel) { SearchHandlers.create(viewModel) }
     val context = LocalContext.current
+
+    RegisterScreenDataOnLifecycleEffect(
+        appResumeStateManager = appResumeStateManager,
+    ) {
+        AppResumeScreenData.SearchScreen(
+            searchTerm = state.searchTerm,
+        )
+    }
+
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SearchEvent.NavigateBack -> onNavigateBack()
