@@ -156,9 +156,9 @@ class RetrofitsImpl(
 
     private fun OkHttpClient.Builder.setSslSocketFactoryIfRequired(
         sslContext: SSLContext?,
-        trustManagers: Array<TrustManager>?,
+        trustManagers: Array<TrustManager>,
     ): OkHttpClient.Builder =
-        if (sslContext != null && !trustManagers.isNullOrEmpty()) {
+        if (sslContext != null && trustManagers.isNotEmpty()) {
             sslSocketFactory(
                 sslContext.socketFactory,
                 trustManagers.first() as X509TrustManager,
