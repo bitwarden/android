@@ -108,19 +108,23 @@ fun EnvironmentScreen(
 
         is EnvironmentState.DialogState.SetCertificateData -> {
             BitwardenClientCertificateDialog(
-                onConfirmClick = { alias, password ->
-                    viewModel.trySendAction(
-                        EnvironmentAction.SetCertificateInfoResultReceive(
-                            certificateFileData = dialog.certificateBytes,
-                            password = password,
-                            alias = alias,
-                        ),
-                    )
+                onConfirmClick = remember(viewModel) {
+                    { alias, password ->
+                        viewModel.trySendAction(
+                            EnvironmentAction.SetCertificateInfoResultReceive(
+                                certificateFileData = dialog.certificateBytes,
+                                password = password,
+                                alias = alias,
+                            ),
+                        )
+                    }
                 },
-                onDismissRequest = {
-                    viewModel.trySendAction(
-                        action = EnvironmentAction.SetCertificatePasswordDialogDismiss,
-                    )
+                onDismissRequest = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            action = EnvironmentAction.SetCertificatePasswordDialogDismiss,
+                        )
+                    }
                 },
             )
         }
@@ -133,15 +137,15 @@ fun EnvironmentScreen(
                     R.string.system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden,
                 ),
                 confirmButtonText = stringResource(R.string.continue_text),
-                onConfirmClick = {
-                    viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick)
+                onConfirmClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick) }
                 },
                 dismissButtonText = stringResource(R.string.cancel),
-                onDismissClick = {
-                    viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss)
+                onDismissClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
                 },
-                onDismissRequest = {
-                    viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss)
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
                 },
             )
         }
