@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
@@ -1162,6 +1163,46 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state the SetupTOTP button should be visible but disabled based on state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    canViewPassword = false,
+                    totp = null,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state the TOTP text field should be visible but disabled and the associated icon buttons should be invisible based on state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    canViewPassword = false,
+                    totp = "TestCode",
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "TOTP")
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Delete")
+        composeTestRule.assertScrollableNodeDoesNotExist("Copy TOTP")
+        composeTestRule.assertScrollableNodeDoesNotExist("Camera")
     }
 
     @Test
