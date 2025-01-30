@@ -717,20 +717,47 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `MainTypeOptionSelect shouldn't update the state if its already selected`() = runTest {
+        val viewModel = createViewModel()
+        fakeGeneratorRepository.setMockGeneratePassphraseResult(
+            GeneratedPassphraseResult.Success("updatedText"),
+        )
+
+        val expectedState = initialPasscodeState.copy(
+            selectedType = GeneratorState.MainType.Passphrase(),
+            generatedText = "updatedText",
+        )
+
+        val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSPHRASE)
+
+        viewModel.trySendAction(action)
+        assertEquals(expectedState, viewModel.stateFlow.value)
+
+        fakeGeneratorRepository.setMockGeneratePassphraseResult(
+            GeneratedPassphraseResult.Success("updatedTextAgain"),
+        )
+
+        viewModel.trySendAction(action)
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `MainTypeOptionSelect PASSWORD should switch to Passcode`() = runTest {
         val viewModel = createViewModel()
+        viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.USERNAME))
+
         fakeGeneratorRepository.setMockGeneratePasswordResult(
             GeneratedPasswordResult.Success("updatedText"),
         )
 
         val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD)
 
-        viewModel.trySendAction(action)
-
         val expectedState = initialPasscodeState.copy(
             selectedType = GeneratorState.MainType.Password(),
             generatedText = "updatedText",
         )
+
+        viewModel.trySendAction(action)
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
