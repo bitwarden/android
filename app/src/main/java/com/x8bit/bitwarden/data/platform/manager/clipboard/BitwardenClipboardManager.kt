@@ -35,6 +35,15 @@ interface BitwardenClipboardManager {
      * See [setText] for more details.
      */
     fun setText(
+        text: String,
+        isSensitive: Boolean = true,
+        toastDescriptorOverride: Text,
+    )
+
+    /**
+     * See [setText] for more details.
+     */
+    fun setText(
         text: Text,
         isSensitive: Boolean = true,
         toastDescriptorOverride: String? = null,

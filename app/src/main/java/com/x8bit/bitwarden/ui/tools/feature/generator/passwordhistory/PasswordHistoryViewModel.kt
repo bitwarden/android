@@ -131,7 +131,10 @@ class PasswordHistoryViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(password: GeneratedPassword) {
-        clipboardManager.setText(text = password.password)
+        clipboardManager.setText(
+            text = password.password,
+            toastDescriptorOverride = R.string.password.asText(),
+        )
     }
 
     private fun List<PasswordHistoryView>?.toViewState(): PasswordHistoryState.ViewState {

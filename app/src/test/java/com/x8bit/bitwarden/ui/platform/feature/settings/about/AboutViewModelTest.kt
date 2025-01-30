@@ -138,7 +138,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(AboutAction.VersionClick)
 
         verify(exactly = 1) {
-            clipboardManager.setText(expectedText, ofType(Boolean::class), isNull())
+            clipboardManager.setText(expectedText, ofType(Boolean::class), isNull<String>())
         }
     }
 

@@ -1095,7 +1095,10 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginCopyTotpKeyText(
         action: VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick,
     ) {
-        clipboardManager.setText(text = action.totpKey)
+        clipboardManager.setText(
+            text = action.totpKey,
+            toastDescriptorOverride = R.string.authenticator_key.asText(),
+        )
     }
 
     private fun handleLoginClearTotpKey() {

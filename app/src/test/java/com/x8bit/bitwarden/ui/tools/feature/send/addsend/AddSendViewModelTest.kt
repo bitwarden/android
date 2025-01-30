@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
@@ -64,7 +65,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
-        every { setText(any<String>()) } just runs
+        every { setText(any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
@@ -216,7 +217,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
                 specialCircumstanceManager.specialCircumstance = null
-                clipboardManager.setText(sendUrl)
+                clipboardManager.setText(
+                    text = sendUrl,
+                    toastDescriptorOverride = R.string.send_link.asText(),
+                )
             }
         }
 
@@ -251,7 +255,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
                 specialCircumstanceManager.specialCircumstance = null
-                clipboardManager.setText(sendUrl)
+                clipboardManager.setText(
+                    text = sendUrl,
+                    toastDescriptorOverride = R.string.send_link.asText(),
+                )
             }
         }
 
@@ -492,7 +499,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(AddSendAction.CopyLinkClick)
 
         verify(exactly = 1) {
-            clipboardManager.setText(sendUrl)
+            clipboardManager.setText(
+                text = sendUrl,
+                toastDescriptorOverride = R.string.send_link.asText(),
+            )
         }
     }
 

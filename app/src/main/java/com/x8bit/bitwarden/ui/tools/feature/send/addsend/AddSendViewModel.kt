@@ -201,7 +201,10 @@ class AddSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 if (state.isShared) {
                     navigateBack()
-                    clipboardManager.setText(result.sendView.toSendUrl(state.baseWebSendUrl))
+                    clipboardManager.setText(
+                        result.sendView.toSendUrl(state.baseWebSendUrl),
+                        toastDescriptorOverride = R.string.send_link.asText(),
+                    )
                 } else {
                     navigateBack()
                     sendEvent(
@@ -377,7 +380,12 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleCopyLinkClick() {
         onContent {
-            it.common.sendUrl?.let { sendUrl -> clipboardManager.setText(text = sendUrl) }
+            it.common.sendUrl?.let { sendUrl ->
+                clipboardManager.setText(
+                    text = sendUrl,
+                    toastDescriptorOverride = R.string.send_link.asText(),
+                )
+            }
         }
     }
 

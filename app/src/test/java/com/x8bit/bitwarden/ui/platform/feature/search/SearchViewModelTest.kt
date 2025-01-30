@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
@@ -88,7 +89,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
-        every { setText(any<String>()) } just runs
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
     private val policyManager: PolicyManager = mockk<PolicyManager> {
         every {
@@ -660,19 +661,22 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `OverflowOptionClick Send CopyUrlClick should call setText on clipboardManager`() {
-        val sendUrl = "www.test.com"
-        every { clipboardManager.setText(sendUrl) } just runs
-        val viewModel = createViewModel()
-        viewModel.trySendAction(
-            SearchAction.OverflowOptionClick(
-                ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
-            ),
-        )
-        verify(exactly = 1) {
-            clipboardManager.setText(text = sendUrl)
+    fun `OverflowOptionClick Send CopyUrlClick should call setText on clipboardManager`() =
+        runTest {
+            val sendUrl = "www.test.com"
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = sendUrl,
+                    toastDescriptorOverride = R.string.link.asText(),
+                )
+            }
         }
-    }
 
     @Test
     fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
@@ -813,7 +817,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(notes)
+                clipboardManager.setText(
+                    text = notes,
+                    toastDescriptorOverride = R.string.notes.asText(),
+                )
             }
         }
 
@@ -831,7 +838,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(number)
+                clipboardManager.setText(
+                    text = number,
+                    toastDescriptorOverride = R.string.number.asText(),
+                )
             }
         }
 
@@ -854,7 +864,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 1) {
-                clipboardManager.setText(code)
+                clipboardManager.setText(
+                    text = code,
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
 
@@ -876,7 +889,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 0) {
-                clipboardManager.setText(text = any<String>())
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
             }
         }
 
@@ -897,7 +913,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(password)
+                clipboardManager.setText(
+                    text = password,
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )
@@ -921,7 +940,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(securityCode)
+                clipboardManager.setText(
+                    text = securityCode,
+                    toastDescriptorOverride = R.string.security_code.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
                 )
@@ -942,7 +964,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(username)
+                clipboardManager.setText(
+                    text = username,
+                    toastDescriptorOverride = R.string.username.asText(),
+                )
             }
         }
 
