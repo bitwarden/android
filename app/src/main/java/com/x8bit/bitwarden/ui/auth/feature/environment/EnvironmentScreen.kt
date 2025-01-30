@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
 import android.widget.Toast
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -87,7 +87,7 @@ fun EnvironmentScreen(
                 viewModel.trySendAction(
                     EnvironmentAction.SystemCertificateSelectionResultReceive(
                         keyChainManager.choosePrivateKeyAlias(
-                            currentServerUrl = state.serverUrl.takeUnless { it.isEmpty() },
+                            currentServerUrl = event.serverUrl?.takeUnless { it.isEmpty() },
                         ),
                     ),
                 )
@@ -315,7 +315,7 @@ fun EnvironmentScreen(
                     textFieldTestTag = "KeyAliasEntry",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .focusable(false)
+                        .focusProperties { canFocus = false }
                         .standardHorizontalMargin(),
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))

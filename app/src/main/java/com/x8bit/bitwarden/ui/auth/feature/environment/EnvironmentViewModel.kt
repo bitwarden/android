@@ -210,7 +210,11 @@ class EnvironmentViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = null)
         }
-        sendEvent(EnvironmentEvent.ShowSystemCertificateSelectionDialog)
+        sendEvent(
+            EnvironmentEvent.ShowSystemCertificateSelectionDialog(
+                serverUrl = state.serverUrl.prefixHttpsIfNecessaryOrNull(),
+            ),
+        )
     }
 
     private fun handleWebVaultServerUrlChangeAction(
@@ -452,7 +456,9 @@ sealed class EnvironmentEvent {
     /**
      * Show the system certificate selection dialog.
      */
-    data object ShowSystemCertificateSelectionDialog : EnvironmentEvent()
+    data class ShowSystemCertificateSelectionDialog(
+        val serverUrl: String?,
+    ) : EnvironmentEvent()
 
     /**
      * Show a toast with the given message.
