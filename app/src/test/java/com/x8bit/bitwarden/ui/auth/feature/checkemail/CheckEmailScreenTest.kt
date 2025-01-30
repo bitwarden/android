@@ -79,7 +79,6 @@ class CheckEmailScreenTest : BaseComposeTest() {
 
     @Test
     fun `change email button click should send ChangeEmailClick action`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = true)
         composeTestRule
             .onNodeWithText("Change email address")
             .performScrollTo()
@@ -92,7 +91,6 @@ class CheckEmailScreenTest : BaseComposeTest() {
         private const val EMAIL = "test@gmail.com"
         private val DEFAULT_STATE = CheckEmailState(
             email = EMAIL,
-            showNewOnboardingUi = false,
         )
     }
 }
