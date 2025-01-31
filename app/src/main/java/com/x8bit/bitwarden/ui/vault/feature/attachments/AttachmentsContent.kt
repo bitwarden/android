@@ -24,8 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -162,8 +161,7 @@ private fun AttachmentListEntry(
     Row(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .cardPadding(cardStyle = cardStyle, start = 16.dp)
+            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp)
             .testTag("AttachmentRow"),
         verticalAlignment = Alignment.CenterVertically,
     ) {

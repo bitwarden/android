@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.dialog
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -9,7 +7,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.minimumInteractiveComponentSize
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,8 +20,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
@@ -76,14 +72,11 @@ fun BitwardenTimeSelectButton(
                 contentDescription = "$label, $formattedTime"
             }
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .clickable(
-                enabled = isEnabled,
-                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
-                interactionSource = remember { MutableInteractionSource() },
+            .cardStyle(
+                cardStyle = cardStyle,
+                clickEnabled = isEnabled,
                 onClick = { shouldShowDialog = !shouldShowDialog },
             )
-            .cardPadding(cardStyle = cardStyle)
             .padding(top = 4.dp),
         textStyle = BitwardenTheme.typography.bodyLarge,
         readOnly = true,

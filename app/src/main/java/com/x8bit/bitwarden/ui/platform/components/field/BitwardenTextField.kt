@@ -41,8 +41,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.toPx
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
@@ -251,8 +250,11 @@ fun BitwardenTextField(
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
                     .focusRequester(focusRequester)
-                    .cardBackground(cardStyle = cardStyle)
-                    .cardPadding(cardStyle = cardStyle, top = 6.dp, bottom = 0.dp)
+                    .cardStyle(
+                        cardStyle = cardStyle,
+                        paddingTop = 6.dp,
+                        paddingBottom = 0.dp,
+                    )
                     .fillMaxWidth(),
             ) {
                 TextField(

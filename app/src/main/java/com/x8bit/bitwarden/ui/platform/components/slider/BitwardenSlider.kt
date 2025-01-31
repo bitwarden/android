@@ -30,15 +30,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -76,8 +75,7 @@ fun BitwardenSlider(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .cardPadding(cardStyle = cardStyle, end = 16.dp)
+            .cardStyle(cardStyle = cardStyle, paddingEnd = 16.dp)
             .semantics(mergeDescendants = true) {},
     ) {
         TextField(
@@ -115,7 +113,7 @@ fun BitwardenSlider(
                         else -> false
                     }
                 }
-                .semantics { valueTag?.let { testTag = it } }
+                .nullableTestTag(tag = valueTag)
                 .wrapContentWidth()
                 // We want the width to be no wider than the label + 16dp on either side
                 .width(width = 16.dp + labelTextWidth + 16.dp),
@@ -147,7 +145,7 @@ fun BitwardenSlider(
             },
             modifier = Modifier
                 .focusProperties { canFocus = false }
-                .semantics { sliderTag?.let { testTag = it } }
+                .nullableTestTag(tag = sliderTag)
                 .weight(weight = 1f),
         )
     }

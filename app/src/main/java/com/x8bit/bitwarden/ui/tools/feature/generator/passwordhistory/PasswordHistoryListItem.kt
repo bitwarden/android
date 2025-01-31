@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -44,12 +44,10 @@ fun PasswordHistoryListItem(
 ) {
     Row(
         modifier = modifier
-            .cardBackground(cardStyle = cardStyle)
-            .padding(
-                top = 12.dp,
-                bottom = 12.dp,
-                start = 16.dp,
-                end = 4.dp,
+            .cardStyle(
+                cardStyle = cardStyle,
+                paddingStart = 16.dp,
+                paddingEnd = 4.dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
