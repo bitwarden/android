@@ -118,6 +118,8 @@ fun VaultContent(
                         .testTag("CipherCell")
                         .standardHorizontalMargin(),
                 )
+            }
+            item {
                 Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
