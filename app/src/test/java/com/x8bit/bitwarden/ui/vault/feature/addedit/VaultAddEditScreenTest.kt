@@ -657,7 +657,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextEquals("Password", "")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Check if password has been exposed.")
+            .onNodeWithText("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Generate password")
@@ -682,7 +682,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onNodeWithText("Password")
             .assertTextEquals("Password", "••••••••")
         composeTestRule
-            .onNodeWithContentDescription("Check if password has been exposed.")
+            .onNodeWithText("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Generate password")
@@ -834,9 +834,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Password")
-            .onChildren()
-            .filterToOne(hasContentDescription("Check if password has been exposed."))
+            .onNodeWithTextAfterScroll(text = "Check password for data breaches")
             .performClick()
 
         verify {
@@ -1008,23 +1006,23 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll("TOTP")
-            .assertTextEquals("TOTP", "TestCode")
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "TestCode")
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = "NewTestCode") }
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll("TOTP")
-            .assertTextEquals("TOTP", "NewTestCode")
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "NewTestCode")
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
 
         composeTestRule
-            .onNodeWithText("TOTP")
+            .onNodeWithText("Authenticator key")
             .assertDoesNotExist()
     }
 
@@ -1079,7 +1077,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll("Camera")
+            .onNodeWithTextAfterScroll("Set up authenticator key")
             .performClick()
 
         verify {
@@ -1195,7 +1193,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TOTP")
+            .onNodeWithTextAfterScroll(text = "Authenticator key")
             .assertIsDisplayed()
             .assertIsNotEnabled()
 
@@ -1232,7 +1230,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_Login the URI control should display the text provided by the state`() {
         composeTestRule
-            .onNodeWithTextAfterScroll("URI")
+            .onNodeWithTextAfterScroll("Website (URI)")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -1246,14 +1244,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .assertTextContains("NewURI")
     }
 
     @Test
     fun `in ItemType_Login Uri settings dialog should be dismissed on cancel click`() {
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
@@ -1280,7 +1278,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
@@ -1305,7 +1303,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_Login Uri settings dialog with open match detection click should open list of options`() {
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
@@ -1365,7 +1363,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
@@ -1410,7 +1408,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
@@ -1436,7 +1434,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_Login state clicking the New URI button should trigger AddNewUriClick`() {
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New URI")
+            .onNodeWithTextAfterScroll(text = "Add website")
             .performClick()
 
         verify {
@@ -2454,7 +2452,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Item name (required)")
             .performTextInput(text = "TestName")
 
         verify {
@@ -2469,7 +2467,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Item name (required)")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -2477,7 +2475,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Item name (required)")
             .assertTextContains("NewName")
     }
 
@@ -2531,7 +2529,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
+            .onNodeWithContentDescriptionAfterScroll("Unfavorite")
+            .assertIsDisplayed()
             .performClick()
 
         verify {
@@ -2548,16 +2547,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .assertIsOff()
+            .onNodeWithContentDescriptionAfterScroll("Unfavorite")
+            .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) { copy(favorite = true) }
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .assertIsOn()
+            .onNodeWithContentDescriptionAfterScroll("Favorite")
+            .assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
