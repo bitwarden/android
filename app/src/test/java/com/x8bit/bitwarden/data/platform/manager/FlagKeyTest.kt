@@ -98,7 +98,7 @@ class FlagKeyTest {
                 FlagKey.NewDevicePermanentDismiss,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
-            ).any {
+            ).all {
                 it.defaultValue
             },
         )
@@ -134,7 +134,7 @@ class FlagKeyTest {
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.MutualTls,
-            ).any {
+            ).all {
                 it.isRemotelyConfigured
             },
         )
