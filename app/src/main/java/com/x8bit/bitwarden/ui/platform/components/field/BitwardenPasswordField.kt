@@ -38,8 +38,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -133,8 +132,11 @@ fun BitwardenPasswordField(
         Column(
             modifier = modifier
                 .defaultMinSize(minHeight = 60.dp)
-                .cardBackground(cardStyle = cardStyle)
-                .cardPadding(cardStyle = cardStyle, top = 6.dp, bottom = 0.dp)
+                .cardStyle(
+                    cardStyle = cardStyle,
+                    paddingTop = 6.dp,
+                    paddingBottom = 0.dp,
+                )
                 .tabNavigation()
                 .focusRequester(focusRequester = focusRequester),
         ) {

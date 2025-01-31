@@ -26,9 +26,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
-import com.x8bit.bitwarden.ui.platform.base.util.nullableClickable
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
@@ -228,12 +226,13 @@ fun BitwardenSwitch(
         verticalArrangement = Arrangement.Center,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .nullableClickable(
+            .cardStyle(
+                cardStyle = cardStyle,
                 onClick = onCheckedChange?.let { { it(!isChecked) } },
-                enabled = !readOnly && enabled,
+                clickEnabled = !readOnly && enabled,
+                paddingTop = 6.dp,
+                paddingBottom = 0.dp,
             )
-            .cardPadding(cardStyle = cardStyle, top = 6.dp, bottom = 0.dp)
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
                 contentDescription?.let { this.contentDescription = it }

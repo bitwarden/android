@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.dropdown
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,11 +17,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.minimumInteractiveComponentSize
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -38,8 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -116,17 +111,12 @@ fun BitwardenMultiSelectButton(
                     },
                 )
             }
-            .cardBackground(cardStyle = cardStyle)
-            .clickable(
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
-                enabled = isEnabled,
-                interactionSource = remember { MutableInteractionSource() },
-            ) {
-                shouldShowDialog = !shouldShowDialog
-            }
-            .cardPadding(cardStyle = cardStyle, top = 6.dp, bottom = 0.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
+                paddingTop = 6.dp,
+                paddingBottom = 0.dp,
+                onClick = { shouldShowDialog = !shouldShowDialog },
+            )
             .padding(paddingValues = insets),
     ) {
         TextField(

@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.listitem
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +9,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -23,14 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -86,18 +80,11 @@ fun BitwardenListItem(
     Row(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
-                onClick = onClick,
-            )
-            .cardPadding(
+            .cardStyle(
                 cardStyle = cardStyle,
-                start = 16.dp,
-                end = 4.dp,
+                onClick = onClick,
+                paddingStart = 16.dp,
+                paddingEnd = 4.dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -107,8 +94,8 @@ fun BitwardenListItem(
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
-                .semantics { startIconTestTag?.let { testTag = it } }
-                .size(24.dp),
+                .nullableTestTag(tag = startIconTestTag)
+                .size(size = 24.dp),
         )
 
         Column(modifier = Modifier.weight(1f)) {
@@ -122,7 +109,7 @@ fun BitwardenListItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
-                        .semantics { labelTestTag?.let { testTag = it } }
+                        .nullableTestTag(tag = labelTestTag)
                         .weight(weight = 1f, fill = false),
                 )
 
@@ -133,8 +120,8 @@ fun BitwardenListItem(
                         contentDescription = iconResource.contentDescription,
                         tint = BitwardenTheme.colorScheme.icon.primary,
                         modifier = Modifier
-                            .semantics { iconResource.testTag?.let { testTag = it } }
-                            .size(16.dp),
+                            .nullableTestTag(tag = iconResource.testTag)
+                            .size(size = 16.dp),
                     )
                 }
             }
@@ -144,9 +131,7 @@ fun BitwardenListItem(
                     text = secondSupportLabel,
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier.semantics {
-                        secondSupportingLabelTestTag?.let { testTag = it }
-                    },
+                    modifier = Modifier.nullableTestTag(tag = secondSupportingLabelTestTag),
                 )
             }
 
@@ -155,7 +140,7 @@ fun BitwardenListItem(
                     text = supportLabel,
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier.semantics { supportingLabelTestTag?.let { testTag = it } },
+                    modifier = Modifier.nullableTestTag(tag = supportingLabelTestTag),
                 )
             }
         }
@@ -165,7 +150,7 @@ fun BitwardenListItem(
                 vectorIconRes = R.drawable.ic_ellipsis_horizontal,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowDialog = true },
-                modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
+                modifier = Modifier.nullableTestTag(tag = optionsTestTag),
             )
         }
     }

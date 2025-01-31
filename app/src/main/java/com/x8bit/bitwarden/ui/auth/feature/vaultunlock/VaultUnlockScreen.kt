@@ -46,8 +46,7 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -277,11 +276,6 @@ fun VaultUnlockScreen(
                         .fillMaxWidth(),
                 )
             }
-            val trailingTextCardStyle = if (state.hideInput) {
-                CardStyle.Full
-            } else {
-                CardStyle.Bottom
-            }
             Text(
                 text = stringResource(
                     id = R.string.logged_in_as_on,
@@ -293,13 +287,11 @@ fun VaultUnlockScreen(
                 modifier = Modifier
                     .testTag("UserAndEnvironmentDataLabel")
                     .standardHorizontalMargin()
-                    .cardBackground(cardStyle = trailingTextCardStyle)
-                    .cardPadding(
-                        cardStyle = trailingTextCardStyle,
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 0.dp,
-                        bottom = 12.dp,
+                    .cardStyle(
+                        cardStyle = if (state.hideInput) CardStyle.Full else CardStyle.Bottom,
+                        paddingStart = 16.dp,
+                        paddingEnd = 16.dp,
+                        paddingTop = 0.dp,
                     )
                     .fillMaxWidth(),
             )

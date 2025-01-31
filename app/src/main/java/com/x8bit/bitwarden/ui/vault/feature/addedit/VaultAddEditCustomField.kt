@@ -1,12 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,8 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
@@ -31,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.ImmutableList
@@ -99,7 +94,9 @@ fun VaultAddEditCustomField(
                 onValueChanged = { onCustomFieldValueChange(customField.copy(value = it)) },
                 onEditValue = { shouldShowChooserDialog = true },
                 cardStyle = cardStyle,
-                modifier = modifier.testTag("AddEditCustomBooleanField"),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .testTag(tag = "AddEditCustomBooleanField"),
             )
         }
 
@@ -162,14 +159,13 @@ private fun CustomFieldBoolean(
         modifier = modifier
             .semantics(mergeDescendants = true) {}
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
+            .cardStyle(
+                cardStyle = cardStyle,
                 onClick = { onValueChanged(!value) },
-            )
-            .cardPadding(cardStyle = cardStyle, end = 4.dp, top = 6.dp, bottom = 6.dp)
-            .fillMaxWidth(),
+                paddingEnd = 4.dp,
+                paddingTop = 6.dp,
+                paddingBottom = 6.dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BitwardenSwitch(

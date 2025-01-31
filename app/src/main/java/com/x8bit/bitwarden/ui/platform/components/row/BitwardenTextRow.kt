@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components.row
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,16 +8,13 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -56,16 +51,12 @@ fun BitwardenTextRow(
         contentAlignment = Alignment.CenterStart,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = cardStyle)
-            .clickable(
-                enabled = isEnabled,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+            .cardStyle(
+                cardStyle = cardStyle,
                 onClick = onClick,
+                clickEnabled = isEnabled,
+                paddingHorizontal = 16.dp,
             )
-            .cardPadding(cardStyle = cardStyle, horizontal = 16.dp)
             .semantics(mergeDescendants = true) { },
     ) {
         Row(
@@ -86,7 +77,7 @@ fun BitwardenTextRow(
                     } else {
                         BitwardenTheme.colorScheme.filledButton.foregroundDisabled
                     },
-                    modifier = Modifier.run { textTestTag?.let { testTag(it) } ?: this },
+                    modifier = Modifier.nullableTestTag(tag = textTestTag),
                 )
                 description?.let {
                     Text(

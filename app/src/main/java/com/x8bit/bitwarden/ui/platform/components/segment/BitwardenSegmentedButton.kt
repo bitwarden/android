@@ -19,9 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -96,7 +95,7 @@ fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
         icon = {
             // No icon required
         },
-        modifier = Modifier.semantics { option.testTag?.let { testTag = it } },
+        modifier = Modifier.nullableTestTag(tag = option.testTag),
     )
 }
 
