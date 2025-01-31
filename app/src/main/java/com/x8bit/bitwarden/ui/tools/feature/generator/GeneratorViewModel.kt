@@ -801,6 +801,8 @@ class GeneratorViewModel @Inject constructor(
     //region Main Type Option Handlers
 
     private fun handleMainTypeOptionSelect(action: GeneratorAction.MainTypeOptionSelect) {
+        if (action.mainTypeOption == state.selectedType.mainTypeOption) return
+
         when (action.mainTypeOption) {
             GeneratorState.MainTypeOption.PASSWORD -> {
                 loadPasscodeOptions(selectedType = GeneratorState.MainType.Password())
